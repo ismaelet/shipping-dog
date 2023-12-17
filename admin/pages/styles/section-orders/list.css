@@ -1,0 +1,8 @@
+/* Status */
+.order-status {
+	color: #fff;
+	padding: 0.5em 1em;
+	border-radius: var(--border-radius-1000);
+	text-align: center;
+	font-weight: var(--fw-bold);
+}

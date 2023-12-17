@@ -1,0 +1,33 @@
+[Falk & Ross - Normal colors]
+X 480
+Y 486
+W 1025 ~ H 1107
+R -0,96%
+
+[UTT Europe - Normal colors]
+X 491
+Y 384
+W 1254 ~ H 1567
+R -0,96%
+
+[Heather colors]
+X 482
+Y 473
+W 1004 ~ H 1100
+R 0,48%
+
+[Back]
+X 489
+Y 524
+W 1008 ~ H 1260
+
+OR
+
+X 540
+Y 382
+W 1237 ~ H 1546
+
+[Back Heather]
+X 488
+Y 468
+W 918 ~ H 1147

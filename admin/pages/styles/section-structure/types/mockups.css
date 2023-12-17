@@ -1,0 +1,11 @@
+/*
+* Layout
+*/
+.mockup__background {
+	background-image: url(../../../../../app/assets/mockups/bgr/grey.png);
+}
+
+.mockup__image {
+	width: 100%;
+	aspect-ratio: 1;
+}

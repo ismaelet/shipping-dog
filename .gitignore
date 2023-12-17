@@ -1,0 +1,5 @@
+vendor/
+uploads/
+node_modules/
+
+error.log

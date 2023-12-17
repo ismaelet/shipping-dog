@@ -1,0 +1,70 @@
+/* Structure */
+* {
+	position: initial;
+}
+
+main {
+	--default-radius: 0.5rem;
+}
+
+img {
+	display: block;
+}
+
+/* Title */
+.section-title {
+	margin-bottom: 2rem;
+	font-size: 2rem;
+	font-weight: 500;
+}
+
+.section-title-box {
+	display: grid;
+	grid-template-columns: auto max-content;
+	margin-bottom: 2rem;
+	align-items: center;
+}
+
+.section-title-box .section-title {
+	margin-bottom: 0;
+}
+
+section .more {
+	color: var(--secondary);
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+/* Buttons */
+main .pbtn {
+	position: relative;
+	z-index: 1;
+}
+
+main .pbtn::before {
+	content: '';
+	background: linear-gradient(to right, var(--clr-1), var(--clr-1-variant));
+	border-radius: inherit;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	transition: opacity 0.3s;
+}
+
+main .pbtn:hover::before {
+	opacity: 0;
+}
+
+@media (max-width: 480px) {
+	.section-title-box {
+		grid-template-columns: 1fr;
+	}
+
+	.section-title-box .more {
+		margin-top: 0.5rem;
+		text-align: left;
+	}
+}

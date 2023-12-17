@@ -1,0 +1,130 @@
+/*
+* 1. General settings
+* 2. Product functionalities
+* 3. Product card
+*	3.1 General layout
+*	3.2 Header
+*	3.3 Body
+*	3.4 Price
+* 4. Orders
+* 5. Cart Recap
+* 6. Shipping method
+* 7. Cart List
+* 8. App styles
+*/
+
+/*
+* 1. General settings
+*/
+:root {
+	--status-color--canceled: #c94040;
+	--status-color--open: #ccc;
+	--status-color--waiting-payment: #80c6f5;
+	--status-color--confirmed-payment: #f7a128;
+	--status-color--shipped: #ff7b00;
+	--status-color--delivered: #44c544;
+}
+
+.status-color--canceled {
+	--_color: var(--status-color--canceled);
+}
+.status-color--open {
+	--_color: var(--status-color--open);
+}
+.status-color--waiting-payment,
+.status-color--received {
+	--_color: var(--status-color--waiting-payment);
+}
+.status-color--confirmed-payment,
+.status-color--label-ready {
+	--_color: var(--status-color--confirmed-payment);
+}
+.status-color--shipped {
+	--_color: var(--status-color--shipped);
+}
+.status-color--delivered {
+	--_color: var(--status-color--delivered);
+}
+
+.background-status-color--canceled {
+	background-color: var(--status-color--canceled);
+}
+.background-status-color--open {
+	background-color: var(--status-color--open);
+}
+.background-status-color--waiting-payment,
+.background-status-color--received {
+	background-color: var(--status-color--waiting-payment);
+}
+.background-status-color--confirmed-payment,
+.background-status-color--label-ready {
+	background-color: var(--status-color--confirmed-payment);
+}
+.background-status-color--shipped {
+	background-color: var(--status-color--shipped);
+}
+.background-status-color--delivered {
+	background-color: var(--status-color--delivered);
+}
+
+/*
+* 7. Cart list
+*/
+.cart-list {
+	overflow-x: auto;
+	font-size: var(--fs-300);
+}
+
+.cart-list__wrapper {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr) max-content max-content max-content max-content;
+	overflow: hidden;
+	min-width: 768px;
+	border-radius: var(--border-radius-400);
+}
+
+.cart-list__header,
+.cart-list__cart {
+	display: contents;
+}
+
+.cart-list__field {
+	display: grid;
+	padding-block: 0.75rem;
+	padding-left: 2rem;
+	background-color: var(--clr-surface-600);
+	align-items: center;
+}
+
+.cart-list__field:first-child {
+	padding-left: 1rem;
+}
+
+.cart-list__field:last-child {
+	padding-right: 1rem;
+}
+
+.cart-list__cart:nth-child(2n) .cart-list__field {
+	background-color: var(--clr-surface-500);
+}
+
+.cart-list__field--header {
+	background-color: var(--clr-primary-400);
+	color: #fff;
+	letter-spacing: 0.05em;
+}
+
+.cart-list__status {
+	padding-inline: 1em;
+	padding-block: 0.5em;
+	border-radius: 1rem;
+	color: var(--fc-700);
+	font-weight: var(--fw-medium);
+	line-height: 1;
+	text-align: center;
+}
+
+.cart-list__link {
+	max-width: max-content;
+	padding-inline: 0.2em;
+}

@@ -1,0 +1,156 @@
+<?php
+
+use Ecommerce\Order;
+
+if (!$year) $year = DB::row('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID=?) AND cartID IN (SELECT ID FROM carts WHERE status>0) ORDER BY time DESC', [$seller->id])['year'];
+
+$res_months = DB::select('MONTH(time) as month FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID=?) AND cartID IN (SELECT ID FROM carts WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$seller->id, $year]);
+
+while ($row_months = $res_months->fetch_assoc()) {
+
+	$row_dark = true;
+
+	$month = $row_months['month'];
+	$month_str = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+
+	$row_month = DB::row(
+		'
+		SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * orders.quantity) as totGain, COUNT(*) as count
+		FROM orders
+		LEFT JOIN carts ON orders.cartID = carts.ID
+		WHERE
+			YEAR(orders.time) = ? AND
+			MONTH(orders.time) = ? AND
+			sellerId = ? AND
+			carts.status > 0',
+		[$year, $month, $seller->id]
+	);
+
+	$month_tot = $row_month['totGain'];
+	$month_num = $row_month['count'];
+
+	//$res_saleM = DB::select('* FROM sales WHERE storID=? AND YEAR(time)=? AND MONTH(time)=? ORDER BY time DESC', [$id, $year, $month]);
+	$sales = DB::select(
+		'
+		orders.ID
+		FROM orders
+		LEFT JOIN carts ON orders.cartID = carts.ID
+		WHERE
+			YEAR(orders.time) = ? AND
+			MONTH(orders.time) = ? AND
+			sellerId = ? AND
+			carts.status > 0
+		ORDER BY carts.time DESC',
+		[$year, $month, $seller->id]
+	);
+?>
+
+	<div class="sales month-box pad-v-2 mar-b-1">
+
+		<h3 class="month-title inlb br-c1"><span class="txt-med"><?= $month_str[$month - 1] ?></span> <span class="title-year"><?= $year ?></span></h3>
+
+		<p class="month-gain inlb"><strong><?= format($month_tot) ?> €</strong> da <strong><?= $month_num ?></strong> vendite</p>
+
+		<button type="button" class="sbtn month-btn clickable" onclick="$(this).next().toggleClass('hidden'); $(this).hide();"><span class="month-btn-text">Mostra le vendite</span></button>
+
+		<div class="tbl-box pad-t-2 hidden">
+			<div class="list-tbl">
+
+				<div class="list-tbl-head">
+					<p class="list-name lon">Design</p>
+					<p class="list-name shr">Guadagno</p>
+					<p class="list-name shr">Capo</p>
+					<p class="list-name shr">Colore</p>
+					<p class="list-name shr">Sconto</p>
+					<p class="list-name shr">Data</p>
+				</div>
+
+				<?php while ($sale = $sales->fetch_assoc()) {
+
+					$order = new Ecommerce\Order($sale['ID']);
+
+					//get date
+					/*$date = date_parse($sale['time']);
+
+					//design data
+					$desID = $sale['desID'];
+					$des_name = DB::find('name FROM designs WHERE ID=?', [$desID]);
+
+					$des_name ?: '-design rimosso-';
+
+					//get type
+					$type_str = DB::find('name_it FROM items_types WHERE ID=?', [$sale['typeID']]);
+
+					//get color
+					$color_str = $sale['colorID'] ? DB::find('name_it FROM items_colors WHERE ID=?', [$sale['colorID']]) : '-';
+
+					//gain
+					$gain = number_format(($sale['gain'] * $sale['amount']), 2, '.', '');
+
+					//code
+					$code = empty($sale['code']) ? '-' : strtoupper($sale['code']);
+					*/
+				?>
+
+					<!--sale line-->
+					<div class="list-row <?php if ($row_dark) {
+												echo 'row_dark';
+												$row_dark = false;
+											} else $row_dark = 'true' ?>">
+						<div class="list-cell">
+							<p class="list-inp">
+								<?php
+								if ($order->quantity > 1) echo $order->quantity . " x ";
+								echo $order->product->name ?: '- design rimosso -';
+								?>
+							</p>
+						</div>
+						<div class="list-cell">
+							<p class="list-inp"><?= $order->gainString ?></p>
+						</div>
+						<div class="list-cell">
+							<p class="list-inp"><?= $order->product->type->name ?></p>
+						</div>
+						<div class="list-cell">
+							<p class="list-inp"><?= $order->color->name ?></p>
+						</div>
+						<div class="list-cell">
+							<p class="list-inp"><?= $order->cart->coupon->code ?: '-' ?></p>
+						</div>
+						<div class="list-cell">
+							<p class="list-inp"><?= $order->timeString ?></p>
+						</div>
+					</div>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+<?php } ?>
+
+<?php
+
+$res_year = DB::select('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID=?) AND cartID IN (SELECT ID FROM carts WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$seller->id]);
+
+if ($res_year->num_rows > 1) { ?>
+
+	<div id="years-box" class="txt-cen pad-t-2 pad-b-5 gallery">
+
+		<?php while ($row = $res_year->fetch_assoc()) {
+
+			$yearM = $row['year'] ?>
+
+			<label>
+
+				<input type="checkbox" class="hidden" value="<?= $yearM ?>" onchange="$('#year-inp').val($(this).val()); $('#search-btn').click();">
+
+				<p class="year clickable inlb bgr-c1-h txt-wht-h <?php if ($yearM == $year) echo 'active' ?>">
+					<?= $yearM ?>
+				</p>
+
+			</label>
+
+		<?php } ?>
+
+	</div>
+
+<?php } ?>

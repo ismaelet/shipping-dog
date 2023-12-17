@@ -1,0 +1,36 @@
+/* Structure */
+#body {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-areas:
+		'guest login'
+		'register login'
+		'continue empty';
+	gap: 4rem;
+}
+
+#guest {
+	grid-area: guest;
+}
+#login {
+	grid-area: login;
+}
+#register {
+	grid-area: register;
+}
+#continue {
+	grid-area: continue;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	#body {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-areas:
+			'guest'
+			'login'
+			'register'
+			'continue';
+		gap: 3rem;
+	}
+}

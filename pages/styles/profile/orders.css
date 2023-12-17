@@ -1,0 +1,29 @@
+.stitle {
+	border-bottom: 1px solid var(--text-color-fade);
+	margin-bottom: 1rem;
+}
+
+.form-body {
+	overflow: auto;
+	scroll-snap-type: inline mandatory;
+}
+
+#orders-tbl {
+	display: grid;
+	min-width: 600px;
+	grid-template-columns: 1.5fr 2fr 3fr 2fr 2fr 2fr;
+	align-items: center;
+}
+
+#orders-tbl > * {
+	display: grid;
+	border-bottom: 1px solid var(--surface-secondary);
+	height: 100%;
+	align-items: center;
+	scroll-snap-align: start;
+}
+
+#orders-tbl .title {
+	color: var(--text-color-strong);	
+	font-weight: 600;
+}

@@ -1,0 +1,33 @@
+/**/
+#page-header .bgr {
+	filter: invert(1);
+}
+
+#page-header h1 {
+	color: var(--theme-min);
+}
+
+/* Products */
+#products {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+	gap: 2rem;
+}
+
+#products img {
+	object-fit: cover;
+	border-radius: 10px;
+	box-shadow: 5px 10px 1rem rgba(0, 0, 0, 0.1);
+	width: 100%;
+	aspect-ratio: 1 / 1;
+}
+
+#products .name {
+	font-size: 0.9rem;
+	font-weight: 600;
+}
+
+#products .shop {
+	color: var(--text-color);
+	font-size: 0.8rem;
+}

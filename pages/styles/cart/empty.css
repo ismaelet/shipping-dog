@@ -1,0 +1,16 @@
+/*
+* Layout
+*/
+.empty-cart__icon {
+	--icon-size: 50%;
+	width: min(10rem, 20vw);
+	aspect-ratio: 1;
+	margin-top: -5rem;
+	border: 2px solid var(--clr-primary-400);
+	border-radius: 50%;
+	color: var(--clr-primary-400);
+}
+
+.empty-cart__icon .icon-embed {
+	rotate: -10deg;
+}

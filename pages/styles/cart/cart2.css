@@ -1,0 +1,96 @@
+/* Structure */
+#content > * {
+	display: grid;
+	gap: 3rem;
+	align-content: start;
+}
+
+/* Address */
+.address-form .field {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+}
+
+.address-form--local-delivery .field:has(.delivery-input),
+.address-form--local-delivery .delivery-input {
+	display: none;
+}
+
+/*CODE SECTION*/
+#code_cont {
+	margin-top: 10px;
+}
+
+#add_code {
+	display: none;
+}
+
+.code_txt {
+	font-size: 0.9rem;
+	line-height: 1.6;
+}
+
+.code {
+	margin-left: 0.5em;
+	font-weight: bold;
+	letter-spacing: 0.07em;
+}
+
+#code_remove {
+	background-color: transparent;
+	border: none;
+	margin-top: 4px;
+	color: red;
+	font-family: var(--font-text);
+	letter-spacing: 0.05em;
+	cursor: pointer;
+}
+
+/* Credit section */
+#credit-section .total-credit {
+	height: 0.5rem;
+	border-radius: 1rem;
+	margin-top: 1rem;
+	background-color: var(--surface-secondary);
+}
+
+#credit-section .used-credit {
+	height: 100%;
+	border-radius: inherit;
+	background-color: var(--clr-1);
+}
+
+/* Credit button */
+.credit-btn {
+	color: var(--text-color-strong);
+	border-style: dashed;
+	font-size: var(--fs-300);
+	text-transform: none;
+}
+
+.use-credit-btn {
+	border-color: var(--clr-1);
+}
+
+.use-credit-btn:hover {
+	border-color: var(--clr-1-variant);
+	color: var(--clr-1-variant);
+}
+
+.no-credit-btn {
+	border-color: red !important;
+}
+
+.no-credit-btn:hover {
+	color: red;
+}
+
+.no-credit-btn .btn-icon {
+	background-color: var(--text-color-strong);
+	width: 0.8rem;
+}
+
+.no-credit-btn:hover .btn-icon {
+	background-color: red;
+}

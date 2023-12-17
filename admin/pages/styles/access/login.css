@@ -1,0 +1,16 @@
+/*
+* Layout
+*/
+main {
+	display: grid;
+	place-items: center;
+}
+
+.page-content {
+	width: 100%;
+	max-width: 600px;
+}
+
+.button {
+	font-size: var(--fs-450);
+}
