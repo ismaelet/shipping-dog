@@ -25,6 +25,9 @@ spl_autoload_register(function ($name) {
 		case file_exists($file = public_server_path('/app/classes/' . $name . '.php')):
 			include_once($file);
 			break;
+		case file_exists($file = public_server_path('/system/classes/' . $name . '.php')):
+			include_once($file);
+			break;
 	}
 
 	if (method_exists($name, '__constructStatic')) {

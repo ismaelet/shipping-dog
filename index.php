@@ -1,6 +1,6 @@
 <?php
 
-define('DEBUG', (false || in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])));
+define('DEBUG', (true || in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])));
 
 ini_set('error_log', 'error.log');
 

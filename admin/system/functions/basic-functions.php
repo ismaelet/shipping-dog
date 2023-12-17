@@ -31,31 +31,12 @@ function parse_rgba($hex, $alpha = 1) {
 	return $rgba;
 }
 
-/*
-* Translation
-*/
-function __($text) {
-
-	static $translations = [];
-
-	$language = $_SESSION['language'] ?? sys_config('default-language');
-
-	if (empty($translations)) {
-
-		if (file_exists($file = SERVER_ROOT . '/system/translations/' . $language . '.php')) include_once($file);
-		$additionalFiles = scan('/app/translations/' . $language, 'php');
-
-		foreach ($additionalFiles as $additionalFile) {
-			include_once($additionalFile);
-			$translations = array_merge($translations, $additionalTranslations);
-		}
-	}
-
-	$translated = $translations[$text] ?? $text;
-
-	return $translated;
+/**
+ * Translation
+ */
+function __(string $text = null) {
+	return $text ? TranslationInterface::getInstance()->translate($text) : '';
 }
-
 
 /*
 * User functions
