@@ -1,6 +1,6 @@
+error.log
+composer.lock
+
 vendor/
 uploads/
 node_modules/
-
-error.log
-composer.lock
