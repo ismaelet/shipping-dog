@@ -2,6 +2,7 @@
     "require": {
         "phpmailer/phpmailer": "*",
         "dompdf/dompdf": "*",
-        "vlucas/phpdotenv": "*"
+        "vlucas/phpdotenv": "*",
+        "illuminate/database": "^10.38"
     }
 }
