@@ -8,12 +8,12 @@ class MiddlewareLoader {
 		$defaultMiddlewareLoader = [
 			'public' => function () {
 				global $user;
-				$public = sys_config('static') ?: DB::find('value FROM config WHERE name=?', ['public']);
+				$public = sys_config('static') ?: DB::find('value FROM config WHERE name = ?', ['public']);
 				if (!$public && !$user->admin) redirect('/offline');
 			},
 
 			'not-public' => function () {
-				$public = sys_config('static') ?: DB::find('value FROM config WHERE name=?', ['public']);
+				$public = sys_config('static') ?: DB::find('value FROM config WHERE name = ?', ['public']);
 				if ($public) redirect('/');
 			},
 

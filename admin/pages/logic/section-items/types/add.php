@@ -58,7 +58,7 @@ $inputs = [
 
 //sizes
 $array = [['type' => 'lbl', 'text' => 'Taglie']];
-$typeSizes = explode(',', DB::find('sizes FROM items_types WHERE ID=?', [$id]));
+$typeSizes = explode(',', DB::find('sizes FROM items_types WHERE ID = ?', [$id]));
 
 $res = DB::select('tag, name FROM items_sizes ORDER BY ID ASC');
 
@@ -75,7 +75,7 @@ $inputs[] = $array;
 
 //positions
 $array = [['type' => 'lbl', 'text' => 'Posizioni di stampa']];
-$typePositions = explode(',', DB::find('positions FROM items_types WHERE ID=?', [$id]));
+$typePositions = explode(',', DB::find('positions FROM items_types WHERE ID = ?', [$id]));
 
 $res = DB::select('ID, name_it FROM items_positions ORDER BY ID ASC');
 

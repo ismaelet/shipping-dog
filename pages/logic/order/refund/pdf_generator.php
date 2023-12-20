@@ -253,10 +253,10 @@ main {padding: 0; font-size: .9rem;}
 	color: #333;
 }";
 	
-$row_addr = DB::row('* FROM addresses WHERE cartID=?', [$id]);
+$row_addr = DB::row('* FROM addresses WHERE cartID = ?', [$id]);
 $region = empty($row_addr['region']) ? '' : ' ('.$row_addr['region'].')';
 
-$res_ord = DB::select('* FROM refunds_ord WHERE cartID=?', [$id]);
+$res_ord = DB::select('* FROM refunds_ord WHERE cartID = ?', [$id]);
 
 $product_rows = '';
 

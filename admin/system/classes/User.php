@@ -11,7 +11,7 @@ class User {
 	public $admin = false;
 
 	function __construct($id) {
-		if ($this->data = DB::row('* FROM users WHERE id=?', [$id])) {
+		if ($this->data = DB::row('* FROM users WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->username = $this->data['username'] ?: $this->data['email'];
 			$this->firstname = ucfirst($this->data['firstname']);

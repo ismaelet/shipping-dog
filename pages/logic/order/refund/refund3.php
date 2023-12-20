@@ -18,7 +18,7 @@ if (isset($_POST['remove'])) {
 
 //cancel the request
 if (isset($_POST['cancel'])) {
-	DB::update('refunds SET status=1, processed=0 WHERE cartID = ?', [$id]);
+	DB::update('refunds SET status = 1, processed=0 WHERE cartID = ?', [$id]);
 	DB::delete('refunds_ord WHERE cartID = ?', [$id]);
 
 	unset($_SESSION['refID']);
@@ -35,7 +35,7 @@ if (isset($_POST['pay']) || isset($_POST['free']) || isset($_POST['refund'])) {
 
 		$ordID = $row_ref['ordID'];
 
-		$row_ord = DB::row('sizeID, colorID FROM orders WHERE ID = ?', [$ordID]);
+		$row_ord = DB::row('sizeID, colorID FROM orders ', [$ordID]);
 
 		$color_old = $row_ord['colorID'];
 		$color_new = $row_ord['colorID'];

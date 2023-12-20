@@ -63,6 +63,10 @@
 	margin-right: -0.2rem;
 }
 
+.client__image {
+	background-color: var(--clr-surface-400);
+}
+
 /* Responsive */
 @media (max-width: 480px) {
 	#client-pics .gallery {

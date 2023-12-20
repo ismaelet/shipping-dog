@@ -13,7 +13,7 @@ function cart_old($buyerID, $stepId = false) {
 	// clean and redirect if the cart is empty
 	if (!cart_count()) {
 
-		DB::delete('carts WHERE ID=?', $cartID);
+		DB::delete('carts WHERE ID = ?', $cartID);
 
 		redirect('/cart/empty');
 	}
@@ -58,7 +58,7 @@ function cart_promotions(&$cart) {
 	$promotion['discount-shop'] = 10;
 	$promotion['trigger'] = [
 		'count',
-		'orders WHERE buyer=? AND itemID IN (SELECT ID FROM items WHERE userID=?) AND typeID IN (6,7,8,9,10,11)',
+		'orders WHERE buyer=? AND itemID IN (SELECT ID FROM items WHERE userID = ?) AND typeID IN (6,7,8,9,10,11)',
 		[$cart->customer, 187],
 		2
 	];
@@ -70,8 +70,8 @@ function cart_promotions(&$cart) {
 		//remove expired promotions
 		if ($cart->promotion && ($cart->promotion != $promotion['code'] || !$promotion['active'])) {
 
-			DB::update('carts SET promotion="" WHERE ID=?', [$cart->id]);
-			DB::update('orders SET price_disc=0, gain_disc=0 WHERE cartID=?', [$cart->id]);
+			DB::update('carts SET promotion="" WHERE ID = ?', [$cart->id]);
+			DB::update('orders SET price_disc=0, gain_disc=0 WHERE cartID = ?', [$cart->id]);
 
 			redirect();
 		}
@@ -94,17 +94,17 @@ function cart_promotions(&$cart) {
 					//add promotion to the cart
 					$cart->promotion = $promotion['code'];
 
-					DB::update('carts SET promotion=? WHERE ID=?', [$promotion['code'], $cart->id]);
+					DB::update('carts SET promotion=? WHERE ID = ?', [$promotion['code'], $cart->id]);
 
 					//add discount to orders
-					$orders = DB::select('ID, price FROM orders WHERE cartID=?', [$cart->id]);
+					$orders = DB::select('ID, price FROM orders WHERE cartID = ?', [$cart->id]);
 
 					while ($order = $orders->fetch_assoc()) {
 
 						$price_disc = round($order['price'] * $promotion['discount'], 2);
 						$gain_disc = round($order['price'] * $promotion['discount-shop'] / 100, 2);
 
-						DB::update('orders SET price_disc=?, gain_disc=? WHERE ID=?', [$price_disc, $gain_disc, $order['ID']]);
+						DB::update('orders SET price_disc=?, gain_disc=? WHERE ID = ?', [$price_disc, $gain_disc, $order['ID']]);
 					}
 
 					redirect();
@@ -113,8 +113,8 @@ function cart_promotions(&$cart) {
 				//if not triggered anymore
 				if ($cart->promotion && !$triggered) {
 
-					DB::update('carts SET promotion="" WHERE ID=?', [$cart->id]);
-					DB::update('orders SET price_disc=0, gain_disc=0 WHERE cartID=?', [$cart->id]);
+					DB::update('carts SET promotion="" WHERE ID = ?', [$cart->id]);
+					DB::update('orders SET price_disc=0, gain_disc=0 WHERE cartID = ?', [$cart->id]);
 
 					redirect();
 				}

@@ -94,10 +94,10 @@ function _expand_edit($table, $inputs, $index, $id) {
 	$defaultColorId = $_POST['default-color-id'];
 	$colors = implode(',', $_POST['colors']);
 
-	DB::update($table . ' SET name=?, userID=?, typeID=?, colorID=?, colors=? WHERE ID=?', [$name, $sellerId, $typeId, $defaultColorId, $colors, $id]);
+	DB::update($table . ' SET name = ?, userID = ?, typeID = ?, colorID = ?, colors=? WHERE ID = ?', [$name, $sellerId, $typeId, $defaultColorId, $colors, $id]);
 
-	if (DB::exists('items_prices WHERE itemID=?', [$id])) {
-		DB::update('items_prices SET price=? WHERE itemID=?', [$price, $id]);
+	if (DB::exists('items_prices WHERE itemID = ?', [$id])) {
+		DB::update('items_prices SET price=? WHERE itemID = ?', [$price, $id]);
 	} else {
 		DB::add('items_prices (itemID, price)', [$id, $price]);
 	}

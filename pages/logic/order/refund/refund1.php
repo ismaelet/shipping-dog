@@ -9,16 +9,16 @@ if (isset($_POST['submit'])) {
 	$id = $_POST['id'];
 	$email = strtolower(trim($_POST['email']));
 
-	if (DB::exists('addresses WHERE cartID=? AND email=?', [$id, $email])) {
+	if (DB::exists('addresses WHERE cartID = ? AND email=?', [$id, $email])) {
 
 		$_SESSION['refID'] = $id;
 
-		if ($status = DB::find('status FROM refunds WHERE cartID=?', $id)) {
+		if ($status = DB::find('status FROM refunds WHERE cartID = ?', $id)) {
 
 			if ($status > 1) redirect('/refund?step=' . $status);
 
 			else {
-				DB::update('refunds SET status=2 WHERE cartID=?', [$id]);
+				DB::update('refunds SET status=2 WHERE cartID = ?', [$id]);
 				redirect('/refund?step=2');
 			}
 		} else {

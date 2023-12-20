@@ -12,7 +12,7 @@ use function Ecommerce\format_price;
 
 	<?php
 	$row_dark = true;
-	$designs = DB::select('SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * quantity) as totGain, COUNT(*) as count, designId FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID=?) AND cartID IN (SELECT ID FROM carts WHERE status>0) AND designId IN (SELECT ID FROM designs WHERE status=1) GROUP BY designId ORDER BY totGain DESC', [userId()]);
+	$designs = DB::select('SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * quantity) as totGain, COUNT(*) as count, designId FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) AND designId IN (SELECT ID FROM designs WHERE status = 1) GROUP BY designId ORDER BY totGain DESC', [userId()]);
 	?>
 
 	<div class="list-tbl-head">

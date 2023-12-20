@@ -7,7 +7,7 @@ $search = $_GET['search'] ?? '';
 $search = strtolower(trim($search));
 
 if ($search) {
-	$results = DB::select("userID, " . $showField . " FROM " . $table . " WHERE userID=? OR LOWER(" . $showField . ") LIKE CONCAT('%',?,'%') ORDER BY " . $showField . " ASC LIMIT 10", [$search, $search]);
+	$results = DB::select("userID, " . $showField . " FROM " . $table . " WHERE userID = ? OR LOWER(" . $showField . ") LIKE CONCAT('%',?,'%') ORDER BY " . $showField . " ASC LIMIT 10", [$search, $search]);
 
 	while ($result = $results->fetch_assoc()) {
 		$response[] = [

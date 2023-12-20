@@ -23,14 +23,14 @@ $sellerCount = 12;
 $fanPicsCount = 4;
 
 // productss
-$popular = DB::select('ID FROM items WHERE status=1 AND userID IN (SELECT userID FROM stores WHERE status=1 AND hidden=0) ORDER BY rsales DESC LIMIT ?', [$productN]);
+$popular = DB::select('ID FROM items INNER JOIN stores ON items.userID = stores.userID WHERE items.status = 1 AND stores.status = 1 ORDER BY items.rsales DESC LIMIT ?', [$productN]);
 
 // designs
 $popularDesigns = rows_to_objects(
 	DB::select(
 		Design::INDEX . '
 	FROM ' . Design::TABLE . ' INNER JOIN ' . Seller::TABLE . ' ON ' . Design::TABLE . '.' . Design::SELLER_INDEX . ' = ' . Seller::TABLE . '.' . Seller::INDEX . '
-	WHERE ' . Design::TABLE . '.status = 1 AND ' . Seller::TABLE . '.status = 1 AND ' . Seller::TABLE . '.hidden = 0
+	WHERE ' . Design::TABLE . '.status = 1 AND ' . Seller::TABLE . '.status = 1
 	ORDER BY ' . Design::TABLE . '.rsales DESC LIMIT ?',
 		[$popularDesignCount]
 	),
@@ -38,7 +38,7 @@ $popularDesigns = rows_to_objects(
 );
 
 // sellers
-$sellers = rows_to_objects(DB::select(Seller::INDEX . ' FROM ' . Seller::TABLE . ' WHERE status=1 AND hidden=0 ORDER BY rsales DESC, userID ASC LIMIT ?', [$sellerCount]), 'Ecommerce\Seller');
+$sellers = rows_to_objects(DB::select(Seller::INDEX . ' FROM ' . Seller::TABLE . ' WHERE status = 1 ORDER BY rsales DESC, userID ASC LIMIT ?', [$sellerCount]), 'Ecommerce\Seller');
 
 // customer pics
 $client_pics = DB::select('* FROM home_pics ORDER BY ID DESC LIMIT ?', [$fanPicsCount]);

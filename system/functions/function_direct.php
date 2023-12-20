@@ -23,7 +23,7 @@ function login_direct($token) {
 				//login
 				$id = $row['userID'];
 
-				DB::update('auth_tokens SET expiration=(NOW() + INTERVAL 1 MONTH) WHERE userID=?', [$id]);
+				DB::update('auth_tokens SET expiration=(NOW() + INTERVAL 1 MONTH) WHERE userID = ?', [$id]);
 
 				setcookie('auth_token', $selector.'_'.$validator, time() + 60*60*24*30);
 

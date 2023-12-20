@@ -29,8 +29,8 @@ if (isset($_POST['change-status'])) {
 	}
 
 	if ($comment) {
-		if (DB::exists('ecommerce_carts_comments WHERE cartId=?', $id)) {
-			DB::update('ecommerce_carts_comments SET comment=? WHERE cartId=?', [$comment, $id]);
+		if (DB::exists('ecommerce_carts_comments WHERE cartId = ?', $id)) {
+			DB::update('ecommerce_carts_comments SET comment=? WHERE cartId = ?', [$comment, $id]);
 		} else {
 			DB::add('ecommerce_carts_comments (cartId, comment) VALUES (?, ?)', [$id, $comment]);
 		}

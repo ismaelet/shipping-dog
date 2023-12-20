@@ -47,7 +47,7 @@ $inputs = [
 			'type' => 'select',
 			'name' => 'type',
 			'text' => 'Tipo di capo',
-			'query' => 'tag, IF (gender=2, CONCAT(name_it," donna"), name_it) as name_full FROM items_types WHERE hidden=0 ORDER BY ID ASC',
+			'query' => 'tag, IF (gender=2, CONCAT(name_it," donna"), name_it) as name_full FROM items_types WHERE hidden = 0 ORDER BY ID ASC',
 			'field-name' => 'tag',
 			'field-show' => 'name_full',
 		],
@@ -77,7 +77,7 @@ if (isset($_POST['submit'])) {
 	$desID = $_POST['desID'];
 	$type = $_POST['type'];
 
-	if (DB::exists('designs WHERE ID=? AND userID=?', [$desID, $user->id])) {
+	if (DB::exists('designs WHERE ID = ? AND userID = ?', [$desID, $user->id])) {
 
 		$imgID = DB::add('home_pics (fname, lname, desID, type) VALUES (?, ?, ?, ?)', [$fname, $lname, $desID, $type]);
 

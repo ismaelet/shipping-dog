@@ -35,10 +35,10 @@
 						$cart = new Cart($row['ID'], ['buyer', 'payID', 'tot', 'time', 'code']);
 
 						$row_data = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM carts_data WHERE cartID=$cart->id"));
-						$res_ord = DB::select('ID FROM orders WHERE cartID=? ORDER BY time ASC', [$cart->id]);
+						$res_ord = DB::select('ID FROM orders WHERE cartID = ? ORDER BY time ASC', [$cart->id]);
 						$ship = strtoupper(mysqli_fetch_assoc(mysqli_query($con, "SELECT name FROM sys_shipping WHERE ID=$cart->shipID"))['name']);
 
-						if ($row_addr = DB::row('* FROM addresses WHERE cartID=?', $cart->id)) {
+						if ($row_addr = DB::row('* FROM addresses WHERE cartID = ?', $cart->id)) {
 							$country = in_array($row_addr['country'], array('Italy', 'Italia')) ? '' : "<br>".$row_addr['country'];
 							$region = empty($row_addr['region']) ? '' : ' ('.$row_addr['region'].')';
 							$phone = $row_addr['phone'];

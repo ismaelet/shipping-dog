@@ -20,8 +20,6 @@ use Ecommerce\Cart as Cart;
 
 			$pay = $row['payID'] == 1 ? 'PayPal' : 'Stringipe';
 
-			$row_data = DB::row('* FROM carts_data WHERE cartID=?', [$cart->id]);
-
 			if ($cart->addressId) {
 				$address =
 					$cart->address->fullAddress . '<br>'
@@ -30,13 +28,11 @@ use Ecommerce\Cart as Cart;
 			} else $address = "<br><span style='color:red'>!!! Errore nell'indirizzo !!!</span>";
 
 			$code_str = empty($row['code']) ? '' : '<br><br>Sconto: ' . $row['code'];
-			$comm = !empty($row_data['comm_vip']) ? '<br><br>NOTA: <strong>' . $row_data['comm_vip'] . '</strong>' : '';
-
-			$name_str = DB::exists('users WHERE ID=? AND level=1', [$buyer]) ? ' *' : '';
+			$name_str = DB::exists('users WHERE ID = ? AND level = 1', [$buyer]) ? ' *' : '';
 
 			$ord_str = '';
 
-			$res_ord = DB::select('ID FROM orders WHERE cartID=? ORDER BY time ASC', [$cart->id]);
+			$res_ord = DB::select('ID FROM orders WHERE cartID = ? ORDER BY time ASC', [$cart->id]);
 
 			foreach ($cart->orders as $order) {
 				if ($order->inventory == 1) $ord_str .= '!! IN INVENTARIO !! ';
@@ -47,7 +43,7 @@ use Ecommerce\Cart as Cart;
 
 			echo '[' . date('Y/m/d', strtotime($row['time'])) . ' - ' . $pay . ' - ' . $cart->id . ']' . $name_str . '<br>'
 				. $address
-				. $code_str . $comm . '<br><br>'
+				. $code_str . '<br><br>'
 				. $ord_str . '<br>'
 				. 'Spedizione: ' . $cart->shippingMethod->shortName . ', ' . $cart->shippingMethod->deliveryDateString . '<br>'
 				. 'Totale: ' . $cart->priceString . '<br>'

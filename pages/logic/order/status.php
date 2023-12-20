@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
 
 	$email = strtolower(trim($_POST['email']));
 
-	$buyerID = DB::find('buyer FROM addresses WHERE cartID=? AND email=?', [$id, $email]);
+	$buyerID = DB::find('buyer FROM addresses WHERE cartID = ? AND email=?', [$id, $email]);
 
 	if ($buyerID) {
 

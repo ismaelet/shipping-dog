@@ -101,7 +101,7 @@ class Shop {
 
 		// filters by type
 		if ($this->type) {
-			$res_type = DB::select('ID FROM items_types WHERE tag=?', [$this->type]);
+			$res_type = DB::select('ID FROM items_types WHERE tag = ?', [$this->type]);
 
 			if ($row_type = $res_type->fetch_assoc()) {
 				$typeID = $row_type['ID'];
@@ -111,7 +111,7 @@ class Shop {
 
 		// filters by gender
 		if (in_array($this->gender, ['m', 'f'])) {
-			$res_gender = DB::select('ID FROM items_genders WHERE tag=?', [$this->gender]);
+			$res_gender = DB::select('ID FROM items_genders WHERE tag = ?', [$this->gender]);
 
 			if ($row = $res_gender->fetch_assoc()) {
 				$gendID = $row['ID'];
@@ -269,10 +269,10 @@ class Shop {
 								<div class="gender-ddown">
 									<?php
 									if ($this->id) $res = DB::select("
-											ID FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden=0 AND ID IN (SELECT typeID FROM items WHERE userID=? AND status=1) ORDER BY ID ASC", [$this->id]);
+											ID FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT typeID FROM items WHERE userID = ? AND status = 1) ORDER BY ID ASC", [$this->id]);
 
 									else $res = DB::select("
-											ID FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden=0 AND ID IN (SELECT typeID FROM items WHERE status=1) ORDER BY ID ASC");
+											ID FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT typeID FROM items WHERE status = 1) ORDER BY ID ASC");
 
 									while ($row = $res->fetch_assoc()) {
 
@@ -302,10 +302,10 @@ class Shop {
 
 									if ($this->id) {
 										$res = DB::select("
-											ID FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden=0 OR ID=115) AND ID IN (SELECT typeID FROM items WHERE userID=? AND status=1) ORDER BY ID ASC", [$this->id]);
+											ID FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT typeID FROM items WHERE userID = ? AND status = 1) ORDER BY ID ASC", [$this->id]);
 									} else {
 										$res = DB::select("
-											ID FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden=0 OR ID=115) AND ID IN (SELECT typeID FROM items WHERE status=1) ORDER BY ID ASC");
+											ID FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT typeID FROM items WHERE status = 1) ORDER BY ID ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {
@@ -336,10 +336,10 @@ class Shop {
 
 									if ($this->id) {
 										$res = DB::select("
-											ID FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT typeID FROM items WHERE userID=? AND status=1) ORDER BY name_it ASC", [$this->id]);
+											ID FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT typeID FROM items WHERE userID = ? AND status = 1) ORDER BY name_it ASC", [$this->id]);
 									} else {
 										$res = DB::select("
-											ID FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT typeID FROM items WHERE status=1) ORDER BY name_it ASC");
+											ID FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT typeID FROM items WHERE status = 1) ORDER BY name_it ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {

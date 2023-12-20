@@ -5,6 +5,8 @@ class StyleLoader {
 	private static $list = [];
 
 	public static function __constructStatic() {
+		self::add(null, 'base');
+
 		// add framework styles
 		$files = glob(SERVER_ROOT . '/system/styles/*.css');
 		foreach ($files as $file) self::add(self::getFileName($file), 'system');
@@ -19,6 +21,10 @@ class StyleLoader {
 		$file = null;
 
 		switch ($type) {
+			case 'base':
+				$priority = 0;
+				$file = '/public/assets/css/style.css';
+				break;
 			case 'system':
 				$priority = $priority ?: 1;
 				$file = '/system/styles/' . $fileName . '.css';

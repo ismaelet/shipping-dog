@@ -1,12 +1,38 @@
 <?php
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+// Set the error log
+ini_set('error_log', __DIR__ . '/../../logs/error.log');
+
+// Load resources
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+// Load environment variables
 (Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'))->load();
 
-// fetch app config
-require_once(__DIR__ . '/../../app/config/config.php');
-require_once(__DIR__ . '/../../app/config/vendor-config.php');
+// Load Eloquent ORM
+$capsule = new Capsule;
+$capsule->addConnection([
+	'driver' => 'mysql',
+	'host' => env('DB_HOST'),
+	'database' => env('DB_DATABASE'),
+	'username' => env('DB_USERNAME'),
+	'password' => env('DB_PASSWORD'),
+	'charset'   => 'utf8',
+	'collation' => 'utf8_unicode_ci',
+	'prefix'    => '',
+]);
+
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
+
+// Set the error reporting
+if (env('DEBUG')) {
+	ini_set('display_errors', '1');
+	ini_set('display_startup_errors', '1');
+	error_reporting(E_ALL ^ E_DEPRECATED);
+}
 
 // define class autoloader
 spl_autoload_register(function ($name) {
@@ -25,7 +51,7 @@ spl_autoload_register(function ($name) {
 		case file_exists($file = public_server_path('/app/classes/' . $name . '.php')):
 			include_once($file);
 			break;
-		case file_exists($file = public_server_path('/system/classes/' . $name . '.php')):
+		case file_exists($file = __DIR__ . '/../../../system/classes/' . $name . '.php'):
 			include_once($file);
 			break;
 	}
@@ -34,6 +60,10 @@ spl_autoload_register(function ($name) {
 		$name::__constructStatic();
 	}
 });
+
+// fetch app config
+require_once(__DIR__ . '/../../app/config/config.php');
+require_once(__DIR__ . '/../../app/config/vendor-config.php');
 
 // render
 Setup::execute();

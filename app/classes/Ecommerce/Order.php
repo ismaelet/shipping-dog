@@ -231,7 +231,7 @@ class Order {
 	public function updateDiscount(float $discountAmount) {
 		$discountAmount = round($discountAmount, 2);
 
-		DB::update('orders SET price_disc=? WHERE ID=?', [$discountAmount, $this->id]);
+		DB::update('orders SET price_disc=? WHERE ID = ?', [$discountAmount, $this->id]);
 
 		$this->data['fixedDiscount'] = $discountAmount;
 		$this->data = [];
@@ -242,7 +242,7 @@ class Order {
 	public function updateGainReduction(float $gainReduction) {
 		$gainReduction = round($gainReduction, 2);
 
-		DB::update('orders SET gain_disc=? WHERE ID=?', [$gainReduction, $this->id]);
+		DB::update('orders SET gain_disc=? WHERE ID = ?', [$gainReduction, $this->id]);
 
 		$this->data['gainReduction'] = $gainReduction;
 		unset($this->data['totalGain']);
@@ -265,7 +265,7 @@ class Order {
 
 		if ($productId) {
 			$product = (new Product($productId))->setLogoId($logoId);
-			$priceSize = DB::find('price FROM items_sizes WHERE ID=?', [$sizeId]);
+			$priceSize = DB::find('price FROM items_sizes WHERE ID = ?', [$sizeId]);
 			$price = $product->fullPrice + $priceSize;
 
 			if (userId()) {

@@ -53,7 +53,7 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 		}
 	} else {
 		// edit
-		DB::update('items SET name = ?, typeID = ?, colorID = ?, colors = ? WHERE ID = ?', [$name, $typeId, $defaultColorId, $newColors, $product->id]);
+		DB::update('items SET name = ?, typeID = ?, colorID = ?, colors = ? ', [$name, $typeId, $defaultColorId, $newColors, $product->id]);
 	}
 
 	DB::put('items_info', ['description' => $description], $product->id);

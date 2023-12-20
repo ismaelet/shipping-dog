@@ -129,7 +129,7 @@ main {
 	padding-block: 2rem;
 	margin-bottom: 1rem;
 	margin-inline: 1rem;
-	border-bottom: 1px solid var(--text-color-fade);
+	border-bottom: var(--border);
 	text-transform: uppercase;
 	font-size: 0.9rem;
 }

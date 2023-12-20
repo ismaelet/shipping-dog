@@ -15,7 +15,7 @@ unset($_SESSION['done']);
 
 $id = $_GET['id'] ?? false;
 
-if (!$row = DB::row('userID FROM designs WHERE ID=?', [$id])) redirect('/manage/portfolio');
+if (!$row = DB::row('userID FROM designs WHERE ID = ?', [$id])) redirect('/manage/portfolio');
 
 $design = new Design($id);
 $seller = $design->seller;
@@ -30,7 +30,7 @@ View::$title = 'Modifica: ' . $design->name;
 $custom = $design->custom;
 
 // generate data
-$res_colorD = DB::select('ID FROM items_colors WHERE hidden=0 ORDER BY hidden ASC, preorder ASC, reorder ASC, name_it ASC');
+$res_colorD = DB::select('ID FROM items_colors WHERE hidden = 0 ORDER BY hidden ASC, preorder ASC, reorder ASC, name_it ASC');
 
 // reupload design
 if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
@@ -55,11 +55,11 @@ if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
 	if ($error) $_SESSION['error'] = $dark ? 'dark_' . $error : 'light_' . $error;
 	else {
 
-		DB::update('designs SET ratio=? WHERE ID=?', [$ratio, $id]);
+		DB::update('designs SET ratio=? WHERE ID = ?', [$ratio, $id]);
 
 		if (!$design->custom) {
 			// delete item images
-			$res = DB::select('ID from items WHERE desID=?', [$id]);
+			$res = DB::select('ID from items WHERE desID = ?', [$id]);
 			while ($row = $res->fetch_assoc()) Preview::deleteImages($row['ID']);
 		}
 
@@ -109,7 +109,7 @@ if (isset($_POST['colors-submit'])) {
 
 		$type = new Type($row['ID']);
 
-		$productID = DB::find('ID FROM items WHERE desID=? AND typeID=?', [$id, $type->id]);
+		$productID = DB::find('ID FROM items WHERE desID = ? AND typeID = ?', [$id, $type->id]);
 
 		$product = new Product($productID);
 
@@ -120,7 +120,7 @@ if (isset($_POST['colors-submit'])) {
 
 			$colors = implode(',', $colors);
 
-			DB::update('items SET colorID=?, colors=? WHERE ID=?', [$color->id, $colors, $product->id]);
+			DB::update('items SET colorID = ?, colors=? WHERE ID = ?', [$color->id, $colors, $product->id]);
 		}
 	}
 
@@ -130,7 +130,7 @@ if (isset($_POST['colors-submit'])) {
 
 	$colorHex = $_POST['color-hex'];
 
-	DB::update('designs SET color=? WHERE ID=?', [$colorHex, $id]);
+	DB::update('designs SET color=? WHERE ID = ?', [$colorHex, $id]);
 
 	// refresh
 	$_SESSION['done'] = 'colors';
@@ -181,7 +181,7 @@ if (isset($_POST['update-position'])) {
 // disable item
 if (isset($_POST['off']) || isset($_POST['on'])) {
 	$typeId = $_POST['typeID'];
-	$productId = DB::find('ID FROM items WHERE desID=? AND typeID=?', [$id, $typeId]);
+	$productId = DB::find('ID FROM items WHERE desID = ? AND typeID = ?', [$id, $typeId]);
 	$activate = isset($_POST['on']);
 
 	if ($productId) {

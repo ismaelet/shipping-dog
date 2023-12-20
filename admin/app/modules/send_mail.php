@@ -4,9 +4,9 @@
 function send_email($email, $cartID) {
 
 	//generate email text
-	$buyer = DB::find('buyer FROM carts WHERE ID=?', [$cartID]);
+	$buyer = DB::find('buyer FROM carts WHERE ID = ?', [$cartID]);
 
-	$row_addr = DB::row('* FROM addresses WHERE cartID=?', [$cartID]);
+	$row_addr = DB::row('* FROM addresses WHERE cartID = ?', [$cartID]);
 
 	$addr_aname = $row_addr['aname'];
 	$addr_strt = $row_addr['address'];
@@ -19,7 +19,7 @@ function send_email($email, $cartID) {
 	$toemail = $row_addr['email'];
 
 	$orders = '';
-	$res_ord = DB::select('ID FROM orders WHERE cartID=? ORDER BY ID ASC', [$cartID]);
+	$res_ord = DB::select('ID FROM orders WHERE cartID = ? ORDER BY ID ASC', [$cartID]);
 
 	while ($row_ord = $res_ord->fetch_assoc()) {
 

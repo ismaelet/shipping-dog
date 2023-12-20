@@ -10,7 +10,7 @@ class PaymentMethod {
 	public $name;
 
 	function __construct($id) {
-		if ($row = DB::row('* FROM sys_payment WHERE id=?', [$id])) {
+		if ($row = DB::row('* FROM sys_payment WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->name = $row['name_it'];
 		}

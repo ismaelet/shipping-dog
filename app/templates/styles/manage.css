@@ -88,7 +88,6 @@ main {
 .nav-title {
 	color: var(--text-color-fade);
 	font-weight: 600;
-	font-size: 0.9rem;
 	line-height: 3;
 	transition: color 0.2s;
 }
@@ -136,7 +135,7 @@ main {
 
 .nav-link {
 	padding-left: 4.2rem;
-	font-size: 0.8rem;
+	font-size: var(--fs-300);
 	transition: color 0.2s;
 }
 
@@ -172,7 +171,7 @@ main {
 }
 
 .stitle {
-	border-bottom: 1px solid var(--text-color-fade);
+	border-bottom: var(--border);
 	padding: 2rem 0;
 	font-size: 1.5rem;
 	font-weight: 600;
@@ -181,7 +180,7 @@ main {
 }
 
 .form-foot {
-	border-top: 1px solid var(--text-color-fade);
+	border-top: var(--border);
 	text-align: center;
 	padding: 1rem 0;
 	margin-top: 2rem;

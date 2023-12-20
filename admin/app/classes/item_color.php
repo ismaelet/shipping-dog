@@ -12,7 +12,7 @@ class Color {
 
 		if ($id) {
 
-			$row = DB::row('* FROM items_colors WHERE ID=?', [$id]);
+			$row = DB::row('* FROM items_colors WHERE ID = ?', [$id]);
 
 			$this->id = $id;
 			$this->name = $row['name_it'];

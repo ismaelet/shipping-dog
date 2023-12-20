@@ -32,7 +32,7 @@ class User {
 	/*
 
 	function __construct($id) {
-		if ($row = DB::row('* FROM users WHERE id=?', [$id])) {
+		if ($row = DB::row('* FROM users WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->username = $row['username'] ?: $row['email'];
 			$this->userFirstName = ucfirst($row['firstName']);

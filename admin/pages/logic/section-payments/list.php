@@ -38,12 +38,12 @@ $buttons = [
 */
 if (isset($_POST['delete-expand'])) {
 	$id = $_POST['ID'];
-	$payment = DB::row('* FROM stores_payments WHERE id=?', $id);
+	$payment = DB::row('* FROM stores_payments WHERE id = ?', $id);
 
-	if ($payment['other']) DB::update('stores SET flat=flat-? WHERE userID=?', [$payment['value'], $payment['storeID']]);
-	else DB::update('stores SET payed=payed-? WHERE userID=?', [$payment['value'], $payment['storeID']]);
+	if ($payment['other']) DB::update('stores SET flat=flat-? WHERE userID = ?', [$payment['value'], $payment['storeID']]);
+	else DB::update('stores SET payed=payed-? WHERE userID = ?', [$payment['value'], $payment['storeID']]);
 
-	DB::delete('stores_payments WHERE ID=?', [$id]);
+	DB::delete('stores_payments WHERE ID = ?', [$id]);
 
 	redirect();
 }

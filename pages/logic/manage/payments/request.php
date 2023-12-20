@@ -94,12 +94,12 @@ if (isset($_POST['submit'])) {
 
 if (isset($_POST['download'])) {
 
-	DB::update('stores SET request=1 WHERE userID=?', [userId()]);
+	DB::update('stores SET request=1 WHERE userID = ?', [userId()]);
 
 	if ($data['total'] == $seller->toPay && file_exists($documents[0]['server-path'])) {
 		redirect($documents[0]['client-path']);
 	} else {
-		DB::update('stores SET request=1 WHERE userID=?', [userId()]);
+		DB::update('stores SET request=1 WHERE userID = ?', [userId()]);
 		DB::update('payment_requests SET total=? WHERE shopId=?', [$seller->toPay, userId()]);
 
 		foreach ($documents as $document) {

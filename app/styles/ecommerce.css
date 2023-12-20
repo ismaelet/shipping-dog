@@ -92,7 +92,7 @@
 	display: grid;
 	padding-block: 0.75rem;
 	padding-left: 2rem;
-	background-color: var(--clr-surface-600);
+	background-color: var(--color-surface-500);
 	align-items: center;
 }
 
@@ -104,7 +104,7 @@
 	padding-right: 1rem;
 }
 
-.cart-list__cart:nth-child(2n) .cart-list__field {
+.cart-list__cart:nth-child(2n + 1) .cart-list__field {
 	background-color: var(--clr-surface-500);
 }
 

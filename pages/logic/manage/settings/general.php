@@ -6,7 +6,7 @@ $saved = $_GET['saved'] ?? false;
 $seller = new Seller(userId());
 
 // get socials data
-$row_link = DB::row('* FROM links WHERE userID=?', [userId()]);
+$row_link = DB::row('* FROM links WHERE userID = ?', [userId()]);
 
 if (!$row_link) DB::add('links (userID) VALUES (?)', [userId()]);
 
@@ -85,9 +85,9 @@ if (isset($_POST['edit-socials'])) {
 	if ($pos = strpos($yt, 'youtube.com/')) $yt = substr($yt, $pos + 12);
 	$yt = strtok($yt, '/');
 
-	if (!DB::exists('links WHERE userID=?', [userId()])) DB::add('links (userID) VALUE (?)', [userId()]);
+	if (!DB::exists('links WHERE userID = ?', [userId()])) DB::add('links (userID) VALUE (?)', [userId()]);
 
-	DB::update('links SET site=?, facebook=?, instagram=?, twitter=?, youtube=? WHERE userID=?', [$site, $fb, $inst, $twit, $yt, userId()]);
+	DB::update('links SET site=?, facebook=?, instagram=?, twitter=?, youtube=? WHERE userID = ?', [$site, $fb, $inst, $twit, $yt, userId()]);
 
 	redirect('&saved=socials#socials');
 }

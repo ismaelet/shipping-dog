@@ -4,7 +4,7 @@ $pageConfig['add'] = false;
 
 $queryConfig['table'] = 'stores';
 $queryConfig['index'] = 'userID';
-$queryConfig['where-search'] = "name LIKE CONCAT('%',?,'%') OR userID=? OR userID IN (SELECT ID FROM users WHERE username LIKE CONCAT('%',?,'%') OR firstname LIKE CONCAT('%',?,'%') OR lastname LIKE CONCAT('%',?,'%'))";
+$queryConfig['where-search'] = "name LIKE CONCAT('%',?,'%') OR userID = ? OR userID IN (SELECT ID FROM users WHERE username LIKE CONCAT('%',?,'%') OR firstname LIKE CONCAT('%',?,'%') OR lastname LIKE CONCAT('%',?,'%'))";
 
 // select fields
 $fields = [
@@ -40,11 +40,11 @@ function _expand_buttons(&$button, $buttonKey, $queryRow) {
 * Form
 */
 if (isset($_POST['activate'])) {
-	DB::update('stores SET status=1 WHERE userID=?', [$_POST['userID']]);
+	DB::update('stores SET status=1 WHERE userID = ?', [$_POST['userID']]);
 }
 
 if (isset($_POST['deactivate'])) {
-	DB::update('stores SET status=0 WHERE userID=?', [$_POST['userID']]);
+	DB::update('stores SET status=0 WHERE userID = ?', [$_POST['userID']]);
 }
 
 if (isset($_POST['delete'])) {

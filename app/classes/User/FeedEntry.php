@@ -43,7 +43,7 @@ class FeedEntry {
 	}
 
 	private function getnews() {
-		return $this->typeId == 1 ? DB::find('text_it FROM news WHERE ID=?', $this->eventId) : null;
+		return $this->typeId == 1 ? DB::find('text_it FROM news WHERE ID = ?', $this->eventId) : null;
 	}
 
 	private function getprofile() {

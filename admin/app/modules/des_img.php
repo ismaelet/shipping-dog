@@ -24,9 +24,9 @@ function des_img_gen($design) {
 		//bgr
 		$src_image = imagecreatetruecolor($w, $h);
 
-		if (isset($design->color)) $design->color = DB::find('color FROM designs WHERE ID=?', [$design->id]);
+		if (isset($design->color)) $design->color = DB::find('color FROM designs WHERE ID = ?', [$design->id]);
 
-		$color_hex = DB::find('color FROM designs WHERE ID=?', [$design->id]);
+		$color_hex = DB::find('color FROM designs WHERE ID = ?', [$design->id]);
 		if ($color_hex == '#FFFFFF') $color = imagecolorallocate($src_image, 255, 255, 255);
 		else $color = imagecolorallocate($src_image, 0, 0, 0);
 

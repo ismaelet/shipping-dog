@@ -10,8 +10,8 @@ class Price {
 	function __construct($product) {
 
 		$row =
-			DB::row('* FROM items_prices WHERE itemID=?', [$product->id]) ?:
-			DB::row('* FROM prices_stores WHERE storeID=? AND typeID=?', [$product->seller->id, $product->type->id]);
+			DB::row('* FROM items_prices WHERE itemID = ?', [$product->id]) ?:
+			DB::row('* FROM prices_stores WHERE storeID = ? AND typeID = ?', [$product->seller->id, $product->type->id]);
 
 		if ($row) {
 			$this->price = format($row['price']);

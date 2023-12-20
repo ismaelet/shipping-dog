@@ -11,9 +11,9 @@ $title = 'aname';
 $id = $_GET['id'] ?? false;
 
 //create entry if doesn't exists
-if ($id && !DB::exists('addresses WHERE cartID=?', [$id])) {
+if ($id && !DB::exists('addresses WHERE cartID = ?', [$id])) {
 
-	$buyer = DB::find('buyer FROM carts WHERE ID=?', [$id]);
+	$buyer = DB::find('buyer FROM carts WHERE ID = ?', [$id]);
 
 	DB::add('addresses (cartID, buyer) VALUES (?, ?)', [$id, $buyer]);
 }
@@ -32,15 +32,15 @@ if (isset($_POST['edit'])) {
 
 	$comment = $_POST['comment'];
 
-	DB::update('addresses SET aname=?, address=?, number=?, zip=?, city=?, region=?, email=?, phone=? WHERE cartID=?', [$aname, $addr, $num, $zip, $city, $reg, $email, $phone, $id]);
+	DB::update('addresses SET aname = ?, address=?, number=?, zip=?, city=?, region=?, email=?, phone=? WHERE cartID = ?', [$aname, $addr, $num, $zip, $city, $reg, $email, $phone, $id]);
 
-	DB::update('carts_data SET comm_vip=? WHERE cartID=?', [$comment, $id]);
+	DB::update('carts_data SET comm_vip=? WHERE cartID = ?', [$comment, $id]);
 
 	redirect('list' . $hash);
 }
 
 //form
-$comment = DB::find('comm_vip FROM carts_data WHERE cartID=?', [$id]) ?? '';
+$comment = DB::find('comm_vip FROM carts_data WHERE cartID = ?', [$id]) ?? '';
 
 $inputs = [
 	[

@@ -6,7 +6,7 @@ $index = 'date';
 $add = false;
 
 // handle search
-$query['filter'] = "name LIKE CONCAT('%',?,'%') OR userID=? OR userID IN (SELECT ID FROM users WHERE username LIKE CONCAT('%',?,'%') OR firstname LIKE CONCAT('%',?,'%') OR lastname LIKE CONCAT('%',?,'%'))";
+$query['filter'] = "name LIKE CONCAT('%',?,'%') OR userID = ? OR userID IN (SELECT ID FROM users WHERE username LIKE CONCAT('%',?,'%') OR firstname LIKE CONCAT('%',?,'%') OR lastname LIKE CONCAT('%',?,'%'))";
 
 // select fields
 $fields = [

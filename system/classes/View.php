@@ -110,6 +110,8 @@ class View {
 	* Render the view
 	*/
 	public static function show() {
+		$timerStart = microtime(true);
+
 		// set basic data
 		if (!self::$location) self::$location = self::$name;
 		if (!self::$url) self::$url = SERVER_ROOT . '/pages/views/' . self::$name . '.php';
@@ -128,5 +130,12 @@ class View {
 
 		// render page
 		Viewer::render();
+
+		// if (env('DEBUG')) {
+		// 	$endTimer = round((microtime(true) - $timerStart) * 1000);
+
+		// 	echo 'Connection time: ' . $endTimer . 'ms<br>';
+		// 	echo DB::getQueries();
+		// }
 	}
 }

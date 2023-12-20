@@ -161,7 +161,7 @@
 				<?php } ?>
 
 				<!-- Favorites icon -->
-				<?php if ($header['wishlist'] && DB::exists('likes WHERE userID=?', [$user->id])) { ?>
+				<?php if ($header['wishlist'] && DB::exists('likes WHERE userID = ?', [$user->id])) { ?>
 
 					<a id="h-wish" class="wish icon-box h-link al-mid" href="<?= client_url('/wishlist') ?>">
 						<?= icon_embed('love') ?>

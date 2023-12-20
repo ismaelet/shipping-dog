@@ -31,7 +31,7 @@ class Type {
 	public $availablePositionIds;
 
 	function __construct($id) {
-		if ($row = DB::row('* FROM items_types WHERE ID=?', [$id])) {
+		if ($row = DB::row('* FROM items_types WHERE ID = ?', [$id])) {
 			$this->id = $id;
 			$this->slug = $row['tag'];
 			$this->name = $row['name_' . 'it'];
@@ -94,8 +94,8 @@ class Type {
 
 		foreach ($this->availableColorSlugs as $colorSlug) {
 			$colorId = $all ?
-				DB::find('ID FROM items_colors WHERE tag=?', [$colorSlug]) :
-				DB::find('ID FROM items_colors WHERE tag=? AND hidden=0', [$colorSlug]);
+				DB::find('ID FROM items_colors WHERE tag = ?', [$colorSlug]) :
+				DB::find('ID FROM items_colors WHERE tag = ? AND hidden = 0', [$colorSlug]);
 
 			if ($colorId) {
 				$colors[] = new Color($colorId);

@@ -124,7 +124,7 @@ use function Ecommerce\cart;
 						<input type="text" class="inp delivery-input" name="city" placeholder="Città" value="<?= $address->city ?>" maxlength="30" autocomplete="address-level2" <?= !cart()->localDelivery ? 'required' : '' ?>>
 
 						<div class="field">
-							<input type="text" class="inp delivery-input" name="zip" placeholder="Codice postale" value="<?= $address->zip ?>" maxlength="5" autocomplete="postal-code" <?= !cart()->localDelivery ? 'required' : '' ?>>
+							<input type="text" class="inp delivery-input" name="zip" placeholder="Codice postale" value="<?= trim($address->zip) ?>" maxlength="5" autocomplete="postal-code" <?= !cart()->localDelivery ? 'required' : '' ?>>
 							<input type="text" class="inp delivery-input" name="region" placeholder="Provincia" value="<?= $address->region ?>" maxlength="2" autocomplete="address-level1" <?= !cart()->localDelivery ? 'required' : '' ?>>
 						</div>
 

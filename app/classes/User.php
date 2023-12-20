@@ -18,7 +18,7 @@ class User {
 	public $rank_str;
 
 	function __construct(int $id = null) {
-		if ($row = DB::row('* FROM users WHERE ID=?', [$id])) {
+		if ($row = DB::row('* FROM users WHERE ID = ?', [$id])) {
 			$this->id = $id;
 			$this->buyerId = $this->id;
 			$this->username = $row['username'];
@@ -102,6 +102,6 @@ class User {
 
 	// check if the user is a seller
 	function is_seller() {
-		return DB::exists('stores WHERE userID=?', [$this->id]);
+		return DB::exists('stores WHERE userID = ?', [$this->id]);
 	}
 }

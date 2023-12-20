@@ -17,7 +17,7 @@ class DesignsRequest {
 			foreach ($searchFields as $searchField) {
 				switch ($searchField) {
 					case 'id':
-						$queryFields[] = 'ID=?';
+						$queryFields[] = 'ID = ?';
 						break;
 					case 'name':
 						$queryFields[] = $searchField . " LIKE CONCAT('%',?,'%')";

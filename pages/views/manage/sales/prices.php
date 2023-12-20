@@ -40,7 +40,7 @@ use Ecommerce\Product\Type;
 				$type = new Type($row['ID']);
 				$gender = new Gender($type->genderId);
 
-				$row_price = DB::row('* FROM prices_stores WHERE storeID=? AND typeID=?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE typeID=?', [$type->id]);
+				$row_price = DB::row('* FROM prices_stores WHERE storeID = ? AND typeID = ?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE typeID = ?', [$type->id]);
 
 				$price = $row_price['price'];
 				$gain_w = $row_price['gain_w'];
@@ -83,7 +83,7 @@ use Ecommerce\Product\Type;
 
 				$type = new Type($row['ID']);
 
-				$row_price = DB::row('* FROM prices_stores WHERE storeID=? AND typeID=?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE typeID=?', [$type->id]);
+				$row_price = DB::row('* FROM prices_stores WHERE storeID = ? AND typeID = ?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE typeID = ?', [$type->id]);
 
 				$price = $row_price['price'];
 				$gain_w = $row_price['gain_w'];

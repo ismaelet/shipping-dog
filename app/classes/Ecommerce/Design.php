@@ -43,11 +43,11 @@ class Design {
 	}
 
 	private function getProductCount() {
-		return  DB::count('items WHERE desID=? AND status=1', [$this->id]);
+		return  DB::count('items WHERE desID = ? AND status = 1', [$this->id]);
 	}
 
 	private function getMainProduct() {
-		$productId = DB::find('ID FROM items WHERE desID=? AND status=1 ORDER BY typeID ASC', [$this->id]);
+		$productId = DB::find('ID FROM items WHERE desID = ? AND status = 1 ORDER BY typeID ASC', [$this->id]);
 
 		return  new Product($productId);
 	}
@@ -86,7 +86,7 @@ class Design {
 	private function loved() {
 		global $user;
 
-		$loved = logged() && DB::exists('likes WHERE userID=? AND desID=?', [$user->id, $this->id]);
+		$loved = logged() && DB::exists('likes WHERE userID = ? AND desID = ?', [$user->id, $this->id]);
 
 		return $loved;
 	}
@@ -136,11 +136,11 @@ class Design {
 
 	public function delete(bool $permanently = false) {
 		if ($permanently) {
-			DB::delete('designs WHERE ID=?', [$this->id]);
-			DB::delete('designs_tags WHERE desID=?', [$this->id]);
-			DB::delete('likes WHERE desID=?', [$this->id]);
+			DB::delete('designs WHERE ID = ?', [$this->id]);
+			DB::delete('designs_tags WHERE desID = ?', [$this->id]);
+			DB::delete('likes WHERE desID = ?', [$this->id]);
 		} else {
-			DB::update('designs SET status=0 WHERE ID=?', [$this->id]);
+			DB::update('designs SET status=0 WHERE ID = ?', [$this->id]);
 		}
 
 		foreach ($this->products as $product) {

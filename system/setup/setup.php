@@ -1,12 +1,38 @@
 <?php
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+// Set the error log
+ini_set('error_log', __DIR__ . '/../../logs/error.log');
+
+// Load resources
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+// Load environment variables
 (Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'))->load();
 
-// fetch app config
-require_once(__DIR__ . '/../../app/config/config.php');
-require_once(__DIR__ . '/../../app/config/vendor-config.php');
+// Load Eloquent ORM
+$capsule = new Capsule;
+$capsule->addConnection([
+	'driver' => 'mysql',
+	'host' => env('DB_HOST'),
+	'database' => env('DB_DATABASE'),
+	'username' => env('DB_USERNAME'),
+	'password' => env('DB_PASSWORD'),
+	'charset'   => 'utf8',
+	'collation' => 'utf8_unicode_ci',
+	'prefix'    => '',
+]);
+
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
+
+// Set the error reporting
+if (env('DEBUG') == 'true') {
+	ini_set('display_errors', '1');
+	ini_set('display_startup_errors', '1');
+	error_reporting(E_ALL ^ E_DEPRECATED);
+}
 
 // define class autoloader
 spl_autoload_register(function ($name) {
@@ -31,6 +57,10 @@ spl_autoload_register(function ($name) {
 		$name::__constructStatic();
 	}
 });
+
+// Load resources
+require_once __DIR__ . '/../../app/config/config.php';
+require_once __DIR__ . '/../../app/config/vendor-config.php';
 
 // render
 Setup::execute();
@@ -83,10 +113,7 @@ class Setup {
 				$error = $e->getMessage();
 
 				error_log('Connection error: ' . $error . PHP_EOL . 'On page: ' . $_SERVER['REQUEST_URI']);
-
-				if (DEBUG || in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])) {
-					echo $error;
-				}
+				echo $error;
 			}
 		}
 	}
@@ -148,15 +175,12 @@ class Setup {
 
 	// execute the setup
 	static public function execute() {
-
 		// load resources
 		self::initializeConstants();
 		self::initializeFunctions();
-		self::initializeVendor();
 
 		// connect
 		self::connect();
-		self::migrate();
 		self::initializeRoutes();
 
 		// start session

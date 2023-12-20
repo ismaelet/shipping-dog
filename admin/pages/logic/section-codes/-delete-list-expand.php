@@ -5,11 +5,11 @@ $dett_str = $apply = '';
 $desID = $row['desID'];
 $storeID = $row['storID'];
 
-if ($desID) $apply = DB::find('name FROM designs WHERE ID=?', [$desID]);
-else if ($storeID) $apply = DB::find('name FROM stores WHERE userID=?', [$storeID]);
+if ($desID) $apply = DB::find('name FROM designs WHERE ID = ?', [$desID]);
+else if ($storeID) $apply = DB::find('name FROM stores WHERE userID = ?', [$storeID]);
 
-if ($row['typeID']) $apply .= 'Tipo: '.DB::find('name_it FROM items_types WHERE ID=?', [$row['typeID']]);
-if ($row['colorID']) $apply .= 'Colore: '.DB::find('name_it FROM items_colors WHERE ID=?', [$row['colorID']]);
+if ($row['typeID']) $apply .= 'Tipo: ' . DB::find('name_it FROM items_types WHERE ID = ?', [$row['typeID']]);
+if ($row['colorID']) $apply .= 'Colore: ' . DB::find('name_it FROM items_colors WHERE ID = ?', [$row['colorID']]);
 
 if (empty($apply)) $apply = 'Tutti';
 
@@ -19,24 +19,24 @@ $inputs[2]['value'] = $apply;
 $codeMod = $row['mod_us'] + $row['mod_them'];
 $codeFlat = $row['flat_us'] + $row['flat_them'];
 
-if ($codeMod) $mod_str = '-'.($codeMod).'% ('.$row['mod_us'] .'+'. $row['mod_them'].')';
+if ($codeMod) $mod_str = '-' . ($codeMod) . '% (' . $row['mod_us'] . '+' . $row['mod_them'] . ')';
 else $mod_str = '0 %';
 
 $inputs[3]['value'] = $mod_str;
 $inputs[3]['value'] = 'aaaa';
 
 if ($row['zero'] == 1) $flat_str = '- Guadagno';
-else if ($codeFlat) $flat_str = '-'.($codeFlat).'€ ('.$row['flat_us'] .'+'. $row['flat_them'].')';
+else if ($codeFlat) $flat_str = '-' . ($codeFlat) . '€ (' . $row['flat_us'] . '+' . $row['flat_them'] . ')';
 else $flat_str = '0 €';
 
 $inputs[4]['value'] = $flat_str;
 $inputs[4]['value'] = 'aaaa';
 
 //type
-$type = DB::find('name_it FROM items_types WHERE ID=?', [$row['typeID']]) ?: 'Tutti';
+$type = DB::find('name_it FROM items_types WHERE ID = ?', [$row['typeID']]) ?: 'Tutti';
 
 //color
-$color = DB::find('name_it FROM items_colors WHERE ID=?', [$row['colorID']]) ?: 'Tutti';
+$color = DB::find('name_it FROM items_colors WHERE ID = ?', [$row['colorID']]) ?: 'Tutti';
 
 //time
 $time_start = date('Y-m-d', strtotime($row['time_start']));

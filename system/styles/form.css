@@ -14,7 +14,7 @@
 .form-template .body {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	border-block: 1px solid var(--text-color-fade);
+	border-block: var(--border);
 	padding-block: 1rem;
 	gap: 1rem;
 }

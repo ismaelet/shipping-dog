@@ -15,7 +15,7 @@ class Position {
 	public $imagePositionId;
 
 	function __construct($id) {
-		if ($row = DB::row('* FROM items_positions WHERE ID=?', [$id])) {
+		if ($row = DB::row('* FROM items_positions WHERE ID = ?', [$id])) {
 			$this->id = $id;
 			$this->name = $row['name_' . 'it'];
 			$this->info = $row['info'];

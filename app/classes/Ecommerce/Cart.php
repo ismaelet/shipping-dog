@@ -339,7 +339,7 @@ class Cart {
 	*/
 	private function getOrders() {
 		$orders = [];
-		$ordersRes = DB::select('id FROM orders WHERE cartId=? ORDER BY time ASC', [$this->id]);
+		$ordersRes = DB::select('id FROM orders WHERE cartId = ? ORDER BY time ASC', [$this->id]);
 
 		while ($order = $ordersRes->fetch_assoc()) {
 			$orders[] = new Order($order['id']);
@@ -366,14 +366,14 @@ class Cart {
 				[$this->price, $this->usedCredit, $this->shipID, $this->fullShippingPrice, $this->shippingWithCredit, $this->id]
 			);
 		else {
-			DB::delete('carts WHERE ID=?', $this->id);
+			DB::delete('carts WHERE ID = ?', $this->id);
 		}
 	}
 
 	public function updateTracking($tracking) {
 		$this->data['tracking'] = trim($tracking);
 
-		DB::update('carts SET tracking=? WHERE id=?', [$this->tracking, $this->id]);
+		DB::update('carts SET tracking=? WHERE id = ?', [$this->tracking, $this->id]);
 		//if ($this->tracking) send_tracking_email($this->id);
 	}
 
@@ -502,7 +502,7 @@ class Cart {
 	*/
 	public function removeCoupon() {
 		if ($this->couponId) {
-			DB::update("carts SET code='' WHERE ID=?", [$this->id]);
+			DB::update("carts SET code='' WHERE ID = ?", [$this->id]);
 
 			foreach ($this->orders as $order) {
 				$order->resetDiscount();
@@ -561,7 +561,7 @@ class Cart {
 			}
 
 			if (!$this->coupon->permanent) {
-				DB::delete('codes WHERE id = ?', [$this->couponId]);
+				DB::delete('codes ', [$this->couponId]);
 			}
 		}
 
@@ -612,7 +612,7 @@ class Cart {
 				$inventoryId = $inventoryData['inventoryId'];
 
 				DB::update(Order::TABLE . ' SET inventory = 1 WHERE ' . Order::INDEX . ' = ?', [$order->id]);
-				DB::delete('inventory WHERE id = ?', [$inventoryId]);
+				DB::delete('inventory ', [$inventoryId]);
 			}
 
 			if ($this->customerId != $order->sellerId) {
@@ -693,7 +693,7 @@ class Cart {
 				}
 			}
 
-			DB::update('carts SET code = ? WHERE ID = ?', [$coupon->code, $this->id]);
+			DB::update('carts SET code = ? ', [$coupon->code, $this->id]);
 
 			$this->data['couponCode'] = $coupon->code;
 			$this->data = [];

@@ -37,7 +37,7 @@ $inputs = [
 * Form handling
 */
 function _expand_edit($table, $inputs, $index, $id) {
-	$old = DB::find('slug FROM admin_categories WHERE id=?', $id);
+	$old = DB::find('slug FROM admin_categories WHERE id = ?', $id);
 
 	form_db_update($table, $inputs, $index, $id);
 

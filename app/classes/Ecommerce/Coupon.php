@@ -44,7 +44,7 @@ class Coupon {
 	// private $minPrice;
 
 	function __construct($id) {
-		if ($row = DB::row('* FROM codes WHERE id=?', [$id])) {
+		if ($row = DB::row('* FROM codes WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->code = $row['code'];
 			$this->timeStart = $row['time_start'];
@@ -77,7 +77,7 @@ class Coupon {
 	 * Get methods
 	 */
 	private function getUsed() {
-		return $this->data['used'] = DB::exists('codes_used WHERE codeID=? AND userID=?', [$this->id, userId()]);
+		return $this->data['used'] = DB::exists('codes_used WHERE codeID = ? AND userID = ?', [$this->id, userId()]);
 	}
 
 	private function getIsValid() {

@@ -2,6 +2,38 @@
 
 class DB {
 
+	private static $queries = [];
+	private static $impossibleToImprove = [
+		'select * from addresses where id = ? limit 1',
+		'select * from designs where id = ? limit 1',
+		'select * from users where id = ? limit 1',
+		'select * from orders where id = ? limit 1',
+		'select * from orders where cartid = ? limit 1',
+		'select * from sys_shipping where id = ? liID = ?mit 1',
+		'select * from carts where id = ? limit 1',
+		'select * from items where id = ? limit 1',
+		'select * from stores where userid = ? limit 1',
+		'select * from items_types where id = ? limit 1',
+		'select * from items_colors where id = ? limit 1',
+		'select * from items_positions where id = ? limit 1',
+		'select * from items_genders where id = ? limit 1',
+		'select * from sys_shipping where id = ? limit 1',
+		'select * from items_sizes where id = ? limit 1',
+		'select * from extras where id = ? limit 1',
+		'select * from items_mockups where typeid = ? and positionid = ? limit 1',
+		'select * from items_previews where itemid = ? and positionid = ? limit 1',
+		'select * from prices_stores where storeid = ? and typeid = ? limit 1',
+		'select 1 from stores where userid = ? limit 1',
+		'select 1 from users where id = ? and level = 1 limit 1',
+		'select id from items_colors where tag = ? limit 1',
+		'select id from addresses where cartid = ? limit 1',
+		'select id from carts where buyer = ? AND status = 0 limit 1',
+		'select value from config where name = ? limit 1',
+		'select value from variables where name = ? limit 1',
+		'select count(*) as num from orders where cartid = ? limit 1',
+		'select column_name from information_schema.columns where table_schema = ? and table_name = ?',
+	];
+
 	// generic query
 	static function execute(string $query, $values = []) {
 		global $con;
@@ -13,6 +45,18 @@ class DB {
 
 		// execute the query
 		if ($stmt) {
+
+			// logged{
+			if (env('DEBUG')) {
+				if (strpos($query, 'WHERE') && !in_array(strtolower($query), self::$impossibleToImprove)) {
+					if (!in_array($query, array_keys(self::$queries))) {
+						self::$queries[$query] = 1;
+					} else {
+						self::$queries[$query]++;
+					}
+				}
+			}
+
 			$types = [];
 
 			if (!empty($values)) {
@@ -174,5 +218,16 @@ class DB {
 		$response = self::execute($query);
 
 		return $response->num_rows;
+	}
+
+	static function getQueries() {
+		$queries = self::$queries;
+		arsort($queries);
+
+		array_walk($queries, function (&$value, $key) {
+			$value = $value . ' x ' . $key;
+		});
+
+		return implode('<br>' . PHP_EOL, $queries);
 	}
 }

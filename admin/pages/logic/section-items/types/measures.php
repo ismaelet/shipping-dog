@@ -3,7 +3,7 @@
 global $id;
 
 //setup page
-$typeName = DB::find('name FROM items_types WHERE ID=?', $id);
+$typeName = DB::find('name FROM items_types WHERE ID = ?', $id);
 
 $tbl = 'items_types_measures';
 $index = 'typeID';

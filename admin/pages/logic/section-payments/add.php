@@ -46,8 +46,8 @@ function _expand_add($tbl, $inputs) {
 
 	$value = str_replace(',', '.', $_POST['value']);
 
-	if (isset($_POST['other'])) DB::update('stores SET flat=flat+? WHERE userID=?', [$value, $_POST['storeID']]);
-	else DB::update('stores SET payed=payed+?, request=0 WHERE userID=?', [$value, $_POST['storeID']]);
+	if (isset($_POST['other'])) DB::update('stores SET flat=flat+? WHERE userID = ?', [$value, $_POST['storeID']]);
+	else DB::update('stores SET payed=payed+?, request=0 WHERE userID = ?', [$value, $_POST['storeID']]);
 
 	form_db_add($tbl, $inputs);
 }

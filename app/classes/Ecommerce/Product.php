@@ -230,8 +230,8 @@ class Product {
 
 	private function getPriceData() {
 		$priceData =
-			DB::row('* FROM items_prices WHERE itemID=?', [$this->id]) ?: (DB::row('* FROM prices_stores WHERE storeID=? AND typeID=?', [$this->seller->id, $this->type->id]) ?:
-				DB::row('* FROM prices_default WHERE typeID=?', [$this->type->id])
+			DB::row('* FROM items_prices WHERE itemID = ?', [$this->id]) ?: (DB::row('* FROM prices_stores WHERE storeID = ? AND typeID = ?', [$this->seller->id, $this->type->id]) ?:
+				DB::row('* FROM prices_default WHERE typeID = ?', [$this->type->id])
 			);
 
 		return $priceData;
@@ -348,7 +348,7 @@ class Product {
 	public function updateColors(array $availableColorSlugs) {
 		$availableColorSlugsString = implode(',', $availableColorSlugs);
 
-		DB::update('items SET colors=? WHERE ID=?', [$availableColorSlugsString, $this->id]);
+		DB::update('items SET colors=? WHERE ID = ?', [$availableColorSlugsString, $this->id]);
 
 		$this->data['availableColorSlugs'] = $availableColorSlugs;
 
@@ -361,7 +361,7 @@ class Product {
 		$this->setColorId($colorId);
 
 		if ($this->colorId != $oldColorId) {
-			DB::update('items SET colorID=? WHERE ID=?', [$colorId, $this->id]);
+			DB::update('items SET colorID = ? WHERE ID = ?', [$colorId, $this->id]);
 		}
 
 		return $this;
@@ -370,7 +370,7 @@ class Product {
 	public function updateStatus(bool $published) {
 		$statusId = $published ? 1 : 0;
 
-		DB::update('items SET status=? WHERE ID=?', [$statusId, $this->id]);
+		DB::update('items SET status=? WHERE ID = ?', [$statusId, $this->id]);
 
 		$this->setStatusId($published);
 
@@ -382,7 +382,7 @@ class Product {
 			$positionIds = implode(',', $positionIds);
 		}
 
-		DB::update('items SET positions=? WHERE ID=?', [$positionIds, $this->id]);
+		DB::update('items SET positions=? WHERE ID = ?', [$positionIds, $this->id]);
 
 		$this->data['positionIds'] = $positionIds;
 

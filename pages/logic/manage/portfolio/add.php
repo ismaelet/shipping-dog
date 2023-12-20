@@ -115,14 +115,14 @@ if (isset($_POST['submit'])) {
 		}
 
 		// add items
-		$res = userId() != 1 ? DB::select('ID FROM items_types WHERE hidden=0') : DB::select('ID FROM items_types WHERE ID=16');
+		$res = userId() != 1 ? DB::select('ID FROM items_types WHERE hidden = 0') : DB::select('ID FROM items_types WHERE ID=16');
 
 		while ($row = $res->fetch_assoc()) {
 			Product::new($desID, $row['ID']);
 		}
 
 		// make the user an artist if it's a regular user
-		DB::update('users SET level=1 WHERE ID=? AND level=0', [userId()]);
+		DB::update('users SET level = 1 WHERE ID = ? AND level=0', [userId()]);
 
 		// add tags
 		update_tags($_POST['tags'], $desID);

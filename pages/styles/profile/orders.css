@@ -1,5 +1,5 @@
 .stitle {
-	border-bottom: 1px solid var(--text-color-fade);
+	border-bottom: var(--border);
 	margin-bottom: 1rem;
 }
 
@@ -24,6 +24,6 @@
 }
 
 #orders-tbl .title {
-	color: var(--text-color-strong);	
+	color: var(--text-color-strong);
 	font-weight: 600;
 }

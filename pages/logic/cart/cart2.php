@@ -36,7 +36,7 @@ $warning = warning_banner();
 /*
 * Shipping methods
 */
-$shippingZones = DB::find('zone FROM sys_country WHERE ID=?', [cart()->countryId]);
+$shippingZones = DB::find('zone FROM sys_country WHERE ID = ?', [cart()->countryId]);
 
 if (cart()->shippingMethodId != 1) {
 	// if the shipping isn't free, fetch the shipping methods
@@ -79,7 +79,7 @@ if (isset($_POST['del_code'])) {
 }
 
 if (isset($_POST['item_credit'])) {
-	DB::update('orders SET credit=1 WHERE ID=?', [$_POST['item_credit']]);
+	DB::update('orders SET credit=1 WHERE ID = ?', [$_POST['item_credit']]);
 
 	cart()->update();
 
@@ -87,7 +87,7 @@ if (isset($_POST['item_credit'])) {
 }
 
 if (isset($_POST['item_no_credit'])) {
-	DB::update('orders SET credit=0 WHERE ID=?', [$_POST['item_no_credit']]);
+	DB::update('orders SET credit=0 WHERE ID = ?', [$_POST['item_no_credit']]);
 
 	cart()->update();
 

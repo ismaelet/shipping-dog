@@ -3,7 +3,7 @@
 function login($userId, $url = false, $remember = true) {
 
 	// remove old accesses
-	DB::delete('auth_tokens WHERE expiration < NOW() AND userID=?', [$userId]);
+	DB::delete('auth_tokens WHERE expiration < NOW() AND userID = ?', [$userId]);
 
 	// remember me
 	if ($remember) {
@@ -37,7 +37,7 @@ function standard_login($username, $password, $url = false, $remember = true) {
 	if (!$url) $url = sys_config('logged-redirect') ?: '/';
 
 	// fetch user data
-	$userData = DB::row('id, password FROM users WHERE (username=? OR email=?)', [$username, $username]);
+	$userData = DB::row('id, password FROM users WHERE (username = ? OR email=?)', [$username, $username]);
 
 	// if it's a valid username
 	if ($userData) {
@@ -47,7 +47,7 @@ function standard_login($username, $password, $url = false, $remember = true) {
 		// update old password
 		if ($dbPassword[0] != '$' && ($password == $dbPassword || md5($password) == $dbPassword)) {
 			$dbPassword = password_hash($password, PASSWORD_DEFAULT);
-			DB::update('users SET password=? WHERE id=?', [$dbPassword, $userId]);
+			DB::update('users SET password=? WHERE id = ?', [$dbPassword, $userId]);
 		}
 
 		// successful login
@@ -89,7 +89,7 @@ function logout($url = '') {
 
 	setcookie('auth_token', '', -1);
 
-	DB::delete('auth_tokens WHERE userID=?', $user->id);
+	DB::delete('auth_tokens WHERE userID = ?', $user->id);
 
 	session_destroy();
 

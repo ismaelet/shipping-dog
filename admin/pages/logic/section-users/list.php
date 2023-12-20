@@ -4,7 +4,7 @@ $pageConfig['add'] = false;
 $queryConfig['table'] = 'users LEFT JOIN stores ON users.ID = stores.userID';
 $queryConfig['index'] = 'ID';
 $queryConfig['select'] = ['ID', 'username', 'email', 'users.time', 'stores.name as sellerName'];
-$queryConfig['where-search'] = "ID=? OR username LIKE CONCAT('%',?,'%') OR email LIKE CONCAT('%',?,'%') OR stores.name LIKE CONCAT('%',?,'%')";
+$queryConfig['where-search'] = "ID = ? OR username LIKE CONCAT('%',?,'%') OR email LIKE CONCAT('%',?,'%') OR stores.name LIKE CONCAT('%',?,'%')";
 
 // fields
 $fields = [

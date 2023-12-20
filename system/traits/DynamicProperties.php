@@ -31,7 +31,7 @@ trait DynamicProperties {
 
 				$error = 'Undefined property ' . self::class . '::' . $property;
 
-				if (DEBUG) {
+				if (env('DEBUG')) {
 					trigger_error($error);
 					debug_print_backtrace();
 				}

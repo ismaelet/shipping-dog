@@ -11,7 +11,7 @@ $designId = $_GET['designId'];
 $design = new Design($designId);
 
 if (!$design->custom && userId() != 1) {
-	$types = DB::select('ID FROM items_types WHERE hidden=0 ORDER BY category ASC, ID ASC');
+	$types = DB::select('ID FROM items_types WHERE hidden = 0 ORDER BY category ASC, ID ASC');
 } else {
 	$types = DB::select('ID FROM items_types ORDER BY hidden ASC, category ASC, ID ASC');
 }
@@ -20,7 +20,7 @@ while ($typeRow = $types->fetch_assoc()) {
 	$type = new Type($typeRow['ID']);
 	$gender = new Gender($type->genderId);
 
-	$productId = DB::find('ID FROM items WHERE desID=? AND typeID=?', [$design->id, $type->id]);
+	$productId = DB::find('ID FROM items WHERE desID = ? AND typeID = ?', [$design->id, $type->id]);
 
 	$product = new Product($productId);
 
@@ -102,8 +102,8 @@ while ($typeRow = $types->fetch_assoc()) {
 
 								$enabled = in_array($position->id, $product->availablePositionIds);
 
-								$base = DB::row('* FROM items_mockups WHERE typeID=? AND positionID=?', [$product->type->id, $position->id]);
-								$mockup = DB::row('* FROM items_previews WHERE itemID=? AND positionID=?', [$product->id, $position->id]);
+								$base = DB::row('* FROM items_mockups WHERE typeID = ? AND positionID = ?', [$product->type->id, $position->id]);
+								$mockup = DB::row('* FROM items_previews WHERE itemID = ? AND positionID = ?', [$product->id, $position->id]);
 
 								$pX = $mockup['pos_x'] ?? $base['pos_x_def'];
 								$pY = $mockup['pos_y'] ?? $base['pos_y_def'];
@@ -242,8 +242,8 @@ while ($typeRow = $types->fetch_assoc()) {
 
 								<!-- Color tab -->
 								<?php } else {
-								$base = DB::row('* FROM items_mockups WHERE typeID=? AND positionID=?', [$product->type->id, $product->positionId]);
-								$mockup = DB::row('* FROM items_previews WHERE itemID=? AND positionID=?', [$product->id, $product->positionId]);
+								$base = DB::row('* FROM items_mockups WHERE typeID = ? AND positionID = ?', [$product->type->id, $product->positionId]);
+								$mockup = DB::row('* FROM items_previews WHERE itemID = ? AND positionID = ?', [$product->id, $product->positionId]);
 
 								if ($base || $mockup) {
 									$pX = $mockup['pos_x'] ?? $base['pos_x_def'];
@@ -340,7 +340,7 @@ while ($typeRow = $types->fetch_assoc()) {
 
 																	<label class="color-box">
 
-																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (DB::exists("items WHERE ID=? AND colors LIKE CONCAT('%',?,'%')", [$product->id, $color->slug])) echo 'checked' ?>>
+																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (DB::exists("items WHERE ID = ? AND colors LIKE CONCAT('%',?,'%')", [$product->id, $color->slug])) echo 'checked' ?>>
 
 																		<div class="color-icon" style="background-color: #<?= $color->hex ?>;"></div>
 
@@ -368,9 +368,9 @@ while ($typeRow = $types->fetch_assoc()) {
 
 																$color = new Color($row['ID']) ?>
 
-																<label class="inlb color-box <?php if (DB::exists("items WHERE ID=? AND colors LIKE CONCAT('%',?,'%')", [$product->id, $color->slug])) echo 'active' ?>">
+																<label class="inlb color-box <?php if (DB::exists("items WHERE ID = ? AND colors LIKE CONCAT('%',?,'%')", [$product->id, $color->slug])) echo 'active' ?>">
 
-																	<input type="checkbox" class="cbx hidden colorD-<?= $color->slug ?>" name="colorD" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-color-id="<?= $color->id ?>" data-dark="<?= $color->dark ? 1 : 0 ?>" <?php if ($color->id == DB::find('colorID FROM items WHERE ID=?', [$product->id])) echo 'checked' ?>>
+																	<input type="checkbox" class="cbx hidden colorD-<?= $color->slug ?>" name="colorD" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-color-id="<?= $color->id ?>" data-dark="<?= $color->dark ? 1 : 0 ?>" <?php if ($color->id == DB::find('colorID FROM items WHERE ID = ?', [$product->id])) echo 'checked' ?>>
 
 																	<div class="color-icon" for="item-colorD-<?= $color->slug ?>" style="background-color: #<?= $color->hex ?>;"></div>
 																</label>

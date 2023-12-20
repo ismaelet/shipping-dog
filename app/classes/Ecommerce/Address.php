@@ -29,7 +29,7 @@ class Address {
 	public $secretNumber;
 
 	function __construct($id) {
-		if ($row = DB::row('* FROM addresses WHERE id=?', [$id])) {
+		if ($row = DB::row('* FROM addresses WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->fullname = $row['aname'];
 			$this->address = str_replace("\'", "'", $row['address']);

@@ -61,17 +61,17 @@ if (isset($_POST['add-color'])) {
 	if (isset($_POST['type'])) {
 		$color = new Color($_POST['color']);
 
-		DB::update('items_colors SET hidden=0 WHERE tag=?', [$color->slug]);
+		DB::update('items_colors SET hidden=0 WHERE tag = ?', [$color->slug]);
 
 		foreach ($_POST['type'] as $typeId) {
 			// update type colors
-			DB::update("items_types SET colors=CONCAT(colors,',',?) WHERE ID=? AND NOT FIND_IN_SET(?, colors)", [$color->slug, $typeId, $color->slug]);
+			DB::update("items_types SET colors=CONCAT(colors,',',?) WHERE ID = ? AND NOT FIND_IN_SET(?, colors)", [$color->slug, $typeId, $color->slug]);
 
 			// update items color
-			DB::update("items SET colors=CONCAT(colors,',',?) WHERE typeID=? AND NOT FIND_IN_SET(?, colors) AND desID NOT IN (SELECT ID FROM designs WHERE custom=1)", [$color->slug, $typeId, $color->slug]);
+			DB::update("items SET colors=CONCAT(colors,',',?) WHERE typeID = ? AND NOT FIND_IN_SET(?, colors) AND desID NOT IN (SELECT ID FROM designs WHERE custom=1)", [$color->slug, $typeId, $color->slug]);
 
 			// set as main color if there's no main color
-			DB::update("items SET colorID=? WHERE typeID=? AND colorID=0", [$color->id, $typeId]);
+			DB::update("items SET colorID = ? WHERE typeID = ? AND colorID=0", [$color->id, $typeId]);
 		}
 
 		$done = true;
@@ -84,8 +84,8 @@ if (isset($_POST['remove-color'])) {
 		$color = new Color($_POST['color']);
 
 		foreach ($_POST['type'] as $typeID) {
-			DB::update("items_types SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE ID=?", [$typeID]);
-			DB::update("items SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE typeID=? AND desID NOT IN (SELECT ID FROM designs WHERE custom=1)", [$typeID]);
+			DB::update("items_types SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE ID = ?", [$typeID]);
+			DB::update("items SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE typeID = ? AND desID NOT IN (SELECT ID FROM designs WHERE custom=1)", [$typeID]);
 		}
 
 		$done = true;
@@ -96,7 +96,7 @@ if (isset($_POST['remove-color'])) {
 if (isset($_POST['remove-color-all'])) {
 	$color = new Color($_POST['color']);
 
-	DB::update('items_colors SET hidden=1 WHERE ID=?', [$color->id]);
+	DB::update('items_colors SET hidden=1 WHERE ID = ?', [$color->id]);
 	DB::update("items_types SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ','))");
 	DB::update("items SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE desID NOT IN (SELECT ID FROM designs WHERE custom=1)");
 

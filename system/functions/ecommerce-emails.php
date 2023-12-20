@@ -76,7 +76,7 @@ function ecommerce_send_status_email($cartId, $statusCode) {
 
 	//gift cards
 	/*if ($type == 'confirmed') {
-		$giftCards = DB::select('id FROM ecommerce_orders WHERE cartId=? AND itemId=61', [$cart->id]);
+		$giftCards = DB::select('id FROM ecommerce_orders WHERE cartId = ? AND itemId=61', [$cart->id]);
 
 		while ($giftCardId = $giftCards->fetch_assoc()) {
 

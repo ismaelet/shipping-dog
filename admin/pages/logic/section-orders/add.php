@@ -39,7 +39,7 @@ function _expand_add($tbl, $inputs) {
 	//generate cart
 	$cartID = DB::add('carts (buyer, shipID, status) VALUES (?, ?, 1)', [$buyer, $shipID]);
 
-	DB::update('carts SET time=NOW() WHERE ID=?', [$cartID]);
+	DB::update('carts SET time=NOW() WHERE ID = ?', [$cartID]);
 
 	//generate cart data
 	DB::add('carts_data (cartID) VALUES (?)', [$cartID]);
@@ -111,7 +111,7 @@ function _expand_add($tbl, $inputs) {
 	if (empty($reg)) $reg = $city;
 	$reg = (strlen(trim($reg)) == 2) ? strtoupper(trim($reg)) : ucwords(strtolower(trim($reg)));
 
-	DB::update('addresses SET aname=?, address=?, number=?, zip=?, city=?, region=? WHERE ID=?', [$aname, $addr, $num, $zip, $city, $reg, $id]);
+	DB::update('addresses SET aname = ?, address=?, number=?, zip=?, city=?, region=? WHERE ID = ?', [$aname, $addr, $num, $zip, $city, $reg, $id]);
 
 	//get contact data
 	$addrRaw = $_POST['contacts'];
@@ -135,5 +135,5 @@ function _expand_add($tbl, $inputs) {
 	$email = strtolower(trim($email));
 	$phone = trim($phone);
 
-	DB::update('addresses SET email=?, phone=? WHERE ID=?', [$email, $phone, $id]);
+	DB::update('addresses SET email=?, phone=? WHERE ID = ?', [$email, $phone, $id]);
 }

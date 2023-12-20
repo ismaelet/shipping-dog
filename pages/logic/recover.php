@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
 
 			$newPassword = bin2hex(random_bytes(6));
 
-			DB::update('users SET password=? WHERE ID=?', [$newPassword, $userData['ID']]);
+			DB::update('users SET password=? WHERE ID = ?', [$newPassword, $userData['ID']]);
 
 			$mailText = '<h1 style="text-align: center; padding-bottom: 16px; font-weight: 600;">Recupero dati di accesso</h1>
 			<p>Come richiesto, abbiamo reimpostato la tua password di accesso. Dopo il primo accesso potrai cambiarla in una password a tua scelta. I nuovi dati di accesso sono i seguenti:<br><br>

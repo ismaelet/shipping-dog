@@ -52,7 +52,7 @@ if (!$product->type->genderId || $product->type->genderId == 3) {
 		DB::select(
 			"items.ID FROM items
 		INNER JOIN items_types ON items.typeID = items_types.ID
-		WHERE desID = ? AND typeID <> ? AND category='c' AND items.status=1 AND items.deleted = 0
+		WHERE desID = ? AND typeID <> ? AND category='c' AND items.status = 1 AND items.deleted = 0
 		ORDER BY items.sort ASC, items_types.sort ASC, items_types.ID ASC",
 			[$product->design->id, $product->type->id]
 		),
@@ -63,7 +63,7 @@ if (!$product->type->genderId || $product->type->genderId == 3) {
 		DB::select(
 			"items.ID FROM items
 		INNER JOIN items_types ON items.typeID = items_types.ID
-		WHERE desID = ? AND typeID <> ? AND category='c' AND (gender = ? OR gender=0 OR gender=3) AND items.status=1 AND items.deleted = 0
+		WHERE desID = ? AND typeID <> ? AND category='c' AND (gender = ? OR gender=0 OR gender=3) AND items.status = 1 AND items.deleted = 0
 		ORDER BY items.sort ASC, items_types.sort ASC, items_types.ID ASC",
 			[$product->design->id, $product->type->id, $product->type->genderId]
 		),
@@ -71,7 +71,7 @@ if (!$product->type->genderId || $product->type->genderId == 3) {
 	);
 }
 
-$relatedAccessories = rows_to_objects(DB::select("ID FROM items WHERE desID = ? AND typeID <> ? AND typeID IN (SELECT ID FROM items_types WHERE category='m') AND status=1 ORDER BY typeID ASC", [$product->design->id, $product->type->id]), Product::class);
+$relatedAccessories = rows_to_objects(DB::select("ID FROM items WHERE desID = ? AND typeID <> ? AND typeID IN (SELECT ID FROM items_types WHERE category='m') AND status = 1 ORDER BY typeID ASC", [$product->design->id, $product->type->id]), Product::class);
 
 $relatedProdutsVariables = [$seller->id, $product->design->id, $product->type->id, 8];
 $relatedProdutsVariables = array_merge($relatedProdutsVariables, $relatedProdutsVariables);

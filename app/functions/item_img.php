@@ -4,7 +4,7 @@
 //generate missing images
 function item_imgs_gen($product) {
 
-	if (!DB::find('custom FROM designs WHERE ID=?', [$product->designID])) {
+	if (!DB::find('custom FROM designs WHERE ID = ?', [$product->designID])) {
 
 		//if no special mockups or base too
 		if (empty($product->type->mockups) || in_array('base', $product->type->mockups)) {
@@ -23,7 +23,7 @@ function item_imgs_gen($product) {
 //generate a specific missing image
 function item_img_gen($product, $bgr, $mockup = '') {
 
-	$desID = $product->design->id ?? DB::find('desID FROM items WHERE ID=?', [$product->id]);
+	$desID = $product->design->id ?? DB::find('desID FROM items WHERE ID = ?', [$product->id]);
 
 	//get mockup data
 	$base = $product->type->slug . $mockup;
@@ -45,7 +45,7 @@ function item_img_gen($product, $bgr, $mockup = '') {
 
 	if (file_exists($clo_path) && file_exists($des_path)) {
 
-		$product->preview = new Ecommerce\Product_Preview(DB::row('size, pos_x, pos_y FROM items WHERE ID=?', [$product->id]));
+		$product->preview = new Ecommerce\Product_Preview(DB::row('size, pos_x, pos_y FROM items WHERE ID = ?', [$product->id]));
 
 		//make directory if doesn't exist
 		if (!file_exists(SERVER_ROOT . '/uploads/items/' . $product->type->slug)) mkdir(SERVER_ROOT . '/uploads/items/' . $product->type->slug, 0777, true);

@@ -24,9 +24,9 @@ function des_img_gen($design) {
 		//bgr
 		$src_image = imagecreatetruecolor($w, $h);
 
-		if (isset($design->color)) $design->color = DB::find('color FROM designs WHERE ID=?', [$design->id]);
+		if (isset($design->color)) $design->color = DB::find('color FROM designs WHERE ID = ?', [$design->id]);
 
-		$rgba = parse_rgba(DB::find('color FROM designs WHERE ID=?', [$design->id]));
+		$rgba = parse_rgba(DB::find('color FROM designs WHERE ID = ?', [$design->id]));
 		$color = imagecolorallocate($src_image, $rgba[0], $rgba[1], $rgba[2]);
 
 		imagefilledrectangle($src_image, 0, 0, $w - 1, $h - 1, $color);

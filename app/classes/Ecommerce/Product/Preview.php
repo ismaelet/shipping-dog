@@ -74,11 +74,11 @@ class Preview {
 	static function put($id, $data) {
 		$result = false;
 		$product = new Product($id);
-		$base = DB::row('* FROM items_mockups WHERE typeID=? AND positionID=?', [$product->type->id, $data['positionID']]);
+		$base = DB::row('* FROM items_mockups WHERE typeID = ? AND positionID = ?', [$product->type->id, $data['positionID']]);
 
 		if ($data['size'] != $base['siz_x_def'] || $data['pos-x'] != $base['pos_x_def'] || $data['pos-y'] != $base['pos_y_def']) {
-			if (DB::exists('items_previews WHERE itemID=? AND positionID=?', [$product->id, $data['positionID']]))
-				$result = DB::update('items_previews SET size=?, pos_x=?, pos_y=? WHERE itemID=? AND positionID=?', [$data['size'], $data['pos-x'], $data['pos-y'], $product->id, $data['positionID']]);
+			if (DB::exists('items_previews WHERE itemID = ? AND positionID = ?', [$product->id, $data['positionID']]))
+				$result = DB::update('items_previews SET size=?, pos_x=?, pos_y=? WHERE itemID = ? AND positionID = ?', [$data['size'], $data['pos-x'], $data['pos-y'], $product->id, $data['positionID']]);
 			else
 				$result = DB::add('items_previews (itemID, positionID, size, pos_x, pos_y) VALUES (?, ?, ?, ?, ?)', [$product->id, $data['positionID'], $data['size'], $data['pos-x'], $data['pos-y']]);
 
@@ -91,10 +91,10 @@ class Preview {
 	// generate a missing image
 	private function generateImage() {
 		// fetch mockup base data
-		$mockupFrameworkData = DB::row('* FROM items_mockups WHERE typeID=? AND positionID=?', [$this->product->typeId, $this->product->positionId]);
+		$mockupFrameworkData = DB::row('* FROM items_mockups WHERE typeID = ? AND positionID = ?', [$this->product->typeId, $this->product->positionId]);
 
 		// fetch mockup design data
-		$mockupProductData = DB::row('* FROM items_previews WHERE itemID=? AND positionID=?', [$this->product->id, $this->product->positionId]);
+		$mockupProductData = DB::row('* FROM items_previews WHERE itemID = ? AND positionID = ?', [$this->product->id, $this->product->positionId]);
 
 		// background
 		$backgroundImage = server_root() . '/app/assets/mockups/bgr/grey.png';

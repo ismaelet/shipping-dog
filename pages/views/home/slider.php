@@ -33,7 +33,7 @@
 
 				<?php foreach($slideIDs as $key => $designID) {
 					
-					$seller = new Seller(DB::find('userID FROM designs WHERE ID=?', [$designID]));
+					$seller = new Seller(DB::find('userID FROM designs WHERE ID = ?', [$designID]));
 
 					?>
 

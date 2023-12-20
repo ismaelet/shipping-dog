@@ -67,7 +67,7 @@ class ShippingMethod {
 		$price = 0;
 
 		// fetch shipping data
-		$shipping = DB::row('* FROM sys_shipping WHERE ID=?', [$this->id]);
+		$shipping = DB::row('* FROM sys_shipping WHERE ID = ?', [$this->id]);
 
 		if ($shipping) {
 			// calculate price

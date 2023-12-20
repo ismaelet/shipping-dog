@@ -11,9 +11,9 @@ $done = $_SESSION['form-done'] ?? false;
 unset($_SESSION['form-done']);
 
 //fetch data
-if (!$address = DB::row('* FROM addresses WHERE cartID=? AND security=?', [$id, $security])) redirect('/');
+if (!$address = DB::row('* FROM addresses WHERE cartID = ? AND security=?', [$id, $security])) redirect('/');
 
-$status = DB::find('status FROM carts WHERE ID=?', [$id]);
+$status = DB::find('status FROM carts WHERE ID = ?', [$id]);
 
 if (!$status) redirect('/cart');
 

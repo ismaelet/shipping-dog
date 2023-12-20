@@ -11,7 +11,7 @@ if (!$processed) {
 
 	if ($chan) {
 
-		$row_cart = DB::row('* FROM carts WHERE ID = ?', [$id]);
+		$row_cart = DB::row('* FROM carts ', [$id]);
 
 		$buyer = $row_cart['buyer'];
 		$shipID = $row_cart['shipID'];
@@ -58,10 +58,10 @@ if (!$processed) {
 
 		$ordID = $row_ref_ord['ordID'];
 
-		$row_ord = DB::row('* FROM orders WHERE ID = ?', [$ordID]);
+		$row_ord = DB::row('* FROM orders ', [$ordID]);
 
 		$productID = $row_ord['itemID'];
-		$desID = DB::find('desID FROM items WHERE ID = ?', [$productID]);
+		$desID = DB::find('desID FROM items ', [$productID]);
 		$typeID = $row_ord['typeID'];
 		$class = (new Type($typeID))->class;
 		$gendID = $row_ord['gendID'];
@@ -98,7 +98,7 @@ if (!$processed) {
 
 /*if (isset($_POST['cancel'])) {
 	
-	DB::update('refunds SET status=1, processed=0 WHERE cartID = ?', [$id]);
+	DB::update('refunds SET status = 1, processed=0 WHERE cartID = ?', [$id]);
 	DB::delete('refunds_ord WHERE cartID = ?', [$id]);
 	
 	redirect('/refund');

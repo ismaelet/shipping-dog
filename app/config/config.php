@@ -70,10 +70,10 @@ $sysConfig = [
 
 //local server settings
 if (strpos($_SERVER['REMOTE_ADDR'], '172') === 0) {
-	$sysConfig['hostname'] = $_ENV['DB_HOST'];
-	$sysConfig['database'] = $_ENV['DB_DATABASE'];
-	$sysConfig['username'] = $_ENV['DB_USERNAME'];
-	$sysConfig['password'] = $_ENV['DB_PASSWORD'];
+	$sysConfig['hostname'] = env('DB_HOST');
+	$sysConfig['database'] = env('DB_DATABASE');
+	$sysConfig['username'] = env('DB_USERNAME');
+	$sysConfig['password'] = env('DB_PASSWORD');
 } else {
 	// live server settings
 	$sysConfig['hostname'] = 'localhost';

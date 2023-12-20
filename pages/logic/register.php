@@ -8,7 +8,7 @@ $error = false;
 // submit
 if (isset($_POST['submit'])) {
 	// check for errors
-	if (DB::exists('users WHERE username=?', [$_POST['username']])) $error = 'user_match';
+	if (DB::exists('users WHERE username = ?', [$_POST['username']])) $error = 'user_match';
 	else if (DB::exists('users WHERE email=?', [$_POST['email']])) $error = 'email_match';
 	else if (strlen($_POST['password']) < 6) $error = 'pass_short';
 	else if ($_POST['password'] != $_POST['pass_conf']) $error = 'pass_match';

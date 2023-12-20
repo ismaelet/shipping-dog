@@ -1214,7 +1214,7 @@ select:focus:-webkit-autofill {
 	display: grid;
 	aspect-ratio: 1;
 	border-radius: 50%;
-	outline: 1px solid var(--text-color-fade);
+	outline: var(--border);
 	margin-block: 2px;
 	margin-left: 2px;
 	place-items: center;
@@ -2587,9 +2587,6 @@ h2 {
 h3 {
 	font-size: 1rem;
 }
-p {
-	font-size: 0.875rem;
-}
 
 h1,
 h2,
@@ -2648,12 +2645,6 @@ p {
 .txt-0rem {
 	font-size: 0;
 }
-.txt-08rem {
-	font-size: 0.8rem;
-}
-.txt-09rem {
-	font-size: 0.9rem;
-}
 .txt-1rem {
 	font-size: 1rem;
 }
@@ -2699,9 +2690,6 @@ p {
 
 .txt-12px {
 	font-size: 0.75rem;
-}
-.txt-14px {
-	font-size: 0.875rem;
 }
 .txt-20px {
 	font-size: 1.25rem;

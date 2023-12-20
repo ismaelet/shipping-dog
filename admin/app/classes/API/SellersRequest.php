@@ -17,7 +17,7 @@ class SellersRequest {
 			foreach ($searchFields as $searchField) {
 				switch ($searchField) {
 					case 'id':
-						$queryFields[] = 'userID=?';
+						$queryFields[] = 'userID = ?';
 						break;
 					case 'name':
 						$queryFields[] = $searchField . " LIKE CONCAT('%',?,'%')";

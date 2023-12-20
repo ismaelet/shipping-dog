@@ -7,7 +7,7 @@
 	</div>
 
 	<!-- Request -->
-	<?php if (DB::find('request FROM stores WHERE userID=?', [$seller->id])) { ?>
+	<?php if (DB::find('request FROM stores WHERE userID = ?', [$seller->id])) { ?>
 
 		<div class="request">
 

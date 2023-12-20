@@ -245,7 +245,7 @@ $(window).on('load', async function () {
 	const box = $('.async-items')
 	const designId = box.data('design-id')
 
-	let html = await AJAX('edit-item-list', { designId: designId }, 'text', false)
+	let html = await AJAX('edit-item-list', { designId: designId }, 'text', true)
 
 	box.html(html)
 	$('#items-load-bgr').fadeOut()

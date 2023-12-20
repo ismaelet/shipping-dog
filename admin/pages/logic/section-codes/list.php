@@ -47,8 +47,8 @@ $buttons = [
 function _expand_results(&$entry, $field, $key, $row) {
 
 	if ($key == 2) {
-		if ($row['desID']) $entry['value'] = DB::find('name FROM designs WHERE id=?', [$row['desID']]);
-		else if ($row['storID']) $entry['value'] = DB::find('name FROM stores WHERE userID=?', [$row['storID']]);
+		if ($row['desID']) $entry['value'] = DB::find('name FROM designs WHERE id = ?', [$row['desID']]);
+		else if ($row['storID']) $entry['value'] = DB::find('name FROM stores WHERE userID = ?', [$row['storID']]);
 		else $entry['value'] = 'Tutti';
 	} else if ($key == 3) {
 		$entry['value'] = !$row['mod_us'] && !$row['mod_them'] ? 'nessuno' : '<span class="txt-bold">' . ($row['mod_us'] + $row['mod_them']) . '%</span>: ' . $row['mod_us'] . '% nostro, ' . $row['mod_them'] . '% del negozio';

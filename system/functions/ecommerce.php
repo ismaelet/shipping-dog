@@ -89,17 +89,17 @@ function associate_cart_old($permanentCustomerId, $guestCustomerId = false) {
 		if ($guestCustomer->hasCart) {
 			if ($permanentCustomer->hasCart) {
 				// if the user has a cart transfer the guest orders to it
-				DB::update('ecommerce_orders SET cartId=? WHERE cartId=?', [$permanentCustomer->cart->id, $guestCustomer->cart->id]);
-				DB::delete('ecommerce_carts WHERE id=?', [$guestCustomer->cart->id]);
+				DB::update('ecommerce_orders SET cartId = ? WHERE cartId = ?', [$permanentCustomer->cart->id, $guestCustomer->cart->id]);
+				DB::delete('ecommerce_carts WHERE id = ?', [$guestCustomer->cart->id]);
 			} else {
 				// otherwise convert the session cart to the user cart
-				DB::update('ecommerce_carts SET customerId=? WHERE id=?', [$permanentCustomer->id, $guestCustomer->cart->id]);
-				DB::update('ecommerce_orders SET customerId=? WHERE cartId=?', [$permanentCustomer->id, $guestCustomer->cart->id]);
+				DB::update('ecommerce_carts SET customerId=? WHERE id = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
+				DB::update('ecommerce_orders SET customerId=? WHERE cartId = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
 
 				// add an address
 				if (!$guestCustomer->cart->addressId) {
 					$addressId = DB::find('id FROM ecommerce_addresses WHERE customerId=? ORDER BY id DESC', [$permanentCustomer->id]);
-					DB::update('ecommerce_carts SET addressId=? WHERE id=?', [$addressId, $guestCustomer->cart->id]);
+					DB::update('ecommerce_carts SET addressId=? WHERE id = ?', [$addressId, $guestCustomer->cart->id]);
 				}
 			}
 		}

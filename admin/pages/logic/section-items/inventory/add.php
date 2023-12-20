@@ -65,8 +65,8 @@ $inputs = [
 ];
 
 if ($id) {
-	$designId = DB::find('designId FROM inventory WHERE id=?', $id);
-	$designName = DB::find('name FROM designs WHERE ID=?', $designId);
+	$designId = DB::find('designId FROM inventory WHERE id = ?', $id);
+	$designName = DB::find('name FROM designs WHERE ID = ?', $designId);
 
 	$inputs['design']['value'] = $designId;
 	$inputs['design']['value-show'] = $designName;

@@ -7,7 +7,7 @@ if (isset($_SESSION['refID']) && $stepId > 1) {
 
 	$id = $_SESSION['refID'];
 
-	$row = DB::row('status, processed FROM refunds WHERE cartID=?', [$id]);
+	$row = DB::row('status, processed FROM refunds WHERE cartID = ?', [$id]);
 	$status = $row['status'];
 	$processed = $row['processed'];
 
@@ -17,10 +17,10 @@ if (isset($_SESSION['refID']) && $stepId > 1) {
 		redirect('/refund');
 	}
 
-	$res_sel = DB::select('* FROM refunds_ord WHERE cartID=?', [$id]);
+	$res_sel = DB::select('* FROM refunds_ord WHERE cartID = ?', [$id]);
 
-	$chan = DB::exists('refunds_ord WHERE cartID=? AND type=1', [$id]);
-	$refn = DB::exists('refunds_ord WHERE cartID=? AND type=2', [$id]);
+	$chan = DB::exists('refunds_ord WHERE cartID = ? AND type=1', [$id]);
+	$refn = DB::exists('refunds_ord WHERE cartID = ? AND type=2', [$id]);
 
 	if ($chan) {
 		$instructions = "

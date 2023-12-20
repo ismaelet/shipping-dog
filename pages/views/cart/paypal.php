@@ -31,7 +31,7 @@ use function Ecommerce\ecommerce_config;
 	<?php } ?>
 
 	<!-- Shipping data -->
-	<?php $row_addr = DB::row('* FROM addresses WHERE cartID=?', [$cart->id]) ?>
+	<?php $row_addr = DB::row('* FROM addresses WHERE cartID = ?', [$cart->id]) ?>
 
 	<input type="hidden" name="shipping_1" value="<?= $cart->shippingPriceFrm ?>">
 	<input type="hidden" name="first_name" value="<?= $cart->address->firstName ?>">

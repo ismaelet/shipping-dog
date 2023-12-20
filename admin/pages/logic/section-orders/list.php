@@ -19,7 +19,7 @@ $queryConfig['maximum-results'] = 20;
 $queryConfig['order-index'] = 'time';
 $queryConfig['where-search'] = "
 (
-	ID=? OR
+	ID = ? OR
 
 	ID IN (
 		SELECT cartID FROM carts_data WHERE comm_vip LIKE CONCAT('%',?,'%')

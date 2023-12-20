@@ -10,13 +10,13 @@ $pageConfig['add'] = false;
 */
 $queryConfig['index'] = 'ID';
 $queryConfig['table'] = 'designs';
-$queryConfig['where-search'] = "name LIKE CONCAT('%',?,'%') OR ID=? OR userID IN (SELECT userID FROM stores WHERE name LIKE CONCAT('%',?,'%'))";
+$queryConfig['where-search'] = "name LIKE CONCAT('%',?,'%') OR ID = ? OR userID IN (SELECT userID FROM stores WHERE name LIKE CONCAT('%',?,'%'))";
 
 // select fields
 $fields = [
 	['title' => 'ID', 'name' => 'ID'],
 	['title' => 'Nome', 'name' => 'name', 'size' => 2],
-	['title' => 'Artista', 'type' => 'find', 'name' => 'userID', 'find' => 'name FROM stores WHERE userID=?', 'size' => 2],
+	['title' => 'Artista', 'type' => 'find', 'name' => 'userID', 'find' => 'name FROM stores WHERE userID = ?', 'size' => 2],
 	['title' => 'Vendite Totali', 'name' => 'sales'],
 	['title' => 'Vendite Recenti', 'name' => 'rsales'],
 	['title' => 'Attivo', 'name' => 'status', 'type' => 'boolean-icon', 'size' => 1],
@@ -49,8 +49,8 @@ function _expand_buttons(&$button, $key, $row) {
 if (isset($_POST['generate'])) {
 	$id = $_POST['ID'];
 
-	if (!DB::find('custom FROM designs WHERE ID=?', [$id])) {
-		$res = DB::select('ID from items WHERE desID=?', [$id]);
+	if (!DB::find('custom FROM designs WHERE ID = ?', [$id])) {
+		$res = DB::select('ID from items WHERE desID = ?', [$id]);
 
 		while ($row = $res->fetch_assoc()) {
 			$product = new Ecommerce\Product($row['ID'], 'type');

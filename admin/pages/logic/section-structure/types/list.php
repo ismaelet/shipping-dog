@@ -10,7 +10,7 @@
 $queryConfig['table'] = 'items_types';
 $queryConfig['index'] = 'ID';
 $query['where-search'] = "
-	ID=? OR
+	ID = ? OR
 	tag LIKE CONCAT('%',?,'%') OR
 	name LIKE CONCAT('%',?,'%') OR
 	name_it LIKE CONCAT('%',?,'%') OR
@@ -25,7 +25,7 @@ $queryConfig['order-direction'] = 'ASC';
 $fields = [
 	['title' => 'ID', 'name' => 'ID'],
 	['title' => 'Nome', 'name' => 'name', 'size' => 2],
-	['title' => 'Modello', 'name' => 'gender', 'type' => 'find', 'find' => 'name_it FROM items_genders WHERE ID=?', 'size' => 1],
+	['title' => 'Modello', 'name' => 'gender', 'type' => 'find', 'find' => 'name_it FROM items_genders WHERE ID = ?', 'size' => 1],
 	['title' => 'Colori', 'name' => 'colors', 'no-overflow' => true, 'size' => 3],
 	['title' => 'Categoria', 'name' => 'category',],
 	['title' => 'Pubblico', 'name' => 'hidden', 'parse' => 'flip', 'type' => 'boolean-icon'],
@@ -47,7 +47,7 @@ function _expand_results(&$entry, $field, $key, $row) {
 		$entry['value'] = [];
 
 		foreach ($colors as $color)
-			if ($colorString = DB::find('name_it FROM items_colors WHERE tag=?', [$color])) $entry['value'][] = $colorString;
+			if ($colorString = DB::find('name_it FROM items_colors WHERE tag = ?', [$color])) $entry['value'][] = $colorString;
 
 		asort($entry['value']);
 

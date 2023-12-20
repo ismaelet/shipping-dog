@@ -182,7 +182,6 @@ header.floating {
 }
 
 .h-link-txt {
-	font-size: 0.9rem;
 	font-weight: 600;
 	line-height: 80px;
 	position: relative;
@@ -239,7 +238,8 @@ header.floating {
 .h-drop-link {
 	display: block;
 	color: #fff;
-	line-height: 1.5;
+	font-size: var(--fs-300);
+	line-height: 1;
 	text-align: left;
 	transition: background 0.2s;
 }

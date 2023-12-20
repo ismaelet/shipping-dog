@@ -11,16 +11,16 @@ if (isset($_POST['view'])) {
 
 	$url = empty($_POST['source']) ? $_POST['details'] : $_POST['source'];
 
-	redirect('https://shippingdog.com'.$_POST['source']);
+	redirect('https://shippingdog.com' . $_POST['source']);
 }
 
 //add entry to ignore list
 if (isset($_POST['ignore'])) {
-	
+
 	$id = $_POST['ID'];
 
-	$url = DB::find('details FROM errors WHERE ID=?', [$id]);
-	
+	$url = DB::find('details FROM errors WHERE ID = ?', [$id]);
+
 	if (!DB::exists('errors_whitelist WHERE url=?', [$url])) DB::add('errors_whitelist (url) VALUES (?)', [$url]);
 
 	DB::delete('errors WHERE details=?', [$url]);

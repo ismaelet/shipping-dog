@@ -216,7 +216,7 @@
 							<div class="inp-box color-grid">
 
 								<?php
-								$defaultColorId = DB::find('colorID FROM items WHERE desID=? AND typeID=1', [$design->id]);
+								$defaultColorId = DB::find('colorID FROM items WHERE desID = ? AND typeID=1', [$design->id]);
 								while ($row = $res_colorD->fetch_assoc()) {
 									$color = new Color($row['ID']);
 								?>

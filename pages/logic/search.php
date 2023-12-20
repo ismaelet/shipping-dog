@@ -23,7 +23,7 @@ if (strlen($search) > 2) {
 		
 		AND status>0
 
-		AND userID IN (SELECT userID FROM stores WHERE status=1 AND hidden=0)
+		AND userID IN (SELECT userID FROM stores WHERE status = 1)
 
 		ORDER BY sales DESC, userID ASC, ID DESC LIMIT " . $max,
 
@@ -33,7 +33,7 @@ if (strlen($search) > 2) {
 	$desN = $res_des->num_rows;
 
 	//get seller results
-	$res_sell = DB::select("userID FROM stores WHERE name LIKE CONCAT('%',?,'%') AND status=1 AND hidden=0 ORDER BY userID DESC LIMIT " . $max, [$search]);
+	$res_sell = DB::select("userID FROM stores WHERE name LIKE CONCAT('%',?,'%') AND status = 1 ORDER BY userID DESC LIMIT " . $max, [$search]);
 
 	$sellN = $res_sell->num_rows;
 

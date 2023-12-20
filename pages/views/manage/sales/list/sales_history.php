@@ -2,9 +2,9 @@
 
 use Ecommerce\Order;
 
-if (!$year) $year = DB::row('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID=?) AND cartID IN (SELECT ID FROM carts WHERE status>0) ORDER BY time DESC', [$seller->id])['year'];
+if (!$year) $year = DB::row('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) ORDER BY time DESC', [$seller->id])['year'];
 
-$res_months = DB::select('MONTH(time) as month FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID=?) AND cartID IN (SELECT ID FROM carts WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$seller->id, $year]);
+$res_months = DB::select('MONTH(time) as month FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$seller->id, $year]);
 
 while ($row_months = $res_months->fetch_assoc()) {
 
@@ -29,7 +29,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 	$month_tot = $row_month['totGain'];
 	$month_num = $row_month['count'];
 
-	//$res_saleM = DB::select('* FROM sales WHERE storID=? AND YEAR(time)=? AND MONTH(time)=? ORDER BY time DESC', [$id, $year, $month]);
+	//$res_saleM = DB::select('* FROM sales WHERE storID = ? AND YEAR(time)=? AND MONTH(time)=? ORDER BY time DESC', [$id, $year, $month]);
 	$sales = DB::select(
 		'
 		orders.ID
@@ -74,15 +74,15 @@ while ($row_months = $res_months->fetch_assoc()) {
 
 					//design data
 					$desID = $sale['desID'];
-					$des_name = DB::find('name FROM designs WHERE ID=?', [$desID]);
+					$des_name = DB::find('name FROM designs WHERE ID = ?', [$desID]);
 
 					$des_name ?: '-design rimosso-';
 
 					//get type
-					$type_str = DB::find('name_it FROM items_types WHERE ID=?', [$sale['typeID']]);
+					$type_str = DB::find('name_it FROM items_types WHERE ID = ?', [$sale['typeID']]);
 
 					//get color
-					$color_str = $sale['colorID'] ? DB::find('name_it FROM items_colors WHERE ID=?', [$sale['colorID']]) : '-';
+					$color_str = $sale['colorID'] ? DB::find('name_it FROM items_colors WHERE ID = ?', [$sale['colorID']]) : '-';
 
 					//gain
 					$gain = number_format(($sale['gain'] * $sale['amount']), 2, '.', '');
@@ -129,7 +129,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 
 <?php
 
-$res_year = DB::select('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID=?) AND cartID IN (SELECT ID FROM carts WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$seller->id]);
+$res_year = DB::select('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$seller->id]);
 
 if ($res_year->num_rows > 1) { ?>
 

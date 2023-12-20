@@ -38,8 +38,8 @@
 
 						$imgID = $row['ID'];
 
-						$des_name = DB::find('name FROM designs WHERE ID=?', [$row['desID']]);
-						$type_name = DB::find('name_it FROM items_types WHERE tag=?', [$row['type']]) ?>
+						$des_name = DB::find('name FROM designs WHERE ID = ?', [$row['desID']]);
+						$type_name = DB::find('name_it FROM items_types WHERE tag = ?', [$row['type']]) ?>
 
 						<form class="list-row <?php if ($i % 2) echo 'dark' ?>" method="POST">
 							<input type="hidden" name="imgID" value="<?= $imgID ?>">
