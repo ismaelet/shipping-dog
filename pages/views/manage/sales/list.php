@@ -2,12 +2,14 @@
 
 <div id="head">
 
-	<div class="list-head">
-		<h1 class="list-title">Lista vendite</h1>
-	</div>
+	<h1 class="section-title text-center mb-12">Lista vendite</h1>
 
 	<!-- Request -->
-	<?php if (DB::find('request FROM stores WHERE userID = ?', [$seller->id])) { ?>
+	<?php
+
+	use function Ecommerce\format_price;
+
+	if (DB::find('request FROM stores WHERE userID = ?', [$oldSeller->id])) { ?>
 
 		<div class="request">
 
@@ -20,12 +22,12 @@
 
 		</div>
 
-	<?php } else if ($seller->toPay >= 31.25) { ?>
+	<?php } else if ($oldSeller->toPay >= 31.25) { ?>
 
 		<form class="request" method="POST">
 
 			<p class="text">
-				Se <strong>non hai una partita IVA e risiedi in Italia</strong> puoi usare il bottone qui sotto per richiedere il pagamento di <strong><?= $seller->toPayString ?></strong><br><br>
+				Se <strong>non hai una partita IVA e risiedi in Italia</strong> puoi usare il bottone qui sotto per richiedere il pagamento di <strong><?= $oldSeller->toPayString ?></strong><br><br>
 				Se invece possiedi una partita IVA oppure non risiedi in Italia, ti preghiamo di contattarci all'indirizzo <a class="txt-sbold txt-c2" href="<?= sys_config('contact-email-link') ?>"><?= sys_config('contact-email') ?></a> per richiedere il pagamento.
 			</p>
 
@@ -60,14 +62,14 @@
 			<!-- Sorting method -->
 			<div id="recap-sort">
 
-				<input type="hidden" name="id" value="<?= $seller->id ?>">
+				<input type="hidden" name="id" value="<?= $oldSeller->id ?>">
 				<input type="hidden" id="sort-inp" name="sort" value="<?= $sort ?>">
 				<input type="hidden" id="year-inp" name="year" value="<?= $year ?>">
 
 				<h1 class="sort-txt">Visualizza:</h1>
 
 				<p class="sort-link clickable <?= $sort == 'designs' ? 'active' : '' ?>" data-sort="designs" onclick="$('#sort-inp').val($(this).data('sort')); $('#search-btn').click();">
-					Lavori
+					Grafiche
 				</p>
 
 				<p class="sort-link clickable <?= $sort == 'time' ? 'active' : '' ?>" data-sort="time" onclick="$('#sort-inp').val($(this).data('sort')); $('#search-btn').click();">
@@ -83,28 +85,28 @@
 				<div class="rec_row">
 					<div class="rec_cell">
 						<p class="rec_lbl">Guadagno:</p>
-						<input type="text" class="inp wid-100" value="<?= $seller->earnedString ?>" disabled>
+						<input type="text" class="inp wid-100" value="<?= format_price($seller->earned()) ?>" disabled>
 					</div>
 
 					<div class="rec_cell">
 						<p class="rec_lbl inlb">Bonus: </p> <?= info_box("Per ogni capo venduto riceverai un ulteriore <strong>10%</strong> del guadagno come bonus. Puoi usare questo bonus per pagare le spese di spedizione quando acquisti sul nostro sito, oppure per comprare prodotti del tuo negozio senza pagarli.") ?>
-						<input type="text" class="inp wid-100" value="<?= $seller->creditString ?>" disabled>
+						<input type="text" class="inp wid-100" value="<?= format_price($seller->credit()) ?>" disabled>
 					</div>
 				</div>
 				<div class="rec_row">
 					<div class="rec_cell">
 						<p class="rec_lbl">PAGATO:</p>
-						<input type="text" class="inp wid-100" value="<?= $seller->payedString ?>" disabled>
+						<input type="text" class="inp wid-100" value="<?= $oldSeller->payedString ?>" disabled>
 					</div>
 
 					<div class="rec_cell">
 						<p class="rec_lbl">ALTRO:</p>
-						<input type="text" class="inp wid-100" value="<?= $seller->otherTransfersString ?>" disabled>
+						<input type="text" class="inp wid-100" value="<?= $oldSeller->otherTransfersString ?>" disabled>
 					</div>
 
 					<div class="rec_cell">
 						<p class="rec_lbl">DA PAGARE:</p>
-						<input type="text" class="inp wid-100 txt-c1" style="font-weight: bold;" value="<?= $seller->toPayString ?>" disabled>
+						<input type="text" class="inp wid-100 txt-c1" style="font-weight: bold;" value="<?= $oldSeller->toPayString ?>" disabled>
 					</div>
 				</div>
 			</div>

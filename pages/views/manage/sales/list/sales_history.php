@@ -2,9 +2,9 @@
 
 use Ecommerce\Order;
 
-if (!$year) $year = DB::row('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) ORDER BY time DESC', [$seller->id])['year'];
+if (!$year) $year = DB::row('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) ORDER BY time DESC', [$oldSeller->id])['year'];
 
-$res_months = DB::select('MONTH(time) as month FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$seller->id, $year]);
+$res_months = DB::select('MONTH(time) as month FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$oldSeller->id, $year]);
 
 while ($row_months = $res_months->fetch_assoc()) {
 
@@ -23,7 +23,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 			MONTH(orders.time) = ? AND
 			sellerId = ? AND
 			carts.status > 0',
-		[$year, $month, $seller->id]
+		[$year, $month, $oldSeller->id]
 	);
 
 	$month_tot = $row_month['totGain'];
@@ -41,7 +41,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 			sellerId = ? AND
 			carts.status > 0
 		ORDER BY carts.time DESC',
-		[$year, $month, $seller->id]
+		[$year, $month, $oldSeller->id]
 	);
 ?>
 
@@ -54,50 +54,27 @@ while ($row_months = $res_months->fetch_assoc()) {
 		<button type="button" class="sbtn month-btn clickable" onclick="$(this).next().toggleClass('hidden'); $(this).hide();"><span class="month-btn-text">Mostra le vendite</span></button>
 
 		<div class="tbl-box pad-t-2 hidden">
-			<div class="list-tbl">
+			<div class="sale-history__grid grid">
 
-				<div class="list-tbl-head">
-					<p class="list-name lon">Design</p>
-					<p class="list-name shr">Guadagno</p>
-					<p class="list-name shr">Capo</p>
-					<p class="list-name shr">Colore</p>
-					<p class="list-name shr">Sconto</p>
-					<p class="list-name shr">Data</p>
+				<div class="grid-row sale-history__head">
+					<p class="grid-item">Design</p>
+					<p class="grid-item">Guadagno</p>
+					<p class="grid-item">Capo</p>
+					<p class="grid-item">Colore</p>
+					<p class="grid-item">Sconto</p>
+					<p class="grid-item">Data</p>
 				</div>
 
 				<?php while ($sale = $sales->fetch_assoc()) {
-
 					$order = new Ecommerce\Order($sale['ID']);
-
-					//get date
-					/*$date = date_parse($sale['time']);
-
-					//design data
-					$desID = $sale['desID'];
-					$des_name = DB::find('name FROM designs WHERE ID = ?', [$desID]);
-
-					$des_name ?: '-design rimosso-';
-
-					//get type
-					$type_str = DB::find('name_it FROM items_types WHERE ID = ?', [$sale['typeID']]);
-
-					//get color
-					$color_str = $sale['colorID'] ? DB::find('name_it FROM items_colors WHERE ID = ?', [$sale['colorID']]) : '-';
-
-					//gain
-					$gain = number_format(($sale['gain'] * $sale['amount']), 2, '.', '');
-
-					//code
-					$code = empty($sale['code']) ? '-' : strtoupper($sale['code']);
-					*/
 				?>
 
 					<!--sale line-->
-					<div class="list-row <?php if ($row_dark) {
+					<div class="grid-row <?php if ($row_dark) {
 												echo 'row_dark';
 												$row_dark = false;
 											} else $row_dark = 'true' ?>">
-						<div class="list-cell">
+						<div class="grid-item">
 							<p class="list-inp">
 								<?php
 								if ($order->quantity > 1) echo $order->quantity . " x ";
@@ -105,19 +82,19 @@ while ($row_months = $res_months->fetch_assoc()) {
 								?>
 							</p>
 						</div>
-						<div class="list-cell">
+						<div class="grid-item">
 							<p class="list-inp"><?= $order->gainString ?></p>
 						</div>
-						<div class="list-cell">
+						<div class="grid-item">
 							<p class="list-inp"><?= $order->product->type->name ?></p>
 						</div>
-						<div class="list-cell">
+						<div class="grid-item">
 							<p class="list-inp"><?= $order->color->name ?></p>
 						</div>
-						<div class="list-cell">
+						<div class="grid-item">
 							<p class="list-inp"><?= $order->cart->coupon->code ?: '-' ?></p>
 						</div>
-						<div class="list-cell">
+						<div class="grid-item">
 							<p class="list-inp"><?= $order->timeString ?></p>
 						</div>
 					</div>
@@ -129,7 +106,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 
 <?php
 
-$res_year = DB::select('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$seller->id]);
+$res_year = DB::select('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$oldSeller->id]);
 
 if ($res_year->num_rows > 1) { ?>
 

@@ -52,6 +52,10 @@
 	outline: none !important;
 	box-shadow: none !important;
 	margin: 0;
+
+	&:-internal-autofill-selected {
+		background-color: transparent !important;
+	}
 }
 
 /* Lists */

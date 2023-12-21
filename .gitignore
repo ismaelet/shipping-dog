@@ -1,5 +1,6 @@
 error.log
 composer.lock
+package-lock.json
 
 vendor/
 uploads/

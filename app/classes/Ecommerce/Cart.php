@@ -570,21 +570,6 @@ class Cart {
 
 		// update the cart status and send the confirmation email
 		$this->updateStatus('received', $sendNotification);
-
-		/**
-		 * !Temporary fix
-		 * 
-		 * Recalculating the available credit of the store
-		 */
-		DB::update('stores SET credit = earned * 0.1');
-
-		$tempCarts = DB::select('ID FROM carts WHERE status > 0 AND (credit_ship = 1 OR ID IN (SELECT cartID FROM orders WHERE credit = 1))');
-
-		while ($tempCartRow = $tempCarts->fetch_assoc()) {
-			$tempCart = new Cart($tempCartRow['ID']);
-
-			DB::update('stores SET credit = credit - ? WHERE userID = ?', [$tempCart->usedCredit, $tempCart->customerId]);
-		}
 	}
 
 	public function sendStatusEmail(bool $debug = false) {

@@ -39,6 +39,9 @@ spl_autoload_register(function ($name) {
 	$name = str_replace('\\', '/', $name);
 
 	switch (true) {
+		case strpos($name, 'App') === 0:
+			include_once(public_server_path('/' . lcfirst($name) . '.php'));
+			break;
 		case file_exists($file = server_path('/app/classes/' . $name . '.php')):
 			include_once($file);
 			break;

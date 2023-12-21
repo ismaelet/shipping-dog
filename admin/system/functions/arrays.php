@@ -12,7 +12,11 @@ function bump(&$array) {
 }
 
 function debug($array) {
-	print('<pre>' . print_r($array, true) . '</pre>');
+	exit('<pre>' . print_r($array, true) . '</pre>');
+}
+
+function soft_debug($array) {
+	print_r('<pre>' . print_r($array, true) . '</pre>');
 }
 
 function explode_last($separator, $string) {

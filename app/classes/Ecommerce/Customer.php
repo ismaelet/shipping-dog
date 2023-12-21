@@ -2,6 +2,7 @@
 
 namespace Ecommerce;
 
+use App\Models\Ecommerce\Seller as EcommerceSeller;
 use DB;
 use Ecommerce\Seller;
 use DynamicProperties;
@@ -63,8 +64,9 @@ class Customer {
 		return (bool) $this->getDefaultAddressId();
 	}
 
-	private function getCredit() {
-		return DB::find('credit FROM ' . Seller::TABLE . ' WHERE ' . Seller::INDEX . ' = ?', [$this->id]) ?: 0;
+	private function getCredit(): float {
+		$seller = EcommerceSeller::find($this->id);
+		return $seller ? $seller->credit() : 0;
 	}
 
 	private function getIsSeller() {

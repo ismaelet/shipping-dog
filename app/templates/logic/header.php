@@ -54,8 +54,8 @@ $header['dropdowns']['info'] = [
 
 $header['dropdowns']['artist'] = [
 	['Il mio negozio', client_url('/artist?id=' . $user->id)],
-	['I miei lavori', client_url('/manage/portfolio')],
-	['Carica un lavoro', client_url('/manage/portfolio/add')],
+	['Le mie grafiche', client_url('/manage/portfolio')],
+	['Carica una grafica', client_url('/manage/portfolio/add')],
 	['Vendite realizzate', client_url('/manage/sales/list')],
 	['Modifica prezzi', client_url('/manage/sales/prices')],
 	['Gestisci', client_url('/manage')],

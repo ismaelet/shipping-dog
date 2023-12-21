@@ -2,6 +2,7 @@
 
 namespace Ecommerce;
 
+use App\Models\Ecommerce\Seller as EcommerceSeller;
 use DB;
 use DatabaseObject;
 use User;
@@ -108,7 +109,7 @@ class Seller {
 	}
 
 	private function getCredit() {
-		return DB::find('credit FROM stores WHERE userID = ?', [$this->id]);
+		return EcommerceSeller::find($this->id)->credit();
 	}
 
 	private function getCreditString() {

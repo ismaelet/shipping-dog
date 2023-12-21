@@ -1,17 +1,21 @@
+# Get the base image
 FROM php:apache
 
+# Set working directory
 WORKDIR /var/www/html
 
-RUN docker-php-ext-install mysqli
-
+# Setup dependencies
+RUN apt-get update --fix-missing
 RUN curl -I http://deb.debian.org/debian-security/dists/bookworm-security/InRelease
 
-RUN apt-get update --fix-missing
+# Install MySQLi
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install pdo_mysql
 
+# Handle images
 RUN apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-dev
-
-
 RUN docker-php-ext-configure gd --with-webp --with-jpeg && \
     docker-php-ext-install gd
 
+# Enable htaccess rewrite
 RUN a2enmod rewrite
