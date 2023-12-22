@@ -1,6 +1,9 @@
 <?php
 
 //setup page
+
+use App\Models\Ecommerce\Cart;
+
 $error = false;
 $title = 'Stato ordine';
 
@@ -18,14 +21,18 @@ $inputs = [
 //submit
 if (isset($_POST['submit'])) {
 
-	$id = $_POST['id'];
-
+	$id = (int) $_POST['id'];
 	$email = strtolower(trim($_POST['email']));
+	$cart = Cart::join('addresses', 'addresses.cartID', 'carts.ID')
+		->where('carts.ID', $id)
+		->where('email', $email)
+		->where('status', '!=', '0')
+		->select('carts.*', 'addresses.email')
+		->first();
 
-	$buyerID = DB::find('buyer FROM addresses WHERE cartID = ? AND email=?', [$id, $email]);
-
-	if ($buyerID) {
-
-		redirect('/order?id=' . $id . '&buyer=' . $buyerID);
-	} else $error = 'no_match';
+	if ($cart) {
+		redirect('/order?id=' . $cart->ID . '&email=' . $email);
+	} else {
+		$error = 'no_match';
+	}
 }

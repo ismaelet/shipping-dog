@@ -57,6 +57,9 @@ spl_autoload_register(function ($name) {
 		case file_exists($file = __DIR__ . '/../../../system/classes/' . $name . '.php'):
 			include_once($file);
 			break;
+		case file_exists($file = __DIR__ . '/../../../system/traits/' . $name . '.php'):
+			include_once($file);
+			break;
 	}
 
 	if (method_exists($name, '__constructStatic')) {

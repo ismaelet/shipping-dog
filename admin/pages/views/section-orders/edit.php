@@ -156,7 +156,6 @@
 
 		<div class="panel">
 			<p class="txt-med txt-lh2"><?= $cart->address->fullAddress ?></p>
-			<p class="txt-med txt-lh2"><?= $cart->notes ?: '' ?></p>
 
 			<?php if ($cart->status > 1) { ?>
 
