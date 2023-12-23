@@ -7,48 +7,69 @@ use App\Models\Ecommerce\Order;
 
 {% block main %}
 
-<p id="log">
+<p class="log">
 
-	/// <?= $carts->count() ?> ARTICOLI DA FARE<br>
+	/// <?= $filteredOrders->count() ?> ARTICOLI DA FARE<br>
 
-	<?php if ($firstCart) { ?>
+	<?php if ($filteredOrders->count()) {
+		$firstCart = $filteredOrders->sortBy('cartID')->first();
+	?>
 
-		/// A PARTIRE DA ORDINE <span class="fw-bold">#<?= $firstCart->ID ?></span> (<span class="fw-bold"><?= $firstCart->address->aname ?></span>)
+		/// A PARTIRE DA ORDINE <span class="fw-bold">#<?= $firstCart->cartId ?></span> (<span class="fw-bold"><?= $firstCart->customerName ?></span>)
 
-		<br><br><br>
+</p>
 
-	<?php
-		foreach ($sellers as $seller) {
-			// Get the orders
-			$designs = Design::join('orders', 'designs.ID', '=', 'orders.designId')
-				->join('carts', 'orders.cartID', '=', 'carts.ID')
-				->where('carts.status', '>', 0)
-				->where('carts.time', '>', $date)
-				->where('sellerId', '=', $seller->userID)
-				->orderBy('designs.name', 'asc')
-				->get(['designs.*']);
+<p class="log">
+	--------------------------- <span style="color: #fff;">DESIGN</span> ---------------------------
+</p>
+
+<p class="log">
+<?php
+
+		$sortedBySellers = $filteredOrders
+			->sortBy('sellerId')
+			->unique('sellerId');
+
+		foreach ($sortedBySellers as $sellerOrder) {
 
 			// Seller name
-			echo '<span style="color: #ff9600;">[ ' . strtoupper($seller->name) . ' ]</span><br>';
+			echo '<span style="color: #ff9600;">[ ' . strtoupper($sellerOrder->storeName) . ' ]</span><br>';
+
+			// Get the orders
+			$sortedByProducts = $filteredOrders
+				->where('sellerId', '=', $sellerOrder->sellerId)
+				->sortBy('designId')
+				->unique('designId');
 
 			// Designs
-			foreach ($designs as $design) {
-				$orders = Order::join('carts', 'orders.cartID', '=', 'carts.ID')
-					->where('carts.status', '>', 0)
-					->where('carts.time', '>', $date)
-					->where('designId', '=', $design->ID)
-					->where('sellerId', '=', $seller->userID)
-					->orderBy('typeID', 'asc')
-					->orderBy('sizeID', 'asc')
-					->orderBy('colorID', 'asc')
-					->get(['orders.*']);
+			foreach ($sortedByProducts as $product) {
+				$mergedOrders = [];
 
-				// Design name
-				echo '<span style="color: #fff;">' . $design->ID . ' - ' . $design->name . '</span><br>';
+				// Product name (grouped by designId)
+				echo '<span style="color: #fff;">' . ($product->designId ?  $product->designId . ' - ' : '') . $product->productName . '</span><br>';
 
-				// Orders
+				// Get the orders
+				$orders = $filteredOrders
+					->where('sellerId', '=', $product->sellerId)
+					->where('designId', '=', $product->designId)
+					->sortBy('sizeID')
+					->sortBy('colorID')
+					->sortBy('typeID');
+
+				// Merge orders
 				foreach ($orders as $order) {
-					echo $order->quantity . ' x ' . $order->description() . '<br>';
+					$orderDescription = $order->description();
+
+					if (isset($mergedOrders[$orderDescription])) {
+						$mergedOrders[$orderDescription] += $order->quantity;
+					} else {
+						$mergedOrders[$orderDescription] = 1;
+					}
+				}
+
+				// Print orders
+				foreach ($mergedOrders as $orderDescription => $quantity) {
+					echo $quantity . ' x ' . $orderDescription . '<br>';
 				}
 
 				echo '<br>';
@@ -56,6 +77,54 @@ use App\Models\Ecommerce\Order;
 
 			echo '<br>';
 		}
+	} ?>
+
+</p>
+
+<p class="log">
+	--------------------------- <span style="color: #fff;">PRODOTTI</span> ---------------------------
+</p>
+
+<p class="log">
+
+	<?php
+	$sortedByTypes = $filteredOrders
+		->sortBy('typeID')
+		->unique('typeID');
+
+	foreach ($sortedByTypes as $typeOrder) {
+
+		$mergedOrders = [];
+
+		// Seller name
+		echo '<span style="color: #ff9600;">[ ' . strtoupper($typeOrder->productTypeName) . ' ]</span><br>';
+
+		// Get the orders
+		$sortedByData = $filteredOrders
+			->where('typeID', '=', $typeOrder->typeID)
+			->sortBy('colorID')
+			->sortBy('sizeID');
+
+		// Merge orders
+		foreach ($sortedByData as $order) {
+			$orderDescription = [];
+			$orderDescription[] = $order->size && strpos($order->product->type->sizes, ',') ? $order->size->name : null;
+			$orderDescription[] = $order->color && strpos($order->product->type->colors, ',') ? $order->color->name_it : null;
+			$orderDescription = implode(' ', array_filter($orderDescription)) ?: 'Prodotto standard';
+
+			if (isset($mergedOrders[$orderDescription])) {
+				$mergedOrders[$orderDescription] += $order->quantity;
+			} else {
+				$mergedOrders[$orderDescription] = 1;
+			}
+		}
+
+		// Print orders
+		foreach ($mergedOrders as $orderDescription => $quantity) {
+			echo $quantity . ' x ' . $orderDescription . '<br>';
+		}
+
+		echo '<br>';
 	} ?>
 
 </p>

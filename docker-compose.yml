@@ -23,7 +23,6 @@ services:
             - 'mysql:/var/lib/mysql'
         networks:
             - internal
-        restart: unless-stopped
     phpmyadmin:
         image: phpmyadmin
         ports:
@@ -36,7 +35,6 @@ services:
             - internal
         depends_on:
             - mysql
-        restart: unless-stopped
 networks:
     internal:
         driver: bridge
