@@ -1,30 +1,34 @@
 <?php
 
-use App\Models\Ecommerce\Design;
-use App\Models\Ecommerce\Order;
-
 ?>
 
 {% block main %}
 
+<form action="" method="POST" class="p-4">
+	<label class="label">Parti dall'ordine:</label>
+	<input type="number" name="product_log_start_from_id" value="<?= $validCarts->count() ? $firstCart->cartId : $startFromId ?>" placeholder="Parti del numero ordine #">
+</form>
+
 <p class="log">
 
-	/// <?= $filteredOrders->count() ?> ARTICOLI DA FARE<br>
+	/// <?= $validCarts->count() ? $filteredOrders->count() : 0 ?> ARTICOLI DA FARE<br>
 
-	<?php if ($filteredOrders->count()) {
-		$firstCart = $filteredOrders->sortBy('cartID')->first();
-	?>
 
+	<?php if ($validCarts->count()) { ?>
 		/// A PARTIRE DA ORDINE <span class="fw-bold">#<?= $firstCart->cartId ?></span> (<span class="fw-bold"><?= $firstCart->customerName ?></span>)
+	<?php } ?>
 
 </p>
 
-<p class="log">
-	--------------------------- <span style="color: #fff;">DESIGN</span> ---------------------------
-</p>
 
-<p class="log">
-<?php
+<?php if ($validCarts->count()) { ?>
+
+	<p class="log">
+		--------------------------- <span style="color: #fff;">DESIGN</span> ---------------------------
+	</p>
+
+	<p class="log">
+		<?php
 
 		$sortedBySellers = $filteredOrders
 			->sortBy('sellerId')
@@ -76,61 +80,59 @@ use App\Models\Ecommerce\Order;
 			}
 
 			echo '<br>';
-		}
-	} ?>
+		} ?>
 
-</p>
+	</p>
 
-<p class="log">
-	--------------------------- <span style="color: #fff;">PRODOTTI</span> ---------------------------
-</p>
 
-<p class="log">
+	<p class="log">
+		--------------------------- <span style="color: #fff;">PRODOTTI</span> ---------------------------
+	</p>
 
-	<?php
-	$sortedByTypes = $filteredOrders
-		->sortBy('typeID')
-		->unique('typeID');
+	<p class="log">
 
-	foreach ($sortedByTypes as $typeOrder) {
+		<?php
+		$sortedByTypes = $filteredOrders
+			->sortBy('typeID')
+			->unique('typeID');
 
-		$mergedOrders = [];
+		foreach ($sortedByTypes as $typeOrder) {
 
-		// Seller name
-		echo '<span style="color: #ff9600;">[ ' . strtoupper($typeOrder->productTypeName) . ' ]</span><br>';
+			$mergedOrders = [];
 
-		// Get the orders
-		$sortedByData = $filteredOrders
-			->where('typeID', '=', $typeOrder->typeID)
-			->sortBy('colorID')
-			->sortBy('sizeID');
+			// Seller name
+			echo '<span style="color: #ff9600;">[ ' . strtoupper($typeOrder->productTypeName) . ' ]</span><br>';
 
-		// Merge orders
-		foreach ($sortedByData as $order) {
-			$orderDescription = [];
-			$orderDescription[] = $order->size && strpos($order->product->type->sizes, ',') ? $order->size->name : null;
-			$orderDescription[] = $order->color && strpos($order->product->type->colors, ',') ? $order->color->name_it : null;
-			$orderDescription = implode(' ', array_filter($orderDescription)) ?: 'Prodotto standard';
+			// Get the orders
+			$sortedByData = $filteredOrders
+				->where('typeID', '=', $typeOrder->typeID)
+				->sortBy('colorID')
+				->sortBy('sizeID');
 
-			if (isset($mergedOrders[$orderDescription])) {
-				$mergedOrders[$orderDescription] += $order->quantity;
-			} else {
-				$mergedOrders[$orderDescription] = 1;
+			// Merge orders
+			foreach ($sortedByData as $order) {
+				$orderDescription = [];
+				$orderDescription[] = $order->size && strpos($order->product->type->sizes, ',') ? $order->size->name : null;
+				$orderDescription[] = $order->color && strpos($order->product->type->colors, ',') ? $order->color->name_it : null;
+				$orderDescription = implode(' ', array_filter($orderDescription)) ?: 'Prodotto standard';
+
+				if (isset($mergedOrders[$orderDescription])) {
+					$mergedOrders[$orderDescription] += $order->quantity;
+				} else {
+					$mergedOrders[$orderDescription] = 1;
+				}
 			}
-		}
 
-		// Print orders
-		foreach ($mergedOrders as $orderDescription => $quantity) {
-			echo $quantity . ' x ' . $orderDescription . '<br>';
-		}
+			// Print orders
+			foreach ($mergedOrders as $orderDescription => $quantity) {
+				echo $quantity . ' x ' . $orderDescription . '<br>';
+			}
 
-		echo '<br>';
-	} ?>
+			echo '<br>';
+		} ?>
 
-</p>
+	</p>
 
-<form method="POST" class="flex-group center-content mar-t-2">
-	<button type="submit" name="submit" class="button" onclick="return confirm('Sei sicuro di voler pulire il log?')">Pulisci log</button>
-</form>
+<?php } ?>
 
 {% end main %}

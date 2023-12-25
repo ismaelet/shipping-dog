@@ -1,5 +1,6 @@
 <?php
 
+use App\View\Components\Interactions\FollowButton;
 use Ecommerce\Design;
 
 ?>
@@ -32,7 +33,7 @@ use Ecommerce\Design;
 				<?php } ?>
 
 				<!-- Follow button -->
-				<?= follow_button($seller) ?>
+				<?= FollowButton::render(['sellerId' => $seller->id]) ?>
 			</div>
 		</div>
 	</div>

@@ -1,9 +1,0 @@
-{
-	"require": {
-		"shuchkin/simplexlsxgen": "*",
-		"phpmailer/phpmailer": "*",
-		"dompdf/dompdf": "*",
-		"vlucas/phpdotenv": "*",
-		"illuminate/database": "*"
-	}
-}

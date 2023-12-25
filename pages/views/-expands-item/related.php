@@ -1,3 +1,9 @@
+<?php
+
+use App\View\Components\Interactions\FollowButton;
+
+?>
+
 <!-- Artist -->
 <section id="art-sec">
 	<div class="main-wrap">
@@ -13,7 +19,7 @@
 				<p id="art-date">membro dal <?= $seller->timeString ?></p>
 
 				<!-- Follow artist -->
-				<?= follow_button($seller) ?>
+				<?= FollowButton::render(['sellerId' => $seller->id]) ?>
 			</div>
 		</div>
 	</div>

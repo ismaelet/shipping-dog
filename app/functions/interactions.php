@@ -22,28 +22,6 @@ function love_button($design) {
 
 			</a>
 
-		<?php }
-	}
-}
-
-function follow_button($seller) {
-
-	global $user;
-
-	if ($seller->id != $user->id) {
-
-		if (logged()) { ?>
-
-			<div class="follow-btn" data-active="1" data-id="<?= $seller->id ?>" data-followed="<?= $seller->followed ?>" data-hroot="<?= CLIENT_ROOT ?>">
-
-				<?= $seller->followed ? 'seguendo' : 'segui' ?>
-
-			</div>
-
-		<?php } else { ?>
-
-			<a href="<?= client_url('/login?url=' . $_SERVER['REQUEST_URI']) ?>" class="follow-btn">segui</a>
-
 <?php }
 	}
 }

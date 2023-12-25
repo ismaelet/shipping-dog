@@ -1,3 +1,8 @@
+<?php
+
+use App\View\Components\Interactions\FollowButton;
+?>
+
 {% block main %}
 
 <section id="head" class="main-wrap">
@@ -21,7 +26,9 @@
 			<?php } ?>
 
 			<!-- Follow button -->
-			<?= follow_button($seller) ?>
+			<div class="flex justify-center mt-8 mb-4">
+				<?= FollowButton::render(['sellerId' => $seller->id]) ?>
+			</div>
 
 			<div id="title-box" class="txt-cen">
 

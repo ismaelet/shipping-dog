@@ -84,18 +84,14 @@ class Setup {
 
 	// functions
 	static private function initializeFunctions() {
+		$modules = glob(SERVER_ROOT . '/app/Helpers/*.php', GLOB_BRACE);
+		foreach ($modules as $module) include_once($module);
+
 		$modules = glob(SERVER_ROOT . '/system/functions/*.php', GLOB_BRACE);
 		foreach ($modules as $module) include_once($module);
 
 		$modules = glob(SERVER_ROOT . '/app/functions/*.php', GLOB_BRACE);
 		foreach ($modules as $module) include_once($module);
-	}
-
-	// vendor
-	static private function initializeVendor() {
-		if (file_exists($autoloadFile = SERVER_ROOT . '/vendor/autoload.php')) {
-			require_once $autoloadFile;
-		}
 	}
 
 	// routes
