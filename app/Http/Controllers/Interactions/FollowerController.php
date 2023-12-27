@@ -19,7 +19,11 @@ class FollowerController extends Controller {
 		];
 
 		if (!Follower::where($requestData)->count()) {
-			$follower = Follower::create($requestData);
+
+			$follower = Follower::create([
+				'userID' => $userId,
+				'followID' => $sellerId,
+			]);
 
 			return $follower->ID;
 		}
@@ -33,9 +37,11 @@ class FollowerController extends Controller {
 	public static function unfollow(): bool {
 		$sellerId = static::body('sellerId');
 		$userId = static::body('userId') ?? userId();
+		$requestData = [
+			'userID' => $userId,
+			'followID' => $sellerId,
+		];
 
-		debug($sellerId);
-
-		return true;
+		return Follower::where($requestData)->delete();
 	}
 }

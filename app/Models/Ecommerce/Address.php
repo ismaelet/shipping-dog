@@ -9,8 +9,7 @@ class Address extends Model {
 
 	protected $primaryKey = 'ID';
 	protected $table = 'addresses';
-	protected $fillable = [];
-
+	protected $fillable = ['cartID', 'buyer', 'aname', 'address', 'number', 'city', 'zip', 'country', 'email', 'phone'];
 	/**
 	 * Get the address' cart
 	 */

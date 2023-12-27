@@ -4,14 +4,25 @@ main {
 	min-height: 100vh;
 	padding-bottom: 2rem;
 	background: linear-gradient(120deg, #293033, #171e26);
+
+	&:not(:has(.local)) {
+		background: #fff;
+	}
 }
 
 /* Log */
 #log {
-	color: #eee;
 	padding: 1rem 1rem 2rem 1rem;
 	font-family: Courier New;
 	line-height: 1.3;
+
+	&:not(.local) {
+		color: #202020;
+
+		& strong {
+			color: #202020;
+		}
+	}
 }
 
 #del-btn {

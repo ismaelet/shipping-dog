@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Ecommerce\Seller;
+
+$seller = Seller::find($sellerId);
 ?>
 
 <template>
@@ -8,7 +11,7 @@
 		if ($sellerId != userId()) {
 	?>
 
-			<div class="follow-button" x-data="{ followed: false }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; toggleFollow(<?= $sellerId ?>, followed)">
+			<div class="follow-button" x-data="{ followed: <?= $seller->isFollowed() ? 'true' : 'false' ?> }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; toggleFollow(<?= $sellerId ?>, followed)">
 				<span>segui</span>
 				<span>seguendo</span>
 				<span>non seguire</span>
@@ -70,7 +73,7 @@
 
 <script>
 	function toggleFollow(sellerId, followed) {
-		if (!followed) {
+		if (followed) {
 			axios.post('/api/follow', {
 					sellerId: sellerId
 				})
@@ -84,20 +87,20 @@
 				.catch(error => {
 					console.error(error);
 				});
+		} else {
+			axios.post('/api/unfollow', {
+					sellerId: sellerId
+				})
+				.then(response => {
+
+					<?php if (env('DEBUG')) { ?>
+						console.log(response.data);
+					<?php } ?>
+
+				})
+				.catch(error => {
+					console.error(error);
+				});
 		}
-
-		axios.post('/api/unfollow', {
-				sellerId: sellerId
-			})
-			.then(response => {
-
-				<?php if (env('DEBUG')) { ?>
-					console.log(response.data);
-				<?php } ?>
-
-			})
-			.catch(error => {
-				console.error(error);
-			});
 	}
 </script>

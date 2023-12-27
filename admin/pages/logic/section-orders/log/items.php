@@ -4,10 +4,6 @@ use App\Models\Ecommerce\Cart;
 use App\Models\Ecommerce\Order;
 use App\Models\Framework\Configuration;
 
-$token = get_paypal_data();
-
-soft_debug($token);
-
 // Get the date from which to start the log
 $startFromConfig = Configuration::where('name', 'product_log_start_from_id')->first();
 $startFromId = $startFromConfig->value;

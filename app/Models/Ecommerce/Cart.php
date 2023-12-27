@@ -10,7 +10,7 @@ class Cart extends Model {
 
 	protected $primaryKey = 'ID';
 	protected $table = 'carts';
-	protected $fillable = [];
+	protected $fillable = ['has_errors'];
 
 	/**
 	 * Get the cart's orders

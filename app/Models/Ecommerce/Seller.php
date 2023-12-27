@@ -2,6 +2,7 @@
 
 namespace App\Models\Ecommerce;
 
+use App\Models\Seller\Follower;
 use App\Models\Traits\ModelCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -111,5 +112,12 @@ class Seller extends Model {
 			->first()->usedCredit;
 
 		return $this->setCache('usedShippingCredit', round($usedShippingCredit, 2));
+	}
+
+	public function isFollowed(): bool {
+		return Follower::where([
+			'userID' => userId(),
+			'followID' => $this->userID,
+		])->count() > 0;
 	}
 }
