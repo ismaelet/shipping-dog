@@ -1,31 +1,24 @@
 <?php
 
-use Ecommerce\Order;
-
 ?>
 
 {% block form-body %}
 
-<p class="lbl">Seleziona uno o più articoli da cambiare/restiturire:</p>
+<p class="label">Seleziona uno o più articoli da cambiare/restiturire:</p>
 
 <?php if ($error == 'empty') { ?>
 	<p class="error">Devi selezionare almeno un articolo</p>
 <?php } ?>
 
-<?php while ($row_ord = $res_sel->fetch_assoc()) {
-
-	$order = new Order($row_ord['ID']);
-	$product = $order->product ?>
+<?php foreach ($orders as $order) { ?>
 
 	<div class="item-row mar-v-1 br-c1">
-
-		<div class="grid pad-1 clickable">
-
-			<input type="checkbox" class="hidden cbx" name="ordID[]" value="<?= $order->id ?>">
+		<label class="grid pad-1 clickable">
+			<input type="checkbox" class="hidden" name="order_id[]" value="<?= $order->ID ?>">
 
 			<!-- Image -->
 			<div class="item-img-box">
-				<img src="<?= client_path($order->product->image) ?>" class="item-img img-fill">
+				<img src="<?= $order->clientImage() ?>" class="item-img img-fill">
 			</div>
 
 			<!-- Data -->
@@ -33,24 +26,26 @@ use Ecommerce\Order;
 				<h1 class="txt-bold txt-1rem mar-b-05"><?= $order->product->name ?></h1>
 
 				<p class="">
-					<?= $order->fullDescription ?>
+					<?= $order->description() ?>
 				</p>
 			</div>
-		</div>
+		</label>
 
-		<div class="action-box pad-1 hidden">
-			<p class="lbl mar-b-1">Azione richiesta:</p>
-			<select class="" name="type<?= $order->id ?>">
+		<div class="action-box pad-1">
+			<p class="label">Azione richiesta:</p>
+			<select name="is_change[]">
 
-				<?php
-				if (count($product->type->sizes) > 1) { ?>
+				<?php if (count($order->product->type->sizeList()) > 1) { ?>
+
 					<option value="1">Cambio</option>
+
 				<?php } ?>
 
-				<option value="2">Rimborso</option>
+				<option value="0">Rimborso</option>
 			</select>
 		</div>
 	</div>
+
 <?php } ?>
 
 {% end form-body %}

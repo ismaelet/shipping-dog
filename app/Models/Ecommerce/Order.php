@@ -6,6 +6,7 @@ use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductSize;
+use Ecommerce\Order as EcommerceOrder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -63,5 +64,17 @@ class Order extends Model {
 		$description .= $this->posID && $this->posID > 1 ? ' ' . $this->position->name_it : '';
 
 		return $description;
+	}
+
+	/**
+	 * ! USES OLD CLASS
+	 * Returns the image of the order.
+	 */
+	public function clientImage() {
+		$oldOrder = new EcommerceOrder($this->ID);
+
+		$image = $oldOrder->product->clientImage;
+
+		return $image;
 	}
 }

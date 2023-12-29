@@ -54,8 +54,8 @@ $ecommerceConfig = [
 		'0' => ['open', 'Non completato', '#ccc', 'pause'],
 		'1' => ['received', 'Elaborazione', '#92e9ff', 'waiting'],
 		'2' => ['label-ready', 'Pronto', '#ffc677', 'correct'],
-		'3' => ['shipped', 'Spedito', '#ff9600', 'shipping'],
-		'4' => ['delivered', 'Consegnato', '#44c544', 'delivered'],
+		'3' => ['shipped', 'Consegnato al corriere', '#ff9600', 'shipping'],
+		'4' => ['delivered', 'Consegnato al corriere', '#44c544', 'delivered'],
 		'5' => ['change', 'Cambio', '#44c544', 'change'],
 	],
 

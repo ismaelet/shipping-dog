@@ -6,7 +6,7 @@ use function Ecommerce\ecommerce_config;
 
 {% block main %}
 
-<form id="pp_form" class="pp_form" action="https://www.paypal.com/cgi-bin/webscr" method="POST">
+<form id="pp_form" class="pp_form hidden" action="https://www.paypal.com/cgi-bin/webscr" method="POST">
 
 	<input type="hidden" name="cmd" value="_cart">
 	<input type="hidden" name="business" value="<?= ecommerce_config('paypal-user') ?>">
@@ -24,7 +24,7 @@ use function Ecommerce\ecommerce_config;
 </form>
 
 <!-- Load icon -->
-<div id="load" class="center-content">
+<div class="grid">
 	<div class="load-icon"></div>
 </div>
 

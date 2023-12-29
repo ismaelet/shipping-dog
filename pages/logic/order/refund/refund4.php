@@ -11,7 +11,7 @@ if (!$processed) {
 
 	if ($chan) {
 
-		$row_cart = DB::row('* FROM carts ', [$id]);
+		$row_cart = DB::row('* FROM carts WHERE ID = ?', [$id]);
 
 		$buyer = $row_cart['buyer'];
 		$shipID = $row_cart['shipID'];
@@ -58,10 +58,10 @@ if (!$processed) {
 
 		$ordID = $row_ref_ord['ordID'];
 
-		$row_ord = DB::row('* FROM orders ', [$ordID]);
+		$row_ord = DB::row('* FROM orders where ID = ?', [$ordID]);
 
 		$productID = $row_ord['itemID'];
-		$desID = DB::find('desID FROM items ', [$productID]);
+		$desID = DB::find('desID FROM items WHERE ID = ?', [$productID]);
 		$typeID = $row_ord['typeID'];
 		$class = (new Type($typeID))->class;
 		$gendID = $row_ord['gendID'];

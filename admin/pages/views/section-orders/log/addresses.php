@@ -70,25 +70,25 @@ use function Ecommerce\format_price;
 
 			$res_ord = DB::select('ID FROM orders WHERE cartID = ? ORDER BY time ASC', [$cart->id]);
 
-			if ($newCart->has_errors) {
-				$paypalOrderIds = [];
-				$paypalData = paypal_find_order($cart->id);
+			// if ($newCart->has_errors) {
+			// 	$paypalOrderIds = [];
+			// 	$paypalData = paypal_find_order($cart->id);
 
-				$paypalOrderIds = array_column($paypalData->cart_info->item_details, 'item_code');
+			// 	$paypalOrderIds = array_column($paypalData->cart_info->item_details, 'item_code');
 
-				$priceComparison = $paypalData->transaction_info->transaction_amount->value;
-			}
+			// 	$priceComparison = $paypalData->transaction_info->transaction_amount->value;
+			// }
 
 			foreach ($cart->orders as $order) {
 				$validOrder = true;
 
-				if ($newCart->has_errors) {
-					if (!in_array($order->id, $paypalOrderIds)) {
-						$validOrder = false;
+				// if ($newCart->has_errors) {
+				// 	if (!in_array($order->id, $paypalOrderIds)) {
+				// 		$validOrder = false;
 
-						Order::where('ID', $order->id)->delete();
-					}
-				}
+				// 		Order::where('ID', $order->id)->delete();
+				// 	}
+				// }
 
 				if ($validOrder) {
 					if ($order->inventory == 1) $ord_str .= '!! IN INVENTARIO !! ';

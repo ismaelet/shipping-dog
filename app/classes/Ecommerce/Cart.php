@@ -74,15 +74,15 @@ class Cart {
 	private function getStatusId() {
 		$statusId = $this->databaseEntry[self::STATUS_INDEX];
 
-		if ($statusId == 2 && strtotime($this->time) < strtotime('-' . $this->shippingMethod->maximumWorkingDays . ' days')) {
-			$statusId = 3;
-			$this->updateStatusId($statusId, false);
-		}
+		// if ($statusId == 2 && strtotime($this->time) < strtotime('-' . $this->shippingMethod->maximumWorkingDays . ' days')) {
+		// 	$statusId = 3;
+		// 	$this->updateStatusId($statusId, false);
+		// }
 
-		if ($statusId == 3 && strtotime($this->time) < strtotime('-' . $this->shippingMethod->maximumRequiredDays . ' days')) {
-			$statusId = 4;
-			$this->updateStatusId($statusId, false);
-		}
+		// if ($statusId == 3 && strtotime($this->time) < strtotime('-' . $this->shippingMethod->maximumRequiredDays . ' days')) {
+		// 	$statusId = 4;
+		// 	$this->updateStatusId($statusId, false);
+		// }
 
 		return $statusId;
 	}
@@ -473,7 +473,7 @@ class Cart {
 
 		$this->setStatusId($statusId);
 
-		if ($statusId && $sendNotification) {
+		if ($statusId == 1 && $sendNotification) {
 			$this->sendStatusEmail();
 		}
 
@@ -577,7 +577,7 @@ class Cart {
 	}
 
 	public function sendTrackingEmail() {
-		CartTrackingUpdate::send($this);
+		// CartTrackingUpdate::send($this);
 	}
 
 	public function processOrders(): void {

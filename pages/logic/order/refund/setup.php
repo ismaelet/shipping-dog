@@ -1,28 +1,30 @@
 <?php
 
+use App\Models\Ecommerce\ChangeRequest;
+
 $error = false;
-$status = 1;
+$changeRequestStep = 1;
 
-if (isset($_SESSION['refID']) && $stepId > 1) {
+if (isset($_SESSION['changeRequestId']) && $viewStep > 1) {
 
-	$id = $_SESSION['refID'];
+	// Get the change request
+	$changeRequestId = $_SESSION['changeRequestId'];
+	$changeRequest = ChangeRequest::find($changeRequestId);
+	$changeRequestStep = $changeRequest->step;
 
-	$row = DB::row('status, processed FROM refunds WHERE cartID = ?', [$id]);
-	$status = $row['status'];
-	$processed = $row['processed'];
+	// Get the changes
+	$changes = $changeRequest->changes;
 
-	if (!$status) {
+	$actualChanges = $changes->filter(function ($item) {
+		return $item->is_change == 1;
+	});
 
-		unset($_SESSION['refID']);
-		redirect('/refund');
-	}
+	$refunds = $changes->filter(function ($item) {
+		return $item->is_change == 0;
+	});
 
-	$res_sel = DB::select('* FROM refunds_ord WHERE cartID = ?', [$id]);
-
-	$chan = DB::exists('refunds_ord WHERE cartID = ? AND type=1', [$id]);
-	$refn = DB::exists('refunds_ord WHERE cartID = ? AND type=2', [$id]);
-
-	if ($chan) {
+	// Set the instructions
+	if (count($actualChanges)) {
 		$instructions = "
 			<strong>1.</strong> Non appena terminerai la prodecura di cambio metteremo in produzione il nuovo capo, che sarà spedito in 1-5 giorni lavorativi tramite <strong>corriere GLS</strong>.<br><br>
 			<strong>2.</strong> Quando il nuovo capo sarà spedito riceverai una e-email da parte del corriere la data di consegna stimata.
@@ -31,13 +33,14 @@ if (isset($_SESSION['refID']) && $stepId > 1) {
 
 		$notes = '';
 
-		if ($stepId == 3)  $notes .= "<strong>-</strong> Il costo di questa proceudra corrisponde al costo della nuova spedizione ovvero <strong>8,00€</strong>.<br><br>";
+		if ($viewStep == 3) {
+			$notes .= "<strong>-</strong> Il costo di questa proceudra corrisponde al costo della nuova spedizione ovvero <strong>8,00€</strong>.<br><br>";
+		}
 
 		$notes .= "
 			<strong>-</strong> Gli articoli da rendere possono essere messi in una scatola o in una busta. Non è necessario usare la confezione originale.<br><br>
 		";
 	} else {
-
 		$instructions = "
 			<strong>1.</strong> Spedisci il pacco con il reso con il metodo di spedizione che preferisci (tramite Poste o qualsiasi corriere) all'indirizzo:<br><br>
 
@@ -56,4 +59,6 @@ if (isset($_SESSION['refID']) && $stepId > 1) {
 	}
 }
 
-if ($stepId > 1 && $status != $stepId) redirect('/refund?step=' . $status);
+if ($viewStep > 1 && $changeRequestStep != $viewStep) {
+	redirect('/refund?step=' . $changeRequestStep);
+}

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ecommerce\Product\ProductSize;
 use Ecommerce\Order;
 
 ?>
@@ -8,55 +9,51 @@ use Ecommerce\Order;
 
 <div id="item-cont">
 
-	<?php while ($row = $res_sel->fetch_assoc()) {
-
-		$order = new Order($row['ordID']);
-		$product = $order->product ?>
+	<?php foreach ($changes as $change) {
+	?>
 
 		<div class="item-box">
 			<div class="item-tbl">
 				<div class="item-tbl">
-
 					<div class="row">
-
 						<div class="item-cell item-pic_cell">
 							<div class="data_row" method="POST">
 
 								<!--Image-->
 								<div class="img_cont">
-									<img src="<?= client_path($product->image) ?>" class="item-img img-fill">
+									<img src="<?= $change->order->clientImage() ?>" class="item-img img-fill">
 								</div>
 							</div>
 						</div>
 
 						<div class="item-cell item-name_cell">
-							<h1 class="txt-1rem txt-bold"><?= $order->product->name ?></h1>
+							<h1 class="txt-1rem txt-bold"><?= $change->order->product->name ?></h1>
 							<p class="item-name">
-								<?= $order->fullDescription ?>
+								<?= $change->order->description() ?>
 							</p>
 						</div>
 
 						<div class="item-cell item-new_cell">
 
-							<?php if ($row['type'] == 1) { ?>
+							<?php if ($change->is_change) { ?>
 
-								<p class="lbl">Taglia desiderata</p>
+								<p class="label">Taglia desiderata</p>
 
-								<select class="sel" name="size_new<?= $order->id ?>" required>
+								<select class="" name="new_size_id[]" required>
 
-									<?php
+									<?php $sizes = $change->order->product->type->sizeCollection();
 
-									$sizes = rows_to_objects(DB::select('ID FROM items_sizes WHERE ID <> ? ORDER BY ID ASC', [$order->sizeId]), 'Ecommerce\Product\Size');
+									$sizes = $sizes->filter(function ($item) use ($change) {
+										return $item->ID != $change->order->sizeID;
+									});
 
-									foreach ($sizes as $key => $size) {
-										if (in_array($size->slug, $product->type->sizes)) { ?>
+									foreach ($sizes as $key => $size) { ?>
 
-											<option value="<?= $size->id ?>" <?= $row['size_new'] == $size->id ? 'selected' : '' ?>>
-												<?= strtoupper($size->name) ?>
-											</option>
+										<option value="<?= $size->ID ?>" <?= $change->new_size_id == $size->ID ? 'selected' : '' ?>>
+											<?= strtoupper($size->name) ?>
+										</option>
 
-									<?php }
-									} ?>
+									<?php } ?>
 
 								</select>
 
@@ -64,7 +61,7 @@ use Ecommerce\Order;
 								<p class="ref_title">RESO</p>
 							<?php } ?>
 
-							<button type="submit" name="remove" value="<?= $order->id ?>" class="txt remove">Cancella <?= $row['type'] == 1 ? 'cambio' : 'reso' ?></button>
+							<button type="submit" name="remove" value="<?= $change->order->ID ?>" class="txt remove">Cancella <?= $change->is_change ? 'cambio' : 'reso' ?></button>
 						</div>
 					</div>
 				</div>
@@ -83,13 +80,13 @@ use Ecommerce\Order;
 	<?= $notes ?>
 </p>
 
-<button type="submit" name="cancel" value="<?= $id ?>" class="txt-lef remove pad-b-1" formnovalidate>Cancella <?= $chan ? 'cambio' : 'reso' ?></button>
+<button type="submit" name="cancel" value="<?= $changeRequestId ?>" class="txt-lef remove pad-b-1" formnovalidate>Cancella <?= $actualChanges ? 'cambio' : 'reso' ?></button>
 
 {% end form-body %}
 
 {% block form-footer %}
 
-<?php if ($chan) { ?>
+<?php if ($actualChanges) { ?>
 
 	<button type="submit" name="pay" id="submit" class="button">Paga ritiro (<strong>8,00€</strong>)</button>
 

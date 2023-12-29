@@ -1,31 +1,42 @@
 <?php
 
-$stepId = 2;
+use App\Models\Ecommerce\Change;
+
+$viewStep = 2;
 
 include_once('setup.php');
 
-$res_sel = DB::select('* FROM orders WHERE cartID = ?', [$id]);
+$orders = $changeRequest->cart->orders;
 
 if (isset($_POST['submit'])) {
-	if (isset($_POST['ordID'])) {
-		foreach ($_POST['ordID'] as $ordID) {
-			$type = $_POST['type' . $ordID];
+	if (isset($_POST['order_id'])) {
+		foreach ($_POST['order_id'] as $orderKey => $orderId) {
+			$is_change = $_POST['is_change'][$orderKey];
 
-			if (DB::exists('refunds_ord WHERE ordID = ?', [$ordID])) DB::update('refunds_ord SET type=? WHERE ordID = ?', [$type, $ordID]);
-			else DB::add('refunds_ord (ordID, cartID, type) VALUES (?, ?, ?)', [$ordID, $id, $type]);
+			Change::create([
+				'order_id' => $orderId,
+				'change_request_id' => $changeRequest->id,
+				'is_change' => $is_change,
+			]);
 		}
 
-		DB::update('refunds SET status=3 WHERE cartID = ?', [$id]);
+		$changeRequest->step = $viewStep + 1;
+		$changeRequest->save();
 
-		redirect('/refund?step=3');
+		redirect('/refund?step=' . $changeRequest->step);
 	} else {
 		$error = 'empty';
 	}
 }
 
 if (isset($_POST['cancel'])) {
-	DB::delete('refunds_ord WHERE cartID = ?', [$id]);
-	DB::update('refunds SET status = 1 WHERE cartID = ?', [$id]);
+	$changeRequest->changes;
+
+	foreach ($changeRequest->changes as $change) {
+		$change->delete();
+	}
+
+	$changeRequest->delete();
 
 	redirect('/refund');
 }

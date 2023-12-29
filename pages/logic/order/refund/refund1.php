@@ -1,41 +1,55 @@
 <?php
 
-$stepId = 1;
+use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\ChangeRequest;
+
+$viewStep = 1;
 
 include_once('setup.php');
 
+/**
+ * The form submit
+ */
 if (isset($_POST['submit'])) {
 
-	$id = $_POST['id'];
+	// Get the post data
+	$cartId = $_POST['cart_id'];
 	$email = strtolower(trim($_POST['email']));
 
-	if (DB::exists('addresses WHERE cartID = ? AND email=?', [$id, $email])) {
+	// Check if the cart exists
+	$cart = Cart::join('addresses', 'addresses.cartID', '=', 'carts.ID')
+		->where('carts.ID', $cartId)
+		->where('addresses.email', $email)
+		->first();
 
-		$_SESSION['refID'] = $id;
+	if ($cart) {
+		$changeRequest = ChangeRequest::where('cart_id', $cartId)->first();
 
-		if ($status = DB::find('status FROM refunds WHERE cartID = ?', $id)) {
-
-			if ($status > 1) redirect('/refund?step=' . $status);
-
-			else {
-				DB::update('refunds SET status=2 WHERE cartID = ?', [$id]);
-				redirect('/refund?step=2');
-			}
-		} else {
-
-			DB::add('refunds (cartID, status) VALUES (?, ?)', [$id, 2]);
-
-			redirect('/refund?step=2');
+		if (!$changeRequest) {
+			// Create the change request
+			$changeRequest = ChangeRequest::create([
+				'cart_id' => $cartId,
+				'step' => 2,
+			]);
 		}
-	} else $error = 'match';
+
+		$_SESSION['changeRequestId'] = $changeRequest->id;
+
+		redirect('/refund?step=' . $changeRequest->step);
+	} else {
+		$error = 'match';
+	}
 }
 
+/**
+ * The form inputs
+ */
 $inputs = [
 	[
 		['name' => 'email', 'text' => 'Indirizzo e-email', 'required' => true],
 	],
 	[
-		['name' => 'id', 'text' => 'Numero ordine', 'required' => true],
+		['name' => 'cart_id', 'text' => 'Numero ordine', 'required' => true],
 		['type' => 'error', 'text' => 'Nessun ordine trovato', 'error' => 'match'],
 	],
 ];
