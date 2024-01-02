@@ -637,14 +637,18 @@ class Cart {
 				if ($matchesDesign && $matchesSeller && $matchesType && $matchesColor) {
 					if (!$coupon->removesGain) {
 						// precentage discount
-						if ($coupon->ourPercentageDiscountMultiple && $this->quantity > 1) {
+						if ($coupon->ourPercentageDiscountMultiple && $this->quantity > 2) {
 							$ourDiscountPercentage = $coupon->ourPercentageDiscountMultiple;
+						} else if ($coupon->ourPercentageDiscountTwo && $this->quantity > 1) {
+							$ourDiscountPercentage = $coupon->ourPercentageDiscountTwo;
 						} else {
 							$ourDiscountPercentage = $coupon->ourPercentageDiscount;
 						}
 
-						if ($coupon->sellerPercentageDiscountMultiple && $this->quantity > 1) {
+						if ($coupon->sellerPercentageDiscountMultiple && $this->quantity > 2) {
 							$sellerDiscountPercentage = $coupon->sellerPercentageDiscountMultiple;
+						} else if ($coupon->sellerPercentageDiscountTwo && $this->quantity > 1) {
+							$sellerDiscountPercentage = $coupon->sellerPercentageDiscountTwo;
 						} else {
 							$sellerDiscountPercentage = $coupon->sellerPercentageDiscount;
 						}
@@ -678,7 +682,7 @@ class Cart {
 				}
 			}
 
-			DB::update('carts SET code = ? ', [$coupon->code, $this->id]);
+			DB::update(self::TABLE . ' SET code = ? WHERE ' . self::INDEX . ' = ?', [$coupon->code, $this->id]);
 
 			$this->data['couponCode'] = $coupon->code;
 			$this->data = [];

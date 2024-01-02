@@ -233,7 +233,8 @@ main {
 .panel {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
-	grid-template-rows: max-content 1fr;
+	grid-template-rows: max-content;
+	grid-auto-rows: auto;
 	gap: 1rem;
 	padding: 2rem;
 	background-color: var(--clr-neutral-100);

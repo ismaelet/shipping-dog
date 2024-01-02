@@ -52,6 +52,10 @@ function _expand_results(&$entry, $field, $key, $row) {
 		else $entry['value'] = 'Tutti';
 	} else if ($key == 3) {
 		$entry['value'] = !$row['mod_us'] && !$row['mod_them'] ? 'nessuno' : '<span class="txt-bold">' . ($row['mod_us'] + $row['mod_them']) . '%</span>: ' . $row['mod_us'] . '% nostro, ' . $row['mod_them'] . '% del negozio';
+
+		if ($row['mod_us2'] || $row['mod_them2']) {
+			$entry['value'] .= ' per un articolo<br><span class="txt-bold">' . ($row['mod_us2'] + $row['mod_them2']) . '%</span>: ' . $row['mod_us2'] . '% nostro, ' . $row['mod_them2'] . '% del negozio per due o più articoli';
+		}
 	} else if ($key == 4) {
 		$entry['value'] = !$row['flat_us'] && !$row['flat_them'] ? 'nessuno' : '<span class="txt-bold">' . ($row['flat_us'] + $row['flat_them']) . '€</span>: ' . $row['flat_us'] . '€ nostro, ' . $row['flat_them'] . '€ del negozio';
 	} else if ($key == 7) {

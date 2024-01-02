@@ -446,6 +446,11 @@ body.fixed {
 	max-width: 100%;
 }
 
+.button--small {
+	--_padding-block: 1em;
+	font-size: var(--fs-300);
+}
+
 .button--full-width {
 	width: 100%;
 	padding-inline: 0;
@@ -586,8 +591,16 @@ textarea:focus {
 		grid-column: span 4;
 	}
 
+	.form-field [data-size='1'] {
+		grid-column: span 1;
+	}
+
 	.form-field [data-size='2'] {
 		grid-column: span 2;
+	}
+
+	.form-field [data-size='3'] {
+		grid-column: span 3;
 	}
 }
 

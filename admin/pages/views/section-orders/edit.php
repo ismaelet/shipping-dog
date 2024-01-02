@@ -72,7 +72,7 @@
 			</div>
 		</div>
 	</section>
-	<section class="cart-actions flex-group">
+	<section class="cart-actions flex flex-wrap gap-2">
 
 		<?php if ($cart->statusId > 0) { ?>
 
@@ -83,16 +83,20 @@
 
 		<?php } ?>
 
+		<?php if ($cart->statusId != 0) { ?>
+
+			<button type="submit" class="cart-action cart-action_restore button button--secondary button--auto-width" name="change-status" value="open">
+				<?= icon_embed('back') ?>
+				Riapri il carrello
+			</button>
+
+		<?php } ?>
+
 		<?php if ($cart->statusId == -1) { ?>
 
 			<button type="submit" class="cart-action cart-action_restore button button--auto-width" name="change-status" value="received">
 				<?= icon_embed('correct') ?>
 				Ripristina l'ordine
-			</button>
-
-			<button type="submit" class="cart-action cart-action_restore button button--secondary button--auto-width" name="change-status" value="open">
-				<?= icon_embed('correct') ?>
-				Riapri il carrello
 			</button>
 
 		<?php } else if (!$cart->statusId) { ?>
@@ -165,8 +169,11 @@
 				</div>
 
 			<?php } ?>
-		</div>
 
+			<div>
+				<a href="edit-address?id=<?= $cart->address->id ?>" class="button button--small button--secondary button--auto-width">Modifica</a>
+			</div>
+		</div>
 	</section>
 </aside>
 
