@@ -4,10 +4,19 @@
 
 {% block main %}
 
-<form action="" method="POST" class="p-4">
+<div class="p-4">
 	<label class="label">Parti dall'ordine:</label>
-	<input type="number" name="product_log_start_from_id" value="<?= $validCarts->count() ? $firstCart->cartId : $startFromId ?>" placeholder="Parti del numero ordine #">
-</form>
+
+	<div class="flex gap-4">
+		<form action="" method="POST" class="w-full">
+			<input type="number" name="product_log_start_from_id" value="<?= $validCarts->count() ? $firstCart->cartId : $startFromId ?>" placeholder="Parti del numero ordine #">
+		</form>
+
+		<form action="" method="POST">
+			<button type="submit" class="button" name="clean-log">Pulisci log</button>
+		</form>
+	</div>
+</div>
 
 <p class="log">
 

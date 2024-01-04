@@ -561,7 +561,7 @@ class Cart {
 			}
 
 			if (!$this->coupon->permanent) {
-				DB::delete('codes ', [$this->couponId]);
+				DB::delete(Coupon::TABLE . ' WHERE ' . Coupon::INDEX . ' = ?', [$this->couponId]);
 			}
 		}
 

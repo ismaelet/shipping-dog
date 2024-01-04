@@ -17,5 +17,9 @@ RUN apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-dev
 RUN docker-php-ext-configure gd --with-webp --with-jpeg && \
     docker-php-ext-install gd
 
+# Required to generate XLSX files
+RUN apt-get install -y libonig-dev
+RUN docker-php-ext-install mbstring
+
 # Enable htaccess rewrite
 RUN a2enmod rewrite

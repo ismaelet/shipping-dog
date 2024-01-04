@@ -1,11 +1,16 @@
+{% block form-body %}
+
+<div class="form-field">
+	<label class="label">Scarica dall'ordine, all'ordine:</label>
+	<input type="number" name="first_cart_id" value="<?= $firstCart->ID ?? '' ?>" placeholder="Scarica dall'ordine numero" data-size="2" required>
+	<input type="number" name="last_cart_id" value="<?= $lastCart->ID ?? '' ?>" placeholder="Fino all'ordine numero" data-size="2" required>
+</div>
+
+{% end form-body %}
+
 {% block form-footer %}
 
-<?php if ($cartCount) { ?>
-	<button type="submit" name="submit" class="button" onclick="return confirm('Sei sicuro di voler generare le etichette?')">Scarica le nuova etichette</button>
-<?php } ?>
-
-<a href="<?= client_url('/uploads/documents/Etichette-Corriere.xlsx') ?>" class="button button--secondary">
-	Riscarica le ultime etichette
-</a>
+<button type="submit" name="submit" class="button">Scarica le etichette</button>
+<button type="submit" name="process-all" class="button button--secondary">Elabora gli ordini</button>
 
 {% end form-footer %}

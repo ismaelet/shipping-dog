@@ -1,6 +1,8 @@
 <?php
 
-use Ecommerce\Cart;
+use App\Models\Ecommerce\Address;
+use App\Models\Ecommerce\Cart;
+use Ecommerce\ShippingMethod;
 use Shuchkin\SimpleXLSXGen as XLS;
 
 /*
@@ -9,36 +11,64 @@ use Shuchkin\SimpleXLSXGen as XLS;
 
 $pageConfig['free'] = true;
 
-$cartCount = DB::count('carts WHERE status=1 && (shipID=2 OR shipID=1) ORDER BY time ASC');
+$carts = Cart::where('status', 1)->where('shipID', '!=', ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID)->orderBy('time', 'asc');
+
+if ($carts->count()) {
+	$firstCart = $carts->first();
+	$lastCart = Cart::where('status', 1)->where('shipID', '!=', ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID)->orderBy('time', 'desc')->first();
+} else {
+	$lastCart = Cart::where('status', '>', 0)->where('shipID', '!=', ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID)->orderBy('time', 'desc')->first();
+}
 
 // submit
 if (isset($_POST['submit'])) {
-
 	$rows = [];
 
-	$cartRows = DB::select('ID FROM carts WHERE status = 1 && (shipID = 2 OR shipID = 1) ORDER BY time ASC');
+	$firstSelectedCartId = $_POST['first_cart_id'];
+	$lastSelectedCartId = $_POST['last_cart_id'];
+	$firstSelectedCart = Cart::find($firstSelectedCartId);
+	$lastSelectedCart = Cart::find($lastSelectedCartId);
 
-	while ($cartRow = $cartRows->fetch_assoc()) {
-		$cart = new Cart($cartRow['ID']);
-		$address = $cart->address;
+	if ($firstSelectedCart && $lastSelectedCart) {
 
-		$rows[] = [
-			$address->fullname,
-			$address->address . ', ' . $address->number,
-			$address->city,
-			$address->zip,
-			$address->region,
-			$address->email,
-			'Tel: ' . $address->phone,
-			1,
-			1,
-			$address->exchange ? 24 : ''
-		];
+		if ((isset($firstCart) && $firstSelectedCart->ID == $firstCart->ID) && (isset($lastCart) && $lastSelectedCart->ID == $lastCart->ID)) {
+			$addresses = Address::join('carts', 'addresses.cartID', '=', 'carts.ID')
+				->where('carts.status', 1)
+				->where('shipID', '!=', ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID)
+				->whereBetween('carts.time', [$firstSelectedCart->time, $lastSelectedCart->time])
+				->orderBy('carts.time', 'asc')
+				->get();
+		} else {
+			$addresses = Address::join('carts', 'addresses.cartID', '=', 'carts.ID')
+				->where('carts.status', '>', 0)
+				->where('shipID', '!=', ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID)
+				->whereBetween('carts.time', [$firstSelectedCart->time, $lastSelectedCart->time])
+				->orderBy('carts.time', 'asc')
+				->get();
+		}
 
-		DB::update('carts SET status = 2 WHERE ID = ?', [$cartRow['ID']]);
+		foreach ($addresses as $address) {
+			$rows[] = [
+				$address->aname,
+				$address->address . ', ' . $address->number,
+				$address->city,
+				$address->zip,
+				$address->region,
+				$address->email,
+				'Tel: ' . $address->phone,
+				1,
+				1,
+				$address->exchange ? 24 : ''
+			];
+		}
+
+		$xlsx = XLS::fromArray($rows);
+		$xlsx->downloadAs('Etichette-Corriere.xlsx');
 	}
+}
 
-	$xlsx = XLS::fromArray($rows);
-	$xlsx->saveAs(SERVER_ROOT . '/uploads/documents/Etichette-Corriere.xlsx');
-	$xlsx->downloadAs('Etichette-Corriere.xlsx');
+if (isset($_POST['process-all'])) {
+	Cart::where('status', 1)->where('shipID', '!=', ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID)->update(['status' => 2]);
+
+	redirect();
 }

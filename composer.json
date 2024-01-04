@@ -3,6 +3,7 @@
         "phpmailer/phpmailer": "*",
         "dompdf/dompdf": "*",
         "vlucas/phpdotenv": "*",
-        "illuminate/database": "^10.38"
+        "illuminate/database": "^10.38",
+        "shuchkin/simplexlsxgen": "^1.4"
     }
 }

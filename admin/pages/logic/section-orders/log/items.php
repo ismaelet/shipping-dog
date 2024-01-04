@@ -29,6 +29,15 @@ if ($validCarts->count()) {
 /**
  * Update the log start date
  */
+if (isset($_POST['clean-log'])) {
+	$lastCompletedCart = Cart::where('status', '>', 0)->orderBy('time', 'desc')->first();
+	$firstUncompletedCart = Cart::where('status', 0)->where('time', '>', $lastCompletedCart->time)->orderBy('time', 'asc')->first();
+	$startFromConfig->value = $firstUncompletedCart->ID ?? Cart->orderBy('time', 'desc')->first()->ID + 1;
+	$startFromConfig->save();
+
+	redirect();
+}
+
 if (!empty($_POST['product_log_start_from_id'])) {
 	$startFromConfig->value = (int) $_POST['product_log_start_from_id'];
 	$startFromConfig->save();
