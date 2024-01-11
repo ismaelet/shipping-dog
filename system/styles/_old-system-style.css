@@ -1047,7 +1047,7 @@ textarea {
 	--inp-height: 3rem;
 	--inp-outline: 1px;
 	--inp-border-radius: var(--border-radius);
-	--inp-bgr: var(--surface);
+	--inp-clr-bgr: var(--surface);
 	--inp-color: var(--text-color-strong);
 	--inp-accent: var(--clr-1);
 	--inp-font-size: 0.9rem;
@@ -1056,9 +1056,9 @@ textarea {
 input:-webkit-autofill,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
-	outline: 2px solid var(--inp-bgr) !important;
-	-webkit-box-shadow: 0 0 0 1000px var(--inp-bgr) inset !important;
-	box-shadow: 0 0 0 1000px var(--inp-bgr) inset !important;
+	outline: 2px solid var(--inp-clr-bgr) !important;
+	-webkit-box-shadow: 0 0 0 1000px var(--inp-clr-bgr) inset !important;
+	box-shadow: 0 0 0 1000px var(--inp-clr-bgr) inset !important;
 	-webkit-text-fill-color: var(--inp-color) !important;
 	transition: none !important;
 }
@@ -1076,7 +1076,7 @@ select:focus:-webkit-autofill {
 	border: none;
 	border-radius: var(--inp-border-radius);
 	outline: var(--inp-outline) solid transparent;
-	background-color: var(--inp-bgr);
+	background-color: var(--inp-clr-bgr);
 	color: var(--inp-color);
 	font-family: var(--font-text);
 	font-size: var(--inp-font-size);
@@ -1162,7 +1162,7 @@ select:focus:-webkit-autofill {
 }
 
 .fancy-input .inp {
-	--inp-bgr: var(--bgr);
+	--inp-clr-bgr: var(--bgr);
 }
 
 .fancy-input-lbl {

@@ -13,10 +13,10 @@ html[data-theme='light'] #slider .bgr {
 }
 
 #slider-title {
-	padding: 10vh 1rem;
+	padding: 10vh 0;
 	color: #fff;
-	font-size: 3rem;
-	letter-spacing: 0.4em;
+	font-size: min(3rem, 13vw);
+	letter-spacing: min(0.4em, 3vw);
 	text-align: center;
 }
 
@@ -32,9 +32,10 @@ html[data-theme='light'] #slider .bgr {
 
 /*  Flow bar  */
 #flow-bar {
+	--_size: min(2rem, 8vw);
 	--_inactive-color: var(--text-color-fade);
 	display: grid;
-	grid-template-columns: 2rem 1fr 2rem 1fr 2rem 1fr 2rem;
+	grid-template-columns: var(--_size) 1fr var(--_size) 1fr var(--_size) 1fr var(--_size);
 	margin-inline: 7%;
 	margin-block: 3rem 5rem;
 	align-items: center;
@@ -277,7 +278,7 @@ html[data-theme='light'] #slider .bgr {
 #chck_box {
 	display: grid;
 	gap: 1rem;
-	padding: 1.5rem 2rem;
+	padding: 1.5rem var(--content-padding);
 	background-color: var(--surface);
 	border-radius: var(--border-radius-400);
 	margin-top: 1rem;

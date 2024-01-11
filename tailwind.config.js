@@ -58,7 +58,7 @@ module.exports = {
 				'main-heading': [
 					'var(--font-size-900)',
 					{
-						fontWeight: 'var(--font-weight-bold)',
+						fontWeight: 'var(--fw-medium)',
 						letterSpacing: '0.03em',
 						lineHeight: '1.1',
 					},

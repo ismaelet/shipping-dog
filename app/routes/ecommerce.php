@@ -8,7 +8,7 @@ Route::add('/cart', function () {
 	$currentStepId = $_GET['step-id'] ?? null;
 	$currentStepId = in_array($currentStepId, array_keys($cartSteps)) ? $currentStepId : null;
 
-	if (!cart()->quantity) {
+	if (!cart() || !cart()->quantity) {
 		redirect('/cart/empty');
 	}
 
@@ -62,7 +62,7 @@ Route::add('/cart/success', function () {
 
 // empty cart
 Route::add('/cart/empty', function () {
-	if (cart()->quantity) {
+	if (cart() && cart()->quantity) {
 		redirect('/cart');
 	}
 

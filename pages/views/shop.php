@@ -4,26 +4,17 @@
 	<div id="slider-box">
 		<div id="bgr" class="bgr" <?= background_image('bgr.jpg') ?>></div>
 
-		<div id="title-box" class="txt-cen cenY rel pad-h-5">
-			<h1 id="title" class="mar-b-4 txt-wht">SHO<span style="letter-spacing: 0;">P</span></h1>
+		<div class="grid justify-items-center gap-8 text-center px-4">
+			<h1 id="title" class="txt-wht">SHO<span style="letter-spacing: 0;">P</span></h1>
 
-			<div id="srch-pan" class="inlb">
-				<form class="srch_box" method="GET" autocomplete="off">
-					<div class="srch_row">
+			<!-- Search box -->
+			<form class="page-search" method="GET" autocomplete="off">
+				<input type="text" name="search" class="page-search__input" value="<?= $_GET['search'] ?? '' ?>" placeholder="Cerca un prodotto" maxlength="30" onfocus="$(this).next().addClass('focus');" onblur="$(this).next().removeClass('focus');" autocomplete="off">
 
-						<div class="srch_cell left">
-							<input type="text" name="search" id="slider-search-inp" class="inp" value="<?= $_GET['search'] ?? '' ?>" placeholder="Cerca un prodotto" maxlength="30" onfocus="$('#slider-search-btn').addClass('focus');" onblur="$('#slider-search-btn').removeClass('focus');" autocomplete="off">
-						</div>
-
-						<div class="srch_cell right">
-							<button type="submit" id="slider-search-btn" class="srch_btn bgr-c1">
-								<span class="bgr" <?= background_image(ICONS_DIR . 'actions/srch_wht.png') ?>></span>
-							</button>
-						</div>
-
-					</div>
-				</form>
-			</div>
+				<button type="submit" class="page-search__button button">
+					<?= icon_embed('search') ?>
+				</button>
+			</form>
 		</div>
 
 		<a href="#body" class="nav-arr pos-br bot wht scroll"></a>

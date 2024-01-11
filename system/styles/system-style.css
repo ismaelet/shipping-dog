@@ -453,12 +453,14 @@ body.fixed {
 	border-color: var(--clr-primary-400);
 }
 
-.button--secondary.button--bad {
+.button--secondary.button--bad,
+.button--secondary.button--warning {
 	color: var(--clr-bad-400);
 	border-color: var(--clr-bad-400);
 }
 
-.button--secondary.button--bad:hover {
+.button--secondary.button--bad:hover,
+.button--secondary.button--warning:hover {
 	color: var(--clr-bad-500);
 	border-color: var(--clr-bad-500);
 }
@@ -506,7 +508,7 @@ textarea {
 	border: var(--inp-border-width) solid var(--inp-border-color);
 	border-radius: var(--inp-border-radius);
 	background-color: var(--inp-clr-bgr);
-	color: var(--inp-fc);
+	color: var(--inp-color);
 	font-family: var(--ff-default);
 	font-size: var(--inp-fs);
 	transition: border-color 0.2s;
@@ -525,8 +527,8 @@ textarea:-webkit-autofill {
 	border: var(--inp-border-width) solid var(--inp-clr-bgr);
 	box-shadow: 0 0 0 1000px var(--inp-clr-bgr) inset !important;
 	-webkit-box-shadow: 0 0 0 1000px var(--inp-clr-bgr) inset;
-	-webkit-text-fill-color: var(--inp-fc);
-	color: var(--inp-fc);
+	-webkit-text-fill-color: var(--inp-color);
+	color: var(--inp-color);
 }
 
 input {

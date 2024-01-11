@@ -114,6 +114,9 @@ class Seller extends Model {
 		return $this->setCache('usedShippingCredit', round($usedShippingCredit, 2));
 	}
 
+	/**
+	 * Check if the seller is followed by the logged user
+	 */
 	public function isFollowed(): bool {
 		return Follower::where([
 			'userID' => userId(),

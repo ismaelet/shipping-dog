@@ -115,7 +115,7 @@
 	--inp-shadow: 0 0 5px rgba(16, 114, 191, 0.1);
 	--inp-clr-bgr: var(--clr-surface-600);
 	--inp-clr-accent: var(--clr-primary-400);
-	--inp-fc: var(--fc-700);
+	--inp-color: var(--fc-700);
 	--inp-fs: var(--fs-400);
 }
 

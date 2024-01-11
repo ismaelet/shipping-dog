@@ -79,7 +79,7 @@
 
 	/* inputs */
 	--inp-clr-bgr: var(--surface);
-	--inp-fc: var(--fc-700);
+	--inp-color: var(--fc-700);
 	--inp-fs: var(--fs-300);
 
 	/* -- OLD -- */
@@ -240,7 +240,7 @@ p.error {
 html[data-theme='dark'] input,
 html[data-theme='dark'] select,
 html[data-theme='dark'] textarea {
-	--inp-bgr: var(--surface-secondary);
+	--inp-clr-bgr: var(--surface-secondary);
 }
 
 .inp,
@@ -271,12 +271,20 @@ html[data-theme='dark'] textarea {
 
 .button:not(.button--secondary):not(.button--empty) {
 	background: linear-gradient(to right, var(--clr-primary-400), var(--clr-primary-500));
-	transition: --clr-primary-400 0.3s, --clr-primary-500 0.3s;
+	transition: --clr-primary-400 0.3s, --clr-primary-500 0.3s, background 0.3s;
+
+	&.button--warning {
+		background: var(--clr-bad-400);
+	}
 }
 
 .button:not(.button--secondary):not(.button--empty):hover {
 	--clr-primary-400: hsl(var(--clr-primary-hsl-400));
 	--clr-primary-500: hsl(var(--clr-primary-hsl-400));
+
+	&.button--warning {
+		background: var(--clr-bad-500);
+	}
 }
 
 .button--secondary {

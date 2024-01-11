@@ -471,7 +471,7 @@ textarea {
 	border: var(--inp-border-width) solid transparent;
 	border-radius: var(--inp-border-radius);
 	background-color: var(--inp-clr-bgr);
-	color: var(--inp-fc);
+	color: var(--inp-color);
 	font-family: var(--ff-default);
 	font-size: var(--inp-fs);
 	transition: border-color 0.2s;
@@ -490,8 +490,8 @@ textarea:-webkit-autofill {
 	border: var(--inp-border-width) solid var(--inp-clr-bgr);
 	box-shadow: 0 0 0 1000px var(--inp-clr-bgr) inset !important;
 	-webkit-box-shadow: 0 0 0 1000px var(--inp-clr-bgr) inset;
-	-webkit-text-fill-color: var(--inp-fc);
-	color: var(--inp-fc);
+	-webkit-text-fill-color: var(--inp-color);
+	color: var(--inp-color);
 }
 
 input {

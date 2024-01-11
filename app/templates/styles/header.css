@@ -62,7 +62,6 @@ header.floating {
 #h-nav-rig {
 	display: flex;
 	align-items: center;
-	gap: min(1.5rem, 3vw);
 	flex-shrink: 0;
 }
 
@@ -84,8 +83,8 @@ header.floating {
 	white-space: nowrap;
 	transition: color 0.4s;
 
-	@media (max-width: 481px) {
-		font-size: 1rem;
+	@media (max-width: 480px) {
+		display: none;
 	}
 }
 
@@ -171,12 +170,6 @@ header.floating {
 }
 
 /* Desktop links */
-.h-nav-box {
-	display: flex;
-	gap: 3rem;
-	align-items: center;
-}
-
 .h-link {
 	position: relative;
 }
@@ -251,6 +244,11 @@ header.floating {
 }
 
 /* Wishlist & Cart */
+header:has(#h-srch-cbx:checked) .h-icon {
+	visibility: hidden;
+	pointer-events: none;
+}
+
 #h-cart {
 	display: block;
 	background-position: center;
@@ -321,10 +319,6 @@ html[data-theme='dark'] .theme-switch .dark-icon {
 }
 
 /* Login & profile */
-#h-log-box {
-	margin-left: 1rem;
-}
-
 #h-user-ico {
 	display: block;
 	background-color: #ddd;
@@ -540,7 +534,7 @@ html[data-theme='dark'] .theme-switch .dark-icon {
 	}
 
 	#h-srch-cbx:checked ~ #h-srch-inp-box {
-		width: calc(100vw - 195px);
+		width: calc(100vw - 96px);
 	}
 
 	.h-name {

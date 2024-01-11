@@ -10,7 +10,7 @@ use Ecommerce\Seller;
 <section id="page-header" class="center-items">
 	<div class="page-background bgr" <?= background_image('bgr.jpg') ?>></div>
 
-	<form method="GET" id="searcher" class="pad-h-2">
+	<form method="GET" id="searcher" class="px-4">
 		<div id="srch-inp-cell" class="">
 			<input type="text" id="srch-inp" name="search" placeholder="Cerca articolo, negozio o tag" maxlength="30">
 		</div>

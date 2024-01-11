@@ -6,12 +6,9 @@ use Ecommerce\Design;
 
 {% block main %}
 
-<section id="page-header" class="pad-v-7">
-
+<section id="page-header" class="pad-v-7 text-center">
 	<div class="bgr" <?= background_image(IMG_DIR . 'blank.png') ?>></div>
-
-	<h1 class="txt-upp txt-cen txt-ls2"><span class="txt-c1">Wish</span>list</h1>
-
+	<h1 class="text-main-heading uppercase tracking-widest"><span class="txt-c1">Wish</span>list</h1>
 </section>
 
 <?php if ($selN) { ?>

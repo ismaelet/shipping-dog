@@ -76,12 +76,12 @@
 			<div id="h-nav-cen" class="h-bar inlb txt-cen al-mid"></div>
 
 			<!-- Right bar -->
-			<div id="h-nav-rig" class="h-bar inlb txt-rig al-mid">
+			<div id="h-nav-rig" class="h-bar flex gap-6 lg:gap-12">
 
 				<!-- Links -->
 				<?php if (!$header['force-mob']) { ?>
 
-					<div class="h-nav-box desk1280 inlb al-mid">
+					<div class="h-nav-box desk1280 flex gap-12">
 
 						<?php foreach ($header['links'] as $h_link) {
 
@@ -145,45 +145,48 @@
 					</div>
 				<?php } ?>
 
-				<!-- Theme switch -->
-				<?php if ($header['light-mode-switcher']) { ?>
+				<!-- Navigation icons -->
+				<div class="h-navigation-icons flex gap-6 items-center">
+					<!-- Theme switch -->
+					<?php if ($header['light-mode-switcher']) { ?>
 
-					<div class="theme-switch">
-						<div class="light-icon icon-box" data-theme="light">
-							<?= icon_embed('sun') ?>
+						<div class="theme-switch h-icon">
+							<div class="light-icon icon-box" data-theme="light">
+								<?= icon_embed('sun') ?>
+							</div>
+
+							<div class="dark-icon icon-box" data-theme="dark">
+								<?= icon_embed('moon') ?>
+							</div>
 						</div>
 
-						<div class="dark-icon icon-box" data-theme="dark">
-							<?= icon_embed('moon') ?>
-						</div>
-					</div>
-
-				<?php } ?>
-
-				<!-- Favorites icon -->
-				<?php if ($header['wishlist'] && DB::exists('likes WHERE userID = ?', [$user->id])) { ?>
-
-					<a id="h-wish" class="wish icon-box h-link al-mid" href="<?= client_url('/wishlist') ?>">
-						<?= icon_embed('love') ?>
-					</a>
-
-				<?php } ?>
-
-				<!-- Cart icon -->
-				<a id="h-cart" class="bag icon-box h-link al-mid" href="<?= client_url('/cart') ?>">
-
-					<?= icon_embed('bag') ?>
-
-					<?php if (cart_count()) { ?>
-						<h1 id="h-cart-num"><?= cart_count() ?></h1>
 					<?php } ?>
 
-				</a>
+					<!-- Favorites icon -->
+					<?php if ($header['wishlist'] && DB::exists('likes WHERE userID = ?', [$user->id])) { ?>
+
+						<a id="h-wish" class="wish icon-box h-link al-mid h-icon" href="<?= client_url('/wishlist') ?>">
+							<?= icon_embed('love') ?>
+						</a>
+
+					<?php } ?>
+
+					<!-- Cart icon -->
+					<a id="h-cart" class="bag icon-box h-link al-mid h-icon" href="<?= client_url('/cart') ?>">
+
+						<?= icon_embed('bag') ?>
+
+						<?php if (cart_count()) { ?>
+							<h1 id="h-cart-num"><?= cart_count() ?></h1>
+						<?php } ?>
+
+					</a>
+				</div>
 
 				<!-- Login bar -->
 				<?php if ($header['login']) { ?>
 
-					<div id="h-log-box" class="inlb al-mid <?= $header['force-mob'] ? 'hidden' : 'desk1280' ?>">
+					<div id="h-log-box" class="<?= $header['force-mob'] ? 'hidden' : 'desk1280' ?>">
 
 						<?php if ($user->id) { ?>
 

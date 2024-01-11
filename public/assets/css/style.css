@@ -633,7 +633,7 @@ video {
   --font-size-400: 1rem;
   --font-size-700: min(2rem, 6vw);
   --font-size-800: min(3rem, 10vw);
-  --font-size-900: min(6rem, 15vw);
+  --font-size-900: min(5rem, 15vw);
   /* 2.3.3 Font weight */
   --font-weight-thin: 100;
   --font-weight-extra-light: 200;
@@ -827,8 +827,16 @@ video {
   flex-wrap: wrap;
 }
 
+.items-center{
+  align-items: center;
+}
+
 .justify-center{
   justify-content: center;
+}
+
+.justify-items-center{
+  justify-items: center;
 }
 
 .gap-2{
@@ -839,6 +847,18 @@ video {
   gap: 1rem;
 }
 
+.gap-8{
+  gap: 2rem;
+}
+
+.gap-12{
+  gap: 3rem;
+}
+
+.gap-6{
+  gap: 1.5rem;
+}
+
 .border{
   border-width: var(--border-width);
 }
@@ -847,8 +867,28 @@ video {
   padding: 1rem;
 }
 
+.px-4{
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .text-center{
   text-align: center;
+}
+
+.text-main-heading{
+  font-size: var(--font-size-900);
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  font-weight: var(--fw-medium);
+}
+
+.uppercase{
+  text-transform: uppercase;
+}
+
+.tracking-widest{
+  letter-spacing: 0.1em;
 }
 
 .filter{
@@ -861,4 +901,10 @@ video {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+@media (min-width: 1024px){
+  .lg\:gap-12{
+    gap: 3rem;
+  }
 }

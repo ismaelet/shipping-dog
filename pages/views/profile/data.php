@@ -8,7 +8,11 @@
 
 		<div class="body">
 
-			<?php if ($done == 'data') { ?>
+			<?php
+
+			use App\View\Components\Form\Button;
+
+			if ($done == 'data') { ?>
 
 				<p class="confirmation">Dati modificati con successo</p>
 
@@ -27,7 +31,7 @@
 			<input type="text" class="inp" name="fname" value="<?= user()->fname; ?>" placeholder="Nome">
 			<input type="text" class="inp" name="lname" value="<?= user()->lname; ?>" placeholder="Cognome">
 
-			<p class="lbl">email:</p>
+			<p class="lbl">E-mail:</p>
 			<input type="email" class="inp" name="email" value="<?= user()->email; ?>" placeholder="email" required>
 
 			<?php if ($error == 'email_match') { ?>
@@ -39,7 +43,7 @@
 		</div>
 
 		<div class="footer">
-			<button type="submit" name="edit_data" class="pbtn wid-100">Modifica</button>
+			<button type="submit" name="edit_data" class="button button--full-width">Modifica</button>
 		</div>
 	</form>
 
@@ -76,7 +80,7 @@
 		</div>
 
 		<div class="footer">
-			<button type="submit" name="edit_pass" class="pbtn wid-100">Modifica</button>
+			<button type="submit" name="edit_pass" class="button button--full-width">Modifica</button>
 		</div>
 	</form>
 
@@ -99,7 +103,10 @@
 		</div>
 
 		<div class="footer">
-			<button type="submit" name="delete-account" class="pbtn pbtn_red wid-100" onclick="return confirm('Sei sicuro di voler eliminare l\'account? Non potrà essere ripristinato.')">Elimina l'account</button>
+			<button type="submit" name="delete-account" class="button button--warning button--full-width" onclick="return confirm('Sei sicuro di voler eliminare l\'account? Non potrà essere ripristinato.')">
+				<?= icon_embed('delete') ?>
+				Elimina l'account
+			</button>
 		</div>
 	</form>
 </div>
