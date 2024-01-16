@@ -7,20 +7,24 @@ use Ecommerce\Design;
 <section id="client-pics">
 	<div class="header">
 		<div class="main-wrap txt-cen">
-			<div class="section-title-box">
-				<h2 class="section-title">Le vostre foto</h2>
+			<div class="grid">
+				<div class="section-title-box">
+					<h2 class="section-title">Le vostre foto</h2>
+				</div>
+
+				<p class="mwid-600 mar-h-auto">Mandaci una foto con un nostro capo indossato su <a class="txt-c1-h" href="<?= sys_config('contact-instagram-link') ?>">Instagram</a>, <a class="txt-c1-h" href="<?= sys_config('contact-facebook') ?>">Facebook</a> o per <a class="txt-c1-h" href="<?= sys_config('contact-email-link') ?>">e-email</a> e ottieni subito un <strong>codice sconto del 15%</strong></p>
+
+				<div class="flex center-content">
+					<a href="<?= sys_config('contact-instagram-link') ?>" class="button button--auto-width mar-t-2">
+						<?= icon_embed('contacts/instagram') ?>
+						Seguici su Instagram
+					</a>
+				</div>
+
+				<a href="<?= client_url('/fan-pics') ?>" class="block mar-t-3">
+					<p class="more txt-rig">Esplorale tutte</p>
+				</a>
 			</div>
-
-			<p class="mwid-600 mar-h-auto">Mandaci una foto con un nostro capo indossato su <a class="txt-c1-h" href="<?= sys_config('contact-instagram-link') ?>">Instagram</a>, <a class="txt-c1-h" href="<?= sys_config('contact-facebook') ?>">Facebook</a> o per <a class="txt-c1-h" href="<?= sys_config('contact-email-link') ?>">e-email</a> e ottieni subito un <strong>codice sconto del 15%</strong></p>
-
-			<a href="<?= sys_config('contact-instagram-link') ?>" class="pbtn mar-t-2 wid-auto">
-				<span class="btn-icon bgr-f" <?= icon_svg('socials/instagram') ?>></span>
-				<span class="btn-txt">Seguici su Instagram</span>
-			</a>
-
-			<a href="<?= client_url('/fan-pics') ?>" class="block mar-t-3">
-				<p class="more txt-rig">Esplorale tutte</p>
-			</a>
 		</div>
 	</div>
 

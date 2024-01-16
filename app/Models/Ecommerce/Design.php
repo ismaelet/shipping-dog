@@ -11,6 +11,10 @@ class Design extends Model {
 	protected $table = 'designs';
 	protected $fillable = [];
 
+	public function seller() {
+		return $this->belongsTo(Seller::class, 'userID', 'userID');
+	}
+
 	/**
 	 * Check if the design is liked by the logged user
 	 */

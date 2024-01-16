@@ -8,24 +8,26 @@ $design = Design::find($designId);
 
 <template>
 
-	<?php if (logged()) {
-		if ($design->sellerId != userId()) {
-	?>
+	<?php if ($design) { ?>
+		<?php if (logged()) {
+			if ($design->seller->userID != userId()) {
+		?>
 
-			<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; toggleLike(<?= $designId ?>, liked)" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
+				<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; toggleLike(<?= $designId ?>, liked)" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
+					<?= icon_embed('love-stroke') ?>
+					<?= icon_embed('love') ?>
+				</div>
+
+			<?php }
+		} else { ?>
+
+			<a class=" like-button grid stack-content" href="<?= client_url('/login?url=' . $_SERVER['REQUEST_URI']) ?>" data-liked="false" title="Aggiungi ai preferiti">
 				<?= icon_embed('love-stroke') ?>
 				<?= icon_embed('love') ?>
-			</div>
+			</a>
 
-		<?php }
-	} else { ?>
-
-		<a class=" like-button grid stack-content" href="<?= client_url('/login?url=' . $_SERVER['REQUEST_URI']) ?>" data-liked="false" title="Aggiungi ai preferiti">
-			<?= icon_embed('love-stroke') ?>
-			<?= icon_embed('love') ?>
-		</a>
-
-	<?php } ?>
+	<?php }
+	} ?>
 
 </template>
 
