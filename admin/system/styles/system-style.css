@@ -40,7 +40,7 @@
 	--clr-primary-100: hsl(var(--clr-primary-hsl-100));
 	--clr-primary-200: hsl(var(--clr-primary-hsl-200));
 	--clr-primary-300: hsl(var(--clr-primary-hsl-300));
-	--clr-primary-400: hsl(var(--clr-primary-hsl-400));
+	--color-primary-400: hsl(var(--color-primary-400-hsl));
 	--clr-primary-500: hsl(var(--clr-primary-hsl-500));
 	--clr-primary-700: hsl(var(--clr-primary-hsl-700));
 	--clr-primary-800: hsl(var(--clr-primary-hsl-800));
@@ -387,7 +387,7 @@ body.fixed {
 	width: 12.5rem;
 	max-width: 100%;
 	padding: calc(var(--_padding-block) - var(--_border-width, 0px)) 2.2em;
-	background-color: var(--clr-primary-400);
+	background-color: var(--color-primary-400);
 	border-width: var(--_border-width, 0);
 	border-style: solid;
 	border-radius: var(--button-border-radius);
@@ -418,8 +418,8 @@ body.fixed {
 }
 
 .button--secondary:hover {
-	color: var(--clr-primary-400);
-	border-color: var(--clr-primary-400);
+	color: var(--color-primary-400);
+	border-color: var(--color-primary-400);
 }
 
 .button--secondary.button--bad {
@@ -438,7 +438,7 @@ body.fixed {
 }
 
 .button--empty:hover {
-	color: var(--clr-primary-400);
+	color: var(--color-primary-400);
 }
 
 .button--auto-width {
@@ -448,7 +448,7 @@ body.fixed {
 
 .button--small {
 	--_padding-block: 1em;
-	font-size: var(--fs-300);
+	font-size: var(--font-size-300);
 }
 
 .button--full-width {
@@ -643,7 +643,7 @@ textarea:focus {
 	aspect-ratio: 1;
 	margin: auto;
 	opacity: 0;
-	background-color: var(--clr-primary-400);
+	background-color: var(--color-primary-400);
 	border-radius: inherit;
 	transition: opacity 0.2s;
 }
@@ -906,7 +906,7 @@ textarea:focus {
 }
 
 .text-link:hover {
-	color: var(--clr-primary-400);
+	color: var(--color-primary-400);
 }
 
 .text-link:has(.icon-embed) {
@@ -1528,13 +1528,13 @@ h3 {
 	color: var(--fc-700);
 }
 .fc-primary {
-	color: var(--clr-primary-400);
+	color: var(--color-primary-400);
 }
 .fc-hover-primary {
 	transition: color 0.2s;
 }
 .fc-hover-primary:hover {
-	color: var(--clr-primary-400);
+	color: var(--color-primary-400);
 }
 .fc-warning {
 	color: var(--clr-bad-400);

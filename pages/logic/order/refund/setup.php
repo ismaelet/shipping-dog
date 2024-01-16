@@ -5,6 +5,9 @@ use App\Models\Ecommerce\ChangeRequest;
 $error = false;
 $changeRequestStep = 1;
 
+/**
+ * Check if the change request exists
+ */
 if (isset($_SESSION['changeRequestId']) && $viewStep > 1) {
 
 	// Get the change request
@@ -59,6 +62,34 @@ if (isset($_SESSION['changeRequestId']) && $viewStep > 1) {
 	}
 }
 
+/**
+ * Redirectto the correct step
+ */
 if ($viewStep > 1 && $changeRequestStep != $viewStep) {
 	redirect('/refund?step=' . $changeRequestStep);
+}
+
+/**
+ * Cancel the change request
+ */
+if (isset($_POST['cancel'])) {
+	foreach ($changeRequest->changes as $change) {
+		$change->delete();
+	}
+
+	$changeRequest->delete();
+
+	unset($_SESSION['changeRequestId']);
+
+	redirect('/refund');
+}
+
+/**
+ * Go back to the previous step
+ */
+function return_to_previous_step(ChangeRequest $changeRequest): void {
+	$changeRequest->step = $changeRequest->step - 1;
+	$changeRequest->save();
+
+	redirect('/refund?step=' . $changeRequest->step);
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Ecommerce\ChangeRequest;
+
 include(substr(__DIR__, 0, strpos(__DIR__, 'listeners')) . '/system/setup/setup.php');
 
 //setup variables
@@ -67,22 +69,19 @@ if ($res == 'VERIFIED') {
 		$cartID = $cust_array[0];
 
 		if (isset($cust_array[1])) {
-
-			//external payment
-			if ($cust_array[1] == 'custom') {
-
-				file_get_contents('https://judgesgarden.com/listeners/paypal.php?id=' . $cartID);
-
-				//refund or change
-			} else if ($cust_array[1] == 'ship') mysqli_query($con, "UPDATE refunds SET status=4, payed=1 WHERE cartID=$cartID");
-
-			//normal payment 
-			else {
-
+			if (strpos($cust_array[1], 'change:') === 0) {
+				$changeRequestId = explode(':', $cust_array[1])[1];
+				$changeRequest = ChangeRequest::find($changeRequestId);
+				$changeRequest->payed = true;
+				$changeRequest->save();
+			} else {
+				// Normal purchase
 				$lang = $cust_array[2];
 
 				include_once('shared.php');
 			}
-		} else error_log('Errore PayPal');
+		} else {
+			error_log('Errore PayPal');
+		}
 	}
 }

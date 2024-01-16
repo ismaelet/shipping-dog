@@ -231,7 +231,7 @@ header.floating {
 .h-drop-link {
 	display: block;
 	color: #fff;
-	font-size: var(--fs-300);
+	font-size: var(--font-size-300);
 	line-height: 1;
 	text-align: left;
 	transition: background 0.2s;

@@ -135,7 +135,7 @@ main {
 
 .nav-link {
 	padding-left: 4.2rem;
-	font-size: var(--fs-300);
+	font-size: var(--font-size-300);
 	transition: color 0.2s;
 }
 

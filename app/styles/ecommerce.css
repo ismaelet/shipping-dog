@@ -72,7 +72,7 @@
 */
 .cart-list {
 	overflow-x: auto;
-	font-size: var(--fs-300);
+	font-size: var(--font-size-300);
 }
 
 .cart-list__wrapper {
@@ -109,7 +109,7 @@
 }
 
 .cart-list__field--header {
-	background-color: var(--clr-primary-400);
+	background-color: var(--color-primary-400);
 	color: #fff;
 	letter-spacing: 0.05em;
 }

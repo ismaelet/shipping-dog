@@ -33,7 +33,7 @@
 */
 :root {
 	/* Colors */
-	--clr-primary-hsl-400: 215, 70%, 60%;
+	--color-primary-400-hsl: 215, 70%, 60%;
 	--clr-primary-hsl-500: 229, 70%, 55%;
 
 	--clr-neutral-hsl-100: 0, 0%, 0%;
@@ -71,7 +71,7 @@
 
 	--fs-100: 0.5rem;
 	--fs-200: 0.625rem;
-	--fs-300: 0.875rem;
+	--font-size-300: 0.875rem;
 	--fs-400: 1rem;
 	--fs-450: 1.1rem;
 	--fs-500: 1.25rem;
@@ -114,7 +114,7 @@
 	--inp-border-radius: var(--border-radius-400);
 	--inp-shadow: 0 0 5px rgba(16, 114, 191, 0.1);
 	--inp-clr-bgr: var(--clr-surface-600);
-	--inp-clr-accent: var(--clr-primary-400);
+	--inp-clr-accent: var(--color-primary-400);
 	--inp-color: var(--fc-700);
 	--inp-fs: var(--fs-400);
 }
@@ -203,7 +203,7 @@ p .fw-black {
 }
 
 .text {
-	font-size: var(--fs-300);
+	font-size: var(--font-size-300);
 }
 
 .contrasting-background {

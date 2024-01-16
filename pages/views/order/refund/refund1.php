@@ -11,6 +11,6 @@
 
 {% block form-footer %}
 
-<button type="submit" name="submit" class="button">Ricerca</button>
+<button type="submit" name="submit" class="button">Cerca</button>
 
 {% end form-footer %}

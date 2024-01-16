@@ -2,10 +2,7 @@
 
 use App\Models\Ecommerce\Address;
 use App\Models\Ecommerce\Cart as EcommerceCart;
-use App\Models\Ecommerce\Order;
 use Ecommerce\Cart as Cart;
-
-use function Ecommerce\format_price;
 
 ?>
 
@@ -102,9 +99,15 @@ use function Ecommerce\format_price;
 				. $address
 				. $code_str . '<br><br>'
 				. $ord_str . '<br>'
-				. 'Spedizione: ' . $cart->shippingMethod->shortName . ', ' . $cart->shippingMethod->deliveryDateString . '<br>'
-				. 'Totale: ' . $cart->priceString . '<br>'
-				. '-------|<br><br>';
+				. 'Spedizione: ' . $cart->shippingMethod->shortName . ', ' . $cart->shippingMethod->deliveryDateString . '<br>';
+
+			if (!$newCart->change_request) {
+				echo 'Totale: ' . $cart->priceString . '<br>';
+			} else {
+				echo "<span style='color: CornflowerBlue; font-weight: bold;'>CAMBIO TAGLIA</span><br>";
+			}
+
+			echo '-------|<br><br>';
 	?>
 		<?php }
 	} else { ?>

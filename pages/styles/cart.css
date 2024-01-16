@@ -153,8 +153,9 @@ html[data-theme='light'] #slider .bgr {
 	letter-spacing: 0.01em;
 }
 
-.art_spec {
+.order-list__description {
 	padding-top: 3px;
+	font-size: var(--font-size-300);
 }
 
 .price {

@@ -44,7 +44,7 @@ use Ecommerce\ViewManager;
 								<span class="date"><?= $cart->shippingMethod->deliveryDateString ?></span>
 							</h1>
 
-							<p class="art_spec"><?= $cart->shippingMethod->description ?></p>
+							<p class="order-list__description"><?= $cart->shippingMethod->description ?></p>
 						</div>
 					</label>
 				</div>

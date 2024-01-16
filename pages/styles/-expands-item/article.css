@@ -304,8 +304,8 @@
 }
 
 input:checked + .data-selector__label {
-	border-color: var(--clr-primary-400);
-	color: var(--clr-primary-400);
+	border-color: var(--color-primary-400);
+	color: var(--color-primary-400);
 }
 
 .size_lbl,
@@ -399,7 +399,7 @@ input:checked + .pos_txt_lbl {
 	transition: border 0.2s, filter 0.2s;
 
 	&:has(:checked) {
-		border-color: var(--clr-primary-400);
+		border-color: var(--color-primary-400);
 		filter: grayscale(0);
 	}
 

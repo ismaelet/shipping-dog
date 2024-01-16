@@ -1,55 +1,51 @@
 <?php
 
-use App\Models\Ecommerce\Order;
+use App\Models\Ecommerce\Change;
 
 $viewStep = 3;
 
 include_once('setup.php');
 
-//remove an article
+/**
+ * Remove a change
+ */
 if (isset($_POST['remove'])) {
+	$changeId = $_POST['remove'];
+	$change = Change::find($changeId);
+	$change->delete();
 
-	$ordID = $_POST['remove'];
-
-	DB::delete('refunds_ord WHERE ordID = ?', [$ordID]);
-
-	if (!DB::exists('refunds_ord WHERE cartID = ?', [$id])) DB::update('refunds SET status=2 WHERE cartID = ?', [$id]);
+	if (!$changeRequest->changes()->count()) {
+		return_to_previous_step($changeRequest);
+	}
 
 	redirect();
 }
 
-//cancel the request
-if (isset($_POST['cancel'])) {
-	DB::update('refunds SET status = 1, processed=0 WHERE cartID = ?', [$id]);
-	DB::delete('refunds_ord WHERE cartID = ?', [$id]);
+/**
+ * Go to payment
+ */
+if (isset($_POST['pay']) || isset($_POST['skip_payment']) || isset($_POST['refund'])) {
 
-	unset($_SESSION['changeRequestId']);
+	$changeRequest->step = $changeRequest->step + 1;
+	$changeRequest->save();
 
-	redirect('/refund');
-}
+	// Store the new size
+	foreach ($changeRequest->realChanges as $change) {
+		$newSizeId = $_POST[$change->id . '_new_size_id'];
 
-//go to payment
-if (isset($_POST['pay']) || isset($_POST['free']) || isset($_POST['refund'])) {
-
-	$res_ref = DB::select('ordID FROM refunds_ord WHERE type=1 AND cartID = ?', [$id]);
-
-	while ($row_ref = $res_ref->fetch_assoc()) {
-
-		$order = Order::find($row_ref['ordID']);
-
-		$size_new = $_POST['size_new' . $order->ID];
-
-		DB::update('refunds_ord SET size_new = ?, size_old = ? WHERE ordID = ?', [$size_new, $order->sizeID, $order->ID]);
+		$change->old_size_id = $change->old_order->sizeID;
+		$change->new_size_id = $newSizeId;
+		$change->save();
 	}
 
 	if (isset($_POST['pay'])) {
+		// Redirect to PayPal
 		redirect('/refund/paypal');
-	} else {
-		DB::update('refunds SET status=4, payed=1 WHERE cartID = ?', [$id]);
+	} else if (isset($_POST['skip_payment'])) {
+		// Mark the change request as payed (used by admins)
+		$changeRequest->payed = true;
+		$changeRequest->save();
 
-		$_SESSION['payment_type'] = 'change';
-		$_SESSION['payment_cartID'] = $id;
-
-		redirect('/cart/success');
+		redirect('/refund?step=' . $changeRequest->step);
 	}
 }

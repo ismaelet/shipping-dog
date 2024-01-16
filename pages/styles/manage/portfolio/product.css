@@ -63,7 +63,7 @@
 	width: max-content;
 	background: transparent;
 	border: none;
-	font-size: var(--fs-300);
+	font-size: var(--font-size-300);
 	color: red;
 	cursor: pointer;
 }

@@ -23,12 +23,12 @@ if (isset($_POST['submit'])) {
 		->first();
 
 	if ($cart) {
-		$changeRequest = ChangeRequest::where('cart_id', $cartId)->first();
+		$changeRequest = ChangeRequest::where('old_cart_id', $cartId)->first();
 
 		if (!$changeRequest) {
 			// Create the change request
 			$changeRequest = ChangeRequest::create([
-				'cart_id' => $cartId,
+				'old_cart_id' => $cartId,
 				'step' => 2,
 			]);
 		}

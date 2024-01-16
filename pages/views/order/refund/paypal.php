@@ -18,9 +18,9 @@ use function Ecommerce\ecommerce_config;
 	<input type="hidden" name="item_name_1" value="Spese di spedizione">
 	<input type="hidden" name="amount_1" value="8.00">
 	<input type="hidden" name="quantity_1" value="1">
-	<input type="hidden" name="item_number_1" value="ship">
+	<input type="hidden" name="item_number_1" value="shipping_fee">
 
-	<input type="hidden" name="custom" value="<?= $id . '&ship&it'; ?>">
+	<input type="hidden" name="custom" value="change:<?= $changeRequest->id ?>">
 </form>
 
 <!-- Load icon -->

@@ -1,105 +1,65 @@
 <?php
 
-use Ecommerce\Product\Type;
+use App\Models\Ecommerce\InventoryItem;
 
-$stepId = 4;
+$viewStep = 4;
 
 include_once('setup.php');
 
-//not processed yet
-if (!$processed) {
+// Process the change request
+if (!$changeRequest->processed && $changeRequest->payed) {
 
-	if ($chan) {
+	// Process the changes in case of at least a real change
+	if ($changeRequest->realChanges->count()) {
+		// Duplicate the old cart
+		$oldCart = $changeRequest->old_cart;
+		$newCart = $oldCart->replicate();
+		$newCart->quantity = $changeRequest->realChanges->count();
+		$newCart->code = '';
+		$newCart->status = 1;
+		$newCart->shipping = 8;
+		$newCart->credit_ship = 0;
+		$newCart->tot = 0;
+		$newCart->touch('time');
+		$newCart->save();
 
-		$row_cart = DB::row('* FROM carts WHERE ID = ?', [$id]);
+		$changeRequest->new_cart_id = $newCart->ID;
 
-		$buyer = $row_cart['buyer'];
-		$shipID = $row_cart['shipID'];
-		$countID = $row_cart['countID'];
+		// Duplicate the address
+		$address = $oldCart->address->replicate();
+		$address->cartID = $newCart->ID;
+		$address->save();
 
-		$qty = DB::count('refunds_ord WHERE cartID = ? AND type=1', [$id]);
+		// Process the individual changes
+		foreach ($changeRequest->realChanges as $change) {
+			$oldOrder = $change->old_order;
 
-		$newID = DB::add(
-			'carts 
-			(buyer, shipID, countID, payID, shipping, status, step, time) VALUES
-			(?, ?, ?, 1, 6.49, 1, 5, NOW())',
-			[$buyer, $shipID, $countID]
-		);
+			// Add the old product to the inventory
+			InventoryItem::create([
+				'designId' => $oldOrder->designId,
+				'typeId' => $oldOrder->typeID,
+				'colorId' => $oldOrder->colorID,
+				'sizeId' => $oldOrder->sizeID,
+				'positionId' => $oldOrder->posID,
+				'logoId' => $oldOrder->extID,
+			]);
 
-		DB::update('refunds SET newID = ? WHERE cartID = ?', [$newID, $id]);
+			// Duplicate the old order
+			$newOrder = $oldOrder->replicate();
+			$newOrder->cartID = $newCart->ID;
+			$newOrder->sizeID = $change->new_size_id;
+			$newOrder->fullProductPrice = 0;
+			$newOrder->price_disc = 0;
+			$newOrder->productGain = 0;
+			$newOrder->gain_disc = 0;
+			$newOrder->credit = 0;
+			$newOrder->save();
 
-		//copy old address
-		$row_addr = DB::row('* FROM addresses WHERE cartID = ?', [$id]);
-		$aname = $row_addr['aname'];
-		$address = $row_addr['address'];
-		$num = $row_addr['number'];
-		$zip = $row_addr['zip'];
-		$city = $row_addr['city'];
-		$region = $row_addr['region'];
-		$country = $row_addr['country'];
-		$email = $row_addr['email'];
-		$phone = $row_addr['phone'];
-
-		DB::add(
-			'addresses 
-			(buyer, cartID, aname, address, number, zip, city, region, country, email, phone, exchange) VALUES
-			(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)',
-			[$buyer, $newID, $aname, $address, $num, $zip, $city, $region, $country, $email, $phone]
-		);
-
-		//add comment
-		DB::add('carts_data (cartID, comm_vip) VALUES (?, ?)', [$newID, 'Cambio taglia']);
-	}
-
-	//add orders
-	$res_ref_ord = DB::select('* FROM refunds_ord WHERE cartID = ? AND type = 1', [$id]);
-
-	while ($row_ref_ord = $res_ref_ord->fetch_assoc()) {
-
-		$ordID = $row_ref_ord['ordID'];
-
-		$row_ord = DB::row('* FROM orders where ID = ?', [$ordID]);
-
-		$productID = $row_ord['itemID'];
-		$desID = DB::find('desID FROM items WHERE ID = ?', [$productID]);
-		$typeID = $row_ord['typeID'];
-		$class = (new Type($typeID))->class;
-		$gendID = $row_ord['gendID'];
-		$posID = $row_ord['posID'];
-		$extID = $row_ord['extID'];
-
-		DB::add(
-			'inventory 
-			(designId, typeId, colorId, sizeId, positionId, logoId)',
-			[$desID, $typeID, $row_ord['colorID'], $row_ord['sizeID'], $posID, $extID]
-		);
-
-		if ($chan) {
-
-			$sizeID = $row_ref_ord['size_new'];
-			$colorID = $row_ref_ord['color_new'];
-			$qty = $row_ord['quantity'];
-
-			$ord_newID = DB::add(
-				'orders 
-				(buyer, cartID, itemID, typeID, colorID, sizeID, gendID, posID, extID, fullProductPrice, productGain, quantity)',
-				[$buyer, $newID, $productID, $typeID, $colorID, $sizeID, $gendID, $posID, $extID, 0, 0, $qty]
-			);
-
-			DB::update('refunds_ord SET newID = ? WHERE ordID = ?', [$ord_newID, $ordID]);
+			$change->new_order_id = $newOrder->ID;
 		}
 	}
 
-	//set as processed
-	DB::update('refunds SET processed=1 WHERE cartID = ?', [$id]);
-
-	redirect();
+	// Mark the change request as processed
+	$changeRequest->processed = true;
+	$changeRequest->save();
 }
-
-/*if (isset($_POST['cancel'])) {
-	
-	DB::update('refunds SET status = 1, processed=0 WHERE cartID = ?', [$id]);
-	DB::delete('refunds_ord WHERE cartID = ?', [$id]);
-	
-	redirect('/refund');
-}*/

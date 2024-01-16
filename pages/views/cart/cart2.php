@@ -77,7 +77,7 @@ use function Ecommerce\cart;
 										<?= $shippingMethod->name ?><br>
 										<span class="date"><?= $shippingMethod->deliveryDateString ?></span>
 									</h3>
-									<p class="art_spec"><?= $shippingMethod->description ?></p>
+									<p class="order-list__description"><?= $shippingMethod->description ?></p>
 									<h3 class="price"><?= $shippingMethod->priceString ?></h3>
 								</div>
 							</label>

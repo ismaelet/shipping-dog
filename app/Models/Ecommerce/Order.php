@@ -14,7 +14,7 @@ class Order extends Model {
 
 	protected $primaryKey = 'ID';
 	protected $table = 'orders';
-	protected $fillable = [];
+	protected $fillable = ['fullProductPrice', 'price_disc', 'productGain', 'gain_disc', 'credit'];
 
 	/**
 	 * Get the order's product

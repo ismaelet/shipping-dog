@@ -11,7 +11,7 @@
 }
 
 .panel__counter {
-	color: var(--clr-primary-400);
+	color: var(--color-primary-400);
 	font-size: var(--fs-850);
 	font-weight: var(--fw-bold);
 	text-align: center;
@@ -35,7 +35,7 @@
 .seller-item__button {
 	background: none;
 	border: none;
-	color: var(--clr-primary-400);
+	color: var(--color-primary-400);
 	font-family: var(--ff-titles);
 	cursor: pointer;
 }

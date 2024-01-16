@@ -22,7 +22,7 @@
 
 .feed__text .user {
 	font-weight: var(--fw-semibold);
-	color: var(--clr-primary-400);
+	color: var(--color-primary-400);
 }
 .feed__text .design {
 	font-weight: var(--fw-semibold);

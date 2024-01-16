@@ -10,7 +10,7 @@
 	--border-radius: 0.5rem;
 
 	/* colors */
-	--clr-primary-hsl-400: 35, 100%, 50%;
+	--color-primary-400-hsl: 35, 100%, 50%;
 	--clr-primary-hsl-500: 25, 100%, 45%;
 	--clr-secondary-hsl-400: 200, 88%, 70%;
 
@@ -43,7 +43,7 @@
 
 	--fs-100: 0.625rem;
 	--fs-200: 0.75rem;
-	--fs-300: 0.875rem;
+	--font-size-300: 0.875rem;
 	--fs-400: 1rem;
 	--fs-450: 1.125rem;
 	--fs-500: 1.25rem;
@@ -80,7 +80,7 @@
 	/* inputs */
 	--inp-clr-bgr: var(--surface);
 	--inp-color: var(--fc-700);
-	--inp-fs: var(--fs-300);
+	--inp-fs: var(--font-size-300);
 
 	/* -- OLD -- */
 	--clr-neutral-hsl-100: 0, 0%, 100%;
@@ -258,7 +258,7 @@ html[data-theme='dark'] textarea {
 /*
 * Buttons
 */
-@property --clr-primary-400 {
+@property --color-primary-400 {
 	syntax: '<color>';
 	inherits: true;
 	initial-value: #ff9600;
@@ -270,8 +270,8 @@ html[data-theme='dark'] textarea {
 }
 
 .button:not(.button--secondary):not(.button--empty) {
-	background: linear-gradient(to right, var(--clr-primary-400), var(--clr-primary-500));
-	transition: --clr-primary-400 0.3s, --clr-primary-500 0.3s, background 0.3s;
+	background: linear-gradient(to right, var(--color-primary-400), var(--clr-primary-500));
+	transition: --color-primary-400 0.3s, --clr-primary-500 0.3s, background 0.3s;
 
 	&.button--warning {
 		background: var(--clr-bad-400);
@@ -279,8 +279,8 @@ html[data-theme='dark'] textarea {
 }
 
 .button:not(.button--secondary):not(.button--empty):hover {
-	--clr-primary-400: hsl(var(--clr-primary-hsl-400));
-	--clr-primary-500: hsl(var(--clr-primary-hsl-400));
+	--color-primary-400: hsl(var(--color-primary-400-hsl));
+	--clr-primary-500: hsl(var(--color-primary-400-hsl));
 
 	&.button--warning {
 		background: var(--clr-bad-500);

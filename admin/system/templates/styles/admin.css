@@ -70,7 +70,7 @@ main {
 	display: grid;
 	grid-template-rows: max-content 0fr;
 	padding-right: 1rem;
-	font-size: var(--fs-300);
+	font-size: var(--font-size-300);
 	transition: grid-template-rows 0.3s;
 }
 
@@ -92,8 +92,8 @@ main {
 	width: 3px;
 	height: 50%;
 	opacity: 0;
-	background-color: var(--clr-primary-400);
-	box-shadow: 3px 0 1rem 0 var(--clr-primary-400), 3px 0 2rem 0 var(--clr-primary-400);
+	background-color: var(--color-primary-400);
+	box-shadow: 3px 0 1rem 0 var(--color-primary-400), 3px 0 2rem 0 var(--color-primary-400);
 	transition: opacity 0.3s;
 }
 
@@ -177,7 +177,7 @@ main {
 
 .menu-subitem__title.active a,
 .menu-subitem__title a:hover {
-	color: var(--clr-primary-400);
+	color: var(--color-primary-400);
 }
 
 /*

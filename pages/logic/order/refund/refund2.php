@@ -6,7 +6,7 @@ $viewStep = 2;
 
 include_once('setup.php');
 
-$orders = $changeRequest->cart->orders;
+$orders = $changeRequest->old_cart->orders;
 
 if (isset($_POST['submit'])) {
 	if (isset($_POST['order_id'])) {
@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
 			$is_change = $_POST['is_change'][$orderKey];
 
 			Change::create([
-				'order_id' => $orderId,
+				'old_order_id' => $orderId,
 				'change_request_id' => $changeRequest->id,
 				'is_change' => $is_change,
 			]);

@@ -3,6 +3,7 @@
 use App\Models\Ecommerce\Seller;
 
 $seller = Seller::find($sellerId);
+
 ?>
 
 <template>

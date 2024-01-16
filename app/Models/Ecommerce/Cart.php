@@ -3,6 +3,7 @@
 namespace App\Models\Ecommerce;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -24,5 +25,12 @@ class Cart extends Model {
 	 */
 	public function address(): HasOne {
 		return $this->hasOne(Address::class, 'cartID', 'ID');
+	}
+
+	/**
+	 * Get the change request that generated this cart
+	 */
+	public function change_request(): HasOne {
+		return $this->HasOne(ChangeRequest::class, 'new_cart_id', 'ID');
 	}
 }

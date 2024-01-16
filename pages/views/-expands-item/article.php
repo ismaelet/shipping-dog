@@ -1,5 +1,6 @@
 <?php
 
+use App\View\Components\Interactions\LikeButton;
 use Ecommerce\Product\Color;
 use Ecommerce\Product\Gender;
 use Ecommerce\Product\Position;
@@ -49,7 +50,7 @@ use Ecommerce\Product\Type;
 						</div>
 
 						<!-- Love button -->
-						<?= love_button($product->design) ?>
+						<?= LikeButton::render(['designId' => $product->designId]) ?>
 
 					</div>
 

@@ -2,6 +2,8 @@
 
 namespace Ecommerce;
 
+use App\View\Components\Interactions\LikeButton;
+
 class ViewManager {
 
 	/*
@@ -19,7 +21,7 @@ class ViewManager {
 					<p class="price blu"><?= $product->priceString ?></p>
 				</a>
 
-				<?= love_button($product->design) ?>
+				<?= LikeButton::render(['designId' => $product->designId]) ?>
 
 			</div>
 
@@ -69,7 +71,7 @@ class ViewManager {
 
 							<?php } ?>
 
-							<p class="art_spec">
+							<p class="order-list__description">
 								<?= $order->fullDescription ?>
 							</p>
 						</div>

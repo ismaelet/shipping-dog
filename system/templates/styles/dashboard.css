@@ -82,8 +82,8 @@ main {
 
 .dashboard-navigation .category .highlight {
 	opacity: 0;
-	background-color: var(--clr-primary-400);
-	box-shadow: 3px 0 1rem 0 var(--clr-primary-400), 3px 0 2rem 0 var(--clr-primary-400);
+	background-color: var(--color-primary-400);
+	box-shadow: 3px 0 1rem 0 var(--color-primary-400), 3px 0 2rem 0 var(--color-primary-400);
 	width: 3px;
 	height: 2rem;
 	position: absolute;
