@@ -150,6 +150,7 @@ html[data-theme='dark'] {
 	--clr-surface-400: hsl(var(--theme-h), 32%, 13%);
 	--clr-surface-500: hsl(var(--theme-h), 28%, 16%);
 	--clr-surface-600: hsl(var(--theme-h), 28%, 20%);
+	--clr-surface-700: hsl(var(--theme-h), 20%, 25%);
 
 	/* Borders */
 	--border-clr-400: hsl(var(--theme-h), 30%, 20%);

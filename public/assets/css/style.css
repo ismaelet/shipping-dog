@@ -913,7 +913,15 @@ video {
 }
 
 @media (min-width: 1024px){
+  .lg\:justify-items-start{
+    justify-items: start;
+  }
+
   .lg\:gap-12{
     gap: 3rem;
+  }
+
+  .lg\:text-left{
+    text-align: left;
   }
 }

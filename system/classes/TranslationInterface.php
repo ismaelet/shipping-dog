@@ -13,7 +13,7 @@ class TranslationInterface {
 		$language = $_SESSION['language'];
 
 		// get system translations
-		if (file_exists($file = server_path('/system/translations/' . $language . '.php'))) {
+		if (file_exists($file = public_server_path('/system/translations/' . $language . '.php'))) {
 			$translations = include_once($file);
 		}
 

@@ -21,23 +21,25 @@
 <?php if ($pageConfig['search-bar']) { ?>
 
 	<!-- Search bar -->
-	<form class="search-bar" method="GET">
-		<div class="search-bar__icon--search interactive js-search">
-			<?= icon_embed('search') ?>
-		</div>
-
-		<input type="text" class="js-search-input" name="search" value="<?= $queryConfig['search'] ?>" placeholder="<?= __('Search in this list') ?>" autocomplete="off">
-
-		<?php if ($queryConfig['search']) { ?>
-
-			<div class="interactive js-search-cancel">
-				<?= icon_embed('close') ?>
+	<search>
+		<form class="search-bar" method="GET">
+			<div class="search-bar__icon--search interactive js-search">
+				<?= icon_embed('search') ?>
 			</div>
 
-		<?php } ?>
+			<input type="search" class="js-search-input" name="search" value="<?= $queryConfig['search'] ?>" placeholder="<?= __('Search in this list') ?>" autocomplete="off">
 
-		<button type="submit" class="hidden"></button>
-	</form>
+			<?php if ($queryConfig['search']) { ?>
+
+				<div class="interactive js-search-cancel">
+					<?= icon_embed('close') ?>
+				</div>
+
+			<?php } ?>
+
+			<button type="submit" class="hidden"></button>
+		</form>
+	</search>
 
 <?php } ?>
 

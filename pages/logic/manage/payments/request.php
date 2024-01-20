@@ -94,17 +94,19 @@ if (isset($_POST['submit'])) {
 
 if (isset($_POST['download'])) {
 
-	DB::update('stores SET request=1 WHERE userID = ?', [userId()]);
+	DB::update('stores SET request = 1 WHERE userID = ?', [userId()]);
 
 	if ($data['total'] == $seller->toPay && file_exists($documents[0]['server-path'])) {
 		redirect($documents[0]['client-path']);
 	} else {
-		DB::update('stores SET request=1 WHERE userID = ?', [userId()]);
-		DB::update('payment_requests SET total=? WHERE shopId=?', [$seller->toPay, userId()]);
+		DB::update('stores SET request = 1 WHERE userID = ?', [userId()]);
+		DB::update('payment_requests SET total = ? WHERE shopId = ?', [$seller->toPay, userId()]);
 
 		foreach ($documents as $document) {
 
-			if (file_exists($document['server-path'])) unlink($document['server-path']);
+			if (file_exists($document['server-path'])) {
+				unlink($document['server-path']);
+			}
 
 			$html = file_get_contents(__DIR__ . '/' . $document['template'] . '-template.html');
 
@@ -150,7 +152,11 @@ if (isset($_POST['download'])) {
 			$dompdf->render();
 			$output = $dompdf->output();
 
-			$pdfFileName = SERVER_ROOT . $document['folder'] . '/' . $document['file-name'];
+			if (!file_exists(public_server_directory($document['folder']))) {
+				mkdir(public_server_directory($document['folder']), 0777, true);
+			}
+
+			$pdfFileName = server_path($document['folder'] . '/' . $document['file-name']);
 			file_put_contents($pdfFileName, $output);
 		}
 

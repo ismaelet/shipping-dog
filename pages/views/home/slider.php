@@ -13,15 +13,15 @@
 		</div>
 
 		<!-- Body -->
-		<div id="slider-body" class="">
+		<div id="slider-body" class="grid gap-12 text-center justify-items-center lg:text-left lg:justify-items-start ">
+			<div class="grid gap-8">
+				<h1 class="txt-wht txt-upp">Shipping<br><span class="txt-c1">Dog</span></h1>
+				<p class="stitle">T-shirt, abbigliamento e accessori personalizzati</p>
+			</div>
 
-			<h1 class="txt-wht txt-upp">Shipping<br><span class="txt-c1">Dog</span></h1>
-
-			<p class="stitle">T-shirt, abbigliamento e accessori personalizzati</p>
-
-			<a href="<?= client_url('/shop') ?>" class="pbtn">
-				<span class="btn-icon small bgr-f" <?= icon_svg('cart') ?>></span>
-				<span class="btn-txt">Shop Now</span>
+			<a href="<?= client_url('/shop') ?>" class="button">
+				<?= icon_embed('cart') ?>
+				Shop Now
 			</a>
 
 		</div>

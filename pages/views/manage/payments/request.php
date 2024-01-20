@@ -50,7 +50,11 @@
 
 	{% block form-footer %}
 
-	<button type="submit" class="button" name="download">Scarica il <strong>PDF</strong></button>
+	<button type="submit" class="button" name="download">
+		<?= icon_embed('download') ?>
+		Scarica il <strong>PDF</strong>
+	</button>
+
 	<a class="button button--secondary" href="?edit=1">Modifica i dati di fatturazione</a>
 
 	{% end form-footer %}

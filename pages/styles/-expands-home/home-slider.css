@@ -48,7 +48,6 @@
 #slider-body .stitle {
 	color: #fff;
 	font-size: 1rem;
-	margin-top: 2rem;
 	line-height: 1.2;
 	letter-spacing: 0.05em;
 }
@@ -142,10 +141,6 @@
 	#slider-background::after {
 		background: rgba(15, 15, 15, 0.3);
 		width: 100%;
-	}
-
-	#slider-body {
-		text-align: center;
 	}
 }
 
