@@ -11,22 +11,28 @@ use Ecommerce\Product;
 	<h1 class="stitle br-c1 txt-2rem">Portfolio</h1>
 
 	<div class="mar-t-2 mar-b-3 txt-cen">
+
 		<?php if (!$totalCount) { ?>
-			<p class="txt-c-title txt-med txt-ls05 txt-1rem mar-b-1">Ancora non hai caricato nessun lavoro. Clicca qui sotto per cominciare:</p>
+
+			<p class="txt-c-title txt-med txt-ls05 txt-1rem mar-b-1">Ancora non hai caricato nessuna grafica. Clicca qui sotto per cominciare:</p>
+
 		<?php } ?>
 
 		<div class="flex-group center-content" data-spacing="700">
 			<a href="<?= client_url('/manage/portfolio/add?id=' . $seller->id) ?>" class="button button--secondary button--auto-width">
 				<?= icon_embed('upload') ?>
-				Carica un lavoro
+				Carica una grafica
 			</a>
 
 			<?php if ($seller->custom) { ?>
+
 				<a href="<?= client_url('/manage/portfolio/product') ?>" class="button button--secondary button--auto-width button--dashed">
 					<?= icon_embed('upload') ?>
 					Carica un prodotto
 				</a>
+
 			<?php } ?>
+
 		</div>
 	</div>
 

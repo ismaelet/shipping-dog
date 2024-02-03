@@ -43,11 +43,14 @@ $inputs = [
 			'text' => 'File vettoriale (opzionale)',
 		],
 		[
+			'type' => 'info', 'text' => 'Anche se non è obbligatorio, consigliamo di caricare la grafica anche in formato <span class="txt-bold">PDF</span> o <span class="txt-bold">AI</span> per la <span class="text-primary">massima qualità di stampa</span> possibile.',
+		],
+		[
 			'type' => 'file',
-			'text' => 'Oltre al PNG per la preview che hai già selezionato, consigliamo di caricare anche il design in formato <span class="txt-bold">PDF</span> o <span class="txt-bold">AI</span> per la massima qualità di stampa possibile. Se non hai il design in questo formato non preoccuparti, lascia pure vuoto questo campo, riusciremo comunque a realizare i tuoi prodotti con stampe di alta qualità.',
 			'name' => 'file-vector',
 		],
-
+	],
+	[
 		['type' => 'error', 'error' => 'file-size', 'text' => 'Il file caricato è troppo grande',],
 		['type' => 'error', 'error' => 'file-type', 'text' => 'Tipo di file invalido, deve essere un <strong>PNG</strong>',],
 		['type' => 'error', 'error' => 'file-reso', 'text' => 'Il file caricato deve avere una risoluzione minore di <strong>10.000px</strong>',],

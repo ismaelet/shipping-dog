@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ecommerce\Seller as EcommerceSeller;
 use Ecommerce\Seller;
 
 // accept seller entry
@@ -9,7 +10,8 @@ if (isset($_POST['accept-seller'])) {
 
 // delete seller entry
 if (isset($_POST['delete-seller'])) {
-	(new Seller($_POST['delete-seller']))->delete();
+	$seller = EcommerceSeller::find($_POST['delete-seller']);
+	$seller->deleteAndClean();
 }
 
 // select pending lables
@@ -19,7 +21,7 @@ $lblN = DB::count('carts WHERE status=1 && (shipID=2 OR shipID=1)');
 $categories = DB::select('* FROM admin_categories ORDER BY ID ASC');
 
 // select shops awaiting for approval
-$sellers = DB::select('userID, name FROM stores WHERE status=0 AND userID IN (SELECT userID FROM designs WHERE status>0) AND userID NOT IN (4855) ORDER BY userID DESC');
+$sellers = DB::select('userID, name FROM stores WHERE status = 0 AND userID IN (SELECT userID FROM designs WHERE status > 0) AND userID NOT IN (2) ORDER BY userID DESC');
 
 // select balace
 $balance['gained'] = DB::sum('total FROM stores');

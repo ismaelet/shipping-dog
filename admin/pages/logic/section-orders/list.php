@@ -6,7 +6,7 @@
 
 use Ecommerce\Cart;
 
-$pageConfig['add'] = 'false';
+$pageConfig['add'] = false;
 $pageConfig['row-action'] = 'edit?id={{id}}';
 
 /*

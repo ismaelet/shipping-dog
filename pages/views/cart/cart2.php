@@ -1,5 +1,6 @@
 <?php
 
+use App\View\Components\Form\Input;
 use Ecommerce\ViewManager;
 use ViewManager\Ecommerce\CartFlowBar;
 use ViewManager\Ecommerce\CartRecap;
@@ -114,7 +115,7 @@ use function Ecommerce\cart;
 
 					<div class="grid gap1">
 
-						<input type="text" class="inp" name="aname" placeholder="Nominativo di spedizione" value="<?= $address->fullname ?>" maxlength="50" required>
+						<?= Input::render(['name' => 'aname', 'placeholder' => 'Nominativo di spedizione', 'value' => $address->fullname, 'required' => true, 'trim' => true]) ?>
 
 						<div class="field">
 							<input type="text" id="inp_addr" class="inp delivery-input" name="address" placeholder="Indirizzo" value="<?= $address->address ?>" maxlength="30" autocomplete="address-line1" <?= !cart()->localDelivery ? 'required' : '' ?>>
@@ -167,14 +168,14 @@ use function Ecommerce\cart;
 								<?php if ($error == 'coupon-not-logged') { ?><p class="error mar-t-1">Devi essere registrato per poter usare questo codice</p><?php } ?>
 								<?php if ($error == 'coupon-used') { ?><p class="error mar-t-1">Hai già usato il codice inserito</p><?php } ?>
 
-								<button type="submit" id="add_code" name="add_code" class="pbtn btn-full-width mar-t-1">Aggiungi</button>
+								<button type="submit" id="add_code" name="add_code" class="button button--full-width mar-t-1" formnovalidate>Aggiungi</button>
 
 							<?php } else { ?>
 
 								<p class="code_txt">
 									Codice usato: <span class="code txt-c1"><?= cart()->coupon->code ?></span>
 								</p>
-								<button type="submit" name="del_code" id="code_remove">Rimuovi</button>
+								<button type="submit" name="del_code" id="code_remove" formnovalidate>Rimuovi</button>
 
 							<?php } ?>
 

@@ -21,12 +21,11 @@ use ViewManager\Ecommerce\CartFlowBar;
 		<form id="guest" class="section" method="POST">
 			<h3 class="title">ORDINA SENZA REGISTRARTI</h3>
 			<p class="txt">Clicca qui se vuoi procedere all'acquisto senza registrarti</p><br>
-			<button type="submit" name="guest" class="pbtn ora wid-100">Ordina come ospite</button>
+			<button type="submit" name="guest" class="button button--full-width">Ordina come ospite</button>
 		</form>
 
-		<!-- Login desktop -->
+		<!-- Login -->
 		<section id="login" class="section">
-
 			<h3 class="title">HAI GIÀ UN ACCOUNT?</h3>
 
 			<form method="POST">
@@ -38,20 +37,15 @@ use ViewManager\Ecommerce\CartFlowBar;
 				</div>
 
 				<?php if ($error == 'user_bad') { ?>
+
 					<p class="error">Nome utente o password errati</p>
+
 				<?php } ?>
 
-				<button type="submit" name="submit" class="pbtn mar-t-2 wid-100">Log In</button><br>
-
-				<!-- <button type="button" name="fb-btn" class="pbtn wid-100">
-					<span class="bgr bgr-c3"></span>
-					<input type="hidden" id="fbID" name="fbID" value="0">
-					<span class="soc-icon fb-icon wht"></span>
-					<span class="al-mid">Facebook Login</span>
-				</button> -->
+				<button type="submit" name="submit" class="button mar-t-2 button--full-width">Log In</button><br>
 
 				<div class="txt-rig mar-t-05">
-					<p class="inlb"><a href="<?= CLIENT_ROOT; ?>/login/recover">Hai dimenticato la password?</a></p>
+					<p class="inlb"><a href="<?= client_url('/login/recover') ?>">Hai dimenticato la password?</a></p>
 				</div>
 			</form>
 
@@ -61,14 +55,14 @@ use ViewManager\Ecommerce\CartFlowBar;
 		<div id="register" class="section">
 			<h3 class="title">REGISTRATI</h3>
 			<p class="txt">Vai qui sotto se vuoi registrarti</p><br>
-			<a href="<?= CLIENT_ROOT; ?>/register"><button type="button" class="sbtn wid-100">Registrati</button></a>
+			<a href="<?= CLIENT_ROOT; ?>/register"><button type="button" class="button button--secondary button--full-width">Registrati</button></a>
 		</div>
 
 		<!-- Continue -->
 		<div id="continue" class="section">
 			<h3 class="title">Continua con gli acquisti</h3>
 			<p class="txt">Vuoi aggiungere altri articoli al carrello prima di continuare?</p><br>
-			<a href="<?= CLIENT_ROOT; ?>/shop"><button type="button" class="sbtn wid-100">Torna al negozio</button></a>
+			<a href="<?= CLIENT_ROOT; ?>/shop"><button type="button" class="button button--secondary button--full-width">Torna al negozio</button></a>
 		</div>
 
 	</div>

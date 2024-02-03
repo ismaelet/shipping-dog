@@ -12,7 +12,7 @@
 					<?= icon_embed('upload') ?>
 				</div>
 
-				<h1 id="upload-title" class="txt-bold txt-2rem pad-h-2">Carica un nuovo lavoro</h1>
+				<h1 id="upload-title" class="txt-bold txt-2rem pad-h-2">Carica una nuova grafica</h1>
 			</div>
 
 		</div>
@@ -28,7 +28,7 @@
 	<!-- Step 2: fill in the data -->
 	<div id="data-form">
 
-		<h1 class="form-title">Carica un lavoro</h1>
+		<h1 class="form-title">Carica una grafica</h1>
 
 		<form class="form file-form" method="POST" enctype="multipart/form-data">
 
@@ -50,7 +50,7 @@
 
 					<button type="submit" name="submit" class="pbtn txt-sbold file-submit">
 						<span class="btn-icon bgr-f" <?= icon_svg('upload') ?>></span>
-						<span class="btn-txt">Carica lavoro</span>
+						<span class="btn-txt">Carica la grafica</span>
 					</button>
 
 					<div class="file-load"></div>

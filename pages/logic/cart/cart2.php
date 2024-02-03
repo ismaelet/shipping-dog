@@ -49,7 +49,36 @@ if (cart()->shippingMethodId != 1) {
 $shippingMethods = rows_to_objects($shippingMethodRes, ShippingMethod::class);
 
 // checkout
+
+
+/**
+ * Save the address
+ */
 if (!empty($_POST)) {
+	$aname = str_replace('-', ',', $_POST['aname']);
+	$addr = ucwords(strtolower(trim($_POST['address'])));
+	$num = trim($_POST['number']);
+	$zip = strtoupper(trim($_POST['zip']));
+	$city = str_replace('-', ',', $_POST['city']);
+	$city = ucwords(strtolower(trim($city)));
+	$reg = strtoupper(trim($_POST['region']));
+	$email = strtolower(trim($_POST['email']));
+	$phone = trim($_POST['phone']);
+	$security = random_string();
+
+	DB::put(Address::TABLE, [
+		'cartID' => cartId(),
+		'buyer' => userId() ?: null,
+		'aname' => $aname,
+		'address' => $addr,
+		'number' => $num,
+		'zip' => $zip,
+		'city' => $city,
+		'region' => $reg,
+		'email' => $email,
+		'phone' => $phone,
+		'security' => $security
+	], cart()->addressId);
 }
 
 // remove item
@@ -108,32 +137,9 @@ if (isset($_POST['ship_no_credit'])) {
 	redirect('#shipping');
 }
 
-// advance the cart
+/**
+ * Advance to next step
+ */
 if (isset($_POST['submit'])) {
-	$aname = str_replace('-', ',', $_POST['aname']);
-	$addr = ucwords(strtolower(trim($_POST['address'])));
-	$num = trim($_POST['number']);
-	$zip = strtoupper(trim($_POST['zip']));
-	$city = str_replace('-', ',', $_POST['city']);
-	$city = ucwords(strtolower(trim($city)));
-	$reg = strtoupper(trim($_POST['region']));
-	$email = strtolower(trim($_POST['email']));
-	$phone = trim($_POST['phone']);
-	$security = random_string();
-
-	DB::put(Address::TABLE, [
-		'cartID' => cartId(),
-		'buyer' => userId() ?: null,
-		'aname' => $aname,
-		'address' => $addr,
-		'number' => $num,
-		'zip' => $zip,
-		'city' => $city,
-		'region' => $reg,
-		'email' => $email,
-		'phone' => $phone,
-		'security' => $security
-	], cart()->addressId);
-
 	cart()->advanceAndRedirect();
 }

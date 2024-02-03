@@ -8,7 +8,7 @@ use Ecommerce\Cart as Cart;
 
 {% block main %}
 
-<p id="log" class="<?= env('DEBUG') ? 'local' : '' ?>">
+<p id="log" class="local">
 	<?php if ($res_sel->num_rows) {
 		while ($row = $res_sel->fetch_assoc()) {
 
@@ -21,7 +21,7 @@ use Ecommerce\Cart as Cart;
 			$stat = $row['status'];
 			$err = $row['error'];
 
-			$pay = $row['payID'] == 1 ? 'PayPal' : 'Stringipe';
+			$pay = $row['payID'] == 1 ? 'PayPal' : 'Altro pagamento';
 
 			if ($cart->addressId) {
 				$address =
@@ -88,8 +88,8 @@ use Ecommerce\Cart as Cart;
 				// }
 
 				if ($validOrder) {
-					if ($order->inventory == 1) $ord_str .= '!! IN INVENTARIO !! ';
-					if ($order->inventory == 2) $ord_str .= '!! SIMILE IN INVENTARIO !! ';
+					if ($order->inventory == 1) $ord_str .= '<span style="color: lightgreen; font-weight: bold;">! IN INVENTARIO ! </span>';
+					if ($order->inventory == 2) $ord_str .= '<span style="color: green; font-weight: bold;">! SIMILE IN INVENTARIO ! </span>';
 
 					$ord_str .= '<a href="' . $order->product->fullUrl . '">' . $order->designId . ' - ' . $order->description . '</a><br>';
 				}
@@ -116,7 +116,9 @@ use Ecommerce\Cart as Cart;
 </p>
 
 <div class="mar-b-2 center-content">
-	<a href="addresses_clean?id=log_date" class="button"><?= $res_sel->num_rows ? 'Pulisci log' : 'Aggiorna la data<br>dell\'ultimo ordine fatto' ?></a>
+	<a href="addresses_clean?id=log_date" class="button button--auto-width">
+		<?= $res_sel->num_rows ? 'Pulisci log' : 'Aggiorna la data<br>dell\'ultimo ordine fatto' ?>
+	</a>
 </div>
 
 {% end main %}

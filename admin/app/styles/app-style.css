@@ -33,7 +33,7 @@
 */
 :root {
 	/* Colors */
-	--color-primary-400-hsl: 215, 70%, 60%;
+	--color-primary-400-hsl: 215deg 70% 60%;
 	--clr-primary-hsl-500: 229, 70%, 55%;
 
 	--clr-neutral-hsl-100: 0, 0%, 0%;

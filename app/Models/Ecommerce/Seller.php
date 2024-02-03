@@ -2,7 +2,9 @@
 
 namespace App\Models\Ecommerce;
 
+use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Seller\Follower;
+use App\Models\Seller\Price;
 use App\Models\Traits\ModelCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +22,34 @@ class Seller extends Model {
 	protected $primaryKey = 'userID';
 	protected $table = 'stores';
 	protected $fillable = [];
+
+	/**
+	 * Get the seller's designs
+	 */
+	public function designs(): HasMany {
+		return $this->hasMany(Design::class, 'userID', 'userID');
+	}
+
+	/**
+	 * Get the seller's followers
+	 */
+	public function followers(): HasMany {
+		return $this->hasMany(Follower::class, 'followID', 'userID');
+	}
+
+	/**
+	 * Get the seller's prices
+	 */
+	public function prices() {
+		return $this->hasMany(Price::class, 'storeID', 'userID');
+	}
+
+	/**
+	 * Get the seller's logo groups
+	 */
+	public function logoGroups(): HasMany {
+		return $this->hasMany(LogoGroup::class, 'storID', 'userID');
+	}
 
 	/**
 	 * Get the seller's orders
@@ -122,5 +152,26 @@ class Seller extends Model {
 			'userID' => userId(),
 			'followID' => $this->userID,
 		])->count() > 0;
+	}
+
+	public function deleteAndClean() {
+		// Delete designs
+		foreach ($this->designs as $design) {
+			$design->deleteAndClean(true);
+		}
+
+		// Delete logo groups
+		foreach ($this->logoGroups as $logoGroup) {
+			$logoGroup->deleteAndClean();
+		}
+
+		// Delete followers
+		$this->followers()->delete();
+
+		// Delete prices
+		$this->prices()->delete();
+
+		// Delete the seller
+		$this->delete();
 	}
 }

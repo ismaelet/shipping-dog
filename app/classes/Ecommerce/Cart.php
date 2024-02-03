@@ -92,7 +92,7 @@ class Cart {
 	}
 
 	private function getAddressId() {
-		$addressId = DB::find(Address::INDEX . ' FROM ' . Address::TABLE . ' WHERE ' . Address::CART_INDEX . ' = ?', [$this->id]);
+		$addressId = DB::find(Address::INDEX . ' FROM ' . Address::TABLE . ' WHERE ' . Address::CART_INDEX . ' = ? ORDER BY ' . Address::INDEX . ' DESC', [$this->id]);
 
 		return $addressId;
 	}

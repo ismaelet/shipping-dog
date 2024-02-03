@@ -29,7 +29,7 @@
 
 			use Ecommerce\Seller;
 
-			if ($sellers) {
+			if ($sellers->num_rows) {
 				while ($sellerEntry = $sellers->fetch_assoc()) {
 					$seller = new Seller($sellerEntry[Seller::INDEX]);
 			?>

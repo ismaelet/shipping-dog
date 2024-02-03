@@ -285,6 +285,12 @@ class Order {
 			DB::update(Cart::TABLE . ' SET quantity = quantity + ? WHERE ' . Cart::INDEX . ' = ?', [$quantity, $cart->id]);
 
 			$cart->resetDynamicProperties();
+
+			if ($cart->couponId) {
+				$couponId = $cart->couponId;
+				$cart->removeCoupon();
+				$cart->addCoupon($couponId);
+			}
 		}
 
 		redirect('/cart?step-id=2');
