@@ -17,7 +17,7 @@
 
 .feed__text {
 	padding: 1rem;
-	color: var(--fc-700);
+	color: var(--color-neutral-400);
 }
 
 .feed__text .user {

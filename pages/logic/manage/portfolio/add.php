@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ecommerce\Design as EcommerceDesign;
 use Ecommerce\Design;
 use Ecommerce\Design\LogoGroup;
 use Ecommerce\Product;
@@ -12,13 +13,15 @@ $error = false;
 // setup form
 $inputs = [
 	[
-		['type' => 'lbl', 'text' => 'Nome design'],
+		['type' => 'lbl', 'text' => 'Titolo della grafica'],
 		[
 			'name' => 'name',
-			'text' => 'Nome design',
+			'text' => 'Titolo della grafica',
 			'maxlenght' => 30,
 			'required' => true,
 		],
+		['type' => 'error', 'error' => 'name-empty', 'text' => 'È obbligatario scegliere un nome',],
+		['type' => 'error', 'error' => 'name-exists', 'text' => 'Esiste già una grafica con questo nome',],
 	],
 	[
 		['type' => 'lbl', 'text' => 'Tag'],
@@ -68,71 +71,9 @@ $inputs = [
 
 // upload design
 if (isset($_POST['submit'])) {
+	$error = add_new_design();
 
-	// get inputs data
-	$name = trim($_POST['name']);
-
-	// get design ID
-	$desID = DB::row('MAX(ID) as max FROM designs')['max'] + 1;
-
-	// upload image
-	$file_vector = false;
-	$file = '/uploads/designs/' . $desID . '.png';
-	$file_m = '/uploads/designs/' . $desID . '_m.png';
-	$file_ori = '/uploads/designs_originals/' . $desID . '.png';
-
-	if (!empty($_FILES['file-vector']['name'])) {
-
-		$type = strtolower(strrev(explode('.', strrev($_FILES['file-vector']['name']))[0]));
-
-		if (in_array($type, ['pdf', 'ai'])) {
-			$file_vector = '/uploads/designs_vector/' . $desID . '.' . $type;
-		} else {
-			$file_vector = false;
-		}
-	}
-
-	$error = upload_img_OLD($file, 'png', '1024');
-	$error_m = upload_img_OLD($file_m, 'png', '450');
-
-	$reso = getimagesize($_FILES['file']['tmp_name']);
-	upload_file($file_ori);
-
-	if ($file_vector) {
-		upload_file($file_vector, 'file-vector');
-	}
-
-	// add databese entry
-	if (!$error && !$error_m) {
-
-		// add design
-		$ratio = round($reso[0] / $reso[1], 2);
-
-		$designId = DB::add('designs (ID, userID, name, status, ratio) VALUES (?, ?, ?, ?, ?)', [$desID, userId(), $name, 1, $ratio]);
-
-		// add logo
-		$sellerLogoGroupId = DB::find(LogoGroup::INDEX . ' FROM ' . LogoGroup::TABLE . ' WHERE ' . LogoGroup::SELLER_INDEX . ' = ? ORDER BY ' . LogoGroup::INDEX . ' DESC', [userId()]);
-
-		if ($sellerLogoGroupId) {
-			DB::update(Design::TABLE . ' SET ' . Design::LOGO_GROUP_INDEX . ' = ? WHERE ' . Design::INDEX . ' = ?', [$sellerLogoGroupId, $designId]);
-		}
-
-		// add items
-		$res = userId() != 1 ? DB::select('ID FROM items_types WHERE hidden = 0') : DB::select('ID FROM items_types WHERE ID=16');
-
-		while ($row = $res->fetch_assoc()) {
-			Product::new($desID, $row['ID']);
-		}
-
-		// make the user an artist if it's a regular user
-		DB::update('users SET level = 1 WHERE ID = ? AND level=0', [userId()]);
-
-		// add tags
-		update_tags($_POST['tags'], $desID);
-
-		// redirect
-		redirect('/manage/portfolio/edit?id=' . $desID);
-	} else {
+	if ($error) {
 		$inputs[2] = [
 			['type' => 'lbl', 'text' => 'Immagine (PNG)'],
 			[
@@ -143,4 +84,86 @@ if (isset($_POST['submit'])) {
 			]
 		];
 	}
+}
+
+function add_new_design(): string|false {
+	// Get the design name
+	$name = trim($_POST['name']);
+
+	if (empty($name)) {
+		return 'name-empty';
+	}
+
+	if (EcommerceDesign::where('name', $name)->exists()) {
+		return 'name-exists';
+	}
+
+	// Get design ID
+	$desID = DB::row('MAX(ID) as max FROM designs')['max'] + 1;
+
+	// Upload image
+	$file_vector = false;
+	$file = '/uploads/designs/' . $desID . '.png';
+	$file_m = '/uploads/designs/' . $desID . '_m.png';
+	$file_ori = '/uploads/designs_originals/' . $desID . '.png';
+
+	// Upload the vector file
+	if (!empty($_FILES['file-vector']['name'])) {
+		$type = strtolower(strrev(explode('.', strrev($_FILES['file-vector']['name']))[0]));
+
+		if (in_array($type, ['pdf', 'ai'])) {
+			$file_vector = '/uploads/designs_vector/' . $desID . '.' . $type;
+		} else {
+			$file_vector = false;
+		}
+	}
+
+	// Upload the images
+	$error = upload_img_OLD($file, 'png', '1024');
+
+	if ($error) {
+		return $error;
+	}
+
+	$error_m = upload_img_OLD($file_m, 'png', '450');
+
+	if ($error_m) {
+		return $error_m;
+	}
+
+	$reso = getimagesize($_FILES['file']['tmp_name']);
+
+	upload_file($file_ori);
+
+	if ($file_vector) {
+		upload_file($file_vector, 'file-vector');
+	}
+
+	// Add databese entry
+	$ratio = round($reso[0] / $reso[1], 2);
+
+	$designId = DB::add('designs (ID, userID, name, status, ratio) VALUES (?, ?, ?, ?, ?)', [$desID, userId(), $name, 1, $ratio]);
+
+	// Add logo
+	$sellerLogoGroupId = DB::find(LogoGroup::INDEX . ' FROM ' . LogoGroup::TABLE . ' WHERE ' . LogoGroup::SELLER_INDEX . ' = ? ORDER BY ' . LogoGroup::INDEX . ' DESC', [userId()]);
+
+	if ($sellerLogoGroupId) {
+		DB::update(Design::TABLE . ' SET ' . Design::LOGO_GROUP_INDEX . ' = ? WHERE ' . Design::INDEX . ' = ?', [$sellerLogoGroupId, $designId]);
+	}
+
+	// Add items
+	$res = userId() != 1 ? DB::select('ID FROM items_types WHERE hidden = 0') : DB::select('ID FROM items_types WHERE ID=16');
+
+	while ($row = $res->fetch_assoc()) {
+		Product::new($desID, $row['ID']);
+	}
+
+	// Make the user an artist if it's a regular user
+	DB::update('users SET level = 1 WHERE ID = ? AND level=0', [userId()]);
+
+	// Add tags
+	update_tags($_POST['tags'], $desID);
+
+	// Redirect
+	redirect('/manage/portfolio/edit?id=' . $desID);
 }

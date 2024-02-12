@@ -7,7 +7,7 @@ use Email;
 use function Ecommerce\cart;
 
 class CartStatusUpdate {
-	public static function send(object $cart = null, string $statusCode = null, bool $debug = false) {
+	public static function send(object $cart = null, string $statusCode = null, bool $forceSend = false, bool $debug = false) {
 		$cart = $cart ?: cart();
 		$orderList = '';
 		$statusCode = $statusCode ?: $cart->statusCode;
@@ -81,7 +81,7 @@ class CartStatusUpdate {
 			'text' => $emailBody,
 		];
 
-		if ($statusCode == 'received') {
+		if ($statusCode == 'received' || $forceSend) {
 			Email::send($emailData);
 		}
 	}

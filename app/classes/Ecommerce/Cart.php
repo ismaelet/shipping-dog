@@ -4,7 +4,6 @@ namespace Ecommerce;
 
 use DB;
 use EmailService\Ecommerce\CartStatusUpdate;
-use EmailService\Ecommerce\CartTrackingUpdate;
 use DatabaseObject;
 use Ecommerce\Product\Type;
 use View;
@@ -572,8 +571,8 @@ class Cart {
 		$this->updateStatus('received', $sendNotification);
 	}
 
-	public function sendStatusEmail(bool $debug = false) {
-		CartStatusUpdate::send($this, null, $debug);
+	public function sendStatusEmail(bool $forceSend = false, bool $debug = false) {
+		CartStatusUpdate::send($this, null, $forceSend, $debug);
 	}
 
 	public function sendTrackingEmail() {

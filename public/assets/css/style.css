@@ -56,7 +56,7 @@
 @layer reset, base, layout, components, utilities;
 
 /*
-! tailwindcss v3.4.0 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -900,9 +900,19 @@ video {
   letter-spacing: 0.1em;
 }
 
+.text-neutral-900{
+  --tw-text-opacity: 1;
+  color: hsl(var(--color-neutral-900-hsl) / var(--tw-text-opacity));
+}
+
 .text-primary{
   --tw-text-opacity: 1;
   color: hsl(var(--color-primary-400-hsl) / var(--tw-text-opacity));
+}
+
+.text-neutral-dark-900{
+  --tw-text-opacity: 1;
+  color: hsl(var(--color-neutral-dark-900-hsl) / var(--tw-text-opacity));
 }
 
 .blur{
