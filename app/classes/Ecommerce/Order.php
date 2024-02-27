@@ -165,10 +165,10 @@ class Order {
 		return $name;
 	}
 
-	private function getDescription() {
+	public function getDescription(bool $showDeleted = false): string {
 		$product = $this->product;
 
-		if ($product->statusId) {
+		if ($product->statusId || $showDeleted) {
 			$description = $product->name;
 			$description .= ' (' . $product->type->name;
 			if ($product->type->sibling && !$product->type->unisex) $description .= ' ' . $product->gender->name;

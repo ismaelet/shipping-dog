@@ -1,7 +1,16 @@
 <?php
 
+use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Interactions\FollowerController;
 use App\Http\Controllers\Interactions\LikeController;
+
+/**
+ * Carts
+ */
+Route::add('/api/carts', function () {
+	echo json_encode(CartController::get());
+});
+
 
 /**
  * Likes

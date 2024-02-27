@@ -90,6 +90,9 @@ class Setup {
 
 	// functions
 	static private function initializeFunctions() {
+		$modules = glob(SERVER_ROOT . '/../app/Helpers/*.php', GLOB_BRACE);
+		foreach ($modules as $module) include_once($module);
+
 		$modules = glob(SERVER_ROOT . '/system/functions/*.php', GLOB_BRACE);
 		foreach ($modules as $module) include_once($module);
 

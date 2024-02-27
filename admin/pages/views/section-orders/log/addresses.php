@@ -91,7 +91,7 @@ use Ecommerce\Cart as Cart;
 					if ($order->inventory == 1) $ord_str .= '<span style="color: lightgreen; font-weight: bold;">! IN INVENTARIO ! </span>';
 					if ($order->inventory == 2) $ord_str .= '<span style="color: green; font-weight: bold;">! SIMILE IN INVENTARIO ! </span>';
 
-					$ord_str .= '<a href="' . $order->product->fullUrl . '">' . $order->designId . ' - ' . $order->description . '</a><br>';
+					$ord_str .= '<a href="' . $order->product->fullUrl . '" target="_blank">' . $order->designId . ' - ' . $order->getDescription(true) . '</a><br>';
 				}
 			}
 

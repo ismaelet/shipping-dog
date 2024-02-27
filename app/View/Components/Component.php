@@ -58,7 +58,7 @@ class Component {
 		// render the component
 		ob_start();
 
-		require(server_path($componentView));
+		require(public_server_path($componentView));
 
 		// store the render
 		$content = ob_get_clean();

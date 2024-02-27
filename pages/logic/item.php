@@ -12,7 +12,7 @@ $productColorId = $_GET['colorId'] ?? null;
 $product = new Product($id);
 
 // if not found
-if (!$product->id || (!$product->statusId && !$product->isUserOwner) || $product->deleted) {
+if (!$product->id || (!admin() && (!$product->statusId && !$product->isUserOwner) || $product->deleted)) {
 	redirect('/shop');
 }
 

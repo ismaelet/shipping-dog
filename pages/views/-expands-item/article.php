@@ -425,10 +425,15 @@ use Ecommerce\Product\Type;
 
 				<!-- Add to cart -->
 				<div class="mar-t-4">
-					<button type="submit" id="submit" name="submit" class="add-to-cart button button--full-width">
-						<?= icon_embed('cart') ?>
-						Aggiungi al carrello
-					</button>
+
+					<?php if (($product->statusId && !$product->deleted) || $owner) { ?>
+
+						<button type="submit" id="submit" name="submit" class="add-to-cart button button--full-width">
+							<?= icon_embed('cart') ?>
+							Aggiungi al carrello
+						</button>
+
+					<?php } ?>
 
 					<?php if (!$product->isCustom && $product->type->blankId && $product->type->blankId != $product->id) { ?>
 

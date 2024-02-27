@@ -1,16 +1,25 @@
 <?php
 
+use App\View\Components\Form\SearchInput;
+
 ?>
 
 {% block main %}
 
 <div class="p-4 grid gap-8">
 	<div>
-		<label class="label">Parti dall'ordine:</label>
+		<label class="label">Parti dopo l'ordine:</label>
 
 		<div class="flex gap-4">
 			<form action="" method="POST" class="w-full">
-				<input type="number" name="product_log_start_from_id" value="<?= $validCarts->count() ? $firstCart->cartId : $startFromId ?>" placeholder="Parti del numero ordine #">
+				<?= SearchInput::render([
+					'search' => 'carts',
+					'name' => 'last_cart_id',
+					'placeholder' => 'Ultimo ordine fatto',
+					'required' => true,
+					'storedValue' => $startFromId,
+					'shownValue' => $startFromCart->ID . ' - ' . $startFromCart->address->aname
+				]) ?>
 			</form>
 
 			<form action="" method="POST">
@@ -25,11 +34,6 @@
 <p class="log">
 
 	/// <?= $validCarts->count() ? $filteredOrders->count() : 0 ?> ARTICOLI DA FARE<br>
-
-
-	<?php if ($validCarts->count()) { ?>
-		/// A PARTIRE DA ORDINE <span class="fw-bold">#<?= $firstCart->cartId ?></span> (<span class="fw-bold"><?= $firstCart->customerName ?></span>)
-	<?php } ?>
 
 </p>
 
@@ -64,7 +68,7 @@
 					$mergedOrders = [];
 
 					// Product name (grouped by designId)
-					echo '<span style="color: #fff;">' . ($product->designId ?  $product->designId . ' - ' : '') . $product->productName . '</span><br>';
+					echo '<span class="text-color-highlighted">' . ($product->designId ?  $product->designId . ' - ' : '') . $product->productName . '</span><br>';
 
 					// Get the orders
 					$orders = $filteredOrders
@@ -77,6 +81,7 @@
 					// Merge orders
 					foreach ($orders as $order) {
 						$orderDescription = $order->description();
+						$orderDescription = $order->inventory ? $orderDescription . ' <strong>(INVENTARIO)</strong>' : $orderDescription;
 
 						if (isset($mergedOrders[$orderDescription])) {
 							$mergedOrders[$orderDescription] += $order->quantity;
@@ -100,7 +105,7 @@
 
 
 		<p class="log">
-			--------------------------- <span style="color: #fff;">PRODOTTI</span> ---------------------------
+			--------------------------- <span class="text-strong">PRODOTTI</span> ---------------------------
 		</p>
 
 		<p class="log">
@@ -119,6 +124,7 @@
 
 				// Get the orders
 				$sortedByData = $filteredOrders
+					->where('inventory', 0)
 					->where('typeID', '=', $typeOrder->typeID)
 					->sortBy('colorID')
 					->sortBy('sizeID');
