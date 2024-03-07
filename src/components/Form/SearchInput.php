@@ -1,7 +1,20 @@
-<template>
-	<div class="search-input js-search-input" data-endpoint="<?= $search ?>">
+<!-- 
+	Version 1.1.1
 
-		<input type="hidden" class="js-search-store" name="<?= $name ?>" value="<?= $storedValue ?? '' ?>" <?= isset($required) ? 'required' : '' ?>>
+	search: string, the search class endpoint
+	storedName: string, the name of the input to store the value
+	shownName: string, the name of the input to show the value
+	storedValue: mixed|null, the value of the input to store the value
+	shownValue: mixed|null, the value of the input to show the value
+	where: array|null, the where clause for the search
+	placeholder: string, the input placeholder
+	required: bool, if the input is required
+-->
+
+<template>
+	<div class="search-input js-search-input" data-endpoint="<?= $search ?>" <?= isset($where) ? 'data-where="' . implode(',', $where) . '"' : '' ?>>
+
+		<input type="hidden" class="js-search-store" name="<?= $storedName ?>" value="<?= $storedValue ?? '' ?>" <?= isset($required) ? 'required' : '' ?>>
 
 		<input type="text" class="js-search-show" <?= isset($shownName) ? 'name="' . $shownName . '"' : '' ?> value="<?= $shownValue ?? '' ?>" placeholder="<?= $placeholder ?? '' ?>" <?= isset($required) ? 'required' : '' ?> autocomplete="off">
 
@@ -70,25 +83,26 @@
 				const shownInput = element
 				const dropDown = searchBlock.querySelector('.js-search-dropdown')
 				const endpoint = searchBlock.dataset.endpoint
+				// const whereClause = searchBlock.dataset.where
 				const filter = shownInput.value
 
 				dropDown.innerHTML = ''
 
 				// Fetch the results
-				axios.get('/api/carts?filter=' + encodeURIComponent(filter))
+				axios.get(`/api/${endpoint}?filter=${encodeURIComponent(filter)}`)
 					.then(response => {
 						// Get the results
 						const results = response.data
 						const count = results.length
 
-						console.log(results)
-
 						if (count) {
+							dropDown.innerHTML = ''
+
 							// Populate the dropdown
 							for (const result of results) {
 								const itemText = highlight_search_result(result.name, filter)
 
-								dropDown.insertAdjacentHTML('beforeend', '<p class="search-input__item js-search-item" data-id="' + result.id + '" data-text="' + result.name + '" tabindex="-1">' + itemText + '</p>')
+								dropDown.insertAdjacentHTML('beforeend', `<p class="search-input__item js-search-item" data-id="${result.id}" data-text="${result.name}" tabindex="-1">${itemText}</p>`)
 
 								dropDown.classList.add('active')
 							}

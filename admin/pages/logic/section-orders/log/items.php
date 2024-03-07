@@ -5,13 +5,12 @@ use App\Models\Ecommerce\Order;
 use App\Models\Framework\Configuration;
 
 // Get the date from which to start the log
-$startFromConfig = Configuration::where('name', 'product_log_start_from_id')->first();
-$startFromId = $startFromConfig->value;
-$startFromCart = Cart::find($startFromId);
-$validCarts = Cart::where('time', '>', $startFromCart->time)->where('status', '>', 0);
-$date = $validCarts->count() ? $validCarts->first()->time : null;
+$startFromConfig = Configuration::where('name', 'product_log_start_from')->first();
+$startFromTime = $startFromConfig->value;
+$validCarts = Cart::where('time', '>=', $startFromTime)->where('status', '>', 0);
+$startFromCart = $validCarts->count() ? $validCarts->orderBy('time', 'asc')->first() : null;
 
-// Get the types
+// Get the carts
 if ($validCarts->count()) {
 	$filteredOrders = Order::join('carts', 'orders.cartID', '=', 'carts.ID')
 		->join('addresses', 'addresses.cartID', '=', 'carts.ID')
@@ -19,7 +18,7 @@ if ($validCarts->count()) {
 		->join('items', 'items.ID', '=', 'orders.itemID')
 		->join('items_types', 'items_types.ID', '=', 'orders.typeID')
 		->where('carts.status', '>', 0)
-		->where('carts.time', '>=', $date)
+		->where('carts.time', '>=', $startFromTime)
 		->select('carts.ID as cartId', 'carts.time as confirmedTime', 'orders.*', 'stores.name as storeName', 'addresses.aname as customerName', 'items.name as productName', 'items_types.name as productTypeName')
 		->get();
 
@@ -30,17 +29,21 @@ if ($validCarts->count()) {
 /**
  * Update the log start date
  */
-if (isset($_POST['clean-log'])) {
-	$lastCompletedCart = Cart::where('status', '>', 0)->orderBy('time', 'desc')->first();
-	$startFromConfig->value = $lastCompletedCart->ID;
+if (isset($_POST['clean_log'])) {
+	$startFromConfig->value = date('Y-m-d H:i:s');
 	$startFromConfig->save();
 
 	redirect();
 }
 
-if (!empty($_POST['last_cart_id'])) {
-	$startFromConfig->value = (int) $_POST['last_cart_id'];
-	$startFromConfig->save();
+if (!empty($_POST['start_cart_id'])) {
+	$startFromId = (int) $_POST['start_cart_id'];
+	$startFromCart = Cart::find($startFromId);
+
+	if ($startFromCart) {
+		$startFromConfig->value = $startFromCart->time;
+		$startFromConfig->save();
+	}
 
 	redirect();
 }

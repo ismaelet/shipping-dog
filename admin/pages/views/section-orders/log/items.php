@@ -8,22 +8,22 @@ use App\View\Components\Form\SearchInput;
 
 <div class="p-4 grid gap-8">
 	<div>
-		<label class="label">Parti dopo l'ordine:</label>
+		<label class="label">Parti dall'ordine:</label>
 
 		<div class="flex gap-4">
 			<form action="" method="POST" class="w-full">
 				<?= SearchInput::render([
 					'search' => 'carts',
-					'name' => 'last_cart_id',
-					'placeholder' => 'Ultimo ordine fatto',
+					'storedName' => 'start_cart_id',
+					'storedValue' => $startFromCart ? $startFromCart->ID : null,
+					'shownValue' => $startFromCart ? $startFromCart->ID . ' - ' . $startFromCart->address->aname : '',
+					'placeholder' => 'Ordine da cui partire',
 					'required' => true,
-					'storedValue' => $startFromId,
-					'shownValue' => $startFromCart->ID . ' - ' . $startFromCart->address->aname
 				]) ?>
 			</form>
 
 			<form action="" method="POST">
-				<button type="submit" class="button button--secondary" name="clean-log"><?= icon_embed('clean') ?>Pulisci log</button>
+				<button type="submit" class="button button--secondary" name="clean_log"><?= icon_embed('clean') ?>Pulisci log</button>
 			</form>
 		</div>
 	</div>

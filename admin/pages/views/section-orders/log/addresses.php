@@ -21,7 +21,7 @@ use Ecommerce\Cart as Cart;
 			$stat = $row['status'];
 			$err = $row['error'];
 
-			$pay = $row['payID'] == 1 ? 'PayPal' : 'Altro pagamento';
+			// $pay = $row['payID'] == 1 ? 'PayPal' : 'Altro pagamento';
 
 			if ($cart->addressId) {
 				$address =
@@ -95,7 +95,7 @@ use Ecommerce\Cart as Cart;
 				}
 			}
 
-			echo '[' . date('Y/m/d', strtotime($row['time'])) . ' - ' . $pay . ' - ' . $cart->id . ']' . $name_str . '<br>'
+			echo '[' . date('Y-m-d H:i:s', strtotime($row['time'])) . ' - ' . $cart->id . ']' . $name_str . '<br>'
 				. $address
 				. $code_str . '<br><br>'
 				. $ord_str . '<br>'

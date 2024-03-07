@@ -71,7 +71,7 @@ module.exports = {
 						lineHeight: '1.2',
 					},
 				],
-				'article-heading': [
+				'component-heading': [
 					'var(--font-size-700)',
 					{
 						fontWeight: 'var(--font-weight-semibold)',
@@ -81,7 +81,7 @@ module.exports = {
 				],
 
 				// Subheadings
-				'main-sub-heading': [
+				'main-subheading': [
 					'var(--font-size-700)',
 					{
 						fontWeight: 'var(--font-weight-semibold)',
@@ -89,7 +89,7 @@ module.exports = {
 						lineHeight: '1.2',
 					},
 				],
-				'section-sub-heading': [
+				'section-subheading': [
 					'var(--font-size-700)',
 					{
 						fontWeight: 'var(--font-weight-semibold)',
@@ -97,7 +97,7 @@ module.exports = {
 						lineHeight: '1.2',
 					},
 				],
-				'article-sub-heading': [
+				'component-subheading': [
 					'var(--font-size-700)',
 					{
 						fontWeight: 'var(--font-weight-semibold)',
