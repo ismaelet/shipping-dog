@@ -2,6 +2,7 @@
 
 namespace App\Models\Ecommerce;
 
+use App\Models\Ecommerce\Product\ProductDescription;
 use App\Models\Ecommerce\Product\ProductPrice;
 use App\Models\Ecommerce\Product\ProductType;
 use Illuminate\Database\Eloquent\Model;
@@ -28,9 +29,27 @@ class Product extends Model {
 	}
 
 	/**
+	 * Get the product's description model
+	 */
+	public function descriptionModel(): HasOne {
+		return $this->hasOne(ProductDescription::class, 'itemID', 'ID');
+	}
+
+	/**
+	 * Get the product's description model
+	 */
+	public function description(): string|false {
+		if ($this->descriptionModel) {
+			return $this->descriptionModel->description ?: false;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Delete the product and clean the related data
 	 */
-	public function deleteAndClean($permanently = false) {
+	public function deleteAndClean(bool $permanently = false): void {
 		if ($permanently) {
 			$this->price()->delete();
 			$this->delete();

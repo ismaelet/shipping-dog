@@ -9,7 +9,7 @@ use Ecommerce\Product\Type;
 
 ?>
 
-<div class="main-wrap pad-t-3 item-type--<?= $product->type->slug ?>" id="item" data-id="<?= $product->id ?>" data-hroot="<?= CLIENT_ROOT ?>">
+<div class="main-wrap pad-t-3 item-type--<?= $oldProduct->type->slug ?>" id="item" data-id="<?= $oldProduct->id ?>" data-hroot="<?= CLIENT_ROOT ?>">
 
 	<!-- Warning -->
 	<?php if ($warning) { ?>
@@ -30,10 +30,10 @@ use Ecommerce\Product\Type;
 					<div id="item-img-box">
 
 						<!-- Image -->
-						<img class="img-zoom img-fill js-main-image" id="item-img" src="<?= $product->clientFullImage ?>" alt="">
+						<img class="img-zoom img-fill js-main-image" id="item-img" src="<?= $oldProduct->clientFullImage ?>" alt="">
 
 						<!-- Logos on the image -->
-						<?php if ($product->hasLogos && $product->logoGroup->preview) { ?>
+						<?php if ($oldProduct->hasLogos && $oldProduct->logoGroup->preview) { ?>
 
 							<img class="logo-field__preview-logo js-logo-image" alt="">
 
@@ -50,7 +50,7 @@ use Ecommerce\Product\Type;
 						</div>
 
 						<!-- Love button -->
-						<?= LikeButton::render(['designId' => $product->designId]) ?>
+						<?= LikeButton::render(['designId' => $oldProduct->designId]) ?>
 
 					</div>
 
@@ -59,14 +59,14 @@ use Ecommerce\Product\Type;
 				<!-- Zoom on mobile -->
 				<div id="img-zoom-bgr">
 					<div id="img-zoom-box">
-						<img class="js-main-image" id="img-zoom" src="<?= $product->clientFullImage ?>">
+						<img class="js-main-image" id="img-zoom" src="<?= $oldProduct->clientFullImage ?>">
 					</div>
 				</div>
 
 			</section>
 
 			<!-- More products with the same design -->
-			<?php if (!$product->isCustom) { ?>
+			<?php if (!$oldProduct->isCustom) { ?>
 
 				<section id="type-sec">
 					<!-- Types -->
@@ -75,13 +75,13 @@ use Ecommerce\Product\Type;
 
 							<?php if ($relatedGarmentCount) { ?>
 
-								<h3 class="item-type-title clickable txt-bold inlb marr1 <?php if ($product->type->category == 'c' || !$relatedAccessoryCount) echo 'active' ?>" data-tar="#more-clothing">Abbigliamento</h3>
+								<h3 class="item-type-title clickable txt-bold inlb marr1 <?php if ($oldProduct->type->category == 'c' || !$relatedAccessoryCount) echo 'active' ?>" data-tar="#more-clothing">Abbigliamento</h3>
 
 							<?php } ?>
 
 							<?php if ($relatedAccessoryCount) { ?>
 
-								<h3 class="item-type-title clickable txt-bold inlb <?php if ($product->type->category == 'm') echo 'active' ?>" data-tar="#more-accessories">Accessori</h3>
+								<h3 class="item-type-title clickable txt-bold inlb <?php if ($oldProduct->type->category == 'm') echo 'active' ?>" data-tar="#more-accessories">Accessori</h3>
 
 							<?php } ?>
 
@@ -90,7 +90,7 @@ use Ecommerce\Product\Type;
 						<!-- More clothing -->
 						<?php if ($relatedGarmentCount) { ?>
 
-							<div id="more-clothing" class="type-slide <?php if ($product->type->category == 'c' || !$relatedAccessoryCount) echo 'active' ?>">
+							<div id="more-clothing" class="type-slide <?php if ($oldProduct->type->category == 'c' || !$relatedAccessoryCount) echo 'active' ?>">
 
 								<div id="type-slideC" data-pos="1" class="carousel mob-fluid">
 
@@ -124,7 +124,7 @@ use Ecommerce\Product\Type;
 						<!-- More accessories -->
 						<?php if ($relatedAccessoryCount) { ?>
 
-							<div id="more-accessories" class="type-slide <?php if ($product->type->category == 'm') echo 'active' ?>">
+							<div id="more-accessories" class="type-slide <?php if ($oldProduct->type->category == 'm') echo 'active' ?>">
 
 								<div id="type-slideM" data-pos="1" class="carousel mob-fluid">
 
@@ -166,41 +166,41 @@ use Ecommerce\Product\Type;
 		<section id="right-panel" class="grid">
 			<div class="">
 				<!-- Title -->
-				<h1 id="title"><?= $product->name ?></h1>
-				<p id="author"><?= $product->type->name ?> by <a class="txt-c1-h" href="<?= CLIENT_ROOT ?>/artist?id=<?= $product->seller->id ?>"><?= $product->seller->name ?></a></p>
+				<h1 id="title"><?= $oldProduct->name ?></h1>
+				<p id="author"><?= $oldProduct->type->name ?> by <a class="txt-c1-h" href="<?= CLIENT_ROOT ?>/artist?id=<?= $oldProduct->seller->id ?>"><?= $oldProduct->seller->name ?></a></p>
 
 				<!-- Price -->
 				<div class="price-block">
 
-					<?php if ($product->customerDiscount) { ?>
+					<?php if ($oldProduct->customerDiscount) { ?>
 
 						<!-- Price when there's a discount -->
-						<p class="price price-old heading-like js-full-price"><?= $product->fullPriceString ?></p>
-						<p class="price price-promo heading-like js-price"><?= $product->priceString ?></p>
+						<p class="price price-old heading-like js-full-price"><?= $oldProduct->fullPriceString ?></p>
+						<p class="price price-promo heading-like js-price"><?= $oldProduct->priceString ?></p>
 
 						<div class="flex-group">
-							<p class="price-txt">Prezzo scontato<?= $product->isUserOwner ? ' solo per te' : '' ?></p>
+							<p class="price-txt">Prezzo scontato<?= $oldProduct->isUserOwner ? ' solo per te' : '' ?></p>
 
-							<?php if ($product->isUserOwner) {
-								info_box("Questo prezzo speciale è visibile a te, perché sei il proprietario di questo articolo. I clienti vedranno solo il prezzo normale di <span class='js-full-price'>" . $product->fullPriceString . "</span>");
+							<?php if ($oldProduct->isUserOwner) {
+								info_box("Questo prezzo speciale è visibile a te, perché sei il proprietario di questo articolo. I clienti vedranno solo il prezzo normale di <span class='js-full-price'>" . $oldProduct->fullPriceString . "</span>");
 							} ?>
 						</div>
 
 					<?php } else { ?>
 
 						<!-- Normal price -->
-						<p class="price txt-bold price-def heading-like js-price"><?= $product->priceString ?></p>
+						<p class="price txt-bold price-def heading-like js-price"><?= $oldProduct->priceString ?></p>
 
 					<?php } ?>
 
 				</div>
 
 				<!-- Colors -->
-				<?php if (!empty($product->type->availableColorSlugs)) {
+				<?php if (!empty($oldProduct->type->availableColorSlugs)) {
 					$res = DB::select('ID FROM items_colors ORDER BY reorder ASC, name_it ASC');
 				?>
 
-					<section id="color" class="field <?php if (count($product->availableColorSlugs) < 2) echo 'hide' ?>">
+					<section id="color" class="field <?php if (count($oldProduct->availableColorSlugs) < 2) echo 'hide' ?>">
 						<p class="lbl">Colore</p>
 						<div class="grid">
 
@@ -208,9 +208,9 @@ use Ecommerce\Product\Type;
 
 								$color = new Color($row['ID']);
 
-								if ((in_array($color->slug, $product->type->availableColorSlugs) || $product->isCustom) && in_array($color->slug, $product->availableColorSlugs)) { ?>
+								if ((in_array($color->slug, $oldProduct->type->availableColorSlugs) || $oldProduct->isCustom) && in_array($color->slug, $oldProduct->availableColorSlugs)) { ?>
 
-									<input type="checkbox" class="cbx" id="cbx-color-<?= $color->slug ?>" name="cbx-color[]" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-id="<?= $color->id ?>" <?php if ($color->slug == $product->color->slug) echo 'checked' ?>>
+									<input type="checkbox" class="cbx" id="cbx-color-<?= $color->slug ?>" name="cbx-color[]" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-id="<?= $color->id ?>" <?php if ($color->slug == $oldProduct->color->slug) echo 'checked' ?>>
 
 									<label for="cbx-color-<?= $color->slug ?>" class="color-box">
 
@@ -234,11 +234,11 @@ use Ecommerce\Product\Type;
 				<?php } ?>
 
 				<!-- Size -->
-				<?php if (!empty($product->type->sizes)) {
+				<?php if (!empty($oldProduct->type->sizes)) {
 
 					$new = true;
 
-					$size_table = DB::exists('items_types_measures WHERE typeId=?', [$product->type->id]);
+					$size_table = DB::exists('items_types_measures WHERE typeId=?', [$oldProduct->type->id]);
 
 					$res = DB::select('ID FROM items_sizes');
 				?>
@@ -246,7 +246,7 @@ use Ecommerce\Product\Type;
 					<section id="size" class="field">
 						<p class="lbl">Taglia
 
-							<?php if (!$product->isCustom && $size_table) { ?>
+							<?php if (!$oldProduct->isCustom && $size_table) { ?>
 								<span class="lbox-open clickable info txt-c1-h" data-tar="#size-lbox">info taglie</span>
 							<?php } ?>
 
@@ -258,7 +258,7 @@ use Ecommerce\Product\Type;
 
 								$sizeM = new Size($row['ID']);
 
-								if (in_array($sizeM->slug, $product->type->sizes)) { ?>
+								if (in_array($sizeM->slug, $oldProduct->type->sizes)) { ?>
 
 									<div class="size_box">
 										<input type="hidden" value="<?= $sizeM->price ?>">
@@ -283,12 +283,12 @@ use Ecommerce\Product\Type;
 				<?php } ?>
 
 				<!-- Gender -->
-				<?php if ($product->type->genderId) {
+				<?php if ($oldProduct->type->genderId) {
 					$new = true;
 
 					$genders = [];
-					$genders[] = $product->type->genderId;
-					if ($product->type->sibling) $genders[] = (new Type($product->type->sibling))->genderId;
+					$genders[] = $oldProduct->type->genderId;
+					if ($oldProduct->type->sibling) $genders[] = (new Type($oldProduct->type->sibling))->genderId;
 
 				?>
 
@@ -297,7 +297,7 @@ use Ecommerce\Product\Type;
 						<div class="">
 							<p class="lbl">Modello</p>
 
-							<?php if ($product->type->sibling && $product->type->unisex) info_box("Qui puoi scegliere se vedere l'anteprima del prodotto su un modello maschile o femminile, ma ha scopo puramente illustrativo, in quanto tutte le taglie per questo articolo sono unisex.") ?>
+							<?php if ($oldProduct->type->sibling && $oldProduct->type->unisex) info_box("Qui puoi scegliere se vedere l'anteprima del prodotto su un modello maschile o femminile, ma ha scopo puramente illustrativo, in quanto tutte le taglie per questo articolo sono unisex.") ?>
 						</div>
 
 						<div class="grid">
@@ -306,7 +306,7 @@ use Ecommerce\Product\Type;
 								$gender = new Gender($genderId);
 
 								if ($key) {
-									$relatedProduct = new Ecommerce\Product(DB::find('ID FROM items WHERE desID = ? AND typeID = ?', [$product->design->id, $product->type->sibling]));
+									$relatedProduct = new Ecommerce\Product(DB::find('ID FROM items WHERE desID = ? AND typeID = ?', [$oldProduct->design->id, $oldProduct->type->sibling]));
 								}
 
 							?>
@@ -328,13 +328,13 @@ use Ecommerce\Product\Type;
 				<?php } ?>
 
 				<!-- Position -->
-				<div id="position" class="field <?= count($product->availablePositionIds) < 2 || $product->isCustom ? 'hidden' : '' ?>">
+				<div id="position" class="field <?= count($oldProduct->availablePositionIds) < 2 || $oldProduct->isCustom ? 'hidden' : '' ?>">
 
 					<p class="lbl">Posizione della stampa</p>
 
 					<div class="data-area">
 
-						<?php foreach ($product->availablePositionIds as $key => $positionId) {
+						<?php foreach ($oldProduct->availablePositionIds as $key => $positionId) {
 							$position = new Position($positionId);
 						?>
 
@@ -349,16 +349,16 @@ use Ecommerce\Product\Type;
 				</div>
 
 				<!-- Logos -->
-				<?php if ($product->hasLogos) { ?>
+				<?php if ($oldProduct->hasLogos) { ?>
 
 					<div class="logo-field field">
-						<p class="lbl"><?= $product->logoGroup->name ?></p>
+						<p class="lbl"><?= $oldProduct->logoGroup->name ?></p>
 
 						<div class="grid-flow" data-spacing="400">
 							<div class="logo-field__list">
 
 								<!-- Checkbox for no logo -->
-								<?php if (!$product->logoGroup->forced) { ?>
+								<?php if (!$oldProduct->logoGroup->forced) { ?>
 
 									<label class="logo-field__item">
 										<input type="radio" class="js-logo" name="logo-id" value="0" checked>
@@ -368,10 +368,10 @@ use Ecommerce\Product\Type;
 								<?php } ?>
 
 								<!--checkboxs for extras-->
-								<?php foreach ($product->logos as $logoKey => $logo) { ?>
+								<?php foreach ($oldProduct->logos as $logoKey => $logo) { ?>
 
 									<label class="logo-field__item" title="<?= $logo->name ?>">
-										<input type="radio" class="js-logo" name="logo-id" value="<?= $logo->id ?>" <?= $product->logoGroup->forced && !$logoKey ? 'checked' : null ?>>
+										<input type="radio" class="js-logo" name="logo-id" value="<?= $logo->id ?>" <?= $oldProduct->logoGroup->forced && !$logoKey ? 'checked' : null ?>>
 										<img class="img-fill" src="<?= $logo->clientImage ?>" alt="">
 									</label>
 
@@ -379,9 +379,9 @@ use Ecommerce\Product\Type;
 
 							</div>
 
-							<div class="logo-field__preview js-logo-image-background" class="<?= $product->logoGroup->forced ? 'active' : null ?>">
+							<div class="logo-field__preview js-logo-image-background" class="<?= $oldProduct->logoGroup->forced ? 'active' : null ?>">
 								<div class="logo-field__preview-wrapper grid-flow stack-content">
-									<img class="logo-field__preview-image js-front-image" src="<?= $product->clientFullImage ?>">
+									<img class="logo-field__preview-image js-front-image" src="<?= $oldProduct->clientFullImage ?>">
 									<img class="logo-field__preview-logo js-logo-image" src="" alt="">
 								</div>
 							</div>
@@ -391,7 +391,7 @@ use Ecommerce\Product\Type;
 				<?php } ?>
 
 				<!-- Pencilcase back -->
-				<?php if (false && $product->type->slug == 'cas') { ?>
+				<?php if (false && $oldProduct->type->slug == 'cas') { ?>
 
 					<div class="field">
 						<p class="lbl">Retro</p>
@@ -426,7 +426,7 @@ use Ecommerce\Product\Type;
 				<!-- Add to cart -->
 				<div class="mar-t-4">
 
-					<?php if (($product->statusId && !$product->deleted) || $owner) { ?>
+					<?php if (($oldProduct->statusId && !$oldProduct->deleted) || $owner) { ?>
 
 						<button type="submit" id="submit" name="submit" class="add-to-cart button button--full-width">
 							<?= icon_embed('cart') ?>
@@ -435,9 +435,9 @@ use Ecommerce\Product\Type;
 
 					<?php } ?>
 
-					<?php if (!$product->isCustom && $product->type->blankId && $product->type->blankId != $product->id) { ?>
+					<?php if (!$oldProduct->isCustom && $oldProduct->type->blankId && $oldProduct->type->blankId != $oldProduct->id) { ?>
 
-						<p class="mar-t-1">Vuoi acquistare il prodotto senza grafica? <a class="txt-bold txt-c-title" href="<?= $product->type->blankProduct->clientUrl ?>">Clicca qui</a>.</p>
+						<p class="mar-t-1">Vuoi acquistare il prodotto senza grafica? <a class="txt-bold txt-c-title" href="<?= $oldProduct->type->blankProduct->clientUrl ?>">Clicca qui</a>.</p>
 
 					<?php } ?>
 

@@ -3,18 +3,18 @@
 $desc = null;
 $dett = null;
 
-$res = DB::select('* FROM items_info WHERE itemID=' . $product->id);
+$res = DB::select('* FROM items_info WHERE itemID=' . $oldProduct->id);
 
 if ($row = $res->fetch_assoc()) {
 	$desc = $row['description'];
 	$dett = str_replace(array('-', "\r\n"), array('&middot;', '<br>'), $row['details']);
-} else if (!$product->isCustom) {
+} else if (!$oldProduct->isCustom) {
 	include_once('descriptions.php');
 }
 
 ?>
 
-<?php if ($desc || $dett || $product->coverImage) { ?>
+<?php if ($desc || $dett || $oldProduct->coverImage) { ?>
 
 	<section id="info-sec" class="va-cen">
 
@@ -46,7 +46,7 @@ if ($row = $res->fetch_assoc()) {
 							<h3 class="desc_stitle">Descrizione</h3>
 							<p class="desc_txt"><?= $desc ?? '-' ?></p><br>
 
-							<?php if (!$product->isCustom) { ?>
+							<?php if (!$oldProduct->isCustom) { ?>
 								<h3 class="desc_stitle">Dettagli prodotto</h3>
 								<p class="desc_txt"><?= $dett ?? '-' ?></p>
 							<?php } ?>
@@ -78,8 +78,8 @@ if ($row = $res->fetch_assoc()) {
 								<div id="revpop-bgr" onClick="$(this).parent().hide();"></div>
 								<div id="revpop-box">
 									<?php
-										$res_exs = mysqli_query($con, "SELECT ID FROM reviews WHERE userID=$userID AND typeID=$product->typeID->slug LIMIT 1");
-										$res_ava = mysqli_query($con, "SELECT ID FROM orders WHERE buyer=$userID AND typeID=$product->typeID->slug LIMIT 1");
+										$res_exs = mysqli_query($con, "SELECT ID FROM reviews WHERE userID=$userID AND typeID=$oldProduct->typeID->slug LIMIT 1");
+										$res_ava = mysqli_query($con, "SELECT ID FROM orders WHERE buyer=$userID AND typeID=$oldProduct->typeID->slug LIMIT 1");
 
 										if (mysqli_num_rows($res_exs)) {?>
 
@@ -119,11 +119,11 @@ if ($row = $res->fetch_assoc()) {
 
 		<?php } ?>
 
-		<?php if ($product->coverImage) { ?>
+		<?php if ($oldProduct->coverImage) { ?>
 
 			<div id="info-rig" class="hei-100">
 
-				<img src="<?= $product->clientCoverImage ?>" class="image-cover">
+				<img src="<?= $oldProduct->clientCoverImage ?>" class="image-cover">
 
 				<?php /*
 			<div id="info-rev-list" class="info-rev">

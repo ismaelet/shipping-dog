@@ -44,7 +44,7 @@ $dett_lss_it = $dett_lss_en = "&middot; Tessuto: 100% cotone jersey<br>&middot; 
 $desc_und_it = $desc_und_en = "Intimo uomo moderno e confortevole. I capi sono già stati pre-lavati per evitare che si restringano dopo il primo lavaggio.";
 $dett_und_it = $dett_und_en = "&middot; Tessuto: 95% cotone, 5% elastan<br>&middot; Densità: 150 g/m²<br>&middot; Fascia elasticizzata<br>&middot; Tessuto frontale a doppio strato<br>&middot; Lavabile a 60&deg;";
 
-if (isset($product)) {
-	$desc = isset(${'desc_' . $product->type->slug . '_' . 'it'}) ? ${'desc_' . $product->type->slug . '_' . 'it'} : '-';
-	$dett = isset(${'dett_' . $product->type->slug . '_' . 'it'}) ? ${'dett_' . $product->type->slug . '_' . 'it'} : '-';
+if (isset($oldProduct)) {
+	$desc = isset(${'desc_' . $oldProduct->type->slug . '_' . 'it'}) ? ${'desc_' . $oldProduct->type->slug . '_' . 'it'} : '-';
+	$dett = isset(${'dett_' . $oldProduct->type->slug . '_' . 'it'}) ? ${'dett_' . $oldProduct->type->slug . '_' . 'it'} : '-';
 }

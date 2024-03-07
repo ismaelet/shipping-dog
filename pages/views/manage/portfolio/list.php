@@ -24,7 +24,7 @@ use Ecommerce\Product;
 				Carica una grafica
 			</a>
 
-			<?php if ($seller->custom) { ?>
+			<?php if ($seller->custom || $customProductsCount) { ?>
 
 				<a href="<?= client_url('/manage/portfolio/product') ?>" class="button button--secondary button--auto-width button--dashed">
 					<?= icon_embed('upload') ?>
@@ -80,6 +80,7 @@ use Ecommerce\Product;
 				<h2 class="section-title fa-center">Prodotti personalizzati</h2>
 
 				<div class="grid-flow js-sortable" data-spacing="400" data-columns="15rem">
+
 					<?php while ($productRow = $customProducts->fetch_assoc()) {
 						$product = new Product($productRow['ID']);
 					?>
@@ -99,10 +100,12 @@ use Ecommerce\Product;
 								<?php if (!$product->statusId) { ?>
 									<p class="fc-warning">Non pubblicato</p>
 								<?php } ?>
+
 							</div>
 						</div>
 
 					<?php } ?>
+
 				</div>
 			</div>
 

@@ -43,12 +43,12 @@ use App\View\Components\Interactions\FollowButton;
 <?php } ?>
 
 <!-- Tags -->
-<?php if ($product->design->tags) { ?>
+<?php if ($oldProduct->design->tags) { ?>
 
 	<section id="tag-sec" class="">
 		<div id="tag-block" class="main-wrap txt-cen pad-t-3">
 
-			<?php foreach ($product->design->tags as $slug) {
+			<?php foreach ($oldProduct->design->tags as $slug) {
 				$slug = str_replace('#', '', $slug);
 			?>
 

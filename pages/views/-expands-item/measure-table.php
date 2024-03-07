@@ -23,9 +23,9 @@
 
 					<p class="txt-bold txt-line">Altezza:</p>
 
-					<?php foreach ($product->type->sizes as $size) {
+					<?php foreach ($oldProduct->type->sizes as $size) {
 
-						$measures = DB::find('val FROM items_types_measures WHERE typeId=? AND size=?', [$product->type->id, $size]);
+						$measures = DB::find('val FROM items_types_measures WHERE typeId=? AND size=?', [$oldProduct->type->id, $size]);
 
 					?>
 
@@ -39,8 +39,8 @@
 
 				</div>
 
-				<?php if (DB::exists('items_types_measures WHERE typeId=? AND size=?', [$product->type->id, 'mat'])) { ?>
-					<p class="">Composizione: <?= DB::find('val FROM items_types_measures WHERE typeId=? AND size=?', [$product->type->id, 'mat']) ?></p>
+				<?php if (DB::exists('items_types_measures WHERE typeId=? AND size=?', [$oldProduct->type->id, 'mat'])) { ?>
+					<p class="">Composizione: <?= DB::find('val FROM items_types_measures WHERE typeId=? AND size=?', [$oldProduct->type->id, 'mat']) ?></p>
 				<?php } ?>
 
 			</div>

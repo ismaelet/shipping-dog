@@ -1,11 +1,13 @@
 <?php
 
-use Ecommerce\Product;
+use App\Models\Ecommerce\Product;
+use Ecommerce\Product as OldProduct;
 use Ecommerce\Product\Color;
 use Ecommerce\Product\Type;
 
 $productId = $_GET['id'] ?? null;
-$product = $productId ? new Product($productId) : null;
+$oldProduct = $productId ? new OldProduct($productId) : null;
+$product = Product::find($productId);
 $seller = View::get('seller');
 $saved = $_GET['saved'] ?? false;
 
@@ -38,8 +40,18 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 
 	if (isset($_POST['add'])) {
 		// add
-		$productId = DB::add('items (name, desID, userID, typeID, colorID, colors, positions, status)', [$name, 0, $seller->id, $typeId, $defaultColorId, $newColors, 1, 0]);
-		$product = new Product($productId);
+		$product = new Product();
+		$product->name = $name;
+		$product->desID = 0;
+		$product->userID = $seller->id;
+		$product->typeID = $typeId;
+		$product->colorID = $defaultColorId;
+		$product->colors = $newColors;
+		$product->status = 1;
+		$product->positions = 0;
+		$product->save();
+
+		$oldProduct = new OldProduct($product->ID);
 
 		// upload product images
 		if (!empty($_POST['colors'])) {
@@ -47,23 +59,28 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 				$colorId = DB::find('ID FROM items_colors WHERE tag = ?', [$colorSlug]);
 
 				if ($_FILES['file-' . $colorId]['name']) {
-					upload_product_image($product, $colorId);
+					upload_product_image($oldProduct, $colorId);
 				}
 			}
 		}
 	} else {
 		// edit
-		DB::update('items SET name = ?, typeID = ?, colorID = ?, colors = ? ', [$name, $typeId, $defaultColorId, $newColors, $product->id]);
+		$product->update([
+			'name' => $name,
+			'typeID' => $typeId,
+			'colorID' => $defaultColorId,
+			'colors' => $newColors
+		]);
 	}
 
-	DB::put('items_info', ['description' => $description], $product->id);
+	DB::put('items_info', ['description' => $description], $oldProduct->id);
 
 	// price
-	if (!DB::exists('items_prices WHERE itemID = ?', [$product->id])) {
-		DB::add('items_prices (itemID, price, gain_w, gain_c)', [$product->id, $product->fullPrice, $product->whiteGain, $product->coloredGain]);
+	if (!DB::exists('items_prices WHERE itemID = ?', [$oldProduct->id])) {
+		DB::add('items_prices (itemID, price, gain_w, gain_c)', [$oldProduct->id, $oldProduct->fullPrice, $oldProduct->whiteGain, $oldProduct->coloredGain]);
 	}
 
-	$product->updatePrice($price);
+	$oldProduct->updatePrice($price);
 
 	// update cover image
 	if ($_FILES['cover-image']['name']) {
@@ -72,18 +89,18 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 			'name' => 'cover-image',
 			'size' => 2000,
 			'quality' => 80,
-			'url' => SERVER_ROOT . $product->coverImage
+			'url' => SERVER_ROOT . $oldProduct->coverImage
 		];
 
 		upload_img($imageData);
 	}
 
-	redirect('?id=' . $product->id . '&saved=1');
+	redirect('?id=' . $oldProduct->id . '&saved=1');
 }
 
 // delete
 if (isset($_POST['delete'])) {
-	$product->delete();
+	$oldProduct->delete();
 
 	redirect('list');
 }
@@ -92,19 +109,19 @@ if (isset($_POST['delete'])) {
 if (isset($_POST['upload'])) {
 	$colorId = $_POST['upload'];
 
-	upload_product_image($product, $colorId);
+	upload_product_image($oldProduct, $colorId);
 
 	redirect('#active-colors');
 }
 
-function upload_product_image($product, $colorId) {
+function upload_product_image($oldProduct, $colorId) {
 	$files = [
 		['size' => 1024, 'quality' => 90],
 		['size' => 400, 'quality' => 80],
 	];
 
 	foreach ($files as $file) {
-		$url = $product->setColorId($colorId)->getServerSpecificImage($file['size']);
+		$url = $oldProduct->setColorId($colorId)->getServerSpecificImage($file['size']);
 
 		$imageData = [
 			'mode' => 'max',
