@@ -2,6 +2,7 @@ error.log
 composer.lock
 package-lock.json
 
+logs/
 vendor/
 uploads/
 node_modules/

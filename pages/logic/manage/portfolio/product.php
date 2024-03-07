@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\Ecommerce\Product;
+use App\Models\Ecommerce\Product\ProductColor;
+use App\Models\Ecommerce\Product\ProductPrice;
+use App\Models\Ecommerce\Product\ProductType;
 use Ecommerce\Product as OldProduct;
 use Ecommerce\Product\Color;
 use Ecommerce\Product\Type;
@@ -33,23 +36,25 @@ while ($colorRow = $colorRows->fetch_assoc()) {
 if (isset($_POST['add']) || isset($_POST['edit'])) {
 	$name = $_POST['name'];
 	$typeId = $_POST['typeId'];
+	$type = ProductType::find($typeId);
 	$price = str_replace(',', '.', $_POST['price']);
 	$description = $_POST['description'];
 	$defaultColorId = $_POST['default-color-id'];
 	$newColors = implode(',', $_POST['colors'] ?? [$defaultColorId]);
+	$positionId = $type->positions ? explode(',', $type->positions)[0] : null;
 
 	if (isset($_POST['add'])) {
 		// add
-		$product = new Product();
-		$product->name = $name;
-		$product->desID = 0;
-		$product->userID = $seller->id;
-		$product->typeID = $typeId;
-		$product->colorID = $defaultColorId;
-		$product->colors = $newColors;
-		$product->status = 1;
-		$product->positions = 0;
-		$product->save();
+		$product = Product::create([
+			'name' => $name,
+			'desID' => 0,
+			'userID' => $seller->id,
+			'typeID' => $typeId,
+			'colorID' => $defaultColorId,
+			'colors' => $newColors,
+			'status' => 1,
+			'positions' => $positionId,
+		]);
 
 		$oldProduct = new OldProduct($product->ID);
 
@@ -75,14 +80,14 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 
 	DB::put('items_info', ['description' => $description], $oldProduct->id);
 
-	// price
-	if (!DB::exists('items_prices WHERE itemID = ?', [$oldProduct->id])) {
-		DB::add('items_prices (itemID, price, gain_w, gain_c)', [$oldProduct->id, $oldProduct->fullPrice, $oldProduct->whiteGain, $oldProduct->coloredGain]);
-	}
+	// Price
+	ProductPrice::updateOrCreate(['itemID' => $product->ID], [
+		'price' => $price,
+		'gain_w' => $oldProduct->whiteGain,
+		'gain_c' => $oldProduct->coloredGain
+	]);
 
-	$oldProduct->updatePrice($price);
-
-	// update cover image
+	// Update cover image
 	if ($_FILES['cover-image']['name']) {
 		$imageData = [
 			'mode' => 'max',
@@ -108,6 +113,14 @@ if (isset($_POST['delete'])) {
 // image upload
 if (isset($_POST['upload'])) {
 	$colorId = $_POST['upload'];
+	$color = ProductColor::find($colorId);
+	$colors = explode(',', $product->colors);
+
+	if (!in_array($color->tag, $colors)) {
+		$colors[] = $color->tag;
+		$product->colors = implode(',', $colors);
+		$product->save();
+	}
 
 	upload_product_image($oldProduct, $colorId);
 

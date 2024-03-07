@@ -435,9 +435,9 @@ use Ecommerce\Product\Type;
 
 					<?php } ?>
 
-					<?php if (!$oldProduct->isCustom && $oldProduct->type->blankId && $oldProduct->type->blankId != $oldProduct->id) { ?>
+					<?php if (!$oldProduct->isCustom && $product->blankProduct()) { ?>
 
-						<p class="mar-t-1">Vuoi acquistare il prodotto senza grafica? <a class="txt-bold txt-c-title" href="<?= $oldProduct->type->blankProduct->clientUrl ?>">Clicca qui</a>.</p>
+						<p class="mar-t-1">Vuoi acquistare il prodotto senza grafica? <a class="txt-bold txt-c-title" href="<?= $product->blankProduct()->clientUrl() ?>">Clicca qui</a>.</p>
 
 					<?php } ?>
 

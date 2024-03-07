@@ -8,5 +8,5 @@ class ProductPrice extends Model {
 
 	protected $primaryKey = 'itemID';
 	protected $table = 'items_prices';
-	protected $fillable = [];
+	protected $fillable = ['itemID', 'price', 'gain_w', 'gain_c'];
 }

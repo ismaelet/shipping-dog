@@ -12,7 +12,7 @@ class Product extends Model {
 
 	protected $primaryKey = 'ID';
 	protected $table = 'items';
-	protected $fillable = ['status'];
+	protected $fillable = ['name', 'desID', 'userID', 'typeID', 'colorID', 'colors', 'status', 'positions'];
 
 	/**
 	 * Get the product's type
@@ -44,6 +44,32 @@ class Product extends Model {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get the product's url
+	 */
+	public function url(): string {
+		return '/shop/item?id=' . $this->ID;
+	}
+
+	/**
+	 * Get the product's url, relative to the client root
+	 */
+	public function clientUrl(): string {
+		return public_client_url($this->url());
+	}
+
+	/**
+	 * Get the base product, without any design
+	 */
+	public function blankProduct(): ?self {
+		return self::where('ID', '!=', $this->ID)
+			->where('typeID', $this->typeID)
+			->where('status', 1)
+			->where('userID', 1)
+			->oldest()
+			->first();
 	}
 
 	/**

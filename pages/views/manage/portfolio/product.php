@@ -103,7 +103,9 @@
 								<?= $color->name ?>
 							</p>
 
-							<?php if ($oldProduct) {
+							<?php
+
+							if ($oldProduct) {
 								$oldProduct->setColorId($color->id);
 							}
 
@@ -129,13 +131,18 @@
 			</div>
 
 			<?php if ($oldProduct && $oldProduct->hasSpecificCoverImage) { ?>
+
 				<label class="replace-image">
 					<input type="file" name="cover-image" onchange="$('.js-submit').click()">
 					<img class="product-cover-image" src="<?= client_path($oldProduct->coverImage) ?>">
 				</label>
+
 			<?php } else { ?>
+
 				<input type="file" class="inp" name="cover-image">
+
 			<?php } ?>
+
 		</div>
 	</div>
 
