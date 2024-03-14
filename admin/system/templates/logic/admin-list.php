@@ -1,6 +1,9 @@
 <?php
 
 // setup variables
+
+use function Ecommerce\format_price;
+
 $values = [];
 $listRows = [];
 $currentPage = $_GET['page'] ?? 1;

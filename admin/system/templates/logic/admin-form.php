@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\FormController;
+
 $id = $_GET['id'] ?? null;
 $entry = View::get('entry') ?? null;
 $queryConfig = View::get('queryConfig');
@@ -49,16 +51,24 @@ if ($pageConfig['edit']) {
 
 // add
 if (isset($_POST['add'])) {
-	if (function_exists('_expand_add')) $error = _expand_add($queryConfig['table'], $inputs);
-	else form_db_add($queryConfig['table'], $inputs);
+	if (FormController::add()) {
+	} else if (function_exists('_expand_add')) {
+		$error = _expand_add($queryConfig['table'], $inputs);
+	} else {
+		form_db_add($queryConfig['table'], $inputs);
+	}
 
-	if (!$error) header('Location: ' . $pageConfig['return-url']);
+	header('Location: ' . $pageConfig['return-url']);
 }
 
 // edit
 if (isset($_POST['edit'])) {
-	if (function_exists('_expand_edit')) $error = _expand_edit($queryConfig['table'], $inputs, $queryConfig['index-field'], $id);
-	else form_db_update($queryConfig['table'], $inputs, $queryConfig['index-field'], $id);
+	if (FormController::edit(['id' => $id])) {
+	} else if (function_exists('_expand_edit')) {
+		$error = _expand_edit($queryConfig['table'], $inputs, $queryConfig['index-field'], $id);
+	} else {
+		form_db_update($queryConfig['table'], $inputs, $queryConfig['index-field'], $id);
+	}
 
-	if (!$error) header('Location: ' . $pageConfig['return-url']);
+	header('Location: ' . $pageConfig['return-url']);
 }

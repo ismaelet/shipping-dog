@@ -16,8 +16,6 @@ $query['where-search'] = "
 	name_it LIKE CONCAT('%',?,'%') OR
 	names_it LIKE CONCAT('%',?,'%')
 ";
-$queryConfig['order-index'] = 'category ASC, hidden ASC, sort';
-$queryConfig['order-direction'] = 'ASC';
 
 /*
 * Fields

@@ -1,20 +1,20 @@
 <?php
 
-/*
-* Page configuration
-*/
+/**
+ * Page configuration
+ */
 // $pageConfig['confirm'] = $pageConfig['confirm'] ?? null;
 
-/*
-* Query configuration
-*/
+/**
+ * Query configuration
+ */
 $queryConfig['table'] = 'admin_categories';
 $queryConfig['index-field'] = 'id';
 $queryConfig['title-field'] = 'name';
 
-/*
-* Form fields
-*/
+/**
+ * Form fields
+ */
 $inputs = [
 	[
 		['type' => 'lbl', 'text' => 'Nome'],
@@ -33,9 +33,9 @@ $inputs = [
 	],
 ];
 
-/*
-* Form handling
-*/
+/**
+ * Form handling
+ */
 function _expand_edit($table, $inputs, $index, $id) {
 	$old = DB::find('slug FROM admin_categories WHERE id = ?', $id);
 
