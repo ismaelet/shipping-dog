@@ -3,6 +3,7 @@
 /*
 * Page configuration
 */
+$pageConfig['row-action'] = 'add?id={{id}}';
 
 /*
 * Query configuration

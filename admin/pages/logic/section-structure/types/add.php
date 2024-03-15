@@ -3,12 +3,18 @@
 use App\Http\Controllers\Admin\FormController;
 use App\Models\Ecommerce\BasePrice;
 use App\Models\Ecommerce\Design;
+use App\Models\Ecommerce\Product;
+use App\Models\Ecommerce\Product\ProductColor;
+use App\Models\Ecommerce\Product\ProductPosition;
+use App\Models\Ecommerce\Product\ProductSize;
 use App\Models\Ecommerce\Product\ProductTypeMeasure;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
-use Ecommerce\Product;
+use Ecommerce\Product as OldProduct;
 
 global $id;
+
+$productType = $id ? ProductType::find($id) : null;
 
 /**
  * Query configuration
@@ -66,34 +72,72 @@ $inputs = [
 	],
 ];
 
-//sizes
-$array = [['type' => 'lbl', 'text' => 'Taglie']];
-$typeSizes = explode(',', DB::find('sizes FROM items_types WHERE ID = ?', [$id]));
+// Colors
+$array = [['type' => 'lbl', 'text' => 'Colori']];
+$typeColors = $productType ? $productType->colorCollection()->pluck('tag')->toArray() : [];
+$colors = ProductColor::all()->sortBy('ID')->sortBy('reorder');
 
-$res = DB::select('tag, name FROM items_sizes ORDER BY ID ASC');
+foreach ($colors as $color) {
+	$colorInput = [
+		'type' => 'cbx',
+		'name' => 'colors[]',
+		'value' => $color->tag,
+		'ignore' => true,
+		'text' => $color->name_it,
+		'size' => 1
+	];
 
-while ($row = $res->fetch_assoc()) {
+	if ($productType && in_array($color->tag, $typeColors)) {
+		$colorInput['checked'] = true;
+	}
 
-	$size = ['type' => 'cbx', 'name' => 'sizes[]', 'value' => $row['tag'], 'ignore' => true, 'text' => $row['name'], 'size' => 1];
-
-	if (in_array($row['tag'], $typeSizes)) $size['checked'] = true;
-
-	$array[] = $size;
+	$array[] = $colorInput;
 }
 
 $inputs[] = $array;
 
-//positions
+// Sizes
+$array = [['type' => 'lbl', 'text' => 'Taglie']];
+$typeSizes = $productType ? $productType->sizeCollection()->pluck('tag')->toArray() : [];
+$sizes = ProductSize::all()->sortBy('ID');
+
+foreach ($sizes as $size) {
+	$sizeInput = [
+		'type' => 'cbx',
+		'name' => 'sizes[]',
+		'value' => $size->tag,
+		'ignore' => true,
+		'text' => $size->name,
+		'size' => 1
+	];
+
+	if ($productType && in_array($size->tag, $typeSizes)) {
+		$sizeInput['checked'] = true;
+	}
+
+	$array[] = $sizeInput;
+}
+
+$inputs[] = $array;
+
+// Positions
 $array = [['type' => 'lbl', 'text' => 'Posizioni di stampa']];
-$typePositions = explode(',', DB::find('positions FROM items_types WHERE ID = ?', [$id]));
+$typePositions = $productType ? $productType->positionCollection()->pluck('ID')->toArray() : [];
+$positions = ProductPosition::all()->sortBy('ID');
 
-$res = DB::select('ID, name_it FROM items_positions ORDER BY ID ASC');
+foreach ($positions as $position) {
+	$size = [
+		'type' => 'cbx',
+		'name' => 'positions[]',
+		'value' => $position->ID,
+		'ignore' => true,
+		'text' => $position->name_it,
+		'size' => 1
+	];
 
-while ($row = $res->fetch_assoc()) {
-
-	$size = ['type' => 'cbx', 'name' => 'positions[]', 'value' => $row['ID'], 'ignore' => true, 'text' => $row['name_it'], 'size' => 1];
-
-	if (in_array($row['ID'], $typePositions)) $size['checked'] = true;
+	if ($productType && in_array($position->ID, $typePositions)) {
+		$size['checked'] = true;
+	}
 
 	$array[] = $size;
 }
@@ -112,6 +156,7 @@ FormController::setAdd(function () {
 			'gender' => $_POST['gender'],
 			'sibling' => $_POST['sibling'],
 			'unisex' => $_POST['unisex'] ?? 0,
+			'colors' => implode(',', $_POST['colors']),
 			'sizes' => implode(',', $_POST['sizes']),
 			'positions' => implode(',', $_POST['positions']),
 		]
@@ -143,11 +188,44 @@ FormController::setAdd(function () {
 	$designs = Design::where('status', 1);
 
 	foreach ($designs as $design) {
-		Product::new($design->ID, $type->ID);
+		OldProduct::new($design->ID, $type->ID);
 	}
 });
 
-//edit
-function _expand_edit($tbl, $inputs, $index, $id) {
-	form_db_update($tbl, $inputs, $index, $id);
-}
+// Edit the type
+FormController::setEdit(function ($id) {
+	$productType = ProductType::find($id);
+	$oldColors = $productType->colorCollection()->pluck('tag')->toArray();
+	$newColors = $_POST['colors'];
+	$colorsToAdd = array_diff($newColors, $oldColors);
+	$colorsToRemove = array_diff($oldColors, $newColors);
+
+	// Create the type
+	$productType->update(
+		[
+			'tag' => $_POST['tag'],
+			'name' => $_POST['name'],
+			'name_it' => $_POST['name_it'],
+			'names_it' => $_POST['names_it'],
+			'gender' => $_POST['gender'],
+			'sibling' => $_POST['sibling'],
+			'unisex' => $_POST['unisex'] ?? 0,
+			'colors' => implode(',', $_POST['colors']),
+			'sizes' => implode(',', $_POST['sizes']),
+			'positions' => implode(',', $_POST['positions']),
+		]
+	);
+
+	// Add the new colors
+	foreach ($colorsToAdd as $color) {
+		DB::update((new Product)->getTable() . " SET colors = CONCAT(colors, ',$color') WHERE typeID = ?", [$productType->ID]);
+		DB::update((new Product)->getTable() . " SET colors = TRIM(LEADING ',' FROM colors) WHERE typeID = ?", [$productType->ID]);
+	}
+
+	// Remove the old colors
+	foreach ($colorsToRemove as $color) {
+		DB::update((new Product)->getTable() . " SET colors = CONCAT(',', colors, ',') WHERE typeID = ?", [$productType->ID]);
+		DB::update((new Product)->getTable() . " SET colors = REPLACE(colors, ',$color,', ',') WHERE typeID = ?", [$productType->ID]);
+		DB::update((new Product)->getTable() . " SET colors = TRIM(BOTH ',' FROM colors) WHERE typeID = ?", [$productType->ID]);
+	}
+});
