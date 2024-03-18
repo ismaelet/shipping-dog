@@ -12,20 +12,20 @@ img {
 }
 
 /* Title */
-.section-title {
+.section-heading {
 	margin-bottom: 2rem;
 	font-size: 2rem;
 	font-weight: 500;
 }
 
-.section-title-box {
+.section-heading-box {
 	display: grid;
 	grid-template-columns: auto max-content;
 	margin-bottom: 2rem;
 	align-items: center;
 }
 
-.section-title-box .section-title {
+.section-heading-box .section-heading {
 	margin-bottom: 0;
 }
 
@@ -59,11 +59,11 @@ main .pbtn:hover::before {
 }
 
 @media (max-width: 480px) {
-	.section-title-box {
+	.section-heading-box {
 		grid-template-columns: 1fr;
 	}
 
-	.section-title-box .more {
+	.section-heading-box .more {
 		margin-top: 0.5rem;
 		text-align: left;
 	}

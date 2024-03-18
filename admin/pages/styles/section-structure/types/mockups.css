@@ -9,3 +9,39 @@
 	width: 100%;
 	aspect-ratio: 1;
 }
+
+.range-input {
+	display: grid;
+	grid-template-columns: auto max-content;
+	gap: 1rem;
+}
+
+.preview-image {
+	--max-height: calc(var(--max-y-size));
+}
+
+.preview-image img {
+	position: relative;
+}
+
+.max-printable-area {
+	position: relative;
+	top: calc(var(--starting-y-position) * 1%);
+	left: calc(var(--starting-x-position) * 1%);
+	width: calc(var(--max-x-size) * 1%);
+	height: calc(var(--max-height) * 1%);
+	background-color: hsl(220, 100%, 50%, 0.2);
+	border: 2px dashed hsl(220, 100%, 50%, 0.5);
+}
+
+.default-printable-area {
+	--default-width: calc(var(--max-x-size) * (var(--default-x-size)) / 100);
+	--printable-y-area: calc(var(--starting-y-position) + (var(--max-height) - var(--default-width)) * (var(--default-y-position) / 100));
+	position: relative;
+	top: calc((var(--printable-y-area) * 1%));
+	left: calc((var(--starting-x-position) + (var(--max-x-size) - var(--default-width)) / 2) * 1%);
+	width: calc(var(--default-width) * 1%);
+	aspect-ratio: 1;
+	background-color: hsl(0, 100%, 50%, 0.4);
+	border: 2px dashed hsl(0, 100%, 50%, 1);
+}

@@ -1,7 +1,7 @@
 <section id="designs">
 	<div class="main-wrap">
-		<div class="section-title-box">
-			<h2 class="section-title">Design popolari</h2>
+		<div class="section-heading-box">
+			<h2 class="section-heading">Design popolari</h2>
 
 			<a href="<?= client_url('/shop') ?>">
 				<p class="more txt-rig">Esplora tutti</p>

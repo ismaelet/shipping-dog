@@ -2,7 +2,7 @@
 
 <div id="head">
 
-	<h1 class="section-title text-center mb-12">Lista vendite</h1>
+	<h1 class="section-heading text-center mb-12">Lista vendite</h1>
 
 	<!-- Request -->
 	<?php

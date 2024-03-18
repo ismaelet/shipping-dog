@@ -5,7 +5,7 @@
 		<?= icon_embed('empty-cart') ?>
 	</div>
 
-	<h1 class="section-title">Il tuo carrello è vuoto</h1>
+	<h1 class="section-heading">Il tuo carrello è vuoto</h1>
 	<p class="text--big">Puoi cercare dei prodotti da acquistare qui</p>
 	<a href="<?= client_url('/shop') ?>" class="button">Catalogo</a>
 </div>

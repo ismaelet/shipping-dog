@@ -77,7 +77,7 @@ use Ecommerce\Product;
 		<?php if ($customProductsCount) { ?>
 
 			<div class="grid-flow" data-spacing="700">
-				<h2 class="section-title fa-center">Prodotti personalizzati</h2>
+				<h2 class="section-heading fa-center">Prodotti personalizzati</h2>
 
 				<div class="grid-flow js-sortable" data-spacing="400" data-columns="15rem">
 

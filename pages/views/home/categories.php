@@ -22,7 +22,7 @@
 	</section>
 
 	<div class="main-wrap mob480">
-		<h2 class="section-title">I nostri prodotti</h2>
+		<h2 class="section-heading">I nostri prodotti</h2>
 	</div>
 
 	<section class="featured-categories grid">

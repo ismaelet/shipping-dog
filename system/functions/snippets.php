@@ -101,7 +101,7 @@ function snippet_page_head(string $title = null, bool $contrastingBackground = t
 	<section class="page-head grid-flow stack-content center-content <?= $contrastingBackground ? 'contrasting-background' : '' ?>">
 		<div class="page-head__background fill-all background-fill" <?= background_image('head-background') ?>></div>
 		<div class="page-head__content main-wrap">
-			<h1 class="page-head__title section-title"><?= $title ?: View::$title ?></h1>
+			<h1 class="page-head__title section-heading"><?= $title ?: View::$title ?></h1>
 		</div>
 	</section>
 

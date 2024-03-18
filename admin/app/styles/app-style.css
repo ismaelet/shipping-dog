@@ -190,8 +190,8 @@ p .fw-black {
 	font-weight: var(--fw-medium);
 }
 
-.section-title {
-	font-size: min(4rem, 10vw);
+.section-heading {
+	font-size: min(2.5rem, 10vw);
 	font-weight: var(--fw-semibold);
 }
 
@@ -199,7 +199,7 @@ p .fw-black {
 	font-size: var(--fs-500);
 }
 
-.subsection-title {
+.subsection-heading {
 	font-size: var(--fs-500);
 }
 

@@ -49,7 +49,7 @@ main .main-wrap {
 	font-size: 0.9em;
 }
 
-.section-title {
+.section-heading {
 	border-bottom: 1px solid var(--surface-secondary);
 	padding-bottom: 1rem;
 	margin-bottom: 1.5rem;

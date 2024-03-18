@@ -210,7 +210,7 @@ p.error {
 	border-radius: 8px;
 }
 
-.section-title {
+.section-heading {
 	font-size: min(3rem, 10vw);
 	font-weight: var(--fw-semibold);
 }

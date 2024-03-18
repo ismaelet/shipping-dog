@@ -1,6 +1,6 @@
 <section id="shops">
 	<div class="main-wrap">
-		<h2 class="section-title">Negozi in evidenza</h2>
+		<h2 class="section-heading">Negozi in evidenza</h2>
 
 		<div class="pos-rel">
 			<section id="carousel-shops" class="carousel mob-fluid" data-pos="1" data-loop="1" style="--itemN: <?= count($sellers) ?>;">

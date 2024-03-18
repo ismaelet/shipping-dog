@@ -8,8 +8,8 @@ use Ecommerce\Design;
 	<div class="header">
 		<div class="main-wrap txt-cen">
 			<div class="grid">
-				<div class="section-title-box">
-					<h2 class="section-title">Le vostre foto</h2>
+				<div class="section-heading-box">
+					<h2 class="section-heading">Le vostre foto</h2>
 				</div>
 
 				<p class="mwid-600 mar-h-auto">Mandaci una foto con un nostro capo indossato su <a class="txt-c1-h" href="<?= sys_config('contact-instagram-link') ?>">Instagram</a>, <a class="txt-c1-h" href="<?= sys_config('contact-facebook') ?>">Facebook</a> o per <a class="txt-c1-h" href="<?= sys_config('contact-email-link') ?>">e-email</a> e ottieni subito un <strong>codice sconto del 15%</strong></p>

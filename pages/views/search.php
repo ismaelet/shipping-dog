@@ -31,7 +31,7 @@ use Ecommerce\Seller;
 		<?php if ($sellN) { ?>
 
 			<section id="shops" class="mar-b-4">
-				<h3 class="section-title">Negozi:</h3>
+				<h3 class="section-heading">Negozi:</h3>
 				<div class="gallery">
 
 					<?php while ($row = $res_sell->fetch_assoc()) {
@@ -55,7 +55,7 @@ use Ecommerce\Seller;
 		<?php if ($desN) { ?>
 
 			<section id="items">
-				<h3 class="section-title">Prodotti:</h3>
+				<h3 class="section-heading">Prodotti:</h3>
 				<div class="gallery">
 
 					<?php while ($row = $res_des->fetch_assoc()) {

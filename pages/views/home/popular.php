@@ -2,9 +2,9 @@
 
 	<div class="main-wrap">
 
-		<div class="section-title-box">
+		<div class="section-heading-box">
 
-			<h2 class="section-title">Articoli popolari</h2>
+			<h2 class="section-heading">Articoli popolari</h2>
 
 			<a href="<?= client_url('/shop') ?>">
 				<p class="more txt-rig">Esplora tutti</p>
