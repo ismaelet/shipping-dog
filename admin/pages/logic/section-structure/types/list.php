@@ -36,6 +36,7 @@ $fields = [
 
 $buttons = [
 	['title' => 'Mockup', 'color' => 'green', 'url' => 'mockups?id={{ID}}'],
+	['title' => 'Prezzi', 'color' => 'yellow', 'url' => 'prices?id={{ID}}'],
 ];
 
 function _expand_results(&$entry, $field, $key, $row) {

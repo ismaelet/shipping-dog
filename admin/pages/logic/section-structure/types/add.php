@@ -144,8 +144,21 @@ foreach ($positions as $position) {
 
 $inputs[] = $array;
 
+$inputs[] = [
+	['type' => 'lbl', 'text' => 'Stato'],
+	[
+		'type' => 'cbx',
+		'name' => 'public',
+		'checked' => $productType ? !$productType->hidden : false,
+		'ignore' => true,
+		'text' => 'Il tipo di prodotto è attivo',
+	]
+];
+
 // Add the type
 FormController::setAdd(function () {
+	$public = isset($_POST['public']);
+
 	// Create the type
 	$type =	ProductType::create(
 		[
@@ -159,6 +172,7 @@ FormController::setAdd(function () {
 			'colors' => implode(',', $_POST['colors']),
 			'sizes' => implode(',', $_POST['sizes']),
 			'positions' => implode(',', $_POST['positions']),
+			'hidden' => !$public,
 		]
 	);
 
@@ -185,16 +199,20 @@ FormController::setAdd(function () {
 		}
 	}
 
-	$designs = Design::where('status', 1);
+	$designs = Design::where('status', 1)->get();
 
-	foreach ($designs as $design) {
-		OldProduct::new($design->ID, $type->ID);
+	if ($public) {
+		foreach ($designs as $design) {
+			OldProduct::new($design->ID, $type->ID);
+		}
 	}
 });
 
 // Edit the type
 FormController::setEdit(function ($id) {
 	$productType = ProductType::find($id);
+	$oldStatus = !$productType->hidden;
+	$public = isset($_POST['public']);
 	$oldColors = $productType->colorCollection()->pluck('tag')->toArray();
 	$newColors = $_POST['colors'];
 	$colorsToAdd = array_diff($newColors, $oldColors);
@@ -213,6 +231,7 @@ FormController::setEdit(function ($id) {
 			'colors' => implode(',', $_POST['colors']),
 			'sizes' => implode(',', $_POST['sizes']),
 			'positions' => implode(',', $_POST['positions']),
+			'hidden' => !$public,
 		]
 	);
 
@@ -227,5 +246,15 @@ FormController::setEdit(function ($id) {
 		DB::update((new Product)->getTable() . " SET colors = CONCAT(',', colors, ',') WHERE typeID = ?", [$productType->ID]);
 		DB::update((new Product)->getTable() . " SET colors = REPLACE(colors, ',$color,', ',') WHERE typeID = ?", [$productType->ID]);
 		DB::update((new Product)->getTable() . " SET colors = TRIM(BOTH ',' FROM colors) WHERE typeID = ?", [$productType->ID]);
+	}
+
+	if (!$oldStatus && $public) {
+		$designs = Design::where('status', 1)->get();
+
+		foreach ($designs as $design) {
+			if (!Product::where('desID', $design->ID)->where('typeID', $productType->ID)->count()) {
+				OldProduct::new($design->ID, $productType->ID);
+			}
+		}
 	}
 });

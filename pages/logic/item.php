@@ -55,7 +55,7 @@ if (!$oldProduct->type->genderId || $oldProduct->type->genderId == 3) {
 			"items.ID FROM items
 		INNER JOIN items_types ON items.typeID = items_types.ID
 		WHERE desID = ? AND typeID <> ? AND category='c' AND items.status = 1 AND items.deleted = 0
-		ORDER BY items.sort ASC, items_types.sort ASC, items_types.ID ASC",
+		ORDER BY typeID ASC, items.sort ASC, items_types.sort ASC, items_types.ID ASC",
 			[$oldProduct->design->id, $oldProduct->type->id]
 		),
 		OldProduct::class
@@ -66,7 +66,7 @@ if (!$oldProduct->type->genderId || $oldProduct->type->genderId == 3) {
 			"items.ID FROM items
 		INNER JOIN items_types ON items.typeID = items_types.ID
 		WHERE desID = ? AND typeID <> ? AND category='c' AND (gender = ? OR gender=0 OR gender=3) AND items.status = 1 AND items.deleted = 0
-		ORDER BY items.sort ASC, items_types.sort ASC, items_types.ID ASC",
+		ORDER BY typeID ASC, items.sort ASC, items_types.sort ASC, items_types.ID ASC",
 			[$oldProduct->design->id, $oldProduct->type->id, $oldProduct->type->genderId]
 		),
 		OldProduct::class

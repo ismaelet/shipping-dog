@@ -1,9 +1,14 @@
 <?php
 
-//setup page
-$tbl = 'prices_default';
-$index = 'typeID';
-$index_show = 'typeID';
+/**
+ * Query configuration
+ */
+
+use App\Http\Controllers\Admin\FormController;
+
+$queryConfig['table'] = 'prices_default';
+$queryConfig['index-field'] = 'typeID';
+$queryConfig['title-field'] = 'typeID';
 
 //form
 $inputs = [
@@ -20,3 +25,6 @@ $inputs = [
 		['name' => 'gain_c', 'text' => 'Guadagni da capi colorati'],
 	],
 ];
+
+// FormController::setEdit(function ($id) {
+// });

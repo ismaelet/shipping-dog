@@ -183,6 +183,10 @@
 	--_color: orange;
 }
 
+.admin-list__button[data-color='yellow'] {
+	--_color: yellow;
+}
+
 .admin-list__button[data-color='purple'] {
 	--_color: blueviolet;
 }
