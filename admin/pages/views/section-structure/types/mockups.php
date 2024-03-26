@@ -17,18 +17,18 @@
 				</div>
 
 				<div class="">
-					<label class="label" for="siz_x_max">Dimensione orizzontale massima</label>
+					<label class="label" for="pos_x_min">Posizione orizzontale minima</label>
 					<div class="range-input">
-						<input type="range" id="siz_x_max" name="siz_x_max" value="<?= $mockupData->siz_x_max ?>" min="0" max="100" step="1">
-						<p class="range-text"><span><?= $mockupData->siz_x_max ?></span> %</p>
+						<input type="range" id="pos_x_min" name="pos_x_min" value="<?= $mockupData->pos_x_min ?>" min="0" max="100" step="1">
+						<p class="range-text"><span><?= $mockupData->pos_x_min ?></span> %</p>
 					</div>
 				</div>
 
 				<div class="">
-					<label class="label" for="siz_y_max">Dimensione verticale massima</label>
+					<label class="label" for="siz_x_max">Dimensione orizzontale massima</label>
 					<div class="range-input">
-						<input type="range" id="siz_y_max" name="siz_y_max" value="<?= $mockupData->siz_y_max ?>" min="0" max="100" step="1">
-						<p class="range-text"><span><?= $mockupData->siz_y_max ?></span> %</p>
+						<input type="range" id="siz_x_max" name="siz_x_max" value="<?= $mockupData->siz_x_max ?>" min="0" max="100" step="1">
+						<p class="range-text"><span><?= $mockupData->siz_x_max ?></span> %</p>
 					</div>
 				</div>
 
@@ -41,10 +41,18 @@
 				</div>
 
 				<div class="">
-					<label class="label" for="pos_x_min">Posizione orizzontale minima</label>
+					<label class="label" for="pos_y_min">Posizione verticale minima</label>
 					<div class="range-input">
-						<input type="range" id="pos_x_min" name="pos_x_min" value="<?= $mockupData->pos_x_min ?>" min="0" max="100" step="1">
-						<p class="range-text"><span><?= $mockupData->pos_x_min ?></span> %</p>
+						<input type="range" id="pos_y_min" name="pos_y_min" value="<?= $mockupData->pos_y_min ?>" min="0" max="100" step="1">
+						<p class="range-text"><span><?= $mockupData->pos_y_min ?></span> %</p>
+					</div>
+				</div>
+
+				<div class="">
+					<label class="label" for="siz_y_max">Dimensione verticale massima</label>
+					<div class="range-input">
+						<input type="range" id="siz_y_max" name="siz_y_max" value="<?= $mockupData->siz_y_max ?>" min="0" max="100" step="1">
+						<p class="range-text"><span><?= $mockupData->siz_y_max ?></span> %</p>
 					</div>
 				</div>
 
@@ -56,20 +64,12 @@
 					</div>
 				</div>
 
-				<div class="">
-					<label class="label" for="pos_y_min">Posizione verticale minima</label>
-					<div class="range-input">
-						<input type="range" id="pos_y_min" name="pos_y_min" value="<?= $mockupData->pos_y_min ?>" min="0" max="100" step="1">
-						<p class="range-text"><span><?= $mockupData->pos_y_min ?></span> %</p>
-					</div>
-				</div>
-
 				<button type="submit" class="button mt-8" name="edit">Salva</button>
 			</form>
 
 			<div class="preview-image grid stack-content" style="--default-x-size: <?= $mockupData->siz_x_def ?>; --max-x-size: <?= $mockupData->siz_x_max ?>; --max-y-size: <?= $mockupData->siz_y_max ?>; --default-x-position: <?= $mockupData->pos_x_def ?>; --starting-x-position: <?= $mockupData->pos_x_min ?>; --default-y-position: <?= $mockupData->pos_y_def ?>; --starting-y-position: <?= $mockupData->pos_y_min ?>;">
 				<img src="<?= public_client_path('/app/assets/mockups/bgr/grey.png') ?>" alt="">
-				<img src="<?= public_client_path($mockupData->clothingImage(1)) ?>" alt="">
+				<img src="<?= public_client_path($mockupData->clothingImage()) ?>" alt="">
 
 				<div class="max-printable-area"></div>
 				<div class="default-printable-area"></div>

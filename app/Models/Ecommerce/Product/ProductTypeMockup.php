@@ -33,7 +33,7 @@ class ProductTypeMockup extends Model {
 	 * Get the clothing image path
 	 */
 	public function clothingImage(?int $colorId = null, ?int $positionId = null): string {
-		$colorId = $colorId ?: 1;
+		$colorId = $colorId ?: $this->type->colorCollection()->first()->ID;
 		$positionId = $positionId ?: 1;
 		$color = ProductColor::find($colorId);
 		$position = ProductPosition::find($positionId);

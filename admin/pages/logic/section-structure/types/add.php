@@ -44,6 +44,15 @@ $inputs = [
 		['name' => 'names_it', 'text' => 'Nome plurale mostrato ai clienti'],
 	],
 	[
+		['type' => 'lbl', 'text' => 'Categoria'],
+		[
+			'type' => 'select',
+			'name' => 'category',
+			'text' => 'Categoria',
+			'array' => [['c', 'Abbigliamento'], ['m', 'Accessorio']],
+		],
+	],
+	[
 		['type' => 'lbl', 'text' => 'Genere'],
 		[
 			'type' => 'select',
@@ -166,6 +175,7 @@ FormController::setAdd(function () {
 			'name' => $_POST['name'],
 			'name_it' => $_POST['name_it'],
 			'names_it' => $_POST['names_it'],
+			'category' => $_POST['category'],
 			'gender' => $_POST['gender'],
 			'sibling' => $_POST['sibling'],
 			'unisex' => $_POST['unisex'] ?? 0,
@@ -225,6 +235,7 @@ FormController::setEdit(function ($id) {
 			'name' => $_POST['name'],
 			'name_it' => $_POST['name_it'],
 			'names_it' => $_POST['names_it'],
+			'category' => $_POST['category'],
 			'gender' => $_POST['gender'],
 			'sibling' => $_POST['sibling'],
 			'unisex' => $_POST['unisex'] ?? 0,

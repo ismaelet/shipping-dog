@@ -8,5 +8,5 @@ class BasePrice extends Model {
 
 	protected $primaryKey = 'typeID';
 	protected $table = 'prices_default';
-	protected $fillable = ['price', 'gain_w', 'gain_c'];
+	protected $fillable = ['typeID', 'price', 'gain_w', 'gain_c'];
 }

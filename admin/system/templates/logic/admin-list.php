@@ -141,7 +141,7 @@ while ($queryRow = $queryResults->fetch_assoc()) {
 					$entry['value'] = format($entry['value']);
 					break;
 				case 'price':
-					$entry['value'] = function_exists('format_price') ? format_price($entry['value']) : format($entry['value']);
+					$entry['value'] = format_price($entry['value']);
 					break;
 				case 'date-day':
 					$entry['value'] = date('Y-m-d', strtotime($entry['value']));

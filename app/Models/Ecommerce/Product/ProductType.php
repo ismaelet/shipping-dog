@@ -9,7 +9,7 @@ class ProductType extends Model {
 
 	protected $primaryKey = 'ID';
 	protected $table = 'items_types';
-	protected $fillable = ['tag', 'name', 'name_it', 'names_it', 'gender', 'sibling', 'unisex', 'sizes', 'positions', 'colors', 'hidden'];
+	protected $fillable = ['tag', 'name', 'name_it', 'names_it', 'gender', 'sibling', 'unisex', 'sizes', 'positions', 'category', 'colors', 'hidden'];
 
 	/**
 	 * The list of the type's colors as array
