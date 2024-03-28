@@ -92,7 +92,7 @@ foreach ($colors as $color) {
 		'name' => 'colors[]',
 		'value' => $color->tag,
 		'ignore' => true,
-		'text' => $color->name_it,
+		'text' => '<span class="color-box" style="--_color: #' . $color->color . ';"></span>' . $color->name_it,
 		'size' => 1
 	];
 
