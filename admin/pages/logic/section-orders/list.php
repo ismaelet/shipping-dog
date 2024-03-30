@@ -56,7 +56,7 @@ $fields = [
 	['title' => 'Contatti',],
 	['title' => 'Articoli', 'size' => 2],
 	['title' => 'Totale'],
-	['title' => 'Stato'],
+	['title' => 'Stato', 'wrap' => false],
 
 	['type' => 'btn'],
 ];

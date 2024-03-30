@@ -235,16 +235,13 @@ use Ecommerce\Product\Type;
 
 				<!-- Size -->
 				<?php if (!empty($oldProduct->type->sizes)) {
-
 					$new = true;
-
-					$size_table = DB::exists('items_types_measures WHERE typeId=?', [$oldProduct->type->id]);
-
+					$size_table = DB::exists('items_types_measures WHERE typeId=?', [$oldProduct->type->id]) && $product->type->category == 'c';
 					$res = DB::select('ID FROM items_sizes');
 				?>
 
 					<section id="size" class="field">
-						<p class="lbl">Taglia
+						<p class="lbl"><?= $product->type->category == 'c' ? 'Taglia' : 'Dimensione' ?>
 
 							<?php if (!$oldProduct->isCustom && $size_table) { ?>
 								<span class="lbox-open clickable info txt-c1-h" data-tar="#size-lbox">info taglie</span>
@@ -276,7 +273,9 @@ use Ecommerce\Product\Type;
 						</div>
 
 						<!-- Size table -->
-						<?php include_once('measure-table.php') ?>
+						<?php if ($size_table) {
+							include_once('measure-table.php');
+						} ?>
 
 					</section>
 

@@ -55,7 +55,7 @@
 <!-- List -->
 <section class="admin-list-wrapper">
 
-	<div class="admin-list" style="grid-template-columns: <?= $pageConfig['grid-columns'] ?>;">
+	<div class="admin-list" style="--_columns: <?= count($pageConfig['grid-columns']) ?>;" astyle="grid-template-columns: <?= implode(' ', $pageConfig['grid-columns']) ?>;">
 
 		<?php
 		include_once('-expands-admin-list/head.php');

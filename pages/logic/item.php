@@ -80,15 +80,15 @@ $relatedProdutsVariables = array_merge($relatedProdutsVariables, $relatedProduts
 
 $relatedProducts = rows_to_objects(
 	DB::execute(
-		'(SELECT ID FROM items WHERE userID = ? AND (desID <> ? OR desID = 0) AND status > 0 AND typeID = ? ORDER BY sales DESC, ID DESC LIMIT ?)
+		'(SELECT ID FROM items WHERE userID = ? AND (desID <> ? OR desID = 0) AND status > 0 AND typeID = ? AND deleted = 0 ORDER BY sales DESC, ID DESC LIMIT ?)
 		UNION
-		(SELECT ID FROM items WHERE userID = ? AND (desID <> ? OR desID = 0) AND status > 0 AND typeID <> ? ORDER BY sales DESC, ID DESC LIMIT ?)',
+		(SELECT ID FROM items WHERE userID = ? AND (desID <> ? OR desID = 0) AND status > 0 AND typeID <> ? AND deleted = 0 ORDER BY sales DESC, ID DESC LIMIT ?)',
 		$relatedProdutsVariables
 	)->get_result(),
 	OldProduct::class
 );
 
-$relatedProducts = $relatedProducts ? array_slice($relatedProducts, 0, 8) : $relatedProducts;
+$relatedProducts = $relatedProducts && count($relatedProducts) > 8 ? array_slice($relatedProducts, 0, 8) : $relatedProducts;
 
 $relatedGarmentCount = count($relatedGarments);
 $relatedAccessoryCount = count($relatedAccessories);

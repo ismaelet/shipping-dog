@@ -240,8 +240,7 @@ function generate_input($input, $data, $error, $done) {
 				<label class="
 					checkbox
 					<?= $input['custom-class'] ?? '' ?>
-					<?= isset($input['size']) ? 'inp-size' . $input['size'] : '' ?>
-				">
+				" data-size="<?= $input['size'] ?? 4 ?>">
 
 					<input type="checkbox" name="<?= $name ?>" value="<?= $value ?>" <?= !empty($input['checked']) || ($name && isset($_POST[$name])) || ($name && isset($data[$name]) && $data[$name] == $value) ? 'checked' : '' ?> <?= isset($input['required']) ? 'required' : '' ?>>
 

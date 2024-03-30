@@ -32,9 +32,10 @@ foreach ($listRows as $result) {
 					* Show & find fields
 					*/
 					$fullContentSnippet = $entry['overflow'] ? '<p class="text-full">' . $entry['value'] . '</p>' : '';
+					$wrapContentClass = $entry['wrap'] ? 'wrap-content' : 'nowrap-content';
 					$classesSnippet = implode(
 						' ',
-						array_filter(['field-' . $entry['name'], ($entry['overflow'] ? 'overflow' : ''), ...$entry['custom-classes']])
+						array_filter(['field-' . $entry['name'], ($entry['overflow'] ? 'overflow' : ''), ...$entry['custom-classes'], $wrapContentClass])
 					);
 		?>
 

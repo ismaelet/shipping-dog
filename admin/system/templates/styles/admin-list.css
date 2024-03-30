@@ -81,13 +81,13 @@
 
 .admin-list {
 	display: grid;
+	/* grid-auto-flow: column; */
+	grid-template-columns: repeat(var(--_columns), auto);
 	width: 100%;
+	min-width: 1024px;
 }
 
 /* Head */
-.admin-list__head {
-	display: contents;
-}
 
 .admin-list__head .admin-list__field {
 	background-color: var(--clr-surface-400);
@@ -104,7 +104,13 @@
 }
 
 /* Rows */
-.admin-list__row,
+.admin-list__head,
+.admin-list__row {
+	display: grid;
+	grid-template-columns: subgrid;
+	grid-column: 1 / -1;
+}
+
 .admin-list__row-link {
 	display: contents;
 }
@@ -137,6 +143,15 @@
 
 .admin-list__field--centered {
 	text-align: center;
+}
+
+.admin-list .text-short {
+	word-wrap: break-word;
+}
+
+.nowrap-content p {
+	word-wrap: normal;
+	white-space: nowrap;
 }
 
 /* Fields content */

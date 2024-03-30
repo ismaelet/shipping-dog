@@ -91,8 +91,6 @@ foreach ($fields as $field) {
 	}
 }
 
-$pageConfig['grid-columns'] = implode(' ', $pageConfig['grid-columns']);
-
 // page bars
 $pagesCount = ceil($resultCount / $queryConfig['maximum-results']);
 $pageConfig['first-page'] = $currentPage - 2;
@@ -167,6 +165,7 @@ while ($queryRow = $queryResults->fetch_assoc()) {
 		$entry['maxlenght'] = $field['maxlenght'] ?? false;
 		$entry['overflow'] = $field['overflow'] ?? false;
 		$entry['max-size'] = $field['max-size'] ?? false;
+		$entry['wrap'] = $field['wrap'] ?? true;
 		$entry['custom-classes'] = $entry['custom-classes'] ?? [];
 		$entry['showed-value'] = $entry['maxlenght'] && strlen($entry['value']) > $entry['maxlenght'] ?
 			substr($entry['value'], 0, ($entry['maxlenght']) - 3) . '...' : $entry['value'];
