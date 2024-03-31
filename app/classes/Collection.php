@@ -38,7 +38,7 @@ class Collection {
 
 		$color = '#aaa';
 
-		$img = '/uploads/collections/' . $this->id . '.jpg';
+		$img = '/uploads/shops/collections/' . $this->id . '.jpg';
 
 		if (!file_exists(SERVER_ROOT . $img)) {
 

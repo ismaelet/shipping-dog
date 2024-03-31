@@ -54,13 +54,13 @@ class User {
 
 	// get the profile icon
 	private function icon() {
-		$icon = '/uploads/img_profile/' . $this->id;
+		$icon = '/uploads/users/icons/' . $this->id;
 
 		if (!file_exists(public_server_path($icon))) {
 			$icon .= '.jpg';
 
 			if (!file_exists(public_server_path($icon))) {
-				$icon = '/uploads/img_profile/0.jpg';
+				$icon = '/uploads/users/icons/0.jpg';
 			}
 		}
 
@@ -72,26 +72,26 @@ class User {
 		$covers = [];
 
 		// get the HD cover image
-		$cover = '/uploads/img_shop/' . $this->id;
+		$cover = '/uploads/shops/covers/' . $this->id;
 
 		if (!file_exists(public_server_path($cover))) {
 			$cover .= '.jpg';
 
 			if (!file_exists(public_server_path($cover))) {
-				$cover = '/uploads/img_shop/0.jpg';
+				$cover = '/uploads/shops/covers/0.jpg';
 			}
 		}
 
 		$covers[] = $cover;
 
 		// get the LD cover image
-		$cover = '/uploads/img_shop/' . $this->id . '_m';
+		$cover = '/uploads/shops/covers/' . $this->id . '_m';
 
 		if (!file_exists(public_server_path($cover))) {
 			$cover .= '.jpg';
 
 			if (!file_exists(public_server_path($cover))) {
-				$cover = '/uploads/img_shop/0.jpg';
+				$cover = '/uploads/shops/covers/0.jpg';
 			}
 		}
 

@@ -24,7 +24,7 @@ class Logo {
 	}
 
 	private function getImage() {
-		$image = '/uploads/logos/' . $this->id;
+		$image = '/uploads/shops/logos/' . $this->id;
 
 		if (!file_exists(public_server_path($image))) {
 			$image .= '.png';

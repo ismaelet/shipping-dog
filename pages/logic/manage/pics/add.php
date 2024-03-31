@@ -81,7 +81,7 @@ if (isset($_POST['submit'])) {
 
 		$imgID = DB::add('home_pics (fname, lname, desID, type) VALUES (?, ?, ?, ?)', [$fname, $lname, $desID, $type]);
 
-		$file = '/uploads/img_fans/' . $imgID . '.jpg';
+		$file = '/uploads/users/testimonials/' . $imgID . '.jpg';
 
 		upload_img_OLD($file, 'img', '600', 'max');
 

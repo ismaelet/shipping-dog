@@ -35,7 +35,7 @@ class Preview {
 			}
 
 			if (!$this->getHasImage()) {
-				$image = '/app/assets/mockups/no-image';
+				$image = '/uploads/product_types/mockups/no-image';
 			}
 		}
 
@@ -97,7 +97,7 @@ class Preview {
 		$mockupProductData = DB::row('* FROM items_previews WHERE itemID = ? AND positionID = ?', [$this->product->id, $this->product->positionId]);
 
 		// background
-		$backgroundImage = server_root() . '/app/assets/mockups/bgr/grey.png';
+		$backgroundImage = server_root() . '/uploads/product_types/mockups/bgr/grey.png';
 
 		// clothing
 		$clothingImage = server_root() . $this->product->type->getImage($this->product->colorId, $this->product->positionId);

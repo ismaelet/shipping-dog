@@ -34,7 +34,7 @@ use App\View\Components\Interactions\FollowButton;
 			while ($row_fan = $res_fan->fetch_assoc()) {
 				$i++ ?>
 				<div class="fan-box inlb">
-					<div class="fan-pic img" style="background-image: url(/uploads/img_fans/<?= $row_fan['ID'] ?>.jpg)"></div>
+					<div class="fan-pic img" style="background-image: url(/uploads/users/testimonials/<?= $row_fan['ID'] ?>.jpg)"></div>
 				</div>
 			<?php } ?>
 		</div>

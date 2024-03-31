@@ -11,7 +11,7 @@ if (isset($_POST['delete'])) {
 
 	DB::delete('home_pics WHERE ID = ?', [$imgID]);
 
-	unlink(SERVER_ROOT . '/uploads/img_fans/' . $imgID . '.jpg');
+	unlink(SERVER_ROOT . '/uploads/users/testimonials/' . $imgID . '.jpg');
 
 	redirect();
 }

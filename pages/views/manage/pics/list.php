@@ -60,7 +60,7 @@
 							</div>
 
 							<div class="list-cell">
-								<a href="<?= CLIENT_ROOT ?>/uploads/img_fans/<?= $imgID ?>.jpg">
+								<a href="<?= CLIENT_ROOT ?>/uploads/users/testimonials/<?= $imgID ?>.jpg">
 									<button type="button" class="list-btn gre">Visualizza</button>
 								</a>
 

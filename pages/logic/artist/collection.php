@@ -63,8 +63,8 @@ if (isset($_POST['remove'])) {
 // edit collection image
 if (isset($_POST['img-change'])) {
 
-	$file = '/uploads/collections/' . $id . '.jpg';
-	$file_m = '/uploads/collections/' . $id . '_m.jpg';
+	$file = '/uploads/shops/collections/' . $id . '.jpg';
+	$file_m = '/uploads/shops/collections/' . $id . '_m.jpg';
 
 	upload_img_OLD($file, 'img', '1920');
 	upload_img_OLD($file_m, 'img', '768');

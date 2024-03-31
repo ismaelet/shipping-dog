@@ -44,11 +44,11 @@ if ($row = $res->fetch_assoc()) {
 						<div class="info-slide">
 
 							<h3 class="desc_stitle">Descrizione</h3>
-							<p class="desc_txt"><?= $desc ?? '-' ?></p><br>
+							<p class="desc_txt"><?= $desc ?: '-' ?></p><br>
 
 							<?php if (!$oldProduct->isCustom) { ?>
 								<h3 class="desc_stitle">Dettagli prodotto</h3>
-								<p class="desc_txt"><?= $dett ?? '-' ?></p>
+								<p class="desc_txt"><?= $dett ?: '-' ?></p>
 							<?php } ?>
 
 						</div>

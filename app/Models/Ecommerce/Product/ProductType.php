@@ -4,6 +4,7 @@ namespace App\Models\Ecommerce\Product;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ProductType extends Model {
 
@@ -51,5 +52,12 @@ class ProductType extends Model {
 	 */
 	public function positionCollection(): Collection {
 		return ProductPosition::whereIn('ID', $this->positionList())->get();
+	}
+
+	/**
+	 * The infos of this type
+	 */
+	public function info(): HasOne {
+		return $this->hasOne(ProductTypeInfo::class, 'product_type_id', 'ID');
 	}
 }

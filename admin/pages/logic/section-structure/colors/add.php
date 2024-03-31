@@ -27,4 +27,7 @@ $inputs = [
 		['type' => 'lbl', 'text' => 'Ordine'],
 		['name' => 'reorder', 'text' => 'Ordine', 'parse' => 'int'],
 	],
+	[
+		['name' => 'dark', 'text' => 'Il colore è scuro', 'type' => 'cbx',],
+	],
 ];

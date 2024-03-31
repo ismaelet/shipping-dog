@@ -7,13 +7,13 @@ function des_img_gen($design) {
 	$des_path = SERVER_ROOT . '/uploads/designs/' . $design->id . '.png';
 
 	//outputs
-	$dst_image_path = SERVER_ROOT . '/uploads/items/des/' . $design->id . '.jpg';
-	$dst_image_path_m = SERVER_ROOT . '/uploads/items/des/' . $design->id . '_m.jpg';
+	$dst_image_path = SERVER_ROOT . '/uploads/designs/previews/' . $design->id . '.jpg';
+	$dst_image_path_m = SERVER_ROOT . '/uploads/designs/previews/' . $design->id . '_m.jpg';
 
 	if (file_exists($des_path)) {
 
 		//make directory if doesn't exist
-		if (!file_exists($dir = SERVER_ROOT . '/uploads/items/des')) mkdir($dir, 0777, true);
+		if (!file_exists($dir = SERVER_ROOT . '/uploads/designs/previews')) mkdir($dir, 0777, true);
 
 		//SAVE HD
 		$w = $h = 1024;

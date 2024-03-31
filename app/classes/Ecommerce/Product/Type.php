@@ -80,10 +80,10 @@ class Type {
 	}
 
 	private function getBlankImage() {
-		$image = '/app/assets/mockups/' . $this->slug . '.webp';
+		$image = '/uploads/product_types/mockups/' . $this->slug . '.webp';
 
 		if (!file_exists(SERVER_ROOT . $image)) {
-			$image = '/app/assets/mockups/' . $this->slug . '.jpg';
+			$image = '/uploads/product_types/mockups/' . $this->slug . '.jpg';
 		}
 
 		return $image;
@@ -128,13 +128,13 @@ class Type {
 
 		if (!$image) {
 			switch (true) {
-				case (file_exists(server_root() . $file = '/app/assets/mockups/' . $this->slug . '/' . $color->slug . '-' . $position->imagePositionId . '.webp')):
+				case (file_exists(server_root() . $file = '/uploads/product_types/mockups/' . $this->slug . '/' . $color->slug . '-' . $position->imagePositionId . '.webp')):
 					$image = $file;
 					break;
-				case (file_exists(server_root() . $file = '/app/assets/mockups/' . $this->slug . '/' . $color->slug . '-' . $position->imagePositionId . '.png')):
+				case (file_exists(server_root() . $file = '/uploads/product_types/mockups/' . $this->slug . '/' . $color->slug . '-' . $position->imagePositionId . '.png')):
 					$image = $file;
 					break;
-				case (file_exists(server_root() . $file = '/app/assets/mockups/' . $this->slug . '/' . $color->slug . '.png')):
+				case (file_exists(server_root() . $file = '/uploads/product_types/mockups/' . $this->slug . '/' . $color->slug . '.png')):
 					$image = $file;
 					break;
 				default:
@@ -156,13 +156,13 @@ class Type {
 
 		if (!$image) {
 			switch (true) {
-				case (file_exists(SERVER_ROOT . $file = '/app/assets/mockups/' . $this->slug . '/' . $color->slug . '-' . $positionId . '-det.webp')):
+				case (file_exists(SERVER_ROOT . $file = '/uploads/product_types/mockups/' . $this->slug . '/' . $color->slug . '-' . $positionId . '-det.webp')):
 					$image = $file;
 					break;
-				case (file_exists(SERVER_ROOT . $file = '/app/assets/mockups/' . $this->slug . '/' . $color->slug . '-' . $positionId . '-det.png')):
+				case (file_exists(SERVER_ROOT . $file = '/uploads/product_types/mockups/' . $this->slug . '/' . $color->slug . '-' . $positionId . '-det.png')):
 					$image = $file;
 					break;
-				case (file_exists(SERVER_ROOT . $file = '/app/assets/mockups/' . $this->slug . '/' . $color->slug . '-det.png')):
+				case (file_exists(SERVER_ROOT . $file = '/uploads/product_types/mockups/' . $this->slug . '/' . $color->slug . '-det.png')):
 					$image = $file;
 					break;
 				default:

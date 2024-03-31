@@ -59,7 +59,7 @@ if (isset($_POST['edit_pass'])) {
 // change icon
 if (isset($_POST['edit_icon'])) {
 
-	$file = '/uploads/img_profile/' . userId() . '.jpg';
+	$file = '/uploads/users/icons/' . userId() . '.jpg';
 
 	upload_img_OLD($file, 'img', 150, 'crop');
 }

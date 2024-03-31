@@ -27,6 +27,7 @@ $fields = [
 	['title' => 'Nome', 'name' => 'name_it', 'size' => 1],
 	['title' => 'Tag', 'name' => 'tag',],
 	['title' => 'Ordine', 'name' => 'reorder'],
+	['title' => 'Scuro', 'name' => 'dark', 'type' => 'boolean-icon'],
 	['title' => 'Spedizione lunga', 'name' => 'preorder', 'type' => 'boolean-icon'],
 
 	['type' => 'btn'],

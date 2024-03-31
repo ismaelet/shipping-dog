@@ -92,13 +92,13 @@ class Design {
 	}
 
 	public function getImage($size = 400) {
-		$file = $size == 400 ? '/uploads/items/des/' . $this->id . '_m.jpg' : '/uploads/items/des/' . $this->id . '.jpg';
+		$file = $size == 400 ? '/uploads/designs/previews/' . $this->id . '_m.jpg' : '/uploads/designs/previews/' . $this->id . '.jpg';
 
 		if (!file_exists(public_server_path($file))) {
 			des_img_gen($this);
 
 			if (!file_exists(public_server_path($file))) {
-				$file = '/app/assets/mockups/no-image';
+				$file = '/uploads/product_types/mockups/no-image';
 			}
 		}
 

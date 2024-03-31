@@ -397,15 +397,15 @@ use Ecommerce\Product\Type;
 
 						<div>
 							<input type="checkbox" id="cbx-back_0" class="cbx" name="cbx-back[]" value="0" checked>
-							<label class="back_lbl" id="cbx-back_0" for="cbx-back_0" style="background-image: url(/uploads/logos/0.png);"></label>
+							<label class="back_lbl" id="cbx-back_0" for="cbx-back_0" style="background-image: url(/uploads/shops/logos/0.png);"></label>
 
 							<input type="checkbox" id="cbx-back_1" class="cbx" name="cbx-back[]" value="1">
 							<label class="back_lbl" for="cbx-back_1" style="background-image: url(/app/assets/icons/correct/apply1_wht.png)"></label>
 						</div>
 
 						<div id="back_img_cont">
-							<div class="bgr" style="background-image: url(/app/assets/assets/mockups/bgr/gry.png);"></div>
-							<div id="back_img" class="bgr" style="background-image: url(/app/assets/assets/mockups/cas/wht_m.png);"></div>
+							<div class="bgr" style="background-image: url(/uploads/product_types/mockups/bgr/gry.png);"></div>
+							<div id="back_img" class="bgr" style="background-image: url(/uploads/product_types/mockups/cas/wht_m.png);"></div>
 						</div>
 					</div>
 

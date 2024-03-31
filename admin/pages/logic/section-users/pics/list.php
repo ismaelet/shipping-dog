@@ -38,5 +38,5 @@ if (isset($_POST['delete'])) {
 
 	DB::delete('home_pics WHERE ID = ?', [$id]);
 
-	if (file_exists($file = PUBLIC_SERVER_ROOT . '/uploads/img_fans/' . $id . '.jpg')) unlink($file);
+	if (file_exists($file = PUBLIC_SERVER_ROOT . '/uploads/users/testimonials/' . $id . '.jpg')) unlink($file);
 }

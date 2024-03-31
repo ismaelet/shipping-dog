@@ -171,10 +171,10 @@ class Product {
 			case file_exists(public_server_path($this->specificCoverImage)):
 				$coverImage = $this->specificCoverImage;
 				break;
-			case !$this->isCustom && file_exists(public_server_path($file = '/pages/assets/item/info/' . $this->type->slug)):
+			case !$this->isCustom && file_exists(public_server_path($file = '/uploads/product_types/covers/' . $this->type->slug)):
 				$coverImage = $file;
 				break;
-			case !$this->isCustom && file_exists(public_server_path($file = '/pages/assets/item/info/' . $this->type->slug . '.jpg')):
+			case !$this->isCustom && file_exists(public_server_path($file = '/uploads/product_types/covers/' . $this->type->slug . '.jpg')):
 				$coverImage = $file;
 				break;
 			default:

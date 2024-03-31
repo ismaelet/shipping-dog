@@ -26,7 +26,7 @@ if (isset($_POST['edit'])) {
 // edit profile icon
 if (isset($_POST['edit-icon'])) {
 	$fileData = [
-		'url' => public_server_path('/uploads/img_profile/' . userId()),
+		'url' => public_server_path('/uploads/users/icons/' . userId()),
 		'size' => [200, 200],
 		'mode' => 'crop',
 	];
@@ -40,7 +40,7 @@ if (isset($_POST['edit-icon'])) {
 if (isset($_POST['edit-cover'])) {
 	// upload HD
 	$fileData = [
-		'url' => public_server_path('/uploads/img_shop/' . userId()),
+		'url' => public_server_path('/uploads/shops/covers/' . userId()),
 		'size' => 1920,
 		'mode' => 'width',
 	];
@@ -49,7 +49,7 @@ if (isset($_POST['edit-cover'])) {
 
 	// upload LD
 	$fileData = [
-		'url' => public_server_path('/uploads/img_shop/' . userId() . '_m'),
+		'url' => public_server_path('/uploads/shops/covers/' . userId() . '_m'),
 		'size' => 400,
 		'mode' => 'width',
 		'quality' => 80

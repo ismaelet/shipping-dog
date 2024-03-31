@@ -68,7 +68,7 @@
 			</form>
 
 			<div class="preview-image grid stack-content" style="--default-x-size: <?= $mockupData->siz_x_def ?>; --max-x-size: <?= $mockupData->siz_x_max ?>; --max-y-size: <?= $mockupData->siz_y_max ?>; --default-x-position: <?= $mockupData->pos_x_def ?>; --starting-x-position: <?= $mockupData->pos_x_min ?>; --default-y-position: <?= $mockupData->pos_y_def ?>; --starting-y-position: <?= $mockupData->pos_y_min ?>;">
-				<img src="<?= public_client_path('/app/assets/mockups/bgr/grey.png') ?>" alt="">
+				<img src="<?= public_client_path('/uploads/product_types/mockups/bgr/grey.png') ?>" alt="">
 				<img src="<?= public_client_path($mockupData->clothingImage()) ?>" alt="">
 
 				<div class="max-printable-area"></div>

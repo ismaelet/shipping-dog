@@ -73,7 +73,7 @@ function _expand_add($tbl, $inputs) {
 function _upload_file($id) {
 	if ($_FILES['file']['name']) {
 		$file_data = [
-			'url' => public_server_path('/uploads/img_fans/' . $id . '.jpg'),
+			'url' => public_server_path('/uploads/users/testimonials/' . $id . '.jpg'),
 			'size' => 600,
 			'type' => 'jpg',
 			'mode' => 'height',

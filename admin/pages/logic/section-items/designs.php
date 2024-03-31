@@ -54,13 +54,13 @@ if (isset($_POST['generate'])) {
 
 		while ($row = $res->fetch_assoc()) {
 			$product = new Ecommerce\Product($row['ID'], 'type');
-			$files = glob(PUBLIC_SERVER_ROOT . '/uploads/items/' . $product->type->slug . '/' . $product->id . '*');
+			$files = glob(PUBLIC_SERVER_ROOT . '/uploads/products/' . $product->type->slug . '/' . $product->id . '*');
 
 			array_map('unlink', $files);
 		}
 
-		unlink(PUBLIC_SERVER_ROOT . '/uploads/items/des/' . $id . '.jpg');
-		unlink(PUBLIC_SERVER_ROOT . '/uploads/items/des/' . $id . '_m.jpg');
+		unlink(PUBLIC_SERVER_ROOT . '/uploads/designs/previews/' . $id . '.jpg');
+		unlink(PUBLIC_SERVER_ROOT . '/uploads/designs/previews/' . $id . '_m.jpg');
 	}
 
 	redirect('#row' . $id);

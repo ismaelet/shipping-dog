@@ -39,7 +39,7 @@ class ProductTypeMockup extends Model {
 		$position = ProductPosition::find($positionId);
 		$imageSlug = $color->tag . '-' . $position->basicPositionId();
 
-		return '/app/assets/mockups/' . $this->type->tag . '/' . $imageSlug . '.webp';
+		return '/uploads/product_types/mockups/' . $this->type->tag . '/' . $imageSlug . '.webp';
 	}
 
 	/**

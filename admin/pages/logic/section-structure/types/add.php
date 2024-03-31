@@ -9,6 +9,7 @@ use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductSize;
 use App\Models\Ecommerce\Product\ProductTypeMeasure;
 use App\Models\Ecommerce\Product\ProductType;
+use App\Models\Ecommerce\Product\ProductTypeInfo;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
 use Ecommerce\Product as OldProduct;
 
@@ -44,12 +45,27 @@ $inputs = [
 		['name' => 'names_it', 'text' => 'Nome plurale mostrato ai clienti'],
 	],
 	[
+		['type' => 'lbl', 'text' => 'Descrizione'],
+		['type' => 'textarea', 'name' => 'description', 'text' => 'Breve descrizione del prodotto', 'value' => $productType && $productType->info ? $productType->info->description : ''],
+	],
+	[
+		['type' => 'lbl', 'text' => 'Dettagli'],
+		['type' => 'textarea', 'name' => 'details', 'text' => 'Dettagli tecnici, separati da virgola', 'value' => $productType && $productType->info ? $productType->info->details : ''],
+	],
+	[
 		['type' => 'lbl', 'text' => 'Categoria'],
 		[
 			'type' => 'select',
 			'name' => 'category',
 			'text' => 'Categoria',
 			'array' => [['c', 'Abbigliamento'], ['m', 'Accessorio']],
+		],
+	],
+	[
+		['type' => 'lbl', 'text' => 'Immagine di copertina'],
+		[
+			'type' => 'file',
+			'name' => 'cover_image',
 		],
 	],
 	[
@@ -216,6 +232,13 @@ FormController::setAdd(function () {
 			OldProduct::new($design->ID, $type->ID);
 		}
 	}
+
+	// Create the infos
+	ProductTypeInfo::create([
+		'product_type_id' => $type->ID,
+		'description' => $_POST['description'],
+		'details' => $_POST['details'],
+	]);
 });
 
 // Edit the type
@@ -267,5 +290,26 @@ FormController::setEdit(function ($id) {
 				OldProduct::new($design->ID, $productType->ID);
 			}
 		}
+	}
+
+	// Update the infos
+	ProductTypeInfo::updateOrCreate(
+		['product_type_id' => $productType->ID],
+		[
+			'description' => $_POST['description'],
+			'details' => $_POST['details']
+		]
+	);
+
+	// Update the cover image
+	if (isset($_FILES['cover_image']) && $_FILES['cover_image']['size']) {
+		$fileData = [
+			'url' => public_server_path('/uploads/product_types/covers/' . $productType->tag),
+			'size' => 2000,
+			'name' => 'cover_image',
+			'quality' => 80,
+		];
+
+		upload_img($fileData);
 	}
 });

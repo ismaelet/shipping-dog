@@ -44,13 +44,13 @@ class Mockup {
 	}
 
 	private function getBackgroundImage() {
-		$image = '/app/assets/mockups/' . $this->type->slug . '/' . $this->color->slug . '-' . $this->positionId . '.webp';
+		$image = '/uploads/product_types/mockups/' . $this->type->slug . '/' . $this->color->slug . '-' . $this->positionId . '.webp';
 
 		return $image;
 	}
 
 	private function getFrontImage() {
-		$image = '/app/assets/mockups/' . $this->type->slug . '/' . $this->color->slug . '-' . $this->positionId . '-det.webp';
+		$image = '/uploads/product_types/mockups/' . $this->type->slug . '/' . $this->color->slug . '-' . $this->positionId . '-det.webp';
 
 		return $image;
 	}

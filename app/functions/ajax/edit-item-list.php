@@ -136,7 +136,7 @@ while ($typeRow = $types->fetch_assoc()) {
 											<?php } else { ?>
 
 												<!-- If it's a normal image -->
-												<div class="background bgr" <?= background_image('/app/assets/mockups/bgr/grey.png') ?>></div>
+												<div class="background bgr" <?= background_image('/uploads/product_types/mockups/bgr/grey.png') ?>></div>
 
 												<div class="clothing bgr" <?= background_image($clothing) ?> data-type-id="<?= $product->typeId ?>"></div>
 
@@ -276,7 +276,7 @@ while ($typeRow = $types->fetch_assoc()) {
 												<?php } else { ?>
 
 													<!-- If it's a normal image -->
-													<div class="background bgr" <?= background_image('/app/assets/mockups/bgr/grey.png') ?>></div>
+													<div class="background bgr" <?= background_image('/uploads/product_types/mockups/bgr/grey.png') ?>></div>
 
 													<div class="clothing bgr" <?= background_image($clothing) ?> data-type-id="<?= $product->typeId ?>"></div>
 

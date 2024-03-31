@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		if (logoInput) {
 			if (logoId) {
-				const logoImage = client_url('/uploads/logos/' + logoId + '.png')
+				const logoImage = client_url('/uploads/shops/logos/' + logoId + '.png')
 
 				document.querySelector('.js-logo-image-background').classList.add('active')
 
