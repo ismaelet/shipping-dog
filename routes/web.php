@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/infos/sale-terms', function () {
-	return view('/infos/sale-terms');
+	return view('/infos/sale-terms')->with('title', 'Condizioni di vendita');
 })->name('infos.sale-terms');
 
 /**

@@ -16,7 +16,7 @@
     </style>
 @endpush
 
-<x-layout>
+<x-layout :title="$title ?? null">
     <div class="main-content">
         <x-navigation.default-header :config="$headerConfig ?? []" />
 

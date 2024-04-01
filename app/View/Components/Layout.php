@@ -7,14 +7,16 @@ use Illuminate\Contracts\View\View;
 
 class Layout extends Component {
 
+	public ?string $title;
 	public string $appName;
-	public string|null $appDescription;
+	public ?string $appDescription;
 	public string $colorScheme;
 
 	/**
 	 * Create a new component instance.
 	 */
-	public function __construct() {
+	public function __construct(?string $title = null) {
+		$this->title = $title;
 		$this->appName = config('app.name');
 		$this->appDescription = config('custom.meta_data.description');
 		$this->colorScheme = isset($_COOKIE['color-scheme']) && in_array($_COOKIE['color-scheme'], ['light', 'dark']) ? $_COOKIE['color-scheme'] : config('custom.meta_data.default_color_scheme');

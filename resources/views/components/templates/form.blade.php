@@ -14,7 +14,7 @@
     </style>
 @endpush
 
-<x-templates.main>
+<x-templates.main :title="$title">
     <form class="grid content-center gap-8 py-16" action="" method="POST" enctype="multipart/form-data">
         @csrf
 
