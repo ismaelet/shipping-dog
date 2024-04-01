@@ -1,28 +1,29 @@
 services:
-    php-apache:
+    laravel:
         build:
             context: .
             dockerfile: ./Dockerfile
         volumes:
-            - '.:/var/www/html'
+            - ".:/var/www/html"
         ports:
-            - '80:80'
+            - "80:80"
         depends_on:
             - mysql
         networks:
             - internal
     mysql:
-        image: 'mysql:latest'
+        image: "mysql:latest"
         ports:
-            - '3306:3306'
+            - "3306:3306"
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
-            - 'mysql:/var/lib/mysql'
+            - "mysql:/var/lib/mysql"
         networks:
             - internal
+        restart: unless-stopped
     phpmyadmin:
         image: phpmyadmin
         ports:
@@ -35,6 +36,7 @@ services:
             - internal
         depends_on:
             - mysql
+        restart: unless-stopped
 networks:
     internal:
         driver: bridge

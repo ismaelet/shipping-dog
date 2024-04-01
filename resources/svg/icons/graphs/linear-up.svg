@@ -1,0 +1,31 @@
+<svg class="js-weight js-gain-weight" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 285 196">
+	<defs>
+		<linearGradient id="weight-up-chart-solid-fill" x1="142" y1="15" x2="142" y2="173" spreadMethod="pad" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0)"> <stop id="weight-up-chart-solid-fill-0" offset="0%" stop-color="var(--clr-hover)" stop-opacity=".35"></stop> <stop id="weight-up-chart-solid-fill-1" offset="100%" stop-color="var(--clr-hover)" stop-opacity="0"></stop> </linearGradient>
+	</defs>
+	
+	<g id="weight-up-weight-up"> <g id="weight-up-chart-grid">
+		<line id="weight-up-line_1" x1="274.5" y1="172.5" x2="274.5" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+		<line id="weight-up-line_2" x1="221.5" y1="172.5" x2="221.5" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+		<line id="weight-up-line_4" x1="115.5" y1="172.5" x2="115.5" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+		<line id="weight-up-line_3" x1="168.5" y1="172.5" x2="168.5" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+		<line id="weight-up-line_5" x1="62.5" y1="172.5" x2="62.5" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+		<line id="weight-up-line_6" x1="9.5" y1="172.5" x2="9.50001" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+	</g>
+		
+		<path id="weight-up-chart-solid" d="M222,60.5C243.91,45.0026,275,14,275,14v159h-266v-25c0,0,25.5,9.5,53.5-18.5C77.4039,114.596,81,100,115,100c21,0,28.5-28,53.5-28.5c21.326-.4265,33,3.5,53.5-11Z" opacity="0" fill="url(#weight-up-chart-solid-fill)" stroke-dasharray="761.43"></path>
+		
+		<path id="weight-up-chart-curve" d="M275,14c0,0-31.09,31.0026-53,46.5-20.5,14.5-32.174,10.5735-53.5,11C143.5,72,136,100,115,100c-34,0-37.5961,14.596-52.5,29.5C34.5,157.5,9,148,9,148" fill="none" stroke="var(--clr-hover)" stroke-width="3" stroke-linecap="round" stroke-dashoffset="311.43" stroke-dasharray="311.43"></path>
+		
+		<g id="weight-up-pointer_2_ts" transform="translate(274,14) scale(0,0)"> <circle id="weight-up-pointer_2" r="7.5" transform="translate(0,0)" fill="#fff" stroke="var(--weight-stroke)" stroke-width="3"></circle> </g> <g id="weight-up-pointer_1_ts" transform="translate(10,149) scale(0,0)"> <circle id="weight-up-pointer_1" r="8" transform="translate(0,0)" fill="#fff" stroke="var(--clr-surface-400)" stroke-width="4"></circle> </g>
+		
+		<text id="weight-up-value-2" dx="0" dy="0" font-size="18" font-weight="700" opacity="0" fill="#fff">
+			<tspan id="weight-up-tspan7" x="195" y="15.1523" font-size="18" font-weight="700" font-style="normal" fill="#fff">{{oneMonthWeight}}</tspan>
+		</text>
+		
+		<text id="weight-up-value-1" dx="0" dy="0" font-size="18" font-weight="700" opacity="0" fill="#fff">
+			<tspan id="weight-up-tspan8" x="9" y="125.152" font-size="18" font-weight="700" font-style="normal" fill="#fff">{{weight}}</tspan>
+		</text>
+	</g>
+</svg>
+
+		

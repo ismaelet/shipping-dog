@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Models;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Ecommerce\Shop;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Authenticatable {
+
+	use HasApiTokens, HasFactory, Notifiable;
+
+	protected $primaryKey = 'ID';
+
+	/**
+	 * The attributes that are mass assignable
+	 */
+	protected $fillable = [
+		'name',
+		'email',
+		'password',
+	];
+
+	/**
+	 * The attributes that should be hidden for serialization
+	 */
+	protected $hidden = [
+		'password',
+		'remember_token',
+	];
+
+	/**
+	 * The attributes that should be cast
+	 */
+	protected $casts = [
+		'email_verified_at' => 'datetime',
+		'password' => 'hashed',
+	];
+
+	/**
+	 * Get the user's full name
+	 */
+	public function fullName(): string {
+		$fullName = [];
+		$fullName[] = $this->first_name;
+		$fullName[] = $this->last_name;
+
+		return implode(' ', $fullName);
+	}
+
+	/**
+	 * Get the user's shop
+	 */
+	public function shop(): HasOne {
+		return $this->hasOne(Shop::class, 'userID', 'ID');
+	}
+
+	/**
+	 * Check if the user is a seller
+	 */
+	public function isSeller(): bool {
+		return (bool) $this->shop;
+	}
+}

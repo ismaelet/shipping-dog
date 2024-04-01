@@ -1,0 +1,9 @@
+{
+	"require": {
+		"phpmailer/phpmailer": "*",
+		"vlucas/phpdotenv": "*",
+		"illuminate/database": "^10.38",
+		"shuchkin/simplexlsxgen": "^1.4",
+		"dompdf/dompdf": "^2.0"
+	}
+}

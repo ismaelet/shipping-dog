@@ -22,5 +22,5 @@ RUN docker-php-ext-configure gd --with-webp --with-jpeg \
 RUN apt-get install -y libonig-dev
 RUN docker-php-ext-install mbstring
 
-# Enable htaccess rewrite
+# Enable .htaccess rewrite
 RUN a2enmod rewrite

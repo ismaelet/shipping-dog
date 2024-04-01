@@ -1,0 +1,39 @@
+<svg class="js-weight js-loose-weight" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 294 196">
+	<defs>
+		<linearGradient id="weight-down-chart-solid-fill" x1="142" y1="15" x2="142" y2="173" spreadMethod="pad" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0)">
+			<stop id="weight-down-chart-solid-fill-0" offset="0%" stop-color="var(--clr-hover)" stop-opacity=".35"></stop>
+			<stop id="weight-down-chart-solid-fill-1" offset="100%" stop-color="var(--clr-hover)" stop-opacity="0"></stop>
+		</linearGradient>
+	</defs>
+
+	<g id="weight-down-weight-down">
+		<g id="weight-down-chart-grid">
+			<line id="weight-down-line_2" x1="221.5" y1="172.5" x2="221.5" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+			<line id="weight-down-line_1" x1="274.5" y1="172.5" x2="274.5" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+			<line id="weight-down-line_3" x1="168.5" y1="172.5" x2="168.5" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+			<line id="weight-down-line_4" x1="115.5" y1="172.5" x2="115.5" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+			<line id="weight-down-line_5" x1="62.5" y1="172.5" x2="62.5" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+			<line id="weight-down-line_6" x1="9.5" y1="172.5" x2="9.50001" y2="0.5" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-linecap="round" stroke-dasharray="8,12"></line>
+		</g>
+
+		<path id="weight-down-chart-solid" d="M62,60.5C40.0898,45.0026,9,14,9,14v159h266v-25c0,0-25.5,9.5-53.5-18.5C206.596,114.596,203,100,169,100c-21,0-28.5-28-53.5-28.5-21.3258-.4265-33,3.5-53.5-11Z" opacity="0" fill="url(#weight-down-chart-solid-fill)"></path>
+		
+		<path id="weight-down-chart-curve" d="M9,14c0,0,31.0898,31.0026,53,46.5c20.5,14.5,32.1742,10.5735,53.5,11C140.5,72,148,100,169,100c34,0,37.596,14.596,52.5,29.5c28,28,53.5,18.5,53.5,18.5" fill="none" stroke="var(--clr-hover)" stroke-width="3" stroke-linecap="round" stroke-dashoffset="311.43" stroke-dasharray="311.43"></path>
+
+		<g id="weight-down-pointer_2_ts" transform="translate(274,149) scale(0,0)">
+			<circle id="weight-down-pointer_2" r="7.5" transform="translate(0,0)" fill="#fff" stroke="var(--clr-surface-400)" stroke-width="3"></circle>
+		</g>
+
+		<g id="weight-down-pointer_1_ts" transform="translate(10,14) scale(0,0)">
+			<circle id="weight-down-pointer_1" r="8" transform="translate(0,0)" fill="#fff" stroke="var(--clr-surface-400)" stroke-width="4"></circle>
+		</g>
+		
+		<text id="weight-down-value-1" dx="0" dy="0" font-size="18" font-weight="700" opacity="0" fill="#fff">
+			<tspan id="weight-down-tspan7" x="31" y="20.1523" font-size="18" font-weight="700" font-style="normal" fill="#fff">{{weight}}</tspan>
+		</text>
+		
+		<text id="weight-down-value-2" dx="0" dy="0" font-size="18" font-weight="700" opacity="0" fill="#fff">
+			<tspan id="weight-down-tspan8" x="220" y="125.152" font-size="18" font-weight="700" font-style="normal" fill="#fff">{{oneMonthWeight}}</tspan>
+		</text>
+	</g>
+</svg>

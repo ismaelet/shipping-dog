@@ -1,0 +1,80 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Artisan Migrate",
+			"type": "shell",
+			"command": "env",
+			"args": ["DB_HOST=127.0.0.1", "php", "artisan", "migrate"],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Artisan Rollback",
+			"type": "shell",
+			"command": "env",
+			"args": ["DB_HOST=127.0.0.1", "php", "artisan", "migrate:rollback"],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Artisan: Create Model",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "make:model", "${input:modelName}"],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "Artisan: Create Controller",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "make:controller", "${input:controllerName}"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "Artisan: Create Migration",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "make:migration", "${input:migrationName}"],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		}
+	],
+	"inputs": [
+		{
+			"id": "modelName",
+			"type": "promptString",
+			"default": "Example",
+			"description": "Enter the model name"
+		},
+		{
+			"id": "controllerName",
+			"type": "promptString",
+			"default": "ExampleController",
+			"description": "Enter the controller name"
+		},
+		{
+			"id": "migrationName",
+			"type": "promptString",
+			"default": "create_example_table",
+			"description": "Enter the migration name"
+		}
+	]
+}

@@ -1,0 +1,307 @@
+/*
+* 1. Resets
+*	1.1 Global
+*	1.2 Assets
+* 2. Base
+*	2.1 Color parsing
+*	2.2 Grids & flexboxes
+		2.2.1 Content grid
+		2.2.2 Content flow
+		2.2.3 Dynamic grid columns
+		2.2.4 Dynamic flexbox columns
+* 3. Utilities
+*	3.1 Borders
+*	3.2 Animations
+		3.2.1 Enter animations
+		3.2.2 Exit animations
+*/
+
+/*
+* 1. Resets
+*/
+/* 1.1 Global */
+body {
+    color: var(--color-neutral-400);
+}
+
+/* 1.2 Assets */
+svg {
+    max-height: 100%;
+    fill: currentColor;
+}
+
+/*
+* 2. Base
+*/
+@layer base {
+    /*
+	* 2.1. Color parsing
+	*/
+    :root {
+        --color-primary-100: hsl(var(--color-primary-100-hsl));
+        --color-primary-200: hsl(var(--color-primary-200-hsl));
+        --color-primary-300: hsl(var(--color-primary-300-hsl));
+        --color-primary-400: hsl(var(--color-primary-400-hsl));
+        --color-primary-500: hsl(var(--color-primary-500-hsl));
+        --color-secondary-400: hsl(var(--color-secondary-400-hsl));
+        --color-secondary-500: hsl(var(--color-secondary-500-hsl));
+        --color-neutral-light-100: hsl(var(--color-neutral-light-100-hsl));
+        --color-neutral-light-200: hsl(var(--color-neutral-light-200-hsl));
+        --color-neutral-light-300: hsl(var(--color-neutral-light-300-hsl));
+        --color-neutral-light-400: hsl(var(--color-neutral-light-400-hsl));
+        --color-neutral-light-700: hsl(var(--color-neutral-light-700-hsl));
+        --color-neutral-light-900: hsl(var(--color-neutral-light-900-hsl));
+        --color-neutral-dark-100: hsl(var(--color-neutral-dark-100-hsl));
+        --color-neutral-dark-400: hsl(var(--color-neutral-dark-400-hsl));
+        --color-neutral-dark-900: hsl(var(--color-neutral-dark-900-hsl));
+        --color-neutral-100: hsl(var(--color-neutral-100-hsl));
+        --color-neutral-200: hsl(var(--color-neutral-200-hsl));
+        --color-neutral-300: hsl(var(--color-neutral-300-hsl));
+        --color-neutral-400: hsl(var(--color-neutral-400-hsl));
+        --color-neutral-700: hsl(var(--color-neutral-700-hsl));
+        --color-neutral-900: hsl(var(--color-neutral-900-hsl));
+        --color-background-400: hsl(var(--color-background-400-hsl));
+        --color-background-500: hsl(var(--color-background-500-hsl));
+        --color-surface-400: hsl(var(--color-surface-400-hsl));
+        --color-surface-700: hsl(var(--color-surface-700-hsl));
+        --color-success-400: hsl(var(--color-success-400-hsl));
+        --color-error-400: hsl(var(--color-error-400-hsl));
+    }
+
+    /*
+	* 2.2 Grids and flexboxes
+	*/
+    /* 2.2.1 Content grid */
+    .content-grid,
+    .full-width {
+        --breakout-column: calc(
+            (var(--breakout-width) - var(--content-width)) / 2
+        );
+        display: grid;
+        grid-template-columns:
+            [full-width-start] minmax(var(--content-padding), 1fr)
+            [breakout-start] minmax(0, var(--breakout-column))
+            [content-start] min(
+                100% - var(--content-padding) * 2,
+                var(--content-width)
+            )
+            [content-end] minmax(0, var(--breakout-column))
+            [breakout-end] minmax(var(--content-padding), 1fr) [full-width-end];
+    }
+
+    :where(.content-grid > :not(.breakout, .full-width)),
+    :where(.full-width > :not(.breakout, .full-width)) {
+        grid-column: content;
+    }
+
+    :where(.content-grid > .breakout),
+    :where(.full-width > .breakout) {
+        grid-column: breakout;
+    }
+
+    :where(.content-grid > .full-width),
+    :where(.full-width > .full-width),
+    :where(.content-grid > .stack-content) {
+        grid-column: full-width;
+    }
+
+    /* 2.2.2 Content flow */
+    .grid.stack-content {
+        grid-template-areas: "content";
+
+        & > * {
+            grid-area: content;
+        }
+    }
+
+    /* 2.2.3 Dynamic grid columns */
+    .grid {
+        &.columns-15rem {
+            grid-template-columns: repeat(
+                auto-fill,
+                minmax(min(15rem, 100%), 1fr)
+            );
+        }
+
+        &.columns-20rem {
+            grid-template-columns: repeat(
+                auto-fill,
+                minmax(min(20rem, 100%), 1fr)
+            );
+        }
+
+        &.columns-25rem {
+            grid-template-columns: repeat(
+                auto-fill,
+                minmax(min(25rem, 100%), 1fr)
+            );
+        }
+
+        &.columns-30rem {
+            grid-template-columns: repeat(
+                auto-fill,
+                minmax(min(30rem, 100%), 1fr)
+            );
+        }
+
+        &.columns-40rem {
+            grid-template-columns: repeat(
+                auto-fill,
+                minmax(min(40rem, 100%), 1fr)
+            );
+        }
+    }
+
+    /* 2.2.4 Dynamic flexbox columns */
+    .flex {
+        &.columns-15rem {
+            flex-grow: 1;
+            width: min(15rem, 100%);
+        }
+
+        &.columns-20rem {
+            flex-grow: 1;
+            width: min(20rem, 100%);
+        }
+
+        &.columns-25rem {
+            flex-grow: 1;
+            width: min(25rem, 100%);
+        }
+
+        &.columns-30rem {
+            flex-grow: 1;
+            width: min(30rem, 100%);
+        }
+
+        &.columns-40rem {
+            flex-grow: 1;
+            width: min(40rem, 100%);
+        }
+    }
+}
+
+/*
+* 3. Utilities
+*/
+@layer utilities {
+    /*
+	* 3.1 Borders
+	*/
+    .border {
+        border: var(--border);
+    }
+
+    /*
+	* 3.2 Animations
+	*/
+    /* 3.2.1 Enter animations */
+    [data-enter-animation] {
+        --_enter-animation-delay: var(--_animation-delay, 0ms);
+        --_enter-animation-speed: var(--_animation-speed, 400ms);
+        --_enter-animation-intensity: var(--_animation-intensity, 0.5rem);
+        opacity: 0;
+        pointer-events: none;
+
+        &[data-enter-animation-type="fade-in"] {
+            &:where([data-enter-animation-direction="left"]) {
+                translate: calc(-1 * var(--_enter-animation-intensity)) 0;
+            }
+
+            &:where([data-enter-animation-direction="right"]) {
+                translate: var(--_enter-animation-intensity) 0;
+            }
+
+            &:where([data-enter-animation-direction="top"]) {
+                translate: 0 calc(-1 * var(--_enter-animation-intensity));
+            }
+
+            &:where([data-enter-animation-direction="bottom"]) {
+                translate: 0 var(--_enter-animation-intensity);
+            }
+        }
+
+        &[data-entered="true"] {
+            opacity: 1;
+            pointer-events: auto;
+            translate: 0 0;
+            transition: translate var(--_enter-animation-speed) ease-out,
+                opacity var(--_enter-animation-speed) ease-in;
+            transition-delay: var(--_enter-animation-delay);
+        }
+    }
+
+    /* 3.2.2 Exit animations */
+    .exit-animation {
+        --_exit-animation-delay: var(--_animation-delay, 0ms);
+        --_exit-animation-speed: var(--_animation-speed, 400ms);
+        --_exit-animation-intensity: var(--_animation-intensity, 0.5rem);
+
+        &[data-exit-animation-type="fade-out"] {
+            transition: translate var(--_exit-animation-speed) ease-out,
+                opacity var(--_exit-animation-speed) ease-in;
+            transition-delay: var(--_exit-animation-delay);
+
+            &[data-exited="true"] {
+                opacity: 0 !important;
+                pointer-events: none;
+
+                &[data-exit-animation-direction="left"] {
+                    translate: calc(-1 * var(--_exit-animation-intensity)) 0;
+                }
+
+                &[data-exit-animation-direction="right"] {
+                    translate: var(--_exit-animation-intensity) 0;
+                }
+
+                &[data-exit-animation-direction="top"] {
+                    translate: 0 calc(-1 * var(--_exit-animation-intensity));
+                }
+
+                &[data-exit-animation-direction="bottom"] {
+                    translate: 0 var(--_exit-animation-intensity);
+                }
+            }
+        }
+    }
+
+    [data-delay="1"] {
+        --_animation-delay: 100ms;
+    }
+
+    [data-delay="2"] {
+        --_animation-delay: 200ms;
+    }
+
+    [data-delay="3"] {
+        --_animation-delay: 300ms;
+    }
+
+    [data-delay="4"] {
+        --_animation-delay: 400ms;
+    }
+
+    [data-delay="5"] {
+        --_animation-delay: 500ms;
+    }
+
+    [data-delay="6"] {
+        --_animation-delay: 600ms;
+    }
+
+    [data-delay="7"] {
+        --_animation-delay: 700ms;
+    }
+
+    [data-delay="8"] {
+        --_animation-delay: 800ms;
+    }
+
+    [data-delay="9"] {
+        --_animation-delay: 900ms;
+    }
+
+    [data-delay="10"] {
+        --_animation-delay: 1000ms;
+    }
+}
