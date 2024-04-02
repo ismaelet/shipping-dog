@@ -2,14 +2,47 @@
 
 use App\Models\Ecommerce\Cart;
 use App\Models\User;
+use App\Models\User\AuthToken;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
+define('LOGO_DIR', '/public/legacy/system/assets/logo/');
+define('APP_LOGO_DIR', '/public/legacy/app/assets/logo/');
 define('ICONS_DIR', '/public/legacy/system/assets/icons/');
 define('APP_ICONS_DIR', '/public/legacy/app/assets/icons/');
 
 /**
  * User functions
  */
+function login_direct() {
+	$tokenCode = $_COOKIE['auth_token'] ?? null;
+
+	if ($tokenCode) {
+		$validToken = false;
+		$tokenCode = explode('_', $tokenCode);
+		$selector = $tokenCode[0];
+
+		$token = AuthToken::where('selector', $selector)
+			->where('expiration', '>', now())
+			->first();
+
+		if (isset($tokenCode[1]) && $token) {
+			$validator = $tokenCode[1];
+			$validatorHash = hash('sha256', $validator);
+
+			if (hash_equals($validatorHash, $token->validator)) {
+				$userId = $token->userID;
+
+				Auth::loginUsingId($userId);
+			}
+		}
+
+		if (!$validToken) {
+			setcookie('auth_token', '', -1, '/');
+		}
+	}
+}
+
 function user() {
 	return User::find(0);
 }
@@ -20,10 +53,6 @@ function userId() {
 
 function logged() {
 	return (bool) userId();
-}
-
-function admin() {
-	return auth()->user() && auth()->user()->isAdmin();
 }
 
 function is_seller() {
@@ -52,6 +81,10 @@ function cart_count() {
 /**
  * Files
  */
+function old_url($path): string {
+	return '/public/legacy' . $path;
+}
+
 function assets_directory(string $pagePath = null) {
 	$path = null;
 

@@ -23,7 +23,7 @@ class ProductType extends Model {
 	 * The list of the type's colors as collection
 	 */
 	public function colorCollection(): Collection {
-		return ProductColor::whereIn('tag', $this->colorList())->get();
+		return ProductColor::whereIn('tag', $this->colorList())->orderBy('reorder')->get();
 	}
 
 	/**

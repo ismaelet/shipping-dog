@@ -46,10 +46,10 @@ function rows_to_objects(Query_Result $rows = null, string $className) {
 	return $objects;
 }
 
-function debug($array) {
+function dd($array) {
 	exit('<pre>' . print_r($array, true) . '</pre>');
 }
 
-function soft_debug($array) {
+function dump($array) {
 	print_r('<pre>' . print_r($array, true) . '</pre>');
 }

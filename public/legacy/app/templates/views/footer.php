@@ -77,7 +77,7 @@
 		</div>
 
 		<p id="footer-notes">
-			Copyright © <?= getdate()['year'] ?> <span class="txt-wht"><?= config('custom.meta_data.full_name') ?></span>. Il copyright © di ogni design appartiene al rispettivo proprietario.
+			Copyright © <?= getdate()['year'] ?> <span class="txt-wht"><?= sys_config('name-full') ?></span>. Il copyright © di ogni design appartiene al rispettivo proprietario.
 			<br>Sito web realizzato da <a class="txt-wht-h" href="emailto:ismaele.tuffanelli@gmail.com">Ismaele Tuffanelli</a>
 		</p>
 	</div>

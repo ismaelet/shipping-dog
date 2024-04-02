@@ -57,7 +57,7 @@ class Logic {
 	public static function load() {
 		sort_subvalue(self::$files, 'priority');
 
-		//debug(self::$files);
+		//dd(self::$files);
 
 		foreach (self::$files as $file) {
 			if ($file['url']) self::loadFile($file['url']);

@@ -16,25 +16,33 @@ use Illuminate\Support\Facades\Route;
 /**
  * App routes
  */
-
 Route::get('/infos/sale-terms', function () {
 	return view('/infos/sale-terms')->with('title', 'Condizioni di vendita');
 })->name('infos.sale-terms');
 
 /**
+ * Admin routes
+ */
+if (file_exists(__DIR__ . '/admin.php')) include_once __DIR__ . '/admin.php';
+
+/**
  * Legacy
  */
 Route::get('/shop', function () {
-	return redirect('/public/legacy' . $_SERVER['REQUEST_URI']);
+	return redirect('/legacy' . $_SERVER['REQUEST_URI']);
 })->name('shop');
 
-Route::get('/{any}', function ($any) {
-	return redirect('/public/legacy/' . $any);
+Route::get('/', function () {
+	return redirect('/legacy');
+})->name('home');
+
+Route::get('/public/legacy/{any}', function (string $any = '') {
+	return redirect('/legacy/' . $any);
 })->where('any', '.*');
 
-Route::get('/', function () {
-	return redirect('/public/legacy');
-})->name('home');
+Route::get('/{any}', function (string $any = '') {
+	return redirect('/legacy/' . $any);
+})->where('any', '.*');
 
 Route::get('/cart', function () {
 	return redirect('/public/legacy/cart');
@@ -71,10 +79,6 @@ Route::get('/infos/contract', function () {
 Route::get('/infos/privacy', function () {
 	return redirect('/public/legacy/infos/privacy');
 })->name('infos.privacy');
-
-Route::get('/admin', function () {
-	return redirect('/public/legacy/admin');
-})->name('admin');
 
 Route::get('/contacts', function () {
 	return redirect('/public/legacy/contacts');

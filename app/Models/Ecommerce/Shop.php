@@ -3,9 +3,10 @@
 namespace App\Models\Ecommerce;
 
 use App\Models\Ecommerce\Design\LogoGroup;
-use App\Models\Seller\Follower;
-use App\Models\Seller\Price;
-use App\Models\Traits\ModelCache;
+use App\Models\Shop\Follower;
+use App\Models\Shop\Price;
+use App\Models\Traits\Cache;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -17,49 +18,49 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Shop extends Model {
 
-	use ModelCache;
+	use Cache;
 
 	protected $primaryKey = 'userID';
 	protected $table = 'stores';
 	protected $fillable = [];
 
 	/**
-	 * Get the seller's designs
+	 * Get the shop's designs
 	 */
 	public function designs(): HasMany {
 		return $this->hasMany(Design::class, 'userID', 'userID');
 	}
 
 	/**
-	 * Get the seller's followers
+	 * Get the shop's followers
 	 */
 	public function followers(): HasMany {
 		return $this->hasMany(Follower::class, 'followID', 'userID');
 	}
 
 	/**
-	 * Get the seller's prices
+	 * Get the shop's prices
 	 */
 	public function prices() {
 		return $this->hasMany(Price::class, 'storeID', 'userID');
 	}
 
 	/**
-	 * Get the seller's logo groups
+	 * Get the shop's logo groups
 	 */
 	public function logoGroups(): HasMany {
 		return $this->hasMany(LogoGroup::class, 'storID', 'userID');
 	}
 
 	/**
-	 * Get the seller's orders
+	 * Get the shop's orders
 	 */
 	public function orders(): HasMany {
-		return $this->hasMany(Order::class, 'sellerId', 'userID');
+		return $this->hasMany(Order::class, 'shopId', 'userID');
 	}
 
 	/**
-	 * Get the seller's total sales
+	 * Get the shop's total sales
 	 */
 	public function earned(): float {
 		// Return cached value if exists
@@ -85,9 +86,9 @@ class Shop extends Model {
 	}
 
 	/**
-	 * Get the seller's credit
+	 * Get the shop's credit
 	 */
-	public function credit() {
+	public function credit(): float {
 		// Return cached value if exists
 		if ($this->getCache('credit') !== null) {
 			return $this->getCache('credit');
@@ -97,7 +98,7 @@ class Shop extends Model {
 	}
 
 	/**
-	 * Get the seller's earned credit
+	 * Get the shop's earned credit
 	 */
 	private function earnedCredit(): float {
 		if ($this->getCache('earnedCredit') !== null) {
@@ -108,7 +109,7 @@ class Shop extends Model {
 	}
 
 	/**
-	 * Get the seller's used credit to pay orders
+	 * Get the shop's used credit to pay orders
 	 */
 	private function usedOrderCredit(): float {
 		if ($this->getCache('usedOrderCredit') !== null) {
@@ -125,7 +126,7 @@ class Shop extends Model {
 	}
 
 	/**
-	 * Get the seller's used credit to pay shipping
+	 * Get the shop's used credit to pay shipping
 	 */
 	private function usedShippingCredit(): float {
 		if ($this->getCache('usedShippingCredit') !== null) {
@@ -145,7 +146,7 @@ class Shop extends Model {
 	}
 
 	/**
-	 * Check if the seller is followed by the logged user
+	 * Check if the shop is followed by the logged user
 	 */
 	public function isFollowed(): bool {
 		return Follower::where([
@@ -154,7 +155,10 @@ class Shop extends Model {
 		])->count() > 0;
 	}
 
-	public function deleteAndClean() {
+	/**
+	 * Delete the shop and clean all related data
+	 */
+	public function deleteAndClean(): void {
 		// Delete designs
 		foreach ($this->designs as $design) {
 			$design->deleteAndClean(true);
@@ -171,7 +175,21 @@ class Shop extends Model {
 		// Delete prices
 		$this->prices()->delete();
 
-		// Delete the seller
+		// Delete the shop
 		$this->delete();
+	}
+
+	/**
+	 * Get the shops awaiting approval
+	 */
+	public static function awaitingApproval(): Collection {
+		return self::where('status', 0)
+			->whereIn('userID', function ($query) {
+				$query->select('userID')
+					->from('designs')
+					->where('status', 1);
+			})
+			->where('userID', '!=', 2)
+			->get();
 	}
 }

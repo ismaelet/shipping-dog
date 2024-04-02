@@ -13,7 +13,7 @@ function login($userId, $url = false, $remember = true) {
 
 		DB::add('auth_tokens (selector, validator, userID, expiration) VALUES (?, ?, ?, (NOW() + INTERVAL 1 MONTH))', [$selector, $validatorHash, $userId]);
 
-		setcookie('auth_token', $selector . '_' . $validator, time() + 60 * 60 * 24 * 30);
+		setcookie('auth_token', $selector . '_' . $validator, time() + 60 * 60 * 24 * 30, '/');
 	}
 
 	if (function_exists('associate_cart')) {

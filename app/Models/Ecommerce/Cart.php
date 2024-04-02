@@ -2,6 +2,7 @@
 
 namespace App\Models\Ecommerce;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -31,5 +32,11 @@ class Cart extends Model {
 	 */
 	public function change_request(): HasOne {
 		return $this->HasOne(ChangeRequest::class, 'new_cart_id', 'ID');
+	}
+
+	public static function unlabelled(): Collection {
+		return self::where('status', 1)
+			->whereIn('shipID', ShippingMethod::shippingMethodsWithLabels())
+			->get();
 	}
 }

@@ -11,6 +11,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @method mixed isAdmin()
+ */
 class User extends Authenticatable {
 
 	use HasApiTokens, HasFactory, Notifiable;
@@ -51,6 +54,20 @@ class User extends Authenticatable {
 		$fullName[] = $this->last_name;
 
 		return implode(' ', $fullName);
+	}
+
+	/**
+	 * Check if the user is an admin
+	 */
+	public function isAdmin(): bool {
+		return (bool) $this->admin;
+	}
+
+	/**
+	 * Check if the user is an admin
+	 */
+	public function isSupervisor(): bool {
+		return (bool) $this->admin == 2;
 	}
 
 	/**
