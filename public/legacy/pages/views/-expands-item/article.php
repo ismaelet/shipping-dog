@@ -436,7 +436,7 @@ use Ecommerce\Product\Type;
 
 					<?php if (!$oldProduct->isCustom && $product->blankProduct()) { ?>
 
-						<p class="mar-t-1">Vuoi acquistare il prodotto senza grafica? <a class="txt-bold txt-c-title" href="<?= $product->blankProduct()->clientUrl() ?>">Clicca qui</a>.</p>
+						<p class="mar-t-1">Vuoi acquistare il prodotto senza grafica? <a class="txt-bold txt-c-title" href="<?= $product->blankProduct()->url() ?>">Clicca qui</a>.</p>
 
 					<?php } ?>
 

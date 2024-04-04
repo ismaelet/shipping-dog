@@ -1,0 +1,10 @@
+/**
+* Layout
+*/
+.page-background {
+	opacity: 0.3;
+}
+
+.title {
+	font-size: min(4rem, 13vw);
+}

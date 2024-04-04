@@ -39,6 +39,9 @@ spl_autoload_register(function ($name) {
 	$name = str_replace('\\', '/', $name);
 
 	switch (true) {
+		case strpos($name, 'App/Model') === 0 || strpos($name, 'App/Helpers') === 0:
+			include_once(server_path('/../../' . lcfirst($name) . '.php'));
+			break;
 		case strpos($name, 'App') === 0:
 			include_once(server_path('/' . lcfirst($name) . '.php'));
 			break;
@@ -74,7 +77,7 @@ class Setup {
 		global $sysConfig;
 
 		define('SERVER_ROOT', explode('/system', str_replace("\\", "/", __DIR__))[0]);
-		define('CLIENT_ROOT', str_replace(rtrim($_SERVER['DOCUMENT_ROOT'], '/'), '', SERVER_ROOT));
+		define('CLIENT_ROOT', '');
 		define('CLIENT_URL', !empty($sysConfig['domain']) ? 'https://' . $sysConfig['domain'] : (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . CLIENT_ROOT);
 		define('ICONS_DIR', '/system/assets/icons/');
 		define('APP_ICONS_DIR', '/app/assets/icons/');

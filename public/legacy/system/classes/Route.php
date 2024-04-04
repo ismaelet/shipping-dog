@@ -18,6 +18,10 @@ class Route {
 	public static function run() {
 		$path_found = false;
 		$path = parse_url($_SERVER['REQUEST_URI'])['path'] ?? null;
+		$path = str_replace('public/legacy/', '', $path);
+		$path = str_replace('legacy/', '', $path);
+		// dump($path);
+		// dd(self::$routes);
 
 		if ($path !== null) {
 			foreach (self::$routes as $route) {

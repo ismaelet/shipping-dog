@@ -28,7 +28,7 @@ $footer['columns'] = [
 	[
 		'Legali',
 		[
-			['Condizioni di vendita', new_url('/infos/sale-terms')],
+			['Condizioni di vendita', new_url('/infos/terms')],
 			['Condizioni di invio', client_url('/infos/contract')],
 			['Privacy policy', client_url('/infos/privacy')],
 			['P. IVA ' . sys_config('VAT')],

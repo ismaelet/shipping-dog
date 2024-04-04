@@ -23,7 +23,7 @@ class StyleLoader {
 		switch ($type) {
 			case 'base':
 				$priority = 0;
-				$file = '/public/assets/css/style.css';
+				$file = '/old_public/assets/css/style.css';
 				break;
 			case 'system':
 				$priority = $priority ?: 1;
@@ -59,7 +59,7 @@ class StyleLoader {
 
 		// store the file URL in the list
 		if ($file) {
-			$file .= '?v=' . filemtime(SERVER_ROOT . $file);
+			$file .= $type == 'base' ? '?v=' . filemtime(__DIR__ . '/../../' . $file) : '?v=' . filemtime(SERVER_ROOT . $file);
 			self::$list[] = [$priority, $file];
 		}
 	}
@@ -95,7 +95,7 @@ class StyleLoader {
 
 		sort_subvalue(self::$list, 0);
 
-		foreach (self::$list as $style) $list[] = '<link href="' . CLIENT_ROOT . $style[1] . '" rel="stylesheet" type="text/css">';
+		foreach (self::$list as $style) $list[] = '<link href="' . CLIENT_URL . $style[1] . '" rel="stylesheet" type="text/css">';
 
 		return implode(PHP_EOL, $list);
 	}

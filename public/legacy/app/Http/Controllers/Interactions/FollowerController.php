@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Interactions;
 
 use App\Http\Controllers\Controller;
-use App\Models\Seller\Follower;
+use App\Models\Ecommerce\Seller\Follower;
 
 class FollowerController extends Controller {
 

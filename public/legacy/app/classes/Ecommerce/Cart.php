@@ -2,6 +2,7 @@
 
 namespace Ecommerce;
 
+use App\Models\Ecommerce\InventoryItem;
 use DB;
 use EmailService\Ecommerce\CartStatusUpdate;
 use DatabaseObject;
@@ -596,7 +597,7 @@ class Cart {
 				$inventoryId = $inventoryData['inventoryId'];
 
 				DB::update(Order::TABLE . ' SET inventory = 1 WHERE ' . Order::INDEX . ' = ?', [$order->id]);
-				DB::delete('inventory ', [$inventoryId]);
+				DB::delete('inventory WHERE id = ?', [$inventoryId]);
 			}
 
 			if ($this->customerId != $order->sellerId) {

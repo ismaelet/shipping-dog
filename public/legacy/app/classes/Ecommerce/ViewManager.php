@@ -2,6 +2,7 @@
 
 namespace Ecommerce;
 
+use App\Models\Ecommerce\Product;
 use App\View\Components\Interactions\LikeButton;
 
 class ViewManager {
@@ -11,14 +12,16 @@ class ViewManager {
 	*/
 	// product card
 	public static function renderProductCard(object $product) {
+		$product = Product::find($product->id);
+
 		ob_start();
 ?>
 
 		<div class="item-box">
 			<div class="image">
-				<a href="<?= $product->clientUrl ?>" class="block">
-					<img src="<?= $product->clientImage ?>" alt="" loading="lazy">
-					<p class="price blu"><?= $product->priceString ?></p>
+				<a href="<?= $product->url() ?>" class="block">
+					<img src="<?= $product->image() ?>" alt="" loading="lazy">
+					<p class="price blu"><?= $product->customerPriceString() ?></p>
 				</a>
 
 				<?= LikeButton::render(['designId' => $product->designId]) ?>
@@ -27,7 +30,7 @@ class ViewManager {
 
 			<p class="type txt-upp"><?= $product->type->name ?></p>
 			<p class="name"><?= $product->name ?></p>
-			<p class="seller">by <a class="txt-c1-h" href="<?= $product->seller->clientUrl ?>"><?= $product->seller->name ?></a></p>
+			<p class="seller">by <a class="txt-c1-h" href="<?= $product->seller->url() ?>"><?= $product->seller->name ?></a></p>
 		</div>
 
 	<?php
