@@ -34,6 +34,9 @@ class Cart extends Model {
 		return $this->HasOne(ChangeRequest::class, 'new_cart_id', 'ID');
 	}
 
+	/**
+	 * Get the unlabelled carts
+	 */
 	public static function unlabelled(): Collection {
 		return self::where('status', 1)
 			->whereIn('shipID', ShippingMethod::shippingMethodsWithLabels())

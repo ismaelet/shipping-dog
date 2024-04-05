@@ -53,7 +53,7 @@ class Design extends Model {
 	 */
 	public function isLiked(): bool {
 		return Like::where([
-			'userID' => userId(),
+			'userID' => auth()->id(),
 			'desID' => $this->ID,
 		])->count() > 0;
 	}

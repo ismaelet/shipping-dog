@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Seller;
 use App\Models\Ecommerce\Shop;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -71,10 +73,17 @@ class User extends Authenticatable {
 	}
 
 	/**
+	 * Get the user's active cart
+	 */
+	public function cart_old(): HasOne {
+		return $this->hasOne(Cart::class, 'buyer', 'ID')->where('status', 0);
+	}
+
+	/**
 	 * Get the user's shop
 	 */
 	public function shop(): HasOne {
-		return $this->hasOne(Shop::class, 'userID', 'ID');
+		return $this->hasOne(Seller::class, 'userID', 'ID');
 	}
 
 	/**

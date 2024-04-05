@@ -6,24 +6,24 @@
 
     // links
     $footer['columns'] = [
-        ['Esplora', [['Home', route('home')], ['Prodotti', route('shop')], ['Vendi', route('sell')]]],
+        ['Esplora', [['Home', 'home'], ['Prodotti', 'shop'], ['Vendi', 'sell']]],
 
         [
             'Supporto',
             [
-                ['Contatti', route('contacts')],
-                ['FAQ', route('infos.faq')],
-                ['Cambio taglia', route('refund')],
-                ['Stato ordine', route('order/status')],
+                ['Contatti', 'contacts'],
+                ['FAQ', 'infos.faq'],
+                ['Cambio taglia', 'refund'],
+                ['Stato ordine', 'order/status'],
             ],
         ],
 
         [
             'Legali',
             [
-                ['Condizioni di vendita', route('infos.sale-terms')],
-                ['Condizioni di invio', route('infos.contract')],
-                ['Privacy policy', route('infos.privacy')],
+                ['Condizioni di vendita', 'infos.sale-terms'],
+                ['Condizioni di invio', 'infos.contract'],
+                ['Privacy policy', 'infos.privacy'],
                 ['P. IVA ' . config('custom.ecommerce.vat')],
             ],
         ],
@@ -176,7 +176,7 @@
                     <a href="<?= config('custom.social_media.instagram.url') ?>"
                         class="footer-soc-icon bgr-c1-h center-items">
                         <div class="icon-box">
-                            <?= icon_embed('contacts/instagram') ?>
+                            <?= embed_icon('contacts/instagram') ?>
                         </div>
                     </a>
                     <?php } ?>
@@ -185,7 +185,7 @@
                     <a href="<?= config('custom.social_media.facebook.url') ?>"
                         class="footer-soc-icon bgr-c1-h center-items">
                         <div class="icon-box">
-                            <?= icon_embed('contacts/facebook') ?>
+                            <?= embed_icon('contacts/facebook') ?>
                         </div>
                     </a>
                     <?php } ?>
@@ -194,7 +194,7 @@
                     <a href="<?= config('custom.social_media.email.url') ?>"
                         class="footer-soc-icon bgr-c1-h center-items">
                         <div class="icon-box">
-                            <?= icon_embed('contacts/email') ?>
+                            <?= embed_icon('contacts/email') ?>
                         </div>
                     </a>
                     <?php } ?>

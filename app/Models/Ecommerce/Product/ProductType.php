@@ -68,15 +68,15 @@ class ProductType extends Model {
 		$color = $colorId ? ProductColor::find($colorId) : $this->colorCollection()->first();
 		$position = $positionId ? ProductPosition::find($positionId) : $this->positionCollection()->first();
 
-		if (file_exists(server_root() . $file = '/uploads/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->imagePositionId . '.webp')) {
+		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . '.webp'))) {
 			return $file;
 		}
 
-		if (file_exists(server_root() . $file = '/uploads/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->imagePositionId . '.png')) {
+		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . '.png'))) {
 			return $file;
 		}
 
-		if (file_exists(server_root() . $file = '/uploads/product_types/mockups/' . $this->tag . '/' . $color->tag . '.png')) {
+		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '.png'))) {
 			return $file;
 		}
 

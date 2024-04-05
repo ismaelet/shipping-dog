@@ -7,15 +7,10 @@
 @endpush
 
 <x-templates.empty>
-    <div class="page-content grid-flow stack-content aling-content-center justify-items-center fa-center">
-        <div class="page-background fill-all background-fill"></div>
-
-        <div class="page-body grid-flow center-content" data-spacing="400">
-            <h1 class="title">Errore 404</h1>
-            <p class="section-subtitle">Pagina non trovata</p>
-            <div>
-                <a class="button button--secondary button--auto-width" href="{{ route('home') }}">Torna alla home</a>
-            </div>
-        </div>
+    <div class="grid gap-8 content-center justify-items-center">
+        <x-typography.main-heading>Errore 404</x-typography.main-heading>
+        <x-typography.main-subheading>Pagina non trovata</x-typography.main-subheading>
+        <x-form.button href="{{ route('home') }}" variant="secondary" size="auto">Torna alla
+            home</x-form.button>
     </div>
 </x-templates.empty>

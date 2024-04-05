@@ -25,75 +25,76 @@
     // links
     $header['links'] = [];
 
-    $header['links'][] = ['title' => 'Home', 'loc' => 'home', 'url' => route('home')];
+    $header['links'][] = ['title' => 'Home', 'loc' => 'home', 'url' => '/home'];
     $header['links'][] = [
-        'title' => 'Carrello (' . cart_count() . ')',
+        'title' => 'Carrello (' . cart_quantity() . ')',
         'loc' => 'cart',
-        'url' => route('cart'),
+        'url' => '/cart',
         'cart' => true,
         'mob' => true,
     ];
     $header['links'][] = [
         'title' => 'Login',
         'loc' => 'login',
-        'url' => route('login'),
+        'url' => '/login',
         'logged' => false,
         'mob' => true,
     ];
     $header['links'][] = [
         'title' => 'Mio negozio',
         'loc' => 'artist',
-        'url' => route('artist', ['id' => auth()->id()]),
+        'url' => '/artist',
+        ['id' => auth()->id()],
         'drop' => 'artist',
         'seller' => true,
     ];
     $header['links'][] = [
         'title' => 'Profilo',
         'loc' => 'profile',
-        'url' => route('profile'),
+        'url' => '/profile',
         'logged' => true,
         'mob' => true,
     ];
-    $header['links'][] = ['title' => 'Prodotti', 'loc' => 'shop', 'url' => route('shop'), 'drop' => 'shop'];
-    // $header['links'][] = ['title' => 'Promozioni', 'loc' => 'promotions', 'url' => route('promotions'), 'new' => true];
+    $header['links'][] = ['title' => 'Prodotti', 'loc' => 'shop', 'url' => '/shop', 'drop' => 'shop'];
+    // $header['links'][] = ['title' => 'Promozioni', 'loc' => 'promotions', 'url' => '/promotions'), 'new' => true];
     $header['links'][] = [
         'title' => 'Preferiti',
         'loc' => 'wishlist',
-        'url' => route('wishlist'),
+        'url' => '/wishlist',
         'logged' => true,
         'mob' => true,
     ];
-    $header['links'][] = ['title' => 'Vendi', 'loc' => 'sell', 'url' => route('sell'), 'seller' => false];
-    $header['links'][] = ['title' => 'Supporto', 'loc' => 'info', 'url' => route('infos.faq'), 'drop' => 'info'];
-    $header['links'][] = ['title' => 'Gestione', 'loc' => 'admin', 'url' => route('admin'), 'admin' => true];
+    $header['links'][] = ['title' => 'Vendi', 'loc' => 'sell', 'url' => '/sell', 'seller' => false];
+    $header['links'][] = ['title' => 'Supporto', 'loc' => 'info', 'url' => '/infos.faq', 'drop' => 'info'];
+    $header['links'][] = ['title' => 'Gestione', 'loc' => 'admin', 'url' => '/admin', 'admin' => true];
 
     // dropdowns
     $header['dropdowns']['shop'] = [
-        ['Abbigliamento Donna', route('shop', ['gender' => 'f'])],
-        ['Abbigliamento Uomo', route('shop', ['gender' => 'm'])],
-        ['Accessori', route('shop', ['group' => 'm'])],
-        ['Ufficiali', route('artist', ['id' => '1'])],
+        ['Abbigliamento Donna', '/shop', ['gender' => 'f']],
+        ['Abbigliamento Uomo', '/shop', ['gender' => 'm']],
+        ['Accessori', '/shop', ['group' => 'm']],
+        ['Ufficiali', '/artist', ['id' => '1']],
     ];
 
     $header['dropdowns']['info'] = [
-        ['Contatti', route('contacts')],
-        ['Cambio taglia o reso', route('refund')],
-        ['Stato ordine', route('order/status')],
-        ['Domande frequenti', route('infos.faq')],
+        ['Contatti', '/contacts'],
+        ['Cambio taglia o reso', '/refund'],
+        ['Stato ordine', '/order/status'],
+        ['Domande frequenti', '/infos.faq'],
     ];
 
     $header['dropdowns']['artist'] = [
-        ['Il mio negozio', route('artist', ['id' => auth()->id()])],
-        ['Le mie grafiche', route('manage/portfolio')],
-        ['Carica una grafica', route('manage/portfolio/add')],
-        ['Vendite realizzate', route('manage/sales/list')],
-        ['Modifica prezzi', route('manage/sales/prices')],
-        ['Gestisci', route('manage')],
+        ['Il mio negozio', '/artist', ['id' => auth()->id()]],
+        ['Le mie grafiche', '/manage/portfolio'],
+        ['Carica una grafica', '/manage/portfolio/add'],
+        ['Vendite realizzate', '/manage/sales/list'],
+        ['Modifica prezzi', '/manage/sales/prices'],
+        ['Gestisci', '/manage'],
     ];
 
     // login bar
-    $header['login-link'] = ['Login', route('login')];
-    $header['logged-link'] = [auth()->user() ? auth()->user()->username : '', route('profile')];
+    $header['login-link'] = ['Login', '/login'];
+    $header['logged-link'] = [auth()->user() ? auth()->user()->username : '', '/profile'];
 
 @endphp
 
@@ -666,12 +667,12 @@
 
                 <!-- Logo -->
                 @if ($header['logo'])
-                    <a href="<?= route('home') ?>" id="h-logo" <?= background_image(LOGO_DIR . 'logo.png') ?>></a>
+                    <a href="<?= '/home' ?>" id="h-logo" <?= background_image(LOGO_DIR . 'logo.png') ?>></a>
                 @endif
 
                 <!-- Search bar -->
                 @if ($header['srch-bar'])
-                    <form action="<?= route('search') ?>" method="GET" id="h-srch" class="inlb"
+                    <form action="<?= '/search' ?>" method="GET" id="h-srch" class="inlb"
                         onClick="$('#h-srch-inp').focus();">
 
                         <input type="checkbox" id="h-srch-cbx" class="hidden">
@@ -681,7 +682,7 @@
                             <div class="background fill-all bgr-c1"></div>
 
                             <div class="icon-box">
-                                <?= icon_embed('search') ?>
+                                <?= embed_icon('search') ?>
                             </div>
 
                         </label>
@@ -694,11 +695,11 @@
                         <div class="h-name-box inlb al-mid">
 
                             <h3 class="h-name txt-upp desk1280">
-                                <a href="<?= route('home') ?>"><?= $header['name'] ?></a>
+                                <a href="<?= '/home' ?>"><?= $header['name'] ?></a>
                             </h3>
 
                             <h3 class="h-name txt-upp mob1280">
-                                <a href="<?= route('home') ?>"><?= $header['name-mob'] ?></a>
+                                <a href="<?= '/home' ?>"><?= $header['name-mob'] ?></a>
                             </h3>
 
                         </div>
@@ -711,11 +712,11 @@
                     <div clas="h-name-box" class="inlb">
 
                         <h3 class="h-name txt-upp desk1280">
-                            <a href="<?= route('home') ?>"><?= $header['name'] ?></a>
+                            <a href="<?= '/home' ?>"><?= $header['name'] ?></a>
                         </h3>
 
                         <h3 class="h-name txt-upp mob1280">
-                            <a href="<?= route('home') ?>"><?= $header['name-mob'] ?></a>
+                            <a href="<?= '/home' ?>"><?= $header['name-mob'] ?></a>
                         </h3>
 
                     </div>
@@ -741,29 +742,29 @@
 
                                 // Check logged filter
                                 if (isset($h_link['logged'])) {
-                                    if ($h_link['logged'] && !logged()) {
+                                    if ($h_link['logged'] && !auth()->check()) {
                                         $h_valid = false;
-                                    } elseif (!$h_link['logged'] && logged()) {
+                                    } elseif (!$h_link['logged'] && auth()->check()) {
                                         $h_valid = false;
                                     }
                                 }
 
                                 // Check seller filter
                                 if (isset($h_link['seller'])) {
-                                    if ($h_link['seller'] && (!auth()->user() || !auth()->user()->is_seller())) {
+                                    if ($h_link['seller'] && (!auth()->user() || !auth()->is_seller())) {
                                         $h_valid = false;
-                                    } elseif (!$h_link['seller'] && auth()->user() && auth()->user()->is_seller()) {
+                                    } elseif (!$h_link['seller'] && auth()->user() && auth()->is_seller()) {
                                         $h_valid = false;
                                     }
                                 }
 
                                 // Check admin filter
-                                if (isset($h_link['admin']) && !admin()) {
+                                if (isset($h_link['admin']) && !is_admin()) {
                                     $h_valid = false;
                                 }
 
                                 // Check cart filter
-                                if (isset($h_link['cart']) && !cart_count()) {
+                                if (isset($h_link['cart']) && !cart_quantity()) {
                                     $h_valid = false;
                                 }
 
@@ -787,7 +788,7 @@
 
                                             @if (!empty($h_link['new']))
                                                 <span class="h-link__new-icon">
-                                                    <?= icon_embed('discount') ?>
+                                                    <?= embed_icon('discount') ?>
                                                 </span>
                                             @endif
                                         </a>
@@ -819,29 +820,29 @@
                         <!-- Theme switch -->
                         <div class="theme-switch h-icon">
                             <div class="light-icon icon-box js-color-scheme-switcher" data-color-scheme="light">
-                                <?= icon_embed('sun') ?>
+                                <?= embed_icon('sun') ?>
                             </div>
 
                             <div class="dark-icon icon-box js-color-scheme-switcher" data-color-scheme="dark">
-                                <?= icon_embed('moon') ?>
+                                <?= embed_icon('moon') ?>
                             </div>
                         </div>
                     @endif
 
                     @if ($header['wishlist'])
                         <!-- Favorites icon -->
-                        <a id="h-wish" class="wish icon-box h-link al-mid h-icon" href="<?= route('wishlist') ?>">
-                            <?= icon_embed('love') ?>
+                        <a id="h-wish" class="wish icon-box h-link al-mid h-icon" href="<?= '/wishlist' ?>">
+                            <?= embed_icon('love') ?>
                         </a>
                     @endif
 
                     <!-- Cart icon -->
-                    <a id="h-cart" class="bag icon-box h-link al-mid h-icon" href="<?= route('cart') ?>">
+                    <a id="h-cart" class="bag icon-box h-link al-mid h-icon" href="<?= '/cart' ?>">
 
-                        <?= icon_embed('bag') ?>
+                        <?= embed_icon('bag') ?>
 
-                        @if (cart_count())
-                            <h1 id="h-cart-num"><?= cart_count() ?></h1>
+                        @if (cart_quantity())
+                            <h1 id="h-cart-num"><?= cart_quantity() ?></h1>
                         @endif
 
                     </a>
@@ -906,33 +907,29 @@
 
                                     // Check logged filter
                                     if (isset($h_link['logged'])) {
-                                        if ($h_link['logged'] && !logged()) {
+                                        if ($h_link['logged'] && !auth()->check()) {
                                             $h_valid = false;
-                                        } elseif (!$h_link['logged'] && logged()) {
+                                        } elseif (!$h_link['logged'] && auth()->check()) {
                                             $h_valid = false;
                                         }
                                     }
 
                                     // Check seller filter
                                     if (isset($h_link['seller'])) {
-                                        if ($h_link['seller'] && auth()->user() && auth()->user()->is_seller()) {
+                                        if ($h_link['seller'] && auth()->user() && auth()->is_seller()) {
                                             $h_valid = false;
-                                        } elseif (
-                                            !$h_link['seller'] ||
-                                            !auth()->user() ||
-                                            !auth()->user()->is_seller()
-                                        ) {
+                                        } elseif (!$h_link['seller'] || !auth()->user() || !auth()->is_seller()) {
                                             $h_valid = false;
                                         }
                                     }
 
                                     // Check admin filter
-                                    if (isset($h_link['admin']) && !admin()) {
+                                    if (isset($h_link['admin']) && !is_admin()) {
                                         $h_valid = false;
                                     }
 
                                     // Check cart filter
-                                    if (isset($h_link['cart']) && !cart_count()) {
+                                    if (isset($h_link['cart']) && !cart_quantity()) {
                                         $h_valid = false;
                                     }
 

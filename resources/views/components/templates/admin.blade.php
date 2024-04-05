@@ -181,14 +181,6 @@
             color: var(--fc-400);
         }
 
-
-        .surface {
-            border-radius: var(--border-radius-400);
-            padding: 2rem;
-            background: var(--clr-surface-400);
-            box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.4);
-        }
-
         main {
             display: grid;
             grid-template-columns: max-content minmax(0, 1fr);
@@ -211,6 +203,9 @@
             height: 100svh;
             position: sticky;
             top: 0;
+            overflow: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--clr-surface-700) var(--clr-surface-400);
         }
 
         .menu__group {
@@ -534,7 +529,7 @@
 
 <x-templates.empty>
     <!-- Navigation bar -->
-    <x-templates.admin.navigation />
+    <x-admin.navigation />
 
     <!-- Body -->
     <section class="page-content">

@@ -33,12 +33,21 @@
             &[data-variant="secondary"] {
                 padding-block: calc(1em - var(--border-width));
                 border: var(--border-width) solid currentColor;
-                color: var(--color-primary-400);
+                color: var(--color-neutral-400);
+
+                &:hover {
+                    color: var(--color-neutral-700);
+                }
             }
 
             &[data-size="small"] {
                 min-width: 8rem;
                 font-size: var(--font-size-300);
+            }
+
+            &[data-size="auto"] {
+                width: auto;
+                min-width: unset;
             }
 
             [data-local-theme="dark"] & {

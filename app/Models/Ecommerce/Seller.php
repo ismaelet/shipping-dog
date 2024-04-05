@@ -6,6 +6,7 @@ use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Seller\Follower;
 use App\Models\Ecommerce\Seller\SellerPrice;
 use App\Models\Traits\ModelCache;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -41,7 +42,7 @@ class Seller extends Model {
 	 * Get the seller's prices
 	 */
 	public function prices() {
-		return $this->hasMany(Price::class, 'storeID', 'userID');
+		return $this->hasMany(SellerPrice::class, 'storeID', 'userID');
 	}
 
 	/**
@@ -156,11 +157,28 @@ class Seller extends Model {
 	 */
 	public function isFollowed(): bool {
 		return Follower::where([
-			'userID' => userId(),
+			'userID' => auth()->id(),
 			'followID' => $this->userID,
 		])->count() > 0;
 	}
 
+	/**
+	 * Get the shops awaiting approval
+	 */
+	public static function awaitingApproval(): Collection {
+		return self::where('status', 0)
+			->where('userID', '!=', 2)
+			->whereIn('userID', function ($query) {
+				$query->select('userID')
+					->from('designs')
+					->where('status', 1);
+			})
+			->get();
+	}
+
+	/**
+	 * Delete the seller and clean up the related data
+	 */
 	public function deleteAndClean() {
 		// Delete designs
 		foreach ($this->designs as $design) {

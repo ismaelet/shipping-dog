@@ -14,14 +14,14 @@ class ChangeRequest extends Model {
 	/**
 	 * Get the old cart that owns the change request.
 	 */
-	public function old_cart(): BelongsTo {
+	public function old_cart_old(): BelongsTo {
 		return $this->belongsTo(Cart::class, 'old_cart_id');
 	}
 
 	/**
 	 * Get the new cart generated from the change request.
 	 */
-	public function new_cart(): BelongsTo {
+	public function new_cart_old(): BelongsTo {
 		return $this->belongsTo(Cart::class, 'new_cart_id');
 	}
 

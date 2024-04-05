@@ -2,11 +2,11 @@
 
 namespace App\Models\Ecommerce;
 
-use App\Helpers\StringHelper;
+use App\Helpers\EcommerceHelper;
+use App\Helpers\PreviewHelper;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductDescription;
 use App\Models\Ecommerce\Product\ProductPosition;
-use App\Models\Ecommerce\Product\ProductPreview;
 use App\Models\Ecommerce\Product\ProductPrice;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Seller\SellerPrice;
@@ -92,7 +92,7 @@ class Product extends Model {
 	}
 
 	public function customerPriceString(): string {
-		return StringHelper::price($this->customerPrice());
+		return EcommerceHelper::price($this->customerPrice());
 	}
 
 	/**
@@ -120,8 +120,8 @@ class Product extends Model {
 	/**
 	 * Get the product's preview
 	 */
-	public function preview(?int $imageSize, ?int $colorId, ?int $positionId): ProductPreview {
-		return new ProductPreview($this, $imageSize, $colorId, $positionId);
+	public function preview(?int $imageSize, ?int $colorId, ?int $positionId): PreviewHelper {
+		return new PreviewHelper($this, $imageSize, $colorId, $positionId);
 	}
 
 	/**
@@ -179,7 +179,7 @@ class Product extends Model {
 	 * Check if the product is owned by the logged user
 	 */
 	public function userIsOwner(): bool {
-		return $this->userID == userId();
+		return $this->userID == auth()->id();
 	}
 
 	/**

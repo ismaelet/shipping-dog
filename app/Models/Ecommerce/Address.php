@@ -13,7 +13,7 @@ class Address extends Model {
 	/**
 	 * Get the address' cart
 	 */
-	public function cart(): BelongsTo {
+	public function cart_old(): BelongsTo {
 		return $this->belongsTo(Cart::class, 'cartID', 'ID');
 	}
 }
