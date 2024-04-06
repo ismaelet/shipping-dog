@@ -36,7 +36,7 @@ class CartFlowBar {
 						<?php if ($stepId < $currentStepId) { ?>
 
 							<div class="flow-icon icon-box">
-								<?= icon_embed('correct') ?>
+								<?= embed_icon('correct') ?>
 							</div>
 
 						<?php } else { ?>

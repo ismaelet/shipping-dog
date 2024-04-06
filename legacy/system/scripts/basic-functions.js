@@ -1,4 +1,4 @@
-function redirect_old(url) {
+function redirect(url) {
 	const root = document.querySelector('html').getAttribute('data-client-root')
 
 	window.location.href = root + url

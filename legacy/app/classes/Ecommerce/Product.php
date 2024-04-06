@@ -170,13 +170,13 @@ class Product {
 
 	private function getCoverImage() {
 		switch (true) {
-			case file_exists(public_server_path($this->specificCoverImage)):
+			case file_exists(public_storage_path($this->specificCoverImage)):
 				$coverImage = $this->specificCoverImage;
 				break;
-			case !$this->isCustom && file_exists(public_server_path($file = '/uploads/product_types/covers/' . $this->type->slug)):
+			case !$this->isCustom && file_exists(public_storage_path($file = '/product_types/covers/' . $this->type->slug . '.webp')):
 				$coverImage = $file;
 				break;
-			case !$this->isCustom && file_exists(public_server_path($file = '/uploads/product_types/covers/' . $this->type->slug . '.jpg')):
+			case !$this->isCustom && file_exists(public_storage_path($file = '/product_types/covers/' . $this->type->slug . '.jpg')):
 				$coverImage = $file;
 				break;
 			default:
@@ -187,11 +187,11 @@ class Product {
 	}
 
 	private function getClientCoverImage() {
-		return public_client_path($this->coverImage);
+		return public_asset($this->coverImage);
 	}
 
 	private function getSpecificCoverImage() {
-		return '/uploads/products/' . $this->id . '-cover';
+		return '/products/' . $this->id . '-cover.webp';
 	}
 
 	private function getHasSpecificCoverImage() {

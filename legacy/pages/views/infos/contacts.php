@@ -26,13 +26,13 @@
 
 				<section id="contacts" class="flex gap1 mar-t-1">
 					<a href="<?= sys_config('contact-whatsapp-link') ?>" class="soc-icon block icon-box fill-c1-h">
-						<?= icon_embed('contacts/whatsapp') ?>
+						<?= embed_icon('contacts/whatsapp') ?>
 					</a>
 					<a href="<?= sys_config('contact-instagram-link') ?>" class="soc-icon block icon-box fill-c1-h">
-						<?= icon_embed('contacts/instagram') ?>
+						<?= embed_icon('contacts/instagram') ?>
 					</a>
 					<a href="<?= sys_config('contact-facebook') ?>" class="soc-icon block icon-box fill-c1-h">
-						<?= icon_embed('contacts/facebook') ?>
+						<?= embed_icon('contacts/facebook') ?>
 					</a>
 				</section>
 
@@ -86,7 +86,7 @@
 					<textarea name="text" class="form-textarea" maxlength="500" onfocus="$(this).prev().addClass('focus')" onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}" required></textarea>
 
 					<div class="txt-rig mar-t-2">
-						<button type="submit" id="submit" name="submit" class="pbtn">Invia</button>
+						<button type="submit" id="submit" name="submit" class="button">Invia</button>
 					</div>
 				</form>
 			</section>

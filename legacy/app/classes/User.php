@@ -54,7 +54,7 @@ class User {
 
 	// get the profile icon
 	private function icon(): string {
-		$icon = '/users/icons/' . $this->id;
+		$icon = 'users/icons/' . $this->id;
 
 		if (file_exists(public_storage_path($icon . '.webp'))) {
 			return $icon . '.webp';
@@ -64,40 +64,30 @@ class User {
 			return $icon . '.jpg';
 		}
 
-		return '/users/icons/0.jpg';
+		return 'users/icons/0.jpg';
 	}
 
 	// get the cover image
-	private function cover() {
-		$covers = [];
+	public function cover(?int $size = 400) {
+		$sizeConversion = [
+			1024 => '',
+			400 => '_m',
+		];
 
-		// get the HD cover image
-		$cover = '/uploads/shops/covers/' . $this->id;
+		$sizeSlug = $sizeConversion[$size] ?? '';
 
-		if (!file_exists(public_server_path($cover))) {
-			$cover .= '.jpg';
+		// Get the HD cover image
+		$cover = 'shops/covers/' . $this->id . $sizeSlug;
 
-			if (!file_exists(public_server_path($cover))) {
-				$cover = '/uploads/shops/covers/0.jpg';
-			}
+		if (file_exists(public_storage_path($cover . '.webp'))) {
+			return $cover . '.webp';
 		}
 
-		$covers[] = $cover;
-
-		// get the LD cover image
-		$cover = '/uploads/shops/covers/' . $this->id . '_m';
-
-		if (!file_exists(public_server_path($cover))) {
-			$cover .= '.jpg';
-
-			if (!file_exists(public_server_path($cover))) {
-				$cover = '/uploads/shops/covers/0.jpg';
-			}
+		if (file_exists(public_storage_path($cover . '.jpg'))) {
+			return $cover . '.jpg';
 		}
 
-		$covers[] = $cover;
-
-		return $covers;
+		return 'shops/covers/0.jpg';
 	}
 
 	// check if the user is a seller

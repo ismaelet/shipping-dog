@@ -9,7 +9,7 @@
 
 			<div class="grid-flow center-content">
 				<div id="upload-icon" class="icon-box img">
-					<?= icon_embed('upload') ?>
+					<?= embed_icon('upload') ?>
 				</div>
 
 				<h1 id="upload-title" class="txt-bold txt-2rem pad-h-2">Carica una nuova grafica</h1>

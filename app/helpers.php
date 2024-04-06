@@ -3,29 +3,29 @@
 use App\Helpers\EcommerceHelper;
 use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Cart;
-use App\Models\User;
 use User as OldUser;
 use Ecommerce\Cart as EcommerceCart;
-
-/**
- * Get the current user
- */
-function user(): ?User {
-	return auth()->check() ? auth()->user() : null;
-}
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Check if the user is an admin
  */
 function is_admin(): bool {
-	return auth()->check() && auth()->user()->isAdmin();
+	return Auth::check() && Auth::user()->isAdmin();
 }
 
 /**
  * Check if the user is a supervisor
  */
 function is_supervisor(): bool {
-	return auth()->check() && auth()->user()->isSupervisor();
+	return Auth::check() && Auth::user()->isSupervisor();
+}
+
+/**
+ * Get the path of a file in the public storage directory
+ */
+function public_asset(string $path): string {
+	return FileHelper::publicAsset($path);
 }
 
 /**
@@ -66,12 +66,18 @@ function cart_quantity(): int {
 
 //--------------------
 
+
+
+function cartId(): ?int {
+	return EcommerceHelper::cartId();
+}
+
 function is_seller(): bool {
-	return auth()->check() && auth()->user()->isSeller();
+	return Auth::check() && Auth::user()->isSeller();
 }
 
 function user_old(): ?OldUser {
-	return new OldUser(auth()->id() ?? 0);
+	return new OldUser(Auth::id() ?? 0);
 }
 
 function cart_old(): ?EcommerceCart {

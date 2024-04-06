@@ -13,6 +13,8 @@
     </style>
 @endpush
 
-<x-layout>
+<x-layout :color-scheme="$colorScheme ?? null">
+
     <main>{{ $slot }}</main>
+
 </x-layout>

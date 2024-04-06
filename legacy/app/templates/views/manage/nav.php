@@ -36,13 +36,13 @@
 								<div class="grid">
 
 									<div class="nav-ico no-trans icon-box">
-										<?= icon_embed(APP_ICONS_DIR . $cat) ?>
+										<?= embed_icon(APP_ICONS_DIR . $cat) ?>
 									</div>
 
 									<p class="nav-title no-trans"><?= $category['title'] ?></p>
 
 									<span class="nav-ddown-ico icon-box no-trans">
-										<?= icon_embed('navigation/arrow1-down') ?>
+										<?= embed_icon('navigation/arrow1-down') ?>
 									</span>
 
 								</div>

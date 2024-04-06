@@ -1,0 +1,393 @@
+/* Background */
+.bgr-f,
+.bgr-wht,
+.bgr-f-h:hover,
+.bgr-wht-h:hover {
+	background-color: #fff;
+}
+.bgr-fa {
+	background-color: #fafafa;
+}
+.bgr-f6 {
+	background-color: #f6f6f6;
+}
+.bgr-f3 {
+	background-color: #f3f3f3;
+}
+.bgr-e {
+	background-color: #e0e0e0;
+}
+.bgr-d {
+	background-color: #d0d0d0;
+}
+.bgr-c {
+	background-color: #c0c0c0;
+}
+.bgr-b {
+	background-color: #b0b0b0;
+}
+.bgr-a {
+	background-color: #a0a0a0;
+}
+.bgr-9 {
+	background-color: #909090;
+}
+.bgr-8 {
+	background-color: #808080;
+}
+.bgr-7 {
+	background-color: #707070;
+}
+.bgr-6 {
+	background-color: #606060;
+}
+.bgr-5 {
+	background-color: #505050;
+}
+.bgr-4 {
+	background-color: #404040;
+}
+.bgr-3 {
+	background-color: #303030;
+}
+.bgr-2 {
+	background-color: #202020;
+}
+.bgr-1 {
+	background-color: #101010;
+}
+.bgr-0,
+.bgr-blk,
+.bgr-0-h:hover,
+.bgr-blk-h:hover {
+	background-color: #000;
+}
+
+.bgr-none {
+	background-color: transparent;
+}
+.bgr-gre {
+	background-color: green;
+}
+.bgr-red {
+	background-color: red;
+}
+
+/* Fill */
+.fill-f svg,
+.fill-wht svg,
+.fill-f-h:hover svg,
+.fill-wht-h:hover svg {
+	fill: #fff;
+}
+.fill-fa svg {
+	fill: #fafafa;
+}
+.fill-f6 svg {
+	fill: #f6f6f6;
+}
+.fill-f3 svg {
+	fill: #f3f3f3;
+}
+.fill-e svg {
+	fill: #e0e0e0;
+}
+.fill-d svg {
+	fill: #d0d0d0;
+}
+.fill-c svg {
+	fill: #c0c0c0;
+}
+.fill-b svg {
+	fill: #b0b0b0;
+}
+.fill-a svg {
+	fill: #a0a0a0;
+}
+.fill-9 svg {
+	fill: #909090;
+}
+.fill-8 svg {
+	fill: #808080;
+}
+.fill-7 svg {
+	fill: #707070;
+}
+.fill-6 svg {
+	fill: #606060;
+}
+.fill-5 svg {
+	fill: #505050;
+}
+.fill-4 svg {
+	fill: #404040;
+}
+.fill-3 svg {
+	fill: #303030;
+}
+.fill-2 svg {
+	fill: #202020;
+}
+.fill-1 svg {
+	fill: #101010;
+}
+.fill-0 svg,
+.fill-blk svg,
+.fill-0-h:hover svg,
+.fill-blk-h:hover svg {
+	fill: #000;
+}
+
+.fill-none svg {
+	fill: transparent;
+}
+.fill-gre svg {
+	fill: green;
+}
+.fill-red svg {
+	fill: red;
+}
+
+/* Borders */
+.br-f,
+.br-wht,
+.br-f-h:hover,
+.br-wht-h:hover {
+	border-color: #fff;
+}
+.br-fa {
+	border-color: #fafafa;
+}
+.br-f6 {
+	border-color: #f6f6f6;
+}
+.br-f3 {
+	border-color: #f3f3f3;
+}
+.br-e {
+	border-color: #e0e0e0;
+}
+.br-d {
+	border-color: #d0d0d0;
+}
+.br-c {
+	border-color: #c0c0c0;
+}
+.br-b {
+	border-color: #b0b0b0;
+}
+.br-a {
+	border-color: #a0a0a0;
+}
+.br-9 {
+	border-color: #909090;
+}
+.br-8 {
+	border-color: #808080;
+}
+.br-7 {
+	border-color: #707070;
+}
+.br-6 {
+	border-color: #606060;
+}
+.br-5 {
+	border-color: #505050;
+}
+.br-4 {
+	border-color: #404040;
+}
+.br-3 {
+	border-color: #303030;
+}
+.br-2 {
+	border-color: #202020;
+}
+.br-1 {
+	border-color: #101010;
+}
+.br-0,
+.br-blk,
+.br-0-h:hover,
+.br-blk-h:hover {
+	border-color: #000;
+}
+
+.br-red {
+	border-color: red;
+}
+
+/* Texts */
+.txt-f,
+.txt-wht,
+.txt-f-h:hover,
+.txt-wht-h:hover,
+.txt-wht-h:active {
+	color: #fff;
+}
+.txt-e {
+	color: #e0e0e0;
+}
+.txt-d {
+	color: #d0d0d0;
+}
+.txt-c {
+	color: #c0c0c0;
+}
+.txt-b {
+	color: #b0b0b0;
+}
+.txt-a {
+	color: #a0a0a0;
+}
+.txt-9 {
+	color: #909090;
+}
+.txt-8 {
+	color: #808080;
+}
+.txt-7 {
+	color: #707070;
+}
+.txt-6 {
+	color: #606060;
+}
+.txt-5 {
+	color: #505050;
+}
+.txt-4 {
+	color: #404040;
+}
+.txt-3 {
+	color: #303030;
+}
+.txt-2 {
+	color: #202020;
+}
+.txt-1 {
+	color: #101010;
+}
+.txt-0,
+.txt-blk,
+.txt-0-h:hover,
+.txt-blk-h:hover,
+.txt-blk-h:active {
+	color: #000;
+}
+
+.txt-gre {
+	color: green;
+}
+.txt-red {
+	color: red;
+}
+
+/* App colors */
+.bgr-c900 {
+	background-color: var(--text-color-strong);
+}
+.bgr-c-bgr {
+	background-color: var(--bgr);
+}
+.bgr-c-title {
+	background-color: var(--text-color-strong);
+}
+
+.txt-c-title {
+	color: var(--text-color-strong);
+}
+
+.bgr-c1,
+.bgr-c1-h:hover {
+	background-color: var(--clr-1);
+}
+.br-c1,
+.br-c1-h:hover {
+	border-color: var(--clr-1);
+}
+.txt-c1,
+.txt-c1-h:hover,
+.txt-c1-h:active {
+	color: var(--clr-1);
+}
+.fill-c1 svg,
+.fill-c1-h:hover svg {
+	fill: var(--clr-1);
+}
+
+.bgr-c2,
+.bgr-c2-h:hover {
+	background-color: var(--secondary);
+}
+.br-c2,
+.br-c2-h:hover {
+	border-color: var(--secondary);
+}
+.txt-c2,
+.txt-c2-h:hover,
+.txt-c2-h:active {
+	color: var(--secondary);
+}
+.fill-c2 svg,
+.fill-c2-h:hover svg {
+	fill: var(--secondary);
+}
+
+.bgr-c3,
+.bgr-c3-h:hover {
+	background-color: var(--c3);
+}
+.br-c3,
+.br-c3-h:hover {
+	border-color: var(--c3);
+}
+.txt-c3,
+.txt-c3-h:hover,
+.txt-c3-h:active {
+	color: var(--c3);
+}
+.fill-c3 svg,
+.fill-c3-h:hover svg {
+	fill: var(--c3);
+}
+
+.bgr-c4,
+.bgr-c4-h:hover {
+	background-color: var(--c4);
+}
+.br-c4,
+.br-c4-h:hover {
+	border-color: var(--c4);
+}
+.txt-c4,
+.txt-c4-h:hover,
+.txt-c4-h:active {
+	color: var(--c4);
+}
+.fill-c4 svg,
+.fill-c4-h:hover svg {
+	fill: var(--c4);
+}
+
+.bgr-c5,
+.bgr-c5-h:hover {
+	background-color: var(--c5);
+}
+.br-c5,
+.br-c5-h:hover {
+	border-color: var(--c5);
+}
+.txt-c5,
+.txt-c5-h:hover,
+.txt-c5-h:active {
+	color: var(--c5);
+}
+.fill-c5 svg,
+.fill-c5-h:hover svg {
+	fill: var(--c5);
+}
+
+/* Filters */
+.invert {
+	filter: invert(1);
+}

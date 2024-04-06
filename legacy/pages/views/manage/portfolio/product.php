@@ -8,7 +8,7 @@
 
 		<?php if ($oldProduct) { ?>
 			<button type="submit" class="delete-button" name="delete">
-				<?= icon_embed('delete') ?>
+				<?= embed_icon('delete') ?>
 				Elimina il prodotto
 			</button>
 		<?php } ?>

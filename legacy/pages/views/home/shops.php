@@ -9,9 +9,9 @@
 
 					<div class="carousel-box">
 						<a href="<?= $seller->clientUrl ?>" class="shop">
-							<img src="<?= client_path($seller->cover[1]) ?>" loading="lazy" class="cover img-fill">
+							<img src="<?= public_asset($seller->cover()) ?>" loading="lazy" class="cover img-fill">
 							<div class="content txt-cen pad-h-2 pad-b-2">
-								<img src="<?= client_path($seller->icon) ?>" loading="lazy" class="logo">
+								<img src="<?= public_asset($seller->icon) ?>" loading="lazy" class="logo">
 
 								<div class="data">
 									<p class="name txt-line"><?= $seller->name ?></p>

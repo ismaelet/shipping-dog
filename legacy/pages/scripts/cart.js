@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 			call_class_method('Ecommerce\\Cart', 'updateShippingMethodId', [shippingMethodId], await cartId())
 
-			update_cart_old()
+			update_cart()
 		})
 	})
 })

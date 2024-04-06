@@ -51,7 +51,7 @@
 	{% block form-footer %}
 
 	<button type="submit" class="button" name="download">
-		<?= icon_embed('download') ?>
+		<?= embed_icon('download') ?>
 		Scarica il <strong>PDF</strong>
 	</button>
 

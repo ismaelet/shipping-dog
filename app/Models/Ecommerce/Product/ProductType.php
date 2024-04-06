@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * Class ProductType
+ * 
+ * @method string image(?int $colorId = null, ?int $positionId = null)
+ */
 class ProductType extends Model {
 
 	protected $primaryKey = 'ID';
@@ -64,22 +69,29 @@ class ProductType extends Model {
 	/**
 	 * Get the type's image
 	 */
-	public function image(?int $colorId = null, ?int $positionId = null): ?string {
+	public function image(?int $colorId = null, ?int $positionId = null, string $suffix = ''): ?string {
 		$color = $colorId ? ProductColor::find($colorId) : $this->colorCollection()->first();
 		$position = $positionId ? ProductPosition::find($positionId) : $this->positionCollection()->first();
 
-		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . '.webp'))) {
+		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.webp'))) {
 			return $file;
 		}
 
-		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . '.png'))) {
+		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.png'))) {
 			return $file;
 		}
 
-		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '.png'))) {
+		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . $suffix . '.png'))) {
 			return $file;
 		}
 
 		return null;
+	}
+
+	/**
+	 * Get the type's details image
+	 */
+	public function details(?int $colorId = null, ?int $positionId = null): ?string {
+		return $this->image($colorId, $positionId, '-det');
 	}
 }

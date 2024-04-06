@@ -199,7 +199,7 @@ class PreviewOld {
 	static function deleteImages($id) {
 		$product = new Product($id);
 
-		$files = glob(server_root() . '/uploads/products/' . $product->type->slug . '/' . $product->id . '-*');
+		$files = glob(public_storage_path('products/' . $product->type->slug . '/' . $product->id . '-*'));
 		array_map('unlink', $files);
 	}
 }

@@ -3,10 +3,10 @@
 function snippet_binary_icon($value) {
 	if ($value) {
 		$snippet = '<div class="binary-icon binary-icon_yes icon-box">';
-		$snippet .= icon_embed('correct');
+		$snippet .= embed_icon('correct');
 	} else {
 		$snippet = '<div class="binary-icon binary-icon_no icon-box">';
-		$snippet .= icon_embed('close');
+		$snippet .= embed_icon('close');
 	}
 
 	$snippet .= '</div>';
@@ -27,7 +27,7 @@ function snippet_breadcrumbs($breadcrumbs) {
 	}
 
 	$snippet = '<p class="breadcrumbs">';
-	$snippet .= implode('<span class="breadcrumbs_arrow icon-box">' . icon_embed('navigation/arrow1-right') . '</span>', $snippetParts);
+	$snippet .= implode('<span class="breadcrumbs_arrow icon-box">' . embed_icon('navigation/arrow1-right') . '</span>', $snippetParts);
 	$snippet .= '</p>';
 
 	return $snippet;
@@ -71,7 +71,7 @@ function playable_video(string $videoUrl, array $parameters = null, array $custo
 			</video>
 			<div class="playable-video__overlay js-playable-video-overlay">
 				<div class="playable-video__play-button">
-					' . icon_embed('play') . '
+					' . embed_icon('play') . '
 				</div>
 			</div>
 		</div>';

@@ -11,7 +11,7 @@
     $formattedDifferencePercentage = number_format($differencePercentage, 2, ',', '.');
 @endphp
 
-<x-admin.dashboard-item title="Nuovi Utenti" icon="users">
+<x-admin.dashboard-item title="Nuovi Utenti" subtitle="negli ultimi 30 giorni" icon="users">
 
     <x-slot name="value">
         {{ $newUsersCount > 0 ? '+' . $newUsersCount : 0 }}
@@ -22,7 +22,7 @@
             {{ $difference >= 0 ? '+' . $formattedDifferencePercentage : $formattedDifferencePercentage }}%
         </span>
 
-        rispetto all'ultimo mese
+        rispetto al mese precedente
     </x-slot>
 
 </x-admin.dashboard-item>

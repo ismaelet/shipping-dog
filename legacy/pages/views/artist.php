@@ -8,19 +8,19 @@ use App\View\Components\Interactions\FollowButton;
 <section id="head" class="main-wrap">
 
 	<!-- Cover -->
-	<div id="cover" class="<?= !$seller->hasCover ? 'empty' : '' ?>" <?= background_image($seller->cover[0]) ?>></div>
+	<div id="cover" class="<?= !$seller->hasCover ? 'empty' : '' ?>" <?= temp_bg($seller->cover(1024)) ?>></div>
 
 	<form id="head-sec" method="POST" enctype="multipart/form-data">
 		<div id="head-cont">
 
 			<!-- Profile icon -->
 			<div id="icon-box">
-				<div id="icon" <?= background_image($seller->icon) ?>></div>
+				<div id="icon" <?= temp_bg($seller->icon) ?>></div>
 			</div>
 
 			<!-- Edit button -->
 			<?php if ($vip) { ?>
-				<a href="<?= CLIENT_ROOT ?>/manage?id=<?= $id ?>">
+				<a href="<?= client_url('/manage?id=' . $id) ?>">
 					<p id="edit" class="bgr-c1-h">modifica</p>
 				</a>
 			<?php } ?>
@@ -50,7 +50,7 @@ use App\View\Components\Interactions\FollowButton;
 						<?php if (!empty($row_link['site'])) { ?>
 
 							<a href="<?= $row_link['site'] ?>" class="social icon-box fill-c1-h">
-								<?= icon_embed('contacts/website') ?>
+								<?= embed_icon('contacts/website') ?>
 							</a>
 
 						<?php } ?>
@@ -58,7 +58,7 @@ use App\View\Components\Interactions\FollowButton;
 						<?php if (!empty($row_link['instagram'])) { ?>
 
 							<a href="https://www.instagram.com/<?= $row_link['instagram'] ?>" class="social icon-box fill-c1-h">
-								<?= icon_embed('contacts/instagram') ?>
+								<?= embed_icon('contacts/instagram') ?>
 							</a>
 
 						<?php } ?>
@@ -66,7 +66,7 @@ use App\View\Components\Interactions\FollowButton;
 						<?php if (!empty($row_link['facebook'])) { ?>
 
 							<a href="https://www.facebook.com/<?= $row_link['facebook'] ?>" class="social icon-box fill-c1-h">
-								<?= icon_embed('contacts/facebook') ?>
+								<?= embed_icon('contacts/facebook') ?>
 							</a>
 
 						<?php } ?>
@@ -74,7 +74,7 @@ use App\View\Components\Interactions\FollowButton;
 						<?php if (!empty($row_link['twitter'])) { ?>
 
 							<a href="https://www.twitter.com/<?= $row_link['twitter'] ?>" class="social icon-box fill-c1-h">
-								<?= icon_embed('contacts/twitter') ?>
+								<?= embed_icon('contacts/twitter') ?>
 							</a>
 
 						<?php } ?>
@@ -82,7 +82,7 @@ use App\View\Components\Interactions\FollowButton;
 						<?php if (!empty($row_link['youtube'])) { ?>
 
 							<a href="https://www.youtube.com/<?= $row_link['youtube'] ?>" class="social icon-box fill-c1-h">
-								<?= icon_embed('contacts/youtube-full') ?>
+								<?= embed_icon('contacts/youtube-full') ?>
 							</a>
 
 						<?php } ?>

@@ -15,11 +15,11 @@ class Layout extends Component {
 	/**
 	 * Create a new component instance.
 	 */
-	public function __construct(?string $title = null) {
+	public function __construct(?string $title = null, ?string $colorScheme = null) {
 		$this->title = $title;
 		$this->appName = config('app.name');
 		$this->appDescription = config('custom.meta_data.description');
-		$this->colorScheme = isset($_COOKIE['color-scheme']) && in_array($_COOKIE['color-scheme'], ['light', 'dark']) ? $_COOKIE['color-scheme'] : config('custom.meta_data.default_color_scheme');
+		$this->colorScheme = $colorScheme ?: (isset($_COOKIE['color-scheme']) && in_array($_COOKIE['color-scheme'], ['light', 'dark']) ? $_COOKIE['color-scheme'] : config('custom.meta_data.default_color_scheme'));
 	}
 
 	/**

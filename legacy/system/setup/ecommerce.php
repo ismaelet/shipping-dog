@@ -17,7 +17,7 @@ class EcommerceSetup {
 	private static function initializeCustomer() {
 		global $customer;
 
-		$customerId = auth()->id() ?: null;
+		$customerId = null;
 		$customerId = $_SESSION['customerId'] ?? null;
 
 		$customer = new Customer($customerId);

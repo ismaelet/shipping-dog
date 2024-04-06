@@ -7,7 +7,7 @@
 		<div id="name-box" class="grid-flow stack-content center-content">
 			<input type="text" class="js-change-name" id="name" name="name" maxlength="25" data-id="<?= $id ?>" value="<?= $design->name ?>">
 
-			<?= icon_embed('correct', ['name-change-confirmation', 'js-change-name-confirmation']) ?>
+			<?= embed_icon('correct', ['name-change-confirmation', 'js-change-name-confirmation']) ?>
 		</div>
 	</form>
 
@@ -32,7 +32,7 @@
 
 				<div id="des-light" class="des-box txt-0 pos-rel" onclick="$(this).parent().find('.file-inp').click();">
 
-					<img class="design block" style="background-color: <?= $design->color ?>;" src="<?= client_path('/uploads/designs/' . $id . '.png') ?>">
+					<img class="design block" style="background-color: <?= $design->color ?>;" src="<?= public_asset('/designs/' . $id . '.png') ?>">
 
 					<div class="des-over clickable file-stick">
 
@@ -75,7 +75,7 @@
 
 						<div class="des-box txt-0 pos-rel" onclick="$(this).parent().find('.file-inp').click();">
 
-							<img src="<?= client_path('/uploads/designs/' . $id . '_dark.png') ?>" class="design bgr-blk block">
+							<img src="<?= public_asset('/designs/' . $id . '_dark.png') ?>" class="design bgr-blk block">
 
 							<div class="des-over clickable file-stick">
 
@@ -264,7 +264,7 @@
 		<form class="mar-t-4" method="POST">
 
 			<button type="submit" name="delete" id="delete" class="button button--secondary button--bad button--auto-width place-center" onclick="return confirm('Sei sicuro di voler eliminare definitivamente la grafica e tutti i prodotti associati?')">
-				<?= icon_embed('delete') ?>
+				<?= embed_icon('delete') ?>
 				Elimina la grafica
 			</button>
 

@@ -37,14 +37,3 @@ DBOld::execute('
 		time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	)
 ');
-
-// authentication table
-DBOld::execute('
-	CREATE TABLE IF NOT EXISTS auth_tokens (
-		id INT(11) AUTO_INCREMENT PRIMARY KEY,
-		selector VARCHAR(12),
-		validator VARCHAR(64),
-		userID INT(11),
-		expiration TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP()
-	)
-');

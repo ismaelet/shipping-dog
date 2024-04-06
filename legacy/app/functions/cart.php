@@ -147,7 +147,7 @@ function cart_flow($cart, $loc) {
 					<?php if ($key < $cart->step) { ?>
 
 						<div class="flow-icon icon-box">
-							<?= icon_embed('correct') ?>
+							<?= embed_icon('correct') ?>
 						</div>
 
 					<?php } else { ?>

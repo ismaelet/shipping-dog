@@ -112,7 +112,7 @@
 
 										<div class="lbox-open center-items clickable" data-tar="#lbox-<?= $product->id . $product->color->id ?>">
 											<div class="icon-box">
-												<?= icon_embed('ecommerce/add-to-cart') ?>
+												<?= embed_icon('ecommerce/add-to-cart') ?>
 											</div>
 										</div>
 

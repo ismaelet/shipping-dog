@@ -64,8 +64,8 @@ if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
 		}
 
 		// delete design images
-		if (file_exists($file = SERVER_ROOT . '/uploads/designs/previews/' . $id . '.jpg')) unlink($file);
-		if (file_exists($file = SERVER_ROOT . '/uploads/designs/previews/' . $id . '_m.jpg')) unlink($file);
+		if (file_exists($file = public_storage_path('/designs/previews/' . $id . '.jpg'))) unlink($file);
+		if (file_exists($file = public_storage_path('/designs/previews/' . $id . '_m.jpg'))) unlink($file);
 	}
 
 	if ($dark) redirect_old('#des-dark-anch');
@@ -125,8 +125,8 @@ if (isset($_POST['colors-submit'])) {
 	}
 
 	// update design
-	if (file_exists($file = SERVER_ROOT . '/uploads/designs/previews/' . $id . '.jpg')) unlink($file);
-	if (file_exists($file = SERVER_ROOT . '/uploads/designs/previews/' . $id . '_m.jpg')) unlink($file);
+	if (file_exists($file = public_storage_path('/designs/previews/' . $id . '.jpg'))) unlink($file);
+	if (file_exists($file = public_storage_path('/designs/previews/' . $id . '_m.jpg'))) unlink($file);
 
 	$colorHex = $_POST['color-hex'];
 
@@ -191,7 +191,7 @@ if (isset($_POST['off']) || isset($_POST['on'])) {
 		Product::new($id, $typeId);
 	}
 
-	redirect_old('#item-' . $typeID);
+	redirect_old('#item-' . $typeId);
 }
 
 // delete design

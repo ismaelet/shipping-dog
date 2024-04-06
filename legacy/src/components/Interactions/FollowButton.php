@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Ecommerce\Seller;
+use Illuminate\Support\Facades\Auth;
 
 $seller = Seller::find($sellerId);
 
@@ -8,8 +9,8 @@ $seller = Seller::find($sellerId);
 
 <template>
 
-	<?php if (auth()->check()) {
-		if ($sellerId != auth()->id()) {
+	<?php if (Auth::check()) {
+		if ($sellerId != Auth::id()) {
 	?>
 
 			<div class="follow-button" x-data="{ followed: <?= $seller->isFollowed() ? 'true' : 'false' ?> }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; toggleFollow(<?= $sellerId ?>, followed)">

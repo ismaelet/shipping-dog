@@ -30,7 +30,7 @@ use ViewManager\Ecommerce\CartRecap;
 
 			<?php if (cart_old()->shippingMethodId == ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID) { ?>
 
-				<p class="center-content error-warning">Hai scelto di ritirare il capo in sede, quindi l'ordine NON verrà spedito, ma dovrai ritirarlo nella nostra sede in Piazza Scopoli, 9, 38033 Cavalese (TN)</p>
+				<p class="center-content input-warning">Hai scelto di ritirare il capo in sede, quindi l'ordine NON verrà spedito, ma dovrai ritirarlo nella nostra sede in Piazza Scopoli, 9, 38033 Cavalese (TN)</p>
 
 			<?php } ?>
 

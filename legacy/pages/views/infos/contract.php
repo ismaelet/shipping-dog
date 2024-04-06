@@ -11,6 +11,6 @@
 
 {% block form-footer %}
 
-<a href="<?= client_url('/manage/portfolio/add') ?>" class="pbtn">Indietro</a>
+<a href="<?= client_url('/manage/portfolio/add') ?>" class="button">Indietro</a>
 
 {% end form-footer %}

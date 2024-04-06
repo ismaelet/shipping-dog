@@ -1,3 +1,5 @@
-import "./bootstrap";
-import "./app";
-import "alpinejs";
+import './bootstrap'
+import './app'
+import 'alpinejs'
+
+import.meta.glob(['../images/**'])

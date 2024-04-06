@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ecommerce\Product\ProductType;
 use Ecommerce\Design;
 use Ecommerce\Product;
 use Ecommerce\Product\Color;
@@ -11,61 +12,62 @@ $designId = $_GET['designId'];
 $design = new Design($designId);
 
 if (!$design->custom && auth()->id() != 1) {
-	$types = DBOld::select('ID FROM items_types WHERE hidden = 0 ORDER BY category ASC, ID ASC');
+	$oldTypes = DBOld::select('ID FROM items_types WHERE hidden = 0 ORDER BY category ASC, ID ASC');
 } else {
-	$types = DBOld::select('ID FROM items_types ORDER BY hidden ASC, category ASC, ID ASC');
+	$oldTypes = DBOld::select('ID FROM items_types ORDER BY hidden ASC, category ASC, ID ASC');
 }
 
-while ($typeRow = $types->fetch_assoc()) {
-	$type = new Type($typeRow['ID']);
-	$gender = new Gender($type->genderId);
+while ($oldTypeRow = $oldTypes->fetch_assoc()) {
+	$oldType = new Type($oldTypeRow['ID']);
+	$type = ProductType::find($oldType->id);
+	$gender = new Gender($oldType->genderId);
 
-	$productId = DBOld::find('ID FROM items WHERE desID = ? AND typeID = ?', [$design->id, $type->id]);
+	$productId = DBOld::find('ID FROM items WHERE desID = ? AND typeID = ?', [$design->id, $oldType->id]);
 
 	$product = new Product($productId);
 
 	$active = $product->statusId;
 
 	if ($product->statusId) $productImage = $product->image;
-	else if (file_exists(SERVER_ROOT . $product->image) && !$product->isCustom) $productImage = $product->image;
+	else if (public_storage_path($product->image) && !$product->isCustom) $productImage = $product->image;
 	else $productImage = $product->type->blankImage;
 
 	// tabls
 	$tabs = [];
 
-	if (count($type->colors) > 1) $tabs[] = ['Colori', 'colors'];
+	if (count($oldType->colors) > 1) $tabs[] = ['Colori', 'colors'];
 
-	foreach ($type->availablePositionIds as $positionId) {
+	foreach ($oldType->availablePositionIds as $positionId) {
 		$position = new Position($positionId);
 		if ($position->editable) $tabs[] = [$position->name, 'position', $positionId];
 	}
 
 	use_natural_keys($tabs);
 
-	$designLight = '/uploads/designs/' . $design->id . '.png';
-	$designDark = file_exists(SERVER_ROOT . $file = '/uploads/designs/' . $design->id . '_dark.png') ? $file : $designLight;
+	$designLight = '/designs/' . $design->id . '.png';
+	$designDark = file_exists(public_storage_path($file = '/designs/' . $design->id . '_dark.png')) ? $file : $designLight;
 ?>
 
-	<div id="item-<?= $type->id ?>" class="item <?= $active ? 'active' : '' ?>">
+	<div id="item-<?= $oldType->id ?>" class="item <?= $active ? 'active' : '' ?>">
 
 		<div class="item-img item-panel-open pos-rel">
-			<img src="<?= client_path($productImage) ?>" alt="" class="img-fill">
+			<img src="<?= $productImage ?>" alt="" class="img-fill">
 			<div class="item-over bgr"></div>
 		</div>
 
-		<h3 class="type-name txt-1rem txt-med txt-cen mar-t-05"><?= $type->name;
+		<h3 class="type-name txt-1rem txt-med txt-cen mar-t-05"><?= $oldType->name;
 																if ($gender->id) echo ' - ' . $gender->name ?></h3>
 
 		<form method="POST" class="img-buttons grid mar-t-05">
 
-			<input type="hidden" name="typeID" value="<?= $type->id ?>">
+			<input type="hidden" name="typeID" value="<?= $oldType->id ?>">
 
-			<button type="submit" name="off" class="off-btn switch-btn pbtn">
+			<button type="submit" name="off" class="off-btn switch-btn button">
 				<span class="btn-icon bgr-wht" <?= icon_svg('actions/add-bgr') ?>></span>
 				<span class="btn-txt">Attivo</span>
 			</button>
 
-			<button type="submit" name="on" class="on-btn switch-btn pbtn">
+			<button type="submit" name="on" class="on-btn switch-btn button">
 				<span class="btn-icon bgr-5" <?= icon_svg('actions/add-bgr') ?>></span>
 				<span class="btn-txt txt-5">Disattivato</span>
 			</button>
@@ -116,7 +118,7 @@ while ($typeRow = $types->fetch_assoc()) {
 
 								$orientation = $product->design->ratio > $sX_max / $sY_max;
 
-								$clothing = $product->type->getImage($product->colorId, $position->imagePositionId);
+								$clothing = $type->image($product->colorId, $position->imagePositionId);
 						?>
 
 								<section class="section<?= $key ?> section positions <?= $key == 1 ? 'active' : '' ?> <?= $enabled ? '' : 'disabled' ?>" data-enabled="<?= $enabled ? 1 : 0 ?>" data-image-position="<?= $position->imagePositionId ?>">
@@ -131,14 +133,14 @@ while ($typeRow = $types->fetch_assoc()) {
 											<?php if ($design->custom) { ?>
 
 												<!-- If it's a custom static image -->
-												<div class="bgr" <?= background_image($product->image) ?>></div>
+												<div class="bgr" <?= temp_bg($product->image) ?>></div>
 
 											<?php } else { ?>
 
 												<!-- If it's a normal image -->
-												<div class="background bgr" <?= background_image('/uploads/product_types/mockups/bgr/grey.png') ?>></div>
+												<div class="background bgr" <?= temp_bg('product_types/mockups/bgr/grey.png') ?>></div>
 
-												<div class="clothing bgr" <?= background_image($clothing) ?> data-type-id="<?= $product->typeId ?>"></div>
+												<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $product->typeId ?>"></div>
 
 												<div class="design-box" style="
 											width: <?= $sX_max ?>%;
@@ -147,21 +149,21 @@ while ($typeRow = $types->fetch_assoc()) {
 											left: <?= $pX_min ?>%;">
 
 													<div class="design light <?= $product->color->dark ? '' : 'active' ?>" style="
-												background-image: url(<?= client_url($designLight) ?>);
+												background-image: url(<?= public_asset($designLight) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
 													</div>
 
 													<div class="design dark <?= $product->color->dark ? 'active' : '' ?>" style="
-												background-image: url(<?= client_url($designDark) ?>);
+												background-image: url(<?= public_asset($designDark) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
 													</div>
 
 												</div>
 
-												<?php if (file_exists(SERVER_ROOT . $file = str_replace('.', '-det.', $clothing))) { ?>
-													<div class="details bgr" <?= background_image($file) ?>></div>
+												<?php if (file_exists(public_storage_path($file = str_replace('.', '-det.', $clothing)))) { ?>
+													<div class="details bgr" <?= temp_bg($file) ?>></div>
 											<?php }
 											} ?>
 
@@ -258,7 +260,7 @@ while ($typeRow = $types->fetch_assoc()) {
 									$orientation = $product->design->ratio > $sX_max / $sY_max;
 
 									// $clothingImagePosition = $position->base_of ?: $position->id;
-									$clothing = $product->type->getImage($product->colorId);
+									$clothing = $type->image($product->colorId, $product->positionId);
 								?>
 
 									<section class="section<?= $key ?> section colors <?= $key == 1 ? 'active' : '' ?>" data-image-position="<?= $product->type->basicPositionId ?>">
@@ -271,14 +273,14 @@ while ($typeRow = $types->fetch_assoc()) {
 												<?php if ($design->custom) { ?>
 
 													<!-- If it's a custom static image -->
-													<div class="bgr" <?= background_image($product->image) ?>></div>
+													<div class="bgr" <?= temp_bg($product->image) ?>></div>
 
 												<?php } else { ?>
 
 													<!-- If it's a normal image -->
-													<div class="background bgr" <?= background_image('/uploads/product_types/mockups/bgr/grey.png') ?>></div>
+													<div class="background bgr" <?= temp_bg('product_types/mockups/bgr/grey.png') ?>></div>
 
-													<div class="clothing bgr" <?= background_image($clothing) ?> data-type-id="<?= $product->typeId ?>"></div>
+													<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $product->typeId ?>"></div>
 
 													<div class="design-box pos-rel" style="
 											width: <?= $sX_max ?>%;
@@ -287,13 +289,13 @@ while ($typeRow = $types->fetch_assoc()) {
 											left: <?= $pX_min ?>%;">
 
 														<div class="design light <?= $product->color->dark ? '' : 'active' ?>" style="
-												background-image: url(<?= client_url($designLight) ?>);
+												background-image: url(<?= public_asset($designLight) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
 														</div>
 
 														<div class="design dark <?= $product->color->dark ? 'active' : '' ?>" style="
-												background-image: url(<?= client_url($designDark) ?>);
+												background-image: url(<?= public_asset($designDark) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
 														</div>
@@ -302,7 +304,7 @@ while ($typeRow = $types->fetch_assoc()) {
 
 													<?php if (file_exists(SERVER_ROOT . $file = str_replace('.', '-det.', $clothing))) { ?>
 
-														<div class="details bgr" <?= background_image($file) ?>></div>
+														<div class="details bgr" <?= temp_bg($file) ?>></div>
 
 												<?php }
 												} ?>
@@ -336,7 +338,7 @@ while ($typeRow = $types->fetch_assoc()) {
 
 																$color = new Color($row['ID']);
 
-																if (in_array($color->slug, $type->availableColorSlugs)) { ?>
+																if (in_array($color->slug, $oldType->availableColorSlugs)) { ?>
 
 																	<label class="color-box">
 

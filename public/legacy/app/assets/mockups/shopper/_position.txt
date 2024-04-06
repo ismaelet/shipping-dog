@@ -1,0 +1,5 @@
+1. Rotate 15deg
+2. Crop square
+3. Transform 616x 616y
+4. Resize 1024 x 1024
+5. Flatten

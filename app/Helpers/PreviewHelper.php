@@ -31,7 +31,7 @@ class PreviewHelper {
 	* Returns the image path
 	*/
 	public function image(): string {
-		$image = asset('storage/' . $this->fileStoragePath());
+		$image = public_asset($this->fileStoragePath());
 
 		// Return the image path if it exists
 		if ($this->hasImage()) {
@@ -49,7 +49,7 @@ class PreviewHelper {
 		}
 
 		// Return the default image path
-		return asset('storage/product_types/mockups/no-image.webp');
+		return public_asset('product_types/mockups/no-image.webp');
 	}
 
 	private function fileName(): string {

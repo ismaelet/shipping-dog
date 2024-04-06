@@ -46,7 +46,7 @@ use Ecommerce\Product\Type;
 
 						<!-- Zoom icon on mobile -->
 						<div id="img-zoom-icon" class="img-zoom icon-box clickable">
-							<?= icon_embed('search') ?>
+							<?= embed_icon('search') ?>
 						</div>
 
 						<!-- Love button -->
@@ -361,7 +361,7 @@ use Ecommerce\Product\Type;
 
 									<label class="logo-field__item">
 										<input type="radio" class="js-logo" name="logo-id" value="0" checked>
-										<?= icon_embed('close') ?>
+										<?= embed_icon('close') ?>
 									</label>
 
 								<?php } ?>
@@ -428,7 +428,7 @@ use Ecommerce\Product\Type;
 					<?php if (($oldProduct->statusId && !$oldProduct->deleted) || $owner) { ?>
 
 						<button type="submit" id="submit" name="submit" class="add-to-cart button button--full-width">
-							<?= icon_embed('cart') ?>
+							<?= embed_icon('cart') ?>
 							Aggiungi al carrello
 						</button>
 

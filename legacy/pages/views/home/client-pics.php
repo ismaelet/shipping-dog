@@ -16,7 +16,7 @@ use Ecommerce\Design;
 
 				<div class="flex center-content">
 					<a href="<?= sys_config('contact-instagram-link') ?>" class="button button--auto-width mar-t-2">
-						<?= icon_embed('contacts/instagram') ?>
+						<?= embed_icon('contacts/instagram') ?>
 						Seguici su Instagram
 					</a>
 				</div>
@@ -38,7 +38,7 @@ use Ecommerce\Design;
 			?>
 
 				<a href="<?= $design->url ?>" class="client__image image stack-items">
-					<img src="<?= client_path('/uploads/users/testimonials/' . $row['ID'] . '.jpg') ?>" alt="" loading="lazy" class="img-fill">
+					<img src="<?= public_asset('/users/testimonials/' . $row['ID'] . '.jpg') ?>" alt="" loading="lazy" class="img-fill">
 					<div class="overlay pad-2 grid va-cen txt-cen">
 						<div class="title-box">
 							<p class="design-name txt-wht txt-11rem txt-bold txt-line"><?= $design->name ?></p>

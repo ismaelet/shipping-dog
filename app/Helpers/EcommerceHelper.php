@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Ecommerce\Cart;
+use Illuminate\Support\Facades\Auth;
 
 class EcommerceHelper {
 
@@ -10,8 +11,8 @@ class EcommerceHelper {
 	 * Get the ID of the active cart
 	 */
 	public static function cartId(): ?int {
-		if (auth()->check()) {
-			return auth()->user()->cart->ID ?? null;
+		if (auth()->check() && auth()->user()->cart) {
+			return auth()->user()->cart->ID;
 		}
 
 		return session('cart_id') ?: null;
@@ -22,7 +23,7 @@ class EcommerceHelper {
 	 */
 	public static function cart(): ?Cart {
 		if (auth()->check()) {
-			return auth()->user()->cart ?? null;
+			return Auth::user()->cart ?? null;
 		}
 
 		if (session('cart_id')) {

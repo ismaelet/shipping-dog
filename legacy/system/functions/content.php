@@ -18,7 +18,7 @@ function place_image($slug) {
 		$content =
 			'<a class="admin-replace-img" href="' . client_url('/admin_old/content/images/add?id=' . $imageRow['id']) . '">
 				<div class="admin-replace-img_icon icon-box" href="' . client_url('/admin_old/content/images/add?id=' . $imageRow['id']) . '">
-					' . icon_embed('upload') . '
+					' . embed_icon('upload') . '
 				</div>
 			</a>';
 	}

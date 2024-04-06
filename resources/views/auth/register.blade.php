@@ -1,65 +1,59 @@
 @push('styles')
     <style>
-        .welcome__image {
-            background-position: left;
-            background-size: 150% auto;
 
-            @media (min-width: 769px) {
-                background-position: right;
-                background-size: cover;
-            }
-        }
     </style>
 @endpush
 
-<x-templates.auth :$title>
-    {{-- Body --}}
-    <x-slot:body>
-        <div class="grid gap-2 text-left">
-            <x-form.label>Nome completo:</x-form.label>
-            <x-form.input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="Nome" required />
+<x-templates.auth :$title welcome-image="auth/register-background.webp"
+    welcome-title="<span class='font-light'>Registrati su</span><br>Shipping Dog"
+    welcome-description="Registrandoti sulla nostra piattaforma potrai monitorare lo stato dei tuoi ordini, seguire gli
+	artisti che ti piacciono, aggiungere articoli ai tuoi preferiti e molto altro. Sei un disegnatore?
+	Qui potrai vendere le tue grafiche stampate su tantissimi capi e accessori.">
 
-            @error('first_name')
-                <x-form.error-warning>{{ $message }}</x-form.error-warning>
+    <!-- Form -->
+    <x-slot name="formBody">
+        <x-form.field>
+            <x-form.label>Username</x-form.label>
+            <x-form.input type="text" name="username" :value="old('username')" placeholder="Username" maxlength="20" required />
+
+            @error('username')
+                <x-form.input-warning>{{ $message }}</x-form.input-warning>
             @enderror
+        </x-form.field>
 
-            <x-form.input type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Cognome" required />
 
-            @error('last_name')
-                <x-form.error-warning>{{ $message }}</x-form.error-warning>
+        <x-form.field>
+            <x-form.label>Password</x-form.label>
+            <x-form.input type="password" name="password" placeholder="Password" maxlength="20" required />
+
+            @error('password')
+                <x-form.input-warning>{{ $message }}</x-form.input-warning>
             @enderror
-        </div>
+        </x-form.field>
 
-        <div class="grid gap-2 text-left">
-            <x-form.label>Indirizzo e-mail:</x-form.label>
-            <x-form.input type="email" name="email" value="{{ old('email') }}" placeholder="Indirizzo e-mail"
+        <x-form.field>
+            <x-form.input type="password" name="password_confirmation" placeholder="Conferma la password" maxlength="20"
+                required />
+        </x-form.field>
+
+        <x-form.field>
+            <x-form.label>E-mail</x-form.label>
+            <x-form.input type="email" name="email" :value="old('email')" placeholder="E-mail" maxlength="100"
                 required />
 
             @error('email')
-                <x-form.error-warning>{{ $message }}</x-form.error-warning>
+                <x-form.input-warning>{{ $message }}</x-form.input-warning>
             @enderror
-        </div>
+        </x-form.field>
 
-        <div class="grid gap-2 text-left">
-            <x-form.label>Password:</x-form.label>
-            <x-form.input type="password" name="password" value="" placeholder="Password" required />
-            <x-form.input type="password" name="password_confirmation" value="" placeholder="Conferma la password"
-                required />
+        <x-form.checkbox name="privacy"
+            text="Ho letto e acconsento al <a class='font-bold text-neutral-700' href='/infos/privacy'>trattamento
+                dei dati</a>"
+            required />
+    </x-slot>
 
-            @error('password')
-                <x-form.error-warning>{{ $message }}</x-form.error-warning>
-            @enderror
-        </div>
-    </x-slot:body>
-
-    {{-- Footer --}}
-    <x-slot:footer>
+    <x-slot name="formFooter">
         <x-form.button type="submit">Registrati</x-form.button>
-        <x-form.button href="{{ route('login') }}" variant="secondary">Hai già un account?</x-form.button>
-    </x-slot:footer>
-
-    {{-- Welcome Section --}}
-    <x-slot:welcome>
-        <div class="welcome__image" style="{{ set_background_image('auth/register-image.webp') }}"></div>
-    </x-slot:welcome>
+        <x-form.button href="{{ route('login') }}" variant="secondary">{{ __('Back') }}</x-form.button>
+    </x-slot>
 </x-templates.auth>

@@ -1,0 +1,22 @@
+[Normal]
+X 485
+Y 492
+W 919 ~ H 1096
+R -2.3%
+
+[Heather]
+X 498
+Y 493
+W 839 ~ H 1084
+
+[Back - Normal]
+X 498 OR 497
+Y 584 OR 582
+W 1149 ~ H 1410 OR 1084 ~ 1356
+R 2.72%
+
+[Back - Heather]
+X 507
+Y 479
+W 1455 ~ H 1818
+R 0,37%

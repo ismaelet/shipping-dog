@@ -29,7 +29,7 @@
 						<a href="<?= client_url($dashboardConfig['path']) ?>" class="title-box grid">
 							<div class="highlight"></div>
 							<div class="icon-box">
-								<?= icon_embed('home') ?>
+								<?= embed_icon('home') ?>
 							</div>
 							<p class="title txt-line"><?= ('Dashboard') ?></p>
 						</a>
@@ -45,7 +45,7 @@
 							<div class="title-box grid">
 								<div class="highlight"></div>
 								<div class="icon-box">
-									<?= icon_embed(APP_ICONS_DIR . 'dashboards/' . $category['slug']) ?>
+									<?= embed_icon(APP_ICONS_DIR . 'dashboards/' . $category['slug']) ?>
 								</div>
 								<p class="title txt-line"><?= $category['title'] ?></p>
 							</div>
@@ -75,7 +75,7 @@
 
 		<!-- Mobile open menu icon -->
 		<div id="open-menu" class="icon-box">
-			<?= icon_embed('navigation/arrow1-right') ?>
+			<?= embed_icon('navigation/arrow1-right') ?>
 		</div>
 	</div>
 </section>

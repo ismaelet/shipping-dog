@@ -2,17 +2,19 @@
 
 class ScriptLoader {
 
+	const ASSETS_ROOT = __DIR__ . '/../../../public/legacy';
+
 	private static $list = [];
 	private static $headInlineScripts = [];
 	private static $footInlineScripts = [];
 
 	public static function __constructStatic() {
 		// add framework scripts
-		$files = glob(SERVER_ROOT . '/system/scripts/*.js');
+		$files = glob(self::ASSETS_ROOT . '/system/scripts/*.js');
 		foreach ($files as $file) self::add(self::getFileName($file), 'system');
 
 		// add app scripts
-		$files = glob(SERVER_ROOT . '/app/scripts/*.js');
+		$files = glob(self::ASSETS_ROOT . '/app/scripts/*.js');
 		foreach ($files as $file) self::add(self::getFileName($file), 'app');
 	}
 
@@ -30,16 +32,16 @@ class ScriptLoader {
 				if (!$priority) $priority = 3;
 				break;
 			case 'template':
-				if (file_exists(SERVER_ROOT . $fetchingFile = '/app/templates/scripts/' . $fileName . '.js')) {
+				if (file_exists(self::ASSETS_ROOT . $fetchingFile = '/app/templates/scripts/' . $fileName . '.js')) {
 					$file = $fetchingFile;
 					if (!$priority) $priority = 3;
-				} else if (file_exists(SERVER_ROOT . $fetchingFile = '/system/templates/scripts/' . $fileName . '.js')) {
+				} else if (file_exists(self::ASSETS_ROOT . $fetchingFile = '/system/templates/scripts/' . $fileName . '.js')) {
 					$file = $fetchingFile;
 					if (!$priority) $priority = 2;
 				}
 				break;
 			case 'page':
-				if (file_exists(SERVER_ROOT . $fetchingFile = '/pages/scripts/' . $fileName . '.js')) {
+				if (file_exists(self::ASSETS_ROOT . $fetchingFile = '/pages/scripts/' . $fileName . '.js')) {
 					$file = $fetchingFile;
 					if (!$priority) $priority = 4;
 				}
@@ -52,13 +54,13 @@ class ScriptLoader {
 
 		// store the file URL in the list
 		if ($file) {
-			$file .= '?v=' . filemtime(SERVER_ROOT . $file);
+			$file .= '?v=' . filemtime(self::ASSETS_ROOT . $file);
 			self::$list[] = [$priority, $file];
 		}
 	}
 
 	public static function addPageScripts($pageName) {
-		$pageScripts = glob(SERVER_ROOT . '/pages/scripts/-expands-' . $pageName . '/*.js');
+		$pageScripts = glob(self::ASSETS_ROOT . '/pages/scripts/-expands-' . $pageName . '/*.js');
 
 		self::add($pageName, 'page');
 

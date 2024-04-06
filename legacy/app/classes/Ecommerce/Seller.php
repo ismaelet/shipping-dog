@@ -56,6 +56,10 @@ class Seller {
 		return $this->userData->icon;
 	}
 
+	public function cover(int $size = 400) {
+		return $this->userData->cover($size);
+	}
+
 	private function getCover() {
 		return $this->userData->cover;
 	}

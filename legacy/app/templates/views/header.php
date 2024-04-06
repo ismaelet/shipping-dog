@@ -28,7 +28,7 @@
 							<div class="background fill-all bgr-c1"></div>
 
 							<div class="icon-box">
-								<?= icon_embed('search') ?>
+								<?= embed_icon('search') ?>
 							</div>
 
 						</label>
@@ -121,7 +121,7 @@
 											<?php if (!empty($h_link['new'])) { ?>
 
 												<span class="h-link__new-icon">
-													<?= icon_embed('discount') ?>
+													<?= embed_icon('discount') ?>
 												</span>
 
 											<?php } ?>
@@ -152,11 +152,11 @@
 
 						<div class="theme-switch h-icon">
 							<div class="light-icon icon-box" data-theme="light">
-								<?= icon_embed('sun') ?>
+								<?= embed_icon('sun') ?>
 							</div>
 
 							<div class="dark-icon icon-box" data-theme="dark">
-								<?= icon_embed('moon') ?>
+								<?= embed_icon('moon') ?>
 							</div>
 						</div>
 
@@ -166,7 +166,7 @@
 					<?php if ($header['wishlist'] && DBOld::exists('likes WHERE userID = ?', [auth()->id()])) { ?>
 
 						<a id="h-wish" class="wish icon-box h-link al-mid h-icon" href="<?= client_url('/wishlist') ?>">
-							<?= icon_embed('love') ?>
+							<?= embed_icon('love') ?>
 						</a>
 
 					<?php } ?>
@@ -174,7 +174,7 @@
 					<!-- Cart icon -->
 					<a id="h-cart" class="bag icon-box h-link al-mid h-icon" href="<?= client_url('/cart') ?>">
 
-						<?= icon_embed('bag') ?>
+						<?= embed_icon('bag') ?>
 
 						<?php if (cart_quantity()) { ?>
 							<h1 id="h-cart-num"><?= cart_quantity() ?></h1>

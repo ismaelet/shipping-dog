@@ -29,7 +29,7 @@
 			<label for="chck1<?= $i; ?>" class="info_lbl">
 				<h1 class="info_title">
 					<span class="info_ico icon-box">
-						<?= icon_embed('info') ?>
+						<?= embed_icon('info') ?>
 					</span>
 					<span class="info_title_txt">
 						HO ORDINATO MA NON MI È ARRIVATA NESSUNA email DI CONFERMA
@@ -52,7 +52,7 @@
 			<label for="chck1<?= $i; ?>" class="info_lbl">
 				<h1 class="info_title">
 					<span class="info_ico icon-box">
-						<?= icon_embed('info') ?>
+						<?= embed_icon('info') ?>
 					</span>
 					<span class="info_title_txt">
 						CAMBI DI TAGLIA, RESI E RIMBORSI
@@ -81,7 +81,7 @@
 			<label for="chck2<?= $i; ?>" class="info_lbl">
 				<h1 class="info_title">
 					<span class="info_ico icon-box">
-						<?= icon_embed('info') ?>
+						<?= embed_icon('info') ?>
 					</span>
 					<span class="info_title_txt">
 						TEMPI DI SPEDIZIONE
@@ -103,7 +103,7 @@
 			<label for="chck2<?= $i; ?>" class="info_lbl">
 				<h1 class="info_title">
 					<span class="info_ico icon-box">
-						<?= icon_embed('info') ?>
+						<?= embed_icon('info') ?>
 					</span>
 					<span class="info_title_txt">
 						TRACCIAMENTO ORDINE
@@ -126,7 +126,7 @@
 			<label for="chck2<?= $i; ?>" class="info_lbl">
 				<h1 class="info_title">
 					<span class="info_ico icon-box">
-						<?= icon_embed('info') ?>
+						<?= embed_icon('info') ?>
 					</span>
 					<span class="info_title_txt">
 						SPEDIZIONI IN GIACENZA
@@ -155,7 +155,7 @@
 			<label for="chck3<?= $i; ?>" class="info_lbl">
 				<h1 class="info_title">
 					<span class="info_ico icon-box">
-						<?= icon_embed('info') ?>
+						<?= embed_icon('info') ?>
 					</span>
 					<span class="info_title_txt">
 						COME APRO UN NEGOZIO?
@@ -176,7 +176,7 @@
 			<label for="chck3<?= $i; ?>" class="info_lbl">
 				<h1 class="info_title">
 					<span class="info_ico icon-box">
-						<?= icon_embed('info') ?>
+						<?= embed_icon('info') ?>
 					</span>
 					<span class="info_title_txt">
 						IL MIO NEGOZIO SARÀ ATTIVO FIN DA SUBITO?
@@ -198,7 +198,7 @@
 			<label for="chck3<?= $i; ?>" class="info_lbl">
 				<h1 class="info_title">
 					<span class="info_ico icon-box">
-						<?= icon_embed('info') ?>
+						<?= embed_icon('info') ?>
 					</span>
 					<span class="info_title_txt">
 						GUADAGNI PROPOSTI
@@ -219,7 +219,7 @@
 			<label for="chck3<?= $i; ?>" class="info_lbl">
 				<h1 class="info_title">
 					<span class="info_ico icon-box">
-						<?= icon_embed('info') ?>
+						<?= embed_icon('info') ?>
 					</span>
 					<span class="info_title_txt">
 						COME VERRÒ PAGATO?

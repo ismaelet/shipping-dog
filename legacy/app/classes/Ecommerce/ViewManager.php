@@ -82,7 +82,7 @@ class ViewManager {
 						<?php if (!$cart->statusId) { ?>
 
 							<button type="submit" name="remove" class="remove icon-box" value="<?= $order->id ?>" formnovalidate="formnovalidate">
-								<?= icon_embed('close') ?>
+								<?= embed_icon('close') ?>
 							</button>
 
 						<?php } ?>
@@ -92,14 +92,14 @@ class ViewManager {
 					<?php if (!$cart->statusId && !$cart->code && !$order->credit && $order->product->sellerId == $cart->customerId && $cart->usableCredit >= $order->price) { ?>
 
 						<button class="use-credit-btn credit-btn button button--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $order->id ?>">
-							<?= icon_embed('dollar') ?>
+							<?= embed_icon('dollar') ?>
 							Usa il tuo credito
 						</button>
 
 					<?php } else if (!$cart->statusId && $order->credit) { ?>
 
 						<button class="no-credit-btn credit-btn button button--secondary button--auto-width mar-t-1" name="item_no_credit" value="<?= $order->id ?>">
-							<?= icon_embed('close') ?>
+							<?= embed_icon('close') ?>
 							Non usare il credito
 						</button>
 

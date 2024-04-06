@@ -12,7 +12,7 @@
 				<input type="text" name="search" class="page-search__input" value="<?= $_GET['search'] ?? '' ?>" placeholder="Cerca un prodotto" maxlength="30" onfocus="$(this).next().addClass('focus');" onblur="$(this).next().removeClass('focus');" autocomplete="off">
 
 				<button type="submit" class="page-search__button button">
-					<?= icon_embed('search') ?>
+					<?= embed_icon('search') ?>
 				</button>
 			</form>
 		</div>

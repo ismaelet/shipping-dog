@@ -39,8 +39,8 @@ use Ecommerce\Seller;
 						$seller = new Seller($row['userID'], 'name') ?>
 
 						<a href="<?= $seller->clientUrl ?>" class="shop stack-items">
-							<img src="<?= client_path($seller->cover[1]) ?>" alt="" loading="lazy" class="cover img-fill">
-							<img src="<?= client_path($seller->icon) ?>" alt="" loading="lazy" class="icon">
+							<img src="<?= public_asset($seller->cover()) ?>" alt="" loading="lazy" class="cover img-fill">
+							<img src="<?= public_asset($seller->icon) ?>" alt="" loading="lazy" class="icon">
 							<p class="name txt-line"><?= $seller->name ?></p>
 						</a>
 

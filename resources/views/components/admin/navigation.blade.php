@@ -19,7 +19,7 @@
     // fetch categories
     $menu['categories'] = [];
 
-    $categories = supervisor()
+    $categories = is_supervisor()
         ? AdminCategory::orderBy('manager')->orderBy('sort')->orderBy('name')->get()
         : AdminCategory::where('manager', 0)->orderBy('manager')->orderBy('sort')->orderBy('name')->get();
 
@@ -29,7 +29,7 @@
         $category['slug'] = $categoryRecord->slug;
         $category['checked'] = $currentSection && $category['slug'] == $currentSection['category'];
 
-        $sections = supervisor()
+        $sections = is_supervisor()
             ? AdminSection::where('category', $category['slug'])
                 ->where('hidden', 0)
                 ->orderBy('sort')
@@ -51,7 +51,7 @@
                 ($sectionRecord['slug'] == $currentSection['slug'] ||
                     ($sectionRecord['hidden'] && str_replace('add', 'list', $currentSection['slug'])));
             $section['url'] = empty($sectionRecord['url'])
-                ? old_url('/' . $sectionRecord['category'] . '/' . $sectionRecord['slug'])
+                ? '/admin/' . $sectionRecord['category'] . '/' . $sectionRecord['slug']
                 : $sectionRecord['url'];
 
             $category['sections'][] = $section;
@@ -64,6 +64,31 @@
     $navigationLogo =
         $navigationLogo ?: '<img class="menu__logo image-fit" src="' . (APP_LOGO_DIR . 'logo.png') . '"></img>';
 @endphp
+
+@pushOnce('styles')
+    <style>
+        .menu__group:has(> .button-shutdown) {
+            padding-inline: var(--_padding);
+            margin-top: 1rem;
+
+            @media (max-width: 1280px) {
+                padding-inline: 1rem;
+            }
+        }
+
+        .button-shutdown {
+            width: 100%;
+            padding-inline: unset;
+            border-radius: var(--border-radius-400);
+
+            @media (max-width: 1280px) {
+                & span {
+                    display: none;
+                }
+            }
+        }
+    </style>
+@endpushOnce
 
 @pushOnce('scripts')
     <script defer>
@@ -185,7 +210,7 @@
 
                         <!-- Item header -->
                         <div class="menu-item__header js-open-menu-category">
-                            <?= icon_embed(APP_ICONS_DIR . 'navigation/' . $category['slug']) ?>
+                            <?= embed_icon($category['slug']) ?>
                             <p class="menu-item__title"><?= $category['name'] ?></p>
                         </div>
 
@@ -213,17 +238,17 @@
                 <span class="menu__divider"></span>
 
                 <form class="menu__group" method="POST">
-                    <button class="button button--bad button--secondary button-shutdown" name="logout">
-                        <?= icon_embed('exit') ?>
+                    <x-form.button variant="secondary" size="small" class="button-shutdown" name="logout">
+                        <?= embed_icon('exit') ?>
                         <span>Esci</span>
-                    </button>
+                    </x-form.button>
                 </form>
             </div>
 
-            <!-- Mobile open menu icon -->
-            <div class="menu__open js-toggle-menu">
-                <?= icon_embed('navigation/arrow1-right') ?>
-            </div>
         </div>
+    </div>
+    <!-- Mobile open menu icon -->
+    <div class="menu__open js-toggle-menu">
+        <?= embed_icon('navigation/arrow-simple-right') ?>
     </div>
 </section>

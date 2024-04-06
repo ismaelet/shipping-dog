@@ -16,7 +16,7 @@
 
             &:-webkit-autofill {
                 color: var(--color-neutral-400);
-                -webkit-box-shadow: 0 0 0 1000vw var(--color-background-400) inset;
+                -webkit-box-shadow: 0 0 0 1000vw var(--color-background) inset;
             }
         }
     </style>

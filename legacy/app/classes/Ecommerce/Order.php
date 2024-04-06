@@ -2,12 +2,15 @@
 
 namespace Ecommerce;
 
+use App\Models\Ecommerce\Cart;
 use DateTime;
 use DBOld;
 use Ecommerce\Design\Logo;
 use Ecommerce\Product\Color;
 use Ecommerce\Product\Size;
 use DatabaseObject;
+use Ecommerce\Cart as OldCart;
+use Illuminate\Support\Facades\Auth;
 
 class Order {
 
@@ -92,7 +95,7 @@ class Order {
 	}
 
 	private function getCart() {
-		return new Cart($this->cartId);
+		return new OldCart($this->cartId);
 	}
 
 	private function getSize() {
@@ -268,28 +271,35 @@ class Order {
 			$priceSize = DBOld::find('price FROM items_sizes WHERE ID = ?', [$sizeId]);
 			$price = $product->fullPrice + $priceSize;
 
-			if (auth()->id()) {
-				$cartId = DBOld::find('ID FROM carts WHERE buyer=? AND status=0', [auth()->id()]) ?: DBOld::add('carts (buyer) VALUES (?)', [auth()->id()]);
+			if (Auth::check()) {
+				$cart = Cart::where('buyer', Auth::id())->where('status', 0)->first();
+
+				if (!$cart) {
+					$cart = Cart::create(['buyer' => Auth::id()]);
+				}
 			} else {
-				$cartId = session('cart_id') ?: DBOld::add('carts () VALUES ()');
+				if (session('cart_id')) {
+					$cart = Cart::find(session('cart_id'));
+				} else {
+					$cart = Cart::create();
+					session(['cart_id' => $cart->ID]);
+				}
 			}
 
-			$cart = new Cart($cartId);
+			$oldCart = new OldCart($cart->ID);
 
 			// add order
 			$orderId = DBOld::add(
 				'orders (buyer, cartID, itemID, sellerId, designId, typeID, colorID, sizeID, gendID, posID, extID, fullProductPrice, price_disc, productGain, quantity)',
-				[auth()->id() ?: null, $cart->id, $product->id, $product->sellerId, $product->designId, $product->type->id, $colorId, $sizeId, $genderId, $positionId, $logoId, $price, $product->customerDiscount, $product->customerGain, $quantity]
+				[Auth::id() ?: null, $cart->ID, $product->id, $product->sellerId, $product->designId, $product->type->id, $colorId, $sizeId, $genderId, $positionId, $logoId, $price, $product->customerDiscount, $product->customerGain, $quantity]
 			);
 
-			DBOld::update(Cart::TABLE . ' SET quantity = quantity + ? WHERE ' . Cart::INDEX . ' = ?', [$quantity, $cart->id]);
+			DBOld::update(OldCart::TABLE . ' SET quantity = quantity + ? WHERE ' . OldCart::INDEX . ' = ?', [$quantity, $cart->ID]);
 
-			$cart->resetDynamicProperties();
-
-			if ($cart->couponId) {
-				$couponId = $cart->couponId;
-				$cart->removeCoupon();
-				$cart->addCoupon($couponId);
+			if ($oldCart->couponId) {
+				$couponId = $oldCart->couponId;
+				$oldCart->removeCoupon();
+				$oldCart->addCoupon($couponId);
 			}
 		}
 
@@ -300,7 +310,7 @@ class Order {
 
 	public function delete() {
 		DBOld::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
-		DBOld::update(Cart::TABLE . ' SET quantity = quantity - ? WHERE ' . Cart::INDEX . ' = ?', [$this->quantity, $this->cart->id]);
+		DBOld::update(OldCart::TABLE . ' SET quantity = quantity - ? WHERE ' . OldCart::INDEX . ' = ?', [$this->quantity, $this->cart->id]);
 
 		$this->cart->resetDynamicProperties();
 	}

@@ -1,184 +1,10 @@
 @pushOnce('styles')
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap');
-
-        :root {
-            --color-primary-400-hsl: 215deg 70% 60%;
-            --clr-primary-hsl-500: 229, 70%, 55%;
-
-            --clr-neutral-hsl-100: 0, 0%, 0%;
-            --clr-neutral-hsl-150: 0, 0%, 6%;
-            --clr-neutral-hsl-200: 0, 0%, 12%;
-            --clr-neutral-hsl-300: 0, 0%, 87%;
-            --clr-neutral-hsl-400: 0, 0%, 67%;
-            --clr-neutral-hsl-500: 0, 0%, 47%;
-            --clr-neutral-hsl-600: 0, 0%, 31%;
-            --clr-neutral-hsl-700: 0, 0%, 13%;
-            --clr-neutral-hsl-900: 0, 0%, 100%;
-
-            --clr-good-400: green;
-            --clr-good-500: darkgreen;
-            --clr-bad-400: red;
-            --clr-bad-500: darkred;
-
-            --clr-surface-100: var(--clr-neutral-100);
-
-            --clr-background-hsl: var(--clr-neutral-hsl-100);
-
-            --ff-default: 'Open Sans', sans-serif;
-            --ff-titles: 'Poppins', sans-serif;
-
-            --fc-400: var(--clr-neutral-500);
-            --fc-700: hsl(--clr-neutral-700);
-
-            --fw-light: 300;
-            --fw-regular: 400;
-            --fw-medium: 500;
-            --fw-semibold: 600;
-            --fw-bold: 700;
-            --fw-black: 900;
-
-            --fs-100: 0.5rem;
-            --fs-200: 0.625rem;
-            --font-size-300: 0.875rem;
-            --fs-400: 1rem;
-            --fs-450: 1.1rem;
-            --fs-500: 1.25rem;
-            --fs-600: 1.5rem;
-            --fs-650: 1.75rem;
-            --fs-700: 2rem;
-            --fs-750: 2.5rem;
-            --fs-800: 3rem;
-            --fs-850: 3.5rem;
-            --fs-900: 4rem;
-            --fs-950: 5rem;
-
-            --border-clr-400: var(--clr-neutral-300);
-            --border-clr-700: var(--clr-neutral-700);
-
+        [data-color-scheme="dark"] {
+            --theme-h: 220deg;
+            --theme-dark-s: 25%;
+            --border-color: var(--color-neutral-250);
             --border-width: 1px;
-
-            --border-radius-400: 0.5rem;
-            --border-radius-700: 1rem;
-            --border-radius-800: 2rem;
-            --border-radius-1000: 100vw;
-
-            --border: var(--border-width) solid var(--border-clr-400);
-
-            --shadow-clr: var(--clr-neutral-hsl-900);
-            --shadow-intensity: 0.1;
-            --shadow-400: 0 1rem 2rem hsla(var(--shadow-clr), var(--shadow-intensity));
-            --shadow-big-400: 0 2rem 4rem hsla(var(--shadow-clr), var(--shadow-intensity));
-
-            --button-fw: var(--fw-medium);
-            --button-border-radius: var(--border-radius-400);
-            --button--primary-fc: var(--clr-neutral-900);
-            --button--secondary-border-width: var(--border-width);
-
-            --inp-height: 3rem;
-            --inp-border-width: var(--border-width);
-            --inp-border-radius: var(--border-radius-400);
-            --inp-shadow: 0 0 5px rgba(16, 114, 191, 0.1);
-            --inp-clr-bgr: var(--clr-surface-600);
-            --inp-clr-accent: var(--color-primary-400);
-            --inp-color: var(--fc-700);
-            --inp-fs: var(--fs-400);
-        }
-
-        html[data-color-scheme='dark'] {
-            --fc-400: hsl(var(--theme-h), 19%, 72%);
-            --fc-700: hsl(212, 29%, 92%);
-
-            --fw-semibold: 500;
-            --fw-bold: 500;
-
-            --theme-h: 216;
-
-            --clr-neutral-hsl-100: 0, 0%, 0%;
-            --clr-neutral-hsl-150: 0, 0%, 6%;
-            --clr-neutral-hsl-200: 0, 0%, 12%;
-            --clr-neutral-hsl-300: 0, 0%, 87%;
-            --clr-neutral-hsl-400: 0, 0%, 67%;
-            --clr-neutral-hsl-500: 0, 0%, 47%;
-            --clr-neutral-hsl-600: 0, 0%, 31%;
-            --clr-neutral-hsl-700: 0, 0%, 13%;
-            --clr-neutral-hsl-900: 0, 0%, 0%;
-
-            --clr-background-hsl: var(--theme-h), 40%, 9%;
-
-            --clr-surface-300: hsl(var(--theme-h), 36%, 11%);
-            --clr-surface-400: hsl(var(--theme-h), 32%, 13%);
-            --clr-surface-500: hsl(var(--theme-h), 28%, 16%);
-            --clr-surface-600: hsl(var(--theme-h), 28%, 20%);
-            --clr-surface-700: hsl(var(--theme-h), 20%, 25%);
-
-            --border-clr-400: hsl(var(--theme-h), 30%, 20%);
-            --border-clr-500: hsl(var(--theme-h), 30%, 50%);
-            --border-clr-700: var(--border-clr-500);
-
-            --shadow-intensity: 0.2;
-
-            --button--primary-fc: #fff;
-        }
-
-
-        h1,
-        h2,
-        h3 {
-            letter-spacing: 0.03em;
-            line-height: 1;
-        }
-
-        p strong,
-        p .fw-bold,
-        p .fw-black {
-            color: var(--fc-700);
-        }
-
-        .title {
-            font-size: var(--fs-900);
-            font-weight: var(--fw-bold);
-        }
-
-        .subtitle {
-            font-size: var(--fs-700);
-            font-weight: var(--fw-medium);
-        }
-
-        .section-heading {
-            font-size: min(2.5rem, 10vw);
-            font-weight: var(--fw-semibold);
-        }
-
-        .section-subtitle {
-            font-size: var(--fs-500);
-        }
-
-        .subsection-heading {
-            font-size: var(--fs-500);
-        }
-
-        .text {
-            font-size: var(--font-size-300);
-        }
-
-        .contrasting-background {
-            --fc-400: var(--clr-neutral-100);
-            --fc-700: var(--clr-neutral-100);
-            color: var(--fc-400);
-        }
-
-        html[data-color-scheme='light'] .dark-background {
-            --fc-400: var(--clr-neutral-100);
-            --fc-700: var(--clr-neutral-100);
-            color: var(--fc-400);
-        }
-
-        html[data-color-scheme='dark'] .light-background {
-            --fc-400: var(--clr-neutral-100);
-            --fc-700: var(--clr-neutral-100);
-            color: var(--fc-400);
         }
 
         main {
@@ -216,7 +42,7 @@
         .menu__header {
             display: grid;
             gap: 0.5rem;
-            margin-bottom: 5rem;
+            margin-bottom: 3rem;
             justify-items: center;
             padding-top: var(--_padding);
             padding-inline: var(--_padding);
@@ -242,7 +68,7 @@
         .menu__divider {
             display: block;
             margin-inline: var(--_padding);
-            border-top: var(--border);
+            border-top: var(--border-width) solid var(--color-neutral-250);
         }
 
         .menu-item {
@@ -527,7 +353,7 @@
     </style>
 @endpushOnce
 
-<x-templates.empty>
+<x-templates.empty color-scheme="dark">
     <!-- Navigation bar -->
     <x-admin.navigation />
 

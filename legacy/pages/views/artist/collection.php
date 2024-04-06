@@ -73,7 +73,7 @@ use Ecommerce\Design;
 
 					<button type="button" class="sub_txt gre mar-t-1 lbox-open marr1" data-tar="#lbox-add">
 						<span class="btn-icon">
-							<?= icon_embed('add') ?>
+							<?= embed_icon('add') ?>
 						</span>
 						<span class="btn-txt">Aggiungi un lavoro</span>
 					</button>
@@ -83,7 +83,7 @@ use Ecommerce\Design;
 
 						<button type="button" class="sub_txt lbox-open yel mar-t-1 marr1" data-tar="#lbox-remove">
 							<span class="btn-icon">
-								<?= icon_embed('delete') ?>
+								<?= embed_icon('delete') ?>
 							</span>
 							<span class="btn-txt">Rimuovi un lavoro</span>
 						</button>
@@ -92,14 +92,14 @@ use Ecommerce\Design;
 
 					<button type="button" id="btn-cover" class="sub_txt blu mar-t-1 lbox-open marr1" data-tar="#img-change">
 						<span class="btn-icon">
-							<?= icon_embed('gallery') ?>
+							<?= embed_icon('gallery') ?>
 						</span>
 						<span class="btn-txt">Cambia copertina</span>
 					</button>
 
 					<button type="submit" name="delete" class="sub_txt red mar-t-1 marr1" onclick="return confirm('Sei sicuro di voler eliminare la collezione?')">
 						<span class="btn-icon">
-							<?= icon_embed('delete') ?>
+							<?= embed_icon('delete') ?>
 						</span>
 						<span class="btn-txt">Elimina collezione</span>
 					</button>

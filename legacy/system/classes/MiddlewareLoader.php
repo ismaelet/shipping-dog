@@ -7,9 +7,8 @@ class MiddlewareLoader {
 	public static function __constructStatic() {
 		$defaultMiddlewareLoader = [
 			'public' => function () {
-				global $user;
 				$public = sys_config('static') ?: DBOld::find('value FROM config WHERE name = ?', ['public']);
-				if (!$public && !$user->admin) redirect_old('/offline');
+				if (!$public && !is_admin()) redirect_old('/offline');
 			},
 
 			'not-public' => function () {
@@ -30,13 +29,11 @@ class MiddlewareLoader {
 			},
 
 			'admin' => function () {
-				global $user;
-				if (!$user->admin) redirect_old('/login');
+				if (!is_admin()) redirect_old('/login');
 			},
 
 			'not-admin' => function () {
-				global $user;
-				if ($user->admin) redirect_old(sys_config('logged-redirect') ?: '/');
+				if (is_admin()) redirect_old(sys_config('logged-redirect') ?: '/');
 			},
 		];
 

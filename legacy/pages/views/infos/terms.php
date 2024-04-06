@@ -10,6 +10,6 @@
 
 {% block form-footer %}
 
-<a href="<?= CLIENT_ROOT; ?>/sell" class="pbtn">Indietro</a>
+<a href="<?= client_url('/') ?>" class="button">Indietro</a>
 
 {% end form-footer %}

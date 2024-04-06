@@ -1,17 +1,17 @@
 <?php
 
-use Ecommerce\Product\Type;
+use App\Models\Ecommerce\Product\ProductType;
 
 $images = [];
 $typeId = $_GET['typeId'];
 $colorId = $_GET['colorId'];
 $positionId = $_GET['positionId'] ?? null;
 
-$type = new Type($typeId);
+$type = ProductType::find($typeId);
 
-$images['clothing'] = $type->getImage($colorId, $positionId);
-$images['clothing-full-url'] = client_url($images['clothing']);
-$images['details'] = $type->getDetailsImage($colorId, $positionId);
-$images['details-full-url'] = $images['details'] ? client_url($images['details']) : null;
+$images['clothing'] = $type->image($colorId, $positionId);
+$images['clothing-full-url'] = public_asset($images['clothing']);
+$images['details'] = $type->details($colorId, $positionId);
+$images['details-full-url'] = $images['details'] ? public_asset($images['details']) : null;
 
 echo json_encode($images);

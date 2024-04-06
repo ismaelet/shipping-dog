@@ -1,3 +1,9 @@
+<?php
+
+use Illuminate\Support\Facades\Auth;
+
+?>
+
 {% block content %}
 
 <div class="grid gap2">
@@ -8,18 +14,14 @@
 
 		<div class="body">
 
-			<?php
-
-			use App\View\Components\Form\Button;
-
-			if ($done == 'data') { ?>
+			<?php if ($done == 'data') { ?>
 
 				<p class="confirmation">Dati modificati con successo</p>
 
 			<?php } ?>
 
 			<p class="lbl">Username:</p>
-			<input type="text" class="inp inp-nospace" name="username" value="<?= user()->username; ?>" placeholder="Username" maxlength="16" required>
+			<input type="text" class="inp inp-nospace" name="username" value="<?= Auth::user()->username; ?>" placeholder="Username" maxlength="16" required>
 
 			<?php if ($error == 'user_match') { ?>
 
@@ -28,11 +30,11 @@
 			<?php } ?>
 
 			<p class="lbl">Nome e cognome:</p>
-			<input type="text" class="inp" name="fname" value="<?= user()->fname; ?>" placeholder="Nome">
-			<input type="text" class="inp" name="lname" value="<?= user()->lname; ?>" placeholder="Cognome">
+			<input type="text" class="inp" name="fname" value="<?= Auth::user()->fname; ?>" placeholder="Nome">
+			<input type="text" class="inp" name="lname" value="<?= Auth::user()->lname; ?>" placeholder="Cognome">
 
 			<p class="lbl">E-mail:</p>
-			<input type="email" class="inp" name="email" value="<?= user()->email; ?>" placeholder="email" required>
+			<input type="email" class="inp" name="email" value="<?= Auth::user()->email; ?>" placeholder="email" required>
 
 			<?php if ($error == 'email_match') { ?>
 
@@ -104,7 +106,7 @@
 
 		<div class="footer">
 			<button type="submit" name="delete-account" class="button button--warning button--full-width" onclick="return confirm('Sei sicuro di voler eliminare l\'account? Non potrà essere ripristinato.')">
-				<?= icon_embed('delete') ?>
+				<?= embed_icon('delete') ?>
 				Elimina l'account
 			</button>
 		</div>

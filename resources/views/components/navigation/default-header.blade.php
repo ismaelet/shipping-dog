@@ -350,9 +350,11 @@
         }
 
         /* Wishlist & Cart */
-        header:has(#h-srch-cbx:checked) .h-icon {
-            visibility: hidden;
-            pointer-events: none;
+        @media (max-width: 480px) {
+            header:has(#h-srch-cbx:checked) .h-icon {
+                visibility: hidden;
+                pointer-events: none;
+            }
         }
 
         #h-cart {
@@ -751,9 +753,9 @@
 
                                 // Check seller filter
                                 if (isset($h_link['seller'])) {
-                                    if ($h_link['seller'] && (!auth()->user() || !auth()->is_seller())) {
+                                    if ($h_link['seller'] && (!auth()->user() || !is_seller())) {
                                         $h_valid = false;
-                                    } elseif (!$h_link['seller'] && auth()->user() && auth()->is_seller()) {
+                                    } elseif (!$h_link['seller'] && auth()->user() && is_seller()) {
                                         $h_valid = false;
                                     }
                                 }
@@ -916,9 +918,9 @@
 
                                     // Check seller filter
                                     if (isset($h_link['seller'])) {
-                                        if ($h_link['seller'] && auth()->user() && auth()->is_seller()) {
+                                        if ($h_link['seller'] && auth()->user() && is_seller()) {
                                             $h_valid = false;
-                                        } elseif (!$h_link['seller'] || !auth()->user() || !auth()->is_seller()) {
+                                        } elseif (!$h_link['seller'] || !auth()->user() || !is_seller()) {
                                             $h_valid = false;
                                         }
                                     }

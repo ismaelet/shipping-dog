@@ -1,7 +1,4 @@
 <?php
-
-use Illuminate\Database\Capsule\Manager as Capsule;
-
 // Set the error log
 ini_set('error_log', __DIR__ . '/../../logs/error.log');
 
@@ -10,38 +7,6 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 
 // Load environment variables
 (Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'))->load();
-
-// // Use Laravel components
-// use Illuminate\Container\Container;
-// use Illuminate\Support\Facades\Facade;
-// use Illuminate\Support\ServiceProvider;
-
-// $app = new Container;
-
-// $app->singleton('app', function () use ($app) {
-// 	return $app;
-// });
-
-// Facade::setFacadeApplication($app);
-
-// Register necessary service providers (optional)
-// $app->register(App\Providers\AppServiceProvider::class);
-
-// Load Eloquent ORM
-// $capsule = new Capsule;
-// $capsule->addConnection([
-// 	'driver' => 'mysql',
-// 	'host' => env('DB_HOST'),
-// 	'database' => env('DB_DATABASE'),
-// 	'username' => env('DB_USERNAME'),
-// 	'password' => env('DB_PASSWORD'),
-// 	'charset'   => 'utf8',
-// 	'collation' => 'utf8_unicode_ci',
-// 	'prefix'    => '',
-// ]);
-
-// $capsule->setAsGlobal();
-// $capsule->bootEloquent();
 
 // Set the error reporting
 if (env('DEBUG') == 'true') {
@@ -56,22 +21,19 @@ spl_autoload_register(function ($name) {
 
 	switch (true) {
 		case strpos($name, 'App/Model') === 0 || strpos($name, 'App/Helpers') === 0:
-			include_once(server_path('' . lcfirst($name) . '.php'));
+			include_once __DIR__ . ('/../../../' . lcfirst($name) . '.php');
 			break;
 		case strpos($name, 'App') === 0:
-			include_once(server_path('/' . lcfirst($name) . '.php'));
+			include_once __DIR__ . ('/../../' . lcfirst($name) . '.php');
 			break;
-		case file_exists($file = server_path('/app/classes/' . $name . '.php')):
-			include_once($file);
+		case file_exists($file = __DIR__ . ('/../../app/classes/' . $name . '.php')):
+			include_once $file;
 			break;
-		case file_exists($file = server_path('/system/classes/' . $name . '.php')):
-			include_once($file);
+		case file_exists($file = __DIR__ . ('/../classes/' . $name . '.php')):
+			include_once $file;
 			break;
-		case file_exists($file = server_path('/system/traits/' . $name . '.php')):
-			include_once($file);
-			break;
-		case file_exists($file = public_server_path('/app/classes/' . $name . '.php')):
-			include_once($file);
+		case file_exists($file = __DIR__ . ('/../traits/' . $name . '.php')):
+			include_once $file;
 			break;
 	}
 
@@ -147,20 +109,6 @@ class Setup {
 		}
 	}
 
-	// login
-	static private function sessionLogin() {
-		global $user;
-
-		if (!sys_config('static')) {
-			if (!isset($_SESSION['userId']) && isset($_COOKIE['auth_token'])) {
-				login_direct($_COOKIE['auth_token']);
-			}
-
-			$userId = $_SESSION['userId'] ?? 0;
-			$user = new User($userId);
-		}
-	}
-
 	// language
 	static private function sessionLanguage() {
 		$acceptedLanguages = sys_config('languages');
@@ -206,7 +154,6 @@ class Setup {
 		date_default_timezone_set(sys_config('timezone'));
 
 		// setup the session
-		self::sessionLogin();
 		self::sessionLanguage();
 		self::sessionTheme();
 

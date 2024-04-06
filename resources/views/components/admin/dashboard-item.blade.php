@@ -1,28 +1,54 @@
-@php
-    $icon = $icon ?? null;
-@endphp
+@props(['title', 'subtitle', 'icon', 'variant' => 'default'])
 
-<article class="p-6 border-radius rounded-lg grid gap-2 surface">
+<article {{ $attributes->class(['p-6 border-radius rounded-lg grid content-start gap-3 surface']) }}>
     {{-- Heading --}}
-    <div class="flex justify-between items-center">
-        <h3 class="text-sm font-medium">{{ $title }}</h3>
+    <div class="grid gap-1">
+        <div class="flex justify-between items-center ">
+            {{-- Title --}}
+            @switch($variant)
+                @case('big')
+                    <h3 class="font-semibold">{{ $title }}</h3>
+                @break
 
-        @if ($icon)
-            <span class="h-4">
-                {!! embed_icon($icon) !!}
-            </span>
-        @endif
+                @default
+                    <h3 class="text-sm font-medium">{{ $title }}</h3>
+            @endswitch
+
+            {{-- Icon --}}
+            @isset($icon)
+                <span class="h-4">
+                    {!! embed_icon($icon) !!}
+                </span>
+            @endisset
+        </div>
+
+        {{-- Subtitle --}}
+        @isset($subtitle)
+            <p class="text-sm text-neutral-350">{{ $subtitle }}</p>
+        @endisset
     </div>
 
-    <div>
+    <div class="grid gap-1">
         {{-- Value --}}
-        <div class="text-3xl font-bold text-neutral-700">{{ $value }}</div>
+        @isset($value)
+            <div class="text-3xl font-bold text-neutral-700">{{ $value }}</div>
+        @endisset
+
+        {{-- Content --}}
+        @isset($content)
+            {{ $content }}
+        @endisset
 
         {{-- Action --}}
+        @isset($action)
+            <div class="text-sm text-neutral-350">
+                {{ $action }}
+            </div>
+        @endisset
 
-        {{-- Footer notes --}}
-        @if ($footerNotes)
-            <p class="text-sm text-neutral-300">{{ $footerNotes }}</p>
-        @endif
+        {{-- Footer --}}
+        @isset($footerNotes)
+            <p class="text-sm text-neutral-350">{{ $footerNotes }}</p>
+        @endisset
     </div>
 </article>

@@ -16,7 +16,7 @@
     $formattedDifferencePercentage = number_format($differencePercentage, 2, ',', '.');
 @endphp
 
-<x-admin.dashboard-item title="Vendite Totali" icon="credit-card">
+<x-admin.dashboard-item title="Vendite Totali" subtitle="negli ultimi 30 giorni" icon="credit-card">
 
     <x-slot name="value">
         {{ $newSales > 0 ? '+' . $newSales : 0 }}
@@ -27,7 +27,7 @@
             {{ $difference >= 0 ? '+' . $formattedDifferencePercentage : $formattedDifferencePercentage }}%
         </span>
 
-        rispetto all'ultimo mese
+        rispetto al mese precedente
     </x-slot>
 
 </x-admin.dashboard-item>

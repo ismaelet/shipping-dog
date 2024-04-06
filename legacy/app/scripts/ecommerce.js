@@ -19,7 +19,7 @@ async function cartId() {
 }
 
 // update cart
-async function update_cart_old() {
+async function update_cart() {
 	// fatch data
 	const cartData = await get_class_properties('Ecommerce\\Cart', ['quantity', 'productPrice', 'productPriceString', 'priceString'], await cartId(), null, false)
 
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 		// populate and show the cart dropdown
 		const orderList = await call_class_method('Ecommerce\\ViewManager', 'renderOrderList')
 
-		update_cart_old()
+		update_cart()
 
 		$(sidebardSelector).find(orderListSelector).html(orderList)
 		$(sidebardSelector).addClass(activeClass)
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 			vendor_meta_pixel_initiatecheckout()
 		}
 		if (typeof vendor_meta_pixel_addtocart !== 'undefined') {
-			vendor_meta_pixel_addtocart_old()
+			vendor_meta_pixel_addtocart()
 		}
 	})
 
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 			self.data('added', willBeAdded)
 			module.toggleClass('added')
 		} else {
-			redirect_old('/login?action=wishlist')
+			redirect('/login?action=wishlist')
 		}
 	})
 
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 		await AJAX('ecommerce-orders', parameters, 'none', true)
 
 		// update the price
-		update_cart_old()
+		update_cart()
 
 		self.parents(orderSelector).remove()
 	})

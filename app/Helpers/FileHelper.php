@@ -15,6 +15,13 @@ class FileHelper {
 	}
 
 	/**
+	 * Get the path of a file in the public storage directory
+	 */
+	public static function publicAsset(string $path): string {
+		return asset('storage/' . $path);
+	}
+
+	/**
 	 * Import an icon and embed it in the HTML
 	 */
 	public static function embedSvg(string $fileName, array $customClasses = [], bool $isIcon = false): ?string {

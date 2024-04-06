@@ -20,14 +20,14 @@ use Ecommerce\Product;
 
 		<div class="flex-group center-content" data-spacing="700">
 			<a href="<?= client_url('/manage/portfolio/add?id=' . $seller->id) ?>" class="button button--secondary button--auto-width">
-				<?= icon_embed('upload') ?>
+				<?= embed_icon('upload') ?>
 				Carica una grafica
 			</a>
 
 			<?php if ($seller->custom || $customProductsCount) { ?>
 
 				<a href="<?= client_url('/manage/portfolio/product') ?>" class="button button--secondary button--auto-width button--dashed">
-					<?= icon_embed('upload') ?>
+					<?= embed_icon('upload') ?>
 					Carica un prodotto
 				</a>
 

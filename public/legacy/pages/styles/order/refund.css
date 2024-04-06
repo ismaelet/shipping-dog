@@ -1,0 +1,112 @@
+.remove {
+	display: block;
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid red;
+	padding: 0;
+	margin: 0;
+	color: red;
+	font-family: var(--font-text);
+	cursor: pointer;
+}
+
+#item-lbl {
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 0.7rem;
+}
+
+.item-box {
+	border-bottom: 1px solid var(--surface-secondary);
+}
+
+.item-tbl .row {
+	display: grid;
+	grid-template-columns: 5rem auto max-content;
+	align-items: center;
+	gap: 1rem;
+}
+
+.item-cbx_cell {
+	text-align: center;
+}
+
+.item-img {
+	border-radius: 10px;
+}
+
+.item-cbx_name {
+	width: 75%;
+}
+
+.item-cbx {
+	width: 30%;
+	height: 3rem;
+}
+
+.type_box {
+	display: none;
+	margin-bottom: 1rem;
+}
+
+.remove {
+	display: block;
+	background-color: transparent;
+	border: none;
+	margin-top: 10px;
+	color: #c95f60;
+	font-size: 11px;
+	cursor: pointer;
+}
+
+/*CHANGE 3*/
+.change3 #item-cont {
+	padding-bottom: 1rem;
+}
+
+.change3 .form-body {
+	padding: 0;
+}
+
+.change3 .item-cell {
+	text-align: center;
+}
+
+.change3 .item-pic_cell {
+	border-right: 1px solid #ddd;
+	width: 80px;
+	padding: 10px;
+}
+
+.change3 .item-name_cell {
+	border-right: 1px solid #ddd;
+}
+
+.change3 .item-cbx_name {
+	width: 30%;
+}
+
+.change3 .item-name {
+	padding: 0 10px;
+}
+
+.item-new_cell {
+	padding: 0.6rem 11px;
+}
+
+.info {
+	padding: 1rem 0;
+}
+
+.info_row {
+	display: block;
+	padding: 04px 0;
+	color: #555;
+}
+
+.ref_title {
+	background-color: #f3f3f3;
+	padding: 10px 1rem;
+	color: #555;
+
+	text-align: left;
+}

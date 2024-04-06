@@ -20,7 +20,7 @@
 			</div>
 
 			<a href="<?= client_url('/shop') ?>" class="button">
-				<?= icon_embed('cart') ?>
+				<?= embed_icon('cart') ?>
 				Shop Now
 			</a>
 
@@ -37,7 +37,7 @@
 
 					?>
 
-			        <img src="<?= client_path($seller->icon) ?>" class="img-fill <?= $key == 1 ? 'active' : '' ?>" data-id="<?= $key ?>">
+			        <img src="<?= public_asset($seller->icon) ?>" class="img-fill <?= $key == 1 ? 'active' : '' ?>" data-id="<?= $key ?>">
 
 	    		<?php } ?>
 

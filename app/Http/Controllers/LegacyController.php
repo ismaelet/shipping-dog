@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
-
 class LegacyController extends Controller {
 	public function __invoke() {
 		ob_start();

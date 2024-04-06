@@ -91,23 +91,24 @@ class Design {
 		return $loved;
 	}
 
-	public function getImage($size = 400) {
-		$file = $size == 400 ? '/uploads/designs/previews/' . $this->id . '_m.jpg' : '/uploads/designs/previews/' . $this->id . '.jpg';
+	public function getImage($size = 400): string {
+		$file = $size == 400 ? '/designs/previews/' . $this->id . '_m.jpg' : '/designs/previews/' . $this->id . '.jpg';
 
-		if (!file_exists(public_server_path($file))) {
-			des_img_gen($this);
-
-			if (!file_exists(public_server_path($file))) {
-				$file = '/uploads/product_types/mockups/no-image';
-			}
+		if (file_exists(public_storage_path($file))) {
+			return $file;
 		}
 
+		des_img_gen($this);
 
-		return $file;
+		if (file_exists(public_storage_path($file))) {
+			return $file;
+		}
+
+		return '/product_types/mockups/no-image';
 	}
 
 	public function getClientImage($size = 400) {
-		return public_client_path($this->getImage($size));
+		return public_asset($this->getImage($size));
 	}
 
 	private function getTags() {

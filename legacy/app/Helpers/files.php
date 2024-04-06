@@ -18,7 +18,7 @@ function generate_base_url(string $file = '') {
 }
 
 function client_path(string $file = '') {
-	$url = CLIENT_ROOT . '/legacy' . file_time(generate_base_url($file));
+	$url = asset('/legacy' . file_time(generate_base_url($file)));
 
 	return $url;
 }
@@ -230,7 +230,6 @@ function redirect_old($path = false) {
 	}
 
 	header('Location: ' . $url);
-
 	exit();
 }
 

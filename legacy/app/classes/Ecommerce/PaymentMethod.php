@@ -2,7 +2,7 @@
 
 namespace Ecommerce;
 
-use \DB;
+use DBOld;
 
 class PaymentMethod {
 

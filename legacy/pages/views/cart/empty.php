@@ -2,7 +2,7 @@
 
 <div class="main-wrap self-align-center grid-flow center-content pad-v-5" data-spacing="700">
 	<div class="empty-cart__icon">
-		<?= icon_embed('empty-cart') ?>
+		<?= embed_icon('empty-cart') ?>
 	</div>
 
 	<h1 class="section-heading">Il tuo carrello è vuoto</h1>

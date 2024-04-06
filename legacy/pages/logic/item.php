@@ -10,11 +10,11 @@ $oldProductPositionId = $_GET['positionId'] ?? null;
 $oldProductColorId = $_GET['colorId'] ?? null;
 
 // select item data
-$product = Product::find($id);
-$oldProduct = new OldProduct($id);
+$product = $id ? Product::find($id) : null;
+$oldProduct = $id ? new OldProduct($id) : null;
 
 // if not found
-if (!$oldProduct->id || (!is_admin() && (!$oldProduct->statusId && !$oldProduct->isUserOwner) || $oldProduct->deleted)) {
+if (!$id || !$oldProduct->id || (!is_admin() && (!$oldProduct->statusId && !$oldProduct->isUserOwner) || $oldProduct->deleted)) {
 	redirect_old('/shop');
 }
 

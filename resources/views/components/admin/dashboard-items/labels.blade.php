@@ -1,28 +1,19 @@
 @php
-    $icon = $icon ?? null;
+    use App\Models\Ecommerce\Cart;
+
+    $labelCount = Cart::unlabelled()->count();
+    $firstCartDate = Cart::unlabelled()->sortBy('created_at')->first()->created_at ?? null;
+    $firstCartDate = $firstCartDate ? $firstCartDate->format('d/m/Y') : null;
 @endphp
 
-<article class="p-6 border-radius rounded-lg grid gap-2 surface">
-    {{-- Heading --}}
-    <div class="flex justify-between items-center">
-        <h3 class="text-sm font-medium">{{ $title }}</h3>
+<x-admin.dashboard-item title="Etichette da Stampare" :subtitle="$firstCartDate ? 'a partire dal ' . $firstCartDate : 'nessuna etichetta da stampare'" icon="shipping">
 
-        @if ($icon)
-            <span class="h-4">
-                {!! embed_icon($icon) !!}
-            </span>
-        @endif
-    </div>
+    <x-slot name="value">
+        {!! $labelCount ? $labelCount : '<span class="text-neutral-300">' . $labelCount . '</span>' !!}
+    </x-slot>
 
-    <div>
-        {{-- Value --}}
-        <div class="text-3xl font-bold text-neutral-700">{{ $value }}</div>
+    <x-slot name="action">
+        <a href="/admin/shipping/courier" class="hover:text-primary-400 transition-colors">Visualizza</a>
+    </x-slot>
 
-        {{-- Action --}}
-
-        {{-- Footer notes --}}
-        @if ($footerNotes)
-            <p class="text-sm text-neutral-300">{{ $footerNotes }}</p>
-        @endif
-    </div>
-</article>
+</x-admin.dashboard-item>

@@ -1,7 +1,5 @@
-/** @type {import('tailwindcss').Config} */
-
 export default {
-	content: ['./resources/**/*.blade.php', './resources/**/*.js', './resources/**/*.vue'],
+	content: ['./resources/**/*.blade.php', './resources/**/*.js', './resources/**/*.vue', './legacy/**/*.php'],
 	theme: {
 		// Custom colors
 		colors: {
@@ -31,14 +29,16 @@ export default {
 			// Neutral theme
 			'neutral-100': 'hsl(var(--color-neutral-100-hsl) / <alpha-value>)',
 			'neutral-200': 'hsl(var(--color-neutral-200-hsl) / <alpha-value>)',
+			'neutral-300': 'hsl(var(--color-neutral-300-hsl) / <alpha-value>)',
+			'neutral-350': 'hsl(var(--color-neutral-350-hsl) / <alpha-value>)',
 			'neutral-400': 'hsl(var(--color-neutral-400-hsl) / <alpha-value>)',
 			'neutral-700': 'hsl(var(--color-neutral-700-hsl) / <alpha-value>)',
 			'neutral-900': 'hsl(var(--color-neutral-900-hsl) / <alpha-value>)',
 
 			// Background
-			background: 'hsl(var(--color-background-400-hsl) / <alpha-value>)',
-			'background-400': 'hsl(var(--color-background-400-hsl) / <alpha-value>)',
-			'background-500': 'hsl(var(--color-background-500-hsl) / <alpha-value>)',
+			background: 'hsl(var(--color-background-hsl) / <alpha-value>)',
+			'background-400': 'hsl(var(--color-background-hsl) / <alpha-value>)',
+			'background-500': 'hsl(var(--color-background-hsl) / <alpha-value>)',
 
 			// Surfaces
 			'surface-400': 'hsl(var(--color-surface-400-hsl) / <alpha-value>)',
@@ -68,6 +68,18 @@ export default {
 			heading: 'var(--font-family-heading)',
 			serif: 'var(--font-family-serif)',
 		},
+		fontWeight: {
+			thin: 'var(--font-weight-thin)',
+			hairline: 'var(--font-weight-hairline)',
+			extralight: 'var(--font-weight-extralight)',
+			light: 'var(--font-weight-light)',
+			normal: 'var(--font-weight-normal)',
+			medium: 'var(--font-weight-medium)',
+			semibold: 'var(--font-weight-semibold)',
+			bold: 'var(--font-weight-bold)',
+			'extra-bold': 'var(--font-weight-extra-bold)',
+			black: 'var(--font-weight-black)',
+		},
 		// Extended config
 		extend: {
 			// New heights
@@ -93,7 +105,7 @@ export default {
 				'section-heading': [
 					'var(--font-size-800)',
 					{
-						fontWeight: 'var(--font-weight-semi-bold)',
+						fontWeight: 'var(--font-weight-semibold)',
 						letterSpacing: '0.03em',
 						lineHeight: '1.2',
 					},
@@ -101,7 +113,7 @@ export default {
 				'component-heading': [
 					'var(--font-size-700)',
 					{
-						fontWeight: 'var(--font-weight-semi-bold)',
+						fontWeight: 'var(--font-weight-semibold)',
 						letterSpacing: '0.03em',
 						lineHeight: '1.2',
 					},

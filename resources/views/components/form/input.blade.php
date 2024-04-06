@@ -10,7 +10,7 @@
     <style>
         .input {
             padding-inline: .5em;
-            border-radius: var(--border-radius-100);
+            border-radius: var(--input-border-radius);
             outline: var(--border);
             line-height: 2.8;
             background-color: var(--color-surface-400);
@@ -20,7 +20,7 @@
                 outline-color: var(--color-primary-400);
             }
 
-            :has(> .error-warning) & {
+            :has(> .input-warning) & {
                 outline-color: var(--color-error-400);
             }
         }

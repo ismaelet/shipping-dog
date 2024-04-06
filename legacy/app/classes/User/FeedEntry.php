@@ -39,7 +39,7 @@ class FeedEntry {
 	}
 
 	private function getclientImage() {
-		return client_path($this->image);
+		return $this->image;
 	}
 
 	private function getnews() {
@@ -96,7 +96,7 @@ class FeedEntry {
 	private function calcImg() {
 		switch ($this->typeId) {
 			case 1:
-				return '/uploads/users/icons/0.jpg';
+				return public_asset('/users/icons/0.jpg');
 			case 2:
 			case 5:
 				return $this->order->product->image;

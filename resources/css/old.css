@@ -623,7 +623,6 @@ main {
 .lbox .close-icon {
 	opacity: 0.8;
 	background-color: #f3f3f3;
-	background-image: url(../assets/icons/close.svg);
 	background-position: center;
 	background-size: 50%;
 	border-radius: 50%;
@@ -642,7 +641,6 @@ main {
 
 .lbox .close-icon.thin {
 	background-color: transparent !important;
-	background-image: url(../assets/icons/close-thin.svg);
 	background-size: contain;
 	transition: opacity 0.3s;
 }
@@ -685,7 +683,6 @@ main {
 
 .modal_close {
 	opacity: 1;
-	background-image: url(../assets/icons/close.svg);
 	background-position: center;
 	background-size: contain;
 	width: 1.5rem;
@@ -745,7 +742,6 @@ main {
 .ajax-search-box {
 	overflow: hidden;
 	background-color: var(--surface);
-	border: 1px solid var(--border-color);
 	border-radius: var(--border-radius);
 	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 	text-align: left;
@@ -764,7 +760,6 @@ main {
 /* Misc */
 .file-load {
 	display: none;
-	background-image: url(../assets/icons/loading/loading.svg);
 	background-position: center;
 	background-size: contain;
 	height: 4rem;
@@ -797,7 +792,6 @@ main {
 	height: clamp(1.5rem, 50%, 3rem);
 	margin: auto;
 	opacity: 0;
-	background: url('../assets/icons/upload.svg') center / contain no-repeat;
 	transform: translateY(50%);
 	filter: invert(1);
 	transition: opacity 0.2s, transform 0.2s;
@@ -818,7 +812,6 @@ main {
 	width: clamp(1.5rem, 50%, 3rem);
 	height: clamp(1.5rem, 50%, 3rem);
 	margin: auto;
-	background: url('../assets/icons/loading.svg') center / contain no-repeat;
 	filter: invert(1);
 	transition: opacity 0.2s, transform 0.2s;
 }
@@ -905,10 +898,8 @@ main {
 }
 
 .carousel-arrow.left .icon {
-	background-image: url(../assets/icons/navigation/arrow1-left.svg);
 }
 .carousel-arrow.right .icon {
-	background-image: url(../assets/icons/navigation/arrow1-right.svg);
 }
 
 .carousel-dots {
@@ -1163,7 +1154,6 @@ select:focus:-webkit-autofill {
 .fancy-input {
 	position: relative;
 	border-radius: 3px;
-	outline: 2px solid var(--border-color-strong);
 	transition: outline-color 0.15s;
 }
 
@@ -1365,7 +1355,6 @@ select:focus:-webkit-autofill {
 	--text-color: var(--text-color-strong);
 	--_btn-border: 1px;
 	background-color: transparent;
-	border-color: var(--border-color-strong);
 }
 
 .sbtn:hover {
@@ -1716,7 +1705,6 @@ select:focus:-webkit-autofill {
 * Load
 */
 .load-icon {
-	background: url(../assets/icons/loading.svg) center / contain no-repeat;
 	width: 3rem;
 	height: 3rem;
 }
@@ -3947,26 +3935,6 @@ body.fixed {
 /*
 * 4. Elements
 */
-/* 4.1 Buttons */
-.button {
-	--_padding-block: 1.1em;
-	display: inline-block;
-	width: 12.5rem;
-	max-width: 100%;
-	padding: calc(var(--_padding-block) - var(--_border-width, 0px)) 2.2em;
-	border-width: var(--_border-width, 0);
-	border-style: solid;
-	border-radius: var(--button-border-radius);
-	color: var(--button--primary-fc);
-	font-family: var(--ff-titles);
-	font-size: var(--fs-400);
-	font-weight: var(--button-fw);
-	line-height: 1;
-	text-align: center;
-	cursor: pointer;
-	transition: background-color 0.3s, border 0.3s, color 0.3s;
-}
-
 .button:where(:not(.button--secondary):not(.button--empty)):not([data-variant='secondary']) {
 	background-color: var(--color-primary-400);
 }
@@ -4368,7 +4336,6 @@ input[type='number']:not(.number-input-with-arrows) {
 	width: 3rem;
 	aspect-ratio: 1;
 	opacity: 0;
-	background-image: url(../assets/icons/upload.svg);
 	background-position: center;
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -4500,7 +4467,6 @@ p .icon-embed,
 
 .modal__close {
 	opacity: 1;
-	background-image: url(../assets/icons/close.svg);
 	background-position: center;
 	background-size: contain;
 	width: 1.5rem;
@@ -5133,8 +5099,7 @@ h3,
 	display: inline-block;
 }
 
-.confirmation-message,
-.error-warning {
+.confirmation-message {
 	padding-block: 0.5em;
 	border-radius: var(--inp-border-radius);
 	border: var(--border-width) solid;
@@ -5146,12 +5111,6 @@ h3,
 	background-color: var(--clr-good-200);
 	border-color: var(--clr-good-400);
 	color: var(--clr-good-400);
-}
-
-.error-warning {
-	background-color: var(--clr-bad-200);
-	border-color: var(--clr-bad-400);
-	color: var(--clr-bad-400);
 }
 
 /* 6.3 Modifiers */
@@ -5366,7 +5325,6 @@ h3,
 	--clr-neutral-hsl-600: 0, 0%, 31%;
 	--clr-neutral-hsl-700: 0, 0%, 13%;
 	--clr-neutral-hsl-900: 0, 0%, 0%;
-	--theme-h: 34;
 	--theme-s: 88%;
 	--bgr-h: var(--theme-h);
 	--bgr-s: var(--theme-s);
@@ -5380,9 +5338,6 @@ h3,
 	--surface-secondary: hsl(var(--theme-h), var(--theme-s), 95%);
 	--surface-tertiary: hsl(var(--theme-h), var(--theme-s), 80%);
 	--clr-neutral-hsl-200: 0, 0%, 92%;
-	--border-color-fade: hsl(var(--theme-h), 0%, 85%);
-	--border-color: #ebebeb;
-	--border-color-strong: #dadada;
 	--text-color-fade: #707070;
 	--text-color: #505050;
 	--text-color-strong: #202020;
@@ -5393,8 +5348,6 @@ h3,
 }
 
 html[data-color-scheme='dark'] {
-	--theme-h: 210;
-
 	/* Colors */
 	--clr-neutral-hsl-100: 0, 0%, 0%;
 	--clr-neutral-hsl-150: 0, 0%, 6%;
@@ -5418,7 +5371,6 @@ html[data-color-scheme='dark'] {
 	/* -- OLD -- */
 	--theme-s: 7%;
 	--bgr-h: var(--theme-h);
-	--bgr-s: 13%;
 	--bgr-l: 10%;
 	--theme-max: #fff;
 	--theme-min: #000;
@@ -5428,9 +5380,6 @@ html[data-color-scheme='dark'] {
 	--surface-variation: hsl(var(--theme-h), var(--theme-s), 11%);
 	--surface-secondary: hsl(var(--theme-h), var(--theme-s), 21%);
 	--surface-tertiary: hsl(var(--theme-h), var(--theme-s), 7%);
-	--border-color-fade: hsl(var(--theme-h), 0%, 17%);
-	--border-color: hsl(var(--theme-h), 0%, 21%);
-	--border-color-strong: hsl(var(--theme-h), 0%, 30%);
 	--text-color-fade-more: hsl(var(--theme-h), var(--theme-s), 30%);
 	--text-color-fade: hsl(var(--theme-h), var(--theme-s), 45%);
 	--text-color: hsl(var(--theme-h), var(--theme-s), 70%);
@@ -5483,11 +5432,6 @@ p a {
 p.confirmation,
 p.error {
 	border-radius: 8px;
-}
-
-.section-heading {
-	font-size: min(3rem, 10vw);
-	font-weight: var(--fw-semibold);
 }
 
 /* Forms */
@@ -5578,7 +5522,6 @@ html[data-color-scheme='dark'] textarea {
 * OLD
 */
 .info-icon {
-	background: url(../assets/icons/info/question_blu.png) center / contain no-repeat;
 	width: 1.3rem;
 	height: 1.3rem;
 }
@@ -5595,7 +5538,6 @@ html[data-color-scheme='dark'] textarea {
 .tip-box .icon-box {
 	display: grid;
 	border-radius: 50%;
-	border: 1px solid var(--border-color);
 	fill: var(--clr-1);
 	width: 1.5rem;
 	aspect-ratio: 1;
@@ -5711,7 +5653,6 @@ p strong {
 /* Lists */
 .list {
 	background-color: var(--bgr);
-	border: 1px solid var(--border-color);
 }
 
 /* Misc */

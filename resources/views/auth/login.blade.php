@@ -1,36 +1,38 @@
-<x-templates.auth :$title>
-    {{-- Body --}}
-    <x-slot:body>
-        <div class="form-field">
-            <x-form.open-input type="email" name="email" value="{{ old('email') }}" placeholder="Indirizzo e-mail"
-                required />
+@pushOnce('styles')
+    <style>
+        main .input {
+            padding-inline: 1.5em;
+            border-radius: var(--border-radius-1000);
+        }
+    </style>
+@endpushOnce
 
-            @error('email')
-                <x-form.error-warning>{{ $message }}</x-form.error-warning>
-            @enderror
+<x-templates.auth :$title welcome-title="<span class='font-light'>Benvenuto su</span><br>Shipping Dog"
+    welcome-image="auth/login-background.webp"
+    welcome-description="Entrando nella nostra piattaforma potrai monitorare lo stato dei tuoi ordini, seguire gli artisti
+	che ti piacciono e molto altro. Sei un disegnatore? Qui
+	potrai vendere le tue grafiche stampate su tantissimi capi e accessori.">
+
+    <x-slot name="formBody">
+        <x-form.input type="hidden" name="url" :value="old('url')" class="rounded-lg" />
+        <x-form.input type="text" name="login" :value="old('login')" placeholder="Username o E-mail" required />
+        <x-form.input type="password" name="password" placeholder="Password" required />
+
+        @error('login')
+            <p class="error ">Dati di accesso errati</p>
+        @enderror
+
+        <div class="flex items-center justify-between">
+            <x-form.checkbox name="remember" text="Resta connesso" checked />
+
+            <a href="/recover" class="text-right hover:text-neutral-700 transition-colors">
+                <p class="">Hai dimenticato la password?</p>
+            </a>
         </div>
+    </x-slot>
 
-        <div class="form-field">
-            <x-form.open-input type="password" name="password" value="" placeholder="Password" required />
-
-            @error('password')
-                <x-form.error-warning>{{ $message }}</x-form.error-warning>
-            @enderror
-        </div>
-
-        @if (session('status'))
-            <x-form.error-warning class="text-left">{{ session('status') }}</x-form.error-warning>
-        @endif
-    </x-slot:body>
-
-    {{-- Footer --}}
-    <x-slot:footer>
-        <x-form.button type="submit">Login</x-form.button>
-        <x-form.button href="{{ route('register') }}" variant="secondary">Registrati</x-form.button>
-    </x-slot:footer>
-
-    {{-- Welcome Section --}}
-    <x-slot:welcome>
-        <div class="welcome__image" style="{{ set_background_image('auth/login-image.webp') }}"></div>
-    </x-slot:welcome>
+    <x-slot name="formFooter">
+        <x-form.button type="submit">Log In</x-form.button>
+        <x-form.button :href="route('register')" variant="secondary">Registrati</x-form.button>
+    </x-slot>
 </x-templates.auth>

@@ -26,6 +26,7 @@ class User extends Authenticatable {
 	 * The attributes that are mass assignable
 	 */
 	protected $fillable = [
+		'username',
 		'name',
 		'email',
 		'password',
@@ -75,7 +76,7 @@ class User extends Authenticatable {
 	/**
 	 * Get the user's active cart
 	 */
-	public function cart_old(): HasOne {
+	public function cart(): HasOne {
 		return $this->hasOne(Cart::class, 'buyer', 'ID')->where('status', 0);
 	}
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Ecommerce\Design;
+use Illuminate\Support\Facades\Auth;
 
 $design = Design::find($designId);
 
@@ -9,8 +10,8 @@ $design = Design::find($designId);
 <template>
 
 	<?php if ($design) { ?>
-		<?php if (auth()->check()) {
-			if ($design->seller->userID != auth()->id()) {
+		<?php if (Auth::check()) {
+			if ($design->seller->userID != Auth::id()) {
 		?>
 
 				<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; toggleLike(<?= $designId ?>, liked)" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
