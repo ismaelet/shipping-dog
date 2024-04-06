@@ -191,6 +191,7 @@
 
 		/* 2.8.4 Surfaces */
 		--color-surface-400-hsl: var(--color-neutral-dark-200-hsl);
+		--color-surface-500-hsl: var(--color-neutral-dark-250-hsl);
 
 		/* 2.8.5 Shadows */
 		--shadow-400: 0 2rem 3rem -1rem hsl(0deg, 0%, 0%, 0.1);

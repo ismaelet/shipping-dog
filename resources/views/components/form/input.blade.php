@@ -13,7 +13,7 @@
             border-radius: var(--input-border-radius);
             outline: var(--border);
             line-height: 2.8;
-            background-color: var(--color-surface-400);
+            background-color: var(--color-surface-500);
             transition: outline-color 0.2s ease-in-out;
 
             &:focus {

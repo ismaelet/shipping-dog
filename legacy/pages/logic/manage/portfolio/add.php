@@ -1,9 +1,11 @@
 <?php
 
+use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Design as EcommerceDesign;
 use Ecommerce\Design;
 use Ecommerce\Design\LogoGroup;
 use Ecommerce\Product;
+use Illuminate\Support\Facades\Auth;
 
 global $user;
 
@@ -94,7 +96,11 @@ function add_new_design(): string|false {
 		return 'name-empty';
 	}
 
-	if (EcommerceDesign::where('name', $name)->exists()) {
+	if (EcommerceDesign::where('name', $name)
+		->where('userID', Auth::id())
+		->where('status', 1)
+		->exists()
+	) {
 		return 'name-exists';
 	}
 
@@ -103,42 +109,39 @@ function add_new_design(): string|false {
 
 	// Upload image
 	$file_vector = false;
-	$file = '/uploads/designs/' . $desID . '.png';
-	$file_m = '/uploads/designs/' . $desID . '_m.png';
-	$file_ori = '/uploads/designs_originals/' . $desID . '.png';
+	$file = 'designs/' . $desID . '.png';
+	$file_m = 'designs/' . $desID . '_m.png';
+	$file_ori = 'designs_originals/' . $desID . '.png';
+
+	// Store the original file
+	$newFile = FileHelper::uploadFile(request(), $file_ori);
+
+	// Store the usable HD file
+	$newFile = FileHelper::uploadImage([
+		'path' => $file,
+		'size' => 1024,
+		'type' => 'png',
+	]);
+
+	// Store the usable LD file
+	$newFile = FileHelper::uploadImage([
+		'path' => $file_m,
+		'size' => 512,
+		'type' => 'png',
+	]);
 
 	// Upload the vector file
 	if (!empty($_FILES['file-vector']['name'])) {
 		$type = strtolower(strrev(explode('.', strrev($_FILES['file-vector']['name']))[0]));
 
 		if (in_array($type, ['pdf', 'ai'])) {
-			$file_vector = '/uploads/designs_vector/' . $desID . '.' . $type;
-		} else {
-			$file_vector = false;
+			$file_vector = 'designs_vector/' . $desID . '.' . $type;
+
+			$newFile = FileHelper::uploadFile(request(), $file_vector);
 		}
 	}
 
-	// Upload the images
-	$error = upload_img_OLD($file, 'png', '1024');
-
-	if ($error) {
-		return $error;
-	}
-
-	$error_m = upload_img_OLD($file_m, 'png', '450');
-
-	if ($error_m) {
-		return $error_m;
-	}
-
 	$reso = getimagesize($_FILES['file']['tmp_name']);
-
-	upload_file($file_ori);
-
-	if ($file_vector) {
-		upload_file($file_vector, 'file-vector');
-	}
-
 	// Add databese entry
 	$ratio = round($reso[0] / $reso[1], 2);
 

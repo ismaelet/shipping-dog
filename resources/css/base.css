@@ -69,6 +69,7 @@ svg {
 		--color-neutral-900: hsl(var(--color-neutral-900-hsl));
 		--color-background: hsl(var(--color-background-hsl));
 		--color-surface-400: hsl(var(--color-surface-400-hsl));
+		--color-surface-500: hsl(var(--color-surface-500-hsl));
 		--color-surface-700: hsl(var(--color-surface-700-hsl));
 		--color-success-400: hsl(var(--color-success-400-hsl));
 		--color-error-400: hsl(var(--color-error-400-hsl));
@@ -193,8 +194,10 @@ svg {
 	/*
 	* 3.3 Borders
 	*/
-	.border {
-		border: var(--border);
+	:where(.border) {
+		border-width: var(--border-width);
+		border-style: solid;
+		border-color: var(--border-color);
 	}
 
 	/*

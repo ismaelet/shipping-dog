@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				positionId: positionId,
 			}
 
-			const fileUrls = await AJAX('product-types-images', parameters, 'json', true)
+			const fileUrls = await AJAX('product-types-images', parameters, 'json', false)
 
 			clothingImageUrl = fileUrls['clothing-full-url']
 			detailsImageUrl = fileUrls['details-full-url']
@@ -245,7 +245,7 @@ $(window).on('load', async function () {
 	const box = $('.async-items')
 	const designId = box.data('design-id')
 
-	let html = await AJAX('edit-item-list', { designId: designId }, 'text', true)
+	let html = await AJAX('edit-item-list', { designId: designId }, 'text', false)
 
 	box.html(html)
 	$('#items-load-bgr').fadeOut()

@@ -14,6 +14,7 @@
 		"laravel/sanctum": "^4.0",
 		"laravel/tinker": "^2.8",
 		"livewire/livewire": "^3.4",
+		"shuchkin/simplexlsxgen": "*",
 		"symfony/filesystem": "^7.0"
 	},
 	"require-dev": {

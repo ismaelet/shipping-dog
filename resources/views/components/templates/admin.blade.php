@@ -31,7 +31,7 @@
             top: 0;
             overflow: auto;
             scrollbar-width: thin;
-            scrollbar-color: var(--clr-surface-700) var(--clr-surface-400);
+            scrollbar-color: var(--color-surface-400) var(--color-background);
         }
 
         .menu__group {

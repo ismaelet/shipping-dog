@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\FileHelper;
 use Ecommerce\Design;
 use Ecommerce\Product;
 use Ecommerce\Product\Color;
@@ -39,34 +40,42 @@ if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
 	$type = $dark ? '_dark' : '';
 
 	// upload image
-	$file = '/uploads/designs/' . $id . $type . '.png';
-	$file_m = '/uploads/designs/' . $id . $type . '_m.png';
-	$file_ori = '/uploads/designs_originals/' . $id . $type . '.png';
+	$file = 'designs/' . $id . $type . '.png';
+	$file_m = 'designs/' . $id . $type . '_m.png';
+	$file_ori = 'designs_originals/' . $id . $type . '.png';
+
+	// Store the original file
+	$newFile = FileHelper::uploadFile(request(), $file_ori);
+
+	// Store the usable HD file
+	$newFile = FileHelper::uploadImage([
+		'path' => $file,
+		'size' => 1024,
+		'type' => 'png',
+	]);
+
+	// Store the usable LD file
+	$newFile = FileHelper::uploadImage([
+		'path' => $file_m,
+		'size' => 512,
+		'type' => 'png',
+	]);
 
 	$reso = getimagesize($_FILES['file']['tmp_name']);
 	$ratio = round($reso[0] / $reso[1], 2);
 
-	$error = upload_img_OLD($file, 'png', '1024');
-	$error_m = upload_img_OLD($file_m, 'png', '450');
-
-	upload_file($file_ori);
-
 	// update ratio
-	if ($error) $_SESSION['error'] = $dark ? 'dark_' . $error : 'light_' . $error;
-	else {
+	DBOld::update('designs SET ratio=? WHERE ID = ?', [$ratio, $id]);
 
-		DBOld::update('designs SET ratio=? WHERE ID = ?', [$ratio, $id]);
-
-		if (!$design->custom) {
-			// delete item images
-			$res = DBOld::select('ID from items WHERE desID = ?', [$id]);
-			while ($row = $res->fetch_assoc()) PreviewOld::deleteImages($row['ID']);
-		}
-
-		// delete design images
-		if (file_exists($file = public_storage_path('/designs/previews/' . $id . '.jpg'))) unlink($file);
-		if (file_exists($file = public_storage_path('/designs/previews/' . $id . '_m.jpg'))) unlink($file);
+	if (!$design->custom) {
+		// delete item images
+		$res = DBOld::select('ID from items WHERE desID = ?', [$id]);
+		while ($row = $res->fetch_assoc()) PreviewOld::deleteImages($row['ID']);
 	}
+
+	// delete design images
+	if (file_exists($file = public_storage_path('/designs/previews/' . $id . '.jpg'))) unlink($file);
+	if (file_exists($file = public_storage_path('/designs/previews/' . $id . '_m.jpg'))) unlink($file);
 
 	if ($dark) redirect_old('#des-dark-anch');
 	else redirect_old('#des-light-anch');

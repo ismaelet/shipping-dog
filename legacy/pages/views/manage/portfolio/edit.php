@@ -32,7 +32,7 @@
 
 				<div id="des-light" class="des-box txt-0 pos-rel" onclick="$(this).parent().find('.file-inp').click();">
 
-					<img class="design block" style="background-color: <?= $design->color ?>;" src="<?= public_asset('/designs/' . $id . '.png') ?>">
+					<img class="design block" style="background-color: <?= $design->color ?>;" src="<?= public_asset('designs/' . $id . '.png') ?>">
 
 					<div class="des-over clickable file-stick">
 
@@ -75,7 +75,7 @@
 
 						<div class="des-box txt-0 pos-rel" onclick="$(this).parent().find('.file-inp').click();">
 
-							<img src="<?= public_asset('/designs/' . $id . '_dark.png') ?>" class="design bgr-blk block">
+							<img src="<?= public_asset('designs/' . $id . '_dark.png') ?>" class="design bgr-blk block">
 
 							<div class="des-over clickable file-stick">
 

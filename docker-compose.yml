@@ -1,42 +1,43 @@
 services:
     laravel:
+        container_name: laravel
         build:
             context: .
             dockerfile: ./Dockerfile
         volumes:
-            - ".:/var/www/html"
+            - '.:/var/www/html'
         ports:
-            - "80:80"
+            - '80:80'
         depends_on:
-            - mysql
+            - ${DB_HOST}
         networks:
             - internal
-    mysql:
-        image: "mysql:latest"
+    database:
+        container_name: ${DB_HOST}
+        image: 'mysql:latest'
         ports:
-            - "3306:3306"
+            - '3306:3306'
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
-            - "mysql:/var/lib/mysql"
+            - 'mysql:/var/lib/mysql'
         networks:
             - internal
-        restart: unless-stopped
     phpmyadmin:
+        container_name: phpmyadmin
         image: phpmyadmin
         ports:
             - 8080:80
         environment:
-            PMA_HOST: mysql
+            PMA_HOST: ${DB_HOST}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
             UPLOAD_LIMIT: 100000000
         networks:
             - internal
         depends_on:
-            - mysql
-        restart: unless-stopped
+            - ${DB_HOST}
 networks:
     internal:
         driver: bridge

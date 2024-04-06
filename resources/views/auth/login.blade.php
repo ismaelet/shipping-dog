@@ -18,9 +18,9 @@
         <x-form.input type="text" name="login" :value="old('login')" placeholder="Username o E-mail" required />
         <x-form.input type="password" name="password" placeholder="Password" required />
 
-        @error('login')
-            <p class="error ">Dati di accesso errati</p>
-        @enderror
+        @session('error')
+            <p class="error ">{{ $value }}</p>
+        @endsession
 
         <div class="flex items-center justify-between">
             <x-form.checkbox name="remember" text="Resta connesso" checked />

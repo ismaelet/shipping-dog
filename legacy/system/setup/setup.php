@@ -1,15 +1,13 @@
 <?php
-// Set the error log
-ini_set('error_log', __DIR__ . '/../../logs/error.log');
 
 // Load resources
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 // Load environment variables
-(Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'))->load();
+(Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../'))->load();
 
 // Set the error reporting
-if (env('DEBUG') == 'true') {
+if (env('APP_DEBUG') == 'true') {
 	ini_set('display_errors', '1');
 	ini_set('display_startup_errors', '1');
 	error_reporting(E_ALL ^ E_DEPRECATED);

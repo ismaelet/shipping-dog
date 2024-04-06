@@ -41,7 +41,7 @@ $fields = [
 ];
 
 $buttons = [
-	['title' => 'Comunicazione', 'url' => PUBLIC_CLIENT_ROOT . '/uploads/documents/payments/Comunicazione_{{userID}}.pdf', 'color' => 'gre'],
+	['title' => 'Comunicazione', 'url' => public_asset('documents/payments/Comunicazione_{{userID}}.pdf'), 'color' => 'gre'],
 ];
 
 function _expand_results(&$entry, $field, $key, $row) {

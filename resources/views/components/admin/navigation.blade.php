@@ -5,15 +5,16 @@
 
     // fetch current section
     $currentSection = false;
-    $currentPathFull = explode('admin', Request::path());
-    $currentPathFull = $currentPathFull[1] ?? null;
+    $currentPathFull = explode('admin', Request::path())[1] ?? '';
+    $currentPathFull = ltrim($currentPathFull, '/');
 
     if ($currentPathFull) {
-        $currentPath = explode('/', $currentPathFull, 2);
-        $currentSection = DB::row('* FROM admin_sections WHERE category=? AND slug=?', [
-            $currentPath[0],
-            $currentPath[1],
-        ]);
+        $currentCategorySlug = explode('/', $currentPathFull)[0] ?? null;
+        $currentSectionSlug = explode('/', $currentPathFull)[1] ?? null;
+
+        $currentSection = AdminSection::where('category', $currentCategorySlug)
+            ->where('slug', $currentSectionSlug)
+            ->first();
     }
 
     // fetch categories

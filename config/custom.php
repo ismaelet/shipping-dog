@@ -62,11 +62,11 @@ return [
     */
 
 	'social_media' => [
-		'instagram' => ['url' => 'https://www.instagram.com/instagramName', 'label' => '@instagramName',],
-		'facebook' => ['url' => '', 'label' => '',],
-		'email' => ['url' => 'mailto:info@domain.com', 'label' => 'info@domain.com',],
-		'whatsapp' => ['url' => 'https://wa.me/390000000000', 'label' => '000 0000000',],
-		'phone' => ['url' => 'tel:000 0000000', 'label' => '000 0000000',],
+		'instagram' => ['url' => 'https://www.instagram.com/shipping.dog/', 'label' => '@shipping.dog',],
+		'facebook' => ['url' => 'https://www.facebook.com/shippingdog/', 'label' => '@shippingdog',],
+		'email' => ['url' => 'mailto:giebapromotion@gmail.com', 'label' => 'giebapromotion@gmail.com',],
+		'whatsapp' => ['url' => 'https://wa.me/3517419263', 'label' => '351 7419263',],
+		'phone' => ['url' => 'tel:0462230218', 'label' => '0462 230218',],
 	],
 
 	/*
