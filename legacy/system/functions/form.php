@@ -4,6 +4,9 @@
 * Form
 */
 // Add to database
+
+use App\View\Components\Form\SearchInput;
+
 function form_db_add($tbl, $fields) {
 
 	$inputs = [];
@@ -175,6 +178,12 @@ function generate_input($input, $data, $error, $done) {
 				<?php }
 				break;
 
+			case 'auto-filled-search':
+
+				echo render_search_input($input);
+
+				break;
+
 			case 'search':
 
 				input_search($input);
@@ -293,6 +302,11 @@ function generate_input($input, $data, $error, $done) {
 		</div>
 
 	<?php }
+	}
+
+
+	function render_search_input(array $config): string {
+		return SearchInput::render($config);
 	}
 
 	/*

@@ -62,19 +62,19 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 			<input type="hidden" name="typeID" value="<?= $oldType->id ?>">
 
-			<button type="submit" name="off" class="off-btn switch-btn button">
-				<span class="btn-icon bgr-wht" <?= embed_icon('actions/add-bgr') ?>></span>
-				<span class="btn-txt">Attivo</span>
+			<button type="submit" name="off" class="btn off-btn switch-btn ">
+				<?= embed_icon('actions/add-bgr') ?>
+				Attivo
 			</button>
 
-			<button type="submit" name="on" class="on-btn switch-btn button">
-				<span class="btn-icon bgr-5" <?= embed_icon('actions/add-bgr') ?>></span>
-				<span class="btn-txt txt-5">Disattivato</span>
+			<button type="submit" name="on" class="btn on-btn switch-btn">
+				<?= embed_icon('actions/add-bgr') ?>
+				Disattivato
 			</button>
 
 			<p class="sbtn edit-btn switch-btn item-panel-open">
-				<span class="btn-icon bgr-c900" <?= embed_icon('settings') ?>></span>
-				<span class="btn-txt">Modifica</span>
+				<?= embed_icon('settings') ?>
+				Modifica
 			</p>
 
 		</form>

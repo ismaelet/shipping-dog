@@ -87,14 +87,14 @@ use ViewManager\Ecommerce\CartRecap;
 
 								if ($shippingMethod->price && !cart_old()->couponId && !cart_old()->shippingWithCredit && cart_old()->usableCredit >= $shippingMethod->price) { ?>
 
-									<button class="use-credit-btn credit-btn button btn--secondary button--full-width mar-b-2" name="ship_credit">
+									<button class="use-credit-btn credit-btn btn btn--secondary button--full-width mar-b-2" name="ship_credit">
 										<?= embed_icon('dollar') ?>
 										Usa il tuo credito
 									</button>
 
 								<?php } else if (cart_old()->shippingWithCredit) { ?>
 
-									<button class="no-credit-btn credit-btn button btn--secondary button--full-width mar-b-2" name="ship_no_credit">
+									<button class="no-credit-btn credit-btn btn btn--secondary button--full-width mar-b-2" name="ship_no_credit">
 										<?= embed_icon('close') ?>
 										Non usare il credito
 									</button>

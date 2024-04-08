@@ -22,7 +22,7 @@ $fields = [
 $buttons = [
 	['title' => 'Attiva', 'name' => 'activate', 'color' => 'green'],
 	['title' => 'Disattiva', 'name' => 'deactivate', 'color' => 'purple'],
-	['title' => 'Mostra', 'url' => PUBLIC_CLIENT_ROOT . '/artist?id={{userID}}'],
+	['title' => 'Mostra', 'url' => '/artist?id={{userID}}'],
 	['type' => 'delete'],
 ];
 

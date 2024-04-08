@@ -30,13 +30,13 @@
 
 																											if ($custom) info_box("Questa immagine è usata solo nelle sezioni dove compare la grafica senza un mockup. Essendo questo un prodotto particolare i mockup non vengono creati automaticamente.") ?>
 
-				<div id="des-light" class="des-box txt-0 pos-rel" onclick="$(this).parent().find('.file-inp').click();">
+				<div id="des-light" class="des-box pos-rel" onclick="$(this).parent().find('.file-inp').click();">
 
 					<img class="design block" style="background-color: <?= $design->color ?>;" src="<?= public_asset('designs/' . $id . '.png') ?>">
 
-					<div class="des-over clickable file-stick">
+					<div class="des-over clickable file-stick text-white">
 
-						<div class="des-icon img cont icon cen file-cancel bgr-f" <?= embed_icon('upload') ?>></div>
+						<div class="des-icon img cont icon cen file-cancel"><?= embed_icon('upload') ?></div>
 
 						<div class="file-load wid-100 cen"></div>
 
@@ -53,7 +53,7 @@
 				<?php if ($error == 'light_error') { ?><p class="error">Errore nel caricamento</p><?php } ?>
 
 				<button type="button" class="mob768 button btn--secondary button--full-width mar-t-2 file-cancel" onclick="$(this).parent().find('.file-inp').click();">
-					<span class="btn-icon bgr-c900" <?= embed_icon('upload') ?>></span>
+					<?= embed_icon('upload') ?>
 					<span class="txt"><strong>Ricarica grafica</strong></span>
 				</button>
 
@@ -79,7 +79,7 @@
 
 							<div class="des-over clickable file-stick">
 
-								<div class="des-icon img icon cont cen file-cancel bgr-f" <?= embed_icon('upload') ?>></div>
+								<div class="des-icon img icon cont cen file-cancel"><?= embed_icon('upload') ?></div>
 
 								<div class="file-load wid-100 cen"></div>
 
@@ -103,7 +103,7 @@
 						<div id="dark-empty" class="center-content clickable" onclick="$(this).parent().find('.file-inp').click();">
 
 							<div class="txt-cen file-cancel">
-								<div class="des-icon icon img cont inlb" <?= embed_icon('upload') ?>></div>
+								<div class="des-icon icon img cont inlb text-white"><?= embed_icon('upload') ?></div>
 								<p class="txt-bold mar-t-05">Carica una versione diversa per i capi scuri</p>
 							</div>
 
@@ -113,7 +113,7 @@
 
 					<?php } ?>
 
-					<input type="file" name="file" class="file-inp hidden">
+					<input type="file" name="file" class="input file-inp hidden">
 					<button type="submit" name="upload-dark" class="file-submit hidden"></button>
 
 				</form>
@@ -144,7 +144,7 @@
 
 					</div>
 
-					<input type="file" name="file" class="file-inp inp clickable">
+					<input type="file" name="file" class="file-inp input clickable">
 					<button type="submit" name="upload-vector" class="file-submit hidden"></button>
 					<div class="file-load"></div>
 
@@ -248,12 +248,14 @@
 	<!-- Items -->
 	<section id="items-sec" class="mar-t-2">
 
-		<h2 class="txt-cen txt-med">Prodotti collegati</h2>
+		<h2 class="text-component-heading text-center">Prodotti collegati</h2>
 		<p class="txt-cen mar-b-2 mar-t-2">Qui puoi modificare il colore dei capi e la dimensione di stampa nei prodotti con questa grafica.</p>
 
 		<div class="item-list grid4 grid3-1024w grid2-480w gap2 al-top pos-rel">
 			<div id="items-load-bgr" class="bgr bgr-c-bgr">
-				<div class="load-icon mar-t-4"></div>
+				<div class="load-icon mar-t-4">
+					<?= embed_icon('loading') ?>
+				</div>
 			</div>
 
 			<!-- AJAX -->

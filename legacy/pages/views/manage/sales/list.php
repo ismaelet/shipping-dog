@@ -31,10 +31,12 @@
 				Se invece possiedi una partita IVA oppure non risiedi in Italia, ti preghiamo di contattarci all'indirizzo <a class="txt-sbold txt-c2" href="<?= sys_config('contact-email-link') ?>"><?= sys_config('contact-email') ?></a> per richiedere il pagamento.
 			</p>
 
-			<button type="submit" class="btn button--auto-width" name="request-payment">
-				<?= embed_icon('dollar') ?>
-				Richiedi il pagamento
-			</button>
+			<div class="flex justify-center mar-t-2">
+				<button type="submit" class="btn button--auto-width" name="request-payment">
+					<?= embed_icon('dollar') ?>
+					Richiedi il pagamento
+				</button>
+			</div>
 
 		</form>
 

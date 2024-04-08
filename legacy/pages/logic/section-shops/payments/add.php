@@ -19,10 +19,9 @@ $inputs = [
 	[
 		['type' => 'lbl', 'text' => 'Negozio',],
 		[
-			'type' => 'search',
-			'text' => 'Negozio',
+			'type' => 'number',
+			'text' => 'ID Negozio',
 			'name' => 'storeID',
-			'search' => 'sellers',
 			'required' => true,
 		],
 	],
@@ -43,11 +42,12 @@ $inputs = [
 * Form handling
 */
 function _expand_add($tbl, $inputs) {
-
 	$value = str_replace(',', '.', $_POST['value']);
 
 	if (isset($_POST['other'])) DBOld::update('stores SET flat=flat+? WHERE userID = ?', [$value, $_POST['storeID']]);
 	else DBOld::update('stores SET payed=payed+?, request=0 WHERE userID = ?', [$value, $_POST['storeID']]);
 
 	form_db_add($tbl, $inputs);
+
+	redirect_old('/admin/shops/payments/list');
 }

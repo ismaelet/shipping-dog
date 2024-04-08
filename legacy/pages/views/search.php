@@ -12,12 +12,12 @@ use Ecommerce\Seller;
 
 	<form method="GET" id="searcher" class="px-4">
 		<div id="srch-inp-cell" class="">
-			<input type="text" id="srch-inp" name="search" placeholder="Cerca articolo, negozio o tag" maxlength="30">
+			<input type="text" class="input" id="srch-inp" name="search" placeholder="Cerca articolo, negozio o tag" maxlength="30">
 		</div>
 
 		<div id="srch-btn-cell" class="">
 			<button type="submit" id="srch-btn" class="center-content">
-				<span class="icon bgr-wht" <?= embed_icon('actions/search') ?>></span>
+				<span class="icon txt-wht"><?= embed_icon('actions/search') ?></span>
 			</button>
 		</div>
 	</form>

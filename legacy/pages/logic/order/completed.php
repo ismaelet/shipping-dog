@@ -30,4 +30,4 @@ $cart = new Cart($cartId);
 
 ViewOld::setTitle('Ordine ' . $cart->idCode);
 
-$cart->sendStatusEmail();
+// $cart->sendStatusEmail();

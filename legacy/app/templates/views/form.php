@@ -1,52 +1,21 @@
-{% extends admin %}
+{% extends main %}
 
-{% block content %}
+{% block main %}
 
-<form method="POST" action="#form" enctype="multipart/form-data" autocomplete="off" id="form" class="file-form">
+<form class="form" id="form" method="POST" enctype="multipart/form-data">
 
-	<!-- Head -->
-	<section class="head bgr-c1">
+	<div class="form-head">
+		<h1 class="form-title"><?= $title ?? View::$title ?></h1>
+	</div>
 
-		<p class="title txt-sbold txt-wht"><?= $page['title'] ?></p>
+	<div class="form-body">
+		{% place form-body %}
+	</div>
 
-	</section>
-
-	<!-- Body -->
-	<section class="body">
-
-		<?php if ($page['free']) { ?>
-
-			{% place form-body %}
-
-		<?php } else if ($inputs) generate_form($inputs, $entry) ?>
-
-	</section>
-
-	<!-- Footer -->
-	<section class="footer">
-
-		<?php if ($page['free']) { ?>
-
-			{% place form-footer %}
-
-		<?php } else { ?>
-
-			<button type="submit" id="submit" class="pbtn <?= $page['upload'] ? 'file-submit' : ''; ?>" name="<?= $page['edit'] ? 'edit' : 'add' ?>" <?php if ($page['confirmation']) { ?> onclick="return confirm('<?= $page['confirmation'] ?>')" <?php } ?>>
-
-				<?= $page['edit'] ? 'Modifica' : 'Aggiungi'; ?>
-
-			</button>
-
-			<?php if ($page['upload']) { ?>
-				<div class="file-load"></div>
-			<?php } ?>
-
-			<a href="<?= $page['back_url'] ?>" class="sbtn">Indietro</a>
-
-		<?php } ?>
-
-	</section>
+	<div class="form-footer">
+		{% place form-footer %}
+	</div>
 
 </form>
 
-{% end content %}
+{% end main %}

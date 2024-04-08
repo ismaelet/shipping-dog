@@ -88,7 +88,7 @@
 	}
 
 	[data-color-scheme='light'] .page-content {
-		background-color: var(--clr-background);
+		background-color: var(--color-background);
 		border-left: 1px solid var(--border-clr-200);
 	}
 

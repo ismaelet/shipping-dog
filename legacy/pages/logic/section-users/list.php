@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 $pageConfig['add'] = false;
 $queryConfig['table'] = 'users LEFT JOIN stores ON users.ID = stores.userID';
 $queryConfig['index'] = 'ID';
@@ -26,8 +29,10 @@ $buttons = [
 // login as a user
 if (isset($_POST['login'])) {
 	$id = $_POST['ID'];
+	$user = User::find($id);
 
-	$_SESSION['userId'] = $id;
+	Auth::logout();
+	Auth::login($user);
 
-	header('Location: ' . PUBLIC_CLIENT_ROOT . '/profile');
+	return redirect('login');
 }

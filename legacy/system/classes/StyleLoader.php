@@ -9,7 +9,7 @@ class StyleLoader {
 
 		self::$list[] = [0, $file];
 
-		$file = 'build/assets/main.css?v=' . filemtime(base_path() . '/public/build/assets/main.css');
+		$file = 'main.css?v=' . filemtime(base_path() . '/public/main.css');
 
 		self::$list[] = [0, $file];
 	}

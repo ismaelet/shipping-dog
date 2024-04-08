@@ -91,14 +91,14 @@ class ViewManager {
 
 					<?php if (!$cart->statusId && !$cart->code && !$order->credit && $order->product->sellerId == $cart->customerId && $cart->usableCredit >= $order->price) { ?>
 
-						<button class="use-credit-btn credit-btn button btn--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $order->id ?>">
+						<button class="use-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $order->id ?>">
 							<?= embed_icon('dollar') ?>
 							Usa il tuo credito
 						</button>
 
 					<?php } else if (!$cart->statusId && $order->credit) { ?>
 
-						<button class="no-credit-btn credit-btn button btn--secondary button--auto-width mar-t-1" name="item_no_credit" value="<?= $order->id ?>">
+						<button class="no-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_no_credit" value="<?= $order->id ?>">
 							<?= embed_icon('close') ?>
 							Non usare il credito
 						</button>

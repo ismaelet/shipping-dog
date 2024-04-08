@@ -113,7 +113,7 @@ class Email {
 					</td>
 				</tr>' : '';
 
-		$body = file_get_contents(SERVER_ROOT . '/app/templates/assets/template-emails/default-framework.html');
+		$body = file_get_contents(base_path() . '/public/templates/assets/template-emails/default-framework.html');
 		$body = str_replace('{{ logo }}', $logo, $body);
 		$body = str_replace('{{ content }}', $content, $body);
 		$body = str_replace('{{ instagram-link }}', $instagramLink, $body);

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Ecommerce\Design as EcommerceDesign;
+use App\Models\Ecommerce\Product as EcommerceProduct;
 use Ecommerce\Design;
 use Ecommerce\Product;
 
@@ -54,15 +56,15 @@ use Ecommerce\Product;
 			<div id="gallery" class="mar-t-2 txt-cen grid gap1 js-sortable">
 
 				<?php while ($row = $designs->fetch_assoc()) {
-					$design = new Design($row['ID']);
+					$design = EcommerceDesign::find($row['ID']);
 				?>
 
 					<div class="img-box">
-						<input type="hidden" name="id[]" value="<?= $design->id ?>">
+						<input type="hidden" name="id[]" value="<?= $design->ID ?>">
 						<input type="hidden" class="pos js-order" name="pos[]" value="<?= $row['sort'] ?>">
 
-						<a class="des-img block sqr" href="<?= client_url('/manage/portfolio/edit?id=' . $design->id) ?>">
-							<img class="img-fill" src="<?= $design->clientImage ?>" loading="lazy">
+						<a class="des-img block sqr" href="/manage/portfolio/edit?id=<?= $design->ID ?>">
+							<img class="img-fill" src="<?= $design->image() ?>" loading="lazy">
 						</a>
 
 						<p class="name fa-center txt-c-title txt-med mar-t-1 txt-line"><?= $design->name ?></p>
@@ -77,27 +79,27 @@ use Ecommerce\Product;
 		<?php if ($customProductsCount) { ?>
 
 			<div class="grid-flow" data-spacing="700">
-				<h2 class="section-heading fa-center">Prodotti personalizzati</h2>
+				<h2 class="text-component-heading fa-center mar-t-4">Prodotti personalizzati</h2>
 
 				<div class="grid-flow js-sortable" data-spacing="400" data-columns="15rem">
 
 					<?php while ($productRow = $customProducts->fetch_assoc()) {
-						$product = new Product($productRow['ID']);
+						$product = EcommerceProduct::find($productRow['ID']);
 					?>
 
 						<div class="img-box grid-flow fa-center" data-spacing="200">
-							<input type="hidden" name="product-id[]" value="<?= $product->id ?>">
+							<input type="hidden" name="product-id[]" value="<?= $product->ID ?>">
 							<input type="hidden" class="pos js-order" name="product-order[]" value="<?= $product->sort ?>">
 
-							<a class="des-img block sqr" href="<?= client_url('/manage/portfolio/product?id=' . $product->id) ?>">
-								<img class="img-fill" src="<?= client_path($product->image) ?>" loading="lazy">
+							<a class="des-img block sqr" href="<?= '/manage/portfolio/product?id=' . $product->ID ?>">
+								<img class="img-fill" src="<?= $product->image() ?>" loading="lazy">
 							</a>
 
 							<div>
 								<p class="fc-titles"><?= $product->name ?></p>
-								<p class=""><?= $product->type->fullName ?></p>
+								<p class=""><?= $product->type->name ?></p>
 
-								<?php if (!$product->statusId) { ?>
+								<?php if (!$product->status) { ?>
 									<p class="fc-warning">Non pubblicato</p>
 								<?php } ?>
 

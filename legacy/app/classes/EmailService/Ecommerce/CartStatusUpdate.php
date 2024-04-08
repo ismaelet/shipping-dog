@@ -4,14 +4,12 @@ namespace EmailService\Ecommerce;
 
 use Email;
 
-
-
 class CartStatusUpdate {
 	public static function send(object $cart = null, string $statusCode = null, bool $forceSend = false, bool $debug = false) {
 		$cart = $cart ?: cart_old();
 		$orderList = '';
 		$statusCode = $statusCode ?: $cart->statusCode;
-		$emailContent = file_get_contents(public_server_path('/app/templates/assets/template-emails/cart-update.html'));
+		$emailContent = file_get_contents(base_path() . '/public/templates/assets/template-emails/cart-update.html');
 
 		// generate dynamic content
 		switch ($statusCode) {

@@ -278,11 +278,11 @@ class Order {
 					$cart = Cart::create(['buyer' => Auth::id()]);
 				}
 			} else {
-				if (session('cart_id')) {
-					$cart = Cart::find(session('cart_id'));
+				if (isset($_SESSION['cart_id'])) {
+					$cart = Cart::find($_SESSION['cart_id']);
 				} else {
 					$cart = Cart::create();
-					session(['cart_id' => $cart->ID]);
+					$_SESSION['cart_id'] = $cart->ID;
 				}
 			}
 

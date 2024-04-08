@@ -4,7 +4,7 @@
 main {
 	display: grid;
 	grid-template-columns: max-content minmax(0, 1fr);
-	background-color: var(--clr-background);
+	background-color: var(--color-background);
 }
 
 /*

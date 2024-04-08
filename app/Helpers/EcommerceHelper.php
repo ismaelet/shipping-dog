@@ -15,7 +15,7 @@ class EcommerceHelper {
 			return auth()->user()->cart->ID;
 		}
 
-		return session('cart_id') ?: null;
+		return $_SESSION['cart_id'] ?? null;
 	}
 
 	/**
@@ -26,8 +26,8 @@ class EcommerceHelper {
 			return Auth::user()->cart ?? null;
 		}
 
-		if (session('cart_id')) {
-			return Cart::find(session('cart_id'));
+		if (isset($_SESSION['cart_id'])) {
+			return Cart::find($_SESSION['cart_id']);
 		}
 
 		return null;

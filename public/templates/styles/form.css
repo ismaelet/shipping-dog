@@ -1,82 +1,73 @@
-/* Layout */
-#wrap {
+/*
+* Layout
+*/
+main {
 	display: grid;
-	align-items: center;
-	min-height: 100%;
+	grid-template-columns: minmax(0, 1fr);
+	place-items: center;
+	padding: 5rem 2rem;
 }
 
-#form {
-	box-shadow: 0 10px 2rem -5px rgba(0, 0, 0, .05);
+.form {
+	width: 600px;
+	max-width: 100%;
+	padding-inline: 2rem;
+	position: relative;
 }
 
-/* Head */
-#form .head {
-	border-radius: var(--border-radius) var(--border-radius) 0 0;
-}
-
-#form .title {
-	padding: 10px 2rem;
-	font-size: 1.5rem;
-}
-
-/* Body */
-#form .body {
-	display: grid;
-	background-color: var(--surface-tertiary);
-	gap: 1rem;
-	padding: 2rem;
-}
-
-/* Footer */
-#form .footer {
-	display: grid;
-	background-color: var(--surface-tertiary);
-	border-radius: 0 0 var(--border-radius) var(--border-radius);
-	padding: 2rem;
-	padding-top: 0;
-	gap: 1rem;
+/*
+* Header
+*/
+.form-title {
+	padding-block: 1.5rem;
+	font-size: 2.5rem;
+	font-weight: 600;
+	letter-spacing: 0.05em;
 	text-align: center;
 }
 
-/* Components */
-#form .lbl {
-	font-weight: 700;
+/*
+* Body
+*/
+.form-body {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 1rem;
+	padding-block: 1rem;
+	border-block: 1px solid var(--border-color);
 }
 
-#form .pbtn,
-#form .sbtn {
-	display: block;
-	min-width: 20vw;
-	margin-inline: auto;
+.form-body > * {
+	grid-column: span 4;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/*
+* Footer
+*/
+.form-footer {
+	display: grid;
+	gap: 0.5rem;
+	padding-block: 1.5rem;
+	text-align: center;
+}
 
-	main {
-		background-color: var(--surface-tertiary);
-	}
+.form-footer .btn {
+	width: 100%;
+}
 
-	#menu {
-		background-color: var(--surface-secondary);
-	}
-
-	#body {
+/*
+* Responsive
+*/
+@media (max-width: 1024px) {
+	.form {
 		padding: 0;
+		background-color: transparent;
+		box-shadow: none;
 	}
-
-	#form .head,
-	#form .footer {
-		border-radius: 0;
-	}
-
 }
 
 @media (max-width: 480px) {
-
-	#form .pbtn,
-	#form .sbtn {
-		width: 100%;
+	main {
+		padding-top: 2rem;
 	}
-
 }

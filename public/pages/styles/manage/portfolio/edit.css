@@ -118,7 +118,6 @@ img {
 
 #dark-empty .des-icon {
 	opacity: 0.7;
-	background-color: var(--theme-max);
 }
 
 #dark-empty:hover .des-icon {
@@ -309,7 +308,7 @@ img {
 
 .item.active .off-btn,
 .item.active .edit-btn {
-	display: block;
+	display: flex;
 }
 
 .item.active .on-btn {

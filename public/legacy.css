@@ -6227,8 +6227,7 @@ a {
 
 /* 2.2. Basic settings */
 body {
-	background-color: var(--clr-background);
-	color: var(--fc-400);
+	background-color: var(--color-background);
 	font-family: var(--ff-default);
 	font-size: var(--fs-400);
 	font-weight: var(--fs-400);

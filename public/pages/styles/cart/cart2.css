@@ -5,6 +5,11 @@
 	align-content: start;
 }
 
+#left_panel,
+#items_panel {
+	--icon-size: 1em;
+}
+
 /* Address */
 .address-form .field {
 	display: grid;

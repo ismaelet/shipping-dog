@@ -50,6 +50,7 @@ export default {
 			error: 'hsl(var(--color-error-400-hsl) / <alpha-value>)',
 
 			// Custom
+			white: 'white',
 			blue: 'lightblue',
 		},
 		// Custom borders

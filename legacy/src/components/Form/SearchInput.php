@@ -1,22 +1,23 @@
 <!-- 
-	Version 1.1.1
+	Version 1.2.0
 
 	search: string, the search class endpoint
 	storedName: string, the name of the input to store the value
-	shownName: string, the name of the input to show the value
-	storedValue: mixed|null, the value of the input to store the value
-	shownValue: mixed|null, the value of the input to show the value
-	where: array|null, the where clause for the search
-	placeholder: string, the input placeholder
-	required: bool, if the input is required
+	shownName: ?string, the name of the input to show the value
+	storedValue: ?mixed, the value of the input to store the value
+	shownValue: ?mixed, the value of the input to show the value
+	where: ?array, the where clause for the search
+	exclude: ?array, the ids to exclude from the search
+	placeholder: ?string, the input placeholder
+	required: ?bool, if the input is required
 -->
 
 <template>
-	<div class="search-input js-search-input" data-endpoint="<?= $search ?>" <?= isset($where) ? 'data-where="' . implode(',', $where) . '"' : '' ?>>
+	<div class="search-input js-search-input" data-endpoint="<?= $search ?>" <?= isset($where) ? 'data-where="' . implode(',', $where) . '"' : '' ?> <?= isset($exclude) ? 'data-exclude="' . implode(',', $exclude) . '"' : '' ?>>
 
 		<input type="hidden" class="js-search-store" name="<?= $storedName ?>" value="<?= $storedValue ?? '' ?>" <?= isset($required) ? 'required' : '' ?>>
 
-		<input type="text" class="js-search-show" <?= isset($shownName) ? 'name="' . $shownName . '"' : '' ?> value="<?= $shownValue ?? '' ?>" placeholder="<?= $placeholder ?? '' ?>" <?= isset($required) ? 'required' : '' ?> autocomplete="off">
+		<input type="text" class="input js-search-show" <?= isset($shownName) ? 'name="' . $shownName . '"' : '' ?> value="<?= $shownValue ?? '' ?>" placeholder="<?= $placeholder ?? '' ?>" <?= isset($required) ? 'required' : '' ?> autocomplete="off">
 
 		<div class="search-input__dropdown js-search-dropdown">
 			<!-- Populated after fetch -->
@@ -82,14 +83,22 @@
 				const storedInput = searchBlock.querySelector('.js-search-store')
 				const shownInput = element
 				const dropDown = searchBlock.querySelector('.js-search-dropdown')
-				const endpoint = searchBlock.dataset.endpoint
-				// const whereClause = searchBlock.dataset.where
+				const parcialEndpoint = searchBlock.dataset.endpoint
 				const filter = shownInput.value
+				const exclude = searchBlock.dataset.exclude
 
+				// Generate the endpoint
+				let fullEndpoint = `/api/${parcialEndpoint}?filter=${encodeURIComponent(filter)}`
+
+				if (exclude) {
+					fullEndpoint += `&exclude=${exclude}`
+				}
+
+				// Empty the previous results
 				dropDown.innerHTML = ''
 
 				// Fetch the results
-				axios.get(`/api/${endpoint}?filter=${encodeURIComponent(filter)}`)
+				axios.get(fullEndpoint)
 					.then(response => {
 						// Get the results
 						const results = response.data

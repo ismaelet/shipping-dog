@@ -137,6 +137,7 @@ header.floating {
 
 #h-srch-inp {
 	width: 100%;
+	font-size: 1rem;
 	border: 1px solid var(--surface);
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;

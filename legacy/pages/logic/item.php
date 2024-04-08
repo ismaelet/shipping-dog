@@ -49,29 +49,16 @@ $fanN = $res_fan->num_rows;
 /*
 * Related products
 */
-if (!$oldProduct->type->genderId || $oldProduct->type->genderId == 3) {
-	$relatedGarments = rows_to_objects(
-		DBOld::select(
-			"items.ID FROM items
+$relatedGarments = rows_to_objects(
+	DBOld::select(
+		"items.ID FROM items
 		INNER JOIN items_types ON items.typeID = items_types.ID
 		WHERE desID = ? AND typeID <> ? AND category='c' AND items.status = 1 AND items.deleted = 0
 		ORDER BY typeID ASC, items.sort ASC, items_types.sort ASC, items_types.ID ASC",
-			[$oldProduct->design->id, $oldProduct->type->id]
-		),
-		OldProduct::class
-	);
-} else {
-	$relatedGarments = rows_to_objects(
-		DBOld::select(
-			"items.ID FROM items
-		INNER JOIN items_types ON items.typeID = items_types.ID
-		WHERE desID = ? AND typeID <> ? AND category='c' AND (gender = ? OR gender=0 OR gender=3) AND items.status = 1 AND items.deleted = 0
-		ORDER BY typeID ASC, items.sort ASC, items_types.sort ASC, items_types.ID ASC",
-			[$oldProduct->design->id, $oldProduct->type->id, $oldProduct->type->genderId]
-		),
-		OldProduct::class
-	);
-}
+		[$oldProduct->design->id, $oldProduct->type->id]
+	),
+	OldProduct::class
+);
 
 $relatedAccessories = rows_to_objects(DBOld::select("ID FROM items WHERE desID = ? AND typeID <> ? AND typeID IN (SELECT ID FROM items_types WHERE category='m') AND status = 1 ORDER BY typeID ASC", [$oldProduct->design->id, $oldProduct->type->id]), OldProduct::class);
 
