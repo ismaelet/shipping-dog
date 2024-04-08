@@ -56,7 +56,7 @@
 
 {% block form-footer %}
 
-<button type="submit" name="submit" id="submit" class="button">Richiedi</button>
+<button type="submit" name="submit" id="submit" class="btn">Richiedi</button>
 <button type="submit" name="cancel" class="remove mar-t-1 txt-lef">Cancella cambio</button>
 
 {% end form-footer %}

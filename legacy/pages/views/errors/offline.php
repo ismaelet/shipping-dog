@@ -12,7 +12,7 @@
 <!-- Login button -->
 <form class="login flex ha-cen pad-b-1" method="POST">
 	<button type="submit" class="login-btn btn-with-icons clickable" name="submit">
-		<span class="text-icon small bgr-c1" <?= icon_svg('key') ?>></span>
+		<span class="text-icon small bgr-c1" <?= embed_icon('key') ?>></span>
 		<span class="login-text br-b-1 br-c1 txt-c1 txt-09rem"><?= ('Entra come amministratore') ?></span>
 	</button>
 </form>

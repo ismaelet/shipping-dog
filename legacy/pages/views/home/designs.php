@@ -14,16 +14,16 @@
 				<?php foreach ($popularDesigns as $design) { ?>
 
 					<div class="carousel-box">
-						<a href="<?= $design->url ?>">
-							<img src="<?= $design->clientImage ?>" alt="" class="img-fill">
+						<a href="<?= $design->url() ?>">
+							<img src="<?= $design->image() ?>" alt="" class="img-fill">
 						</a>
 
 						<h3 class="name mar-t-1 txt-line"><?= $design->name ?></h3>
 
-						<p class="seller txt-line">by <a href="<?= $design->seller->clientUrl ?>" class="txt-c1-h"><?= $design->seller->name ?></a></p>
+						<p class="seller txt-line">by <a href="<?= $design->seller->url() ?>" class="txt-c1-h"><?= $design->seller->name ?></a></p>
 						<p class="mar-t-05 txt-sbold txt-c2">
-							<a href="<?= $design->url ?>">
-								<?= $design->itemN ?> prodotti
+							<a href="<?= $design->url() ?>">
+								<?= $design->productCount() ?> prodotti
 							</a>
 						</p>
 					</div>

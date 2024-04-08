@@ -1,5 +1,6 @@
 <?php
 
+/*
 //generate a specific missing image
 function des_img_gen($design) {
 
@@ -71,3 +72,4 @@ function des_img_gen($design) {
 		imagedestroy($dst_image);
 	}
 }
+*/

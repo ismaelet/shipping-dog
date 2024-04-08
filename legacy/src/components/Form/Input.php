@@ -10,7 +10,7 @@ $trim = $trim ?? false;
 ?>
 
 <template>
-	<input type="<?= $type ?>" class="<?= $trim ? 'js-input-trim' : '' ?>" <?= $name ? 'name="' . $name . '"' : '' ?> <?= $value ? 'value="' . $value . '"' : '' ?> <?= $placeholder ? 'placeholder="' . $placeholder . '"' : '' ?> <?= $required ? 'required' : '' ?> <?= $disabled ? 'disabled' : '' ?> <?= $readonly ? 'readonly' : '' ?> />
+	<input type="<?= $type ?>" class="input <?= $trim ? 'js-input-trim' : '' ?>" <?= $name ? 'name="' . $name . '"' : '' ?> <?= $value ? 'value="' . $value . '"' : '' ?> <?= $placeholder ? 'placeholder="' . $placeholder . '"' : '' ?> <?= $required ? 'required' : '' ?> <?= $disabled ? 'disabled' : '' ?> <?= $readonly ? 'readonly' : '' ?> />
 </template>
 
 <style>

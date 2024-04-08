@@ -12,32 +12,38 @@
 @pushOnce('styles')
     <style>
         .button {
+            --icon-size: 1em;
             display: inline-block;
             min-width: 12rem;
             transition: color .2s, background-color .2s, border-color .2s;
 
+            /* Icons handling */
             &:has(svg) {
                 display: flex;
             }
 
+            /* Primary button */
             &[data-variant="primary"] {
                 --_color: var(--color-primary-400-hsl);
                 --_shadow-intensity: 0.4;
                 padding-block: 1em;
                 background-color: hsl(var(--_color));
-                box-shadow: 0px 1rem 3rem -1rem hsl(var(--_color) / var(--_shadow-intensity));
+                box-shadow: 0 .25rem 3rem -1rem hsl(var(--_color) / var(--_shadow-intensity));
                 color: #fff;
 
+                /* Primary button: Dark color scheme */
                 [data-color-scheme="dark"] &,
                 [data-local-color-scheme="dark"] & {
-                    --_shadow-intensity: 0.25;
+                    --_shadow-intensity: 0.4;
                 }
 
+                /* Primary button: Hover */
                 &:hover {
                     --_color: var(--color-primary-500-hsl);
                 }
             }
 
+            /* Secondary button */
             &[data-variant="secondary"] {
                 --_border-width: 1px;
                 --_border-color: currentColor;
@@ -46,36 +52,35 @@
                 border: var(--_border-width) solid var(--_border-color);
                 color: var(--_color);
 
+                /* Secondary button: Dark color scheme */
                 [data-color-scheme="dark"] &,
                 [data-local-color-scheme="dark"] & {
                     --_border-width: var(--border-width);
                     --_border-color: var(--color-neutral-300);
                 }
 
+                /* Secondary button: Hover */
                 &:hover {
                     --_border-color: var(--color-primary-400);
                     --_color: var(--color-primary-400);
                 }
             }
 
+            /* Small version */
             &[data-size="small"] {
                 min-width: 8rem;
                 font-size: var(--font-size-300);
             }
 
+            /* Auto width version */
             &[data-size="auto"] {
                 width: auto;
                 min-width: unset;
             }
 
-            [data-local-theme="dark"] & {
-                background-color: #fff;
-                color: var(--color-primary-400);
-
-                &:hover {
-                    background-color: var(--color-primary-400);
-                    color: #fff;
-                }
+            /* Button with icons */
+            &:has(svg) {
+                gap: 0.5em;
             }
         }
     </style>

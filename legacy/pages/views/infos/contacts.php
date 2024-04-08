@@ -86,7 +86,7 @@
 					<textarea name="text" class="form-textarea" maxlength="500" onfocus="$(this).prev().addClass('focus')" onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}" required></textarea>
 
 					<div class="txt-rig mar-t-2">
-						<button type="submit" id="submit" name="submit" class="button">Invia</button>
+						<button type="submit" id="submit" name="submit" class="btn">Invia</button>
 					</div>
 				</form>
 			</section>

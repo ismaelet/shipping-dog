@@ -140,7 +140,7 @@
 											</a>
 
 											<div class="add-to-cart-box grid2 mar-t-2">
-												<input type="number" name="quantity" value="1" min="1" max="999" step="1" class="inp">
+												<input type="number" name="quantity" value="1" min="1" max="999" step="1" class="input">
 
 												<button type="submit" name="add-to-cart" class="pbtn mar-t-2">
 													Aggiungi al carrello

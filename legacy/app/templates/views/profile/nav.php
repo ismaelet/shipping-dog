@@ -7,8 +7,8 @@
 		<!-- Title -->
 		<label id="nav-title-box" for="nav-cbx">
 
-			<h3 id="nav-title" class="txt-11rem txt-upp txt-med pad-v-1 pad-h-1">
-				<span class="btn-icon bgr-c-title" <?= icon_svg('list') ?>></span>
+			<h3 id="nav-title" class="txt-11rem txt-upp flex items-center pad-v-1 pad-h-1">
+				<span class="btn-icon"><?= embed_icon('list') ?></span>
 				<span class="btn-txt">Profilo Personale</span>
 			</h3>
 

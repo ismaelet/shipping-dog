@@ -65,7 +65,7 @@ $sysConfig = [
 	'google-analytics' => true,
 	'facebook-pixel' => false,
 
-	'theme-color' => 'dark'
+	'color-scheme' => 'dark'
 ];
 
 //local server settings

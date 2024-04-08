@@ -26,7 +26,7 @@
 
 	{% block form-footer %}
 
-	<button type="submit" name="submit" class="button">Recupera i dati di accesso</button>
+	<button type="submit" name="submit" class="btn">Recupera i dati di accesso</button>
 
 	{% end form-footer %}
 

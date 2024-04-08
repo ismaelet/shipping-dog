@@ -6,7 +6,7 @@
 			<label id="nav-title-box" class="mob1000" for="nav-title-cbx">
 
 				<h1 id="nav-title" class="txt-11rem txt-cen txt-med txt-upp pad-h-1">
-					<span class="btn-icon bgr-c-title" <?= icon_svg('list') ?>></span>
+					<span class="btn-icon bgr-c-title" <?= embed_icon('list') ?>></span>
 					<span class="btn-txt">Menu Gestione</span>
 				</h1>
 
@@ -36,7 +36,7 @@
 								<div class="grid">
 
 									<div class="nav-ico no-trans icon-box">
-										<?= embed_icon(APP_ICONS_DIR . $cat) ?>
+										<?= embed_icon($cat) ?>
 									</div>
 
 									<p class="nav-title no-trans"><?= $category['title'] ?></p>

@@ -38,7 +38,7 @@
     <style>
         /* Structure */
         footer {
-            background-color: var(--surface-tertiary);
+            background-color: var(--color-surface-200);
         }
 
         html[data-color-scheme='light'] footer {
@@ -85,24 +85,11 @@
         }
 
         .footer-soc-icon {
-            background-color: var(--surface-secondary);
+            --icon-size: 50%;
             border-radius: 5px;
             width: 2.5rem;
             height: 2.5rem;
             transition: background-color 0.4s;
-        }
-
-        .footer-soc-icon .icon-box {
-            width: 50%;
-            aspect-ratio: 1;
-        }
-
-        .footer-soc-icon svg {
-            fill: var(--text-color);
-        }
-
-        .footer-soc-icon:hover svg {
-            fill: #fff;
         }
 
         @media (max-width: 768px) {
@@ -126,7 +113,7 @@
 
 <footer>
 
-    <div id="footer-wrap" class="main-wrap">
+    <div id="footer-wrap" class="content-grid">
 
         <div id="footer-body" class="">
 
@@ -140,7 +127,7 @@
 
                     <?php foreach ($f_column[1] as $f_link) { ?>
 
-                    <li>
+                    <li class="text-neutral-300">
 
                         <?php if (isset($f_link[1])) { ?>
 
@@ -167,51 +154,32 @@
             <?php if ($footer['contacts']) { ?>
 
             <div class="contacts footer-col">
-
                 <h3 class="footer-title">Contatti</h3>
 
                 <ul class="flex">
 
-                    <?php if (in_array('instagram', $footer['contacts'])) { ?>
-                    <a href="<?= config('custom.social_media.instagram.url') ?>"
-                        class="footer-soc-icon bgr-c1-h center-items">
-                        <div class="icon-box">
-                            <?= embed_icon('contacts/instagram') ?>
-                        </div>
-                    </a>
-                    <?php } ?>
-
-                    <?php if (in_array('facebook', $footer['contacts'])) { ?>
-                    <a href="<?= config('custom.social_media.facebook.url') ?>"
-                        class="footer-soc-icon bgr-c1-h center-items">
-                        <div class="icon-box">
-                            <?= embed_icon('contacts/facebook') ?>
-                        </div>
-                    </a>
-                    <?php } ?>
-
-                    <?php if (in_array('email', $footer['contacts'])) { ?>
-                    <a href="<?= config('custom.social_media.email.url') ?>"
-                        class="footer-soc-icon bgr-c1-h center-items">
-                        <div class="icon-box">
-                            <?= embed_icon('contacts/email') ?>
-                        </div>
-                    </a>
-                    <?php } ?>
+                    @foreach (config('custom.social_media') as $socialMediaTag => $socialMedia)
+                        <li>
+                            <a href="{{ $socialMedia['url'] }}"
+                                class="footer-soc-icon hover:text-neutral-700 bg-surface-500 hover:bg-primary transition-colors center-items">
+                                <?= embed_icon('contacts/' . $socialMediaTag) ?>
+                            </a>
+                        </li>
+                    @endforeach
 
                 </ul>
-
             </div>
 
             <?php } ?>
 
         </div>
 
-        <p id="footer-notes">
+        <p class="border-t border-neutral-200 text-neutral-300 py-6">
             Copyright © <?= getdate()['year'] ?> <span
-                class="txt-wht"><?= config('custom.meta_data.full_name') ?></span>. Il
-            copyright © di ogni design appartiene al rispettivo proprietario.
-            <br>Sito web realizzato da <a class="txt-wht-h" href="emailto:ismaele.tuffanelli@gmail.com">Ismaele
+                class="font-medium text-neutral-700"><?= config('custom.meta_data.full_name') ?></span>. Il
+            copyright © di ogni grafica appartiene al rispettivo proprietario.
+            <br>Sito web realizzato da <a class="font-medium text-neutral-700"
+                href="emailto:ismaele.tuffanelli@gmail.com">Ismaele
                 Tuffanelli</a>
         </p>
     </div>

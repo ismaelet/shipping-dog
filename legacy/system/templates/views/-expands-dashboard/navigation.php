@@ -15,7 +15,7 @@
 					<!-- Return link -->
 					<a href="<?= client_url('/teacher') ?>" class="dashboard-return">
 						<h3 class="dashboard-return-title flex-line">
-							<div class="text-icon" <?= icon_svg('back') ?>></div>
+							<div class="text-icon" <?= embed_icon('back') ?>></div>
 							Torna all'account
 						</h3>
 					</a>
@@ -45,7 +45,7 @@
 							<div class="title-box grid">
 								<div class="highlight"></div>
 								<div class="icon-box">
-									<?= embed_icon(APP_ICONS_DIR . 'dashboards/' . $category['slug']) ?>
+									<?= embed_icon('dashboards/' . $category['slug']) ?>
 								</div>
 								<p class="title txt-line"><?= $category['title'] ?></p>
 							</div>

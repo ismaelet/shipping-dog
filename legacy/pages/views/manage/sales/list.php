@@ -18,7 +18,7 @@
 				Se vuoi riscaricare o rigenerare il <strong>PDF</strong> da compilare, puoi cliccare qui sotto.
 			</p>
 
-			<a class="button button--auto-width" href="<?= client_url('/manage/payments/request') ?>">Scarica di nuovo il <strong>PDF</strong></a>
+			<a class="btn button--auto-width" href="<?= client_url('/manage/payments/request') ?>">Scarica di nuovo il <strong>PDF</strong></a>
 
 		</div>
 
@@ -31,9 +31,9 @@
 				Se invece possiedi una partita IVA oppure non risiedi in Italia, ti preghiamo di contattarci all'indirizzo <a class="txt-sbold txt-c2" href="<?= sys_config('contact-email-link') ?>"><?= sys_config('contact-email') ?></a> per richiedere il pagamento.
 			</p>
 
-			<button type="submit" class="button button--auto-width" name="request-payment">
-				<span class="btn-icon bgr-f" <?= icon_svg('dollar') ?>></span>
-				<span class="btn-txt">Richiedi il pagamento</span>
+			<button type="submit" class="btn button--auto-width" name="request-payment">
+				<?= embed_icon('dollar') ?>
+				Richiedi il pagamento
 			</button>
 
 		</form>
@@ -46,9 +46,9 @@
 				I pagamenti dei guadagni accumulati non sono inviati automaticamente, ma devono essere richiesti cliccando qui sotto. È possibile richiedere il pagamento se il totale a pagare è superiore a <strong>25,00€ netti</strong> (31,25€ lordi).
 			</p>
 
-			<button type="button" class="button button--auto-width" disabled>
-				<span class="btn-icon bgr-f" <?= icon_svg('dollar') ?>></span>
-				<span class="btn-txt">Richiedi il pagamento</span>
+			<button type="button" class="btn button--auto-width" disabled>
+				<?= embed_icon('dollar') ?>
+				Richiedi il pagamento
 			</button>
 
 		</div>
@@ -85,28 +85,28 @@
 				<div class="rec_row">
 					<div class="rec_cell">
 						<p class="rec_lbl">Guadagno:</p>
-						<input type="text" class="inp wid-100" value="<?= format_price($seller->earned()) ?>" disabled>
+						<input type="text" class="input wid-100" value="<?= format_price($seller->earned()) ?>" disabled>
 					</div>
 
 					<div class="rec_cell">
 						<p class="rec_lbl inlb">Bonus: </p> <?= info_box("Per ogni capo venduto riceverai un ulteriore <strong>10%</strong> del guadagno come bonus. Puoi usare questo bonus per pagare le spese di spedizione quando acquisti sul nostro sito, oppure per comprare prodotti del tuo negozio senza pagarli.") ?>
-						<input type="text" class="inp wid-100" value="<?= format_price($seller->credit()) ?>" disabled>
+						<input type="text" class="input wid-100" value="<?= format_price($seller->credit()) ?>" disabled>
 					</div>
 				</div>
 				<div class="rec_row">
 					<div class="rec_cell">
 						<p class="rec_lbl">PAGATO:</p>
-						<input type="text" class="inp wid-100" value="<?= $oldSeller->payedString ?>" disabled>
+						<input type="text" class="input wid-100" value="<?= $oldSeller->payedString ?>" disabled>
 					</div>
 
 					<div class="rec_cell">
 						<p class="rec_lbl">ALTRO:</p>
-						<input type="text" class="inp wid-100" value="<?= $oldSeller->otherTransfersString ?>" disabled>
+						<input type="text" class="input wid-100" value="<?= $oldSeller->otherTransfersString ?>" disabled>
 					</div>
 
 					<div class="rec_cell">
 						<p class="rec_lbl">DA PAGARE:</p>
-						<input type="text" class="inp wid-100 txt-c1" style="font-weight: bold;" value="<?= $oldSeller->toPayString ?>" disabled>
+						<input type="text" class="input wid-100 txt-c1" style="font-weight: bold;" value="<?= $oldSeller->toPayString ?>" disabled>
 					</div>
 				</div>
 			</div>

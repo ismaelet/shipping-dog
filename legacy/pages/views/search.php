@@ -1,6 +1,6 @@
 <?php
 
-use Ecommerce\Design;
+use App\Models\Ecommerce\Design;
 use Ecommerce\Seller;
 
 ?>
@@ -17,7 +17,7 @@ use Ecommerce\Seller;
 
 		<div id="srch-btn-cell" class="">
 			<button type="submit" id="srch-btn" class="center-content">
-				<span class="icon bgr-wht" <?= icon_svg('actions/search') ?>></span>
+				<span class="icon bgr-wht" <?= embed_icon('actions/search') ?>></span>
 			</button>
 		</div>
 	</form>
@@ -59,19 +59,19 @@ use Ecommerce\Seller;
 				<div class="gallery">
 
 					<?php while ($row = $res_des->fetch_assoc()) {
-						$design = new Design($row['ID']);
+						$design = Design::find($row['ID']);
 						$product = $design->mainProduct;
 					?>
 						<div class="item">
-							<a href="<?= $product->clientUrl ?>">
-								<img src="<?= client_path($product->image) ?>" alt="" loading="lazy" class="image">
+							<a href="<?= $product->url() ?>">
+								<img src="<?= $product->image() ?>" alt="" loading="lazy" class="image">
 							</a>
 							<h3 class="mar-t-1 txt-1rem txt-line txt-med"><?= $product->name ?></h3>
 							<p class="mar-b-05 txt-08rem">
-								by <a class="link" href="<?= $design->seller->clientUrl ?>"><?= $design->seller->name ?></a>
+								by <a class="link" href="<?= $design->seller->url() ?>"><?= $design->seller->name ?></a>
 							</p>
-							<p class="">Su t-shirt e altri <strong><?= $design->productCount ?> articoli</strong></p>
-							<a class="" href="<?= $design->url ?>">
+							<p class="">Su t-shirt e altri <strong><?= $design->productCount() ?> articoli</strong></p>
+							<a class="" href="<?= $design->url() ?>">
 								<p class="cta inlb br-b-2 br-c2 br-c1-h mar-t-05 txt-c2 txt-c1-h txt-bold txt-upp">Scopri</p>
 							</a>
 						</div>

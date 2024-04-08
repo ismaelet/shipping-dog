@@ -27,7 +27,7 @@
 				<?= embed_icon('search') ?>
 			</div>
 
-			<input type="search" class="js-search-input" name="search" value="<?= $queryConfig['search'] ?>" placeholder="<?= ('Search in this list') ?>" autocomplete="off">
+			<input type="search" class="input js-search-input" name="search" value="<?= $queryConfig['search'] ?>" placeholder="<?= ('Search in this list') ?>" autocomplete="off">
 
 			<?php if ($queryConfig['search']) { ?>
 

@@ -32,7 +32,7 @@ $inputs = [
 		[
 			'type' => 'search',
 			'name' => 'desID',
-			'search' => $search,
+			'search' => 'designs',
 			'text' => 'Design',
 		],
 		[

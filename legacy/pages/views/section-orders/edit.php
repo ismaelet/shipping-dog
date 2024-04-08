@@ -76,7 +76,7 @@
 
 		<?php if ($cart->statusId > 0) { ?>
 
-			<button type="button" class="cart-action cart-action_cancel button button--secondary button--auto-width button--bad" data-function="open-modal" data-target="cancel-order-modal" name="change-status" value="canceled">
+			<button type="button" class="cart-action cart-action_cancel button btn--secondary button--auto-width button--bad" data-function="open-modal" data-target="cancel-order-modal" name="change-status" value="canceled">
 				<?= embed_icon('close') ?>
 				Cancella l'ordine
 			</button>
@@ -85,7 +85,7 @@
 
 		<?php if ($cart->statusId != 0) { ?>
 
-			<button type="submit" class="cart-action cart-action_restore button button--secondary button--auto-width" name="change-status" value="open">
+			<button type="submit" class="cart-action cart-action_restore button btn--secondary button--auto-width" name="change-status" value="open">
 				<?= embed_icon('back') ?>
 				Riapri il carrello
 			</button>
@@ -164,14 +164,14 @@
 			<?php if ($cart->status > 1) { ?>
 
 				<div class="tracking mar-t-1">
-					<input type="text" class="inp mar-t-1" name="tracking" value="<?= $cart->tracking ?>" placeholder="Codice di tracking">
-					<button type="submit" class="button mar-t-1 hidden" name="update-tracking">Salva</button>
+					<input type="text" class="inputmar-t-1" name="tracking" value="<?= $cart->tracking ?>" placeholder="Codice di tracking">
+					<button type="submit" class="btn mar-t-1 hidden" name="update-tracking">Salva</button>
 				</div>
 
 			<?php } ?>
 
 			<div>
-				<a href="edit-address?id=<?= $cart->address->id ?>" class="button button--small button--secondary button--auto-width">Modifica</a>
+				<a href="edit-address?id=<?= $cart->address->id ?>" class="btn button--small btn--secondary button--auto-width">Modifica</a>
 			</div>
 		</div>
 	</section>
@@ -197,7 +197,7 @@
 
 		<div class="modal-form-footer">
 			<div class="sbtn" data-function="close-modal">Indietro</div>
-			<button type="submit" class="button" name="change-status" value="canceled" data-style="warning">Cancella l'ordine</button>
+			<button type="submit" class="btn" name="change-status" value="canceled" data-style="warning">Cancella l'ordine</button>
 		</div>
 	</div>
 </dialog>

@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Auth;
 			<?php } ?>
 
 			<p class="lbl">Username:</p>
-			<input type="text" class="inp inp-nospace" name="username" value="<?= Auth::user()->username; ?>" placeholder="Username" maxlength="16" required>
+			<input type="text" class="input inp-nospace" name="username" value="<?= Auth::user()->username; ?>" placeholder="Username" maxlength="16" required>
 
 			<?php if ($error == 'user_match') { ?>
 
@@ -30,11 +30,11 @@ use Illuminate\Support\Facades\Auth;
 			<?php } ?>
 
 			<p class="lbl">Nome e cognome:</p>
-			<input type="text" class="inp" name="fname" value="<?= Auth::user()->fname; ?>" placeholder="Nome">
-			<input type="text" class="inp" name="lname" value="<?= Auth::user()->lname; ?>" placeholder="Cognome">
+			<input type="text" class="input" name="fname" value="<?= Auth::user()->fname; ?>" placeholder="Nome">
+			<input type="text" class="input" name="lname" value="<?= Auth::user()->lname; ?>" placeholder="Cognome">
 
 			<p class="lbl">E-mail:</p>
-			<input type="email" class="inp" name="email" value="<?= Auth::user()->email; ?>" placeholder="email" required>
+			<input type="email" class="input" name="email" value="<?= Auth::user()->email; ?>" placeholder="email" required>
 
 			<?php if ($error == 'email_match') { ?>
 
@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\Auth;
 		</div>
 
 		<div class="footer">
-			<button type="submit" name="edit_data" class="button button--full-width">Modifica</button>
+			<button type="submit" name="edit_data" class="btn button--full-width">Modifica</button>
 		</div>
 	</form>
 
@@ -62,7 +62,7 @@ use Illuminate\Support\Facades\Auth;
 
 			<p class="lbl">Password:</p>
 
-			<input type="password" class="inp" name="passOld" placeholder="Password attuale" maxlength="16" required>
+			<input type="password" class="input" name="passOld" placeholder="Password attuale" maxlength="16" required>
 
 			<?php if ($error == 'pass_bad') { ?>
 
@@ -70,8 +70,8 @@ use Illuminate\Support\Facades\Auth;
 
 			<?php } ?>
 
-			<input type="password" class="inp" name="passNew" placeholder="Nuova password" maxlength="16" required>
-			<input type="password" class="inp" name="passConf" placeholder="Conferma nuova password" maxlength="16" required>
+			<input type="password" class="input" name="passNew" placeholder="Nuova password" maxlength="16" required>
+			<input type="password" class="input" name="passConf" placeholder="Conferma nuova password" maxlength="16" required>
 
 			<?php if ($error == 'pass_match') { ?>
 
@@ -82,7 +82,7 @@ use Illuminate\Support\Facades\Auth;
 		</div>
 
 		<div class="footer">
-			<button type="submit" name="edit_pass" class="button button--full-width">Modifica</button>
+			<button type="submit" name="edit_pass" class="btn button--full-width">Modifica</button>
 		</div>
 	</form>
 
@@ -91,7 +91,7 @@ use Illuminate\Support\Facades\Auth;
 
 		<div class="body">
 			<p class="lbl">Modifica l'immagine profilo:</p>
-			<input type="file" name="file" class="inp file-inp">
+			<input type="file" name="file" class="input file-inp">
 			<button type="submit" name="edit_icon" class="file-submit hidden"></button>
 			<div class="file-load"></div>
 		</div>
@@ -105,7 +105,7 @@ use Illuminate\Support\Facades\Auth;
 		</div>
 
 		<div class="footer">
-			<button type="submit" name="delete-account" class="button button--warning button--full-width" onclick="return confirm('Sei sicuro di voler eliminare l\'account? Non potrà essere ripristinato.')">
+			<button type="submit" name="delete-account" class="btn button--warning button--full-width" onclick="return confirm('Sei sicuro di voler eliminare l\'account? Non potrà essere ripristinato.')">
 				<?= embed_icon('delete') ?>
 				Elimina l'account
 			</button>

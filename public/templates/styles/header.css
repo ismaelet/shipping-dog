@@ -1,0 +1,541 @@
+/* Structure */
+header {
+	--h-bgr-color: var(--bgr);
+	--h-text-color: var(--text-color-strong);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+	width: 100%;
+	height: 80px;
+	position: relative;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	color: var(--color-neutral-700);
+}
+
+[data-color-scheme='dark'] header {
+	--h-bgr-color: var(--surface);
+}
+
+header.floating {
+	position: absolute;
+}
+
+#h-pan {
+	width: 100%;
+	padding-inline: 2rem;
+	top: 0;
+	left: 0;
+}
+
+#h-pan.fixed,
+#h-pan.h-open {
+	position: fixed;
+}
+
+#h-bgr {
+	opacity: 1;
+	background-color: var(--h-bgr-color);
+	transition: opacity 0.4s;
+}
+
+.floating #h-bgr {
+	background-color: rgba(255, 255, 255, 0.6);
+	-webkit-backdrop-filter: blur(7px);
+	backdrop-filter: blur(7px);
+}
+
+[data-color-scheme='dark'] .floating #h-bgr {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+#h-pan.h-open #h-bgr,
+#h-pan.fixed #h-bgr {
+	opacity: 1;
+}
+
+#h-bars {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 0 max-content;
+	align-items: center;
+	position: relative;
+}
+
+#h-nav-rig {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+/* Logo */
+#h-logo {
+	display: inline-block;
+	background-image: url(/app/assets/logo/logo_wht.png);
+	background-size: contain;
+	background-position: center;
+	width: 5rem;
+	height: 5rem;
+}
+
+/* Name and searchbar */
+#h-srch .h-name {
+	color: var(--h-text-color);
+	font-size: 22px;
+	letter-spacing: 0.1em;
+	white-space: nowrap;
+	transition: color 0.4s;
+
+	@media (max-width: 480px) {
+		display: none;
+	}
+}
+
+#h-srch {
+	display: flex;
+	width: max-content;
+	flex-shrink: 0;
+	margin-left: -1rem;
+	position: relative;
+	align-items: center;
+	font-size: 0;
+	overflow: hidden;
+}
+
+#h-srch .h-name-box {
+	max-width: 100%;
+	overflow: hidden;
+	margin-left: 0.5rem;
+	position: relative;
+	top: 1px;
+	transition: max-width 0.1s 0.3s;
+}
+
+#h-srch-ico-box {
+	border: 1px solid transparent;
+	width: 45px;
+	height: 45px;
+	transition: border 0.2s;
+	cursor: pointer;
+}
+
+#h-srch-ico-box .background {
+	opacity: 0;
+	transition: opacity 0.4s;
+}
+
+#h-srch .icon-box {
+	width: 50%;
+	height: 50%;
+	z-index: 1;
+}
+
+#h-srch-inp-box {
+	width: 0;
+	overflow: hidden;
+	transition: width 0.4s;
+	vertical-align: middle;
+}
+
+#h-srch-inp {
+	width: 100%;
+	border: 1px solid var(--surface);
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	padding: 0 1rem;
+	height: 45px;
+	line-height: 45px;
+}
+
+[data-color-scheme='dark'] #h-srch-inp {
+	border: none;
+}
+
+#h-srch-cbx:checked ~ #h-srch-ico-box {
+	border-color: var(--clr-1);
+}
+#h-srch-cbx:checked ~ #h-srch-ico-box .background {
+	opacity: 1;
+}
+#h-srch-cbx:checked ~ #h-srch-ico-box svg {
+	fill: #fff;
+}
+#h-srch-cbx:checked ~ #h-srch-inp-box {
+	width: 300px;
+}
+#h-srch-cbx:checked ~ .h-name-box {
+	max-width: 0;
+	transition: max-width 0.1s;
+}
+
+/* Desktop links */
+.h-link {
+	position: relative;
+}
+
+.h-link-txt {
+	font-weight: 600;
+	line-height: 80px;
+	position: relative;
+}
+
+.h-link__new-icon {
+	--icon-size: 1.2rem;
+	color: red;
+	position: absolute;
+	top: 50%;
+	right: 0;
+	translate: 70% -100%;
+}
+
+[data-color-scheme='dark'] .h-link-txt {
+	font-weight: 500;
+}
+
+.h-link-txt a {
+	display: block;
+	color: var(--h-text-color);
+	transition: color 0.1s;
+}
+
+.h-link-txt:hover a,
+.h-link-txt.active a {
+	color: var(--clr-1);
+}
+
+.h-drop-ico {
+	font-size: 0.8em;
+	vertical-align: top;
+}
+
+/* Desktop dropdown menu */
+.h-drop {
+	background-color: var(--clr-1);
+	width: 230px;
+	max-height: 0;
+	position: absolute;
+	top: 100%;
+	left: calc(50% - 115px);
+	overflow: hidden;
+	transition: max-height 0.1s ease-out;
+	z-index: 1;
+}
+
+.h-link:hover .h-drop,
+#nav_prof:hover .h-drop {
+	max-height: 300px;
+	transition: max-height 0.2s ease-in;
+}
+
+.h-drop-link {
+	display: block;
+	color: #fff;
+	font-size: var(--font-size-300);
+	line-height: 1;
+	text-align: left;
+	transition: background 0.2s;
+}
+
+.h-drop-link a {
+	display: block;
+	padding: 1em;
+	transition: color 0.2s;
+}
+
+/* Wishlist & Cart */
+header:has(#h-srch-cbx:checked) .h-icon {
+	visibility: hidden;
+	pointer-events: none;
+}
+
+#h-cart {
+	display: block;
+	background-position: center;
+	background-size: contain;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	position: relative;
+}
+
+#h-cart svg,
+#h-wish svg {
+	fill: var(--h-text-color);
+}
+
+#h-cart:hover svg,
+#h-wish:hover svg {
+	fill: var(--clr-1);
+}
+
+#h-cart-num {
+	background: #e00003;
+	border-radius: 100%;
+	width: 14px;
+	position: absolute;
+	bottom: 0.9rem;
+	left: 0.9rem;
+	color: #fff;
+	font-size: 0.8rem;
+	line-height: 14px;
+	text-align: center;
+}
+
+#h-wish {
+	background-position: center;
+	background-size: contain;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+}
+
+/* Theme switch */
+.theme-switch .icon-box {
+	display: flex;
+	width: 1.5rem;
+	aspect-ratio: 1;
+	cursor: pointer;
+	justify-content: center;
+}
+
+.theme-switch svg {
+	fill: var(--h-text-color);
+}
+
+.theme-switch .icon-box:hover svg {
+	fill: var(--clr-1);
+}
+
+.theme-switch .dark-icon svg {
+	width: 75%;
+}
+
+html[data-color-scheme='light'] .theme-switch .light-icon {
+	display: none;
+}
+html[data-color-scheme='dark'] .theme-switch .dark-icon {
+	display: none;
+}
+
+/* Login & profile */
+#h-user-ico {
+	display: block;
+	background-color: #ddd;
+	background-position: center;
+	background-size: cover;
+	border: 2px solid #8b8b8b;
+	width: 40px;
+	height: 40px;
+	transition: border 0.1s;
+}
+
+.h-log-txt {
+	display: inline-block;
+	color: var(--h-text-color);
+	transition: color 0.4s, background 0.4s, border 0.4s;
+}
+
+.h-log-txt.main {
+	padding: 0 1.7rem;
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 10em;
+	font-weight: 600;
+	text-transform: lowercase;
+	line-height: calc(3rem - 2px);
+	transition: color 0.2s, background 0.2s, border 0.2s;
+}
+
+.h-log-txt.main:hover {
+	background-color: var(--text-color-strong);
+	border-color: var(--text-color-strong);
+	color: var(--bgr);
+}
+
+[data-color-scheme='dark'] .h-log-txt.main {
+	font-weight: 500;
+}
+
+/* Mobile menu icon */
+#h-mob-pan {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+}
+
+#h-icoM-box {
+	display: inline-block;
+	width: 1.5rem;
+	height: 65px;
+	position: relative;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.h-icoM-line {
+	width: 100%;
+	height: 2px;
+	position: absolute;
+	top: calc(50% - 2px);
+	right: 0;
+	transition: transform 0.4s;
+}
+
+.h-icoM-rot {
+	background-color: var(--h-text-color);
+	width: 100%;
+	height: 100%;
+	transform: rotate(0deg);
+	transition: transform 0.4s;
+}
+
+#h-icoM-line1 {
+	transform: translateY(-10px);
+	transition: transform 0.4s 0.4s;
+}
+
+#h-icoM-line3 {
+	transform: translateY(10px);
+	transition: transform 0.4s 0.4s;
+}
+
+#h-cbxM:checked + #h-icoM-box #h-icoM-line1,
+#h-cbxM:checked + #h-icoM-box #h-icoM-line3 {
+	transform: translateY(0);
+	transition: transform 0.4s;
+}
+
+#h-cbxM:checked + #h-icoM-box #h-icoM-line1 .h-icoM-rot {
+	transform: rotate(45deg);
+	transition: transform 0.4s 0.4s;
+}
+#h-cbxM:checked + #h-icoM-box #h-icoM-line3 .h-icoM-rot {
+	transform: rotate(-45deg);
+	transition: transform 0.4s 0.4s;
+}
+
+#h-icoM-line2 {
+	opacity: 1;
+	transition: opacity 0.1s 0.4s, transform 0.2s 0.4s;
+}
+
+#h-cbxM:checked + #h-icoM-box #h-icoM-line2 {
+	opacity: 0;
+	transform: translateX(-4rem);
+	transition: opacity 0.1s 0.1s, transform 0.2s;
+}
+
+/* Mobile menu */
+#h-navM {
+	background-color: var(--h-bgr-color);
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	overflow-y: auto;
+	position: fixed;
+	top: 65px;
+	left: -100%;
+	z-index: 1;
+	transition: left 0.4s;
+}
+
+#h-cbxM:checked ~ #h-navM {
+	left: 0;
+}
+
+#h-contM {
+	padding: 2rem 2rem 0 2rem;
+	position: relative;
+}
+
+.h-linkM-txt {
+	opacity: 0;
+	padding-left: 20px;
+	transform: translateX(-4rem);
+	font-size: 0.9rem;
+	letter-spacing: 0.1em;
+	line-height: 5.5;
+	cursor: pointer;
+	transition: opacity 0.4s 0.5s, transform 0.4s 0.4s, color 0.5s;
+}
+
+#h-cbxM:checked ~ #h-navM .h-linkM-txt {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+.h-linkM-bgr {
+	opacity: 0;
+	transition: opacity 0.4s;
+	z-index: -1;
+}
+
+.h-lineM {
+	height: 1px;
+	margin: 1rem 0;
+}
+
+/* Mobile dropdown */
+.h-dropM-cbx:checked + a .h-linkM-txt {
+	color: #fff !important;
+}
+.h-dropM-cbx:checked + a .h-linkM-bgr {
+	opacity: 1;
+}
+
+.h-dropM-link {
+	opacity: 0;
+	display: block;
+	border: 0px solid var(--surface-secondary);
+	height: 0;
+	padding-left: 20px;
+	font-size: 0.9rem;
+	letter-spacing: 0.1em;
+	line-height: 4rem;
+	overflow: hidden;
+	transition: opacity 0.4s, border 0.4s, height 0.4s, background 0.4s, color 0.2s;
+}
+
+.h-dropM-cbx:checked ~ .h-dropM .h-dropM-link {
+	opacity: 1;
+	border-width: 0 0 1px 0;
+	height: 4rem;
+}
+
+.h-dropM-link a {
+	display: block;
+}
+
+/* Responsive */
+@media (max-width: 1280px) {
+	header {
+		height: 65px;
+	}
+
+	#h-pan {
+		padding: 0 3rem;
+	}
+
+	#h-logo {
+		width: 4rem;
+		height: 4rem;
+	}
+}
+
+@media (max-width: 576px) {
+	#h-pan {
+		padding-inline: 1rem;
+	}
+
+	#h-contM {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+
+	#h-srch-cbx:checked ~ #h-srch-inp-box {
+		width: calc(100vw - 96px);
+	}
+
+	.h-name {
+		font-size: 1.4rem;
+		letter-spacing: 0;
+	}
+}

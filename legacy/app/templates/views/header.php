@@ -151,11 +151,11 @@
 					<?php if ($header['light-mode-switcher']) { ?>
 
 						<div class="theme-switch h-icon">
-							<div class="light-icon icon-box" data-theme="light">
+							<div class="light-icon icon-box" data-color-scheme="light">
 								<?= embed_icon('sun') ?>
 							</div>
 
-							<div class="dark-icon icon-box" data-theme="dark">
+							<div class="dark-icon icon-box" data-color-scheme="dark">
 								<?= embed_icon('moon') ?>
 							</div>
 						</div>

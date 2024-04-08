@@ -3,7 +3,7 @@
 <div class="form-field">
 	<p class="label">Nome:</p>
 
-	<input type="text" class="inp" name="name" value="<?= $product ? $product->name : '' ?>" placeholder="Nome">
+	<input type="text" class="input" name="name" value="<?= $product ? $product->name : '' ?>" placeholder="Nome">
 </div>
 
 <div class="form-field">
@@ -89,7 +89,7 @@
 <?php if ($product) { ?>
 	<div class="form-field">
 		<p class="label">Immagine di copertina:</p>
-		<input type="file" class="inp" name="cover-image">
+		<input type="file" class="input" name="cover-image">
 	</div>
 <?php } ?>
 

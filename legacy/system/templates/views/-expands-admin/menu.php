@@ -68,7 +68,7 @@
 				<span class="menu__divider"></span>
 
 				<form class="menu__group flex center-content" method="POST">
-					<button class="button button--bad button--secondary button-shutdown" name="logout">
+					<button class="btn button--bad btn--secondary button-shutdown" name="logout">
 						<?= embed_icon('exit') ?>
 						<span>Esci</span>
 					</button>

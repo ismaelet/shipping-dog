@@ -26,7 +26,7 @@
 		<div class="form-field">
 			<p class="label">Nome:</p>
 
-			<input type="text" class="inp" name="name" value="<?= $oldProduct ? $oldProduct->name : '' ?>" placeholder="Nome" required>
+			<input type="text" class="input" name="name" value="<?= $oldProduct ? $oldProduct->name : '' ?>" placeholder="Nome" required>
 		</div>
 
 		<div class="grid-flow" data-columns="2" data-spacing="400">
@@ -139,7 +139,7 @@
 
 			<?php } else { ?>
 
-				<input type="file" class="inp" name="cover-image">
+				<input type="file" class="input" name="cover-image">
 
 			<?php } ?>
 

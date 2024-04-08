@@ -23,12 +23,12 @@ use App\View\Components\Form\SearchInput;
 			</form>
 
 			<form action="" method="POST">
-				<button type="submit" class="button button--secondary" name="clean_log"><?= embed_icon('clean') ?>Pulisci log</button>
+				<button type="submit" class="btn btn--secondary" name="clean_log"><?= embed_icon('clean') ?>Pulisci log</button>
 			</form>
 		</div>
 	</div>
 
-	<div class="button js-copy-orders"><?= embed_icon('copy') ?>Copia tutto</div>
+	<div class="btn js-copy-orders"><?= embed_icon('copy') ?>Copia tutto</div>
 </div>
 
 <p class="log">

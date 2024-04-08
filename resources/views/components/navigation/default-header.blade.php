@@ -19,8 +19,8 @@
     $header['floating'] = false;
 
     // name
-    $header['name'] = 'Shi<span class="txt-c1">pp</span>ing Dog';
-    $header['name-mob'] = 'Shi<span class="txt-c1">pp</span>ing Dog';
+    $header['name'] = 'Shi<span class="text-primary">pp</span>ing Dog';
+    $header['name-mob'] = 'Shi<span class="text-primary">pp</span>ing Dog';
 
     // links
     $header['links'] = [];
@@ -102,8 +102,9 @@
     <style>
         /* Structure */
         header {
-            --h-bgr-color: var(--bgr);
-            --h-text-color: var(--text-color-strong);
+            --h-bgr-color: var(--color-background);
+            --h-text-color: var(--color-neutral-700);
+            color: var(--h-text-color);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
             width: 100%;
             height: 80px;
@@ -114,7 +115,7 @@
         }
 
         [data-color-scheme='dark'] header {
-            --h-bgr-color: var(--surface);
+            --h-bgr-color: var(--color-surface-400);
         }
 
         header.floating {
@@ -197,7 +198,6 @@
             margin-left: -1rem;
             position: relative;
             align-items: center;
-            font-size: 0;
             overflow: hidden;
         }
 
@@ -214,19 +214,17 @@
             border: 1px solid transparent;
             width: 45px;
             height: 45px;
-            transition: border 0.2s;
+            transition: background .4s, border 0.2s;
             cursor: pointer;
-        }
 
-        #h-srch-ico-box .background {
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
+            :checked~& {
+                border-color: var(--color-primary-400);
+                background-color: var(--color-primary-400);
+            }
 
-        #h-srch .icon-box {
-            width: 50%;
-            height: 50%;
-            z-index: 1;
+            svg {
+                width: 50%;
+            }
         }
 
         #h-srch .icon-box svg {
@@ -242,7 +240,9 @@
 
         #h-srch-inp {
             width: 100%;
-            border: 1px solid var(--surface);
+            border: var(--border);
+            border-left: none;
+            outline: none !important;
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
             padding: 0 1rem;
@@ -252,14 +252,6 @@
 
         [data-color-scheme='dark'] #h-srch-inp {
             border: none;
-        }
-
-        #h-srch-cbx:checked~#h-srch-ico-box {
-            border-color: var(--clr-1);
-        }
-
-        #h-srch-cbx:checked~#h-srch-ico-box .background {
-            opacity: 1;
         }
 
         #h-srch-cbx:checked~#h-srch-ico-box svg {
@@ -468,7 +460,6 @@
 
         /* Mobile menu icon */
         #h-mob-pan {
-            display: flex;
             align-items: center;
             gap: 2rem;
         }
@@ -657,73 +648,32 @@
 @endpush
 
 <header class="<?= $header['floating'] ? 'floating' : '' ?>">
-
-    <div id="h-pan">
-
-        <div id="h-bgr" class="bgr"></div>
-
+    <div id="h-pan" class="relative">
+        <div id="h-bgr" class="background-fill absolute inset-0"></div>
         <div id="h-bars">
 
             <!-- Left bar -->
             <div id="h-nav-lef" class="h-bar inlb txt-lef al-mid">
 
-                <!-- Logo -->
-                @if ($header['logo'])
-                    <a href="<?= '/home' ?>" id="h-logo" <?= background_image(LOGO_DIR . 'logo.png') ?>></a>
-                @endif
-
                 <!-- Search bar -->
-                @if ($header['srch-bar'])
-                    <form action="<?= '/search' ?>" method="GET" id="h-srch" class="inlb"
-                        onClick="$('#h-srch-inp').focus();">
+                <form action="/search" method="GET" id="h-srch" class="inlb" onClick="$('#h-srch-inp').focus();">
+                    <input type="checkbox" id="h-srch-cbx" class="hidden">
+                    <label for="h-srch-cbx" id="h-srch-ico-box" class="grid stack-content">
+                        <div class="background fill-all"></div>
+                        <?= embed_icon('search') ?>
+                    </label>
 
-                        <input type="checkbox" id="h-srch-cbx" class="hidden">
-
-                        <label for="h-srch-cbx" id="h-srch-ico-box" class="stack-items">
-
-                            <div class="background fill-all bgr-c1"></div>
-
-                            <div class="icon-box">
-                                <?= embed_icon('search') ?>
-                            </div>
-
-                        </label>
-
-                        <div id="h-srch-inp-box">
-                            <input type="text" id="h-srch-inp" class="input" name="search"
-                                placeholder="Cerca un prodotto o tag">
-                        </div>
-
-                        <div class="h-name-box inlb al-mid">
-
-                            <h3 class="h-name txt-upp desk1280">
-                                <a href="<?= '/home' ?>"><?= $header['name'] ?></a>
-                            </h3>
-
-                            <h3 class="h-name txt-upp mob1280">
-                                <a href="<?= '/home' ?>"><?= $header['name-mob'] ?></a>
-                            </h3>
-
-                        </div>
-
-                    </form>
-                @endif
-
-                <!-- Name -->
-                @if ($header['name-bar'])
-                    <div clas="h-name-box" class="inlb">
-
-                        <h3 class="h-name txt-upp desk1280">
-                            <a href="<?= '/home' ?>"><?= $header['name'] ?></a>
-                        </h3>
-
-                        <h3 class="h-name txt-upp mob1280">
-                            <a href="<?= '/home' ?>"><?= $header['name-mob'] ?></a>
-                        </h3>
-
+                    <div id="h-srch-inp-box">
+                        <input type="text" id="h-srch-inp" class="input" name="search"
+                            placeholder="Cerca un prodotto o tag">
                     </div>
-                @endif
 
+                    <div class="h-name-box inlb al-mid">
+                        <h3 class="h-name uppercase">
+                            <a href="/home"><?= $header['name'] ?></a>
+                        </h3>
+                    </div>
+                </form>
             </div>
 
             <!-- Central bar -->
@@ -735,7 +685,7 @@
                 <!-- Links -->
                 @if (!$header['force-mob'])
 
-                    <div class="h-nav-box desk1280 flex gap-12">
+                    <div class="h-nav-box hidden lg:flex gap-12">
 
                         @foreach ($header['links'] as $h_link)
                             @php
@@ -851,29 +801,22 @@
                 </div>
 
                 <!-- Login bar -->
-                @if ($header['login'])
+                <div id="h-log-box" class="hidden lg:block">
 
-                    <div id="h-log-box" class="<?= $header['force-mob'] ? 'hidden' : 'desk1280' ?>">
+                    @if (auth()->id())
+                        <a href="<?= $header['logged-link'][1] ?>">
+                            <p class="h-log-txt br-c1-h txt-upp main"><?= $header['logged-link'][0] ?></p>
+                        </a>
+                    @else
+                        <a href="<?= $header['login-link'][1] ?>">
+                            <p class="h-log-txt br-c1-h txt-upp main"><?= $header['login-link'][0] ?></p>
+                        </a>
+                    @endif
 
-                        @if (auth()->id())
-                            <a href="<?= $header['logged-link'][1] ?>">
-                                <p class="h-log-txt br-c1-h txt-upp main"><?= $header['logged-link'][0] ?></p>
-                            </a>
-                        @else
-                            <a href="<?= $header['login-link'][1] ?>">
-                                <p class="h-log-txt br-c1-h txt-upp main"><?= $header['login-link'][0] ?></p>
-                            </a>
-                        @endif
-
-                    </div>
-
-                @endif
+                </div>
 
                 <!-- Mobile menu -->
-                <div id="h-mob-pan"
-                    class="txt-rig @php if (!$header['force-mob']) {
-                    echo 'mob1280';
-                } @endphp">
+                <div id="h-mob-pan" class="txt-rig flex lg:hidden ">
 
                     <!-- Mobile icon -->
                     <input type="checkbox" id="h-cbxM" class="hidden">

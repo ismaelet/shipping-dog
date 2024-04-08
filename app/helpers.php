@@ -8,6 +8,16 @@ use Ecommerce\Cart as EcommerceCart;
 use Illuminate\Support\Facades\Auth;
 
 /**
+ * Debug a variable
+ */
+function debug($var): void {
+	echo '<pre>';
+	print_r($var);
+	echo '</pre>';
+	exit;
+}
+
+/**
  * Check if the user is an admin
  */
 function is_admin(): bool {

@@ -10,6 +10,6 @@
 
 {% block form-footer %}
 
-<button type="submit" name="submit" id="submit" class="button">Ricerca</button>
+<button type="submit" name="submit" id="submit" class="btn">Ricerca</button>
 
 {% end form-footer %}

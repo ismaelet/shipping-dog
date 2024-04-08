@@ -15,7 +15,7 @@ use Ecommerce\Design;
 				<p class="mwid-600 mar-h-auto">Mandaci una foto con un nostro capo indossato su <a class="txt-c1-h" href="<?= sys_config('contact-instagram-link') ?>">Instagram</a>, <a class="txt-c1-h" href="<?= sys_config('contact-facebook') ?>">Facebook</a> o per <a class="txt-c1-h" href="<?= sys_config('contact-email-link') ?>">e-email</a> e ottieni subito un <strong>codice sconto del 15%</strong></p>
 
 				<div class="flex center-content">
-					<a href="<?= sys_config('contact-instagram-link') ?>" class="button button--auto-width mar-t-2">
+					<a href="<?= sys_config('contact-instagram-link') ?>" class="btn button--auto-width mar-t-2">
 						<?= embed_icon('contacts/instagram') ?>
 						Seguici su Instagram
 					</a>

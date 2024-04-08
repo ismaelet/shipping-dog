@@ -134,7 +134,7 @@ class Setup {
 
 	// theme
 	static private function sessionTheme() {
-		$_SESSION['theme-color'] = ($_COOKIE['theme-color'] ?? sys_config('theme-color'));
+		$_SESSION['color-scheme'] = ($_COOKIE['color-scheme'] ?? sys_config('color-scheme'));
 	}
 
 	// execute the setup

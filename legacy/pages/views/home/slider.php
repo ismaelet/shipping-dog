@@ -19,7 +19,7 @@
 				<p class="stitle">T-shirt, abbigliamento e accessori personalizzati</p>
 			</div>
 
-			<a href="<?= client_url('/shop') ?>" class="button">
+			<a href="<?= client_url('/shop') ?>" class="btn">
 				<?= embed_icon('cart') ?>
 				Shop Now
 			</a>

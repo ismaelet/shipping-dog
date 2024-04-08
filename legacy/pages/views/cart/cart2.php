@@ -65,12 +65,10 @@ use ViewManager\Ecommerce\CartRecap;
 						?>
 
 							<label class="ship_row interactive">
-								<div class="ship_chck_box">
+								<div class="checkbox">
 									<input type="radio" class="inp_cbx ship_cbx js-shipping-method js-cart-shipping-price-string" name="cbx_ship" value="<?= $shippingMethod->id ?>" <?= cart_old()->shippingMethodId == $shippingMethod->id ? 'checked' : '' ?> data-shipped="<?= $shippingMethod->shipped ? 1 : 0 ?>" data-cart-id="<?= cart_old()->id ?>" data-shipping-method-id="<?= $shippingMethod->id ?>" required>
 
-									<div class="icon">
-										<div class="icon-dot"></div>
-									</div>
+									<span></span>
 								</div>
 
 								<div class="ship_box">
@@ -89,14 +87,14 @@ use ViewManager\Ecommerce\CartRecap;
 
 								if ($shippingMethod->price && !cart_old()->couponId && !cart_old()->shippingWithCredit && cart_old()->usableCredit >= $shippingMethod->price) { ?>
 
-									<button class="use-credit-btn credit-btn button button--secondary button--full-width mar-b-2" name="ship_credit">
+									<button class="use-credit-btn credit-btn button btn--secondary button--full-width mar-b-2" name="ship_credit">
 										<?= embed_icon('dollar') ?>
 										Usa il tuo credito
 									</button>
 
 								<?php } else if (cart_old()->shippingWithCredit) { ?>
 
-									<button class="no-credit-btn credit-btn button button--secondary button--full-width mar-b-2" name="ship_no_credit">
+									<button class="no-credit-btn credit-btn button btn--secondary button--full-width mar-b-2" name="ship_no_credit">
 										<?= embed_icon('close') ?>
 										Non usare il credito
 									</button>
@@ -118,19 +116,19 @@ use ViewManager\Ecommerce\CartRecap;
 						<?= Input::render(['name' => 'aname', 'placeholder' => 'Nominativo di spedizione', 'value' => $address->fullname, 'required' => true, 'trim' => true]) ?>
 
 						<div class="field">
-							<input type="text" id="inp_addr" class="inp delivery-input" name="address" placeholder="Indirizzo" value="<?= $address->address ?>" maxlength="30" autocomplete="address-line1" <?= !cart_old()->localDelivery ? 'required' : '' ?>>
-							<input type="text" id="inp_num" class="inp delivery-input" name="number" placeholder="Numero civico" value="<?= $address->number ?>" maxlength="10" <?= !cart_old()->localDelivery ? 'required' : '' ?>>
+							<input type="text" id="inp_addr" class="input delivery-input" name="address" placeholder="Indirizzo" value="<?= $address->address ?>" maxlength="30" autocomplete="address-line1" <?= !cart_old()->localDelivery ? 'required' : '' ?>>
+							<input type="text" id="inp_num" class="input delivery-input" name="number" placeholder="Numero civico" value="<?= $address->number ?>" maxlength="10" <?= !cart_old()->localDelivery ? 'required' : '' ?>>
 						</div>
 
-						<input type="text" class="inp delivery-input" name="city" placeholder="Città" value="<?= $address->city ?>" maxlength="30" autocomplete="address-level2" <?= !cart_old()->localDelivery ? 'required' : '' ?>>
+						<input type="text" class="input delivery-input" name="city" placeholder="Città" value="<?= $address->city ?>" maxlength="30" autocomplete="address-level2" <?= !cart_old()->localDelivery ? 'required' : '' ?>>
 
 						<div class="field">
-							<input type="text" class="inp delivery-input" name="zip" placeholder="Codice postale" value="<?= trim($address->zip) ?>" maxlength="5" autocomplete="postal-code" <?= !cart_old()->localDelivery ? 'required' : '' ?>>
-							<input type="text" class="inp delivery-input" name="region" placeholder="Provincia" value="<?= $address->region ?>" maxlength="2" autocomplete="address-level1" <?= !cart_old()->localDelivery ? 'required' : '' ?>>
+							<input type="text" class="input delivery-input" name="zip" placeholder="Codice postale" value="<?= trim($address->zip) ?>" maxlength="5" autocomplete="postal-code" <?= !cart_old()->localDelivery ? 'required' : '' ?>>
+							<input type="text" class="input delivery-input" name="region" placeholder="Provincia" value="<?= $address->region ?>" maxlength="2" autocomplete="address-level1" <?= !cart_old()->localDelivery ? 'required' : '' ?>>
 						</div>
 
-						<input type="email" class="inp" name="email" placeholder="Indirizzo e-mail" value="<?= $address->email ?>" maxlength="50" required autocomplete="email">
-						<input type="text" class="inp js-input-no-space" name="phone" placeholder="Numero di telefono" value="<?= $address->phone ?>" maxlength="30" autocomplete="tel" required>
+						<input type="email" class="input" name="email" placeholder="Indirizzo e-mail" value="<?= $address->email ?>" maxlength="50" required autocomplete="email">
+						<input type="text" class="input js-input-no-space" name="phone" placeholder="Numero di telefono" value="<?= $address->phone ?>" maxlength="30" autocomplete="tel" required>
 
 					</div>
 
@@ -161,14 +159,14 @@ use ViewManager\Ecommerce\CartRecap;
 
 							<?php if (!cart_old()->couponId) { ?>
 
-								<input type="text" id="code-inp" name="code" class="inp wide" placeholder="Codice sconto (opzionale)" onFocus="$('.err').hide()">
+								<input type="text" id="code-inp" name="code" class="input wide" placeholder="Codice sconto (opzionale)" onFocus="$('.err').hide()">
 								<?php if ($error == 'coupon-invalid') { ?><p class="error mar-t-1">Il codice inserito non esiste</p><?php } ?>
 								<?php if ($error == 'coupon-expired') { ?><p class="error mar-t-1">Il codice inserito è scaduto</p><?php } ?>
 								<?php if ($error == 'coupon-not-active') { ?><p class="error mar-t-1">Il codice inserito non è attivo</p><?php } ?>
 								<?php if ($error == 'coupon-not-logged') { ?><p class="error mar-t-1">Devi essere registrato per poter usare questo codice</p><?php } ?>
 								<?php if ($error == 'coupon-used') { ?><p class="error mar-t-1">Hai già usato il codice inserito</p><?php } ?>
 
-								<button type="submit" id="add_code" name="add_code" class="button button--full-width mar-t-1" formnovalidate>Aggiungi</button>
+								<button type="submit" id="add_code" name="add_code" class="btn button--full-width mar-t-1" formnovalidate>Aggiungi</button>
 
 							<?php } else { ?>
 

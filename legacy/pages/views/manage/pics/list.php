@@ -6,11 +6,11 @@
 		<h1 class="list-title bgr-c1 txt-wht">Lista foto utenti</h1>
 	</div>
 
-	<a class="block pad-h-2 pad-t-2 txt-cen" href="<?= client_url('/manage/pics/add?id=' . $id) ?>">
+	<a class="block pad-h-2 pad-t-2 txt-cen" href="<?= client_url('/manage/pics/add') ?>">
 
-		<button type="button" class="sbtn btn-auto-width br-c1">
-			<span class="btn-icon bgr-c-title" <?= icon_svg('upload') ?>></span>
-			<span class="btn-txt">Carica foto cliente</span>
+		<button type="button" class="btn btn--secondary button--auto-width br-c1 mx-auto ">
+			<?= embed_icon('upload') ?>
+			Carica foto cliente
 		</button>
 
 	</a>
@@ -75,7 +75,7 @@
 
 			<p class="mar-b-2 txt-c-title txt-med txt-cen">
 
-				<span class="btn-icon inlb icon bgr-c2" <?= icon_svg('info') ?>></span>
+				<span class="btn-icon inlb icon"><?= embed_icon('info') ?></span>
 
 				<span class="btn-txt">Se un cliente ti invia una foto con uno dei tuoi prodotti indossati puoi caricarla qui, apparirà nella pagina del prodotto e nella homepage tra le foto dei clienti.</span>
 

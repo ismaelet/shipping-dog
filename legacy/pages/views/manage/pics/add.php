@@ -7,7 +7,7 @@
 	<div class="body pad-t-2">
 
 		<p class="mar-b-2 txt-sold">
-			<span class="btn-icon inlb icon bgr-c2" <?= icon_svg('info') ?>></span>
+			<span class="btn-icon inlb icon bgr-c2"><?= embed_icon('info') ?></span>
 			<span class="btn-txt">Se un cliente ti invia una foto con uno dei tuoi prodotti indossati puoi caricarla qui, apparirà nella pagina del prodotto e nella homepage tra le foto dei clienti.</span>
 		</p>
 

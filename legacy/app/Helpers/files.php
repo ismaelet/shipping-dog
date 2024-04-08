@@ -18,7 +18,7 @@ function generate_base_url(string $file = '') {
 }
 
 function client_path(string $file = '') {
-	$url = asset('/legacy' . file_time(generate_base_url($file)));
+	$url = asset('' . file_time(generate_base_url($file)));
 
 	return $url;
 }
@@ -135,11 +135,6 @@ function icon_embed(string $file, array $customClasses = []) {
 // put an icon as background image
 function icon_css($icon) {
 	return 'style="background-image: url(' . icon_url($icon) . ');"';
-}
-
-// put a svg icon as background image
-function icon_svg($icon) {
-	return 'style="mask: url(' . icon_url($icon) . '); -webkit-mask: url(' . icon_url($icon) . ') center;"';
 }
 
 // get the url of a page's image folder 

@@ -34,7 +34,7 @@
 				<!-- Delete -->
 				<button type="submit" class="sbtn btn-with-icons" name="delete" onclick="return confirm('Confermi di voler eliminare questo elemento? Non potrà essere ripristinato.')">
 					Elimina l'elemento
-					<span class="text-icon" <?= icon_svg('delete') ?>></span>
+					<span class="text-icon" <?= embed_icon('delete') ?>></span>
 				</button>
 			<?php } ?>
 
@@ -42,7 +42,7 @@
 				<!-- Preview -->
 				<a class="sbtn preview-btn btn-with-icons" href="<?= $item->url ?>" target="_blank">
 					Esamina
-					<span class="text-icon text-icon_big" <?= icon_svg('view') ?>></span>
+					<span class="text-icon text-icon_big" <?= embed_icon('view') ?>></span>
 				</a>
 			<?php } ?>
 
@@ -50,7 +50,7 @@
 				<!-- Save -->
 				<button type="submit" class="pbtn btn-with-icons" name="submit-form">
 					<?= $item->id ? 'Salva' : 'Aggiungi' ?>
-					<span class="text-icon" <?= icon_svg($item->id ? 'save' : 'add') ?>></span>
+					<span class="text-icon" <?= embed_icon($item->id ? 'save' : 'add') ?>></span>
 				</button>
 			<?php } ?>
 		</section>

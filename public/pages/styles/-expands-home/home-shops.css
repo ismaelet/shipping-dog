@@ -1,0 +1,114 @@
+/* Structure */
+#shops {
+	margin-top: 5rem;
+}
+
+/* Carousel */
+#carousel-shops {
+	--columns: 3;
+	--rows: 1;
+	--step: 3;
+	--gap: min(5rem, 5vw);
+}
+
+#carousel-shops .carousel-box {
+	padding-block: 0.5rem 1rem;
+}
+
+/* Shop item */
+#shops .shop {
+	display: grid;
+	border-radius: var(--default-radius);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	grid-template-rows: 10rem auto;
+	height: 100%;
+}
+
+#shops .shop .cover {
+	background-color: var(--surface-secondary);
+	border-radius: var(--default-radius) var(--default-radius) 0 0;
+}
+
+#shops .shop .content {
+	display: grid;
+	border: 1px solid #eee;
+	border-radius: 0 0 var(--default-radius) var(--default-radius);
+	grid-template-columns: minmax(0, 1fr);
+	grid-template-rows: 3rem auto max-content;
+	height: 100%;
+}
+
+html[data-color-scheme='dark'] #shops .shop .content {
+	background: linear-gradient(180deg, var(--surface-secondary), var(--surface));
+	border: none;
+}
+
+#shops .shop .logo {
+	background-color: var(--surface);
+	border: 4px solid var(--bgr);
+	border-radius: 50%;
+	height: calc(100% + 1rem);
+	aspect-ratio: 1 / 1;
+	margin-inline: auto;
+	transform: translateY(-50%);
+	transition: box-shadow 0.3s;
+}
+
+html[data-color-scheme='dark'] #shops .shop .logo {
+	border-color: var(--surface-secondary);
+}
+
+#shops .shop .name {
+	color: var(--text-color-strong);
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+#shops .shop .text {
+	color: var(--text-color);
+	line-height: 1.6;
+}
+
+#shops .shop .footer {
+	align-self: flex-end;
+}
+
+#shops .explore {
+	display: inline-block;
+	background-color: var(--surface);
+	border-radius: 2rem;
+	padding: 0 2em;
+	font-size: 1rem;
+	font-weight: 500;
+	font-family: var(--font-main);
+	line-height: 2.6;
+	transition: background-color 0.2s, color 0.2s;
+}
+
+html[data-color-scheme='dark'] #shops .shop .explore:not(:hover) {
+	background-color: var(--bgr);
+}
+
+#shops .shop .explore:hover {
+	background-color: var(--clr-1);
+	color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+	#carousel-shops {
+		--columns: 2.8;
+	}
+}
+
+@media (max-width: 768px) {
+	#carousel-shops {
+		--columns: 2.3;
+	}
+}
+
+@media (max-width: 480px) {
+	#carousel-shops {
+		--columns: 1.5;
+	}
+}

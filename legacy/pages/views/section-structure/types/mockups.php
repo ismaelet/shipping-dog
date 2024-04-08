@@ -64,7 +64,7 @@
 					</div>
 				</div>
 
-				<button type="submit" class="button mt-8" name="edit">Salva</button>
+				<button type="submit" class="btn mt-8" name="edit">Salva</button>
 			</form>
 
 			<div class="preview-image grid stack-content" style="--default-x-size: <?= $mockupData->siz_x_def ?>; --max-x-size: <?= $mockupData->siz_x_max ?>; --max-y-size: <?= $mockupData->siz_y_max ?>; --default-x-position: <?= $mockupData->pos_x_def ?>; --starting-x-position: <?= $mockupData->pos_x_min ?>; --default-y-position: <?= $mockupData->pos_y_def ?>; --starting-y-position: <?= $mockupData->pos_y_min ?>;">

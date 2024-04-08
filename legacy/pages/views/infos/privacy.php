@@ -8,6 +8,6 @@
 
 {% block form-footer %}
 
-<a class="button" href="<?= client_url('/') ?>">Homepage</a>
+<a class="btn" href="<?= client_url('/') ?>">Homepage</a>
 
 {% end form-footer %}

@@ -1,20 +1,7 @@
 <?php
 
-/*
-* TEMP
-*/
-/*DBOld::update('
-	orders
-	INNER JOIN items ON orders.itemID = items.ID
-	SET sellerId = userID, designId = desID
-');*/
-
-//theme
-//$header['floating'] = true;
-
-//variabiles
-
-use Ecommerce\Design;
+use App\Models\Ecommerce\Design;
+use Ecommerce\Design as OldDesign;
 use Ecommerce\Seller;
 
 $productN = 20;
@@ -26,16 +13,12 @@ $fanPicsCount = 4;
 $popular = DBOld::select('ID FROM items INNER JOIN stores ON items.userID = stores.userID WHERE items.status = 1 AND stores.status = 1 ORDER BY items.rsales DESC LIMIT ?', [$productN]);
 
 // designs
-$popularDesigns = rows_to_objects(
-	DBOld::select(
-		Design::INDEX . '
-	FROM ' . Design::TABLE . ' INNER JOIN ' . Seller::TABLE . ' ON ' . Design::TABLE . '.' . Design::SELLER_INDEX . ' = ' . Seller::TABLE . '.' . Seller::INDEX . '
-	WHERE ' . Design::TABLE . '.status = 1 AND ' . Seller::TABLE . '.status = 1
-	ORDER BY ' . Design::TABLE . '.rsales DESC LIMIT ?',
-		[$popularDesignCount]
-	),
-	Design::class
-);
+$popularDesigns = Design::join('stores', 'designs.userID', '=', 'stores.userID')
+	->where('designs.status', 1)
+	->where('stores.status', 1)
+	->orderBy('designs.rsales', 'desc')
+	->limit($popularDesignCount)
+	->get();
 
 // sellers
 $sellers = rows_to_objects(DBOld::select(Seller::INDEX . ' FROM ' . Seller::TABLE . ' WHERE status = 1 ORDER BY rsales DESC, userID ASC LIMIT ?', [$sellerCount]), 'Ecommerce\Seller');

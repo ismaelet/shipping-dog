@@ -18,7 +18,7 @@
 			</div>
 		</div>
 
-		<button type="submit" class="button button--full-width" name="submit">Log In</button>
+		<button type="submit" class="btn button--full-width" name="submit">Log In</button>
 	</div>
 </form>
 

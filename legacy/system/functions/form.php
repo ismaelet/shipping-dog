@@ -183,7 +183,7 @@ function generate_input($input, $data, $error, $done) {
 
 			case 'file': ?>
 
-				<input type="file" class="inp file" name="<?= $name ?>" <?= isset($input['multiple']) ? 'multiple' : '' ?> <?= isset($input['required']) ? 'required' : '' ?>>
+				<input type="file" class="input file" name="<?= $name ?>" <?= isset($input['multiple']) ? 'multiple' : '' ?> <?= isset($input['required']) ? 'required' : '' ?>>
 
 			<?php break;
 
@@ -200,7 +200,7 @@ function generate_input($input, $data, $error, $done) {
 				}
 			?>
 
-				<select class="sel <?= isset($input['affect']) ? 'affect' : '' ?>" <?= isset($input['affect']) ? 'data-affect="' . $input['affect'] . '"' : '' ?> name="<?= $name ?>">
+				<select class="select <?= isset($input['affect']) ? 'affect' : '' ?>" <?= isset($input['affect']) ? 'data-affect="' . $input['affect'] . '"' : '' ?> name="<?= $name ?>">
 
 					<?php if (isset($input['empty'])) { ?>
 
@@ -221,7 +221,7 @@ function generate_input($input, $data, $error, $done) {
 
 			case 'select-dependent': ?>
 
-				<select class="sel" data-tbl="<?= $input['query-tbl'] ?>" data-filter="<?= $input['query-filter'] ?>" data-id="<?= $input['field-name'] ?>" data-show="<?= $input['field-show'] ?>" data-root="<?= CLIENT_ROOT ?>" name="<?= $name ?>" disabled>
+				<select class="select" data-tbl="<?= $input['query-tbl'] ?>" data-filter="<?= $input['query-filter'] ?>" data-id="<?= $input['field-name'] ?>" data-show="<?= $input['field-show'] ?>" data-root="<?= CLIENT_ROOT ?>" name="<?= $name ?>" disabled>
 					<option>-</option>
 				</select>
 
@@ -275,7 +275,7 @@ function generate_input($input, $data, $error, $done) {
 
 			default: ?>
 
-				<input type="<?= $type ?>" class="
+				<input type="<?= $type ?>" class="input
 					<?= $input['custom-class'] ?? '' ?>
 				" name="<?= $name ?>" value="<?= $value ?>" placeholder="<?= $styling ? '' : ($input['text'] ?? '') ?>" <?= isset($input['minlength']) ? 'minlength="' . $input['minlength'] . '"' : '' ?> <?= isset($input['maxlength']) ? 'maxlength="' . $input['maxlength'] . '"' : '' ?> <?= isset($input['min']) ? 'min="' . $input['min'] . '"' : '' ?> <?= isset($input['max']) ? 'max="' . $input['max'] . '"' : '' ?> <?= isset($input['step']) ? 'step="' . $input['step'] . '"' : '' ?> <?= isset($input['required']) ? 'required' : '' ?> <?= isset($input['readonly']) ? 'readonly' : '' ?> <?= isset($input['required']) ? 'required' : '' ?> data-size="<?= $input['size'] ?? 4 ?>" <?php
 																																																																																																																																																																									if (isset($input['data']))
@@ -310,13 +310,14 @@ function generate_input($input, $data, $error, $done) {
 	function input_search($input) {
 		$showValue = $input['value-show'] ?? '';
 		$showValue = str_replace('"', "&quot;", $showValue);
+		$customClasses = isset($input['custom-classes']) ? implode(' ', $input['custom-classes']) : '';
 	?>
 
-	<div class="ajax-search pos-rel <?= $input['custom-classes'] ?? '' ?>" data-endpoint="<?= $input['search'] ?>">
+	<div class="ajax-search pos-rel <?= $customClasses ?>" data-endpoint="<?= $input['search'] ?>">
 
 		<input type="hidden" class="ajax-search-id" name="<?= $input['name'] ?>" value="<?= $input['value'] ?? '' ?>" <?= isset($input['required']) ? 'required' : '' ?>>
 
-		<input type="text" class="inp ajax-search-text" <?= isset($input['name-show']) ? 'name="' . $input['name-show'] . '"' : '' ?> value="<?= $showValue ?>" <?= !empty($input['title']) ? 'title="' . $showValue . '"' : '' ?> placeholder="<?= $input['text'] ?? '' ?>" <?= isset($input['required']) ? 'required' : '' ?> autocomplete="off">
+		<input type="text" class="input ajax-search-text" <?= isset($input['name-show']) ? 'name="' . $input['name-show'] . '"' : '' ?> value="<?= $showValue ?>" <?= !empty($input['title']) ? 'title="' . $showValue . '"' : '' ?> placeholder="<?= $input['text'] ?? '' ?>" <?= isset($input['required']) ? 'required' : '' ?> autocomplete="off">
 
 		<div class="ajax-search-ddown">
 			<div class="ajax-search-box"></div>

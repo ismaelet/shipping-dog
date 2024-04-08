@@ -42,11 +42,15 @@ export default {
 
 			// Surfaces
 			'surface-400': 'hsl(var(--color-surface-400-hsl) / <alpha-value>)',
+			'surface-500': 'hsl(var(--color-surface-500-hsl) / <alpha-value>)',
 			'surface-700': 'hsl(var(--color-surface-700-hsl) / <alpha-value>)',
 
 			// Utility colors
 			success: 'hsl(var(--color-success-400-hsl) / <alpha-value>)',
 			error: 'hsl(var(--color-error-400-hsl) / <alpha-value>)',
+
+			// Custom
+			blue: 'lightblue',
 		},
 		// Custom borders
 		borderWidth: {

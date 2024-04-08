@@ -427,7 +427,7 @@ use Ecommerce\Product\Type;
 
 					<?php if (($oldProduct->statusId && !$oldProduct->deleted) || $owner) { ?>
 
-						<button type="submit" id="submit" name="submit" class="add-to-cart button button--full-width">
+						<button type="submit" id="submit" name="submit" class="add-to-cart btn button--full-width">
 							<?= embed_icon('cart') ?>
 							Aggiungi al carrello
 						</button>

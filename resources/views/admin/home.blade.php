@@ -1,33 +1,33 @@
-<x-templates.admin>
+<x-templates.admin-dashboard>
 
-    <x-admin.typography.section-heading>Dashboard</x-admin.typography.section-heading>
+    <x-templates.dashboard.dashboard-heading>Dashboard</x-templates.dashboard.dashboard-heading>
 
     <div class="grid gap-4 mt-8">
         {{-- Row 1 --}}
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 
             {{-- Labels --}}
-            <x-admin.dashboard-items.labels />
+            <x-admin.labels />
 
             {{-- Total revenue --}}
-            <x-admin.dashboard-items.total-revenue />
+            <x-admin.total-revenue />
 
             {{-- Total sales --}}
-            <x-admin.dashboard-items.total-sales />
+            <x-admin.total-sales />
 
             {{-- New users --}}
-            <x-admin.dashboard-items.new-users />
+            <x-admin.new-users />
         </div>
 
         {{-- Row 2 --}}
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
 
             {{-- Revenue graph --}}
-            <x-admin.dashboard-items.revenue-graph />
+            <x-admin.revenue-graph />
 
             {{-- Awaiting sellers --}}
-            <x-admin.dashboard-items.awaiting-sellers />
+            <x-admin.awaiting-sellers />
 
         </div>
     </div>
-</x-templates.admin>
+</x-templates.admin-dashboard>

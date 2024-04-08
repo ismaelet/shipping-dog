@@ -15,16 +15,16 @@ $design = Design::find($designId);
 		?>
 
 				<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; toggleLike(<?= $designId ?>, liked)" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
-					<?= icon_embed('love-stroke') ?>
-					<?= icon_embed('love') ?>
+					<?= embed_icon('love-stroke') ?>
+					<?= embed_icon('love') ?>
 				</div>
 
 			<?php }
 		} else { ?>
 
 			<a class=" like-button grid stack-content" href="<?= client_url('/login?url=' . $_SERVER['REQUEST_URI']) ?>" data-liked="false" title="Aggiungi ai preferiti">
-				<?= icon_embed('love-stroke') ?>
-				<?= icon_embed('love') ?>
+				<?= embed_icon('love-stroke') ?>
+				<?= embed_icon('love') ?>
 			</a>
 
 	<?php }

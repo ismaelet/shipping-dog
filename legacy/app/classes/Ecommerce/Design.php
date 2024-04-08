@@ -98,7 +98,7 @@ class Design {
 			return $file;
 		}
 
-		des_img_gen($this);
+		des_img_gen($this->id);
 
 		if (file_exists(public_storage_path($file))) {
 			return $file;

@@ -19,14 +19,14 @@ use Ecommerce\Product;
 		<?php } ?>
 
 		<div class="flex-group center-content" data-spacing="700">
-			<a href="<?= client_url('/manage/portfolio/add?id=' . $seller->id) ?>" class="button button--secondary button--auto-width">
+			<a href="<?= client_url('/manage/portfolio/add?id=' . $seller->id) ?>" class="btn btn--secondary button--auto-width">
 				<?= embed_icon('upload') ?>
 				Carica una grafica
 			</a>
 
 			<?php if ($seller->custom || $customProductsCount) { ?>
 
-				<a href="<?= client_url('/manage/portfolio/product') ?>" class="button button--secondary button--auto-width button--dashed">
+				<a href="<?= client_url('/manage/portfolio/product') ?>" class="btn btn--secondary button--auto-width button--dashed">
 					<?= embed_icon('upload') ?>
 					Carica un prodotto
 				</a>
@@ -39,7 +39,7 @@ use Ecommerce\Product;
 	<?php if ($totalCount) { ?>
 
 		<div id="sort-box" class="txt-cen mar-b-2">
-			<div id="sort-icon" class="icon inlb mar-b-1" <?= icon_svg('move') ?>></div>
+			<div id="sort-icon" class="icon inlb mar-b-1"><?= embed_icon('move') ?></div>
 
 			<p id="sort-txt" class="mar-h-auto mar-b-1">
 				Puoi riordinare i lavori a piacimento trascinandoli nella posizione desiderata.

@@ -116,7 +116,7 @@ use Ecommerce\Cart as Cart;
 </p>
 
 <div class="mar-b-2 center-content">
-	<a href="addresses_clean?id=log_date" class="button button--auto-width">
+	<a href="addresses_clean?id=log_date" class="btn button--auto-width">
 		<?= $res_sel->num_rows ? 'Pulisci log' : 'Aggiorna la data<br>dell\'ultimo ordine fatto' ?>
 	</a>
 </div>

@@ -28,14 +28,14 @@
             aspect-ratio: 1;
             margin-block: 2px;
             margin-left: 2px;
-            border: var(--border-width) solid var(--border-clr-400);
+            border: var(--border-width) solid var(--border-color);
             border-radius: 50%;
             cursor: pointer;
             transition: border-color 0.2s;
         }
 
         .checkbox input:checked+span {
-            border-color: var(--fc-700);
+            border-color: var(--color-neutral-700);
         }
 
         .checkbox>span::after {
@@ -56,7 +56,7 @@
 
         @media (hover: none) {
             .checkbox input:not(:checked)+span {
-                border-color: var(--border-clr-400);
+                border-color: var(--border-color);
             }
 
             .checkbox input:not(:checked)+span::after {

@@ -27,7 +27,7 @@
 			<?= embed_icon('search') ?>
 		</div>
 
-		<input type="text" class="inp" name="search" value="<?= isset($_GET['search']) ? trim($_GET['search']) : '' ?>" placeholder="Cerca in questa lista" autocomplete="off">
+		<input type="text" class="input" name="search" value="<?= isset($_GET['search']) ? trim($_GET['search']) : '' ?>" placeholder="Cerca in questa lista" autocomplete="off">
 
 		<button type="submit" class="hidden"></button>
 

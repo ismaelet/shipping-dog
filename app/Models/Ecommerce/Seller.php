@@ -63,7 +63,7 @@ class Seller extends Model {
 	 * Get the seller's URL
 	 */
 	public function url(): string {
-		return '/shop/' . $this->userID;
+		return '/artist?id=' . $this->userID;
 	}
 
 	/**
@@ -160,6 +160,23 @@ class Seller extends Model {
 			'userID' => auth()->id(),
 			'followID' => $this->userID,
 		])->count() > 0;
+	}
+
+	/**
+	 * Get the seller's icon
+	 */
+	public function icon(): string {
+		$icon = 'users/icons/' . $this->userID;
+
+		if (file_exists(public_storage_path($icon . '.webp'))) {
+			return public_asset($icon . '.webp');
+		}
+
+		if (file_exists(public_storage_path($icon . '.jpg'))) {
+			return public_asset($icon . '.jpg');
+		}
+
+		return public_asset('users/icons/0.jpg');
 	}
 
 	/**

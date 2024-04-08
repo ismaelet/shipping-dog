@@ -57,7 +57,7 @@ class PreviewHelper {
 	}
 
 	private function storageDirectory(): string {
-		return 'products/' . $this->product->type->tag;
+		return !$this->product->isCustom() ? 'products/' . $this->product->type->tag : 'products/custom';
 	}
 
 	private function fileStoragePath(): string {

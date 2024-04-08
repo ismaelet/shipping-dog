@@ -63,17 +63,17 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 			<input type="hidden" name="typeID" value="<?= $oldType->id ?>">
 
 			<button type="submit" name="off" class="off-btn switch-btn button">
-				<span class="btn-icon bgr-wht" <?= icon_svg('actions/add-bgr') ?>></span>
+				<span class="btn-icon bgr-wht" <?= embed_icon('actions/add-bgr') ?>></span>
 				<span class="btn-txt">Attivo</span>
 			</button>
 
 			<button type="submit" name="on" class="on-btn switch-btn button">
-				<span class="btn-icon bgr-5" <?= icon_svg('actions/add-bgr') ?>></span>
+				<span class="btn-icon bgr-5" <?= embed_icon('actions/add-bgr') ?>></span>
 				<span class="btn-txt txt-5">Disattivato</span>
 			</button>
 
 			<p class="sbtn edit-btn switch-btn item-panel-open">
-				<span class="btn-icon bgr-c900" <?= icon_svg('settings') ?>></span>
+				<span class="btn-icon bgr-c900" <?= embed_icon('settings') ?>></span>
 				<span class="btn-txt">Modifica</span>
 			</p>
 
@@ -93,7 +93,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 				<div class="wrapper">
 
-					<div class="close-icon item-panel-close icon clickable bgr-c900 bgr-c1-h" <?= icon_svg('actions/close') ?>></div>
+					<div class="close-icon item-panel-close icon clickable bgr-c900 bgr-c1-h" <?= embed_icon('actions/close') ?>></div>
 
 					<div class="content">
 

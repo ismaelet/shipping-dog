@@ -36,7 +36,7 @@
 
 					<div class="des-over clickable file-stick">
 
-						<div class="des-icon img cont icon cen file-cancel bgr-f" <?= icon_svg('upload') ?>></div>
+						<div class="des-icon img cont icon cen file-cancel bgr-f" <?= embed_icon('upload') ?>></div>
 
 						<div class="file-load wid-100 cen"></div>
 
@@ -52,8 +52,8 @@
 				<?php if ($error == 'light_file_reso') { ?><p class="error">l'immagine deve avere meno di 10.000px di lato</p><?php } ?>
 				<?php if ($error == 'light_error') { ?><p class="error">Errore nel caricamento</p><?php } ?>
 
-				<button type="button" class="mob768 button button--secondary button--full-width mar-t-2 file-cancel" onclick="$(this).parent().find('.file-inp').click();">
-					<span class="btn-icon bgr-c900" <?= icon_svg('upload') ?>></span>
+				<button type="button" class="mob768 button btn--secondary button--full-width mar-t-2 file-cancel" onclick="$(this).parent().find('.file-inp').click();">
+					<span class="btn-icon bgr-c900" <?= embed_icon('upload') ?>></span>
 					<span class="txt"><strong>Ricarica grafica</strong></span>
 				</button>
 
@@ -79,7 +79,7 @@
 
 							<div class="des-over clickable file-stick">
 
-								<div class="des-icon img icon cont cen file-cancel bgr-f" <?= icon_svg('upload') ?>></div>
+								<div class="des-icon img icon cont cen file-cancel bgr-f" <?= embed_icon('upload') ?>></div>
 
 								<div class="file-load wid-100 cen"></div>
 
@@ -92,7 +92,7 @@
 						<?php if ($error == 'dark_file_reso') { ?><p class="error">l'immagine deve avere meno di 10.000px di lato</p><?php } ?>
 						<?php if ($error == 'dark_error') { ?><p class="error">Errore nel caricamento</p><?php } ?>
 
-						<button type="button" class="mob768 button button--secondary button--full-width mar-t-2 file-cancel" onclick="$(this).parent().find('.file-inp').click();">
+						<button type="button" class="mob768 button btn--secondary button--full-width mar-t-2 file-cancel" onclick="$(this).parent().find('.file-inp').click();">
 							<span class="btn-icon" <?= icon_css('actions/upload_blk') ?>></span>
 							<span class="txt"><strong>Ricarica grafica</strong></span>
 						</button>
@@ -103,7 +103,7 @@
 						<div id="dark-empty" class="center-content clickable" onclick="$(this).parent().find('.file-inp').click();">
 
 							<div class="txt-cen file-cancel">
-								<div class="des-icon icon img cont inlb" <?= icon_svg('upload') ?>></div>
+								<div class="des-icon icon img cont inlb" <?= embed_icon('upload') ?>></div>
 								<p class="txt-bold mar-t-05">Carica una versione diversa per i capi scuri</p>
 							</div>
 
@@ -169,7 +169,7 @@
 					<textarea name="tags" class="textarea mar0" placeholder="(Opzionale) Puoi inserire fino a 10 tag separati da virgola. I tag rendono il tuo design più facile da trovare."><?= $design->tags ? implode(',', $design->tags) : '' ?></textarea>
 				</div>
 
-				<button type="submit" class="button button--full-width mar-t-1" name="tags-submit">Aggiorna</button>
+				<button type="submit" class="btn button--full-width mar-t-1" name="tags-submit">Aggiorna</button>
 
 			</section>
 
@@ -235,7 +235,7 @@
 
 						</div>
 
-						<button type="submit" name="colors-submit" class="button button--full-width">Applica a <span class="fw-bold">TUTTI</span> i capi</button>
+						<button type="submit" name="colors-submit" class="btn button--full-width">Applica a <span class="fw-bold">TUTTI</span> i capi</button>
 
 					</div>
 				</section>
@@ -263,7 +263,7 @@
 
 		<form class="mar-t-4" method="POST">
 
-			<button type="submit" name="delete" id="delete" class="button button--secondary button--bad button--auto-width place-center" onclick="return confirm('Sei sicuro di voler eliminare definitivamente la grafica e tutti i prodotti associati?')">
+			<button type="submit" name="delete" id="delete" class="btn btn--secondary button--bad button--auto-width place-center" onclick="return confirm('Sei sicuro di voler eliminare definitivamente la grafica e tutti i prodotti associati?')">
 				<?= embed_icon('delete') ?>
 				Elimina la grafica
 			</button>

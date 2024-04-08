@@ -2,7 +2,6 @@
     <style>
         main .input {
             padding-inline: 1.5em;
-            border-radius: var(--border-radius-1000);
         }
     </style>
 @endpushOnce
@@ -19,7 +18,7 @@
         <x-form.input type="password" name="password" placeholder="Password" required />
 
         @session('error')
-            <p class="error ">{{ $value }}</p>
+            <p class="error">{{ $value }}</p>
         @endsession
 
         <div class="flex items-center justify-between">

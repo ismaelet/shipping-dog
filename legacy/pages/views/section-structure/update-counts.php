@@ -10,6 +10,6 @@
 
 {% block form-footer %}
 
-<button type="submit" class="button button--auto-width" name="update" value="recent">Aggiorna i conteggi</button>
+<button type="submit" class="btn button--auto-width" name="update" value="recent">Aggiorna i conteggi</button>
 
 {% end form-footer %}

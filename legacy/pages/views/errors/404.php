@@ -6,7 +6,7 @@
 	<div class="page-body grid-flow center-content" data-spacing="400">
 		<h1 class="title"><?= ('Error 404') ?></h1>
 		<p class="section-subtitle"><?= ('Page not found') ?></p>
-		<a class="button button--secondary button--auto-width" href="<?= client_url('/') ?>"><?= ('Back to home') ?></a>
+		<a class="btn btn--secondary button--auto-width" href="<?= client_url('/') ?>"><?= ('Back to home') ?></a>
 	</div>
 </div>
 

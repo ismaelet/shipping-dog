@@ -86,17 +86,17 @@
 
 <?php if ($actualChanges) { ?>
 
-	<button type="submit" name="pay" id="submit" class="button">Paga ritiro (<strong>8,00€</strong>)</button>
+	<button type="submit" name="pay" id="submit" class="btn">Paga ritiro (<strong>8,00€</strong>)</button>
 
 	<?php if (is_admin()) { ?>
 
-		<button type="submit" name="skip_payment" class="button button--secondary" formnovalidate>Procedi senza pagare</button>
+		<button type="submit" name="skip_payment" class="btn btn--secondary" formnovalidate>Procedi senza pagare</button>
 
 	<?php } ?>
 
 <?php } else { ?>
 
-	<button type="submit" name="refund" id="submit" class="button">Procedi</button>
+	<button type="submit" name="refund" id="submit" class="btn">Procedi</button>
 
 <?php } ?>
 

@@ -8,6 +8,6 @@
 
 {% block form-footer %}
 
-<button type="submit" id="submit" name="submit" class="button">Invia richiesta</button>
+<button type="submit" id="submit" name="submit" class="btn">Invia richiesta</button>
 
 {% end form-footer %}

@@ -2,20 +2,14 @@
 
 class ScriptLoader {
 
-	const ASSETS_ROOT = __DIR__ . '/../../../public/legacy';
-
 	private static $list = [];
 	private static $headInlineScripts = [];
 	private static $footInlineScripts = [];
 
 	public static function __constructStatic() {
-		// add framework scripts
-		$files = glob(self::ASSETS_ROOT . '/system/scripts/*.js');
-		foreach ($files as $file) self::add(self::getFileName($file), 'system');
+		$file = 'legacy.js?v=' . filemtime(base_path() . '/public/legacy.js');
 
-		// add app scripts
-		$files = glob(self::ASSETS_ROOT . '/app/scripts/*.js');
-		foreach ($files as $file) self::add(self::getFileName($file), 'app');
+		self::$list[] = [0, $file];
 	}
 
 	// load a script
@@ -23,44 +17,29 @@ class ScriptLoader {
 		$file = false;
 
 		switch ($type) {
-			case 'system':
-				$file = '/system/scripts/' . $fileName . '.js';
-				if (!$priority) $priority = 2;
-				break;
-			case 'app':
-				$file = '/app/scripts/' . $fileName . '.js';
-				if (!$priority) $priority = 3;
-				break;
 			case 'template':
-				if (file_exists(self::ASSETS_ROOT . $fetchingFile = '/app/templates/scripts/' . $fileName . '.js')) {
+				if (file_exists(base_path() . '/public' . $fetchingFile = '/templates/scripts/' . $fileName . '.js')) {
 					$file = $fetchingFile;
 					if (!$priority) $priority = 3;
-				} else if (file_exists(self::ASSETS_ROOT . $fetchingFile = '/system/templates/scripts/' . $fileName . '.js')) {
-					$file = $fetchingFile;
-					if (!$priority) $priority = 2;
 				}
 				break;
 			case 'page':
-				if (file_exists(self::ASSETS_ROOT . $fetchingFile = '/pages/scripts/' . $fileName . '.js')) {
+				if (file_exists(base_path() . '/public' . $fetchingFile = '/pages/scripts/' . $fileName . '.js')) {
 					$file = $fetchingFile;
 					if (!$priority) $priority = 4;
 				}
-				break;
-			case 'static':
-				$file = $fileName;
-				if (!$priority) $priority = 5;
 				break;
 		}
 
 		// store the file URL in the list
 		if ($file) {
-			$file .= '?v=' . filemtime(self::ASSETS_ROOT . $file);
+			$file .= '?v=' . filemtime(base_path() . '/public' . $file);
 			self::$list[] = [$priority, $file];
 		}
 	}
 
 	public static function addPageScripts($pageName) {
-		$pageScripts = glob(self::ASSETS_ROOT . '/pages/scripts/-expands-' . $pageName . '/*.js');
+		$pageScripts = glob(base_path() . '/public' . '/pages/scripts/-expands-' . $pageName . '/*.js');
 
 		self::add($pageName, 'page');
 
@@ -83,7 +62,7 @@ class ScriptLoader {
 
 		sort_subvalue(self::$list, 0);
 
-		foreach (self::$list as $style) $list[] = '<script src="' . client_path($style[1]) . '"></script>';
+		foreach (self::$list as $style) $list[] = '<script src="' . asset($style[1]) . '"></script>';
 
 		return implode(PHP_EOL, $list);
 	}

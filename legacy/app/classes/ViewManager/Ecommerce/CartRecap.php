@@ -51,8 +51,8 @@ class CartRecap {
 				<?php if (!$cart->status) { ?>
 
 					<div id="chck_btn_box" class="grid gap1">
-						<button type="button" id="checkout" class="button button--full-width" onclick="$('#submit').click();">Prosegui</button>
-						<a class="button button--secondary button--full-width" href="<?= client_url('/shop') ?>">Continua con gli acquisti</a>
+						<button type="button" id="checkout" class="btn button--full-width" onclick="$('#submit').click();">Prosegui</button>
+						<a class="btn btn--secondary button--full-width" href="<?= client_url('/shop') ?>">Continua con gli acquisti</a>
 					</div>
 
 

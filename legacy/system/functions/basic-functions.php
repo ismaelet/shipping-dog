@@ -12,11 +12,6 @@ function vendorConfig($field) {
 	return $vendorConfig[$field] ?? null;
 }
 
-function debug($blob) {
-	print_r($blob);
-	exit();
-}
-
 // enable full error report
 function full_dd() {
 	ini_set('display_errors', '1');

@@ -142,7 +142,9 @@ use App\View\Components\Interactions\FollowButton;
 									<div class="center-items hei-100">
 
 										<div class="coll-add-box cen txt-cen wid-100">
-											<div class="coll-add-ico"></div>
+											<div class="coll-add-ico text-neutral-700">
+												<?= embed_icon('add') ?>
+											</div>
 											<p class="coll-add-txt txt-wht">Aggiungi collezione</p>
 										</div>
 									</div>
@@ -185,7 +187,7 @@ use App\View\Components\Interactions\FollowButton;
 					<form class="lbox-form" method="POST">
 						<h1 class="lbox-title">Aggiungi una collezione</h1>
 						<div class="lbox-body">
-							<input type="text" name="name" class="inp short" placeholder="Nome della collezione" required>
+							<input type="text" name="name" class="inputshort" placeholder="Nome della collezione" required>
 						</div>
 						<div class="lbox-footer">
 							<button type="submit" name="add_folder" class="pbtn btn-full-width">Aggiungi</button>
@@ -203,7 +205,7 @@ use App\View\Components\Interactions\FollowButton;
 		<div id="empty" class="txt-cen pad-t-5 pad-b-10 main-wrap">
 			<div id="empty-box">
 				<p id="empty-title" class="txt-upp">Ancora nessun lavoro caricato</p>
-				<a href="<?= CLIENT_ROOT ?>/manage/portfolio/add?id=<?= $id ?>"><button type="button" class="pbtn btn-full-width mar-t-2">Carica un lavoro</button></a>
+				<a href="/manage/portfolio/add?id=<?= $id ?>"><button type="button" class="pbtn btn-full-width mar-t-2">Carica un lavoro</button></a>
 			</div>
 		</div>
 

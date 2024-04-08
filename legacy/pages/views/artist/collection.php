@@ -56,7 +56,7 @@ use Ecommerce\Design;
 				<?php if ($vip) { ?>
 
 					<div class="inlb">
-						<input type="text" id="name-inp" class="inp inlb" name="name" placeholder="Nome collezione" value="<?= $coll->name ?>" data-id="<?= $id ?>">
+						<input type="text" id="name-inp" class="inputinlb" name="name" placeholder="Nome collezione" value="<?= $coll->name ?>" data-id="<?= $id ?>">
 
 						<div class="ajax-done-icon"></div>
 					</div>
@@ -208,7 +208,7 @@ use Ecommerce\Design;
 				<div class="lbox-body">
 					<p class="mar-b-1">Seleziona l'immagine di copertina per questa collezione:</p>
 
-					<input type="file" name="file" class="inp file-inp">
+					<input type="file" name="file" class="input file-inp">
 					<div class="file-load"></div>
 					<button type="submit" name="img-change" class="hidden file-submit"></button>
 

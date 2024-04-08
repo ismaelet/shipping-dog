@@ -5,7 +5,7 @@ use App\View\View;
 ?>
 
 <!doctype html>
-<html data-theme="<?= $_SESSION['theme-color'] ?>" data-theme-fluid="<?= empty(sys_config('theme-fluid')) ? 0 : 1 ?>" data-client-root="<?= CLIENT_ROOT ?>">
+<html class="legacy-website" data-color-scheme="<?= $_SESSION['color-scheme'] ?>" data-theme-fluid="<?= empty(sys_config('theme-fluid')) ? 0 : 1 ?>" data-client-root="<?= CLIENT_ROOT ?>">
 
 <head>
 	<meta charset="utf-8">

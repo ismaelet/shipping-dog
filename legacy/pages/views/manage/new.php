@@ -8,6 +8,6 @@
 
 {% block form-footer %}
 
-<a href="<?= client_url('/manage/portfolio/add?id=' . auth()->id()) ?>" class="button">Carica una grafica</a>
+<a href="<?= client_url('/manage/portfolio/add?id=' . auth()->id()) ?>" class="btn">Carica una grafica</a>
 
 {% end form-footer %}

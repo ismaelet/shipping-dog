@@ -14,10 +14,10 @@
 
 	{% block form-footer %}
 
-	<a href="<?= client_url('/contacts') ?>" class="button">I nostri contatti</a>
+	<a href="<?= client_url('/contacts') ?>" class="btn">I nostri contatti</a>
 
 	<?php if ($address['buyer'] == auth()->id()) { ?>
-		<a class="button button--secondary" href="<?= client_url('/order?id=' . $id) ?>">Indietro</a>
+		<a class="btn btn--secondary" href="<?= client_url('/order?id=' . $id) ?>">Indietro</a>
 	<?php } ?>
 
 	{% end form-footer %}
@@ -32,10 +32,10 @@
 
 	{% block form-footer %}
 
-	<button type="submit" name="submit" id="submit" class="button">Cambia Indirizzo</button>
+	<button type="submit" name="submit" id="submit" class="btn">Cambia Indirizzo</button>
 
 	<?php if ($address['buyer'] == auth()->id()) { ?>
-		<a class="button button--secondary" href="<?= client_url('/order?id=' . $id) ?>">Indietro</a>
+		<a class="btn btn--secondary" href="<?= client_url('/order?id=' . $id) ?>">Indietro</a>
 	<?php } ?>
 
 	{% end form-footer %}

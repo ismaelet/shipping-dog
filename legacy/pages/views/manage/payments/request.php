@@ -13,11 +13,11 @@
 
 	{% block form-footer %}
 
-	<button type="submit" class="button" name="submit"><?= $data ? 'Modifica' : 'Invia' ?></button>
+	<button type="submit" class="btn" name="submit"><?= $data ? 'Modifica' : 'Invia' ?></button>
 
 	<?php if ($edit) { ?>
 
-		<a class="button button--secondary" href="?edit=0">Indietro</a>
+		<a class="btn btn--secondary" href="?edit=0">Indietro</a>
 
 	<?php } ?>
 
@@ -50,12 +50,12 @@
 
 	{% block form-footer %}
 
-	<button type="submit" class="button" name="download">
+	<button type="submit" class="btn" name="download">
 		<?= embed_icon('download') ?>
 		Scarica il <strong>PDF</strong>
 	</button>
 
-	<a class="button button--secondary" href="?edit=1">Modifica i dati di fatturazione</a>
+	<a class="btn btn--secondary" href="?edit=1">Modifica i dati di fatturazione</a>
 
 	{% end form-footer %}
 

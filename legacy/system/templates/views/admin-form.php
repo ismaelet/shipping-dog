@@ -29,7 +29,7 @@
 
 		<?php } else { ?>
 
-			<button type="submit" id="submit" class="button <?= $pageConfig['upload'] ? 'file-submit' : ''; ?>" name="<?= $pageConfig['edit'] ? 'edit' : 'add' ?>" <?php if ($pageConfig['confirm']) { ?> onclick="return confirm('<?= $pageConfig['confirm'] ?>')" <?php } ?>>
+			<button type="submit" id="submit" class="btn <?= $pageConfig['upload'] ? 'file-submit' : ''; ?>" name="<?= $pageConfig['edit'] ? 'edit' : 'add' ?>" <?php if ($pageConfig['confirm']) { ?> onclick="return confirm('<?= $pageConfig['confirm'] ?>')" <?php } ?>>
 
 				<?= $pageConfig['edit'] ? ('Save') : ('Add') ?>
 
@@ -39,7 +39,7 @@
 				<div class="file-load"></div>
 			<?php } ?>
 
-			<a href="<?= $pageConfig['return-url'] ?>" class="button button--secondary"><?= ('Back') ?></a>
+			<a href="<?= $pageConfig['return-url'] ?>" class="btn btn--secondary"><?= ('Back') ?></a>
 
 		<?php } ?>
 

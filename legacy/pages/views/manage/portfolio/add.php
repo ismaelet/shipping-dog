@@ -49,7 +49,7 @@
 				<div class="form-foot">
 
 					<button type="submit" name="submit" class="pbtn txt-sbold file-submit">
-						<span class="btn-icon bgr-f" <?= icon_svg('upload') ?>></span>
+						<span class="btn-icon bgr-f" <?= embed_icon('upload') ?>></span>
 						<span class="btn-txt">Carica la grafica</span>
 					</button>
 
