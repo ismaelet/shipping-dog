@@ -7,7 +7,7 @@ main {
 }
 
 /* Menu */
-.dashboard-navigation {
+.navigation {
 	--menu-width: 280px;
 	--icon-size: 1.1rem;
 	--border-size: 2.5rem;
@@ -18,11 +18,11 @@ main {
 	z-index: 1;
 }
 
-[data-color-scheme='dark'] .dashboard-navigation {
+[data-color-scheme='dark'] .navigation {
 	background-color: transparent;
 }
 
-.dashboard-navigation .floating {
+.navigation .floating {
 	position: fixed;
 	height: 100vh;
 }
@@ -32,13 +32,13 @@ main {
 	overflow-y: auto;
 }
 
-.dashboard-navigation .categories {
+.navigation .categories {
 	width: var(--menu-width);
 	overflow: hidden;
 	transition: width 0.4s;
 }
 
-.dashboard-navigation .header {
+.navigation .header {
 	display: flex;
 	gap: 1rem;
 	padding-top: 2rem;
@@ -48,7 +48,7 @@ main {
 	justify-content: center;
 }
 
-.dashboard-navigation .header .logo {
+.navigation .header .logo {
 	background-color: var(--fc-700);
 	width: 1.4rem;
 	aspect-ratio: 1;
@@ -56,23 +56,23 @@ main {
 	transition: width 0.2s;
 }
 
-.dashboard-navigation .header .title {
+.navigation .header .title {
 	font-size: 1.5rem;
 	letter-spacing: 0.07em;
 	font-weight: 500;
 	line-height: 1.1;
 }
 
-.dashboard-navigation .stitle {
+.navigation .stitle {
 	padding-left: 1.5rem;
 }
 
-.dashboard-navigation .category {
+.navigation .category {
 	transition: background 0.2s;
 }
 
 /* Menu: title box */
-.dashboard-navigation .category .title-box {
+.navigation .category .title-box {
 	grid-template-columns: var(--icon-size) auto;
 	column-gap: 1rem;
 	padding-left: var(--border-size);
@@ -80,7 +80,7 @@ main {
 	cursor: pointer;
 }
 
-.dashboard-navigation .category .highlight {
+.navigation .category .highlight {
 	opacity: 0;
 	background-color: var(--color-primary-400);
 	box-shadow: 3px 0 1rem 0 var(--color-primary-400), 3px 0 2rem 0 var(--color-primary-400);
@@ -93,25 +93,25 @@ main {
 	transition: opacity 0.2s;
 }
 
-.dashboard-navigation .category.current-category .highlight {
+.navigation .category.current-category .highlight {
 	opacity: 1;
 }
 
-.dashboard-navigation .category .icon-box {
+.navigation .category .icon-box {
 	width: var(--icon-size);
 	height: 100%;
 	transition: background-color 0.2s;
 }
 
-.dashboard-navigation .category .icon-box svg {
+.navigation .category .icon-box svg {
 	fill: var(--fc-400);
 }
 
-.dashboard-navigation .category.active .icon-box svg {
+.navigation .category.active .icon-box svg {
 	fill: var(--fc-700);
 }
 
-.dashboard-navigation .category .title {
+.navigation .category .title {
 	max-width: 200px;
 	color: var(--fc-400);
 	font-weight: 600;
@@ -120,7 +120,7 @@ main {
 	transition: opacity 0.2s, max-width 0.2s, color 0.2s;
 }
 
-.dashboard-navigation .category.active .title {
+.navigation .category.active .title {
 	color: var(--fc-700);
 }
 
@@ -135,19 +135,19 @@ main {
 }
 
 /* Menu: drop down */
-.dashboard-navigation .ddown {
+.navigation .ddown {
 	--line-height: 2.5rem;
 	height: 0;
 	overflow: hidden;
 	transition: opacity 0.4s, height 0.4s;
 }
 
-.dashboard-navigation .category.active .ddown {
+.navigation .category.active .ddown {
 	opacity: 1;
 	height: calc(var(--line-height) * var(--count));
 }
 
-.dashboard-navigation .ddown .link-box {
+.navigation .ddown .link-box {
 	display: grid;
 	grid-template-columns: 0.5rem auto;
 	width: max-content;
@@ -157,39 +157,39 @@ main {
 	align-items: center;
 }
 
-.dashboard-navigation .link-box.active .highlight {
+.navigation .link-box.active .highlight {
 	opacity: 1;
 }
 
-.dashboard-navigation .ddown .square {
+.navigation .ddown .square {
 	border-radius: 2px;
 	aspect-ratio: 1;
 }
 
-.dashboard-navigation .ddown .square.square-1 {
+.navigation .ddown .square.square-1 {
 	background-color: #65add6;
 }
-.dashboard-navigation .ddown .square.square-2 {
+.navigation .ddown .square.square-2 {
 	background-color: #e7d78f;
 }
-.dashboard-navigation .ddown .square.square-3 {
+.navigation .ddown .square.square-3 {
 	background-color: #93b3aa;
 }
-.dashboard-navigation .ddown .square.square-4 {
+.navigation .ddown .square.square-4 {
 	background-color: #f05749;
 }
-.dashboard-navigation .ddown .square.square-5 {
+.navigation .ddown .square.square-5 {
 	background-color: #c99bd1;
 }
 
-.dashboard-navigation .link {
+.navigation .link {
 	color: var(--text-color-fade);
 	line-height: var(--line-height);
 	transition: opacity 0.2s, color 0.2s;
 }
 
-.dashboard-navigation .link-box.active .link,
-.dashboard-navigation .link-box:hover .link {
+.navigation .link-box.active .link,
+.navigation .link-box:hover .link {
 	color: var(--fc-700);
 }
 
@@ -241,56 +241,56 @@ main {
 * Responsive
 */
 @media (max-width: 1280px) {
-	.dashboard-navigation {
+	.navigation {
 		--border-size: 2rem;
 	}
 
-	[data-color-scheme='dark'] .dashboard-navigation {
+	[data-color-scheme='dark'] .navigation {
 		background-color: var(--surface-fade);
 	}
 
-	.dashboard-navigation:not(.open),
-	.dashboard-navigation:not(.open) .categories {
+	.navigation:not(.open),
+	.navigation:not(.open) .categories {
 		width: calc(var(--icon-size) + var(--border-size) * 2);
 	}
 
-	.dashboard-navigation .stitle {
+	.navigation .stitle {
 		display: none;
 	}
 
-	.dashboard-navigation .group {
+	.navigation .group {
 		margin-bottom: 0;
 	}
 
-	.dashboard-navigation .header .title {
+	.navigation .header .title {
 		display: none;
 	}
 
-	.dashboard-navigation .header .logo {
+	.navigation .header .logo {
 		width: 2rem;
 	}
 
-	.dashboard-navigation .title-box {
+	.navigation .title-box {
 		width: var(--menu-width);
 	}
 
-	.dashboard-navigation .category.active .title-box .highlight {
+	.navigation .category.active .title-box .highlight {
 		opacity: 1;
 	}
 
-	.dashboard-navigation:not(.open) .category .title {
+	.navigation:not(.open) .category .title {
 		max-width: 0;
 	}
 
-	.dashboard-navigation .category .ddown {
+	.navigation .category .ddown {
 		width: var(--menu-width);
 	}
 
-	.dashboard-navigation:not(.open) .category.active .ddown {
+	.navigation:not(.open) .category.active .ddown {
 		height: 0;
 	}
 
-	.dashboard-navigation .ddown .highlight {
+	.navigation .ddown .highlight {
 		display: none;
 	}
 
@@ -300,7 +300,7 @@ main {
 }
 
 @media (max-width: 480px) {
-	.dashboard-navigation {
+	.navigation {
 		--border-size: 1.4rem;
 		--menu-width: 220px;
 	}

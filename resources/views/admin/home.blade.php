@@ -1,32 +1,32 @@
 <x-templates.admin-dashboard>
 
-    <x-templates.dashboard.dashboard-heading>Dashboard</x-templates.dashboard.dashboard-heading>
+    <x-dashboard.title-bar title="Dashboard" />
 
     <div class="grid gap-4 mt-8">
         {{-- Row 1 --}}
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 
             {{-- Labels --}}
-            <x-admin.labels />
+            <x-dashboard.items.labels />
 
             {{-- Total revenue --}}
-            <x-admin.total-revenue />
+            <x-dashboard.items.total-revenue />
 
             {{-- Total sales --}}
-            <x-admin.total-sales />
+            <x-dashboard.items.total-sales />
 
             {{-- New users --}}
-            <x-admin.new-users />
+            <x-dashboard.items.new-users />
         </div>
 
         {{-- Row 2 --}}
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
 
             {{-- Revenue graph --}}
-            <x-admin.revenue-graph />
+            <x-dashboard.items.revenue-graph />
 
             {{-- Awaiting sellers --}}
-            <x-admin.awaiting-sellers />
+            <x-dashboard.items.awaiting-sellers />
 
         </div>
     </div>

@@ -28,7 +28,7 @@
 
 <x-templates.empty :color-scheme="$colorScheme">
     <!-- Navigation bar -->
-    <x-templates.dashboard.dashboard-navigation :navigation-groups="$navigationGroups" />
+    <x-dashboard.navigation :navigation-groups="$navigationGroups" />
     <!-- Body -->
     <section class="page-content">
         <div class="page-wrapper">

@@ -1,4 +1,4 @@
-<section class="dashboard-navigation">
+<section class="navigation">
 	<div class="floating">
 		<div class="menu-wrapper">
 			<div class="categories">

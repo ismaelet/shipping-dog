@@ -36,9 +36,7 @@ export default {
 			'neutral-900': 'hsl(var(--color-neutral-900-hsl) / <alpha-value>)',
 
 			// Background
-			background: 'hsl(var(--color-background-hsl) / <alpha-value>)',
-			'background-400': 'hsl(var(--color-background-hsl) / <alpha-value>)',
-			'background-500': 'hsl(var(--color-background-hsl) / <alpha-value>)',
+			background: 'var(--color-background)',
 
 			// Surfaces
 			'surface-400': 'hsl(var(--color-surface-400-hsl) / <alpha-value>)',
@@ -49,9 +47,10 @@ export default {
 			success: 'hsl(var(--color-success-400-hsl) / <alpha-value>)',
 			error: 'hsl(var(--color-error-400-hsl) / <alpha-value>)',
 
-			// Custom
+			// Basic colors
 			white: 'white',
 			blue: 'lightblue',
+			green: 'lightgreen',
 		},
 		// Custom borders
 		borderWidth: {
@@ -90,6 +89,9 @@ export default {
 			// New heights
 			height: {
 				'screen-min': '100svh',
+			},
+			borderColor: {
+				DEFAULT: 'var(--border-color)',
 			},
 			// New box shadows
 			boxShadow: {
