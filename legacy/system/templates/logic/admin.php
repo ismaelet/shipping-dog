@@ -1,34 +1,45 @@
 <?php
 
 // fetch current section
+
+use App\Models\Admin\AdminCategory;
+use App\Models\Admin\AdminSection;
+
 $currentSection = false;
 
 if (strpos(ViewOld::$name, '-')) {
 	$currentPath = explode('/', explode('section-', ViewOld::$name)[1], 2);
-	$currentSection = DBOld::row('* FROM admin_sections WHERE category=? AND slug=?', [$currentPath[0], $currentPath[1]]);
+	$currentCategory = AdminCategory::where('slug', $currentPath[0])->first();
+	$currentSection = $currentCategory ? AdminSection::where('slug', $currentPath[1])->where('category_id', $currentCategory->id)->first() : null;
 }
 
 // fetch categories
 $menu['categories'] = [];
-$queryManager = is_supervisor() ? '' : 'manager=0';
+$queryManager = is_supervisor() ? '' : 'for_supervisors=0';
 
-$categories = DBOld::select('* FROM admin_categories ' . ($queryManager ? 'WHERE ' . $queryManager : '') . ' ORDER BY manager ASC, sort ASC, name ASC');
+$categories = $queryManager ?
+	AdminCategory::where($queryManager)->orderBy('for_supervisors')->orderBy('order')->orderBy('name')->get() :
+	AdminCategory::orderBy('for_supervisors')->orderBy('order')->orderBy('name')->get();
 
-while ($categoryData = $categories->fetch_assoc()) {
+foreach ($categories as $categoryData) {
 	$category = [];
-	$category['name'] = $categoryData['name'];
-	$category['slug'] = $categoryData['slug'];
+	$category['name'] = $categoryData->name;
+	$category['slug'] = $categoryData->slug;
 	$category['checked'] = $currentSection && $category['slug'] == $currentSection['category'];
 
-	$sections = DBOld::select('* FROM admin_sections WHERE category=? AND hidden=0 ' . ($queryManager ? 'AND ' . $queryManager : '') . ' ORDER BY sort ASC, name ASC', [$category['slug']]);
+	$sections = $queryManager ?
+		AdminSection::where('category_id', $categoryData->id)->where($queryManager)->orderBy('order')->orderBy('name')->get() :
+		AdminSection::where('category_id', $categoryData->id)->orderBy('order')->orderBy('name')->get();
 
-	while ($sectionData = $sections->fetch_assoc()) {
-		$section = [];
-		$section['name'] = $sectionData['name'];
-		$section['checked'] = $currentSection && $category['checked'] && ($sectionData['slug'] == $currentSection['slug'] || ($sectionData['hidden'] && str_replace('add', 'list',  $currentSection['slug'])));
-		$section['url'] = empty($sectionData['url']) ? '/admin/' . $sectionData['category'] . '/' . $sectionData['slug'] : $sectionData['url'];
+	foreach ($sections as $sectionData) {
+		if (!$sectionData->hidden && $sectionData->category) {
+			$section = [];
+			$section['name'] = $sectionData->name;
+			$section['checked'] = $currentSection && $category['checked'] && ($sectionData->slug == $currentSection['slug'] || ($sectionData->hidden && str_replace('add', 'list',  $currentSection['slug'])));
+			$section['url'] = '/admin/' . $sectionData->category->slug . '/' . $sectionData->slug;
 
-		$category['sections'][] = $section;
+			$category['sections'][] = $section;
+		}
 	}
 
 	$menu['categories'][] = $category;

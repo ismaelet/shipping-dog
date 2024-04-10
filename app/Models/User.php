@@ -53,8 +53,8 @@ class User extends Authenticatable {
 	 */
 	public function fullName(): string {
 		$fullName = [];
-		$fullName[] = $this->first_name;
-		$fullName[] = $this->last_name;
+		$fullName[] = $this->firstname;
+		$fullName[] = $this->lastname;
 
 		return implode(' ', $fullName);
 	}

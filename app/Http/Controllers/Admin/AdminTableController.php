@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\AdminSection;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -48,7 +48,7 @@ class AdminTableController extends Controller {
 		// Display the view
 		return view('components.templates.admin-table')
 			->with([
-				'section' => $this->getSection(),
+				'section' => AdminController::getSection(),
 				'fields' => $this->fields,
 				'recordCount' => $this->records->count(),
 				'records' => $this->fetchRecords($request),
@@ -60,19 +60,6 @@ class AdminTableController extends Controller {
 				'searchBar' => $this->searchBar,
 				'pageSize' => $this->pageSize,
 			]);
-	}
-
-	/**
-	 * Get the current section record
-	 */
-	public function getSection(): AdminSection {
-		// Get the current section
-		$sectionPath = explode('/', FacadesRequest::path(), 3);
-		$groupSlug = $sectionPath[1];
-		$sectionSlug = $sectionPath[2];
-		$section = AdminSection::where('category', $groupSlug)->where('slug', $sectionSlug)->first();
-
-		return $section;
 	}
 
 	/**

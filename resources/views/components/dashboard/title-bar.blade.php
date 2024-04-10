@@ -3,7 +3,7 @@
 <section class="flex gap-4 items-center">
 
     {{-- Title --}}
-    <x-dashboard.main-heading>{{ $title }}</x-dashboard.main-heading>
+    <x-dashboard.main-heading>{!! $title !!}</x-dashboard.main-heading>
 
     @if ($addButton)
         {{-- Add button --}}

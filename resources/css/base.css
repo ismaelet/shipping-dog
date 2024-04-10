@@ -214,6 +214,22 @@
 			align-items: center;
 			justify-content: center;
 		}
+
+		.button & {
+			--icon-size: 1em;
+		}
+	}
+
+	.surface {
+		background-color: var(--color-surface-400);
+		border-radius: var(--border-radius-700);
+		box-shadow: var(--shadow-400);
+
+		[data-theme='modern'] & {
+			background-color: transparent;
+			border: var(--border);
+			box-shadow: none;
+		}
 	}
 }
 
@@ -224,15 +240,28 @@
 	/*
 	* 5.1 Styling
 	*/
-	.surface {
-		background-color: var(--color-surface-400);
-		box-shadow: var(--shadow-400);
-	}
-
-	:where(.border) {
+	.border {
 		border-width: var(--border-width);
 		border-style: solid;
-		border-color: var(--border-color);
+
+		:where(&) {
+			border-color: var(--border-color);
+		}
+	}
+
+	.highlight-on-focus {
+		outline-width: var(--border-width);
+		outline-style: solid;
+		transition: outline 0.2s;
+
+		:where(&) {
+			outline-color: transparent;
+		}
+
+		&:focus,
+		&:has(:focus) {
+			outline-color: var(--color-primary-400);
+		}
 	}
 
 	/*

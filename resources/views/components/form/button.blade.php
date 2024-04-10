@@ -12,7 +12,6 @@
 @pushOnce('styles')
     <style>
         .button {
-            --icon-size: 1em;
             display: inline-block;
             min-width: 12rem;
             transition: color .2s, background-color .2s, border-color .2s;

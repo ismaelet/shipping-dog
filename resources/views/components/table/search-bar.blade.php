@@ -7,15 +7,26 @@
         .search-bar {
             grid-template-columns: 1.25rem 1fr 1.25rem;
 
+            [data-color-scheme="light"] & {
+                border: var(--border);
+            }
+
             &:has(:focus) .search-icon {
                 color: var(--color-primary-500);
             }
 
             .input {
                 line-height: 3.5rem;
-                border: none !important;
-                outline: none !important;
-                box-shadow: none !important;
+                background-color: transparent;
+                border: none;
+                outline: none;
+                box-shadow: none;
+
+                &:focus:-webkit-autofill {
+                    outline: none !important;
+                    background-color: transparent !important;
+                    box-shadow: 0 0 0 100vw var(--color-background) inset !important;
+                }
             }
         }
     </style>
@@ -35,7 +46,7 @@
     </script>
 @endpushOnce
 
-<search class="search-bar grid px-6 bg-surface-400 rounded gap-2"">
+<search class="search-bar grid px-6 gap-2 surface highlight-on-focus">
     <div class="search-icon cursor-pointer transition-colors" x-data @click="table_search">
         {!! embed_icon('search') !!}
     </div>

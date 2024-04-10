@@ -9,5 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class AdminCategory extends Model {
 
-	protected $fillable = [];
+	/**
+	 * The attributes that are mass assignable
+	 */
+	protected $fillable = ['name', 'slug', 'order', 'for_supervisors'];
 }

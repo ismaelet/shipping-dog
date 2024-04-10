@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-color-scheme="{{ $colorScheme }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-color-scheme="{{ $colorScheme }}"
+    data-theme="{{ 'modern' }}">
 
 <head>
     <meta charset="utf-8">

@@ -12,9 +12,9 @@ $pageConfig['row-action'] = 'add?id={{id}}';
 $queryConfig['table'] = 'admin_sections';
 $queryConfig['index'] = 'id';
 $queryConfig['select'] = ['admin_sections.id', 'admin_sections.slug', 'admin_sections.name', 'admin_sections.url', 'admin_sections.template', 'admin_sections.hidden', 'admin_categories.name as categoryName',];
-$queryConfig['from'] = 'admin_sections INNER JOIN admin_categories ON admin_sections.category = admin_categories.slug';
-$queryConfig['where-search'] = "LOWER(admin_sections.name) LIKE CONCAT('%',?,'%') OR admin_sections.slug LIKE CONCAT('%',?,'%') OR LOWER(category) LIKE CONCAT('%',?,'%') OR LOWER(admin_categories.name) LIKE CONCAT('%',?,'%')";
-$queryConfig['order-index'] = 'category ASC, admin_sections.name';
+$queryConfig['from'] = 'admin_sections INNER JOIN admin_categories ON admin_sections.category_id = admin_categories.id';
+$queryConfig['where-search'] = "LOWER(admin_sections.name) LIKE CONCAT('%',?,'%') OR admin_sections.slug LIKE CONCAT('%',?,'%') OR LOWER(admin_categories.slug) LIKE CONCAT('%',?,'%') OR LOWER(admin_categories.name) LIKE CONCAT('%',?,'%')";
+$queryConfig['order-index'] = 'admin_categories.order ASC, admin_categories.name, admin_sections.order, admin_sections.name';
 $queryConfig['order-direction'] = 'ASC';
 
 /*

@@ -20,10 +20,6 @@
 
             {
 
-            .divisor {
-                border-top: var(--border-width) solid var(--color-neutral-200);
-            }
-
             .item {
                 grid-template-rows: max-content 0fr;
                 overflow: hidden;
@@ -111,7 +107,11 @@
 
             .subitem-title.active a,
             .subitem-title a:hover {
-                color: #fff;
+                color: var(--color-primary-400);
+
+                [data-color-scheme="dark"] & {
+                    color: #fff;
+                }
             }
         }
     </style>
@@ -126,12 +126,12 @@
                     <input type="checkbox" name="admin_category" class="hidden js-radio-checkbox">
 
                     @if (isset($item['url']))
-                        <a class="item-header cursor-pointer" href="{{ $item['url'] }}">
+                        <a class="item-header items-center cursor-pointer" href="{{ $item['url'] }}">
                             {!! embed_icon($item['icon']) !!}
                             <p class="item-title ml-4 font-heading">{{ $item['name'] }}</p>
                         </a>
                     @else
-                        <div class="item-header cursor-pointer">
+                        <div class="item-header items-center cursor-pointer">
                             {!! embed_icon($item['icon']) !!}
                             <p class="item-title ml-4 font-heading">{{ $item['name'] }}</p>
                         </div>
@@ -154,5 +154,5 @@
         @endforeach
     </div>
 
-    <span class="divisor"></span>
+    <span class="border-b"></span>
 </ul>

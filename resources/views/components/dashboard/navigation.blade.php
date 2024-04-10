@@ -20,19 +20,6 @@
                 scrollbar-width: thin;
                 scrollbar-color: var(--color-surface-400) var(--color-background);
             }
-
-            .navigation-header {
-                padding-top: 2.5rem;
-
-                svg {
-                    width: 100%;
-                    max-height: 3rem;
-                }
-            }
-
-            .button-shutdown {
-                border-radius: var(--border-radius-400);
-            }
         }
     </style>
 @endpushOnce
@@ -42,8 +29,8 @@
 
         <div class="">
             <!-- Dashboard title -->
-            <div class="navigation-header text-neutral-700 grid gap-2 mb-12">
-                {!! embed_svg('logo/logo') !!}
+            <div class="navigation-header text-center text-neutral-700 grid gap-2 mb-12 mt-10">
+                {!! embed_svg('logo/logo', ['w-full', 'h-10']) !!}
                 <p class="font-heading font-semibold text-2xl tracking-wider ">{{ config('app.name') }}</p>
             </div>
 
@@ -54,12 +41,11 @@
                     <x-dashboard.navigation-group :navigation-group="$navigationGroup" />
                 @endforeach
 
-                <form class="mt-2 grid" method="POST">
-                    <x-form.button variant="secondary" size="small" class="button-shutdown" name="logout">
-                        <?= embed_icon('exit') ?>
-                        Esci
-                    </x-form.button>
-                </form>
+                <a class="button-shutdown surface rounded gap-2 leading-10 mt-3 font-heading transition-colors hover:text-neutral-700"
+                    href="{{ route('logout') }}">
+                    {!! embed_icon('exit', ['w-1em']) !!}
+                    Esci
+                </a>
             </div>
 
         </div>

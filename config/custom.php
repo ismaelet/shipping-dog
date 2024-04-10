@@ -14,7 +14,7 @@ return [
 		'full_name' => env('APP_FULL_NAME', ''),
 		'description' => env('APP_DESCRIPTION', ''),
 		'short_description' => env('APP_SHORT_DESCRIPTION', ''),
-		'default_color_scheme' => env('APP_COLOR_SCHEME', 'light'),
+		'default_color_scheme' => env('APP_DEFAULT_COLOR_SCHEME', 'light'),
 	],
 
 	/*

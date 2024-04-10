@@ -1,6 +1,6 @@
 @props(['title', 'subtitle', 'icon', 'variant' => 'default'])
 
-<article {{ $attributes->class(['p-6 border-radius rounded-lg grid content-start gap-3 surface']) }}>
+<article {{ $attributes->class(['p-6 grid content-start gap-3 surface']) }}>
     {{-- Heading --}}
     <div class="grid gap-1">
         <div class="flex justify-between items-center ">

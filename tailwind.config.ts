@@ -86,10 +86,15 @@ export default {
 		},
 		// Extended config
 		extend: {
+			// New widths
+			width: {
+				'1em': '1em',
+			},
 			// New heights
 			height: {
 				'screen-min': '100svh',
 			},
+			// Default border color
 			borderColor: {
 				DEFAULT: 'var(--border-color)',
 			},

@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Admin\Users;
 
 use App\Http\Controllers\Admin\AdminTableController;
 use App\Models\User;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class UserListController extends AdminTableController {
 
@@ -29,19 +30,14 @@ class UserListController extends AdminTableController {
 	protected bool $addButton = false;
 
 	/**
-	 * Display the list of users
+	 * GET method
 	 */
 	public function index(Request $request): View|RedirectResponse {
-		// Catch user redirect request
-		if ($request->has('login')) {
-			return $this->loginAsUser($request->login);
-		}
-
 		// Prepare the query
 		$this->records = $this->prepareQuery();
 
 		// Add search filter
-		if ($request->has('search')) {
+		if ($request->search) {
 			$this->records = $this->addSearchFilter($this->records, $request->search);
 		}
 
@@ -96,6 +92,18 @@ class UserListController extends AdminTableController {
 				'confirmation' => true,
 			],
 		];
+	}
+
+	/**
+	 * POST method
+	 */
+	public function update(Request $request): RedirectResponse {
+		// Catch user redirect request
+		if ($request->has('login')) {
+			return $this->loginAsUser($request->login);
+		}
+
+		return Redirect::back();
 	}
 
 	/**

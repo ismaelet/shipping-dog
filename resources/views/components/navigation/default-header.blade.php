@@ -299,7 +299,7 @@
 
         .h-link-txt:hover a,
         .h-link-txt.active a {
-            color: var(--clr-1);
+            color: var(--color-primary-400);
         }
 
         .h-drop-ico {
@@ -309,7 +309,7 @@
 
         /* Desktop dropdown menu */
         .h-drop {
-            background-color: var(--clr-1);
+            background-color: var(--color-primary-400);
             width: 230px;
             max-height: 0;
             position: absolute;
@@ -366,7 +366,7 @@
 
         #h-cart:hover svg,
         #h-wish:hover svg {
-            fill: var(--clr-1);
+            fill: var(--color-primary-400);
         }
 
         #h-cart-num {
@@ -404,7 +404,7 @@
         }
 
         .theme-switch .icon-box:hover svg {
-            fill: var(--clr-1);
+            fill: var(--color-primary-400);
         }
 
         .theme-switch .dark-icon svg {
@@ -658,7 +658,7 @@
                 <!-- Search bar -->
                 <form action="/search" method="GET" id="h-srch" class="inlb" onClick="$('#h-srch-inp').focus();">
                     <input type="checkbox" id="h-srch-cbx" class="hidden">
-                    <label for="h-srch-cbx" id="h-srch-ico-box" class="grid stack-content">
+                    <label for="h-srch-cbx" id="h-srch-ico-box" class="grid justify-items-center stack-content">
                         <div class="background fill-all"></div>
                         <?= embed_icon('search') ?>
                     </label>
