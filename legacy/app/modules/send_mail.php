@@ -1,14 +1,14 @@
 <?php
 
 /* OLD
-function send_email($email, $cartID) {
+function send_email($email, $cart_id) {
 
 	//generate email text
-	$buyer = DBOld::find('buyer FROM carts WHERE ID = ?', [$cartID]);
+	$user_id = DBOld::find('user_id FROM carts WHERE id = ?', [$cart_id]);
 
-	$row_addr = DBOld::row('* FROM addresses WHERE cartID = ?', [$cartID]);
+	$row_addr = DBOld::row('* FROM addresses WHERE cart_id = ?', [$cart_id]);
 
-	$addr_aname = $row_addr['aname'];
+	$addr_full_name = $row_addr['full_name'];
 	$addr_strt = $row_addr['address'];
 	$addr_num = $row_addr['number'];
 	$addr_zip = $row_addr['zip'];
@@ -19,27 +19,27 @@ function send_email($email, $cartID) {
 	$toemail = $row_addr['email'];
 
 	$orders = '';
-	$res_ord = DBOld::select('ID FROM orders WHERE cartID = ? ORDER BY ID ASC', [$cartID]);
+	$res_ord = DBOld::select('id FROM orders WHERE cart_id = ? ORDER BY id ASC', [$cart_id]);
 
 	while ($row_ord = $res_ord->fetch_assoc()) {
 
-		$order = new Order($row_ord['ID'], '*');
+		$order = new Order($row_ord['id'], '*');
 
 		$orders .= $order->desc[0] . '<br>';
 	}
 
 	$address =
-		$addr_aname . '<br>' .
+		$addr_full_name . '<br>' .
 		$addr_strt . ', ' . $addr_num . '<br>' .
 		$addr_zip . ' ' . $addr_city . ' (' . $addr_reg . ')';
 
 	$txt = file_get_contents(SERVER_ROOT . '/app/modules/email/order_confirmation.html');
 
-	$txt = str_replace('{{cartID}}', $cartID, $txt);
+	$txt = str_replace('{{cart_id}}', $cart_id, $txt);
 	$txt = str_replace('{{address}}', $address, $txt);
-	$txt = str_replace('{{address_link}}', 'https://shippingdog.com/order/address?id=' . $cartID . '&key=' . $security, $txt);
+	$txt = str_replace('{{address_link}}', 'https://shippingdog.com/order/address?id=' . $cart_id . '&key=' . $security, $txt);
 	$txt = str_replace('{{orders}}', $orders, $txt);
-	$txt = str_replace('{{order_link}}', 'https://shippingdog.com/order?id=' . $cartID . '&buyer=' . $buyer, $txt);
+	$txt = str_replace('{{order_link}}', 'https://shippingdog.com/order?id=' . $cart_id . '&user_id=' . $user_id, $txt);
 
 	$email->SMTPDebug = 1;
 	$email->isSMTP();

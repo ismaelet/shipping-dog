@@ -10,8 +10,8 @@ class LogoGroup {
 	use DatabaseObject;
 
 	public const TABLE = 'extras_folder';
-	public const INDEX = 'ID';
-	public const SELLER_INDEX = 'storID';
+	public const INDEX = 'id';
+	public const SELLER_INDEX = 'seller_id';
 
 	/*
 	* Get methods
@@ -20,8 +20,8 @@ class LogoGroup {
 		return $this->databaseEntry ? $this->databaseEntry[self::INDEX] : null;
 	}
 
-	private function getName() {
-		return $this->name_it;
+	public function getName() {
+		return $this->name;
 	}
 
 	private function getLogos() {

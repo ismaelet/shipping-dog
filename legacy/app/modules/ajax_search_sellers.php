@@ -9,11 +9,11 @@ if (!empty($_POST['search'])) {
 
 	$filter = empty($_POST['filter']) ? '' : 'AND ' . $_POST['filter'];
 
-	$res = DBOld::select("userID, name FROM stores WHERE name LIKE CONCAT('%',?,'%') " . $filter . " ORDER BY sales DESC LIMIT 0,6", [$_POST['search']]);
+	$res = DBOld::select("user_id, name FROM stores WHERE name LIKE CONCAT('%',?,'%') " . $filter . " ORDER BY sales DESC LIMIT 0,6", [$_POST['search']]);
 
 	while ($row = $res->fetch_assoc()) { ?>
 
-		<p class="ajax-search-item" data-id="<?= $row['userID']; ?>" data-txt="<?= $row['name']; ?>"><?= $row['name']; ?></p>
+		<p class="ajax-search-item" data-id="<?= $row['user_id']; ?>" data-txt="<?= $row['name']; ?>"><?= $row['name']; ?></p>
 
 <?php }
 }

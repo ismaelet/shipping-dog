@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Address extends Model {
 
-	protected $primaryKey = 'ID';
+
 	protected $table = 'addresses';
-	protected $fillable = ['cartID', 'buyer', 'aname', 'address', 'number', 'city', 'zip', 'country', 'email', 'phone'];
+	protected $fillable = ['cart_id', 'user_id', 'full_name', 'address', 'number', 'city', 'zip', 'country', 'email', 'phone'];
 	/**
 	 * Get the address' cart
 	 */
-	public function cart_old(): BelongsTo {
-		return $this->belongsTo(Cart::class, 'cartID', 'ID');
+	public function cart(): BelongsTo {
+		return $this->belongsTo(Cart::class, 'cart_id', 'id');
 	}
 }

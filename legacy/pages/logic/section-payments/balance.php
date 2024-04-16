@@ -14,38 +14,38 @@ $pageConfig['add'] = false;
 * Query configuration
 */
 $queryConfig['table'] = 'stores';
-$queryConfig['index'] = 'userID';
-$queryConfig['select'] = ['userID', 'name', 'request', 'stores.credit'];
+$queryConfig['index'] = 'user_id';
+$queryConfig['select'] = ['user_id', 'name', 'request', 'stores.credit'];
 $queryConfig['from'] = '
 	stores
-	LEFT JOIN orders ON stores.userID = orders.sellerId
-	INNER JOIN carts ON orders.cartID = carts.ID
+	LEFT JOIN orders ON stores.user_id = orders.seller_id
+	INNER JOIN carts ON orders.cart_id = carts.id
 ';
 $queryConfig['where'] = 'carts.status > 0';
-$queryConfig['where-search'] = "name LIKE CONCAT('%',?,'%') OR userID = ?";
-$queryConfig['group'] = 'orders.sellerId';
+$queryConfig['where-search'] = "name LIKE CONCAT('%',?,'%') OR user_id = ?";
+$queryConfig['group'] = 'orders.seller_id';
 
 //select fields
 $fields = [
-	['title' => 'ID', 'name' => 'userID'],
+	['title' => 'id', 'name' => 'user_id'],
 	['title' => 'Nome', 'name' => 'name', 'size' => 3],
 	['title' => 'Totale', 'name' => 'earned', 'size' => 1],
 	['title' => 'Pagato', 'name' => 'payed', 'size' => 1, 'not-sortable' => true],
 	['title' => 'Altro', 'name' => 'otherTransfers', 'size' => 1, 'not-sortable' => true],
 	['title' => 'Credito', 'name' => 'credit', 'size' => 1, 'not-sortable' => true],
 	['title' => 'Da pagare', 'name' => 'toPay', 'size' => 1, 'not-sortable' => true],
-	['title' => 'PayPal', 'size' => 3, 'name' => 'userID', 'type' => 'find', 'find' => 'paypal FROM payment_requests WHERE shopId=?'],
+	['title' => 'PayPal', 'size' => 3, 'name' => 'user_id', 'type' => 'find', 'find' => 'paypal FROM payment_requests WHERE seller_id=?'],
 	['title' => 'Richiesta', 'name' => 'request', 'type' => 'boolean-icon'],
 
 	['type' => 'btn'],
 ];
 
 $buttons = [
-	['title' => 'Comunicazione', 'url' => PUBLIC_CLIENT_ROOT . '/uploads/documents/payments/Comunicazione_{{userID}}.pdf', 'color' => 'gre'],
+	['title' => 'Comunicazione', 'url' => PUBLIC_CLIENT_ROOT . '/uploads/documents/payments/Comunicazione_{{user_id}}.pdf', 'color' => 'gre'],
 ];
 
 function _expand_results(&$entry, $field, $key, $row) {
-	$seller = new Seller($row['userID']);
+	$seller = new Seller($row['user_id']);
 
 	switch ($field['name']) {
 		case 'earned':

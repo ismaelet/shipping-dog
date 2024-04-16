@@ -2,6 +2,9 @@
 
 namespace Ecommerce;
 
+use App\Models\Ecommerce\Product;
+use App\Models\Ecommerce\Product\ProductGender;
+use App\Models\Ecommerce\Product\ProductType;
 use DBOld;
 use Ecommerce\Product\Type;
 
@@ -36,11 +39,11 @@ class Shop {
 		if (isset($_GET['page'])) $this->page = (int) $_GET['page'];
 		if (isset($_GET['edit']) && is_admin()) $this->edit = true;
 
-		//set sorting
+		// Set sorting
 		if (isset($_GET['sort']) && in_array($_GET['sort'], ['new', 'popular', 'custom'])) {
 			$this->sort = $_GET['sort'];
 		} else if ($this->id) {
-			switch (DBOld::find('sort FROM stores WHERE userID = ?', $this->id)) {
+			switch (DBOld::find('sort FROM stores WHERE user_id = ?', $this->id)) {
 				case 3:
 					$this->sort = 'custom';
 					break;
@@ -55,150 +58,103 @@ class Shop {
 			}
 		}
 
-		$searchSQL = $typeSQL = $gendSQL = $groupSQL = $slugSQL = '';
-
-		//general filters
-		$variables = [];
-
-		$filtSQL = ' items.status > 0 AND items.deleted = 0 ';
-		$filtSQL .=
-			$this->id ?
-			'AND items.userID = ' . $this->id :
-			'AND stores.status = 1 AND stores.hidden = 0';
-
 		$start = $this->page ? $this->size * ($this->page - 1) : 1;
 
+		// Start building the query
+		$products = Product::join('stores', 'items.user_id', '=', 'stores.user_id')
+			->where('items.status', 1)
+			->where('deleted', 0);
+
+		if ($this->id) {
+			// Filter for a specific shop
+			$products
+				->where('items.user_id', $this->id);
+		} else {
+			// Filter for the general shop
+			$products
+				->where('stores.status', 1)
+				->where('stores.hidden', 0);
+		}
+
+		// Order the products
 		switch ($this->sort) {
 			case 'new':
-				$order = ' items.time DESC, desID DESC, typeID ASC ';
+				$products->orderBy('items.time', 'desc')
+					->orderBy('design_id', 'desc')
+					->orderBy('type_id', 'asc');
 				break;
 
 			case 'popular':
-				$order = ' typeID ASC, items.rsales DESC, items.sales DESC, desID DESC ';
+				$products->orderBy('items.recent_sales', 'desc')
+					->orderBy('items.sales', 'desc')
+					->orderBy('design_id', 'desc')
+					->orderBy('type_id', 'asc');
 				break;
 
 			case 'custom':
-				$order = ' designs.sort ASC, items.sort ASC, typeID ASC ';
+				$products->orderBy('items.sort', 'asc')
+					->orderBy('designs.sort', 'asc')
+					->orderBy('type_id', 'asc');
 				break;
 		}
 
-		// filter by keyword
+		// Filter by keyword
 		if ($this->search) {
-			$searchSQL = "
-				AND (
-					items.name LIKE CONCAT('%',?,'%') OR
-					designs.name LIKE CONCAT('%',?,'%') OR
-					stores.name LIKE CONCAT('%',?,'%') OR
-					desID IN (SELECT desID FROM designs_tags WHERE tags LIKE CONCAT('%',?,'%'))
-				)
-			";
-
-			$variables[] = $this->search;
-			$variables[] = $this->search;
-			$variables[] = $this->search;
-			$variables[] = $this->search;
+			$products->where(function ($query) {
+				$query->where('items.name', 'like', '%' . $this->search . '%')
+					->orWhere('stores.name', 'like', '%' . $this->search . '%')
+					->orWhereIn('design_id', function ($query) {
+						$query->select('design_id')
+							->from('designs_tags')
+							->where('tags', 'like', '%' . $this->search . '%');
+					});
+			});
 		}
 
-		// filters by type
+		// Filters by type
 		if ($this->type) {
-			$res_type = DBOld::select('ID FROM items_types WHERE tag = ?', [$this->type]);
-
-			if ($row_type = $res_type->fetch_assoc()) {
-				$typeID = $row_type['ID'];
-				$typeSQL = 'AND typeID = ' . $typeID;
-			}
+			$products->where('type_id', ProductType::where('tag', $this->type)->value('id'));
 		}
 
-		// filters by gender
+		// Filters by gender
 		if (in_array($this->gender, ['m', 'f'])) {
-			$res_gender = DBOld::select('ID FROM items_genders WHERE tag = ?', [$this->gender]);
+			$gender = ProductGender::where('tag', $this->gender)->first();
 
-			if ($row = $res_gender->fetch_assoc()) {
-				$gendID = $row['ID'];
-				$gendSQL = 'AND typeID IN (SELECT ID FROM items_types WHERE gender = ' . $gendID . ' OR gender = 3)';
-			}
+			$products->where(function ($query) use ($gender) {
+				$query->whereIn('type_id', ProductType::whereIn('gender', [$gender->id, 3])->get('id'));
+			});
 		}
 
-		// filters by group
+		// Filters by group
 		if ($this->group) {
-			$groupSQL = "AND typeID IN (SELECT ID FROM items_types WHERE category='$this->group')";
+			$products->whereIn('type_id', ProductType::where('category', $this->group)->get('id'));
 		}
 
-		// filter by tag
+		// Filter by tag
 		if ($this->slug) {
-			$slugSQL = "AND desID IN (SELECT desID FROM designs_tags WHERE tags LIKE '%$this->slug%')";
+			$products->whereIn('design_id', function ($query) {
+				$query->select('design_id')
+					->from('designs_tags')
+					->where('tags', 'like', '%' . $this->slug . '%');
+			});
 		}
 
-		// general showcase
+		// General showcase
 		$generalShowcase = !$this->gender && !$this->type;
 
-		//get items
-		$where = implode(' ', [$filtSQL, $searchSQL, $typeSQL, $gendSQL, $groupSQL, $slugSQL]);
-		$limit = $start . ', ' . $this->size;
-
-		if (!$generalShowcase) {
-			$productsSQL = "
-			items.ID FROM items
-				LEFT JOIN stores ON items.userID = stores.userID
-				LEFT JOIN designs ON items.desID = designs.ID
-			WHERE " . $where . "
-			ORDER BY " . $order . "
-			LIMIT " . $limit;
-
-			$countSQL = 'items
-				LEFT JOIN stores ON items.userID = stores.userID
-				LEFT JOIN designs ON items.desID = designs.ID
-			WHERE ' . $where;
-
-			// get item number
-			$this->resN = DBOld::count($countSQL, $variables);
-
-			$productResults = DBOld::select($productsSQL, $variables);
-		} else {
-			$productsSQL = "
-			(
-				SELECT items.ID
-				FROM items
-				LEFT JOIN stores ON items.userID = stores.userID
-				LEFT JOIN designs ON items.desID = designs.ID
-				WHERE " . $where . " AND items.desID > 0
-				ORDER BY " . $order . "
-				LIMIT " . $limit . "
-			)
-			UNION
-			(
-				SELECT items.ID
-				FROM items
-				LEFT JOIN stores ON items.userID = stores.userID
-				LEFT JOIN designs ON items.desID = designs.ID
-				WHERE " . $where . " AND items.desID = 0
-				ORDER BY " . $order . "
-				LIMIT " . $limit . "
-			)";
-
-			$countSQL = 'SELECT
-				(
-					SELECT COUNT(*) FROM items
-					LEFT JOIN stores ON items.userID = stores.userID
-					LEFT JOIN designs ON items.desID = designs.ID
-					WHERE ' . $where . ' AND desID > 0
-				) + (
-					SELECT COUNT(*) FROM items
-					LEFT JOIN stores ON items.userID = stores.userID
-					LEFT JOIN designs ON items.desID = designs.ID
-					WHERE ' . $where . ' AND desID = 0
-				) as productCount';
-
-			// get item number
-			$productCountResult = DBOld::execute($countSQL, array_merge($variables, $variables))->get_result();
-
-			$this->resN = $productCountResult->fetch_assoc()['productCount'];
-
-			$productResults = DBOld::execute($productsSQL, array_merge($variables, $variables))->get_result();
-		}
+		// Get the products
+		$productCount = $products->count();
+		$products = $products->limit($this->size)
+			->offset($start)
+			->get('items.*');
 
 
-		$this->products = rows_to_objects($productResults, Product::class);
+		// get item number
+		$this->resN = $productCount;
+
+		$productResults = $products;
+
+		$this->products = $productResults;
 	}
 
 	public function render() { ?>
@@ -235,7 +191,7 @@ class Shop {
 
 				<p id="filter-text" onclick="$(this).toggleClass('open'); $(this).next().toggleClass('open');">
 					Filtra la ricerca
-					<span class="search-ddown-ico icon "><?= embed_icon('navigation/arrow1-down') ?></span>
+					<span class="search-ddown-ico icon "><?= embed_icon('navigation/arrow-simple-down') ?></span>
 				</p>
 
 				<div id="search-sec">
@@ -261,7 +217,7 @@ class Shop {
 
 								<label class="gender-title-box" for="gender-cbx-m">
 									<p class="gender-title">
-										<span class="gender-ico icon"><?= embed_icon('navigation/arrow1-down') ?></span>
+										<span class="gender-ico icon"><?= embed_icon('navigation/arrow-simple-down') ?></span>
 										<span class="">Uomo</span>
 									</p>
 								</label>
@@ -269,14 +225,14 @@ class Shop {
 								<div class="gender-ddown">
 									<?php
 									if ($this->id) $res = DBOld::select("
-											ID FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT typeID FROM items WHERE userID = ? AND status = 1) ORDER BY ID ASC", [$this->id]);
+											id FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
 
 									else $res = DBOld::select("
-											ID FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT typeID FROM items WHERE status = 1) ORDER BY ID ASC");
+											id FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
 
 									while ($row = $res->fetch_assoc()) {
 
-										$type = new Type($row['ID']) ?>
+										$type = new Type($row['id']) ?>
 
 										<label>
 											<input type="checkbox" class="type-cbx hidden" name="type" value="<?= $type->slug ?>" <?php if ($this->gender == 'm' && $this->type == $type->slug) echo 'checked' ?>>
@@ -292,7 +248,7 @@ class Shop {
 
 								<label class="gender-title-box" for="gender-cbx-f">
 									<p class="gender-title">
-										<span class="gender-ico icon "><?= embed_icon('navigation/arrow1-down') ?></span>
+										<span class="gender-ico icon "><?= embed_icon('navigation/arrow-simple-down') ?></span>
 										<span class="">Donna</span>
 									</p>
 								</label>
@@ -302,14 +258,14 @@ class Shop {
 
 									if ($this->id) {
 										$res = DBOld::select("
-											ID FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT typeID FROM items WHERE userID = ? AND status = 1) ORDER BY ID ASC", [$this->id]);
+											id FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
 									} else {
 										$res = DBOld::select("
-											ID FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT typeID FROM items WHERE status = 1) ORDER BY ID ASC");
+											id FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {
-										$type = new Type($row['ID']);
+										$type = new Type($row['id']);
 									?>
 
 										<label>
@@ -326,7 +282,7 @@ class Shop {
 
 								<label class="gender-title-box" for="gender-cbx-u">
 									<p class="gender-title">
-										<span class="gender-ico icon "><?= embed_icon('navigation/arrow1-down') ?></span>
+										<span class="gender-ico icon "><?= embed_icon('navigation/arrow-simple-down') ?></span>
 										<span class="">Accessori</span>
 									</p>
 								</label>
@@ -336,15 +292,15 @@ class Shop {
 
 									if ($this->id) {
 										$res = DBOld::select("
-											ID FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT typeID FROM items WHERE userID = ? AND status = 1) ORDER BY name_it ASC", [$this->id]);
+											id FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$this->id]);
 									} else {
 										$res = DBOld::select("
-											ID FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT typeID FROM items WHERE status = 1) ORDER BY name_it ASC");
+											id FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY name ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {
 
-										$type = new Type($row['ID']) ?>
+										$type = new Type($row['id']) ?>
 
 										<label>
 											<input type="checkbox" class="type-cbx hidden" name="type" value="<?= $type->slug ?>" <?php if ($this->type == $type->slug) echo 'checked' ?>>

@@ -29,7 +29,7 @@
 				<p class="nav-link pad-l-1 <?= $profileLocation == 'orders' ? 'active' : '' ?>">Lista ordini</p>
 			</a>
 
-			<?php if (is_seller()) { ?>
+			<?php if (App\Helpers\App::isSeller()) { ?>
 
 				<a href="<?= client_url('/manage') ?>">
 					<p class="nav-link pad-l-1 <?= $profileLocation == 'tools' ? 'active' : '' ?>">Il mio negozio</p>

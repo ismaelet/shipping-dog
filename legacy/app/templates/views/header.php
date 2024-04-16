@@ -97,8 +97,8 @@
 							//check seller filter
 							if (isset($h_link['seller'])) {
 
-								if ($h_link['seller'] && !is_seller()) $h_valid = false;
-								else if (!$h_link['seller'] && is_seller()) $h_valid = false;
+								if ($h_link['seller'] && !App\Helpers\App::isSeller()) $h_valid = false;
+								else if (!$h_link['seller'] && App\Helpers\App::isSeller()) $h_valid = false;
 							}
 
 							//check admin filter
@@ -163,7 +163,7 @@
 					<?php } ?>
 
 					<!-- Favorites icon -->
-					<?php if ($header['wishlist'] && DBOld::exists('likes WHERE userID = ?', [auth()->id()])) { ?>
+					<?php if ($header['wishlist'] && DBOld::exists('likes WHERE user_id = ?', [auth()->id()])) { ?>
 
 						<a id="h-wish" class="wish icon-box h-link al-mid h-icon" href="<?= client_url('/wishlist') ?>">
 							<?= embed_icon('love') ?>
@@ -246,8 +246,8 @@
 								//check seller filter
 								if (isset($h_link['seller'])) {
 
-									if ($h_link['seller'] && !is_seller()) $h_valid = false;
-									else if (!$h_link['seller'] && is_seller()) $h_valid = false;
+									if ($h_link['seller'] && !App\Helpers\App::isSeller()) $h_valid = false;
+									else if (!$h_link['seller'] && App\Helpers\App::isSeller()) $h_valid = false;
 								}
 
 								//check admin filter

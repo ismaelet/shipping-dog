@@ -12,14 +12,14 @@ $startFromCart = $validCarts->count() ? $validCarts->orderBy('time', 'asc')->fir
 
 // Get the carts
 if ($validCarts->count()) {
-	$filteredOrders = Order::join('carts', 'orders.cartID', '=', 'carts.ID')
-		->join('addresses', 'addresses.cartID', '=', 'carts.ID')
-		->join('stores', 'stores.userID', '=', 'orders.sellerId')
-		->join('items', 'items.ID', '=', 'orders.itemID')
-		->join('items_types', 'items_types.ID', '=', 'orders.typeID')
+	$filteredOrders = Order::join('carts', 'orders.cart_id', '=', 'carts.id')
+		->join('addresses', 'addresses.cart_id', '=', 'carts.id')
+		->join('stores', 'stores.user_id', '=', 'orders.seller_id')
+		->join('items', 'items.id', '=', 'orders.product_id')
+		->join('items_types', 'items_types.id', '=', 'orders.type_id')
 		->where('carts.status', '>', 0)
 		->where('carts.time', '>=', $startFromTime)
-		->select('carts.ID as cartId', 'carts.time as confirmedTime', 'orders.*', 'stores.name as storeName', 'addresses.aname as customerName', 'items.name as productName', 'items_types.name as productTypeName')
+		->select('carts.id as cart_id', 'carts.time as confirmedTime', 'orders.*', 'stores.name as storeName', 'addresses.full_name as customerName', 'items.name as productName', 'items_types.name as productTypeName')
 		->get();
 
 	// Get the first cart

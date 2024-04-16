@@ -16,7 +16,7 @@ $sort = $_GET['sort'] ?? 'time';
 $sort = !in_array($sort, ['time', 'designs']) ? 'time' : $sort;
 $year = isset($_GET['year']) ? $_GET['year'] : null;
 
-$saleN = DBOld::count('orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status > 0)', [auth()->id()]);
+$saleN = DBOld::count('orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status > 0)', [auth()->id()]);
 
 // send payment request
 if (isset($_POST['request-payment'])) {

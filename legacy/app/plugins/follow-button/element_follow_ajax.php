@@ -7,13 +7,13 @@ require_once(substr(__DIR__, 0, strpos(__DIR__, 'app')) . '/system/setup/setup.p
 $id = $_POST['id'];
 $followed = $_POST['followed'];
 
-DBOld::delete('feed WHERE type=4 AND userID = ? AND srcID = ?', [$id, auth()->id()]);
+DBOld::delete('feed WHERE type=4 AND user_id = ? AND srcID = ?', [$id, auth()->id()]);
 
-if ($followed) DBOld::delete('followers WHERE userID = ? AND followID = ?', [auth()->id(), $id]);
+if ($followed) DBOld::delete('followers WHERE user_id = ? AND follower_id = ?', [auth()->id(), $id]);
 
-else if (!DBOld::exists('followers WHERE userID = ? AND followID = ?', [auth()->id(), $id])) {
+else if (!DBOld::exists('followers WHERE user_id = ? AND follower_id = ?', [auth()->id(), $id])) {
 
-	$follID = DBOld::add('followers (userID, followID) VALUES (?, ?)', [auth()->id(), $id]);
+	$follID = DBOld::add('followers (user_id, follower_id) VALUES (?, ?)', [auth()->id(), $id]);
 
-	DBOld::add('feed (feedID, userID, srcID, type) VALUES (?, ?, ?, ?)', [$follID, $id, auth()->id(), 4]);
+	DBOld::add('feed (feed_id, user_id, srcID, type) VALUES (?, ?, ?, ?)', [$follID, $id, auth()->id(), 4]);
 }

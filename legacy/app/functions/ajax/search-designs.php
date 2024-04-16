@@ -7,11 +7,11 @@ $search = $_GET['search'] ?? '';
 $search = trim($search);
 
 if ($search) {
-	$results = DBOld::select("ID, CONCAT(ID, ' - ', name) AS " . $showField . " FROM " . $table . " WHERE ID = ? OR name LIKE CONCAT('%',?,'%') ORDER BY " . $showField . " ASC LIMIT 10", [$search, $search]);
+	$results = DBOld::select("ID, CONCAT(ID, ' - ', name) AS " . $showField . " FROM " . $table . " WHERE id = ? OR name LIKE CONCAT('%',?,'%') ORDER BY " . $showField . " ASC LIMIT 10", [$search, $search]);
 
 	while ($result = $results->fetch_assoc()) {
 		$response[] = [
-			'value-field' => $result['ID'],
+			'value-field' => $result['id'],
 			'show-field' => $result[$showField],
 		];
 	}

@@ -11,9 +11,9 @@ $done = $_SESSION['form-done'] ?? false;
 unset($_SESSION['form-done']);
 
 //fetch data
-if (!$address = DBOld::row('* FROM addresses WHERE cartID = ? AND security=?', [$id, $security])) redirect_old('/');
+if (!$address = DBOld::row('* FROM addresses WHERE cart_id = ? AND security=?', [$id, $security])) redirect_old('/');
 
-$status = DBOld::find('status FROM carts WHERE ID = ?', [$id]);
+$status = DBOld::find('status FROM carts WHERE id = ?', [$id]);
 
 if (!$status) redirect_old('/cart');
 
@@ -22,7 +22,7 @@ $inputs = [
 	[
 		['type' => 'done', 'done' => 'ok', 'text' => 'Indirizzo modificato correttamente'],
 		['type' => 'lbl', 'text' => 'Nominativo'],
-		['text' => 'Nominativo di spedizione', 'name' => 'aname', 'value' => $address['aname'], 'required' => true],
+		['text' => 'Nominativo di spedizione', 'name' => 'full_name', 'value' => $address['full_name'], 'required' => true],
 	],
 	[
 		['type' => 'lbl', 'text' => 'Indirizzo'],
@@ -51,7 +51,7 @@ $inputs = [
 //submit
 if (isset($_POST['submit'])) {
 
-	form_db_update('addresses', $inputs, 'cartID', $id);
+	form_db_update('addresses', $inputs, 'cart_id', $id);
 
 	$_SESSION['form-done'] = true;
 

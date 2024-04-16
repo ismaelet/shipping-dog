@@ -9,10 +9,10 @@ $inputs = [
 		['type' => 'lbl', 'text' => 'Capo'],
 		[
 			'type' => 'select',
-			'name' => 'typeId',
+			'name' => 'type_id',
 			'text' => 'Tipo',
-			'query' => 'ID, IF (gender=2, CONCAT(name_it," donna"), name_it) AS name FROM items_types ORDER BY ID ASC',
-			'field-name' => 'ID',
+			'query' => 'ID, IF (gender=2, CONCAT(name," donna"), name) AS name FROM items_types ORDER BY id ASC',
+			'field-name' => 'id',
 			'field-show' => 'name',
 		],
 	],
@@ -29,12 +29,12 @@ $inputs = [
 //add
 if (isset($_POST['submit'])) {
 
-	$typeId = $_POST['typeId'];
+	$type_id = $_POST['type_id'];
 
 	$priceDifference = (float) str_replace(',', '.', $_POST['price-difference']);
 
-	DBOld::update('prices_default SET price=price+? WHERE typeId=?', [$priceDifference, $typeId]);
-	DBOld::update('prices_stores SET price=price+? WHERE typeId=?', [$priceDifference, $typeId]);
+	DBOld::update('prices_default SET price=price+? WHERE type_id=?', [$priceDifference, $type_id]);
+	DBOld::update('prices_stores SET price=price+? WHERE type_id=?', [$priceDifference, $type_id]);
 
 	redirect_old();
 }

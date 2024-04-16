@@ -12,16 +12,16 @@ class FeedEntry {
 
 	use DynamicProperties;
 
-	public const INDEX = 'eventId';
+	public const INDEX = 'event_id';
 
-	private $typeId;
-	private $eventId;
+	private $type_id;
+	private $event_id;
 	private $subjectId;
 	private $time;
 
 	function __construct($row) {
-		$this->typeId = $row['type'];
-		$this->eventId = $row['eventId'] ?? null;
+		$this->type_id = $row['type'];
+		$this->event_id = $row['event_id'] ?? null;
 		$this->subjectId = $row['srcID'] ?? null;
 		$this->time = $row['time'] ?? null;
 	}
@@ -43,19 +43,19 @@ class FeedEntry {
 	}
 
 	private function getnews() {
-		return $this->typeId == 1 ? DBOld::find('text_it FROM news WHERE ID = ?', $this->eventId) : null;
+		return $this->type_id == 1 ? DBOld::find('text FROM news WHERE id = ?', $this->event_id) : null;
 	}
 
 	private function getprofile() {
-		return in_array($this->typeId, [3, 4]) ? new User($this->subjectId) : null;
+		return in_array($this->type_id, [3, 4]) ? new User($this->subjectId) : null;
 	}
 
 	private function getorder() {
-		return $this->typeId == 2 ? new Order($this->eventId) : null;
+		return $this->type_id == 2 ? new Order($this->event_id) : null;
 	}
 
 	private function getseller() {
-		return $this->typeId == 5 ? $this->design->seller : null;
+		return $this->type_id == 5 ? $this->design->seller : null;
 	}
 
 	private function getdesign() {
@@ -63,7 +63,7 @@ class FeedEntry {
 	}
 
 	private function calcText() {
-		switch ($this->typeId) {
+		switch ($this->type_id) {
 			case 1:
 				$text = '<strong><span class="txt-c1">Shipping Dog</span></strong>: ' . $this->news;
 				break;
@@ -94,7 +94,7 @@ class FeedEntry {
 	}
 
 	private function calcImg() {
-		switch ($this->typeId) {
+		switch ($this->type_id) {
 			case 1:
 				return public_asset('users/icons/0.jpg');
 			case 2:
@@ -109,13 +109,13 @@ class FeedEntry {
 	}
 
 	private function calcDesign() {
-		switch ($this->typeId) {
+		switch ($this->type_id) {
 			case 2:
 				$design = $this->order->product->design;
 				break;
 			case 3:
 			case 5:
-				$design = new Design($this->eventId);
+				$design = new Design($this->event_id);
 				break;
 			default:
 				$design = null;

@@ -7,85 +7,84 @@ function delete_user($id) {
 
 function delete_shop($id) {
 
-	$res = DBOld::select('ID FROM designs WHERE userID = ?', [$id]);
+	$res = DBOld::select('id FROM designs WHERE user_id = ?', [$id]);
 
-	while ($row = $res->fetch_assoc()) delete_design($row['ID']);
+	while ($row = $res->fetch_assoc()) delete_design($row['id']);
 
 	//delete extras
-	$res = DBOld::select('ID FROM extras_folder WHERE storID = ?', [$id]);
+	$res = DBOld::select('id FROM extras_folder WHERE seller_id = ?', [$id]);
 
-	while ($row = $res->fetch_assoc()) DBOld::delete('extras WHERE extFID = ?', [$row['ID']]);
+	while ($row = $res->fetch_assoc()) DBOld::delete('extras WHERE logo_group_id = ?', [$row['id']]);
 
-	DBOld::delete('extras_folder WHERE storID = ?', [$id]);
+	DBOld::delete('extras_folder WHERE seller_id = ?', [$id]);
 
 	//remove followers
-	DBOld::delete('followers WHERE followID = ?', [$id]);
+	DBOld::delete('followers WHERE follower_id = ?', [$id]);
 
 	//remove prices
-	DBOld::delete('prices_stores WHERE storeID = ?', [$id]);
+	DBOld::delete('prices_stores WHERE seller_id = ?', [$id]);
 
 	//delete store
-	DBOld::delete('stores WHERE userID = ?', [$id]);
+	DBOld::delete('stores WHERE user_id = ?', [$id]);
 }
 
 function delete_design($id, $destroy = false) {
 
-	$res = DBOld::select('ID FROM items WHERE desID = ?', [$id]);
+	$res = DBOld::select('id FROM items WHERE design_id = ?', [$id]);
 
-	while ($row = $res->fetch_assoc()) delete_item($row['ID']);
+	while ($row = $res->fetch_assoc()) delete_item($row['id']);
 
 	//delete design
-	DBOld::update('designs SET status=0 WHERE ID = ?', [$id]);
+	DBOld::update('designs SET status=0 WHERE id = ?', [$id]);
 
 	//delete likes
-	/*DBOld::delete('likes WHERE desID = ?', [$row['ID']]);
+	/*DBOld::delete('likes WHERE design_id = ?', [$row['id']]);
 
 	//delete home pics
-	DBOld::delete('home_pics WHERE desID = ?', [$row['ID']]);
+	DBOld::delete('home_pics WHERE design_id = ?', [$row['id']]);
 
 	//delete tags
-	DBOld::delete('tags WHERE desID = ?', [$row['ID']]*/
+	DBOld::delete('tags WHERE design_id = ?', [$row['id']]*/
 
-	/*unlink(SERVER_ROOT.'/uploads/designs/'.$desID.'.png');
-	unlink(SERVER_ROOT.'/uploads/designs/'.$desID.'_m.png');
-	//unlink(SERVER_ROOT.'/uploads/designs_originals/'.$desID.'.png');*/
+	/*unlink(SERVER_ROOT.'/uploads/designs/'.$design_id.'.png');
+	unlink(SERVER_ROOT.'/uploads/designs/'.$design_id.'_m.png');
+	//unlink(SERVER_ROOT.'/uploads/designs_originals/'.$design_id.'.png');*/
 }
 
 function delete_item($id, $permanent = false) {
 
 	if ($permanent) {
 
-		DBOld::delete('items WHERE ID = ?', [$id]);
-		DBOld::delete('items_prices WHERE itemID = ?'[$id]);
-	} else DBOld::update('items SET status=0 WHERE ID = ?', [$id]);
+		DBOld::delete('items WHERE id = ?', [$id]);
+		DBOld::delete('items_prices WHERE product_id = ?'[$id]);
+	} else DBOld::update('items SET status=0 WHERE id = ?', [$id]);
 }
 
 function delete_type($id, $permanent = false) {
 
 	if ($permanent) {
 
-		DBOld::delete('types WHERE ID = ?', [$id]);
-		DBOld::delete('items WHERE typeID = ?', [$id]);
-		DBOld::delete('prices_default WHERE typeID = ?', [$id]);
+		DBOld::delete('types WHERE id = ?', [$id]);
+		DBOld::delete('items WHERE type_id = ?', [$id]);
+		DBOld::delete('prices_default WHERE type_id = ?', [$id]);
 	} else {
 
-		DBOld::update('types SET status=0 WHERE ID = ?', [$id]);
-		DBOld::update('items SET status=0 WHERE typeID = ?', [$id]);
+		DBOld::update('types SET status=0 WHERE id = ?', [$id]);
+		DBOld::update('items SET status=0 WHERE type_id = ?', [$id]);
 	}
 }
 
 function delete_temp($id) {
 
-	DBOld::delete('temp_users WHERE ID = ?', $id);
+	DBOld::delete('temp_users WHERE id = ?', $id);
 
-	$cartID = DBOld::find('ID FROM carts WHERE buyer=? AND status=0', [$id]);
+	$cart_id = DBOld::find('id FROM carts WHERE user_id=? AND status=0', [$id]);
 
-	if ($cartID) delete_cart_setup_old($cartID);
+	if ($cart_id) delete_cart_setup_old($cart_id);
 }
 
 function delete_cart_setup_old($id) {
 
-	DBOld::delete('carts WHERE ID = ?', $id);
-	DBOld::delete('carts_data WHERE cartID = ?', $id);
-	DBOld::delete('addresses WHERE cartID = ?', $id);
+	DBOld::delete('carts WHERE id = ?', $id);
+	DBOld::delete('addresses WHERE cart_id = ?', $id);
 }

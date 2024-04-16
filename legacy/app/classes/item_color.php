@@ -12,10 +12,10 @@ class Color {
 
 		if ($id) {
 
-			$row = DBOld::row('* FROM items_colors WHERE ID = ?', [$id]);
+			$row = DBOld::row('* FROM items_colors WHERE id = ?', [$id]);
 
 			$this->id = $id;
-			$this->name = $row['name_it'];
+			$this->name = $row['name'];
 			$this->slug = $row['tag'];
 			$this->hex = $row['color'];
 		}

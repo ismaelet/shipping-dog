@@ -9,8 +9,8 @@
 * Query configuration
 */
 $queryConfig['table'] = 'stores_payments';
-$queryConfig['index-field'] = 'ID';
-$queryConfig['title-field'] = 'ID';
+$queryConfig['index-field'] = 'id';
+$queryConfig['title-field'] = 'id';
 
 /*
 * Form fields
@@ -21,7 +21,7 @@ $inputs = [
 		[
 			'type' => 'number',
 			'text' => 'ID Negozio',
-			'name' => 'storeID',
+			'name' => 'seller_id',
 			'required' => true,
 		],
 	],
@@ -44,8 +44,8 @@ $inputs = [
 function _expand_add($tbl, $inputs) {
 	$value = str_replace(',', '.', $_POST['value']);
 
-	if (isset($_POST['other'])) DBOld::update('stores SET flat=flat+? WHERE userID = ?', [$value, $_POST['storeID']]);
-	else DBOld::update('stores SET payed=payed+?, request=0 WHERE userID = ?', [$value, $_POST['storeID']]);
+	if (isset($_POST['other'])) DBOld::update('stores SET flat=flat+? WHERE user_id = ?', [$value, $_POST['seller_id']]);
+	else DBOld::update('stores SET payed=payed+?, request=0 WHERE user_id = ?', [$value, $_POST['seller_id']]);
 
 	form_db_add($tbl, $inputs);
 

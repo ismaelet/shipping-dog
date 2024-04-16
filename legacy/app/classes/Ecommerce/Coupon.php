@@ -26,9 +26,9 @@ class Coupon {
 	public $permanent;
 	public $freeShipping;
 	public $removesGain;
-	public $sellerId;
-	public $designId;
-	public $typeId;
+	public $seller_id;
+	public $design_id;
+	public $type_id;
 	public $colorId;
 	public $ourPercentageDiscount;
 	public $ourPercentageDiscountTwo;
@@ -54,10 +54,10 @@ class Coupon {
 			$this->permanent = (bool) $row['permanent'];
 			$this->freeShipping = (bool) $row['shipping'];
 			$this->removesGain = (bool) $row['zero'];
-			$this->sellerId = $row['storID'];
-			$this->designId = $row['desID'];
-			$this->typeId = $row['typeID'];
-			$this->colorId = $row['colorID'];
+			$this->seller_id = $row['seller_id'];
+			$this->design_id = $row['design_id'];
+			$this->type_id = $row['type_id'];
+			$this->colorId = $row['color_id'];
 			$this->ourPercentageDiscount = $row['mod_us'];
 			$this->ourPercentageDiscountTwo = $row['mod_us2'];
 			$this->ourPercentageDiscountMultiple = $row['mod_us3'];
@@ -81,7 +81,7 @@ class Coupon {
 	 * Get methods
 	 */
 	private function getUsed() {
-		return $this->data['used'] = DBOld::exists('codes_used WHERE codeID = ? AND userID = ?', [$this->id, auth()->id()]);
+		return $this->data['used'] = DBOld::exists('codes_used WHERE coupon_id = ? AND user_id = ?', [$this->id, auth()->id()]);
 	}
 
 	private function getIsValid() {
@@ -119,7 +119,7 @@ class Coupon {
 	 */
 	public static function generateFromCode(string $code) {
 		$code = strtoupper(trim($code));
-		$couponId = DBOld::find('ID FROM codes WHERE code=?', [$code]);
+		$couponId = DBOld::find('id FROM codes WHERE code=?', [$code]);
 
 		return new self($couponId);
 	}

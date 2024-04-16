@@ -12,7 +12,7 @@ use function Ecommerce\format_price;
 
 	<?php
 	$row_dark = true;
-	$designs = DBOld::select('SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * quantity) as totGain, COUNT(*) as count, designId FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) AND designId IN (SELECT ID FROM designs WHERE status = 1) GROUP BY designId ORDER BY totGain DESC', [auth()->id()]);
+	$designs = DBOld::select('SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * quantity) as totGain, COUNT(*) as count, design_id FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) AND design_id IN (SELECT id FROM designs WHERE status = 1) GROUP BY design_id ORDER BY totGain DESC', [auth()->id()]);
 	?>
 
 	<div class="list-tbl-head">
@@ -25,10 +25,10 @@ use function Ecommerce\format_price;
 
 	<?php while ($designData = $designs->fetch_assoc()) {
 
-		$design = new Design($designData['designId']);
+		$design = new Design($designData['design_id']);
 
 		//get last sale
-		$lastOrderId = DBOld::find('ID FROM orders WHERE designId=? AND cartID IN (SELECT ID FROM carts WHERE status>0) ORDER BY time DESC', [$design->id]);
+		$lastOrderId = DBOld::find('id FROM orders WHERE design_id=? AND cart_id IN (SELECT id FROM carts WHERE status>0) ORDER BY time DESC', [$design->id]);
 
 		$lastOrder = new Order($lastOrderId);
 	?>

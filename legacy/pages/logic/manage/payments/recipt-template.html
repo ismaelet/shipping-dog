@@ -1,72 +1,60 @@
 <html>
+	<head>
+		<meta charset="UTF-8" />
+		<style>
+			@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 
-<head>
-	<meta charset='UTF-8'>
-	<style>
-		@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+			h1 {
+				font-family: 'Open Sans', sans-serif;
+				font-weight: 700;
+			}
 
-		h1 {
-			font-family: 'Open Sans', sans-serif;
-			font-weight: 700;
-		}
+			p {
+				font-family: 'Open Sans', sans-serif;
+			}
 
-		p {
-			font-family: 'Open Sans', sans-serif;
-		}
+			html {
+				margin: 40px 70px;
+			}
+		</style>
+	</head>
 
-		html {
-			margin: 40px 70px;
-		}
-	</style>
-</head>
+	<body>
+		<div>
+			<div style="position: relative">
+				<h1 style="text-align: center; font-size: 30px; position: relative">RICEVUTA</h1>
+			</div>
 
-<body>
-	<div>
+			<p style="font-size: 0.9rem; text-align: justify; margin: 60px 0 0 0; line-height: 1.7">
+				Il sottoscritto {{first_name}} {{last_name}} nato a {{birthplace}} ({{birthprovince}}) il {{birthdate}} residente in {{address}}, {{zip}} {{city}} ({{province}}) avente codice fiscale
+				{{cf}} e numero di carta di identità {{nationalId}}<br /><br />
+				<span style="display: block; text-align: center">dichiara</span><br />
+				di aver ricevuto dalla Società "SHIPPING DOG S.N.C. DI TRENTINI ANDREA E BOLOGNANI MATTIA" con sede in Cavalese (TN) Piazza Scopoli, 9 con codice fiscale e P.IVA 02397230224, l'importo
+				di € {{net}} (diconsi euro {{netWord}}/{{netCents}}) per prestazioni occasionali di “preparazione grafica e Design” sul sito www.shippingdog.com.
+			</p>
 
-		<div style='position: relative;'>
-			<h1 style='text-align: center; font-size: 30px; position: relative;'>RICEVUTA</h1>
+			<p style="width: 60%; font-size: 0.9rem; margin: 30px 0 0 0">
+				<span style="display: inline-block; width: 77%">Importo lordo spettante</span>€<span style="display: inline-block; width: 20%; text-align: right">{{gross}}</span>
+			</p>
+			<p style="width: 60%; font-size: 0.9rem; margin: 5px 0 0 0; border-bottom: 1px solid #aaa">
+				<span style="display: inline-block; width: 77%">Ritenuta d'acconto 20%</span>€<span style="display: inline-block; width: 20%; text-align: right">{{tax}}</span>
+			</p>
+			<h1 style="width: 60%; font-size: 0.9rem; margin: 5px 0 0 0">
+				<span style="display: inline-block; width: 77%">NETTO A PAGARE</span>€<span style="display: inline-block; width: 20%; text-align: right">{{net}}</span>
+			</h1>
+
+			<p style="font-size: 0.9rem; text-align: justify; margin: 60px 0 0 0; line-height: 1.7">
+				Il sottoscritto {{first_name}} {{last_name}} dichiara sotto la propria esclusiva responsabilità di essere soggetto escluso da IVA, non esercitando per professione abituale alcuna
+				attività di lavoro autonomo, così come previsto dall'articolo 5 del D.P.R. n. 633/72.<br /><br />
+
+				<span style="display: none; word-spacing: 1.7em">data: / /</span>
+			</p>
+
+			<div style="overflow: auto">
+				<p style="display: block; width: 33%; font-size: 0.9rem; text-align: center; margin: 20px 0 0 0; line-height: 2.2; float: right">In fede<br />_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</p>
+			</div>
+
+			<p style="display: block; width: 17%; text-align: center; margin: 40px 0 0 0; line-height: 1.7">{{mark}}</p>
 		</div>
-
-		<p style='font-size: .9rem; text-align: justify; margin: 60px 0 0 0; line-height: 1.7;'>
-			Il sottoscritto {{firstname}} {{lastname}} nato a {{birthplace}} ({{birthprovince}}) il {{birthdate}}
-			residente in {{address}}, {{zip}} {{city}} ({{province}}) avente codice fiscale {{cf}} e numero di carta di
-			identità {{nationalId}}<br><br>
-			<span style='display: block; text-align: center;'>dichiara</span><br>
-			di aver ricevuto dalla Società "SHIPPING DOG S.N.C. DI TRENTINI ANDREA E BOLOGNANI MATTIA" con sede in
-			Cavalese (TN) Piazza Scopoli, 9 con codice fiscale e P.IVA 02397230224, l'importo di € {{net}} (diconsi euro
-			{{netWord}}/{{netCents}}) per prestazioni occasionali di “preparazione grafica e Design” sul sito
-			www.shippingdog.com.
-		</p>
-
-		<p style='width: 60%; font-size: .9rem; margin: 30px 0 0 0;'>
-			<span style='display: inline-block; width: 77%;'>Importo lordo spettante</span>€<span
-				style='display: inline-block; width: 20%; text-align: right;'>{{gross}}</span>
-		</p>
-		<p style='width: 60%; font-size: .9rem; margin: 5px 0 0 0; border-bottom: 1px solid #AAA;'>
-			<span style='display: inline-block; width: 77%;'>Ritenuta d'acconto 20%</span>€<span
-				style='display: inline-block; width: 20%; text-align: right;'>{{tax}}</span>
-		</p>
-		<h1 style='width: 60%; font-size: .9rem; margin: 5px 0 0 0;'>
-			<span style='display: inline-block; width: 77%;'>NETTO A PAGARE</span>€<span
-				style='display: inline-block; width: 20%; text-align: right;'>{{net}}</span>
-		</h1>
-
-		<p style='font-size: .9rem; text-align: justify; margin: 60px 0 0 0; line-height: 1.7;'>
-			Il sottoscritto {{firstname}} {{lastname}} dichiara sotto la propria esclusiva responsabilità di essere
-			soggetto escluso da IVA, non esercitando per professione abituale alcuna attività di lavoro autonomo, così
-			come previsto dall'articolo 5 del D.P.R. n. 633/72.<br><br>
-
-			<span style='display: none; word-spacing: 1.7em;'>data: / /</span>
-		</p>
-
-		<div style='overflow: auto;'>
-			<p
-				style='display: block; width: 33%; font-size: .9rem; text-align: center; margin: 20px 0 0 0; line-height: 2.2; float: right;'>
-				In fede<br>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</p>
-		</div>
-
-		<p style='display: block; width: 17%;  text-align: center; margin: 40px 0 0 0; line-height: 1.7'>{{mark}}</p>
-	</div>
-</body>
-
-</HTML>
+	</body>
+</html>

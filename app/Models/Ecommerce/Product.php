@@ -17,29 +17,28 @@ use Illuminate\Support\Str;
 
 class Product extends Model {
 
-	protected $primaryKey = 'ID';
 	protected $table = 'items';
-	protected $fillable = ['name', 'desID', 'userID', 'typeID', 'colorID', 'colors', 'status', 'positions'];
+	protected $fillable = ['name', 'design_id', 'user_id', 'type_id', 'color_id', 'colors', 'status', 'positions'];
 
 	/**
 	 * Get the product's seller
 	 */
 	public function seller(): BelongsTo {
-		return $this->belongsTo(Seller::class, 'userID', 'userID');
+		return $this->belongsTo(Seller::class, 'user_id', 'user_id');
 	}
 
 	/**
 	 * Get the product's design
 	 */
 	public function design(): BelongsTo {
-		return $this->belongsTo(Design::class, 'desID', 'ID');
+		return $this->belongsTo(Design::class);
 	}
 
 	/**
 	 * Get the product's type
 	 */
-	public function type(): HasOne {
-		return $this->hasOne(ProductType::class, 'ID', 'typeID');
+	public function type(): BelongsTo {
+		return $this->belongsTo(ProductType::class);
 	}
 
 	/**
@@ -57,15 +56,15 @@ class Product extends Model {
 	}
 
 	public function specific_price(): HasOne {
-		return $this->hasOne(ProductPrice::class, 'itemID', 'ID');
+		return $this->hasOne(ProductPrice::class);
 	}
 
 	public function seller_price(): HasOne {
-		return $this->hasOne(SellerPrice::class, 'storeID', 'userID')->where('typeID', $this->type->ID);
+		return $this->hasOne(SellerPrice::class, 'seller_id', 'user_id')->where('type_id', $this->type->id);
 	}
 
 	public function base_price(): HasOne {
-		return $this->hasOne(BasePrice::class, 'typeID', 'typeID');
+		return $this->hasOne(BasePrice::class, 'type_id', 'type_id');
 	}
 
 	public function basePrice() {
@@ -99,7 +98,7 @@ class Product extends Model {
 	 * Get the product's description
 	 */
 	public function descriptionModel(): HasOne {
-		return $this->hasOne(ProductDescription::class, 'itemID', 'ID');
+		return $this->hasOne(ProductDescription::class, 'product_id', 'id');
 	}
 
 	public function description(): string|false {
@@ -113,15 +112,15 @@ class Product extends Model {
 	/**
 	 * Get the default color
 	 */
-	public function default_color(): HasOne {
-		return $this->hasOne(ProductColor::class, 'ID', 'colorID');
+	public function default_color(): BelongsTo {
+		return $this->belongsTo(ProductColor::class, 'color_id');
 	}
 
 	/**
 	 * Get the product's preview
 	 */
-	public function preview(?int $imageSize, ?int $colorId, ?int $positionId): PreviewHelper {
-		return new PreviewHelper($this, $imageSize, $colorId, $positionId);
+	public function preview(?int $imageSize, ?int $colorId, ?int $position_id): PreviewHelper {
+		return new PreviewHelper($this, $imageSize, $colorId, $position_id);
 	}
 
 	/**
@@ -139,24 +138,24 @@ class Product extends Model {
 	 * Get the product's slug
 	 */
 	public function slug(): string {
-		return $this->ID . '-' . Str::slug($this->name);
+		return $this->id . '-' . Str::slug($this->name);
 	}
 
 	/**
 	 * Get the product's url
 	 */
 	public function url(): string {
-		return public_client_url('/shop/item?id=' . $this->ID);
+		return public_client_url('/shop/item?id=' . $this->id);
 	}
 
 	/**
 	 * Get the base product, without any design
 	 */
 	public function blankProduct(): ?self {
-		return self::where('ID', '!=', $this->ID)
-			->where('typeID', $this->typeID)
+		return self::where('id', '!=', $this->id)
+			->where('type_id', $this->type_id)
 			->where('status', 1)
-			->where('userID', 1)
+			->where('user_id', 1)
 			->oldest()
 			->first();
 	}
@@ -164,8 +163,8 @@ class Product extends Model {
 	/**
 	 * Get the product's image
 	 */
-	public function image(?int $imageSize = null, ?int $colorId = null, ?int $positionId = null): string {
-		return $this->preview($imageSize, $colorId, $positionId)->image();
+	public function image(?int $imageSize = null, ?int $colorId = null, ?int $position_id = null): string {
+		return $this->preview($imageSize, $colorId, $position_id)->image();
 	}
 
 	/**
@@ -179,7 +178,7 @@ class Product extends Model {
 	 * Check if the product is owned by the logged user
 	 */
 	public function userIsOwner(): bool {
-		return $this->userID == auth()->id();
+		return $this->user_id == auth()->id();
 	}
 
 	/**

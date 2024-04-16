@@ -1,0 +1,98 @@
+[V] Home
+	[V] Header
+		[V] Color scheme switcher
+	[V] Footer
+
+[V] Search
+
+[X] Shop
+	[V] Search filter
+	[V] Sort filter
+	[V] Gender filter
+	[V] Accessory filter
+	[V] Tag filter
+	[V] Official shop
+	[X] Individual shop
+		[X] Collection
+
+[X] Product Page
+	[X] Logos
+	[X] Change color
+	[X] Change position
+	[X] Generate new image
+	[X] Follow button
+	[X] Like button
+	[V] Related products
+
+[V] Auth pages
+	[V] Login
+	[V]	Logout
+	[V] Register
+
+[X] Seller dashboard
+	[V] Settings
+	[V] Porfolio
+		[V] List
+		[V] Add
+		[V] Edit
+	[X] Sales list
+		[X] Payment request
+			[?] PDF generation
+	[V] Edit prices
+	[V] Customer photos
+		[V] Index
+		[V] Create
+
+[X]	Profile
+	[V] Feed
+	[V] Personal data
+	[X] Order list
+		[X] Order page
+	[V] Wishlist
+
+[X] Cart
+	[X] Add order to cart as guest
+	[X] Add order to cart as user
+	[X] Change shipping method
+	[X] Add coupon
+	[X] Pay with credit
+	[X] Paypal redirect
+
+[X] Order confirmation
+	[X] Order confirmation
+		[?] Normal payment
+		[X] Free product
+	[?] Confirmation email
+
+[X] Support
+	[X] Order status
+	[X] Change size
+		[X] Paypal redirect
+		[?] Change confirmation
+
+[X] Infos
+	[V] Contacts
+	[V] FAQ
+	[X] Sale terms
+	[X] Contract
+	[X] Privacy Policy
+
+[X] Admin dashboard
+	[V] Dashboard
+	[X] Orders
+		[X] Index
+		[X] Show
+		[X] Update
+		[X] Order log
+		[X] Product log
+	[X] Users
+		[X] Index
+		[X] Edit
+	[X] Shops
+		[X] Payments
+			[X] Index
+			[X]	Create
+	[X] Coupons
+		[X] Index
+		[X]	Create
+	[X] Labels

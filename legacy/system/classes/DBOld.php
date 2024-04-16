@@ -27,7 +27,7 @@ class DBOld {
 		'select 1 from users where id = ? and level = 1 limit 1',
 		'select id from items_colors where tag = ? limit 1',
 		'select id from addresses where cartid = ? limit 1',
-		'select id from carts where buyer = ? AND status = 0 limit 1',
+		'select id from carts where user_id = ? AND status = 0 limit 1',
 		'select value from config where name = ? limit 1',
 		'select value from variables where name = ? limit 1',
 		'select count(*) as num from orders where cartid = ? limit 1',

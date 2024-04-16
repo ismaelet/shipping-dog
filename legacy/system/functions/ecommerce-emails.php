@@ -2,5 +2,5 @@
 
 use Ecommerce\Cart;
 
-function ecommerce_send_status_email($cartId, $statusCode) {
+function ecommerce_send_status_email($cart_id, $statusCode) {
 }

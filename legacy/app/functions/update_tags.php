@@ -19,6 +19,6 @@ function update_tags($slugs, $id, $slugs_old = false) {
 
 	$slugs = implode(',', $slugs);
 
-	if (DBOld::exists('designs_tags WHERE desID = ?', [$id])) DBOld::update('designs_tags SET tags=? WHERE desID = ?', [$slugs, $id]);
-	else DBOld::add('designs_tags (desID, tags) VALUES (?, ?)', [$id, $slugs]);
+	if (DBOld::exists('designs_tags WHERE design_id = ?', [$id])) DBOld::update('designs_tags SET tags=? WHERE design_id = ?', [$slugs, $id]);
+	else DBOld::add('designs_tags (design_id, tags) VALUES (?, ?)', [$id, $slugs]);
 }

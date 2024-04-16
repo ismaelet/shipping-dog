@@ -3,7 +3,7 @@
 $desc = null;
 $dett = null;
 
-$res = DBOld::select('* FROM items_info WHERE itemID=' . $oldProduct->id);
+$res = DBOld::select('* FROM items_info WHERE product_id=' . $oldProduct->id);
 
 if ($row = $res->fetch_assoc()) {
 	$desc = $row['description'];

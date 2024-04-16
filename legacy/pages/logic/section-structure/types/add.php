@@ -21,7 +21,7 @@ $productType = $id ? ProductType::find($id) : null;
  * Query configuration
  */
 $queryConfig['table'] = 'items_types';
-$queryConfig['index-field'] = 'ID';
+$queryConfig['index-field'] = 'id';
 $queryConfig['title-field'] = 'name';
 
 /**
@@ -38,11 +38,11 @@ $inputs = [
 	],
 	[
 		['type' => 'lbl', 'text' => 'Nome mostrato ai clienti'],
-		['name' => 'name_it', 'text' => 'Nome mostrato ai clienti'],
+		['name' => 'name', 'text' => 'Nome mostrato ai clienti'],
 	],
 	[
 		['type' => 'lbl', 'text' => 'Nome plurale mostrato ai clienti'],
-		['name' => 'names_it', 'text' => 'Nome plurale mostrato ai clienti'],
+		['name' => 'names', 'text' => 'Nome plurale mostrato ai clienti'],
 	],
 	[
 		['type' => 'lbl', 'text' => 'Descrizione'],
@@ -74,9 +74,9 @@ $inputs = [
 			'type' => 'select',
 			'name' => 'gender',
 			'text' => 'Modello',
-			'query' => 'ID, name_it FROM items_genders',
-			'field-name' => 'ID',
-			'field-show' => 'name_it',
+			'query' => 'ID, name FROM items_genders',
+			'field-name' => 'id',
+			'field-show' => 'name',
 			'empty' => true,
 		],
 	],
@@ -86,8 +86,8 @@ $inputs = [
 			'type' => 'select',
 			'name' => 'sibling',
 			'text' => 'Modello',
-			'query' => 'ID, name FROM items_types ORDER BY ID ASC',
-			'field-name' => 'ID',
+			'query' => 'ID, name FROM items_types ORDER BY id ASC',
+			'field-name' => 'id',
 			'field-show' => 'name',
 			'empty' => true,
 		],
@@ -100,7 +100,7 @@ $inputs = [
 // Colors
 $array = [['type' => 'lbl', 'text' => 'Colori']];
 $typeColors = $productType ? $productType->colorCollection()->pluck('tag')->toArray() : [];
-$colors = ProductColor::all()->sortBy('ID')->sortBy('reorder');
+$colors = ProductColor::all()->sortBy('id')->sortBy('reorder');
 
 foreach ($colors as $color) {
 	$colorInput = [
@@ -108,7 +108,7 @@ foreach ($colors as $color) {
 		'name' => 'colors[]',
 		'value' => $color->tag,
 		'ignore' => true,
-		'text' => '<span class="color-box" style="--_color: #' . $color->color . ';"></span>' . $color->name_it,
+		'text' => '<span class="color-box" style="--_color: #' . $color->color . ';"></span>' . $color->name,
 		'size' => 1
 	];
 
@@ -124,7 +124,7 @@ $inputs[] = $array;
 // Sizes
 $array = [['type' => 'lbl', 'text' => 'Taglie']];
 $typeSizes = $productType ? $productType->sizeCollection()->pluck('tag')->toArray() : [];
-$sizes = ProductSize::all()->sortBy('ID');
+$sizes = ProductSize::all()->sortBy('id');
 
 foreach ($sizes as $size) {
 	$sizeInput = [
@@ -147,20 +147,20 @@ $inputs[] = $array;
 
 // Positions
 $array = [['type' => 'lbl', 'text' => 'Posizioni di stampa']];
-$typePositions = $productType ? $productType->positionCollection()->pluck('ID')->toArray() : [];
-$positions = ProductPosition::all()->sortBy('ID');
+$typePositions = $productType ? $productType->positionCollection()->pluck('id')->toArray() : [];
+$positions = ProductPosition::all()->sortBy('id');
 
 foreach ($positions as $position) {
 	$size = [
 		'type' => 'cbx',
 		'name' => 'positions[]',
-		'value' => $position->ID,
+		'value' => $position->id,
 		'ignore' => true,
-		'text' => $position->name_it,
+		'text' => $position->name,
 		'size' => 1
 	];
 
-	if ($productType && in_array($position->ID, $typePositions)) {
+	if ($productType && in_array($position->id, $typePositions)) {
 		$size['checked'] = true;
 	}
 
@@ -189,8 +189,8 @@ FormController::setAdd(function () {
 		[
 			'tag' => $_POST['tag'],
 			'name' => $_POST['name'],
-			'name_it' => $_POST['name_it'],
-			'names_it' => $_POST['names_it'],
+			'name' => $_POST['name'],
+			'names' => $_POST['names'],
 			'category' => $_POST['category'],
 			'gender' => $_POST['gender'],
 			'sibling' => $_POST['sibling'],
@@ -203,13 +203,13 @@ FormController::setAdd(function () {
 	);
 
 	// Create the base price
-	BasePrice::create(['typeID' => $type->ID]);
+	BasePrice::create(['type_id' => $type->id]);
 
 	// Create the measures
 	if (isset($_POST['sizes'])) {
 		foreach ($_POST['sizes'] as $size) {
 			ProductTypeMeasure::create([
-				'typeId' => $type->ID,
+				'type_id' => $type->id,
 				'size' => $size
 			]);
 		}
@@ -219,8 +219,8 @@ FormController::setAdd(function () {
 	if (isset($_POST['positions'])) {
 		foreach ($_POST['positions'] as $position) {
 			ProductTypeMockup::create([
-				'typeID' => $type->ID,
-				'positionID' => $position
+				'type_id' => $type->id,
+				'position_id' => $position
 			]);
 		}
 	}
@@ -229,13 +229,13 @@ FormController::setAdd(function () {
 
 	if ($public) {
 		foreach ($designs as $design) {
-			OldProduct::new($design->ID, $type->ID);
+			OldProduct::new($design->id, $type->id);
 		}
 	}
 
 	// Create the infos
 	ProductTypeInfo::create([
-		'product_type_id' => $type->ID,
+		'product_type_id' => $type->id,
 		'description' => $_POST['description'],
 		'details' => $_POST['details'],
 	]);
@@ -256,8 +256,8 @@ FormController::setEdit(function ($id) {
 		[
 			'tag' => $_POST['tag'],
 			'name' => $_POST['name'],
-			'name_it' => $_POST['name_it'],
-			'names_it' => $_POST['names_it'],
+			'name' => $_POST['name'],
+			'names' => $_POST['names'],
 			'category' => $_POST['category'],
 			'gender' => $_POST['gender'],
 			'sibling' => $_POST['sibling'],
@@ -271,30 +271,30 @@ FormController::setEdit(function ($id) {
 
 	// Add the new colors
 	foreach ($colorsToAdd as $color) {
-		DBOld::update((new Product)->getTable() . " SET colors = CONCAT(colors, ',$color') WHERE typeID = ?", [$productType->ID]);
-		DBOld::update((new Product)->getTable() . " SET colors = TRIM(LEADING ',' FROM colors) WHERE typeID = ?", [$productType->ID]);
+		DBOld::update((new Product)->getTable() . " SET colors = CONCAT(colors, ',$color') WHERE type_id = ?", [$productType->id]);
+		DBOld::update((new Product)->getTable() . " SET colors = TRIM(LEADING ',' FROM colors) WHERE type_id = ?", [$productType->id]);
 	}
 
 	// Remove the old colors
 	foreach ($colorsToRemove as $color) {
-		DBOld::update((new Product)->getTable() . " SET colors = CONCAT(',', colors, ',') WHERE typeID = ?", [$productType->ID]);
-		DBOld::update((new Product)->getTable() . " SET colors = REPLACE(colors, ',$color,', ',') WHERE typeID = ?", [$productType->ID]);
-		DBOld::update((new Product)->getTable() . " SET colors = TRIM(BOTH ',' FROM colors) WHERE typeID = ?", [$productType->ID]);
+		DBOld::update((new Product)->getTable() . " SET colors = CONCAT(',', colors, ',') WHERE type_id = ?", [$productType->id]);
+		DBOld::update((new Product)->getTable() . " SET colors = REPLACE(colors, ',$color,', ',') WHERE type_id = ?", [$productType->id]);
+		DBOld::update((new Product)->getTable() . " SET colors = TRIM(BOTH ',' FROM colors) WHERE type_id = ?", [$productType->id]);
 	}
 
 	if (!$oldStatus && $public) {
 		$designs = Design::where('status', 1)->get();
 
 		foreach ($designs as $design) {
-			if (!Product::where('desID', $design->ID)->where('typeID', $productType->ID)->count()) {
-				OldProduct::new($design->ID, $productType->ID);
+			if (!Product::where('design_id', $design->id)->where('type_id', $productType->id)->count()) {
+				OldProduct::new($design->id, $productType->id);
 			}
 		}
 	}
 
 	// Update the infos
 	ProductTypeInfo::updateOrCreate(
-		['product_type_id' => $productType->ID],
+		['product_type_id' => $productType->id],
 		[
 			'description' => $_POST['description'],
 			'details' => $_POST['details']

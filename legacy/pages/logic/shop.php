@@ -1,10 +1,10 @@
 <?php
 
-use Ecommerce\Design;
+use App\Models\Ecommerce\Design;
 use Ecommerce\Shop;
 
 // get slider image data
-$slid_des = new Design(1612);
+$slid_des = Design::find(1612);
 
 // warnings
 $warning = warning_banner();

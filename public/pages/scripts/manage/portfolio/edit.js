@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const changeName = document.querySelector(changeNameSelector)
 	const changeNameConfirmation = document.querySelector(changeNameConfirmationSelector)
 
-	const designId = document.querySelector('#body').dataset.designId
+	const design_id = document.querySelector('#body').dataset.design_id
 
 	var timer
 
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const name = changeName.value
 
 		if (name) {
-			call_class_method('Ecommerce\\Design', 'updateName', name, designId)
+			call_class_method('Ecommerce\\Design', 'updateName', name, design_id)
 
 			changeNameConfirmation.classList.add('active')
 
@@ -79,14 +79,14 @@ document.addEventListener('DOMContentLoaded', function () {
 		item.find('.image').each(async function () {
 			const section = $(this).parents('.section')
 			const clothing = section.find('.clothing')
-			const typeId = clothing.data('type-id')
+			const type_id = clothing.data('type-id')
 			const details = section.find('.details')
-			const positionId = section.data('image-position')
+			const position_id = section.data('image-position')
 
 			let parameters = {
-				typeId: typeId,
+				type_id: type_id,
 				colorId: colorId,
-				positionId: positionId,
+				position_id: position_id,
 			}
 
 			const fileUrls = await AJAX('product-types-images', parameters, 'json', true)
@@ -243,9 +243,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 $(window).on('load', async function () {
 	const box = $('.async-items')
-	const designId = box.data('design-id')
+	const design_id = box.data('design-id')
 
-	let html = await AJAX('edit-item-list', { designId: designId }, 'text', true)
+	let html = await AJAX('edit-item-list', { design_id: design_id }, 'text', true)
 
 	box.html(html)
 	$('#items-load-bgr').fadeOut()

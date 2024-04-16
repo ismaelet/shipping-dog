@@ -36,18 +36,18 @@
 					while ($row = $res_sel->fetch_assoc()) {
 						$i++;
 
-						$imgID = $row['ID'];
+						$imgID = $row['id'];
 
-						$des_name = DBOld::find('name FROM designs WHERE ID = ?', [$row['desID']]);
-						$type_name = DBOld::find('name_it FROM items_types WHERE tag = ?', [$row['type']]) ?>
+						$des_name = DBOld::find('name FROM designs WHERE id = ?', [$row['design_id']]);
+						$type_name = DBOld::find('name FROM items_types WHERE tag = ?', [$row['type']]) ?>
 
 						<form class="list-row <?php if ($i % 2) echo 'dark' ?>" method="POST">
 							<input type="hidden" name="imgID" value="<?= $imgID ?>">
 							<div class="list-cell">
-								<p class="list-inp"><?= $row['fname'] ?></p>
+								<p class="list-inp"><?= $row['first_name'] ?></p>
 							</div>
 							<div class="list-cell">
-								<p class="list-inp"><?= $row['lname'] ?></p>
+								<p class="list-inp"><?= $row['last_name'] ?></p>
 							</div>
 							<div class="list-cell">
 								<p class="list-inp"><?= $des_name ?></p>

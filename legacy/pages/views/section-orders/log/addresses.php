@@ -12,16 +12,16 @@ use Ecommerce\Cart as Cart;
 	<?php if ($res_sel->num_rows) {
 		while ($row = $res_sel->fetch_assoc()) {
 
-			$cart = new Cart($row['ID']);
+			$cart = new Cart($row['id']);
 			$newCart = EcommerceCart::find($cart->id);
-			$buyer = $row['buyer'];
-			$shipID = $row['shipID'];
-			$reg = (strpos($buyer, 'T') !== false) ? false : true;
+			$user_id = $row['user_id'];
+			$shipping_method_id = $row['shipping_method_id'];
+			$reg = (strpos($user_id, 'T') !== false) ? false : true;
 			$res_str = $reg ? ' - TRACKING' : '';
 			$stat = $row['status'];
 			$err = $row['error'];
 
-			// $pay = $row['payID'] == 1 ? 'PayPal' : 'Altro pagamento';
+			// $pay = $row['payment_method_id'] == 1 ? 'PayPal' : 'Altro pagamento';
 
 			if ($cart->addressId) {
 				$address =
@@ -46,9 +46,9 @@ use Ecommerce\Cart as Cart;
 					$addressLine1 = implode(" ", $addressLine1);
 
 					Address::create([
-						'cartID' => $cart->id,
-						'buyer' => $reg ? $cart->buyer : null,
-						'aname' => $paypalData->shipping_info->name,
+						'cart_id' => $cart->id,
+						'user_id' => $reg ? $cart->user_id : null,
+						'full_name' => $paypalData->shipping_info->name,
 						'address' => $addressLine1,
 						'number' => $addressNumber,
 						'city' => $paypalData->shipping_info->address->city,
@@ -61,11 +61,11 @@ use Ecommerce\Cart as Cart;
 			}
 
 			$code_str = empty($row['code']) ? '' : '<br><br>Sconto: ' . $row['code'];
-			$name_str = DBOld::exists('users WHERE ID = ? AND level = 1', [$buyer]) ? ' *' : '';
+			$name_str = DBOld::exists('users WHERE id = ? AND level = 1', [$user_id]) ? ' *' : '';
 
 			$ord_str = '';
 
-			$res_ord = DBOld::select('ID FROM orders WHERE cartID = ? ORDER BY time ASC', [$cart->id]);
+			$res_ord = DBOld::select('id FROM orders WHERE cart_id = ? ORDER BY time ASC', [$cart->id]);
 
 			// if ($newCart->has_errors) {
 			// 	$paypalOrderIds = [];
@@ -83,7 +83,7 @@ use Ecommerce\Cart as Cart;
 				// 	if (!in_array($order->id, $paypalOrderIds)) {
 				// 		$validOrder = false;
 
-				// 		Order::where('ID', $order->id)->delete();
+				// 		Order::where('id', $order->id)->delete();
 				// 	}
 				// }
 
@@ -91,7 +91,7 @@ use Ecommerce\Cart as Cart;
 					if ($order->inventory == 1) $ord_str .= '<span style="color: lightgreen; font-weight: bold;">! IN INVENTARIO ! </span>';
 					if ($order->inventory == 2) $ord_str .= '<span style="color: green; font-weight: bold;">! SIMILE IN INVENTARIO ! </span>';
 
-					$ord_str .= '<a href="' . $order->product->fullUrl . '" target="_blank">' . $order->designId . ' - ' . $order->getDescription(true) . '</a><br>';
+					$ord_str .= '<a href="' . $order->product->fullUrl . '" target="_blank">' . $order->design_id . ' - ' . $order->getDescription(true) . '</a><br>';
 				}
 			}
 

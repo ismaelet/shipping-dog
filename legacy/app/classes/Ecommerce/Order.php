@@ -17,15 +17,15 @@ class Order {
 	use DatabaseObject;
 
 	public const TABLE = 'orders';
-	public const INDEX = 'ID';
-	public const CART_INDEX = 'cartID';
-	public const PRODUCT_INDEX = 'itemID';
-	public const SELLER_INDEX = 'sellerId';
-	public const DESIGN_INDEX = 'designId';
-	public const COLOR_INDEX = 'colorID';
+	public const INDEX = 'id';
+	public const CART_INDEX = 'cart_id';
+	public const PRODUCT_INDEX = 'product_id';
+	public const SELLER_INDEX = 'seller_id';
+	public const DESIGN_INDEX = 'design_id';
+	public const COLOR_INDEX = 'color_id';
 	public const SIZE_INDEX = 'sizeID';
-	public const POSITION_INDEX = 'posID';
-	public const LOGO_INDEX = 'extID';
+	public const POSITION_INDEX = 'position_id';
+	public const LOGO_INDEX = 'logo_id';
 	public const PRODUCT_GAIN_FIELD = 'productGain';
 
 	/*
@@ -79,15 +79,15 @@ class Order {
 	private function getProduct() {
 		return (new Product($this->productId))
 			->setColorId($this->colorId)
-			->setPositionId($this->positionId);
+			->setPositionId($this->position_id);
 	}
 
 	private function getDesign() {
-		return new Design($this->designId);
+		return new Design($this->design_id);
 	}
 
 	private function getSeller() {
-		return new Seller($this->sellerId);
+		return new Seller($this->seller_id);
 	}
 
 	private function getColor() {
@@ -95,15 +95,15 @@ class Order {
 	}
 
 	private function getCart() {
-		return new OldCart($this->cartId);
+		return new OldCart($this->cart_id);
 	}
 
 	private function getSize() {
-		return new Size($this->sizeId);
+		return new Size($this->size_id);
 	}
 
 	private function getLogo() {
-		return new Logo($this->logoId);
+		return new Logo($this->logo_id);
 	}
 
 	private function getTypeId() {
@@ -115,10 +115,10 @@ class Order {
 	}
 
 	private function getDesignId() {
-		return $this->product->designId;
+		return $this->product->design_id;
 	}
 	private function getSellerId() {
-		return $this->product->sellerId;
+		return $this->product->seller_id;
 	}
 
 	private function getPrice() {
@@ -234,7 +234,7 @@ class Order {
 	public function updateDiscount(float $discountAmount) {
 		$discountAmount = round($discountAmount, 2);
 
-		DBOld::update('orders SET price_disc=? WHERE ID = ?', [$discountAmount, $this->id]);
+		DBOld::update('orders SET price_disc=? WHERE id = ?', [$discountAmount, $this->id]);
 
 		$this->data['fixedDiscount'] = $discountAmount;
 		$this->data = [];
@@ -245,7 +245,7 @@ class Order {
 	public function updateGainReduction(float $gainReduction) {
 		$gainReduction = round($gainReduction, 2);
 
-		DBOld::update('orders SET gain_disc=? WHERE ID = ?', [$gainReduction, $this->id]);
+		DBOld::update('orders SET gain_disc=? WHERE id = ?', [$gainReduction, $this->id]);
 
 		$this->data['gainReduction'] = $gainReduction;
 		unset($this->data['totalGain']);
@@ -258,43 +258,43 @@ class Order {
 	*/
 	public static function add($config) {
 		$orderId = null;
-		$productId = $config['itemId'];
+		$productId = $config['product_id'];
 		$colorId = $config['colorId'] ?? 0;
-		$sizeId = $config['sizeId'] ?? 0;
+		$size_id = $config['size_id'] ?? 0;
 		$genderId = $config['genderId'] ?? 0;
-		$logoId = $config['logoId'] ?? 0;
-		$positionId = $config['positionId'] ?? 1;
+		$logo_id = $config['logo_id'] ?? 0;
+		$position_id = $config['position_id'] ?? 1;
 		$quantity = $config['quantity'] ?? 1;
 
 		if ($productId) {
-			$product = (new Product($productId))->setLogoId($logoId);
-			$priceSize = DBOld::find('price FROM items_sizes WHERE ID = ?', [$sizeId]);
+			$product = (new Product($productId))->setLogoId($logo_id);
+			$priceSize = DBOld::find('price FROM items_sizes WHERE id = ?', [$size_id]);
 			$price = $product->fullPrice + $priceSize;
 
 			if (Auth::check()) {
-				$cart = Cart::where('buyer', Auth::id())->where('status', 0)->first();
+				$cart = Cart::where('user_id', Auth::id())->where('status', 0)->first();
 
 				if (!$cart) {
-					$cart = Cart::create(['buyer' => Auth::id()]);
+					$cart = Cart::create(['user_id' => Auth::id()]);
 				}
 			} else {
 				if (isset($_SESSION['cart_id'])) {
 					$cart = Cart::find($_SESSION['cart_id']);
 				} else {
 					$cart = Cart::create();
-					$_SESSION['cart_id'] = $cart->ID;
+					$_SESSION['cart_id'] = $cart->id;
 				}
 			}
 
-			$oldCart = new OldCart($cart->ID);
+			$oldCart = new OldCart($cart->id);
 
 			// add order
 			$orderId = DBOld::add(
-				'orders (buyer, cartID, itemID, sellerId, designId, typeID, colorID, sizeID, gendID, posID, extID, fullProductPrice, price_disc, productGain, quantity)',
-				[Auth::id() ?: null, $cart->ID, $product->id, $product->sellerId, $product->designId, $product->type->id, $colorId, $sizeId, $genderId, $positionId, $logoId, $price, $product->customerDiscount, $product->customerGain, $quantity]
+				'orders (user_id, cart_id, product_id, seller_id, design_id, type_id, color_id, sizeID, gender_id, position_id, logo_id, fullProductPrice, price_disc, productGain, quantity)',
+				[Auth::id() ?: null, $cart->id, $product->id, $product->seller_id, $product->design_id, $product->type->id, $colorId, $size_id, $genderId, $position_id, $logo_id, $price, $product->customerDiscount, $product->customerGain, $quantity]
 			);
 
-			DBOld::update(OldCart::TABLE . ' SET quantity = quantity + ? WHERE ' . OldCart::INDEX . ' = ?', [$quantity, $cart->ID]);
+			DBOld::update(OldCart::TABLE . ' SET quantity = quantity + ? WHERE ' . OldCart::INDEX . ' = ?', [$quantity, $cart->id]);
 
 			if ($oldCart->couponId) {
 				$couponId = $oldCart->couponId;

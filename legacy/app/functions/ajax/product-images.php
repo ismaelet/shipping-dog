@@ -5,11 +5,11 @@ use Ecommerce\Product;
 $response = [];
 $productId = $_GET['id'];
 $colorId = $_GET['colorId'];
-$positionId = $_GET['positionId'];
+$position_id = $_GET['position_id'];
 
 $product = (new Product($productId))
 	->setColorId($colorId)
-	->setPositionId($positionId);
+	->setPositionId($position_id);
 
 $response['1024-fullUrl'] = client_url($product->fullImage);
 

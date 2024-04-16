@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Models\Ecommerce\Cart;
 use App\Models\Ecommerce\Seller;
-use App\Models\Ecommerce\Shop;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,8 +18,6 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable {
 
 	use HasApiTokens, HasFactory, Notifiable;
-
-	protected $primaryKey = 'ID';
 
 	/**
 	 * The attributes that are mass assignable
@@ -53,8 +50,8 @@ class User extends Authenticatable {
 	 */
 	public function fullName(): string {
 		$fullName = [];
-		$fullName[] = $this->firstname;
-		$fullName[] = $this->lastname;
+		$fullName[] = $this->first_name;
+		$fullName[] = $this->last_name;
 
 		return implode(' ', $fullName);
 	}
@@ -77,14 +74,14 @@ class User extends Authenticatable {
 	 * Get the user's active cart
 	 */
 	public function cart(): HasOne {
-		return $this->hasOne(Cart::class, 'buyer', 'ID')->where('status', 0);
+		return $this->hasOne(Cart::class, 'user_id', 'id')->where('status', 0);
 	}
 
 	/**
 	 * Get the user's shop
 	 */
 	public function shop(): HasOne {
-		return $this->hasOne(Seller::class, 'userID', 'ID');
+		return $this->hasOne(Seller::class, 'user_id', 'id');
 	}
 
 	/**

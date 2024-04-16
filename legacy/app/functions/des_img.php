@@ -2,21 +2,21 @@
 
 use Ecommerce\Design;
 
-function des_img_gen(int $designId): void {
+function des_img_gen(int $design_id): void {
 
-	$design = new Design($designId);
+	$design = new Design($design_id);
 
 	//design path
-	$des_path = public_storage_path('designs/' . $design->id . '.png');
+	$des_path = public_storage('designs/' . $design->id . '.png');
 
 	//outputs
-	$dst_image_path = public_storage_path('designs/previews/' . $design->id . '.webp');
-	$dst_image_path_m = public_storage_path('designs/previews/' . $design->id . '_m.webp');
+	$dst_image_path = public_storage('designs/previews/' . $design->id . '.webp');
+	$dst_image_path_m = public_storage('designs/previews/' . $design->id . '_m.webp');
 
 	if (file_exists($des_path)) {
 
 		//make directory if doesn't exist
-		if (!file_exists($dir = public_storage_path('designs/previews'))) {
+		if (!file_exists($dir = public_storage('designs/previews'))) {
 			mkdir($dir, 0777, true);
 		}
 
@@ -29,9 +29,9 @@ function des_img_gen(int $designId): void {
 		//bgr
 		$src_image = imagecreatetruecolor($w, $h);
 
-		if (isset($design->color)) $design->color = DBOld::find('color FROM designs WHERE ID = ?', [$design->id]);
+		if (isset($design->color)) $design->color = DBOld::find('color FROM designs WHERE id = ?', [$design->id]);
 
-		$rgba = parse_rgba(DBOld::find('color FROM designs WHERE ID = ?', [$design->id]));
+		$rgba = parse_rgba(DBOld::find('color FROM designs WHERE id = ?', [$design->id]));
 		$color = imagecolorallocate($src_image, $rgba[0], $rgba[1], $rgba[2]);
 
 		imagefilledrectangle($src_image, 0, 0, $w - 1, $h - 1, $color);

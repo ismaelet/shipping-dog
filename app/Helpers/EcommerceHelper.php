@@ -10,9 +10,9 @@ class EcommerceHelper {
 	/**
 	 * Get the ID of the active cart
 	 */
-	public static function cartId(): ?int {
+	public static function cart_id(): ?int {
 		if (auth()->check() && auth()->user()->cart) {
-			return auth()->user()->cart->ID;
+			return auth()->user()->cart->id;
 		}
 
 		return $_SESSION['cart_id'] ?? null;

@@ -9,11 +9,11 @@ $pageConfig['row-action'] = 'add?id={{id}}';
 * Query configuration
 */
 $queryConfig['table'] = 'items_colors';
-$queryConfig['index'] = 'ID';
+$queryConfig['index'] = 'id';
 $queryConfig['where-search'] = "
 	ID = ? OR
 	tag LIKE CONCAT('%',?,'%') OR
-	name_it LIKE CONCAT('%',?,'%')
+	name LIKE CONCAT('%',?,'%')
 ";
 $queryConfig['order-index'] = 'reorder ASC, ID';
 $queryConfig['order-direction'] = 'asc';
@@ -22,9 +22,9 @@ $queryConfig['order-direction'] = 'asc';
 * Fields
 */
 $fields = [
-	['title' => 'ID', 'name' => 'ID'],
+	['title' => 'id', 'name' => 'id'],
 	['title' => 'Colore', 'name' => 'color'],
-	['title' => 'Nome', 'name' => 'name_it', 'size' => 1],
+	['title' => 'Nome', 'name' => 'name', 'size' => 1],
 	['title' => 'Tag', 'name' => 'tag',],
 	['title' => 'Ordine', 'name' => 'reorder'],
 	['title' => 'Scuro', 'name' => 'dark', 'type' => 'boolean-icon'],

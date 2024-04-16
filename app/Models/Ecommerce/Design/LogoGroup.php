@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LogoGroup extends Model {
 
-	protected $primaryKey = 'ID';
+
 	protected $table = 'extras_folder';
 	protected $fillable = [];
 
@@ -14,7 +14,7 @@ class LogoGroup extends Model {
 	 * Get the logo group's logos
 	 */
 	public function logos() {
-		return $this->hasMany(Logo::class, 'extFID', 'ID');
+		return $this->hasMany(Logo::class, 'logo_group_id', 'id');
 	}
 
 	/**

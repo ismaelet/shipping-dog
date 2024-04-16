@@ -2,9 +2,9 @@
 
 use Ecommerce\Order;
 
-if (!$year) $year = DBOld::row('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) ORDER BY time DESC', [$oldSeller->id])['year'];
+if (!$year) $year = DBOld::row('YEAR(time) as year FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) ORDER BY time DESC', [$oldSeller->id])['year'];
 
-$res_months = DBOld::select('MONTH(time) as month FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$oldSeller->id, $year]);
+$res_months = DBOld::select('MONTH(time) as month FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$oldSeller->id, $year]);
 
 while ($row_months = $res_months->fetch_assoc()) {
 
@@ -17,11 +17,11 @@ while ($row_months = $res_months->fetch_assoc()) {
 		'
 		SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * orders.quantity) as totGain, COUNT(*) as count
 		FROM orders
-		LEFT JOIN carts ON orders.cartID = carts.ID
+		LEFT JOIN carts ON orders.cart_id = carts.id
 		WHERE
 			YEAR(orders.time) = ? AND
 			MONTH(orders.time) = ? AND
-			sellerId = ? AND
+			seller_id = ? AND
 			carts.status > 0',
 		[$year, $month, $oldSeller->id]
 	);
@@ -29,16 +29,16 @@ while ($row_months = $res_months->fetch_assoc()) {
 	$month_tot = $row_month['totGain'];
 	$month_num = $row_month['count'];
 
-	//$res_saleM = DBOld::select('* FROM sales WHERE storID = ? AND YEAR(time)=? AND MONTH(time)=? ORDER BY time DESC', [$id, $year, $month]);
+	//$res_saleM = DBOld::select('* FROM sales WHERE seller_id = ? AND YEAR(time)=? AND MONTH(time)=? ORDER BY time DESC', [$id, $year, $month]);
 	$sales = DBOld::select(
 		'
-		orders.ID
+		orders.id
 		FROM orders
-		LEFT JOIN carts ON orders.cartID = carts.ID
+		LEFT JOIN carts ON orders.cart_id = carts.id
 		WHERE
 			YEAR(orders.time) = ? AND
 			MONTH(orders.time) = ? AND
-			sellerId = ? AND
+			seller_id = ? AND
 			carts.status > 0
 		ORDER BY carts.time DESC',
 		[$year, $month, $oldSeller->id]
@@ -66,7 +66,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 				</div>
 
 				<?php while ($sale = $sales->fetch_assoc()) {
-					$order = new Ecommerce\Order($sale['ID']);
+					$order = new Ecommerce\Order($sale['id']);
 				?>
 
 					<!--sale line-->
@@ -106,7 +106,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 
 <?php
 
-$res_year = DBOld::select('YEAR(time) as year FROM orders WHERE itemID IN (SELECT ID FROM items WHERE userID = ?) AND cartID IN (SELECT ID FROM carts WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$oldSeller->id]);
+$res_year = DBOld::select('YEAR(time) as year FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$oldSeller->id]);
 
 if ($res_year->num_rows > 1) { ?>
 

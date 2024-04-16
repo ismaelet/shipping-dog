@@ -16,52 +16,52 @@ $saved = $_GET['saved'] ?? false;
 
 // fetch types
 $types = [];
-$typeRows = DBOld::select('ID FROM items_types WHERE id<>16 ORDER BY category ASC, ID ASC');
+$typeRows = DBOld::select('id FROM items_types WHERE id<>16 ORDER BY category ASC, id ASC');
 
 while ($typeRow = $typeRows->fetch_assoc()) {
-	$type = new Type($typeRow['ID']);
+	$type = new Type($typeRow['id']);
 	$types[] = $type;
 }
 
 // fetch colors
 $colors = [];
-$colorRows = DBOld::select('ID FROM items_colors ORDER BY reorder ASC, ID ASC');
+$colorRows = DBOld::select('id FROM items_colors ORDER BY reorder ASC, id ASC');
 
 while ($colorRow = $colorRows->fetch_assoc()) {
-	$color = new Color($colorRow['ID']);
+	$color = new Color($colorRow['id']);
 	$colors[] = $color;
 }
 
 // add
 if (isset($_POST['add']) || isset($_POST['edit'])) {
 	$name = $_POST['name'];
-	$typeId = $_POST['typeId'];
-	$type = ProductType::find($typeId);
+	$type_id = $_POST['type_id'];
+	$type = ProductType::find($type_id);
 	$price = str_replace(',', '.', $_POST['price']);
 	$description = $_POST['description'];
 	$defaultColorId = $_POST['default-color-id'];
 	$newColors = implode(',', $_POST['colors'] ?? [$defaultColorId]);
-	$positionId = $type->positions ? explode(',', $type->positions)[0] : null;
+	$position_id = $type->positions ? explode(',', $type->positions)[0] : null;
 
 	if (isset($_POST['add'])) {
 		// add
 		$product = Product::create([
 			'name' => $name,
-			'desID' => 0,
-			'userID' => $seller->id,
-			'typeID' => $typeId,
-			'colorID' => $defaultColorId,
+			'design_id' => 0,
+			'user_id' => $seller->id,
+			'type_id' => $type_id,
+			'color_id' => $defaultColorId,
 			'colors' => $newColors,
 			'status' => 1,
-			'positions' => $positionId,
+			'positions' => $position_id,
 		]);
 
-		$oldProduct = new OldProduct($product->ID);
+		$oldProduct = new OldProduct($product->id);
 
 		// upload product images
 		if (!empty($_POST['colors'])) {
 			foreach ($_POST['colors'] as $colorSlug) {
-				$colorId = DBOld::find('ID FROM items_colors WHERE tag = ?', [$colorSlug]);
+				$colorId = DBOld::find('id FROM items_colors WHERE tag = ?', [$colorSlug]);
 
 				if ($_FILES['file-' . $colorId]['name']) {
 					upload_product_image($oldProduct, $colorId);
@@ -72,8 +72,8 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 		// edit
 		$product->update([
 			'name' => $name,
-			'typeID' => $typeId,
-			'colorID' => $defaultColorId,
+			'type_id' => $type_id,
+			'color_id' => $defaultColorId,
 			'colors' => $newColors
 		]);
 	}
@@ -81,7 +81,7 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 	DBOld::put('items_info', ['description' => $description], $oldProduct->id);
 
 	// Price
-	ProductPrice::updateOrCreate(['itemID' => $product->ID], [
+	ProductPrice::updateOrCreate(['product_id' => $product->id], [
 		'price' => $price,
 		'gain_w' => $oldProduct->whiteGain,
 		'gain_c' => $oldProduct->coloredGain

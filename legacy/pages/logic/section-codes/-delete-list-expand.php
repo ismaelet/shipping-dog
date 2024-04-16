@@ -2,14 +2,14 @@
 
 $dett_str = $apply = '';
 
-$desID = $row['desID'];
-$storeID = $row['storID'];
+$design_id = $row['design_id'];
+$seller_id = $row['seller_id'];
 
-if ($desID) $apply = DBOld::find('name FROM designs WHERE ID = ?', [$desID]);
-else if ($storeID) $apply = DBOld::find('name FROM stores WHERE userID = ?', [$storeID]);
+if ($design_id) $apply = DBOld::find('name FROM designs WHERE id = ?', [$design_id]);
+else if ($seller_id) $apply = DBOld::find('name FROM stores WHERE user_id = ?', [$seller_id]);
 
-if ($row['typeID']) $apply .= 'Tipo: ' . DBOld::find('name_it FROM items_types WHERE ID = ?', [$row['typeID']]);
-if ($row['colorID']) $apply .= 'Colore: ' . DBOld::find('name_it FROM items_colors WHERE ID = ?', [$row['colorID']]);
+if ($row['type_id']) $apply .= 'Tipo: ' . DBOld::find('name FROM items_types WHERE id = ?', [$row['type_id']]);
+if ($row['color_id']) $apply .= 'Colore: ' . DBOld::find('name FROM items_colors WHERE id = ?', [$row['color_id']]);
 
 if (empty($apply)) $apply = 'Tutti';
 
@@ -33,10 +33,10 @@ $inputs[4]['value'] = $flat_str;
 $inputs[4]['value'] = 'aaaa';
 
 //type
-$type = DBOld::find('name_it FROM items_types WHERE ID = ?', [$row['typeID']]) ?: 'Tutti';
+$type = DBOld::find('name FROM items_types WHERE id = ?', [$row['type_id']]) ?: 'Tutti';
 
 //color
-$color = DBOld::find('name_it FROM items_colors WHERE ID = ?', [$row['colorID']]) ?: 'Tutti';
+$color = DBOld::find('name FROM items_colors WHERE id = ?', [$row['color_id']]) ?: 'Tutti';
 
 //time
 $time_start = date('Y-m-d', strtotime($row['time_start']));

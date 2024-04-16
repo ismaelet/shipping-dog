@@ -17,7 +17,7 @@ class SellersRequest {
 			foreach ($searchFields as $searchField) {
 				switch ($searchField) {
 					case 'id':
-						$queryFields[] = 'userID = ?';
+						$queryFields[] = 'user_id = ?';
 						break;
 					case 'name':
 						$queryFields[] = $searchField . " LIKE CONCAT('%',?,'%')";
@@ -25,7 +25,7 @@ class SellersRequest {
 				}
 			}
 
-			$ids = API_GET_ids($requestContent, $queryFields, 'stores', 'userID');
+			$ids = API_GET_ids($requestContent, $queryFields, 'stores', 'user_id');
 			$response['content'] = API_GET('Seller', $requestContent, false, $ids);
 		}
 

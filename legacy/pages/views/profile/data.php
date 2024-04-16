@@ -30,8 +30,8 @@ use Illuminate\Support\Facades\Auth;
 			<?php } ?>
 
 			<p class="lbl">Nome e cognome:</p>
-			<input type="text" class="input" name="fname" value="<?= Auth::user()->fname; ?>" placeholder="Nome">
-			<input type="text" class="input" name="lname" value="<?= Auth::user()->lname; ?>" placeholder="Cognome">
+			<input type="text" class="input" name="first_name" value="<?= Auth::user()->first_name; ?>" placeholder="Nome">
+			<input type="text" class="input" name="last_name" value="<?= Auth::user()->last_name; ?>" placeholder="Cognome">
 
 			<p class="lbl">E-mail:</p>
 			<input type="email" class="input" name="email" value="<?= Auth::user()->email; ?>" placeholder="email" required>

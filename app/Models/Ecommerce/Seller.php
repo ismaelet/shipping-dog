@@ -20,7 +20,7 @@ class Seller extends Model {
 
 	use ModelCache;
 
-	protected $primaryKey = 'userID';
+	protected $primaryKey = 'user_id';
 	protected $table = 'stores';
 	protected $fillable = [];
 
@@ -28,42 +28,49 @@ class Seller extends Model {
 	 * Get the seller's designs
 	 */
 	public function designs(): HasMany {
-		return $this->hasMany(Design::class, 'userID', 'userID');
+		return $this->hasMany(Design::class, 'user_id', 'user_id');
 	}
 
 	/**
 	 * Get the seller's followers
 	 */
 	public function followers(): HasMany {
-		return $this->hasMany(Follower::class, 'followID', 'userID');
+		return $this->hasMany(Follower::class, 'follower_id', 'user_id');
 	}
 
 	/**
 	 * Get the seller's prices
 	 */
 	public function prices() {
-		return $this->hasMany(SellerPrice::class, 'storeID', 'userID');
+		return $this->hasMany(SellerPrice::class, 'seller_id', 'user_id');
 	}
 
 	/**
 	 * Get the seller's logo groups
 	 */
 	public function logoGroups(): HasMany {
-		return $this->hasMany(LogoGroup::class, 'storID', 'userID');
+		return $this->hasMany(LogoGroup::class, 'seller_id', 'user_id');
+	}
+
+	/**
+	 * Get the formatted time string
+	 */
+	public function timeString(): string {
+		return date('d/m/Y', strtotime($this->time));
 	}
 
 	/**
 	 * Get the seller's orders
 	 */
 	public function orders(): HasMany {
-		return $this->hasMany(Order::class, 'sellerId', 'userID');
+		return $this->hasMany(Order::class, 'seller_id', 'user_id');
 	}
 
 	/**
 	 * Get the seller's URL
 	 */
 	public function url(): string {
-		return '/artist?id=' . $this->userID;
+		return '/artist?id=' . $this->user_id;
 	}
 
 	/**
@@ -77,7 +84,7 @@ class Seller extends Model {
 
 		// Get the total sales
 		$count = $this->orders()
-			->join('carts', 'orders.cartID', '=', 'carts.ID')
+			->join('carts', 'orders.cart_id', '=', 'carts.id')
 			->where('carts.status', '>', 0)
 			->selectRaw('SUM((productGain - gain_disc) * orders.quantity) as totalGain')
 			->first();
@@ -124,7 +131,7 @@ class Seller extends Model {
 		}
 
 		$usedOrderCredit = $this->orders()
-			->where('buyer', '=', $this->userID)
+			->where('user_id', '=', $this->user_id)
 			->where('credit', '=', 1)
 			->selectRaw('SUM((fullProductPrice - price_disc) * orders.quantity) as usedCredit')
 			->first()->usedCredit ?: 0;
@@ -141,7 +148,7 @@ class Seller extends Model {
 		}
 
 		$usedShippingCredit = Cart::whereHas('orders', function ($query) {
-			$query->where('buyer', '=', $this->userID);
+			$query->where('user_id', '=', $this->user_id);
 		})
 			->where('credit_ship', '=', 1)
 			->selectRaw('
@@ -157,8 +164,8 @@ class Seller extends Model {
 	 */
 	public function isFollowed(): bool {
 		return Follower::where([
-			'userID' => auth()->id(),
-			'followID' => $this->userID,
+			'user_id' => auth()->id(),
+			'follower_id' => $this->user_id,
 		])->count() > 0;
 	}
 
@@ -166,13 +173,13 @@ class Seller extends Model {
 	 * Get the seller's icon
 	 */
 	public function icon(): string {
-		$icon = 'users/icons/' . $this->userID;
+		$icon = 'users/icons/' . $this->user_id;
 
-		if (file_exists(public_storage_path($icon . '.webp'))) {
+		if (file_exists(public_storage($icon . '.webp'))) {
 			return public_asset($icon . '.webp');
 		}
 
-		if (file_exists(public_storage_path($icon . '.jpg'))) {
+		if (file_exists(public_storage($icon . '.jpg'))) {
 			return public_asset($icon . '.jpg');
 		}
 
@@ -184,9 +191,9 @@ class Seller extends Model {
 	 */
 	public static function awaitingApproval(): Collection {
 		return self::where('status', 0)
-			->where('userID', '!=', 2)
-			->whereIn('userID', function ($query) {
-				$query->select('userID')
+			->where('user_id', '!=', 2)
+			->whereIn('user_id', function ($query) {
+				$query->select('user_id')
 					->from('designs')
 					->where('status', 1);
 			})

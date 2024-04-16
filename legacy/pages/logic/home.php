@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Ecommerce\Design;
-use Ecommerce\Design as OldDesign;
+use App\Models\Ecommerce\Product;
 use Ecommerce\Seller;
 
 $productN = 20;
@@ -10,21 +10,26 @@ $sellerCount = 12;
 $fanPicsCount = 4;
 
 // productss
-$popular = DBOld::select('ID FROM items INNER JOIN stores ON items.userID = stores.userID WHERE items.status = 1 AND stores.status = 1 ORDER BY items.rsales DESC LIMIT ?', [$productN]);
+$popular = Product::join('stores', 'items.user_id', '=', 'stores.user_id')
+	->where('items.status', 1)
+	->where('stores.status', 1)
+	->orderBy('items.recent_sales', 'desc')
+	->limit($productN)
+	->get('items.*');
 
 // designs
-$popularDesigns = Design::join('stores', 'designs.userID', '=', 'stores.userID')
+$popularDesigns = Design::join('stores', 'designs.user_id', '=', 'stores.user_id')
 	->where('designs.status', 1)
 	->where('stores.status', 1)
-	->orderBy('designs.rsales', 'desc')
+	->orderBy('designs.recent_sales', 'desc')
 	->limit($popularDesignCount)
-	->get();
+	->get('designs.*');
 
 // sellers
-$sellers = rows_to_objects(DBOld::select(Seller::INDEX . ' FROM ' . Seller::TABLE . ' WHERE status = 1 ORDER BY rsales DESC, userID ASC LIMIT ?', [$sellerCount]), 'Ecommerce\Seller');
+$sellers = rows_to_objects(DBOld::select(Seller::INDEX . ' FROM ' . Seller::TABLE . ' WHERE status = 1 ORDER BY recent_sales DESC, user_id ASC LIMIT ?', [$sellerCount]), 'Ecommerce\Seller');
 
 // customer pics
-$client_pics = DBOld::select('* FROM home_pics ORDER BY ID DESC LIMIT ?', [$fanPicsCount]);
+$client_pics = DBOld::select('* FROM home_pics ORDER BY id DESC LIMIT ?', [$fanPicsCount]);
 
 // categories
 $categories = [

@@ -703,9 +703,9 @@
 
                                 // Check seller filter
                                 if (isset($h_link['seller'])) {
-                                    if ($h_link['seller'] && (!auth()->user() || !is_seller())) {
+                                    if ($h_link['seller'] && (!auth()->user() || !App\Helpers\App::isSeller())) {
                                         $h_valid = false;
-                                    } elseif (!$h_link['seller'] && auth()->user() && is_seller()) {
+                                    } elseif (!$h_link['seller'] && auth()->user() && App\Helpers\App::isSeller()) {
                                         $h_valid = false;
                                     }
                                 }
@@ -861,9 +861,13 @@
 
                                     // Check seller filter
                                     if (isset($h_link['seller'])) {
-                                        if ($h_link['seller'] && auth()->user() && is_seller()) {
+                                        if ($h_link['seller'] && auth()->user() && App\Helpers\App::isSeller()) {
                                             $h_valid = false;
-                                        } elseif (!$h_link['seller'] || !auth()->user() || !is_seller()) {
+                                        } elseif (
+                                            !$h_link['seller'] ||
+                                            !auth()->user() ||
+                                            !App\Helpers\App::isSeller()
+                                        ) {
                                             $h_valid = false;
                                         }
                                     }

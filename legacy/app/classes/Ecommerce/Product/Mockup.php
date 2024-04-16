@@ -6,14 +6,14 @@ class Mockup {
 
 	private $data = [];
 
-	public $typeId;
+	public $type_id;
 	public $colorId;
-	public $positionId;
+	public $position_id;
 
-	function __construct($typeId, $colorId, $positionId) {
-		$this->typeId = $typeId;
+	function __construct($type_id, $colorId, $position_id) {
+		$this->type_id = $type_id;
 		$this->colorId = $colorId;
-		$this->positionId = $positionId;
+		$this->position_id = $position_id;
 	}
 
 	function __get($name) {
@@ -34,23 +34,23 @@ class Mockup {
 
 					// related classes
 				case 'type':
-					return $this->data['type'] = new Type($this->typeId);
+					return $this->data['type'] = new Type($this->type_id);
 				case 'color':
 					return $this->data['color'] = new Color($this->colorId);
 				case 'position':
-					return $this->data['position'] = new Position($this->positionId);
+					return $this->data['position'] = new Position($this->position_id);
 			}
 		}
 	}
 
 	private function getBackgroundImage() {
-		$image = '/uploads/product_types/mockups/' . $this->type->slug . '/' . $this->color->slug . '-' . $this->positionId . '.webp';
+		$image = '/uploads/product_types/mockups/' . $this->type->slug . '/' . $this->color->slug . '-' . $this->position_id . '.webp';
 
 		return $image;
 	}
 
 	private function getFrontImage() {
-		$image = '/uploads/product_types/mockups/' . $this->type->slug . '/' . $this->color->slug . '-' . $this->positionId . '-det.webp';
+		$image = '/uploads/product_types/mockups/' . $this->type->slug . '/' . $this->color->slug . '-' . $this->position_id . '-det.webp';
 
 		return $image;
 	}

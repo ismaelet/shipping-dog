@@ -4,8 +4,8 @@
  * Query configuration
  */
 $queryConfig['table'] = 'items_colors';
-$queryConfig['index-field'] = 'ID';
-$queryConfig['title-field'] = 'name_it';
+$queryConfig['index-field'] = 'id';
+$queryConfig['title-field'] = 'name';
 
 /**
  * Form inputs
@@ -17,7 +17,7 @@ $inputs = [
 	],
 	[
 		['type' => 'lbl', 'text' => 'Nome'],
-		['name' => 'name_it', 'text' => 'Nome'],
+		['name' => 'name', 'text' => 'Nome'],
 	],
 	[
 		['type' => 'lbl', 'text' => 'Colore HEX'],

@@ -36,7 +36,7 @@ use Ecommerce\Seller;
 
 					<?php while ($row = $res_sell->fetch_assoc()) {
 
-						$seller = new Seller($row['userID'], 'name') ?>
+						$seller = new Seller($row['user_id'], 'name') ?>
 
 						<a href="<?= $seller->clientUrl ?>" class="shop stack-items">
 							<img src="<?= public_asset($seller->cover()) ?>" alt="" loading="lazy" class="cover img-fill">
@@ -59,7 +59,7 @@ use Ecommerce\Seller;
 				<div class="gallery">
 
 					<?php while ($row = $res_des->fetch_assoc()) {
-						$design = Design::find($row['ID']);
+						$design = Design::find($row['id']);
 						$product = $design->mainProduct;
 					?>
 						<div class="item">

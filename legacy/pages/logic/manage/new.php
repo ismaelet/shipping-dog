@@ -2,7 +2,7 @@
 
 use Ecommerce\Seller;
 
-if (!is_seller()) {
+if (!App\Helpers\App::isSeller()) {
 	redirect_old('/sell');
 }
 

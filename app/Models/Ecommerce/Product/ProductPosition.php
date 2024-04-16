@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductPosition extends Model {
 
-	protected $primaryKey = 'ID';
+
 	protected $table = 'items_positions';
 	protected $fillable = [];
 
@@ -21,6 +21,6 @@ class ProductPosition extends Model {
 	 * Get the basic position ID
 	 */
 	public function basicPositionId(): int {
-		return $this->base_of ?: $this->ID;
+		return $this->base_of ?: $this->id;
 	}
 }

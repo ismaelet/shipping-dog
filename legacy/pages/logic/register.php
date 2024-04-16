@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
 		// add user
 		$id = DBOld::add('users (username, password, email) VALUES (?, MD5(?), ?)', [$_POST['username'], $_POST['password'], $_POST['email']]);
 
-		DBOld::add('links (userID) VALUES (?)', [$id]);
+		DBOld::add('links (user_id) VALUES (?)', [$id]);
 
 		standard_login($_POST['username'], $_POST['password']);
 	}

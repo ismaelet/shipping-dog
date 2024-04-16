@@ -33,7 +33,7 @@ $header['links'][] = ['title' => 'Prodotti', 'loc' => 'shop', 'url' => client_ur
 $header['links'][] = ['title' => 'Preferiti', 'loc' => 'wishlist', 'url' => client_url('/wishlist'), 'logged' => true, 'mob' => true];
 $header['links'][] = ['title' => 'Vendi', 'loc' => 'sell', 'url' => client_url('/sell'), 'seller' => false];
 $header['links'][] = ['title' => 'Supporto', 'loc' => 'info', 'url' => client_url('/infos/faq'), 'drop' => 'info'];
-$header['links'][] = ['title' => 'Gestione', 'loc' => 'admin', 'url' => '/admin', 'admin' => true];
+$header['links'][] = ['title' => 'Gestione', 'loc' => 'admin', 'url' => route('admin.dashboard'), 'admin' => true];
 
 // dropdowns
 $header['dropdowns']['shop'] = [

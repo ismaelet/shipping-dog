@@ -15,9 +15,9 @@
 <div class="form-field">
 	<p class="label">Tipo di prodotto:</p>
 
-	<select class="sel" name="typeId">
+	<select class="sel" name="type_id">
 		<?php foreach ($types as $type) { ?>
-			<option value="<?= $type->id ?>" <?= $product && $product->typeId == $type->id ? 'selected' : '' ?>>
+			<option value="<?= $type->id ?>" <?= $product && $product->type_id == $type->id ? 'selected' : '' ?>>
 				<?= $type->fullName ?>
 			</option>
 		<?php } ?>

@@ -4,24 +4,24 @@ global $id;
 
 //setup page
 $tbl = 'addresses';
-$index = 'cartID';
-$title = 'aname';
+$index = 'cart_id';
+$title = 'full_name';
 
 //get
 $id = $_GET['id'] ?? false;
 
 //create entry if doesn't exists
-if ($id && !DBOld::exists('addresses WHERE cartID = ?', [$id])) {
+if ($id && !DBOld::exists('addresses WHERE cart_id = ?', [$id])) {
 
-	$buyer = DBOld::find('buyer FROM carts WHERE ID = ?', [$id]);
+	$user_id = DBOld::find('user_id FROM carts WHERE id = ?', [$id]);
 
-	DBOld::add('addresses (cartID, buyer) VALUES (?, ?)', [$id, $buyer]);
+	DBOld::add('addresses (cart_id, user_id) VALUES (?, ?)', [$id, $user_id]);
 }
 
 //submit
 if (isset($_POST['edit'])) {
 
-	$aname = ucwords(strtolower(trim($_POST['aname'])));
+	$full_name = ucwords(strtolower(trim($_POST['full_name'])));
 	$addr = ucwords(strtolower(trim($_POST['address'])));
 	$num = trim($_POST['number']);
 	$zip = strtoupper(trim($_POST['zip']));
@@ -32,20 +32,18 @@ if (isset($_POST['edit'])) {
 
 	$comment = $_POST['comment'];
 
-	DBOld::update('addresses SET aname = ?, address=?, number=?, zip=?, city=?, region=?, email=?, phone=? WHERE cartID = ?', [$aname, $addr, $num, $zip, $city, $reg, $email, $phone, $id]);
-
-	DBOld::update('carts_data SET comm_vip=? WHERE cartID = ?', [$comment, $id]);
+	DBOld::update('addresses SET full_name = ?, address=?, number=?, zip=?, city=?, region=?, email=?, phone=? WHERE cart_id = ?', [$full_name, $addr, $num, $zip, $city, $reg, $email, $phone, $id]);
 
 	redirect_old('list' . $hash);
 }
 
 //form
-$comment = DBOld::find('comm_vip FROM carts_data WHERE cartID = ?', [$id]) ?? '';
+$comment = '';
 
 $inputs = [
 	[
 		'pholder' => 'Nominativo di spedizione',
-		'name' => 'aname',
+		'name' => 'full_name',
 		'max' => 50,
 	],
 	[

@@ -40,8 +40,8 @@ class Customer {
 	}
 
 	private function getCart() {
-		$cartId = DBOld::find(Cart::INDEX . ' FROM ' . Cart::TABLE . ' WHERE ' . Cart::CUSTOMER_INDEX . ' = ? AND status = 0', [$this->id]);
-		return new Cart($cartId);
+		$cart_id = DBOld::find(Cart::INDEX . ' FROM ' . Cart::TABLE . ' WHERE ' . Cart::CUSTOMER_INDEX . ' = ? AND status = 0', [$this->id]);
+		return new Cart($cart_id);
 	}
 
 	private function getConfirmedCarts() {

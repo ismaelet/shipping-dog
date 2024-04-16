@@ -10,14 +10,14 @@ class Color {
 	use DatabaseObject;
 
 	public const TABLE = 'items_colors';
-	public const INDEX = 'ID';
+	public const INDEX = 'id';
 
 	private function getId() {
 		return $this->databaseEntry[self::INDEX];
 	}
 
 	private function getName() {
-		return $this->name_it;
+		return $this->name;
 	}
 
 	private function getSlug() {

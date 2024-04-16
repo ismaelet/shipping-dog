@@ -7,8 +7,8 @@
 use App\Http\Controllers\Admin\FormController;
 
 $queryConfig['table'] = 'prices_default';
-$queryConfig['index-field'] = 'typeID';
-$queryConfig['title-field'] = 'typeID';
+$queryConfig['index-field'] = 'type_id';
+$queryConfig['title-field'] = 'type_id';
 
 //form
 $inputs = [

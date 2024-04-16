@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ecommerce\Product as EcommerceProduct;
 use App\Models\Ecommerce\Product\ProductType;
 use Ecommerce\Design;
 use Ecommerce\Product;
@@ -8,50 +9,51 @@ use Ecommerce\Product\Gender;
 use Ecommerce\Product\Position;
 use Ecommerce\Product\Type;
 
-$designId = $_GET['designId'];
-$design = new Design($designId);
+$oldDesign_id = $_GET['design_id'];
+$oldDesign = new Design($oldDesign_id);
 
-if (!$design->custom && auth()->id() != 1) {
-	$oldTypes = DBOld::select('ID FROM items_types WHERE hidden = 0 ORDER BY category ASC, ID ASC');
+if (!$oldDesign->custom && auth()->id() != 1) {
+	$oldTypes = DBOld::select('id FROM items_types WHERE hidden = 0 ORDER BY category ASC, id ASC');
 } else {
-	$oldTypes = DBOld::select('ID FROM items_types ORDER BY hidden ASC, category ASC, ID ASC');
+	$oldTypes = DBOld::select('id FROM items_types ORDER BY hidden ASC, category ASC, id ASC');
 }
 
 while ($oldTypeRow = $oldTypes->fetch_assoc()) {
-	$oldType = new Type($oldTypeRow['ID']);
+	$oldType = new Type($oldTypeRow['id']);
 	$type = ProductType::find($oldType->id);
 	$gender = new Gender($oldType->genderId);
 
-	$productId = DBOld::find('ID FROM items WHERE desID = ? AND typeID = ?', [$design->id, $oldType->id]);
+	$oldProductId = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$oldDesign->id, $oldType->id]);
 
-	$product = new Product($productId);
+	$oldProduct = new Product($oldProductId);
+	$product = EcommerceProduct::find($oldProduct->id);
 
-	$active = $product->statusId;
+	$active = $oldProduct->statusId;
 
-	if ($product->statusId) $productImage = $product->image;
-	else if (public_storage_path($product->image) && !$product->isCustom) $productImage = $product->image;
-	else $productImage = $product->type->blankImage;
+	if ($oldProduct->statusId) $oldProductImage = $oldProduct->image;
+	else if (public_storage($oldProduct->image) && !$oldProduct->isCustom) $oldProductImage = $oldProduct->image;
+	else $oldProductImage = $oldProduct->type->blankImage;
 
 	// tabls
 	$tabs = [];
 
 	if (count($oldType->colors) > 1) $tabs[] = ['Colori', 'colors'];
 
-	foreach ($oldType->availablePositionIds as $positionId) {
-		$position = new Position($positionId);
-		if ($position->editable) $tabs[] = [$position->name, 'position', $positionId];
+	foreach ($oldType->availablePositionIds as $position_id) {
+		$position = new Position($position_id);
+		if ($position->editable) $tabs[] = [$position->name, 'position', $position_id];
 	}
 
 	use_natural_keys($tabs);
 
-	$designLight = '/designs/' . $design->id . '.png';
-	$designDark = file_exists(public_storage_path($file = '/designs/' . $design->id . '_dark.png')) ? $file : $designLight;
+	$oldDesignLight = '/designs/' . $oldDesign->id . '.png';
+	$oldDesignDark = file_exists(public_storage($file = '/designs/' . $oldDesign->id . '_dark.png')) ? $file : $oldDesignLight;
 ?>
 
 	<div id="item-<?= $oldType->id ?>" class="item <?= $active ? 'active' : '' ?>">
 
 		<div class="item-img item-panel-open pos-rel">
-			<img src="<?= $productImage ?>" alt="" class="img-fill">
+			<img src="<?= $oldProductImage ?>" alt="" class="img-fill">
 			<div class="item-over bgr"></div>
 		</div>
 
@@ -60,7 +62,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 		<form method="POST" class="img-buttons grid mar-t-05">
 
-			<input type="hidden" name="typeID" value="<?= $oldType->id ?>">
+			<input type="hidden" name="type_id" value="<?= $oldType->id ?>">
 
 			<button type="submit" name="off" class="btn off-btn switch-btn ">
 				<?= embed_icon('actions/add-bgr') ?>
@@ -79,7 +81,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 		</form>
 
-		<div class="item-panel" data-id=<?= $product->id ?>>
+		<div class="item-panel" data-id=<?= $oldProduct->id ?>>
 
 			<div class="box pos-rel">
 
@@ -102,10 +104,10 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 							if ($tab[1] == 'position') {
 								$position = new Position($tab[2]);
 
-								$enabled = in_array($position->id, $product->availablePositionIds);
+								$enabled = in_array($position->id, $oldProduct->availablePositionIds);
 
-								$base = DBOld::row('* FROM items_mockups WHERE typeID = ? AND positionID = ?', [$product->type->id, $position->id]);
-								$mockup = DBOld::row('* FROM items_previews WHERE itemID = ? AND positionID = ?', [$product->id, $position->id]);
+								$base = DBOld::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$oldProduct->type->id, $position->id]);
+								$mockup = DBOld::row('* FROM items_previews WHERE product_id = ? AND position_id = ?', [$oldProduct->id, $position->id]);
 
 								$pX = $mockup['pos_x'] ?? $base['pos_x_def'];
 								$pY = $mockup['pos_y'] ?? $base['pos_y_def'];
@@ -116,9 +118,9 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 								$pX_min = $base['pos_x_min'];
 								$pY_min = $base['pos_y_min'];
 
-								$orientation = $product->design->ratio > $sX_max / $sY_max;
+								$orientation = $oldProduct->design->ratio > $sX_max / $sY_max;
 
-								$clothing = $type->image($product->colorId, $position->imagePositionId);
+								$clothing = $type->image($oldProduct->colorId, $position->imagePositionId);
 						?>
 
 								<section class="section<?= $key ?> section positions <?= $key == 1 ? 'active' : '' ?> <?= $enabled ? '' : 'disabled' ?>" data-enabled="<?= $enabled ? 1 : 0 ?>" data-image-position="<?= $position->imagePositionId ?>">
@@ -130,17 +132,17 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 										<div class="image mar-h-auto pos-rel">
 
-											<?php if ($design->custom) { ?>
+											<?php if ($oldDesign->custom) { ?>
 
 												<!-- If it's a custom static image -->
-												<div class="bgr" <?= temp_bg($product->image) ?>></div>
+												<div class="bgr" <?= temp_bg($oldProduct->image) ?>></div>
 
 											<?php } else { ?>
 
 												<!-- If it's a normal image -->
 												<div class="background bgr" <?= temp_bg('product_types/mockups/bgr/grey.png') ?>></div>
 
-												<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $product->typeId ?>"></div>
+												<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $oldProduct->type_id ?>"></div>
 
 												<div class="design-box" style="
 											width: <?= $sX_max ?>%;
@@ -148,21 +150,21 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 											top: <?= $pY_min ?>%;
 											left: <?= $pX_min ?>%;">
 
-													<div class="design light <?= $product->color->dark ? '' : 'active' ?>" style="
-												background-image: url(<?= public_asset($designLight) ?>);
+													<div class="design light <?= $oldProduct->color->dark ? '' : 'active' ?>" style="
+												background-image: url(<?= public_asset($oldDesignLight) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
 													</div>
 
-													<div class="design dark <?= $product->color->dark ? 'active' : '' ?>" style="
-												background-image: url(<?= public_asset($designDark) ?>);
+													<div class="design dark <?= $oldProduct->color->dark ? 'active' : '' ?>" style="
+												background-image: url(<?= public_asset($oldDesignDark) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
 													</div>
 
 												</div>
 
-												<?php if (file_exists(public_storage_path($file = str_replace('.', '-det.', $clothing)))) { ?>
+												<?php if (file_exists(public_storage($file = str_replace('.', '-det.', $clothing)))) { ?>
 													<div class="details bgr" <?= temp_bg($file) ?>></div>
 											<?php }
 											} ?>
@@ -173,8 +175,8 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 									<form method="POST" class="data">
 
-										<input type="hidden" name="itemID" value="<?= $product->id ?>">
-										<input type="hidden" name="positionID" value="<?= $position->id ?>">
+										<input type="hidden" name="product_id" value="<?= $oldProduct->id ?>">
+										<input type="hidden" name="position_id" value="<?= $position->id ?>">
 
 										<div>
 											<h1 class="txt-15rem sec-title txt-bold mar-b-1 brb2 br-c2">Stampa in posizione <?= strtolower($position->name) ?></h1>
@@ -194,7 +196,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 											</div>
 
-											<?php if (!$design->custom) { ?>
+											<?php if (!$oldDesign->custom) { ?>
 												<!-- Mockup management -->
 												<div class="item-mockup-field mar-t-2 grid gap1">
 
@@ -232,7 +234,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 											<?php } ?>
 										</div>
 
-										<?php if (!$design->custom) { ?>
+										<?php if (!$oldDesign->custom) { ?>
 											<div class="btn-box txt-cen mar-t-2">
 												<button type="submit" name="update-position" class="pbtn">Applica</button>
 											</div>
@@ -244,8 +246,8 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 								<!-- Color tab -->
 								<?php } else {
-								$base = DBOld::row('* FROM items_mockups WHERE typeID = ? AND positionID = ?', [$product->type->id, $product->positionId]);
-								$mockup = DBOld::row('* FROM items_previews WHERE itemID = ? AND positionID = ?', [$product->id, $product->positionId]);
+								$base = DBOld::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$oldProduct->type->id, $oldProduct->position_id]);
+								$mockup = DBOld::row('* FROM items_previews WHERE product_id = ? AND position_id = ?', [$oldProduct->id, $oldProduct->position_id]);
 
 								if ($base || $mockup) {
 									$pX = $mockup['pos_x'] ?? $base['pos_x_def'];
@@ -257,30 +259,30 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 									$pX_min = $base['pos_x_min'];
 									$pY_min = $base['pos_y_min'];
 
-									$orientation = $product->design->ratio > $sX_max / $sY_max;
+									$orientation = $oldProduct->design->ratio > $sX_max / $sY_max;
 
 									// $clothingImagePosition = $position->base_of ?: $position->id;
-									$clothing = $type->image($product->colorId, $product->positionId);
+									$clothing = $type->image($oldProduct->colorId, $oldProduct->position_id);
 								?>
 
-									<section class="section<?= $key ?> section colors <?= $key == 1 ? 'active' : '' ?>" data-image-position="<?= $product->type->basicPositionId ?>">
+									<section class="section<?= $key ?> section colors <?= $key == 1 ? 'active' : '' ?>" data-image-position="<?= $oldProduct->type->basicPositionId ?>">
 
 										<!-- Preview image -->
 										<div class="image-panel">
 
 											<div class="image mar-h-auto pos-rel">
 
-												<?php if ($design->custom) { ?>
+												<?php if ($oldDesign->custom) { ?>
 
 													<!-- If it's a custom static image -->
-													<div class="bgr" <?= temp_bg($product->image) ?>></div>
+													<div class="bgr" <?= temp_bg($oldProduct->image) ?>></div>
 
 												<?php } else { ?>
 
 													<!-- If it's a normal image -->
 													<div class="background bgr" <?= temp_bg('product_types/mockups/bgr/grey.png') ?>></div>
 
-													<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $product->typeId ?>"></div>
+													<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $oldProduct->type_id ?>"></div>
 
 													<div class="design-box pos-rel" style="
 											width: <?= $sX_max ?>%;
@@ -288,14 +290,14 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 											top: <?= $pY_min ?>%;
 											left: <?= $pX_min ?>%;">
 
-														<div class="design light <?= $product->color->dark ? '' : 'active' ?>" style="
-												background-image: url(<?= public_asset($designLight) ?>);
+														<div class="design light <?= $oldProduct->color->dark ? '' : 'active' ?>" style="
+												background-image: url(<?= public_asset($oldDesignLight) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
 														</div>
 
-														<div class="design dark <?= $product->color->dark ? 'active' : '' ?>" style="
-												background-image: url(<?= public_asset($designDark) ?>);
+														<div class="design dark <?= $oldProduct->color->dark ? 'active' : '' ?>" style="
+												background-image: url(<?= public_asset($oldDesignDark) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
 														</div>
@@ -315,7 +317,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 										<form method="POST" class="data">
 
-											<input type="hidden" name="itemID" value="<?= $product->id ?>">
+											<input type="hidden" name="product_id" value="<?= $oldProduct->id ?>">
 
 											<div class="item-colors-field colors-pan">
 
@@ -332,17 +334,17 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 														<div class="inp-box color-grid">
 															<?php
 
-															$res_colorA = DBOld::select('ID FROM items_colors ORDER BY hidden ASC, preorder ASC, reorder ASC, name_it ASC');
+															$res_colorA = DBOld::select('id FROM items_colors ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
 
 															while ($row = $res_colorA->fetch_assoc()) {
 
-																$color = new Color($row['ID']);
+																$color = new Color($row['id']);
 
 																if (in_array($color->slug, $oldType->availableColorSlugs)) { ?>
 
 																	<label class="color-box">
 
-																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (DBOld::exists("items WHERE ID = ? AND colors LIKE CONCAT('%',?,'%')", [$product->id, $color->slug])) echo 'checked' ?>>
+																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (DBOld::exists("items WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'checked' ?>>
 
 																		<div class="color-icon" style="background-color: #<?= $color->hex ?>;"></div>
 
@@ -364,15 +366,15 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 															<?php
 
-															$res_colorD = DBOld::select('ID FROM items_colors ORDER BY ID ASC');
+															$res_colorD = DBOld::select('id FROM items_colors ORDER BY id ASC');
 
 															while ($row = $res_colorD->fetch_assoc()) {
 
-																$color = new Color($row['ID']) ?>
+																$color = new Color($row['id']) ?>
 
-																<label class="inlb color-box <?php if (DBOld::exists("items WHERE ID = ? AND colors LIKE CONCAT('%',?,'%')", [$product->id, $color->slug])) echo 'active' ?>">
+																<label class="inlb color-box <?php if (DBOld::exists("items WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'active' ?>">
 
-																	<input type="checkbox" class="cbx hidden colorD-<?= $color->slug ?>" name="colorD" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-color-id="<?= $color->id ?>" data-dark="<?= $color->dark ? 1 : 0 ?>" <?php if ($color->id == DBOld::find('colorID FROM items WHERE ID = ?', [$product->id])) echo 'checked' ?>>
+																	<input type="checkbox" class="cbx hidden colorD-<?= $color->slug ?>" name="colorD" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-color-id="<?= $color->id ?>" data-dark="<?= $color->dark ? 1 : 0 ?>" <?php if ($color->id == DBOld::find('color_id FROM items WHERE id = ?', [$oldProduct->id])) echo 'checked' ?>>
 
 																	<div class="color-icon" for="item-colorD-<?= $color->slug ?>" style="background-color: #<?= $color->hex ?>;"></div>
 																</label>

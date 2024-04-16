@@ -33,7 +33,7 @@ use Ecommerce\Design;
 				<?php } ?>
 
 				<!-- Follow button -->
-				<?= FollowButton::render(['sellerId' => $seller->id]) ?>
+				<?= FollowButton::render(['seller_id' => $seller->id]) ?>
 			</div>
 		</div>
 	</div>
@@ -137,7 +137,7 @@ use Ecommerce\Design;
 					<div class="gallery txt-cen mar-v-2">
 						<?php while ($row = $res_add->fetch_assoc()) {
 
-							$design = new Design($row['ID'], 'img') ?>
+							$design = new Design($row['id'], 'img') ?>
 
 							<label class="lbox-ele-box ele">
 								<input type="checkbox" class="hidden" name="add-cbx[]" value="<?= $design->id ?>">
@@ -175,7 +175,7 @@ use Ecommerce\Design;
 					<div class="gallery">
 						<?php while ($row = $res_rem->fetch_assoc()) {
 
-							$design = new Design($row['ID']) ?>
+							$design = new Design($row['id']) ?>
 
 							<label class="lbox-ele-box ele">
 								<input type="checkbox" class="hidden" name="remove-cbx[]" value="<?= $design->id ?>">

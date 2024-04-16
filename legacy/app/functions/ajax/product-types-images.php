@@ -3,15 +3,15 @@
 use App\Models\Ecommerce\Product\ProductType;
 
 $images = [];
-$typeId = $_GET['typeId'];
+$type_id = $_GET['type_id'];
 $colorId = $_GET['colorId'];
-$positionId = $_GET['positionId'] ?? null;
+$position_id = $_GET['position_id'] ?? null;
 
-$type = ProductType::find($typeId);
+$type = ProductType::find($type_id);
 
-$images['clothing'] = $type->image($colorId, $positionId);
+$images['clothing'] = $type->image($colorId, $position_id);
 $images['clothing-full-url'] = public_asset($images['clothing']);
-$images['details'] = $type->details($colorId, $positionId);
+$images['details'] = $type->details($colorId, $position_id);
 $images['details-full-url'] = $images['details'] ? public_asset($images['details']) : null;
 
 echo json_encode($images);

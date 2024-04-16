@@ -21,13 +21,13 @@ while ($tempCouponRow = $tempCoupons->fetch_assoc()) {
 */
 $queryConfig['index'] = 'id';
 $queryConfig['table'] = 'codes';
-$queryConfig['where-search'] = "code LIKE CONCAT('%',?,'%') OR storID IN (SELECT userID FROM stores WHERE name LIKE CONCAT('%',?,'%'))";
+$queryConfig['where-search'] = "code LIKE CONCAT('%',?,'%') OR seller_id IN (SELECT user_id FROM stores WHERE name LIKE CONCAT('%',?,'%'))";
 
 /*
 * Fields
 */
 $fields = [
-	['title' => 'ID', 'name' => 'id'],
+	['title' => 'id', 'name' => 'id'],
 	['title' => 'Codice', 'name' => 'code'],
 	['title' => 'Attivo per', 'size' => 1],
 	['title' => 'Sconto Percentuale'],
@@ -47,8 +47,8 @@ $buttons = [
 function _expand_results(&$entry, $field, $key, $row) {
 
 	if ($key == 2) {
-		if ($row['desID']) $entry['value'] = DBOld::find('name FROM designs WHERE id = ?', [$row['desID']]);
-		else if ($row['storID']) $entry['value'] = DBOld::find('name FROM stores WHERE userID = ?', [$row['storID']]);
+		if ($row['design_id']) $entry['value'] = DBOld::find('name FROM designs WHERE id = ?', [$row['design_id']]);
+		else if ($row['seller_id']) $entry['value'] = DBOld::find('name FROM stores WHERE user_id = ?', [$row['seller_id']]);
 		else $entry['value'] = 'Tutti';
 	} else if ($key == 3) {
 		$entry['value'] = !$row['mod_us'] && !$row['mod_them'] ? 'nessuno' : '<span class="txt-bold">' . ($row['mod_us'] + $row['mod_them']) . '%</span>: ' . $row['mod_us'] . '% nostro, ' . $row['mod_them'] . '% del negozio';

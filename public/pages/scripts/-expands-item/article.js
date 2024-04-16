@@ -56,21 +56,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// get properties
 	function get_position() {
-		var positionId
+		var position_id
 
 		if ($('.js-change-position:checked').length) {
-			positionId = parseInt($('.js-change-position:checked').val())
+			position_id = parseInt($('.js-change-position:checked').val())
 		} else {
-			positionId = 1
+			position_id = 1
 		}
 
-		if (positionId == 5) {
+		if (position_id == 5) {
 			$('#item').addClass('hide-logo')
 		} else {
 			$('#item').removeClass('hide-logo')
 		}
 
-		return positionId
+		return position_id
 	}
 
 	/*
@@ -84,11 +84,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	function change_logo() {
 		const logoInput = document.querySelector(logoFieldSelector + ':checked')
-		const logoId = get_logoId()
+		const logo_id = get_logo_id()
 
 		if (logoInput) {
-			if (logoId) {
-				const logoImage = client_url('/uploads/shops/logos/' + logoId + '.png')
+			if (logo_id) {
+				const logoImage = client_url('/uploads/shops/logos/' + logo_id + '.png')
 
 				document.querySelector('.js-logo-image-background').classList.add('active')
 
@@ -108,16 +108,16 @@ document.addEventListener('DOMContentLoaded', function () {
 		update_price()
 	}
 
-	function get_logoId() {
+	function get_logo_id() {
 		const logoInput = document.querySelector(logoFieldSelector + ':checked')
 
-		let logoId = 0
+		let logo_id = 0
 
 		if (logoInput) {
-			logoId = parseInt(logoInput.value)
+			logo_id = parseInt(logoInput.value)
 		}
 
-		return logoId
+		return logo_id
 	}
 
 	// pencilcase back
@@ -142,13 +142,13 @@ document.addEventListener('DOMContentLoaded', function () {
 	})
 
 	// change view
-	$('.img-posID').mouseenter(function () {
+	$('.img-position_id').mouseenter(function () {
 		$('#item-img').css('background-image', $(this).css('background-image'))
 	})
 
 	// update image
 	async function change_image() {
-		const positionId = get_position()
+		const position_id = get_position()
 		const colorId = get_colorId()
 
 		let timeout
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		}, 300)
 
 		// change main image
-		const url = (await get_class_properties('Ecommerce\\Product', 'clientFullImage', id, { colorId: colorId, positionId: positionId })).clientFullImage
+		const url = (await get_class_properties('Ecommerce\\Product', 'clientFullImage', id, { colorId: colorId, position_id: position_id })).clientFullImage
 
 		clearTimeout(timeout)
 
@@ -176,9 +176,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	// update price
 	async function update_price() {
 		const colorId = get_colorId()
-		const logoId = get_logoId()
-		const fullPrice = (await get_class_properties('Ecommerce\\Product', 'fullPriceString', id, { colorId: colorId, logoId: logoId })).fullPriceString
-		const price = (await get_class_properties('Ecommerce\\Product', 'priceString', id, { colorId: colorId, logoId: logoId })).priceString
+		const logo_id = get_logo_id()
+		const fullPrice = (await get_class_properties('Ecommerce\\Product', 'fullPriceString', id, { colorId: colorId, logo_id: logo_id })).fullPriceString
+		const price = (await get_class_properties('Ecommerce\\Product', 'priceString', id, { colorId: colorId, logo_id: logo_id })).priceString
 
 		document.querySelectorAll('.js-price').forEach((element) => {
 			element.innerHTML = price

@@ -385,7 +385,7 @@ input:checked + .pos_txt_lbl {
 /* Logos */
 .logo-field__list {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(2.75rem, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(2.5rem, 1fr));
 	gap: 0.5rem;
 }
 
@@ -394,6 +394,7 @@ input:checked + .pos_txt_lbl {
 	background-color: var(--border-clr-400);
 	border: 3px solid transparent;
 	border-radius: 100%;
+	aspect-ratio: 1;
 	cursor: pointer;
 	filter: grayscale(1);
 	transition: border 0.2s, filter 0.2s;

@@ -25,7 +25,7 @@ class DesignsRequest {
 				}
 			}
 
-			$ids = API_GET_ids($requestContent, $queryFields, 'designs', 'ID');
+			$ids = API_GET_ids($requestContent, $queryFields, 'designs', 'id');
 			$response['content'] = API_GET('Design', $requestContent, false, $ids);
 		}
 

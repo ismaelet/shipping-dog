@@ -23,9 +23,9 @@ $inputs = [
 			'type' => 'select',
 			'text' => 'Colore',
 			'name' => 'color',
-			'query' => "* FROM items_colors ORDER BY name_it ASC",
-			'field-name' => 'ID',
-			'field-show' => 'name_it',
+			'query' => "* FROM items_colors ORDER BY name ASC",
+			'field-name' => 'id',
+			'field-show' => 'name',
 			'value' => $_POST['color'] ?? false,
 		],
 	]
@@ -33,7 +33,7 @@ $inputs = [
 ];
 
 // fetch types
-$types = DBOld::select('* FROM items_types ORDER BY hidden ASC, category ASC, ID ASC');
+$types = DBOld::select('* FROM items_types ORDER BY hidden ASC, category ASC, id ASC');
 
 $i = 0;
 while ($type = $types->fetch_assoc()) {
@@ -43,8 +43,8 @@ while ($type = $types->fetch_assoc()) {
 	$input = [
 		'type' => 'cbx',
 		'name' => 'type[]',
-		'value' => $type['ID'],
-		'text' => $type['name_it'] . ($type['gender'] == 2 ? ' Donna' : ''),
+		'value' => $type['id'],
+		'text' => $type['name'] . ($type['gender'] == 2 ? ' Donna' : ''),
 	];
 
 	if (!$i) {
@@ -63,15 +63,15 @@ if (isset($_POST['add-color'])) {
 
 		DBOld::update('items_colors SET hidden=0 WHERE tag = ?', [$color->slug]);
 
-		foreach ($_POST['type'] as $typeId) {
+		foreach ($_POST['type'] as $type_id) {
 			// update type colors
-			DBOld::update("items_types SET colors=CONCAT(colors,',',?) WHERE ID = ? AND NOT FIND_IN_SET(?, colors)", [$color->slug, $typeId, $color->slug]);
+			DBOld::update("items_types SET colors=CONCAT(colors,',',?) WHERE id = ? AND NOT FIND_IN_SET(?, colors)", [$color->slug, $type_id, $color->slug]);
 
 			// update items color
-			DBOld::update("items SET colors=CONCAT(colors,',',?) WHERE typeID = ? AND NOT FIND_IN_SET(?, colors) AND desID NOT IN (SELECT ID FROM designs WHERE custom=1)", [$color->slug, $typeId, $color->slug]);
+			DBOld::update("items SET colors=CONCAT(colors,',',?) WHERE type_id = ? AND NOT FIND_IN_SET(?, colors) AND design_id NOT IN (SELECT id FROM designs WHERE custom=1)", [$color->slug, $type_id, $color->slug]);
 
 			// set as main color if there's no main color
-			DBOld::update("items SET colorID = ? WHERE typeID = ? AND colorID=0", [$color->id, $typeId]);
+			DBOld::update("items SET color_id = ? WHERE type_id = ? AND color_id=0", [$color->id, $type_id]);
 		}
 
 		$done = true;
@@ -83,9 +83,9 @@ if (isset($_POST['remove-color'])) {
 	if (isset($_POST['type'])) {
 		$color = new Color($_POST['color']);
 
-		foreach ($_POST['type'] as $typeID) {
-			DBOld::update("items_types SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE ID = ?", [$typeID]);
-			DBOld::update("items SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE typeID = ? AND desID NOT IN (SELECT ID FROM designs WHERE custom=1)", [$typeID]);
+		foreach ($_POST['type'] as $type_id) {
+			DBOld::update("items_types SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE id = ?", [$type_id]);
+			DBOld::update("items SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE type_id = ? AND design_id NOT IN (SELECT id FROM designs WHERE custom=1)", [$type_id]);
 		}
 
 		$done = true;
@@ -96,9 +96,9 @@ if (isset($_POST['remove-color'])) {
 if (isset($_POST['remove-color-all'])) {
 	$color = new Color($_POST['color']);
 
-	DBOld::update('items_colors SET hidden=1 WHERE ID = ?', [$color->id]);
+	DBOld::update('items_colors SET hidden=1 WHERE id = ?', [$color->id]);
 	DBOld::update("items_types SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ','))");
-	DBOld::update("items SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE desID NOT IN (SELECT ID FROM designs WHERE custom=1)");
+	DBOld::update("items SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE design_id NOT IN (SELECT id FROM designs WHERE custom=1)");
 
 	$done = true;
 }

@@ -2,24 +2,24 @@
 
 use Ecommerce\Cart;
 
-function cart_setup_old($buyerID, $stepId = false) {
+function cart_setup_old($user_idID, $stepId = false) {
 
 	// setup cart
-	$cartID = DBOld::find('ID FROM carts WHERE buyer=? and status=0', [$buyerID]);
+	$cart_id = DBOld::find('id FROM carts WHERE user_id=? and status=0', [$user_idID]);
 
 	// redirect if the cart doesn't exists
-	if (!$cartID) redirect_old('/cart/empty');
+	if (!$cart_id) redirect_old('/cart/empty');
 
 	// clean and redirect if the cart is empty
 	if (!cart_quantity()) {
 
-		DBOld::delete('carts WHERE ID = ?', $cartID);
+		DBOld::delete('carts WHERE id = ?', $cart_id);
 
 		redirect_old('/cart/empty');
 	}
 
 	// create cart
-	$cart = new Cart($cartID);
+	$cart = new Cart($cart_id);
 
 	// redirect if the step is wrong
 	if ($stepId && $cart->step < $stepId) redirect_old('/cart?step=' . $cart->step);
@@ -58,7 +58,7 @@ function cart_promotions(&$cart) {
 	$promotion['discount-shop'] = 10;
 	$promotion['trigger'] = [
 		'count',
-		'orders WHERE buyer=? AND itemID IN (SELECT ID FROM items WHERE userID = ?) AND typeID IN (6,7,8,9,10,11)',
+		'orders WHERE user_id=? AND product_id IN (SELECT id FROM items WHERE user_id = ?) AND type_id IN (6,7,8,9,10,11)',
 		[$cart->customer, 187],
 		2
 	];
@@ -70,8 +70,8 @@ function cart_promotions(&$cart) {
 		//remove expired promotions
 		if ($cart->promotion && ($cart->promotion != $promotion['code'] || !$promotion['active'])) {
 
-			DBOld::update('carts SET promotion="" WHERE ID = ?', [$cart->id]);
-			DBOld::update('orders SET price_disc=0, gain_disc=0 WHERE cartID = ?', [$cart->id]);
+			DBOld::update('carts SET promotion="" WHERE id = ?', [$cart->id]);
+			DBOld::update('orders SET price_disc=0, gain_disc=0 WHERE cart_id = ?', [$cart->id]);
 
 			redirect_old();
 		}
@@ -94,17 +94,17 @@ function cart_promotions(&$cart) {
 					//add promotion to the cart
 					$cart->promotion = $promotion['code'];
 
-					DBOld::update('carts SET promotion=? WHERE ID = ?', [$promotion['code'], $cart->id]);
+					DBOld::update('carts SET promotion=? WHERE id = ?', [$promotion['code'], $cart->id]);
 
 					//add discount to orders
-					$orders = DBOld::select('ID, price FROM orders WHERE cartID = ?', [$cart->id]);
+					$orders = DBOld::select('id, price FROM orders WHERE cart_id = ?', [$cart->id]);
 
 					while ($order = $orders->fetch_assoc()) {
 
 						$price_disc = round($order['price'] * $promotion['discount'], 2);
 						$gain_disc = round($order['price'] * $promotion['discount-shop'] / 100, 2);
 
-						DBOld::update('orders SET price_disc=?, gain_disc=? WHERE ID = ?', [$price_disc, $gain_disc, $order['ID']]);
+						DBOld::update('orders SET price_disc=?, gain_disc=? WHERE id = ?', [$price_disc, $gain_disc, $order['id']]);
 					}
 
 					redirect_old();
@@ -113,8 +113,8 @@ function cart_promotions(&$cart) {
 				//if not triggered anymore
 				if ($cart->promotion && !$triggered) {
 
-					DBOld::update('carts SET promotion="" WHERE ID = ?', [$cart->id]);
-					DBOld::update('orders SET price_disc=0, gain_disc=0 WHERE cartID = ?', [$cart->id]);
+					DBOld::update('carts SET promotion="" WHERE id = ?', [$cart->id]);
+					DBOld::update('orders SET price_disc=0, gain_disc=0 WHERE cart_id = ?', [$cart->id]);
 
 					redirect_old();
 				}

@@ -15,9 +15,9 @@ class Position {
 	public $imagePositionId;
 
 	function __construct($id) {
-		if ($row = DBOld::row('* FROM items_positions WHERE ID = ?', [$id])) {
+		if ($row = DBOld::row('* FROM items_positions WHERE id = ?', [$id])) {
 			$this->id = $id;
-			$this->name = $row['name_' . 'it'];
+			$this->name = $row['name'];
 			$this->info = $row['info'];
 			$this->editable = $row['editable'];
 			$this->imagePositionId = $row['base_of'] ?: $this->id;

@@ -21,18 +21,18 @@ use Ecommerce\Design;
 		<div class="gallery">
 
 			<?php while ($row = $client_pics->fetch_assoc()) {
-				$design = new Design($row['desID']);
+				$design = new Design($row['design_id']);
 
-				$lname = empty($row['lname']) || $row['lname'] == '-' ? '' : substr($row['lname'], 0, 1) . '.';
+				$last_name = empty($row['last_name']) || $row['last_name'] == '-' ? '' : substr($row['last_name'], 0, 1) . '.';
 
 			?>
 
 				<a href="<?= $design->url ?>" class="image stack-items">
-					<img src="<?= public_asset('users/testimonials/' . $row['ID'] . '.jpg') ?>" alt="" loading="lazy" class="img-fill">
+					<img src="<?= public_asset('users/testimonials/' . $row['id'] . '.jpg') ?>" alt="" loading="lazy" class="img-fill">
 					<div class="overlay pad-2 grid va-cen txt-cen">
 						<div class="title-box">
 							<p class="design-name txt-wht txt-11rem txt-bold txt-line"><?= $design->name ?></p>
-							<p class="client-name txt-wht txt-upp txt-line"><?= $row['fname'] . ' ' . $lname ?></p>
+							<p class="client-name txt-wht txt-upp txt-line"><?= $row['first_name'] . ' ' . $last_name ?></p>
 						</div>
 					</div>
 				</a>

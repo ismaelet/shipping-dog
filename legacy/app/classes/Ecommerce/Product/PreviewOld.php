@@ -47,7 +47,7 @@ class PreviewOld {
 	}
 
 	private function getFileName() {
-		return $this->product->id . '-' . $this->product->color->slug . '-' . $this->product->positionId . '-' . $this->imageSize;
+		return $this->product->id . '-' . $this->product->color->slug . '-' . $this->product->position_id . '-' . $this->imageSize;
 	}
 
 	private function getDirectory() {
@@ -74,13 +74,13 @@ class PreviewOld {
 	static function put($id, $data) {
 		$result = false;
 		$product = new Product($id);
-		$base = DBOld::row('* FROM items_mockups WHERE typeID = ? AND positionID = ?', [$product->type->id, $data['positionID']]);
+		$base = DBOld::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$product->type->id, $data['position_id']]);
 
 		if ($data['size'] != $base['siz_x_def'] || $data['pos-x'] != $base['pos_x_def'] || $data['pos-y'] != $base['pos_y_def']) {
-			if (DBOld::exists('items_previews WHERE itemID = ? AND positionID = ?', [$product->id, $data['positionID']]))
-				$result = DBOld::update('items_previews SET size=?, pos_x=?, pos_y=? WHERE itemID = ? AND positionID = ?', [$data['size'], $data['pos-x'], $data['pos-y'], $product->id, $data['positionID']]);
+			if (DBOld::exists('items_previews WHERE product_id = ? AND position_id = ?', [$product->id, $data['position_id']]))
+				$result = DBOld::update('items_previews SET size=?, pos_x=?, pos_y=? WHERE product_id = ? AND position_id = ?', [$data['size'], $data['pos-x'], $data['pos-y'], $product->id, $data['position_id']]);
 			else
-				$result = DBOld::add('items_previews (itemID, positionID, size, pos_x, pos_y) VALUES (?, ?, ?, ?, ?)', [$product->id, $data['positionID'], $data['size'], $data['pos-x'], $data['pos-y']]);
+				$result = DBOld::add('items_previews (product_id, position_id, size, pos_x, pos_y) VALUES (?, ?, ?, ?, ?)', [$product->id, $data['position_id'], $data['size'], $data['pos-x'], $data['pos-y']]);
 
 			self::deleteImages($product->id);
 		}
@@ -91,23 +91,23 @@ class PreviewOld {
 	// generate a missing image
 	private function generateImage() {
 		// fetch mockup base data
-		$mockupFrameworkData = DBOld::row('* FROM items_mockups WHERE typeID = ? AND positionID = ?', [$this->product->typeId, $this->product->positionId]);
+		$mockupFrameworkData = DBOld::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$this->product->type_id, $this->product->position_id]);
 
 		// fetch mockup design data
-		$mockupProductData = DBOld::row('* FROM items_previews WHERE itemID = ? AND positionID = ?', [$this->product->id, $this->product->positionId]);
+		$mockupProductData = DBOld::row('* FROM items_previews WHERE product_id = ? AND position_id = ?', [$this->product->id, $this->product->position_id]);
 
 		// background
 		$backgroundImage = server_root() . '/uploads/product_types/mockups/bgr/grey.png';
 
 		// clothing
-		$clothingImage = server_root() . $this->product->type->getImage($this->product->colorId, $this->product->positionId);
+		$clothingImage = server_root() . $this->product->type->getImage($this->product->colorId, $this->product->position_id);
 		$clothingImageType = strpos($clothingImage, '.webp') ? 'webp' : 'png';
 
 		$details = file_exists($file = str_replace('.' . $clothingImageType, '-det.' . $clothingImageType, $clothingImage)) ? $file : false;
 
 		// design
-		$design = $this->product->color->dark && file_exists($file = server_root() . '/uploads/designs/' . $this->product->designId . '_dark.png') ?
-			$file : server_root() . '/uploads/designs/' . $this->product->designId . '.png';
+		$design = $this->product->color->dark && file_exists($file = server_root() . '/uploads/designs/' . $this->product->design_id . '_dark.png') ?
+			$file : server_root() . '/uploads/designs/' . $this->product->design_id . '.png';
 
 		// generate image
 		if (!file_exists($clothingImage)) {
@@ -199,7 +199,7 @@ class PreviewOld {
 	static function deleteImages($id) {
 		$product = new Product($id);
 
-		$files = glob(public_storage_path('products/' . $product->type->slug . '/' . $product->id . '-*'));
+		$files = glob(public_storage('products/' . $product->type->slug . '/' . $product->id . '-*'));
 		array_map('unlink', $files);
 	}
 }

@@ -48,7 +48,7 @@
 		/* 2.1.1 Theme */
 		--theme-h: 34deg;
 		--theme-light-s: 0%;
-		--theme-dark-s: 13%;
+		--theme-dark-s: 25%;
 
 		/* 2.1.1 Primary */
 		--color-primary-300-hsl: 247deg 70% 78%;
@@ -176,7 +176,7 @@
 	[data-color-scheme='dark'],
 	[data-local-color-scheme='dark'] {
 		/* 2.8.1 Theme colors */
-		--theme-h: 228deg;
+		--theme-h: 220deg;
 
 		/* 2.8.2 Neutral colors */
 		--color-neutral-100-hsl: var(--color-neutral-dark-100-hsl);

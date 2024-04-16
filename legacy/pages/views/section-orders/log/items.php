@@ -15,8 +15,8 @@ use App\View\Components\Form\SearchInput;
 				<?= SearchInput::render([
 					'search' => 'carts',
 					'storedName' => 'start_cart_id',
-					'storedValue' => $startFromCart ? $startFromCart->ID : null,
-					'shownValue' => $startFromCart ? $startFromCart->ID . ' - ' . $startFromCart->address->aname : '',
+					'storedValue' => $startFromCart ? $startFromCart->id : null,
+					'shownValue' => $startFromCart ? $startFromCart->id . ' - ' . $startFromCart->address->full_name : '',
 					'placeholder' => 'Ordine da cui partire',
 					'required' => true,
 				]) ?>
@@ -49,8 +49,8 @@ use App\View\Components\Form\SearchInput;
 			<?php
 
 			$sortedBySellers = $filteredOrders
-				->sortBy('sellerId')
-				->unique('sellerId');
+				->sortBy('seller_id')
+				->unique('seller_id');
 
 			foreach ($sortedBySellers as $sellerOrder) {
 
@@ -59,24 +59,24 @@ use App\View\Components\Form\SearchInput;
 
 				// Get the orders
 				$sortedByProducts = $filteredOrders
-					->where('sellerId', '=', $sellerOrder->sellerId)
-					->sortBy('designId')
-					->unique('designId');
+					->where('seller_id', '=', $sellerOrder->seller_id)
+					->sortBy('design_id')
+					->unique('design_id');
 
 				// Designs
 				foreach ($sortedByProducts as $product) {
 					$mergedOrders = [];
 
-					// Product name (grouped by designId)
-					echo '<span class="text-color-highlighted">' . ($product->designId ?  $product->designId . ' - ' : '') . $product->productName . '</span><br>';
+					// Product name (grouped by design_id)
+					echo '<span class="text-color-highlighted">' . ($product->design_id ?  $product->design_id . ' - ' : '') . $product->productName . '</span><br>';
 
 					// Get the orders
 					$orders = $filteredOrders
-						->where('sellerId', '=', $product->sellerId)
-						->where('designId', '=', $product->designId)
+						->where('seller_id', '=', $product->seller_id)
+						->where('design_id', '=', $product->design_id)
 						->sortBy('sizeID')
-						->sortBy('colorID')
-						->sortBy('typeID');
+						->sortBy('color_id')
+						->sortBy('type_id');
 
 					// Merge orders
 					foreach ($orders as $order) {
@@ -112,8 +112,8 @@ use App\View\Components\Form\SearchInput;
 
 			<?php
 			$sortedByTypes = $filteredOrders
-				->sortBy('typeID')
-				->unique('typeID');
+				->sortBy('type_id')
+				->unique('type_id');
 
 			foreach ($sortedByTypes as $typeOrder) {
 
@@ -125,15 +125,15 @@ use App\View\Components\Form\SearchInput;
 				// Get the orders
 				$sortedByData = $filteredOrders
 					->where('inventory', 0)
-					->where('typeID', '=', $typeOrder->typeID)
-					->sortBy('colorID')
+					->where('type_id', '=', $typeOrder->type_id)
+					->sortBy('color_id')
 					->sortBy('sizeID');
 
 				// Merge orders
 				foreach ($sortedByData as $order) {
 					$orderDescription = [];
 					$orderDescription[] = $order->size && strpos($order->product->type->sizes, ',') ? $order->size->name : null;
-					$orderDescription[] = $order->color && strpos($order->product->type->colors, ',') ? $order->color->name_it : null;
+					$orderDescription[] = $order->color && strpos($order->product->type->colors, ',') ? $order->color->name : null;
 					$orderDescription = implode(' ', array_filter($orderDescription)) ?: 'Prodotto standard';
 
 					if (isset($mergedOrders[$orderDescription])) {

@@ -23,11 +23,11 @@ if (!$changeRequest->processed && $changeRequest->payed) {
 		$newCart->touch('time');
 		$newCart->save();
 
-		$changeRequest->new_cart_id = $newCart->ID;
+		$changeRequest->new_cart_id = $newCart->id;
 
 		// Duplicate the address
 		$address = $oldCart->address->replicate();
-		$address->cartID = $newCart->ID;
+		$address->cart_id = $newCart->id;
 		$address->save();
 
 		// Process the individual changes
@@ -36,17 +36,17 @@ if (!$changeRequest->processed && $changeRequest->payed) {
 
 			// Add the old product to the inventory
 			InventoryItem::create([
-				'designId' => $oldOrder->designId,
-				'typeId' => $oldOrder->typeID,
-				'colorId' => $oldOrder->colorID,
-				'sizeId' => $oldOrder->sizeID,
-				'positionId' => $oldOrder->posID,
-				'logoId' => $oldOrder->extID,
+				'design_id' => $oldOrder->design_id,
+				'type_id' => $oldOrder->type_id,
+				'colorId' => $oldOrder->color_id,
+				'size_id' => $oldOrder->sizeID,
+				'position_id' => $oldOrder->position_id,
+				'logo_id' => $oldOrder->logo_id,
 			]);
 
 			// Duplicate the old order
 			$newOrder = $oldOrder->replicate();
-			$newOrder->cartID = $newCart->ID;
+			$newOrder->cart_id = $newCart->id;
 			$newOrder->sizeID = $change->new_size_id;
 			$newOrder->fullProductPrice = 0;
 			$newOrder->price_disc = 0;
@@ -55,7 +55,7 @@ if (!$changeRequest->processed && $changeRequest->payed) {
 			$newOrder->credit = 0;
 			$newOrder->save();
 
-			$change->new_order_id = $newOrder->ID;
+			$change->new_order_id = $newOrder->id;
 		}
 	}
 

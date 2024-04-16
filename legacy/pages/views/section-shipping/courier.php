@@ -2,8 +2,8 @@
 
 <div class="form-field">
 	<label class="label">Scarica dall'ordine, all'ordine:</label>
-	<input type="number" class="input" name="first_cart_id" value="<?= $firstCart->ID ?? '' ?>" placeholder="Scarica dall'ordine numero" data-size="2" required>
-	<input type="number" class="input" name="last_cart_id" value="<?= $lastCart->ID ?? '' ?>" placeholder="Fino all'ordine numero" data-size="2" required>
+	<input type="number" class="input" name="first_cart_id" value="<?= $firstCart->id ?? '' ?>" placeholder="Scarica dall'ordine numero" data-size="2" required>
+	<input type="number" class="input" name="last_cart_id" value="<?= $lastCart->id ?? '' ?>" placeholder="Fino all'ordine numero" data-size="2" required>
 </div>
 
 {% end form-body %}

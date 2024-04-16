@@ -216,9 +216,9 @@
 							<div class="inp-box color-grid">
 
 								<?php
-								$defaultColorId = DBOld::find('colorID FROM items WHERE desID = ? AND typeID=1', [$design->id]);
+								$defaultColorId = DBOld::find('color_id FROM items WHERE design_id = ? AND type_id=1', [$design->id]);
 								while ($row = $res_colorD->fetch_assoc()) {
-									$color = new Color($row['ID']);
+									$color = new Color($row['id']);
 								?>
 
 									<label class="inlb color-box active">

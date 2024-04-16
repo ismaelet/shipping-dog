@@ -9,35 +9,35 @@ $product = $id ? new Product($id) : null;
 
 $pageConfig['free'] = true;
 $queryConfig['table'] = 'items';
-$queryConfig['index-field'] = 'ID';
+$queryConfig['index-field'] = 'id';
 $queryConfig['title-field'] = 'name';
 
 // seller input
 $sellerInput = [
 	'search' => 'sellers',
-	'name' => 'sellerId',
+	'name' => 'seller_id',
 	'text' => 'Negozio',
 	'name-show' => null,
-	'value' => $product ? $product->sellerId : null,
+	'value' => $product ? $product->seller_id : null,
 	'value-show' => $product ? $product->seller->name : null,
 	'required' => true,
 ];
 
 // fetch types
 $types = [];
-$typeRows = DBOld::select('ID FROM items_types ORDER BY category ASC, ID ASC');
+$typeRows = DBOld::select('id FROM items_types ORDER BY category ASC, id ASC');
 
 while ($typeRow = $typeRows->fetch_assoc()) {
-	$type = new Type($typeRow['ID']);
+	$type = new Type($typeRow['id']);
 	$types[] = $type;
 }
 
 // fetch colors
 $colors = [];
-$colorRows = DBOld::select('ID FROM items_colors ORDER BY reorder ASC, ID ASC');
+$colorRows = DBOld::select('id FROM items_colors ORDER BY reorder ASC, id ASC');
 
 while ($colorRow = $colorRows->fetch_assoc()) {
-	$color = new Color($colorRow['ID']);
+	$color = new Color($colorRow['id']);
 	$colors[] = $color;
 }
 
@@ -74,32 +74,32 @@ if (isset($_POST['upload'])) {
 // add
 function _expand_add($table) {
 	$name = $_POST['name'];
-	$sellerId = $_POST['sellerId'];
-	$typeId = $_POST['typeId'];
+	$seller_id = $_POST['seller_id'];
+	$type_id = $_POST['type_id'];
 	$price = str_replace(',', '.', $_POST['price']);
 	$defaultColorId = $_POST['default-color-id'];
 	$colors = implode(',', $_POST['colors']);
 
-	$productId = DBOld::add($table . ' (name, desID, userID, typeID, colorID, colors, positions, status)', [$name, 0, $sellerId, $typeId, $defaultColorId, $colors, 1, 1]);
+	$productId = DBOld::add($table . ' (name, design_id, user_id, type_id, color_id, colors, positions, status)', [$name, 0, $seller_id, $type_id, $defaultColorId, $colors, 1, 1]);
 
-	DBOld::add('items_prices (itemID, price)', [$productId, $price]);
+	DBOld::add('items_prices (product_id, price)', [$productId, $price]);
 }
 
 // edit
 function _expand_edit($table, $inputs, $index, $id) {
 	$name = $_POST['name'];
-	$sellerId = $_POST['sellerId'];
-	$typeId = $_POST['typeId'];
+	$seller_id = $_POST['seller_id'];
+	$type_id = $_POST['type_id'];
 	$price = str_replace(',', '.', $_POST['price']);
 	$defaultColorId = $_POST['default-color-id'];
 	$colors = implode(',', $_POST['colors']);
 
-	DBOld::update($table . ' SET name = ?, userID = ?, typeID = ?, colorID = ?, colors=? WHERE ID = ?', [$name, $sellerId, $typeId, $defaultColorId, $colors, $id]);
+	DBOld::update($table . ' SET name = ?, user_id = ?, type_id = ?, color_id = ?, colors=? WHERE id = ?', [$name, $seller_id, $type_id, $defaultColorId, $colors, $id]);
 
-	if (DBOld::exists('items_prices WHERE itemID = ?', [$id])) {
-		DBOld::update('items_prices SET price=? WHERE itemID = ?', [$price, $id]);
+	if (DBOld::exists('items_prices WHERE product_id = ?', [$id])) {
+		DBOld::update('items_prices SET price=? WHERE product_id = ?', [$price, $id]);
 	} else {
-		DBOld::add('items_prices (itemID, price)', [$id, $price]);
+		DBOld::add('items_prices (product_id, price)', [$id, $price]);
 	}
 
 	if ($_FILES['cover-image']['name']) {

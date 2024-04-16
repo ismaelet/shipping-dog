@@ -12,7 +12,7 @@ $pageConfig['row-action'] = 'edit?id={{id}}';
 /*
 * Query configuration
 */
-$queryConfig['index'] = 'ID';
+$queryConfig['index'] = 'id';
 $queryConfig['table'] = 'carts';
 $queryConfig['where'] = empty($_GET['search']) ? 'status <> 0' : '';
 $queryConfig['maximum-results'] = 20;
@@ -22,35 +22,31 @@ $queryConfig['where-search'] = "
 	ID = ? OR
 
 	ID IN (
-		SELECT cartID FROM carts_data WHERE comm_vip LIKE CONCAT('%',?,'%')
-	) OR
-	
-	ID IN (
-		SELECT cartID FROM addresses
+		SELECT cart_id FROM addresses
 		WHERE
-			aname LIKE CONCAT('%',?,'%') OR
-			fname LIKE CONCAT('%',?,'%') OR
-			lname LIKE CONCAT('%',?,'%') OR
+			full_name LIKE CONCAT('%',?,'%') OR
+			first_name LIKE CONCAT('%',?,'%') OR
+			last_name LIKE CONCAT('%',?,'%') OR
 			email LIKE CONCAT('%',?,'%') OR
 			city LIKE CONCAT('%',?,'%')
 	) OR
 	
 	ID IN (
-		SELECT cartID FROM orders
+		SELECT cart_id FROM orders
 		WHERE
-			itemID IN (SELECT ID FROM items WHERE name LIKE CONCAT('%',?,'%')) OR
-			sellerId IN (SELECT userID FROM stores WHERE name LIKE CONCAT('%',?,'%')) OR
-			designId IN (SELECT ID FROM designs WHERE ID = ? OR name LIKE CONCAT('%',?,'%'))
+			product_id IN (SELECT id FROM items WHERE name LIKE CONCAT('%',?,'%')) OR
+			seller_id IN (SELECT user_id FROM stores WHERE name LIKE CONCAT('%',?,'%')) OR
+			design_id IN (SELECT id FROM designs WHERE id = ? OR name LIKE CONCAT('%',?,'%'))
 	) OR
 	
-	ID IN (SELECT cartID FROM orders WHERE typeID IN (SELECT ID FROM items_types WHERE name_it=CONCAT('%',?,'%')))
+	ID IN (SELECT cart_id FROM orders WHERE type_id IN (SELECT id FROM items_types WHERE name=CONCAT('%',?,'%')))
 )";
 
 /*
 * Fields
 */
 $fields = [
-	['title' => 'ID'],
+	['title' => 'id'],
 	['title' => 'Dati', 'size' => 1],
 	['title' => 'Destinatario', 'size' => 1],
 	['title' => 'Contatti',],
@@ -69,7 +65,7 @@ $buttons = [
 //expand results
 function _expand_results(&$entry, $field, $key, $row) {
 
-	$cart = new Cart($row['ID']);
+	$cart = new Cart($row['id']);
 
 	if ($key == 0) {
 		// id
@@ -107,5 +103,5 @@ function _expand_results(&$entry, $field, $key, $row) {
 
 // resend status email
 if (isset($_POST['resend-status-email'])) {
-	(new Cart($_POST['ID']))->sendStatusEmail(true);
+	(new Cart($_POST['id']))->sendStatusEmail(true);
 }

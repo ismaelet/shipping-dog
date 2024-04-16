@@ -71,7 +71,7 @@ class FileHelper {
 
 		$filePath = $parameters['path'];
 		$fileName = ArrayHelper::explodeLast('/', $filePath)[1];
-		$storageDirectory = public_storage_path(ArrayHelper::explodeLast('/', $filePath)[0]);
+		$storageDirectory = public_storage(ArrayHelper::explodeLast('/', $filePath)[0]);
 		$fileStoragePath = $storageDirectory . '/' . $fileName;
 		$size = $parameters['size'];
 		$type = isset($parameters['type']) && in_array($parameters['type'], ['webp', 'jpg', 'png']) ? $parameters['type'] : 'webp';

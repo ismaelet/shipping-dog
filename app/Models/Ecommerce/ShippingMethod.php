@@ -8,7 +8,7 @@ class ShippingMethod extends Model {
 
 	private const SHIPPING_METHODS_WITH_LABELS = [1, 2];
 
-	protected $primaryKey = 'ID';
+
 	protected $table = 'sys_shipping';
 	protected $fillable = [];
 

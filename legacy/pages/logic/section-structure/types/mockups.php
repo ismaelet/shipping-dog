@@ -5,23 +5,23 @@ use App\Models\Ecommerce\Product\ProductTypeMockup;
 use Ecommerce\Product\Color;
 use Ecommerce\Product\Mockup;
 
-$typeId = $_GET['id'];
-$type = ProductType::find($typeId);
+$type_id = $_GET['id'];
+$type = ProductType::find($type_id);
 
-if (!$type->ID) {
+if (!$type->id) {
 	redirect_old('list');
 }
 
 ViewOld::setTitle('Mockup ' . $type->fullName);
 
-$mockupData = ProductTypeMockup::getByTypeId($typeId);
+$mockupData = ProductTypeMockup::getByTypeId($type_id);
 
 $mockups = [];
 
 foreach ($type->colorCollection() as $color) {
 	foreach ($type->positionCollection() as $position) {
 		if ($position->hasSpecificMockup()) {
-			$mockups[] = new Mockup($type->ID, $color->ID, $position->ID);
+			$mockups[] = new Mockup($type->id, $color->id, $position->id);
 		}
 	}
 }
@@ -49,9 +49,9 @@ if (isset($_POST['edit'])) {
 * Image upload
 */
 if (isset($_POST['image-url'])) {
-	$typeId = $_POST['type-id'];
+	$type_id = $_POST['type-id'];
 	$colorId = $_POST['color-id'];
-	$positionId = $_POST['position-id'];
+	$position_id = $_POST['position-id'];
 
 	$color =  new Color($colorId);
 
@@ -63,9 +63,9 @@ if (isset($_POST['image-url'])) {
 
 	upload_img($fileData);
 
-	$files = glob(public_server_path('/uploads/products/' . $type->tag . '/*-' . $color->tag . '-' . $positionId . '-*'));
+	$files = glob(public_server_path('/uploads/products/' . $type->tag . '/*-' . $color->tag . '-' . $position_id . '-*'));
 
 	array_map('unlink', $files);
 
-	redirect_old('#' . $colorId . '-' . $positionId);
+	redirect_old('#' . $colorId . '-' . $position_id);
 }

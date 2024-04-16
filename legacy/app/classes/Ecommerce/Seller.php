@@ -20,7 +20,7 @@ class Seller {
 	use DatabaseObject;
 
 	public const TABLE = 'stores';
-	public const INDEX = 'userID';
+	public const INDEX = 'user_id';
 
 	/*
 	* Get methods
@@ -45,7 +45,7 @@ class Seller {
 	}
 
 	private function getFollowed() {
-		return auth()->check() && DBOld::exists('followers WHERE userID = ? AND followID = ?', [auth()->id(), $this->id]);
+		return auth()->check() && DBOld::exists('followers WHERE user_id = ? AND follower_id = ?', [auth()->id(), $this->id]);
 	}
 
 	private function getUserData() {
@@ -72,8 +72,8 @@ class Seller {
 		$earned = DBOld::row(
 			'
 		SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * orders.quantity) as totGain
-		FROM orders INNER JOIN carts ON orders.cartID = carts.ID
-		WHERE sellerId = ? AND carts.status > 0',
+		FROM orders INNER JOIN carts ON orders.cart_id = carts.id
+		WHERE seller_id = ? AND carts.status > 0',
 			[$this->id]
 		)['totGain'];
 
@@ -89,7 +89,7 @@ class Seller {
 	}
 
 	private function getPayed() {
-		return DBOld::sum('value FROM stores_payments WHERE storeID = ? AND other = 0', [$this->id]);
+		return DBOld::sum('value FROM stores_payments WHERE seller_id = ? AND other = 0', [$this->id]);
 	}
 
 	private function getPayedString() {
@@ -97,7 +97,7 @@ class Seller {
 	}
 
 	private function getOtherTransfers() {
-		return DBOld::sum('value FROM stores_payments WHERE storeID = ? AND other = 1', [$this->id]);
+		return DBOld::sum('value FROM stores_payments WHERE seller_id = ? AND other = 1', [$this->id]);
 	}
 
 	private function getOtherTransfersString() {
@@ -155,7 +155,7 @@ class Seller {
 	*/
 	public function delete() {
 		DBOld::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
-		DBOld::delete('stores_payments WHERE storeID = ?', [$this->id]);
+		DBOld::delete('stores_payments WHERE seller_id = ?', [$this->id]);
 
 		foreach ($this->designs as $design) {
 			$design->delete(true);

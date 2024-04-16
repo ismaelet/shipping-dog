@@ -31,11 +31,11 @@ use function Ecommerce\ecommerce_config;
 	<?php } ?>
 
 	<!-- Shipping data -->
-	<?php $row_addr = DBOld::row('* FROM addresses WHERE cartID = ?', [$cart->id]) ?>
+	<?php $row_addr = DBOld::row('* FROM addresses WHERE cart_id = ?', [$cart->id]) ?>
 
 	<input type="hidden" name="shipping_1" value="<?= $cart->shippingPriceFrm ?>">
-	<input type="hidden" name="first_name" value="<?= $cart->address->firstName ?>">
-	<input type="hidden" name="last_name" value="<?= $cart->address->lastName ?>">
+	<input type="hidden" name="first_name" value="<?= $cart->address->first_name ?>">
+	<input type="hidden" name="last_name" value="<?= $cart->address->last_name ?>">
 	<input type="hidden" name="address1" value="<?= $cart->address->address . ' ' . $cart->address->number ?>">
 	<input type="hidden" name="city" value="<?= $cart->address->city ?>">
 	<input type="hidden" name="state" value="<?= $cart->address->region ?>">

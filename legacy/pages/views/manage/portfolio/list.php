@@ -56,14 +56,14 @@ use Ecommerce\Product;
 			<div id="gallery" class="mar-t-2 txt-cen grid gap1 js-sortable">
 
 				<?php while ($row = $designs->fetch_assoc()) {
-					$design = EcommerceDesign::find($row['ID']);
+					$design = EcommerceDesign::find($row['id']);
 				?>
 
 					<div class="img-box">
-						<input type="hidden" name="id[]" value="<?= $design->ID ?>">
+						<input type="hidden" name="id[]" value="<?= $design->id ?>">
 						<input type="hidden" class="pos js-order" name="pos[]" value="<?= $row['sort'] ?>">
 
-						<a class="des-img block sqr" href="/manage/portfolio/edit?id=<?= $design->ID ?>">
+						<a class="des-img block sqr" href="/manage/portfolio/edit?id=<?= $design->id ?>">
 							<img class="img-fill" src="<?= $design->image() ?>" loading="lazy">
 						</a>
 
@@ -84,14 +84,14 @@ use Ecommerce\Product;
 				<div class="grid-flow js-sortable" data-spacing="400" data-columns="15rem">
 
 					<?php while ($productRow = $customProducts->fetch_assoc()) {
-						$product = EcommerceProduct::find($productRow['ID']);
+						$product = EcommerceProduct::find($productRow['id']);
 					?>
 
 						<div class="img-box grid-flow fa-center" data-spacing="200">
-							<input type="hidden" name="product-id[]" value="<?= $product->ID ?>">
+							<input type="hidden" name="product-id[]" value="<?= $product->id ?>">
 							<input type="hidden" class="pos js-order" name="product-order[]" value="<?= $product->sort ?>">
 
-							<a class="des-img block sqr" href="<?= '/manage/portfolio/product?id=' . $product->ID ?>">
+							<a class="des-img block sqr" href="<?= '/manage/portfolio/product?id=' . $product->id ?>">
 								<img class="img-fill" src="<?= $product->image() ?>" loading="lazy">
 							</a>
 

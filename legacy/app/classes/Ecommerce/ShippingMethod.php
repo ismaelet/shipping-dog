@@ -28,7 +28,7 @@ class ShippingMethod {
 	use DatabaseObject;
 
 	public const TABLE = 'sys_shipping';
-	public const INDEX = 'ID';
+	public const INDEX = 'id';
 
 	private const REQUIRED_WORKING_DAYS = [1, 2];
 	private const WEEKEND_DAYS = [6, 7];
@@ -48,15 +48,15 @@ class ShippingMethod {
 	}
 
 	private function getName() {
-		return $this->name_it;
+		return $this->name;
 	}
 
 	private function getDescription() {
-		return $this->desc_it;
+		return $this->desc;
 	}
 
 	private function getAssociatedCart() {
-		return cartId() ? cart_old() : null;
+		return cart_id() ? \App\Helpers\App::cartOld() : null;
 	}
 
 	private function getProductQuantity() {
@@ -67,7 +67,7 @@ class ShippingMethod {
 		$price = 0;
 
 		// fetch shipping data
-		$shipping = DBOld::row('* FROM sys_shipping WHERE ID = ?', [$this->id]);
+		$shipping = DBOld::row('* FROM sys_shipping WHERE id = ?', [$this->id]);
 
 		if ($shipping) {
 			// calculate price
@@ -120,7 +120,7 @@ class ShippingMethod {
 		$daysPassed = 0;
 		$workDaysPassed = 0;
 
-		$cart = $this->associatedCart ?: cart_old();
+		$cart = $this->associatedCart ?: \App\Helpers\App::cartOld();
 		$cartTime = $cart->statusId ? $cart->time : date('Y-m-d');
 
 		$weekDayNumber = date('N', strtotime($cartTime));

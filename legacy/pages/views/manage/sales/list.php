@@ -9,7 +9,7 @@
 
 	use function Ecommerce\format_price;
 
-	if (DBOld::find('request FROM stores WHERE userID = ?', [$oldSeller->id])) { ?>
+	if (DBOld::find('request FROM stores WHERE user_id = ?', [$oldSeller->id])) { ?>
 
 		<div class="request">
 

@@ -40,12 +40,12 @@
 									<?php $sizes = $change->old_order->product->type->sizeCollection();
 
 									$sizes = $sizes->filter(function ($item) use ($change) {
-										return $item->ID != $change->old_order->sizeID;
+										return $item->id != $change->old_order->sizeID;
 									});
 
 									foreach ($sizes as $key => $size) { ?>
 
-										<option value="<?= $size->ID ?>" <?= $change->new_size_id == $size->ID ? 'selected' : '' ?>>
+										<option value="<?= $size->id ?>" <?= $change->new_size_id == $size->id ? 'selected' : '' ?>>
 											<?= strtoupper($size->name) ?>
 										</option>
 

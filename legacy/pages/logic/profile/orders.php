@@ -4,4 +4,4 @@ global $user;
 
 $loc = 'orders';
 
-$res_sel = DBOld::select('ID FROM carts WHERE status<>0 and buyer=? ORDER BY time DESC', [auth()->id()]);
+$res_sel = DBOld::select('id FROM carts WHERE status<>0 and user_id=? ORDER BY time DESC', [auth()->id()]);

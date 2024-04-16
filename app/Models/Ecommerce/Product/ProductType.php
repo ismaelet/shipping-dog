@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 /**
  * Class ProductType
  * 
- * @method string image(?int $colorId = null, ?int $positionId = null)
+ * @method string image(?int $colorId = null, ?int $position_id = null)
  */
 class ProductType extends Model {
 
-	protected $primaryKey = 'ID';
+
 	protected $table = 'items_types';
-	protected $fillable = ['tag', 'name', 'name_it', 'names_it', 'gender', 'sibling', 'unisex', 'sizes', 'positions', 'category', 'colors', 'hidden'];
+	protected $fillable = ['tag', 'name', 'name', 'names', 'gender', 'sibling', 'unisex', 'sizes', 'positions', 'category', 'colors', 'hidden'];
 
 	/**
 	 * The list of the type's colors as array
@@ -29,6 +29,17 @@ class ProductType extends Model {
 	 */
 	public function colorCollection(): Collection {
 		return ProductColor::whereIn('tag', $this->colorList())->orderBy('reorder')->get();
+	}
+
+	/**
+	 * The list of the type's colors that are publicly available
+	 */
+	public function publicColors(): Collection {
+		return ProductColor::whereIn('tag', $this->colorList())
+			->where('hidden', false)
+			->orderBy('reorder')
+			->orderBy('id')
+			->get();
 	}
 
 	/**
@@ -56,32 +67,32 @@ class ProductType extends Model {
 	 * The list of the type's positions as collection
 	 */
 	public function positionCollection(): Collection {
-		return ProductPosition::whereIn('ID', $this->positionList())->get();
+		return ProductPosition::whereIn('id', $this->positionList())->get();
 	}
 
 	/**
 	 * The infos of this type
 	 */
 	public function info(): HasOne {
-		return $this->hasOne(ProductTypeInfo::class, 'product_type_id', 'ID');
+		return $this->hasOne(ProductTypeInfo::class, 'product_type_id', 'id');
 	}
 
 	/**
 	 * Get the type's image
 	 */
-	public function image(?int $colorId = null, ?int $positionId = null, string $suffix = ''): ?string {
+	public function image(?int $colorId = null, ?int $position_id = null, string $suffix = ''): ?string {
 		$color = $colorId ? ProductColor::find($colorId) : $this->colorCollection()->first();
-		$position = $positionId ? ProductPosition::find($positionId) : $this->positionCollection()->first();
+		$position = $position_id ? ProductPosition::find($position_id) : $this->positionCollection()->first();
 
-		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.webp'))) {
+		if (file_exists(public_storage($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.webp'))) {
 			return $file;
 		}
 
-		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.png'))) {
+		if (file_exists(public_storage($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.png'))) {
 			return $file;
 		}
 
-		if (file_exists(public_storage_path($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . $suffix . '.png'))) {
+		if (file_exists(public_storage($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . $suffix . '.png'))) {
 			return $file;
 		}
 
@@ -91,7 +102,7 @@ class ProductType extends Model {
 	/**
 	 * Get the type's details image
 	 */
-	public function details(?int $colorId = null, ?int $positionId = null): ?string {
-		return $this->image($colorId, $positionId, '-det');
+	public function details(?int $colorId = null, ?int $position_id = null): ?string {
+		return $this->image($colorId, $position_id, '-det');
 	}
 }

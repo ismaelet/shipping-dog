@@ -20,10 +20,10 @@ class PreviewHelper {
 	private ProductPosition $position;
 	private int $imageSize;
 
-	function __construct(Product $product, ?int $imageSize = 400, ?int $colorId = null, ?int $positionId = null) {
+	function __construct(Product $product, ?int $imageSize = 400, ?int $colorId = null, ?int $position_id = null) {
 		$this->product = $product;
 		$this->color = $colorId ? ProductColor::find($colorId) : $product->default_color;
-		$this->position = $positionId ? ProductPosition::find($positionId) : $product->defaultPosition();
+		$this->position = $position_id ? ProductPosition::find($position_id) : $product->defaultPosition();
 		$this->imageSize = in_array($imageSize, self::ALLOWED_IMAGE_SIZES) ? $imageSize : self::DEFAULT_IMAGE_SIZE;
 	}
 
@@ -39,7 +39,7 @@ class PreviewHelper {
 		}
 
 		// Otherwise generate the image
-		if ($this->product->ID && !$this->product->deleted && !$this->product->isCustom()) {
+		if ($this->product->id && !$this->product->deleted && !$this->product->isCustom()) {
 			$this->generateImage();
 		}
 
@@ -53,7 +53,7 @@ class PreviewHelper {
 	}
 
 	private function fileName(): string {
-		return $this->product->ID . '-' . $this->color->tag . '-' . $this->position->ID . '-' . $this->imageSize . '.webp';
+		return $this->product->id . '-' . $this->color->tag . '-' . $this->position->id . '-' . $this->imageSize . '.webp';
 	}
 
 	private function storageDirectory(): string {
@@ -65,7 +65,7 @@ class PreviewHelper {
 	}
 
 	private function fileServerPath(): string {
-		return public_storage_path($this->fileStoragePath());
+		return public_storage($this->fileStoragePath());
 	}
 
 	private function hasImage(): bool {
@@ -77,23 +77,23 @@ class PreviewHelper {
 	 */
 	private function generateImage(): void {
 		// Fetch mockup type data
-		$mockupFrameworkData = ProductTypeMockup::where('typeID', $this->product->typeID)->where('positionID', $this->position->ID)->first();
+		$mockupFrameworkData = ProductTypeMockup::where('type_id', $this->product->type_id)->where('position_id', $this->position->id)->first();
 
 		// Fetch mockup product data
-		$mockupProductData = ProductMockup::where('itemID', $this->product->ID)->where('positionID', $this->position->ID)->first();
+		$mockupProductData = ProductMockup::where('product_id', $this->product->id)->where('position_id', $this->position->id)->first();
 
 		// Background image
-		$backgroundImage = public_storage_path('/product_types/mockups/bgr/grey.png');
+		$backgroundImage = public_storage('/product_types/mockups/bgr/grey.png');
 
 		// Clothing images
-		$clothingImage = public_storage_path($this->product->type->image($this->color->ID, $this->position->ID));
+		$clothingImage = public_storage($this->product->type->image($this->color->id, $this->position->id));
 		$clothingImageType = strpos($clothingImage, '.webp') ? 'webp' : 'png';
 
 		$details = file_exists($file = str_replace('.' . $clothingImageType, '-det.' . $clothingImageType, $clothingImage)) ? $file : false;
 
 		// Design image
-		$designImage = $this->color->dark && file_exists($file = public_storage_path('/designs/' . $this->product->design->ID . '_dark.png')) ?
-			$file : public_storage_path('/designs/' . $this->product->design->ID . '.png');
+		$designImage = $this->color->dark && file_exists($file = public_storage('/designs/' . $this->product->design->id . '_dark.png')) ?
+			$file : public_storage('/designs/' . $this->product->design->id . '.png');
 
 		// Check if every required image exists
 		if (!file_exists($clothingImage)) {
@@ -102,18 +102,18 @@ class PreviewHelper {
 		}
 
 		if (!file_exists($designImage)) {
-			error_log('Doesn\'t exist design file: ' . $designImage . ' of product: ' . $this->product->ID);
+			error_log('Doesn\'t exist design file: ' . $designImage . ' of product: ' . $this->product->id);
 			return;
 		}
 
 		if (!$mockupProductData && !$mockupFrameworkData) {
-			error_log('Doesn\'t exist mockup data for product: ' . $this->product->ID);
+			error_log('Doesn\'t exist mockup data for product: ' . $this->product->id);
 			return;
 		}
 
 		// Create the directory if it doesn't exist
-		if (!file_exists(public_storage_path($this->storageDirectory()))) {
-			mkdir(public_storage_path($this->storageDirectory()), 0777, true);
+		if (!file_exists(public_storage($this->storageDirectory()))) {
+			mkdir(public_storage($this->storageDirectory()), 0777, true);
 		}
 
 		// Create the base image
@@ -135,7 +135,7 @@ class PreviewHelper {
 		$src_h = $src_size[1];
 
 		if (!isset($src_size[1])) {
-			error_log('No valid clothing image for product: ' . $this->product->ID . ' and type: ' . ($this->product->type->name ?? null) . ' and color: ' . ($this->color->name ?? null) . ' and position: ' . ($this->position->name ?? null));
+			error_log('No valid clothing image for product: ' . $this->product->id . ' and type: ' . ($this->product->type->name ?? null) . ' and color: ' . ($this->color->name ?? null) . ' and position: ' . ($this->position->name ?? null));
 			return;
 		}
 

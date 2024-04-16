@@ -6,21 +6,21 @@
 $warning = warning_banner();
 
 // setup cart
-if (!cart_old()->price) {
-	$res_payments = DBOld::select('* FROM sys_payment WHERE ID = 4');
+if (!\App\Helpers\App::cartOld()->price) {
+	$res_payments = DBOld::select('* FROM sys_payment WHERE id = 4');
 
-	cart_old()->updatePaymentMethodId(4);
-} else if (cart_old()->localDelivery) {
-	$res_payments = DBOld::select('* FROM sys_payment WHERE ID IN (1,3)');
+	\App\Helpers\App::cartOld()->updatePaymentMethodId(4);
+} else if (\App\Helpers\App::cartOld()->localDelivery) {
+	$res_payments = DBOld::select('* FROM sys_payment WHERE id IN (1,3)');
 } else {
-	$res_payments = DBOld::select('* FROM sys_payment WHERE active = 1 ORDER BY ID ASC');
+	$res_payments = DBOld::select('* FROM sys_payment WHERE active = 1 ORDER BY id ASC');
 }
 
 // checkout
 if (isset($_POST['submit'])) {
 	$paymentMethodId = $_POST['cbx_pay'];
 
-	cart_old()->updatePaymentMethodId($paymentMethodId);
+	\App\Helpers\App::cartOld()->updatePaymentMethodId($paymentMethodId);
 
 	switch ($paymentMethodId) {
 		case 1:

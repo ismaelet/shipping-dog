@@ -9,17 +9,17 @@ $skip = true;
 
 // skip when there are no active promotions
 if ($skip || isset($_POST['submit'])) {
-	cart_old()->advanceAndredirect_old();
+	\App\Helpers\App::cartOld()->advanceAndredirect_old();
 }
 
 // add item to cart
 if (isset($_POST['add-to-cart'])) {
 
 	// fetch order data
-	$config['itemId'] = $_POST['id'];
+	$config['product_id'] = $_POST['id'];
 	$config['quantity'] = $_POST['quantity'];
 	$config['colorId'] = $_POST['color'];
-	$config['sizeId'] = $_POST['size'];
+	$config['size_id'] = $_POST['size'];
 
 	Order::add($config);
 

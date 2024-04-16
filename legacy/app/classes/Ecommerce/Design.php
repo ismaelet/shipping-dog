@@ -2,6 +2,7 @@
 
 namespace Ecommerce;
 
+use App\Models\Ecommerce\Design\LogoGroup as DesignLogoGroup;
 use DBOld;
 use Ecommerce\Design\LogoGroup;
 use Ecommerce\Product;
@@ -18,9 +19,9 @@ class Design {
 	use DatabaseObject;
 
 	public const TABLE = 'designs';
-	public const INDEX = 'ID';
-	public const SELLER_INDEX = 'userID';
-	public const LOGO_GROUP_INDEX = 'extFID';
+	public const INDEX = 'id';
+	public const SELLER_INDEX = 'user_id';
+	public const LOGO_GROUP_INDEX = 'logo_group_id';
 
 	private function getId() {
 		return $this->databaseEntry[self::INDEX];
@@ -43,11 +44,11 @@ class Design {
 	}
 
 	private function getProductCount() {
-		return  DBOld::count('items WHERE desID = ? AND status = 1', [$this->id]);
+		return  DBOld::count('items WHERE design_id = ? AND status = 1', [$this->id]);
 	}
 
 	private function getMainProduct() {
-		$productId = DBOld::find('ID FROM items WHERE desID = ? AND status = 1 ORDER BY typeID ASC', [$this->id]);
+		$productId = DBOld::find('id FROM items WHERE design_id = ? AND status = 1 ORDER BY type_id ASC', [$this->id]);
 
 		return  new Product($productId);
 	}
@@ -64,7 +65,7 @@ class Design {
 	}
 
 	private function getSeller() {
-		return  new Seller($this->sellerId);
+		return  new Seller($this->seller_id);
 	}
 
 	private function getLoved() {
@@ -80,13 +81,13 @@ class Design {
 	}
 
 	private function getUserIsOwner() {
-		return $this->sellerId == auth()->id();
+		return $this->seller_id == auth()->id();
 	}
 
 	private function loved() {
 		global $user;
 
-		$loved = auth()->check() && DBOld::exists('likes WHERE userID = ? AND desID = ?', [auth()->id(), $this->id]);
+		$loved = auth()->check() && DBOld::exists('likes WHERE user_id = ? AND design_id = ?', [auth()->id(), $this->id]);
 
 		return $loved;
 	}
@@ -94,13 +95,13 @@ class Design {
 	public function getImage($size = 400): string {
 		$file = $size == 400 ? '/designs/previews/' . $this->id . '_m.jpg' : '/designs/previews/' . $this->id . '.jpg';
 
-		if (file_exists(public_storage_path($file))) {
+		if (file_exists(public_storage($file))) {
 			return $file;
 		}
 
 		des_img_gen($this->id);
 
-		if (file_exists(public_storage_path($file))) {
+		if (file_exists(public_storage($file))) {
 			return $file;
 		}
 
@@ -113,7 +114,7 @@ class Design {
 
 	private function getTags() {
 		if ($this->id) {
-			$tags = DBOld::find('tags FROM designs_tags WHERE desID = ?', [$this->id]);
+			$tags = DBOld::find('tags FROM designs_tags WHERE design_id = ?', [$this->id]);
 
 			if ($tags) {
 				return explode(',', $tags);
@@ -123,12 +124,12 @@ class Design {
 		return null;
 	}
 
-	private function getLogoGroupId() {
-		return DBOld::find(self::LOGO_GROUP_INDEX . ' FROM ' . self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
+	private function getLogoGroupId(): ?int {
+		return DesignLogoGroup::where('id', $this->logo_group_id)->value('id');
 	}
 
-	private function getLogoGroup() {
-		return new LogoGroup($this->logoGroupId);
+	private function getLogoGroup(): ?DesignLogoGroup {
+		return DesignLogoGroup::where('id', $this->logo_group_id)->first();
 	}
 
 	private function getLogos() {
@@ -137,11 +138,11 @@ class Design {
 
 	public function delete(bool $permanently = false) {
 		if ($permanently) {
-			DBOld::delete('designs WHERE ID = ?', [$this->id]);
-			DBOld::delete('designs_tags WHERE desID = ?', [$this->id]);
-			DBOld::delete('likes WHERE desID = ?', [$this->id]);
+			DBOld::delete('designs WHERE id = ?', [$this->id]);
+			DBOld::delete('designs_tags WHERE design_id = ?', [$this->id]);
+			DBOld::delete('likes WHERE design_id = ?', [$this->id]);
 		} else {
-			DBOld::update('designs SET status=0 WHERE ID = ?', [$this->id]);
+			DBOld::update('designs SET status=0 WHERE id = ?', [$this->id]);
 		}
 
 		foreach ($this->products as $product) {

@@ -16,27 +16,27 @@ class Change extends Model {
 	 * Get the old order that owns the change.
 	 */
 	public function old_order(): BelongsTo {
-		return $this->belongsTo(Order::class, 'old_order_id', 'ID');
+		return $this->belongsTo(Order::class, 'old_order_id', 'id');
 	}
 
 	/**
 	 * Get the new order generated from the change
 	 */
 	public function new_order(): BelongsTo {
-		return $this->belongsTo(Order::class, 'new_order_id', 'ID');
+		return $this->belongsTo(Order::class, 'new_order_id', 'id');
 	}
 
 	/**
 	 * Get the old size of the change.
 	 */
 	public function old_size(): HasOne {
-		return $this->hasOne(ProductSize::class, 'ID', 'old_size_id');
+		return $this->hasOne(ProductSize::class, 'id', 'old_size_id');
 	}
 
 	/**
 	 * Get the new size of the change.
 	 */
 	public function new_size(): HasOne {
-		return $this->hasOne(ProductSize::class, 'ID', 'new_size_id');
+		return $this->hasOne(ProductSize::class, 'id', 'new_size_id');
 	}
 }

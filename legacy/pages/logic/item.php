@@ -6,7 +6,7 @@ use Ecommerce\Product as OldProduct;
 
 // get variabiles
 $id = $_GET['id'] ?? null;
-$oldProductPositionId = $_GET['positionId'] ?? null;
+$oldProductPositionId = $_GET['position_id'] ?? null;
 $oldProductColorId = $_GET['colorId'] ?? null;
 
 // select item data
@@ -30,7 +30,7 @@ ViewOld::setThumbnail($oldProduct->clientFullImage)
 	->setTitle($oldProduct->name);
 
 // get item seller
-$seller = $oldProduct->seller;
+$seller = $product->seller;
 
 // redirect if not public
 $owner = $oldProduct->isUserOwner;
@@ -40,10 +40,10 @@ $wip = !$seller->status;
 if ($wip && !$vip) redirect_old('/shop');
 
 // select following status
-$foll = DBOld::exists('followers WHERE userID = ? AND followID = ?', [auth()->id(), $oldProduct->seller->id]);
+$foll = DBOld::exists('followers WHERE user_id = ? AND follower_id = ?', [auth()->id(), $oldProduct->seller->id]);
 
 // select fan pics
-$res_fan = DBOld::select('* FROM home_pics WHERE desID = ? ORDER BY ID DESC LIMIT ?', [$oldProduct->design->id, 5]);
+$res_fan = DBOld::select('* FROM home_pics WHERE design_id = ? ORDER BY id DESC LIMIT ?', [$oldProduct->design->id, 5]);
 $fanN = $res_fan->num_rows;
 
 /*
@@ -51,55 +51,76 @@ $fanN = $res_fan->num_rows;
 */
 $relatedGarments = rows_to_objects(
 	DBOld::select(
-		"items.ID FROM items
-		INNER JOIN items_types ON items.typeID = items_types.ID
-		WHERE desID = ? AND typeID <> ? AND category='c' AND items.status = 1 AND items.deleted = 0
-		ORDER BY typeID ASC, items.sort ASC, items_types.sort ASC, items_types.ID ASC",
+		"items.id FROM items
+		INNER JOIN items_types ON items.type_id = items_types.id
+		WHERE design_id = ? AND type_id <> ? AND category='c' AND items.status = 1 AND items.deleted = 0
+		ORDER BY type_id ASC, items.sort ASC, items_types.sort ASC, items_types.id ASC",
 		[$oldProduct->design->id, $oldProduct->type->id]
 	),
 	OldProduct::class
 );
 
-$relatedAccessories = rows_to_objects(DBOld::select("ID FROM items WHERE desID = ? AND typeID <> ? AND typeID IN (SELECT ID FROM items_types WHERE category='m') AND status = 1 ORDER BY typeID ASC", [$oldProduct->design->id, $oldProduct->type->id]), OldProduct::class);
+$relatedAccessories = rows_to_objects(DBOld::select("id FROM items WHERE design_id = ? AND type_id <> ? AND type_id IN (SELECT id FROM items_types WHERE category='m') AND status = 1 ORDER BY type_id ASC", [$oldProduct->design->id, $oldProduct->type->id]), OldProduct::class);
 
 $relatedProdutsVariables = [$seller->id, $oldProduct->design->id, $oldProduct->type->id, 8];
 $relatedProdutsVariables = array_merge($relatedProdutsVariables, $relatedProdutsVariables);
 
-$relatedProducts = rows_to_objects(
-	DBOld::execute(
-		'(SELECT ID FROM items WHERE userID = ? AND (desID <> ? OR desID = 0) AND status > 0 AND typeID = ? AND deleted = 0 ORDER BY sales DESC, ID DESC LIMIT ?)
-		UNION
-		(SELECT ID FROM items WHERE userID = ? AND (desID <> ? OR desID = 0) AND status > 0 AND typeID <> ? AND deleted = 0 ORDER BY sales DESC, ID DESC LIMIT ?)',
-		$relatedProdutsVariables
-	)->get_result(),
-	OldProduct::class
-);
-
-$relatedProducts = $relatedProducts && count($relatedProducts) > 8 ? array_slice($relatedProducts, 0, 8) : $relatedProducts;
-
 $relatedGarmentCount = count($relatedGarments);
 $relatedAccessoryCount = count($relatedAccessories);
+
+/**
+ * Related products
+ */
+$relatedProducts = Product::where('user_id', $seller->id)
+	->where(function ($query) use ($product) {
+		$query->where('design_id', '<>', $product->design_id)
+			->orWhere('design_id', 0);
+	})
+	->where('status', '>', 0)
+	->where('type_id', $product->type_id)
+	->where('deleted', 0)
+	->orderBy('sales', 'desc')
+	->orderBy('id', 'desc')
+	->limit(8)
+	->get();
+
+if ($relatedProducts->count() < 8) {
+	$moreRelatedProducts = Product::where('user_id', $seller->id)
+		->where(function ($query) use ($product) {
+			$query->where('design_id', '<>', $product->design_id)
+				->orWhere('design_id', 0);
+		})
+		->where('status', '>', 0)
+		->where('type_id', '<>', $product->type_id)
+		->where('deleted', 0)
+		->orderBy('sales', 'desc')
+		->orderBy('id', 'desc')
+		->limit(8 - $relatedProducts->count())
+		->get();
+
+	$relatedProducts = $relatedProducts->merge($moreRelatedProducts);
+}
 
 // warnings
 $warning = warning_banner();
 
 // add order
 if (isset($_POST['submit'])) {
-	$config['itemId'] = $id;
+	$config['product_id'] = $id;
 	$config['quantity'] = $_POST['quantity'];
 
 	if (isset($_POST['cbx-color'])) foreach ($_POST['cbx-color'] as $config['colorId']);
-	if (isset($_POST['cbx-size'])) foreach ($_POST['cbx-size'] as $config['sizeId']);
+	if (isset($_POST['cbx-size'])) foreach ($_POST['cbx-size'] as $config['size_id']);
 	if (isset($_POST['cbx-gender'])) foreach ($_POST['cbx-gender'] as $config['genderId']);
 
 	if (isset($_POST['logo-id'])) {
-		$config['logoId'] = $_POST['logo-id'];
+		$config['logo_id'] = $_POST['logo-id'];
 	}
 
 	if (isset($_POST['cbx-pos'])) {
-		foreach ($_POST['cbx-pos'] as $config['positionId']);
+		foreach ($_POST['cbx-pos'] as $config['position_id']);
 	} else {
-		$config['positionId'] = $oldProduct->availablePositionIds[0];
+		$config['position_id'] = $oldProduct->availablePositionIds[0];
 	}
 
 	Order::add($config);

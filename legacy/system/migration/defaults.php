@@ -20,8 +20,8 @@ DBOld::execute('
 		username VARCHAR(50) DEFAULT "",
 		password VARCHAR(128) DEFAULT "",
 		email VARCHAR(50) DEFAULT "",
-		firstName VARCHAR(50) DEFAULT "",
-		lastName VARCHAR(50) DEFAULT "",
+		first_name VARCHAR(50) DEFAULT "",
+		last_name VARCHAR(50) DEFAULT "",
 		groupId INT(11) DEFAULT 0,
 		admin TINYINT(1) DEFAULT 0,
 		time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -32,7 +32,7 @@ DBOld::execute('
 DBOld::execute('
 	CREATE TABLE IF NOT EXISTS user_resets (
 		id INT(11) AUTO_INCREMENT PRIMARY KEY,
-		userID INT(11),
+		user_id INT(11),
 		security VARCHAR(10),
 		time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	)

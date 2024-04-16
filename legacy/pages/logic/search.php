@@ -12,20 +12,20 @@ if (strlen($search) > 2) {
 	//get design results
 	$res_des = DBOld::select(
 
-		"ID FROM designs WHERE (
+		"id FROM designs WHERE (
 
 			name LIKE CONCAT('%',?,'%') OR
 
-			ID IN (SELECT desID FROM designs_tags WHERE tags LIKE CONCAT('%',?,'%')) OR 
+			ID IN (SELECT design_id FROM designs_tags WHERE tags LIKE CONCAT('%',?,'%')) OR 
 
-			userID IN (SELECT userID FROM stores WHERE name LIKE CONCAT('%',?,'%'))
+			user_id IN (SELECT user_id FROM stores WHERE name LIKE CONCAT('%',?,'%'))
 		)
 		
 		AND status>0
 
-		AND userID IN (SELECT userID FROM stores WHERE status = 1)
+		AND user_id IN (SELECT user_id FROM stores WHERE status = 1)
 
-		ORDER BY sales DESC, userID ASC, ID DESC LIMIT " . $max,
+		ORDER BY sales DESC, user_id ASC, id DESC LIMIT " . $max,
 
 		[$search, $search, $search]
 	);
@@ -33,7 +33,7 @@ if (strlen($search) > 2) {
 	$desN = $res_des->num_rows;
 
 	//get seller results
-	$res_sell = DBOld::select("userID FROM stores WHERE name LIKE CONCAT('%',?,'%') AND status = 1 ORDER BY userID DESC LIMIT " . $max, [$search]);
+	$res_sell = DBOld::select("user_id FROM stores WHERE name LIKE CONCAT('%',?,'%') AND status = 1 ORDER BY user_id DESC LIMIT " . $max, [$search]);
 
 	$sellN = $res_sell->num_rows;
 

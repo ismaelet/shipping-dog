@@ -6,8 +6,8 @@ global $id;
 * Query configuration
 */
 $queryConfig['table'] = 'addresses';
-$queryConfig['index-field'] = 'ID';
-$queryConfig['title-field'] = 'aname';
+$queryConfig['index-field'] = 'id';
+$queryConfig['title-field'] = 'full_name';
 
 /**
  * Inputs
@@ -16,7 +16,7 @@ $inputs = [
 	[
 		['type' => 'done', 'done' => 'ok', 'text' => 'Indirizzo modificato correttamente'],
 		['type' => 'lbl', 'text' => 'Nominativo'],
-		['text' => 'Nominativo di spedizione', 'name' => 'aname', 'required' => true],
+		['text' => 'Nominativo di spedizione', 'name' => 'full_name', 'required' => true],
 	],
 	[
 		['type' => 'lbl', 'text' => 'Indirizzo'],

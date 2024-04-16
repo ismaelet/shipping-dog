@@ -17,16 +17,9 @@
 
             .input {
                 line-height: 3.5rem;
-                background-color: transparent;
-                border: none;
-                outline: none;
-                box-shadow: none;
-
-                &:focus:-webkit-autofill {
-                    outline: none !important;
-                    background-color: transparent !important;
-                    box-shadow: 0 0 0 100vw var(--color-background) inset !important;
-                }
+                border: none !important;
+                outline: none !important;
+                box-shadow: none !important;
             }
         }
     </style>
@@ -46,12 +39,12 @@
     </script>
 @endpushOnce
 
-<search class="search-bar grid px-6 gap-2 surface highlight-on-focus">
+<search class="search-bar grid px-6 bg-surface-400 rounded gap-2"">
     <div class="search-icon cursor-pointer transition-colors" x-data @click="table_search">
         {!! embed_icon('search') !!}
     </div>
 
-    <x-form.input type="text" class="input js-search-input" name="search" placeholder="Cerca nella lista"
+    <x-inputs.input type="text" class="input js-search-input" name="search" placeholder="Cerca nella lista"
         value="{{ $searchText ?? '' }}" />
 
     @isset($searchText)

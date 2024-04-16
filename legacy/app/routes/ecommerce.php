@@ -8,16 +8,16 @@ RouteOld::add('/cart', function () {
 	$currentStepId = $_GET['step-id'] ?? null;
 	$currentStepId = in_array($currentStepId, array_keys($cartSteps)) ? $currentStepId : null;
 
-	if (!cart_old() || !cart_old()->quantity) {
+	if (!\App\Helpers\App::cartOld() || !\App\Helpers\App::cartOld()->quantity) {
 		redirect_old('/cart/empty');
 	}
 
-	if (!$currentStepId || $currentStepId > cart_old()->stepId) {
-		redirect_old(cart_old()->openUrl);
+	if (!$currentStepId || $currentStepId > \App\Helpers\App::cartOld()->stepId) {
+		redirect_old(\App\Helpers\App::cartOld()->openUrl);
 	}
 
 	if ($cartSteps[$currentStepId][1] == 'login' && auth()->check()) {
-		cart_old()->advanceAndredirect_old(2);
+		\App\Helpers\App::cartOld()->advanceAndredirect_old(2);
 	}
 
 	Logic::add('cart', 'page');
@@ -62,7 +62,7 @@ RouteOld::add('/cart/success', function () {
 
 // empty cart
 RouteOld::add('/cart/empty', function () {
-	if (cart_old() && cart_old()->quantity) {
+	if (\App\Helpers\App::cartOld() && \App\Helpers\App::cartOld()->quantity) {
 		redirect_old('/cart');
 	}
 

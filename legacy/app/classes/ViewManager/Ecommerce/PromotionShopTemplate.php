@@ -72,14 +72,14 @@ class PromotionShopTemplate {
 								<div class="gender-ddown">
 									<?php
 									if ($shopData->id) $res = DBOld::select("
-										ID FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT typeID FROM items WHERE userID = ? AND status = 1) ORDER BY ID ASC", [$shopData->id]);
+										id FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$shopData->id]);
 
 									else $res = DBOld::select("
-										ID FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT typeID FROM items WHERE status = 1) ORDER BY ID ASC");
+										id FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
 
 									while ($row = $res->fetch_assoc()) {
 
-										$type = new Type($row['ID']) ?>
+										$type = new Type($row['id']) ?>
 
 										<label>
 											<input type="checkbox" class="type-cbx hidden" name="type" value="<?= $type->slug ?>" <?php if ($shopData->gender == 'm' && $shopData->type == $type->slug) echo 'checked' ?>>
@@ -105,14 +105,14 @@ class PromotionShopTemplate {
 
 									if ($shopData->id) {
 										$res = DBOld::select("
-										ID FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT typeID FROM items WHERE userID = ? AND status = 1) ORDER BY ID ASC", [$shopData->id]);
+										id FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$shopData->id]);
 									} else {
 										$res = DBOld::select("
-										ID FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT typeID FROM items WHERE status = 1) ORDER BY ID ASC");
+										id FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {
-										$type = new Type($row['ID']);
+										$type = new Type($row['id']);
 									?>
 
 										<label>
@@ -139,15 +139,15 @@ class PromotionShopTemplate {
 
 									if ($shopData->id) {
 										$res = DBOld::select("
-										ID FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT typeID FROM items WHERE userID = ? AND status = 1) ORDER BY name_it ASC", [$shopData->id]);
+										id FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$shopData->id]);
 									} else {
 										$res = DBOld::select("
-										ID FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT typeID FROM items WHERE status = 1) ORDER BY name_it ASC");
+										id FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY name ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {
 
-										$type = new Type($row['ID']) ?>
+										$type = new Type($row['id']) ?>
 
 										<label>
 											<input type="checkbox" class="type-cbx hidden" name="type" value="<?= $type->slug ?>" <?php if ($shopData->type == $type->slug) echo 'checked' ?>>

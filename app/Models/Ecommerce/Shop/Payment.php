@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Payment extends Model {
 
-	protected $primaryKey = 'ID';
+
 	protected $table = 'stores_payments';
 	protected $fillable = [];
 }

@@ -5,10 +5,10 @@ class User {
 	private $data = [];
 
 	public $id = null;
-	public $buyerId;
+	public $user_idId;
 	public $username;
-	public $fname;
-	public $lname;
+	public $first_name;
+	public $last_name;
 	public $email;
 	public $admin = false;
 	public $manager = false;
@@ -18,12 +18,12 @@ class User {
 	public $rank_str;
 
 	function __construct(int $id = null) {
-		if ($row = DBOld::row('* FROM users WHERE ID = ?', [$id])) {
+		if ($row = DBOld::row('* FROM users WHERE id = ?', [$id])) {
 			$this->id = $id;
-			$this->buyerId = $this->id;
+			$this->user_idId = $this->id;
 			$this->username = $row['username'];
-			$this->fname = $row['firstname'];
-			$this->lname = $row['lastname'];
+			$this->first_name = $row['first_name'];
+			$this->last_name = $row['last_name'];
 			$this->email = $row['email'];
 			$this->privacy = $row['privacy'];
 			$this->level = $row['level'];
@@ -31,7 +31,7 @@ class User {
 			$this->admin = $row['admin'];
 			$this->manager = $this->admin == 2;
 		} else if (isset($_SESSION['customerId'])) {
-			$this->buyerId = $_SESSION['customerId'] ?? null;
+			$this->user_idId = $_SESSION['customerId'] ?? null;
 		}
 	}
 
@@ -46,8 +46,8 @@ class User {
 					return $this->data['cover'] = $this->cover();
 
 					// retro
-				case 'buyerID':
-					return $this->buyerId;
+				case 'user_idID':
+					return $this->user_idId;
 			}
 		}
 	}
@@ -56,11 +56,11 @@ class User {
 	private function icon(): string {
 		$icon = 'users/icons/' . $this->id;
 
-		if (file_exists(public_storage_path($icon . '.webp'))) {
+		if (file_exists(public_storage($icon . '.webp'))) {
 			return $icon . '.webp';
 		}
 
-		if (file_exists(public_storage_path($icon . '.jpg'))) {
+		if (file_exists(public_storage($icon . '.jpg'))) {
 			return $icon . '.jpg';
 		}
 
@@ -79,11 +79,11 @@ class User {
 		// Get the HD cover image
 		$cover = 'shops/covers/' . $this->id . $sizeSlug;
 
-		if (file_exists(public_storage_path($cover . '.webp'))) {
+		if (file_exists(public_storage($cover . '.webp'))) {
 			return $cover . '.webp';
 		}
 
-		if (file_exists(public_storage_path($cover . '.jpg'))) {
+		if (file_exists(public_storage($cover . '.jpg'))) {
 			return $cover . '.jpg';
 		}
 
@@ -91,7 +91,7 @@ class User {
 	}
 
 	// check if the user is a seller
-	function is_seller() {
-		return DBOld::exists('stores WHERE userID = ?', [$this->id]);
+	function isSeller() {
+		return DBOld::exists('stores WHERE user_id = ?', [$this->id]);
 	}
 }

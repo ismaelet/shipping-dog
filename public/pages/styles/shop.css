@@ -43,7 +43,7 @@
 .page-search .page-search__input {
 	--inp-color: #202020;
 	--inp-clr-bgr: #fff;
-	padding-left: 1.5em;
+	padding-inline: 1.5em 0.5em;
 	border: none !important;
 	outline: none !important;
 	border-radius: var(--border-radius-1000) 0 0 var(--border-radius-1000);

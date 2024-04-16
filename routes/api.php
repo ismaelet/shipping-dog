@@ -15,5 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+	return $request->user();
 });
+
+
+// RouteOld::add('/api/like', function () {
+// 	echo json_encode(LikeController::like());
+// });
+
+// RouteOld::add('/api/unlike', function () {
+// 	echo json_encode(LikeController::unlike());
+// });

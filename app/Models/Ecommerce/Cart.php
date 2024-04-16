@@ -9,29 +9,29 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Cart extends Model {
 
-	protected $primaryKey = 'ID';
+
 	protected $table = 'carts';
-	protected $fillable = ['buyer', 'has_errors'];
+	protected $fillable = ['user_id', 'has_errors'];
 
 	/**
 	 * Get the cart's orders
 	 */
 	public function orders(): HasMany {
-		return $this->hasMany(Order::class, 'cartID', 'ID');
+		return $this->hasMany(Order::class, 'cart_id', 'id');
 	}
 
 	/**
 	 * Get the cart's address
 	 */
 	public function address(): HasOne {
-		return $this->hasOne(Address::class, 'cartID', 'ID');
+		return $this->hasOne(Address::class, 'cart_id', 'id');
 	}
 
 	/**
 	 * Get the change request that generated this cart
 	 */
 	public function change_request(): HasOne {
-		return $this->HasOne(ChangeRequest::class, 'new_cart_id', 'ID');
+		return $this->HasOne(ChangeRequest::class, 'new_cart_id', 'id');
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Cart extends Model {
 	 */
 	public static function unlabelled(): Collection {
 		return self::where('status', 1)
-			->whereIn('shipID', ShippingMethod::shippingMethodsWithLabels())
+			->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
 			->get();
 	}
 }

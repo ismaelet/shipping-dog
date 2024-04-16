@@ -28,7 +28,7 @@ use ViewManager\Ecommerce\CartRecap;
 
 			<?php } ?>
 
-			<?php if (cart_old()->shippingMethodId == ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID) { ?>
+			<?php if (\App\Helpers\App::cartOld()->shippingMethodId == ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID) { ?>
 
 				<p class="center-content input-warning">Hai scelto di ritirare il capo in sede, quindi l'ordine NON verrà spedito, ma dovrai ritirarlo nella nostra sede in Piazza Scopoli, 9, 38033 Cavalese (TN)</p>
 
@@ -45,7 +45,7 @@ use ViewManager\Ecommerce\CartRecap;
 
 						<label class="pay_row">
 							<div class="pay_cbx_box">
-								<input type="radio" class="inp_cbx pay_cbx" name="cbx_pay" value="<?= $row['ID'] ?>" <?php if (cart_old()->paymentMethodId == $row['ID']) echo 'checked'; ?>>
+								<input type="radio" class="inp_cbx pay_cbx" name="cbx_pay" value="<?= $row['id'] ?>" <?php if (\App\Helpers\App::cartOld()->paymentMethodId == $row['id']) echo 'checked'; ?>>
 
 								<div class="icon">
 									<div class="icon-dot"></div>
@@ -53,13 +53,13 @@ use ViewManager\Ecommerce\CartRecap;
 							</div>
 
 							<div class="pay_box">
-								<h1 class="pay_name"><?= $row['name_it']; ?></h1>
+								<h1 class="pay_name"><?= $row['name']; ?></h1>
 
 								<?php if (file_exists(SERVER_ROOT . '/pages/assets/cart/pay_' . $row['tag'] . '.png')) { ?>
 									<div class="pay_img" <?= background_image('/pages/assets/cart/pay_' . $row['tag'] . '.png'); ?>></div>
 								<?php } ?>
 
-								<p class="pay_desc"><?= $row['desc_it']; ?></p>
+								<p class="pay_desc"><?= $row['desc']; ?></p>
 							</div>
 						</label>
 					<?php } ?>

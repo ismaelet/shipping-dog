@@ -8,10 +8,10 @@ use Ecommerce\Shop;
 $id = isset($_GET['id']) ? (int) $_GET['id'] : false;
 
 // redirect to user's shop if no ID is specified
-if (!$id && is_seller()) redirect_old('?id=' . auth()->id());
+if (!$id && App\Helpers\App::isSeller()) redirect_old('?id=' . auth()->id());
 
 // redirect if no shop was found
-if (!DBOld::exists('stores WHERE userID = ?', [$id])) redirect_old('/shop');
+if (!DBOld::exists('stores WHERE user_id = ?', [$id])) redirect_old('/shop');
 
 // setup shop
 $seller = new Seller($id, ['name', 'status', 'followed', 'theme']);
@@ -37,15 +37,15 @@ $collBlock = 10;
 $shop_size = $id == 187 ? 10 : 20;
 
 // select links
-$row_link = DBOld::row('* FROM links WHERE userID = ?', [$id]);
+$row_link = DBOld::row('* FROM links WHERE user_id = ?', [$id]);
 
-$hasItems = DBOld::exists('items WHERE userID = ? AND status > 0', [$id]);
+$hasItems = DBOld::exists('items WHERE user_id = ? AND status > 0', [$id]);
 $productCount = DBOld::count(Product::TABLE . ' WHERE ' . Product::SELLER_INDEX . ' = ? AND status > 0', [$id]);
-$likeN = DBOld::count('likes WHERE desID IN (SELECT ID FROM designs WHERE userID = ?)', [$id]);
-$follN = DBOld::count('followers WHERE followID = ?', [$id]);
+$likeN = DBOld::count('likes WHERE design_id IN (SELECT id FROM designs WHERE user_id = ?)', [$id]);
+$follN = DBOld::count('followers WHERE follower_id = ?', [$id]);
 
-if ($vip) $collN = DBOld::count('collections WHERE userID = ?', [$id]);
-else $collN = DBOld::count('collections WHERE userID = ? AND ID IN (SELECT collection FROM designs)', [$id]);
+if ($vip) $collN = DBOld::count('collections WHERE user_id = ?', [$id]);
+else $collN = DBOld::count('collections WHERE user_id = ? AND ID IN (SELECT collection FROM designs)', [$id]);
 
 // add folder
 if (isset($_POST['add_folder'])) {
@@ -53,7 +53,7 @@ if (isset($_POST['add_folder'])) {
 
 	if (!empty($name)) {
 
-		$collID = DBOld::add('collections (userID, name) VALUES (?, ?)', [$id, $name]);
+		$collID = DBOld::add('collections (user_id, name) VALUES (?, ?)', [$id, $name]);
 
 		redirect_old('/artist/collection?id=' . $collID);
 	} else redirect_old();

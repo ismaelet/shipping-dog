@@ -4,7 +4,7 @@ const hroot = $('main form').data('hroot')
 
 var stripe = Stringipe('pk_live_az7uYEu6NVoM7BEsKAHNhu3O00V6jkCcbm')
 var elements = stripe.elements()
-var cartID, buyer, clientSecret, addr_name
+var cart_id, user_id, clientSecret, addr_name
 
 var style = {
 	base: {
@@ -41,8 +41,8 @@ var response = fetch(hroot + '/stripe_handler')
 		} else {
 			var amount = responseJson.amount.toFixed(2)
 
-			cartID = responseJson.cartID
-			buyer = responseJson.buyer
+			cart_id = responseJson.cart_id
+			user_id = responseJson.user_id
 			clientSecret = responseJson.client_secret
 			addr_name = responseJson.addr_name
 
@@ -84,7 +84,7 @@ submitButton.addEventListener('click', function (ev) {
 				$('.load-icon').hide()
 			} else {
 				if (result.paymentIntent.status === 'succeeded') {
-					$.post(hroot + '/listeners/stripe.php', { cartID: cartID, buyer: buyer }, function (res) {
+					$.post(hroot + '/listeners/stripe.php', { cart_id: cart_id, user_id: user_id }, function (res) {
 						window.location.href = hroot + '/cart/success'
 					})
 				}

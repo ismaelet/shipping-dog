@@ -8,21 +8,21 @@ $error = false;
 // setup form
 $search = [
 	'tbl' => 'designs',
-	'name-id' => 'ID',
+	'name-id' => 'id',
 	'name-show' => 'name',
-	'filter' => 'userID:' . auth()->id(),
+	'filter' => 'user_id:' . auth()->id(),
 ];
 
 $inputs = [
 	[
 		['type' => 'lbl', 'text' => 'Nome e cognome (opzionali)'],
 		[
-			'name' => 'fname',
+			'name' => 'first_name',
 			'text' => 'Nome',
 			'size' => 2,
 		],
 		[
-			'name' => 'lname',
+			'name' => 'last_name',
 			'text' => 'Cognome',
 			'size' => 2,
 		],
@@ -31,7 +31,7 @@ $inputs = [
 		['type' => 'lbl', 'text' => 'Design'],
 		[
 			'type' => 'search',
-			'name' => 'desID',
+			'name' => 'design_id',
 			'search' => 'designs',
 			'text' => 'Design',
 		],
@@ -47,7 +47,7 @@ $inputs = [
 			'type' => 'select',
 			'name' => 'type',
 			'text' => 'Tipo di capo',
-			'query' => 'tag, IF (gender=2, CONCAT(name_it," donna"), name_it) as name_full FROM items_types WHERE hidden = 0 ORDER BY ID ASC',
+			'query' => 'tag, IF (gender=2, CONCAT(name," donna"), name) as name_full FROM items_types WHERE hidden = 0 ORDER BY id ASC',
 			'field-name' => 'tag',
 			'field-show' => 'name_full',
 		],
@@ -72,14 +72,14 @@ $inputs = [
 // submit
 if (isset($_POST['submit'])) {
 	// get inputs data
-	$fname = ucfirst(trim($_POST['fname']));
-	$lname = ucfirst(trim($_POST['lname']));
-	$desID = $_POST['desID'];
+	$first_name = ucfirst(trim($_POST['first_name']));
+	$last_name = ucfirst(trim($_POST['last_name']));
+	$design_id = $_POST['design_id'];
 	$type = $_POST['type'];
 
-	if (DBOld::exists('designs WHERE ID = ? AND userID = ?', [$desID, auth()->id()])) {
+	if (DBOld::exists('designs WHERE id = ? AND user_id = ?', [$design_id, auth()->id()])) {
 
-		$imgID = DBOld::add('home_pics (fname, lname, desID, type) VALUES (?, ?, ?, ?)', [$fname, $lname, $desID, $type]);
+		$imgID = DBOld::add('home_pics (first_name, last_name, design_id, type) VALUES (?, ?, ?, ?)', [$first_name, $last_name, $design_id, $type]);
 
 		$file = '/uploads/users/testimonials/' . $imgID . '.jpg';
 

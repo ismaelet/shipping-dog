@@ -16,11 +16,7 @@
 
 			<div id="carousel-popular" class="carousel mob-fluid" data-pos="1" data-loop="1">
 
-				<?php while ($row = $popular->fetch_assoc()) {
-
-					$product = new Ecommerce\Product($row['ID']);
-
-				?>
+				<?php foreach ($popular as $product) { ?>
 
 					<div class="carousel-box">
 						<?= generate_item_box($product); ?>

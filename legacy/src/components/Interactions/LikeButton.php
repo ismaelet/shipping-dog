@@ -3,7 +3,7 @@
 use App\Models\Ecommerce\Design;
 use Illuminate\Support\Facades\Auth;
 
-$design = Design::find($designId);
+$design = Design::find($design_id);
 
 ?>
 
@@ -11,10 +11,10 @@ $design = Design::find($designId);
 
 	<?php if ($design) { ?>
 		<?php if (Auth::check()) {
-			if ($design->seller->userID != Auth::id()) {
+			if ($design->seller->user_id != Auth::id()) {
 		?>
 
-				<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; toggleLike(<?= $designId ?>, liked)" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
+				<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; toggleLike(<?= $design_id ?>, liked)" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
 					<?= embed_icon('love-stroke') ?>
 					<?= embed_icon('love') ?>
 				</div>
@@ -51,7 +51,7 @@ $design = Design::find($designId);
 		}
 
 		& svg {
-			--icon-size: 60%;
+			--icon-size: 70%;
 			transition: opacity .2s;
 		}
 
@@ -82,10 +82,10 @@ $design = Design::find($designId);
 </style>
 
 <script>
-	function toggleLike(designId, liked) {
+	function toggleLike(design_id, liked) {
 		if (liked) {
 			axios.post('/api/like', {
-					designId: designId
+					design_id: design_id
 				})
 				.then(response => {
 
@@ -99,7 +99,7 @@ $design = Design::find($designId);
 				});
 		} else {
 			axios.post('/api/unlike', {
-					designId: designId
+					design_id: design_id
 				})
 				.then(response => {
 

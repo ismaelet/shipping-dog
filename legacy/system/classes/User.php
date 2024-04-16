@@ -11,7 +11,7 @@ class User {
 
 	public $id;
 	public $username;
-	public $firstName;
+	public $first_name;
 
 	/*
 	* Get methods
@@ -19,8 +19,8 @@ class User {
 	private function getFullName() {
 		$fullName = [];
 
-		if ($this->firstName) $fullName[] = $this->firstName;
-		if ($this->lastName) $fullName[] = $this->lastName;
+		if ($this->first_name) $fullName[] = $this->first_name;
+		if ($this->last_name) $fullName[] = $this->last_name;
 
 		return implode(' ', $fullName);
 	}
@@ -35,8 +35,8 @@ class User {
 		if ($row = DBOld::row('* FROM users WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->username = $row['username'] ?: $row['email'];
-			$this->userFirstName = ucfirst($row['firstName']);
-			$this->userLastName = ucfirst($row['lastName']);
+			$this->userfirst_name = ucfirst($row['first_name']);
+			$this->userlast_name = ucfirst($row['last_name']);
 			$this->email = strtolower($row['email']);
 			$this->groupId = $row['groupId'] ?? null;
 			$this->admin = $row['admin'];
@@ -49,10 +49,10 @@ class User {
 		} else {
 			switch ($name) {
 					// basic data
-				case 'firstName':
-					return $this->data['firstName'] = $this->getFirstName();
-				case 'lastName':
-					return $this->data['lastName'] = $this->getLastName();
+				case 'first_name':
+					return $this->data['first_name'] = $this->getfirst_name();
+				case 'last_name':
+					return $this->data['last_name'] = $this->getlast_name();
 				case 'fullName':
 					return $this->data['fullName'] = $this->getFullName();
 				case 'phone':
@@ -65,38 +65,38 @@ class User {
 		}
 	}
 
-	private function getFirstName() {
+	private function getfirst_name() {
 		global $customer;
 
-		$firstName = $this->userFirstName;
+		$first_name = $this->userfirst_name;
 
 		if (
-			!$firstName &&
+			!$first_name &&
 			isset($customer) &&
 			$customer->id &&
 			$customer->lastAddress->id
 		) {
-			$firstName = $customer->lastAddress->firstName;
+			$first_name = $customer->lastAddress->first_name;
 		}
 
-		return $firstName;
+		return $first_name;
 	}
 
-	private function getLastName() {
+	private function getlast_name() {
 		global $customer;
 
-		$lastName = $this->userLastName;
+		$last_name = $this->userlast_name;
 
 		if (
-			!$lastName &&
+			!$last_name &&
 			isset($customer) &&
 			$customer->id &&
 			$customer->lastAddress->id
 		) {
-			$lastName = $customer->lastAddress->LastName;
+			$last_name = $customer->lastAddress->last_name;
 		}
 
-		return $lastName;
+		return $last_name;
 	}
 
 	private function icon() {

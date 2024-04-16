@@ -77,12 +77,12 @@ function associate_cart_setup_old($permanentCustomerId, $guestCustomerId = false
 		if ($guestCustomer->hasCart) {
 			if ($permanentCustomer->hasCart) {
 				// if the user has a cart transfer the guest orders to it
-				DBOld::update('ecommerce_orders SET cartId = ? WHERE cartId = ?', [$permanentCustomer->cart->id, $guestCustomer->cart->id]);
+				DBOld::update('ecommerce_orders SET cart_id = ? WHERE cart_id = ?', [$permanentCustomer->cart->id, $guestCustomer->cart->id]);
 				DBOld::delete('ecommerce_carts WHERE id = ?', [$guestCustomer->cart->id]);
 			} else {
 				// otherwise convert the session cart to the user cart
 				DBOld::update('ecommerce_carts SET customerId=? WHERE id = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
-				DBOld::update('ecommerce_orders SET customerId=? WHERE cartId = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
+				DBOld::update('ecommerce_orders SET customerId=? WHERE cart_id = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
 
 				// add an address
 				if (!$guestCustomer->cart->addressId) {
@@ -99,9 +99,9 @@ function associate_cart_setup_old($permanentCustomerId, $guestCustomerId = false
 /*
 * 4. Downloads
 */
-function download_quote($cartId) {
+function download_quote($cart_id) {
 	$debug = false;
-	$cart = new Cart($cartId);
+	$cart = new Cart($cart_id);
 
 	// products
 	$productsHtml = [];

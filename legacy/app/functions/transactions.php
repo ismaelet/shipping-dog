@@ -91,9 +91,9 @@ function paypal_find_order($id) {
 	$_SESSION['paypal_orders'] = $orders = $_SESSION['paypal_orders'] ?? get_paypal_transactions()->transaction_details;
 
 	foreach ($orders as $order) {
-		$cartId = explode('&', $order->transaction_info->custom_field ?? null)[0];
+		$cart_id = explode('&', $order->transaction_info->custom_field ?? null)[0];
 
-		if ($cartId == $id) {
+		if ($cart_id == $id) {
 			return $order;
 		}
 	}

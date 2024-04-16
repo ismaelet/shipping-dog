@@ -4,8 +4,8 @@ global $id;
 
 //setup page
 $tbl = 'orders';
-$index = 'ID';
-$index_show = 'ID';
+$index = 'id';
+$index_show = 'id';
 
 //form
 $searchConfig = [
@@ -17,47 +17,47 @@ $searchConfig = [
 
 if ($id) {
 
-	$productID = DBOld::find('itemID FROM orders WHERE ID = ?', $id);
+	$productID = DBOld::find('product_id FROM orders WHERE id = ?', $id);
 
-	$design = DBOld::row('ID, name FROM designs WHERE ID IN (SELECT desID FROM items WHERE ID = ?)', $productID);
+	$design = DBOld::row('ID, name FROM designs WHERE id IN (SELECT design_id FROM items WHERE id = ?)', $productID);
 
-	$searchConfig['value-id'] = $design['ID'] ?? 0;
+	$searchConfig['value-id'] = $design['id'] ?? 0;
 	$searchConfig['value-show'] = $design['name'] ?? '';
 }
 
 $inputs = [
 	[
 		'type' => 'search',
-		'name' => 'desID',
+		'name' => 'design_id',
 		'text' => 'Design',
 		'search' => $searchConfig,
 	],
 	[
 		'type' => 'select',
-		'name' => 'typeID',
+		'name' => 'type_id',
 		'text' => 'Tipo',
-		'query' => 'ID, IF (gender=2, CONCAT(name_it," donna"), name_it) AS name FROM items_types ORDER BY ID ASC',
-		'field-name' => 'ID',
+		'query' => 'ID, IF (gender=2, CONCAT(name," donna"), name) AS name FROM items_types ORDER BY id ASC',
+		'field-name' => 'id',
 		'field-show' => 'name',
 		'parse' => 'int',
 	],
 	[
 		'type' => 'select',
-		'name' => 'gendID',
+		'name' => 'gender_id',
 		'text' => 'Modello',
-		'query' => '* FROM items_genders ORDER BY ID ASC',
-		'field-name' => 'ID',
-		'field-show' => 'name_it',
+		'query' => '* FROM items_genders ORDER BY id ASC',
+		'field-name' => 'id',
+		'field-show' => 'name',
 		'parse' => 'int',
 		'empty' => true,
 	],
 	[
 		'type' => 'select',
-		'name' => 'colorID',
+		'name' => 'color_id',
 		'text' => 'Colore',
-		'query' => '* FROM items_colors ORDER BY ID ASC',
-		'field-name' => 'ID',
-		'field-show' => 'name_it',
+		'query' => '* FROM items_colors ORDER BY id ASC',
+		'field-name' => 'id',
+		'field-show' => 'name',
 		'parse' => 'int',
 		'empty' => true,
 	],
@@ -65,8 +65,8 @@ $inputs = [
 		'type' => 'select',
 		'name' => 'sizeID',
 		'text' => 'Taglia',
-		'query' => '* FROM items_sizes ORDER BY ID ASC',
-		'field-name' => 'ID',
+		'query' => '* FROM items_sizes ORDER BY id ASC',
+		'field-name' => 'id',
 		'field-show' => 'name',
 		'parse' => 'int',
 		'empty' => true,
@@ -78,39 +78,39 @@ $inputs = [
 	],
 ];
 
-if ($id) $inputs[0]['val'] = $design['ID'] ?? 0;
+if ($id) $inputs[0]['val'] = $design['id'] ?? 0;
 
 //add
 function _expand_add($tbl, $inputs) {
 
-	$cartID = (int) $_GET['filter'];
-	$buyer = DBOld::find('buyer FROM carts WHERE ID = ?', $cartID);
+	$cart_id = (int) $_GET['filter'];
+	$user_id = DBOld::find('user_id FROM carts WHERE id = ?', $cart_id);
 
-	$desID = (int) $_POST['desID'];
-	$typeID = (int) $_POST['typeID'];
-	$colorID = (int) $_POST['colorID'];
-	$gendID = (int) $_POST['gendID'];
+	$design_id = (int) $_POST['design_id'];
+	$type_id = (int) $_POST['type_id'];
+	$color_id = (int) $_POST['color_id'];
+	$gender_id = (int) $_POST['gender_id'];
 	$sizeID = (int) $_POST['sizeID'];
 
-	$productID = DBOld::find('ID FROM items WHERE desID = ? AND typeID = ?', [$desID, $typeID]);
+	$productID = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$design_id, $type_id]);
 
-	DBOld::add('orders (cartID, buyer, itemID, typeID, gendID, colorID, sizeID) VALUES (?, ?, ?, ?, ?, ?, ?)', [$cartID, $buyer, $productID, $typeID, $gendID, $colorID, $sizeID]);
+	DBOld::add('orders (cart_id, user_id, product_id, type_id, gender_id, color_id, sizeID) VALUES (?, ?, ?, ?, ?, ?, ?)', [$cart_id, $user_id, $productID, $type_id, $gender_id, $color_id, $sizeID]);
 
 	if (isset($_POST['add-sale'])) {
 
-		$shopID = DBOld::find('userID FROM designs WHERE ID = ?', $desID);
-		$gain = $colorID > 1 ? DBOld::find('gain_c FROM items_prices WHERE itemID = ?', $productID) : DBOld::find('gain_w FROM items_prices WHERE itemID = ?', $productID);
+		$shopID = DBOld::find('user_id FROM designs WHERE id = ?', $design_id);
+		$gain = $color_id > 1 ? DBOld::find('gain_c FROM items_prices WHERE product_id = ?', $productID) : DBOld::find('gain_w FROM items_prices WHERE product_id = ?', $productID);
 
-		DBOld::add('sales (desID, storID, amount, gain, typeID, colorID) VALUES (?, ?, ?, ?, ?, ?)', [$desID, $shopID, 1, $gain, $typeID, $colorID]);
+		DBOld::add('sales (design_id, seller_id, amount, gain, type_id, color_id) VALUES (?, ?, ?, ?, ?, ?)', [$design_id, $shopID, 1, $gain, $type_id, $color_id]);
 
-		DBOld::update('stores SET sales=sales+1, total=total+? WHERE userID = ?', [$gain, $shopID]);
+		DBOld::update('stores SET sales=sales+1, total=total+? WHERE user_id = ?', [$gain, $shopID]);
 	}
 }
 
 //edit
 function _expand_edit($tbl, $inputs, $index, $id) {
 
-	$productID = DBOld::find('ID FROM items WHERE desID = ? AND typeID = ?', [$_POST['desID'], $_POST['typeID']]);
+	$productID = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$_POST['design_id'], $_POST['type_id']]);
 
-	DBOld::update('orders SET itemID = ?, typeID = ?, gendID = ?, colorID = ?, sizeID = ? WHERE ID = ?', [$productID, $_POST['typeID'], $_POST['gendID'], $_POST['colorID'], $_POST['sizeID'], $id]);
+	DBOld::update('orders SET product_id = ?, type_id = ?, gender_id = ?, color_id = ?, sizeID = ? WHERE id = ?', [$productID, $_POST['type_id'], $_POST['gender_id'], $_POST['color_id'], $_POST['sizeID'], $id]);
 }

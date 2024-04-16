@@ -50,7 +50,7 @@ use Ecommerce\Product\Type;
 						</div>
 
 						<!-- Love button -->
-						<?= LikeButton::render(['designId' => $oldProduct->designId]) ?>
+						<?= LikeButton::render(['design_id' => $oldProduct->design_id]) ?>
 
 					</div>
 
@@ -108,11 +108,12 @@ use Ecommerce\Product\Type;
 
 								<?php if ($relatedGarmentCount > 3) { ?>
 
-									<div class="carousel-arrow left disabled" data-direction="left" data-tar="#type-slideC">
-										<div class="icon"></div>
+									<div class="carousel-arrow left disabled" data-direction="left" data-tar="#type-slideC" style="--icon-size: 50%; color: #202020;">
+										<?= embed_icon('navigation/arrow-simple-left') ?>
 									</div>
-									<div class="carousel-arrow right" data-direction="right" data-tar="#type-slideC">
-										<div class="icon"></div>
+
+									<div class="carousel-arrow right" data-direction="right" data-tar="#type-slideC" style="--icon-size: 50%; color: #202020;">
+										<?= embed_icon('navigation/arrow-simple-right') ?>
 									</div>
 
 								<?php } ?>
@@ -197,7 +198,7 @@ use Ecommerce\Product\Type;
 
 				<!-- Colors -->
 				<?php if (!empty($oldProduct->type->availableColorSlugs)) {
-					$res = DBOld::select('ID FROM items_colors ORDER BY reorder ASC, name_it ASC');
+					$res = DBOld::select('id FROM items_colors ORDER BY reorder ASC, name ASC');
 				?>
 
 					<section id="color" class="field <?php if (count($oldProduct->availableColorSlugs) < 2) echo 'hide' ?>">
@@ -206,7 +207,7 @@ use Ecommerce\Product\Type;
 
 							<?php while ($row = $res->fetch_assoc()) {
 
-								$color = new Color($row['ID']);
+								$color = new Color($row['id']);
 
 								if ((in_array($color->slug, $oldProduct->type->availableColorSlugs) || $oldProduct->isCustom) && in_array($color->slug, $oldProduct->availableColorSlugs)) { ?>
 
@@ -236,8 +237,8 @@ use Ecommerce\Product\Type;
 				<!-- Size -->
 				<?php if (!empty($oldProduct->type->sizes)) {
 					$new = true;
-					$size_table = DBOld::exists('items_types_measures WHERE typeId=?', [$oldProduct->type->id]) && $product->type->category == 'c';
-					$res = DBOld::select('ID FROM items_sizes');
+					$size_table = DBOld::exists('items_types_measures WHERE type_id=?', [$oldProduct->type->id]) && $product->type->category == 'c';
+					$res = DBOld::select('id FROM items_sizes');
 				?>
 
 					<section id="size" class="field">
@@ -253,7 +254,7 @@ use Ecommerce\Product\Type;
 
 							<?php while ($row = $res->fetch_assoc()) {
 
-								$sizeM = new Size($row['ID']);
+								$sizeM = new Size($row['id']);
 
 								if (in_array($sizeM->slug, $oldProduct->type->sizes)) { ?>
 
@@ -305,7 +306,7 @@ use Ecommerce\Product\Type;
 								$gender = new Gender($genderId);
 
 								if ($key) {
-									$relatedProduct = new Ecommerce\Product(DBOld::find('ID FROM items WHERE desID = ? AND typeID = ?', [$oldProduct->design->id, $oldProduct->type->sibling]));
+									$relatedProduct = new Ecommerce\Product(DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$oldProduct->design->id, $oldProduct->type->sibling]));
 								}
 
 							?>
@@ -333,8 +334,8 @@ use Ecommerce\Product\Type;
 
 					<div class="data-area">
 
-						<?php foreach ($oldProduct->availablePositionIds as $key => $positionId) {
-							$position = new Position($positionId);
+						<?php foreach ($oldProduct->availablePositionIds as $key => $position_id) {
+							$position = new Position($position_id);
 						?>
 
 							<label class="data-selector data-selector--position">
@@ -371,7 +372,7 @@ use Ecommerce\Product\Type;
 
 									<label class="logo-field__item" title="<?= $logo->name ?>">
 										<input type="radio" class="js-logo" name="logo-id" value="<?= $logo->id ?>" <?= $oldProduct->logoGroup->forced && !$logoKey ? 'checked' : null ?>>
-										<img class="img-fill" src="<?= $logo->clientImage ?>" alt="">
+										<img class="img-fill" src="<?= $logo->image() ?>" alt="">
 									</label>
 
 								<?php } ?>

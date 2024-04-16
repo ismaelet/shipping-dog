@@ -5,7 +5,7 @@
 use Ecommerce\Seller;
 
 $tbl = 'payment_requests';
-$index = 'shopId';
+$index = 'seller_id';
 $edit = $_GET['edit'] ?? false;
 $done = $_GET['edit'] ?? false;
 
@@ -45,8 +45,8 @@ $inputs = [
 	[
 		['type' => 'lbl', 'text' => 'Nome e cognome'],
 		['type' => 'hidden', 'name' => 'shopID', 'value' => auth()->id(), 'required' => true],
-		['text' => 'Nome', 'name' => 'firstname', 'value' => $data['firstname'] ?? false, 'size' => 2, 'maxlength' => 100, 'required' => true],
-		['text' => 'Cognome', 'name' => 'lastname', 'value' => $data['lastname'] ?? false, 'size' => 2, 'maxlength' => 100, 'required' => true],
+		['text' => 'Nome', 'name' => 'first_name', 'value' => $data['first_name'] ?? false, 'size' => 2, 'maxlength' => 100, 'required' => true],
+		['text' => 'Cognome', 'name' => 'last_name', 'value' => $data['last_name'] ?? false, 'size' => 2, 'maxlength' => 100, 'required' => true],
 	],
 	[
 		['type' => 'lbl', 'text' => 'Data di nascita'],
@@ -94,13 +94,13 @@ if (isset($_POST['submit'])) {
 
 if (isset($_POST['download'])) {
 
-	DBOld::update('stores SET request = 1 WHERE userID = ?', [auth()->id()]);
+	DBOld::update('stores SET request = 1 WHERE user_id = ?', [auth()->id()]);
 
 	if ($data['total'] == $seller->toPay && file_exists($documents[0]['server-path'])) {
 		redirect_old($documents[0]['client-path']);
 	} else {
-		DBOld::update('stores SET request = 1 WHERE userID = ?', [auth()->id()]);
-		DBOld::update('payment_requests SET total = ? WHERE shopId = ?', [$seller->toPay, auth()->id()]);
+		DBOld::update('stores SET request = 1 WHERE user_id = ?', [auth()->id()]);
+		DBOld::update('payment_requests SET total = ? WHERE seller_id = ?', [$seller->toPay, auth()->id()]);
 
 		foreach ($documents as $document) {
 
@@ -121,8 +121,8 @@ if (isset($_POST['download'])) {
 			$date['end'] = $dateNow->modify('+' . $waitingDays . ' day');
 			$date['end'] = $date['end']->format('d/m/Y');
 
-			$html = str_replace('{{firstname}}', ucfirst(strtolower($data['firstname'])), $html);
-			$html = str_replace('{{lastname}}', ucfirst(strtolower($data['lastname'])), $html);
+			$html = str_replace('{{first_name}}', ucfirst(strtolower($data['first_name'])), $html);
+			$html = str_replace('{{last_name}}', ucfirst(strtolower($data['last_name'])), $html);
 			$html = str_replace('{{birthdate}}', implode('/', array_reverse(explode('-', $data['birthdate']))), $html);
 			$html = str_replace('{{birthplace}}', $data['birthplace'], $html);
 			$html = str_replace('{{birthprovince}}', strtoupper($data['birthprovince']), $html);

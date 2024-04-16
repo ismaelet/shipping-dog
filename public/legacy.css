@@ -1525,7 +1525,7 @@ select:focus:-webkit-autofill {
 }
 
 .btn-auto-width {
-	width: auto;
+	width: auto !important;
 	min-width: unset;
 	max-width: 100%;
 	padding-inline: 2.5em;
@@ -5824,14 +5824,13 @@ main {
 	display: inline-block;
 	width: 0.6em;
 	height: 0.6em;
-	padding: 0 0.7em;
 	vertical-align: middle;
+	margin-left: 0.5rem;
 	transform: rotate(-90deg);
 	transition: background 0.3s, transform 0.3s;
 }
 
 .gender-cbx:checked ~ .gender-title-box .gender-ico {
-	background-color: #fff;
 	transform: rotate(0deg);
 }
 

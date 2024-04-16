@@ -88,7 +88,7 @@
 
 		<?php foreach ($mockups as $mockup) { ?>
 
-			<div class="mockup panel" id="<?= $mockup->colorId . '-' . $mockup->positionId ?>">
+			<div class="mockup panel" id="<?= $mockup->colorId . '-' . $mockup->position_id ?>">
 				<h3 class="block-title"><?= $mockup->nameWithoutType ?></h3>
 
 				<div class="grid-flow mar-t-1" data-columns="2" data-spacing="400">
@@ -97,9 +97,9 @@
 						<label class="mockup__image fill-all replace-image <?= !$mockup->hasBackgroundImage ? 'replace-image--fixed' : '' ?>">
 							<input type="file" name="file" class="js-submit-on-change">
 							<input type="hidden" name="image-url" value="<?= $mockup->backgroundImage ?>">
-							<input type="hidden" name="type-id" value="<?= $mockup->typeId ?>">
+							<input type="hidden" name="type-id" value="<?= $mockup->type_id ?>">
 							<input type="hidden" name="color-id" value="<?= $mockup->colorId ?>">
-							<input type="hidden" name="position-id" value="<?= $mockup->positionId ?>">
+							<input type="hidden" name="position-id" value="<?= $mockup->position_id ?>">
 							<img class="mockup__image image-fill" <?= $mockup->hasBackgroundImage ? 'src="' . public_asset($mockup->backgroundImage) . '"' : '' ?> alt="">
 						</label>
 					</form>
@@ -109,9 +109,9 @@
 						<label class="mockup__image fill-all replace-image <?= !$mockup->hasFrontImage ? 'replace-image--fixed' : '' ?>">
 							<input type="file" name="file" class="js-submit-on-change">
 							<input type="hidden" name="image-url" value="<?= $mockup->frontImage ?>">
-							<input type="hidden" name="type-id" value="<?= $mockup->typeId ?>">
+							<input type="hidden" name="type-id" value="<?= $mockup->type_id ?>">
 							<input type="hidden" name="color-id" value="<?= $mockup->colorId ?>">
-							<input type="hidden" name="position-id" value="<?= $mockup->positionId ?>">
+							<input type="hidden" name="position-id" value="<?= $mockup->position_id ?>">
 							<img class="mockup__image image-fill" <?= $mockup->hasFrontImage ? 'src="' . public_asset($mockup->frontImage) . '"' : '' ?> alt="">
 						</label>
 					</form>

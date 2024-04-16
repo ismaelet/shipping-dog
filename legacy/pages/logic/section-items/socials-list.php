@@ -11,7 +11,7 @@ if (isset($_POST['submit'])) {
 
 	$rows = [];
 
-	$products = DBOld::select('id FROM items WHERE status=1 AND typeID NOT IN (4, 7, 9, 13, 11) ORDER BY id DESC LIMIT 1000');
+	$products = DBOld::select('id FROM items WHERE status=1 AND type_id NOT IN (4, 7, 9, 13, 11) ORDER BY id DESC LIMIT 1000');
 
 	while ($product = $products->fetch_assoc()) {
 

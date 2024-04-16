@@ -4,7 +4,7 @@
  * Query configuration
  */
 $queryConfig['table'] = 'items_sizes';
-$queryConfig['index-field'] = 'ID';
+$queryConfig['index-field'] = 'id';
 $queryConfig['title-field'] = 'name';
 
 /**

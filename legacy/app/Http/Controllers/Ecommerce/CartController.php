@@ -10,15 +10,15 @@ class CartController extends Controller {
 	public static function get(): array|false {
 		$filter = $_GET['filter'];
 
-		$carts = Cart::join('addresses', 'carts.ID', '=', 'addresses.cartID')
+		$carts = Cart::join('addresses', 'carts.id', '=', 'addresses.cart_id')
 			->where('carts.status', '!=', 0)
 			->where(function ($query) use ($filter) {
-				$query->where('carts.ID', 'like', '%' . $filter . '%')
-					->orWhere('aname', 'like', '%' . $filter . '%');
+				$query->where('carts.id', 'like', '%' . $filter . '%')
+					->orWhere('full_name', 'like', '%' . $filter . '%');
 			})
-			->orderBy('carts.ID', 'desc')
+			->orderBy('carts.id', 'desc')
 			->limit(10)
-			->select('carts.ID as id', 'addresses.aname as name')
+			->select('carts.id as id', 'addresses.full_name as name')
 			->get();
 
 		if ($carts->count()) {

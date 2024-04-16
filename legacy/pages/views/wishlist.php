@@ -18,7 +18,7 @@ use App\Models\Ecommerce\Design as EcommerceDesign;
 
 			<?php while ($row = $res_sel->fetch_assoc()) {
 
-				$design = EcommerceDesign::find($row['desID']);
+				$design = EcommerceDesign::find($row['design_id']);
 			?>
 
 				<div class="product">

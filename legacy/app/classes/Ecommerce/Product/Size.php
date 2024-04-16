@@ -7,7 +7,7 @@ use DBOld;
 class Size {
 
 	public const TABLE = 'items_sizes';
-	public const INDEX = 'ID';
+	public const INDEX = 'id';
 
 	public $id = null;
 	public $slug;

@@ -12,7 +12,7 @@ class PaymentMethod {
 	function __construct($id) {
 		if ($row = DBOld::row('* FROM sys_payment WHERE id = ?', [$id])) {
 			$this->id = $id;
-			$this->name = $row['name_it'];
+			$this->name = $row['name'];
 		}
 	}
 

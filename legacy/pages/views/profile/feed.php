@@ -17,7 +17,7 @@ use User\FeedEntry;
 
 			<?php
 
-			if (is_seller()) { ?>
+			if (App\Helpers\App::isSeller()) { ?>
 
 				Qui puoi vedere le nostre comunicazioni, le vendite più recenti, quando un utente inizia a seguiriti o quando aggiunge uno dei tuoi prodotti ai preferiti.
 

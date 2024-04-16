@@ -6,9 +6,9 @@ $saved = $_GET['saved'] ?? false;
 $seller = new Seller(auth()->id());
 
 // get socials data
-$row_link = DBOld::row('* FROM links WHERE userID = ?', [auth()->id()]);
+$row_link = DBOld::row('* FROM links WHERE user_id = ?', [auth()->id()]);
 
-if (!$row_link) DBOld::add('links (userID) VALUES (?)', [auth()->id()]);
+if (!$row_link) DBOld::add('links (user_id) VALUES (?)', [auth()->id()]);
 
 // edit shop data
 if (isset($_POST['edit'])) {
@@ -85,9 +85,9 @@ if (isset($_POST['edit-socials'])) {
 	if ($pos = strpos($yt, 'youtube.com/')) $yt = substr($yt, $pos + 12);
 	$yt = strtok($yt, '/');
 
-	if (!DBOld::exists('links WHERE userID = ?', [auth()->id()])) DBOld::add('links (userID) VALUE (?)', [auth()->id()]);
+	if (!DBOld::exists('links WHERE user_id = ?', [auth()->id()])) DBOld::add('links (user_id) VALUE (?)', [auth()->id()]);
 
-	DBOld::update('links SET site=?, facebook=?, instagram=?, twitter=?, youtube=? WHERE userID = ?', [$site, $fb, $inst, $twit, $yt, auth()->id()]);
+	DBOld::update('links SET site=?, facebook=?, instagram=?, twitter=?, youtube=? WHERE user_id = ?', [$site, $fb, $inst, $twit, $yt, auth()->id()]);
 
 	redirect_old('&saved=socials#socials');
 }

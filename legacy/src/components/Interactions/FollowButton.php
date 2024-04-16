@@ -3,17 +3,17 @@
 use App\Models\Ecommerce\Seller;
 use Illuminate\Support\Facades\Auth;
 
-$seller = Seller::find($sellerId);
+$seller = Seller::find($seller_id);
 
 ?>
 
 <template>
 
 	<?php if (Auth::check()) {
-		if ($sellerId != Auth::id()) {
+		if ($seller_id != Auth::id()) {
 	?>
 
-			<div class="follow-button" x-data="{ followed: <?= $seller->isFollowed() ? 'true' : 'false' ?> }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; toggleFollow(<?= $sellerId ?>, followed)">
+			<div class="follow-button" x-data="{ followed: <?= $seller->isFollowed() ? 'true' : 'false' ?> }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; toggleFollow(<?= $seller_id ?>, followed)">
 				<span>segui</span>
 				<span>seguendo</span>
 				<span>non seguire</span>
@@ -74,10 +74,10 @@ $seller = Seller::find($sellerId);
 </style>
 
 <script>
-	function toggleFollow(sellerId, followed) {
+	function toggleFollow(seller_id, followed) {
 		if (followed) {
 			axios.post('/api/follow', {
-					sellerId: sellerId
+					seller_id: seller_id
 				})
 				.then(response => {
 
@@ -91,7 +91,7 @@ $seller = Seller::find($sellerId);
 				});
 		} else {
 			axios.post('/api/unfollow', {
-					sellerId: sellerId
+					seller_id: seller_id
 				})
 				.then(response => {
 

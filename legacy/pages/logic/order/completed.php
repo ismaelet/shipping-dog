@@ -3,18 +3,18 @@
 use App\Models\Ecommerce\Cart as EcommerceCart;
 use Ecommerce\Cart;
 
-$cartId = $_GET['id'] ?? null;
+$cart_id = $_GET['id'] ?? null;
 $email = $_GET['email'] ?? null;
 
 
 if (auth()->check() && !$email) {
-	$cart = EcommerceCart::where('carts.ID', $cartId)
-		->where('buyer', auth()->id())
+	$cart = EcommerceCart::where('carts.id', $cart_id)
+		->where('user_id', auth()->id())
 		->where('status', '!=', '0')
 		->first();
 } else {
-	$cart = EcommerceCart::join('addresses', 'addresses.cartID', 'carts.ID')
-		->where('carts.ID', $cartId)
+	$cart = EcommerceCart::join('addresses', 'addresses.cart_id', 'carts.id')
+		->where('carts.id', $cart_id)
 		->where('email', $email)
 		->where('status', '!=', '0')
 		->select('carts.*')
@@ -25,8 +25,8 @@ if (!$cart) {
 	redirect_old('/order/status');
 }
 
-$customerId = $cart->buyer;
-$cart = new Cart($cartId);
+$customerId = $cart->user_id;
+$cart = new Cart($cart_id);
 
 ViewOld::setTitle('Ordine ' . $cart->idCode);
 

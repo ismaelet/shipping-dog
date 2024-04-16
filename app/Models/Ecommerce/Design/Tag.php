@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model {
 
-	protected $primaryKey = 'desID';
+	protected $primaryKey = 'design_id';
 	protected $table = 'designs_tags';
 	protected $fillable = [];
 }

@@ -12,63 +12,62 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Design extends Model {
 
-	protected $primaryKey = 'ID';
 	protected $table = 'designs';
-	protected $fillable = ['status'];
+	protected $fillable = ['id', 'name', 'user_id', 'status', 'ratio'];
 
 	/**
 	 * Get the design's seller
 	 */
 	public function seller(): BelongsTo {
-		return $this->belongsTo(Seller::class, 'userID', 'userID');
+		return $this->belongsTo(Seller::class, 'user_id', 'user_id');
 	}
 
 	/**
 	 * Get the design's main
 	 */
 	public function mainProduct(): HasOne {
-		return $this->hasOne(Product::class, 'desID', 'ID')
+		return $this->hasOne(Product::class)
 			->where('status', 1)
 			->where('deleted', 0)
-			->orderBy('typeID', 'asc');
+			->orderBy('type_id');
 	}
 
 	/**
 	 * Get the design's products
 	 */
 	public function products(): HasMany {
-		return $this->hasMany(Product::class, 'desID', 'ID')
+		return $this->hasMany(Product::class)
 			->where('status', 1)
 			->where('deleted', 0)
-			->orderBy('typeID', 'asc');
+			->orderBy('type_id', 'asc');
 	}
 
 	/**
 	 * Get the design's likes
 	 */
 	public function likes(): HasMany {
-		return $this->hasMany(Like::class, 'desID', 'ID');
+		return $this->hasMany(Like::class);
 	}
 
 	/**
 	 * Get the design's tags
 	 */
 	public function tags(): HasMany {
-		return $this->hasMany(Tag::class, 'desID', 'ID');
+		return $this->hasMany(Tag::class);
 	}
 
 	/**
 	 * Get the design's customer photos
 	 */
 	public function customerPhotos(): HasMany {
-		return $this->hasMany(CustomerPhoto::class, 'desID', 'ID');
+		return $this->hasMany(CustomerPhoto::class);
 	}
 
 	/**
 	 * Ge the desing's url, that is the url of the main product
 	 */
-	public function url(): string {
-		return $this->mainProduct->url();
+	public function url(): ?string {
+		return $this->mainProduct ? $this->mainProduct->url() : null;
 	}
 
 	/**
@@ -83,8 +82,8 @@ class Design extends Model {
 	 */
 	public function isLiked(): bool {
 		return Like::where([
-			'userID' => auth()->id(),
-			'desID' => $this->ID,
+			'user_id' => auth()->id(),
+			'design_id' => $this->id,
 		])->exists();
 	}
 
@@ -92,13 +91,13 @@ class Design extends Model {
 	 * Get the design's image
 	 */
 	public function image(int $size = 400): string {
-		$file = $size == 400 ? 'designs/previews/' . $this->ID . '_m.webp' : 'designs/previews/' . $this->ID . '.webp';
+		$file = $size == 400 ? 'designs/previews/' . $this->id . '_m.webp' : 'designs/previews/' . $this->id . '.webp';
 
-		if (!file_exists(public_storage_path($file))) {
-			des_img_gen($this->ID);
+		if (!file_exists(public_storage($file))) {
+			des_img_gen($this->id);
 		}
 
-		if (file_exists(public_storage_path($file))) {
+		if (file_exists(public_storage($file))) {
 			return public_asset($file);
 		}
 

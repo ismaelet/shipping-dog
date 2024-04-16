@@ -2,6 +2,7 @@
 
 use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Design as EcommerceDesign;
+use App\Models\Ecommerce\Product\ProductType;
 use Ecommerce\Design;
 use Ecommerce\Design\LogoGroup;
 use Ecommerce\Product;
@@ -97,7 +98,7 @@ function add_new_design(): string|false {
 	}
 
 	if (EcommerceDesign::where('name', $name)
-		->where('userID', Auth::id())
+		->where('user_id', Auth::id())
 		->where('status', 1)
 		->exists()
 	) {
@@ -105,26 +106,26 @@ function add_new_design(): string|false {
 	}
 
 	// Get design ID
-	$desID = DBOld::row('MAX(ID) as max FROM designs')['max'] + 1;
+	$design_id = DBOld::row('MAX(ID) as max FROM designs')['max'] + 1;
 
 	// Upload image
 	$file_vector = false;
-	$file = 'designs/' . $desID . '.png';
-	$file_m = 'designs/' . $desID . '_m.png';
-	$file_ori = 'designs_originals/' . $desID . '.png';
+	$file = 'designs/' . $design_id . '.png';
+	$file_m = 'designs/' . $design_id . '_m.png';
+	$file_ori = 'designs_originals/' . $design_id . '.png';
 
 	// Store the original file
-	$newFile = FileHelper::uploadFile(request(), $file_ori);
+	FileHelper::uploadFile(request(), $file_ori);
 
 	// Store the usable HD file
-	$newFile = FileHelper::uploadImage([
+	FileHelper::uploadImage([
 		'path' => $file,
 		'size' => 1024,
 		'type' => 'png',
 	]);
 
 	// Store the usable LD file
-	$newFile = FileHelper::uploadImage([
+	FileHelper::uploadImage([
 		'path' => $file_m,
 		'size' => 512,
 		'type' => 'png',
@@ -135,9 +136,9 @@ function add_new_design(): string|false {
 		$type = strtolower(strrev(explode('.', strrev($_FILES['file-vector']['name']))[0]));
 
 		if (in_array($type, ['pdf', 'ai'])) {
-			$file_vector = 'designs_vector/' . $desID . '.' . $type;
+			$file_vector = 'designs_vector/' . $design_id . '.' . $type;
 
-			$newFile = FileHelper::uploadFile(request(), $file_vector);
+			FileHelper::uploadFile(request(), $file_vector);
 		}
 	}
 
@@ -145,28 +146,37 @@ function add_new_design(): string|false {
 	// Add databese entry
 	$ratio = round($reso[0] / $reso[1], 2);
 
-	$designId = DBOld::add('designs (ID, userID, name, status, ratio) VALUES (?, ?, ?, ?, ?)', [$desID, auth()->id(), $name, 1, $ratio]);
+	EcommerceDesign::create([
+		'id' => $design_id,
+		'user_id' => Auth::id(),
+		'name' => $name,
+		'status' => 1,
+		'ratio' => $ratio,
+	]);
 
 	// Add logo
 	$sellerLogoGroupId = DBOld::find(LogoGroup::INDEX . ' FROM ' . LogoGroup::TABLE . ' WHERE ' . LogoGroup::SELLER_INDEX . ' = ? ORDER BY ' . LogoGroup::INDEX . ' DESC', [auth()->id()]);
 
 	if ($sellerLogoGroupId) {
-		DBOld::update(Design::TABLE . ' SET ' . Design::LOGO_GROUP_INDEX . ' = ? WHERE ' . Design::INDEX . ' = ?', [$sellerLogoGroupId, $designId]);
+		DBOld::update(Design::TABLE . ' SET ' . Design::LOGO_GROUP_INDEX . ' = ? WHERE ' . Design::INDEX . ' = ?', [$sellerLogoGroupId, $design_id]);
 	}
 
 	// Add items
-	$res = auth()->id() != 1 ? DBOld::select('ID FROM items_types WHERE hidden = 0') : DBOld::select('ID FROM items_types WHERE ID=16');
+	$types = ProductType::where('hidden', 0)->get();
 
-	while ($row = $res->fetch_assoc()) {
-		Product::new($desID, $row['ID']);
+	foreach ($types as $type) {
+		Product::new(
+			$design_id,
+			$type->id,
+		);
 	}
 
 	// Make the user an artist if it's a regular user
-	DBOld::update('users SET level = 1 WHERE ID = ? AND level=0', [auth()->id()]);
+	DBOld::update('users SET level = 1 WHERE id = ? AND level=0', [auth()->id()]);
 
 	// Add tags
-	update_tags($_POST['tags'], $desID);
+	update_tags($_POST['tags'], $design_id);
 
 	// Redirect
-	redirect_old('/manage/portfolio/edit?id=' . $desID);
+	redirect_old('/manage/portfolio/edit?id=' . $design_id);
 }

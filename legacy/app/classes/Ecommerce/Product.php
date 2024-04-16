@@ -3,7 +3,9 @@
 namespace Ecommerce;
 
 use App\Helpers\PreviewHelper;
+use App\Models\Ecommerce\Design as NewDesign;
 use App\Models\Ecommerce\Product as EcommerceProduct;
+use App\Models\Ecommerce\Product\ProductType;
 use DBOld;
 use Ecommerce\Product\Type;
 use Ecommerce\Product\Color;
@@ -11,6 +13,7 @@ use Ecommerce\Product\Position;
 use Ecommerce\Product\PreviewOld;
 use DatabaseObject;
 use Ecommerce\Design\Logo;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class Product
@@ -39,11 +42,11 @@ class Product {
 	use DatabaseObject;
 
 	public const TABLE = 'items';
-	public const INDEX = 'ID';
-	public const DESIGN_INDEX = 'desID';
-	public const SELLER_INDEX = 'userID';
-	public const TYPE_INDEX = 'typeID';
-	public const COLOR_INDEX = 'colorID';
+	public const INDEX = 'id';
+	public const DESIGN_INDEX = 'design_id';
+	public const SELLER_INDEX = 'user_id';
+	public const TYPE_INDEX = 'type_id';
+	public const COLOR_INDEX = 'color_id';
 
 	/*
 	* Get methods
@@ -65,7 +68,7 @@ class Product {
 	}
 
 	private function getFullUrl() {
-		return $this->url . '&colorId=' . $this->color->id . '&positionId=' . $this->position->id;
+		return $this->url . '&colorId=' . $this->color->id . '&position_id=' . $this->position->id;
 	}
 
 	private function getClientFullUrl() {
@@ -77,7 +80,7 @@ class Product {
 	}
 
 	private function getDesign() {
-		return new Design($this->designId);
+		return new Design($this->design_id);
 	}
 
 	private function getSellerId() {
@@ -85,7 +88,7 @@ class Product {
 	}
 
 	private function getSeller() {
-		return new Seller($this->sellerId);
+		return new Seller($this->seller_id);
 	}
 
 	private function getTypeId() {
@@ -93,7 +96,7 @@ class Product {
 	}
 
 	private function getType() {
-		return new Type($this->typeId);
+		return new Type($this->type_id);
 	}
 
 	private function getColorId() {
@@ -121,7 +124,7 @@ class Product {
 	}
 
 	private function getPosition() {
-		return new Position($this->positionId);
+		return new Position($this->position_id);
 	}
 
 	private function getAvailablePositionIds() {
@@ -133,7 +136,7 @@ class Product {
 	}
 
 	private function getLogo() {
-		return new Logo($this->logoId);
+		return new Logo($this->logo_id);
 	}
 
 	private function getLogoGroup() {
@@ -146,11 +149,11 @@ class Product {
 		return $logoGroup;
 	}
 
-	private function getHasLogos() {
+	private function getHasLogos(): bool {
 		return (bool) $this->logoGroup && $this->logoGroup->id;
 	}
 
-	private function getLogos() {
+	private function getLogos(): ?Collection {
 		$logos = null;
 
 		if ($this->logoGroup) {
@@ -165,18 +168,18 @@ class Product {
 	}
 
 	private function getIsCustom() {
-		return (bool) $this->designId ? $this->design->custom : true;
+		return (bool) $this->design_id ? $this->design->custom : true;
 	}
 
 	private function getCoverImage() {
 		switch (true) {
-			case file_exists(public_storage_path($this->specificCoverImage)):
+			case file_exists(public_storage($this->specificCoverImage)):
 				$coverImage = $this->specificCoverImage;
 				break;
-			case !$this->isCustom && file_exists(public_storage_path($file = '/product_types/covers/' . $this->type->slug . '.webp')):
+			case !$this->isCustom && file_exists(public_storage($file = '/product_types/covers/' . $this->type->slug . '.webp')):
 				$coverImage = $file;
 				break;
-			case !$this->isCustom && file_exists(public_storage_path($file = '/product_types/covers/' . $this->type->slug . '.jpg')):
+			case !$this->isCustom && file_exists(public_storage($file = '/product_types/covers/' . $this->type->slug . '.jpg')):
 				$coverImage = $file;
 				break;
 			default:
@@ -202,7 +205,7 @@ class Product {
 		return EcommerceProduct::find($this->id);
 	}
 	public function getImage(int $imageSize = null) {
-		return (new PreviewHelper($this->getNewProduct(), $imageSize, $this->colorId, $this->positionId))
+		return (new PreviewHelper($this->getNewProduct(), $imageSize, $this->colorId, $this->position_id))
 			->image();
 	}
 
@@ -225,7 +228,7 @@ class Product {
 	}
 
 	public function getFullImage() {
-		return (new PreviewHelper($this->getNewProduct(), PreviewOld::BIG_IMAGE_SIZE, $this->colorId, $this->positionId))
+		return (new PreviewHelper($this->getNewProduct(), PreviewOld::BIG_IMAGE_SIZE, $this->colorId, $this->position_id))
 			->image();
 	}
 
@@ -235,8 +238,8 @@ class Product {
 
 	private function getPriceData() {
 		$priceData =
-			DBOld::row('* FROM items_prices WHERE itemID = ?', [$this->id]) ?: (DBOld::row('* FROM prices_stores WHERE storeID = ? AND typeID = ?', [$this->seller->id, $this->type->id]) ?:
-				DBOld::row('* FROM prices_default WHERE typeID = ?', [$this->type->id])
+			DBOld::row('* FROM items_prices WHERE product_id = ?', [$this->id]) ?: (DBOld::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$this->seller->id, $this->type->id]) ?:
+				DBOld::row('* FROM prices_default WHERE type_id = ?', [$this->type->id])
 			);
 
 		return $priceData;
@@ -311,7 +314,7 @@ class Product {
 	}
 
 	private function getIsUserOwner() {
-		return $this->sellerId == auth()->id();
+		return $this->seller_id == auth()->id();
 	}
 
 	/*
@@ -325,16 +328,16 @@ class Product {
 		return $this;
 	}
 
-	public function setLogoId(int $logoId = null) {
-		$this->data['logoId'] = $logoId;
+	public function setLogoId(int $logo_id = null) {
+		$this->data['logo_id'] = $logo_id;
 
 		unset($this->data['logo']);
 
 		return $this;
 	}
 
-	public function setPositionId(int $positionId = null) {
-		$this->data['positionId'] = $positionId;
+	public function setPositionId(int $position_id = null) {
+		$this->data['position_id'] = $position_id;
 
 		unset($this->data['position']);
 
@@ -353,7 +356,7 @@ class Product {
 	public function updateColors(array $availableColorSlugs) {
 		$availableColorSlugsString = implode(',', $availableColorSlugs);
 
-		DBOld::update('items SET colors=? WHERE ID = ?', [$availableColorSlugsString, $this->id]);
+		DBOld::update('items SET colors=? WHERE id = ?', [$availableColorSlugsString, $this->id]);
 
 		$this->data['availableColorSlugs'] = $availableColorSlugs;
 
@@ -366,7 +369,7 @@ class Product {
 		$this->setColorId($colorId);
 
 		if ($this->colorId != $oldColorId) {
-			DBOld::update('items SET colorID = ? WHERE ID = ?', [$colorId, $this->id]);
+			DBOld::update('items SET color_id = ? WHERE id = ?', [$colorId, $this->id]);
 		}
 
 		return $this;
@@ -375,23 +378,23 @@ class Product {
 	public function updateStatus(bool $published) {
 		$statusId = $published ? 1 : 0;
 
-		DBOld::update('items SET status=? WHERE ID = ?', [$statusId, $this->id]);
+		DBOld::update('items SET status=? WHERE id = ?', [$statusId, $this->id]);
 
 		$this->setStatusId($published);
 
 		return $this;
 	}
 
-	public function updatePositionIds(mixed $positionIds) {
-		if (is_array($positionIds)) {
-			$positionIds = implode(',', $positionIds);
+	public function updatePositionIds(mixed $position_ids) {
+		if (is_array($position_ids)) {
+			$position_ids = implode(',', $position_ids);
 		}
 
-		DBOld::update('items SET positions=? WHERE ID = ?', [$positionIds, $this->id]);
+		DBOld::update('items SET positions=? WHERE id = ?', [$position_ids, $this->id]);
 
-		$this->data['positionIds'] = $positionIds;
+		$this->data['position_ids'] = $position_ids;
 
-		unset($this->positionId);
+		unset($this->position_id);
 
 		return $this;
 	}
@@ -401,7 +404,7 @@ class Product {
 		$newWhiteGain = $priceDifference * 0.75 + $this->whiteGain;
 		$newColoredGain = $priceDifference * 0.75 + $this->coloredGain;
 
-		DBOld::update('items_prices SET price = ?, gain_w = ?, gain_c = ? WHERE itemID = ?', [$newPrice, $newWhiteGain, $newColoredGain, $this->id]);
+		DBOld::update('items_prices SET price = ?, gain_w = ?, gain_c = ? WHERE product_id = ?', [$newPrice, $newWhiteGain, $newColoredGain, $this->id]);
 
 		return $this;
 	}
@@ -409,32 +412,35 @@ class Product {
 	/*
 	* Instance methods
 	*/
-	static function new(int $designId, int $typeId) {
-		$design = new Design($designId);
-		$type = new Type($typeId);
-		$productId = DBOld::find(self::INDEX . ' FROM ' . self::TABLE . ' WHERE ' . self::DESIGN_INDEX . ' = ? AND ' . self::TYPE_INDEX . ' = ?', [$design->id, $type->id]);
+	static function new(int $design_id, int $type_id) {
+		$design = NewDesign::find($design_id);
+		$type = ProductType::find($type_id);
+		$productId = EcommerceProduct::where('design_id', $design_id)->where('type_id', $type_id)->first();
 
 		if (!$productId) {
 			//get colors
 			$colors = [];
 			$availableColorSlugs = [];
 
-			foreach ($type->publicColors as $color) {
+			foreach ($type->publicColors() as $color) {
 				$colors[] = $color;
-				$availableColorSlugs[] = $color->slug;
+				$availableColorSlugs[] = $color->tag;
 			}
 
 			$colorId = isset($colors[0]) ? $colors[0]->id : 0;
 			$availableColorSlugs = implode(',', $availableColorSlugs);
 
-			//get positions
-			$positions = $type->id != 114 || $design->sellerId == 5151 ? implode(',', $type->availablePositionIds) : '3,4';
-
-			//create item
-			$productId = DBOld::add(
-				self::TABLE . ' (name, ' . self::SELLER_INDEX . ', ' . self::DESIGN_INDEX . ', ' . self::TYPE_INDEX . ', ' . self::COLOR_INDEX . ', colors, positions, status)',
-				[$design->name, $design->sellerId, $design->id, $type->id, $colorId, $availableColorSlugs, $positions, 1]
-			);
+			// Create the item
+			$productId = EcommerceProduct::create([
+				'name' => $design->name,
+				'design_id' => $design->id,
+				'user_id' => $design->user_id,
+				'type_id' => $type->id,
+				'color_id' => $colorId,
+				'colors' => $availableColorSlugs,
+				'positions' => implode(',', $type->positionList()),
+				'status' => 1,
+			])->id;
 		}
 
 		$product = new self($productId);
@@ -445,9 +451,9 @@ class Product {
 	public function delete(bool $permanently = false) {
 		if ($permanently || $this->isCustom) {
 			DBOld::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
-			DBOld::delete('items_info WHERE itemID = ?', [$this->id]);
-			DBOld::delete('items_previews WHERE itemID = ?', [$this->id]);
-			DBOld::delete('items_prices WHERE itemID = ?', [$this->id]);
+			DBOld::delete('items_info WHERE product_id = ?', [$this->id]);
+			DBOld::delete('items_previews WHERE product_id = ?', [$this->id]);
+			DBOld::delete('items_prices WHERE product_id = ?', [$this->id]);
 		} else {
 			DBOld::update(self::TABLE . ' SET deleted = 1 WHERE ' . self::INDEX . ' = ?', [$this->id]);
 		}

@@ -46,11 +46,11 @@
 
 				<?php generate_form($inputs, false, $error) ?>
 
-				<div class="form-foot">
+				<div class="form-foot flex justify-center">
 
-					<button type="submit" name="submit" class="pbtn txt-sbold file-submit">
-						<span class="btn-icon bgr-f" <?= embed_icon('upload') ?>></span>
-						<span class="btn-txt">Carica la grafica</span>
+					<button type="submit" name="submit" class="btn btn-auto-width txt-sbold file-submit">
+						<?= embed_icon('upload') ?>
+						Carica la grafica
 					</button>
 
 					<div class="file-load"></div>

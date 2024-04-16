@@ -8,11 +8,11 @@ use Email;
 
 class CartTrackingUpdate {
 	public static function send(object $cart = null, bool $debug = false) {
-		$cart = $cart ?: cart_old();
+		$cart = $cart ?: \App\Helpers\App::cartOld();
 		$emailContent = file_get_contents(public_server_path('/app/templates/assets/emails/cart-tracking.html'));
 
 		// populate mail body
-		$emailContent = str_replace('{{ cartId }}', $cart->id, $emailContent);
+		$emailContent = str_replace('{{ cart_id }}', $cart->id, $emailContent);
 		$emailContent = str_replace('{{ tracking-code }}', $cart->tracking, $emailContent);
 
 		// setup mail config

@@ -10,7 +10,7 @@ use function Ecommerce\ecommerce_config;
 class CartFlowBar {
 
 	public static function render(int $currentStepId = null, object $cart = null) {
-		$cart = $cart ?: cart_old();
+		$cart = $cart ?: \App\Helpers\App::cartOld();
 		$currentStepId = $currentStepId ?: (ViewOld::get('currentStepId') ?: $cart->stepId);
 
 		ob_start();

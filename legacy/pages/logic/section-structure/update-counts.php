@@ -11,9 +11,9 @@ $pageConfig['centered'] = true;
 if (isset($_POST['update'])) {
 	$updateType = $_POST['update'];
 
-	DBOld::update('stores SET sales=0, rsales=0');
-	DBOld::update('designs SET sales=0, rsales=0');
-	DBOld::update('items SET sales=0, rsales=0');
+	DBOld::update('stores SET sales=0, recent_sales=0');
+	DBOld::update('designs SET sales=0, recent_sales=0');
+	DBOld::update('items SET sales=0, recent_sales=0');
 
 	/*
 	* Recent sales
@@ -21,40 +21,40 @@ if (isset($_POST['update'])) {
 	DBOld::update('
 		stores
 		INNER JOIN (
-			SELECT sellerId, SUM(orders.quantity) as saleQuantity
+			SELECT seller_id, SUM(orders.quantity) as saleQuantity
 			FROM orders
-			INNER JOIN carts ON carts.ID = orders.cartID
+			INNER JOIN carts ON carts.id = orders.cart_id
 			WHERE carts.status > 0 AND carts.time > DATE_SUB(NOW(), INTERVAL 1 YEAR)
-			GROUP BY sellerId
+			GROUP BY seller_id
 		) as recentOrders
-		ON stores.userID = recentOrders.sellerId
-		SET rsales = saleQuantity
+		ON stores.user_id = recentOrders.seller_id
+		SET recent_sales = saleQuantity
 	');
 
 	DBOld::update('
 		designs
 		INNER JOIN (
-			SELECT designId, SUM(orders.quantity) as saleQuantity
+			SELECT design_id, SUM(orders.quantity) as saleQuantity
 			FROM orders
-			INNER JOIN carts ON carts.ID = orders.cartID
+			INNER JOIN carts ON carts.id = orders.cart_id
 			WHERE carts.status > 0 AND carts.time > DATE_SUB(NOW(), INTERVAL 1 YEAR)
-			GROUP BY designId
+			GROUP BY design_id
 		) as recentOrders
-		ON designs.ID = recentOrders.designId
-		SET rsales = saleQuantity
+		ON designs.id = recentOrders.design_id
+		SET recent_sales = saleQuantity
 	');
 
 	DBOld::update('
 		items
 		INNER JOIN (
-			SELECT itemID, SUM(orders.quantity) as saleQuantity
+			SELECT product_id, SUM(orders.quantity) as saleQuantity
 			FROM orders
-			INNER JOIN carts ON carts.ID = orders.cartID
+			INNER JOIN carts ON carts.id = orders.cart_id
 			WHERE carts.status > 0 AND carts.time > DATE_SUB(NOW(), INTERVAL 1 YEAR)
-			GROUP BY itemID
+			GROUP BY product_id
 		) as recentOrders
-		ON items.ID = recentOrders.itemID
-		SET rsales = saleQuantity
+		ON items.id = recentOrders.product_id
+		SET recent_sales = saleQuantity
 	');
 
 	/*
@@ -63,39 +63,39 @@ if (isset($_POST['update'])) {
 	DBOld::update('
 		stores
 		INNER JOIN (
-			SELECT sellerId, SUM(orders.quantity) as saleQuantity
+			SELECT seller_id, SUM(orders.quantity) as saleQuantity
 			FROM orders
-			INNER JOIN carts ON carts.ID = orders.cartID
+			INNER JOIN carts ON carts.id = orders.cart_id
 			WHERE carts.status > 0
-			GROUP BY sellerId
+			GROUP BY seller_id
 		) as recentOrders
-		ON stores.userID = recentOrders.sellerId
+		ON stores.user_id = recentOrders.seller_id
 		SET sales = saleQuantity
 	');
 
 	DBOld::update('
 		designs
 		INNER JOIN (
-			SELECT designId, SUM(orders.quantity) as saleQuantity
+			SELECT design_id, SUM(orders.quantity) as saleQuantity
 			FROM orders
-			INNER JOIN carts ON carts.ID = orders.cartID
+			INNER JOIN carts ON carts.id = orders.cart_id
 			WHERE carts.status > 0
-			GROUP BY designId
+			GROUP BY design_id
 		) as recentOrders
-		ON designs.ID = recentOrders.designId
+		ON designs.id = recentOrders.design_id
 		SET sales = saleQuantity
 	');
 
 	DBOld::update('
 		items
 		INNER JOIN (
-			SELECT itemID, SUM(orders.quantity) as saleQuantity
+			SELECT product_id, SUM(orders.quantity) as saleQuantity
 			FROM orders
-			INNER JOIN carts ON carts.ID = orders.cartID
+			INNER JOIN carts ON carts.id = orders.cart_id
 			WHERE carts.status > 0
-			GROUP BY itemID
+			GROUP BY product_id
 		) as recentOrders
-		ON items.ID = recentOrders.itemID
+		ON items.id = recentOrders.product_id
 		SET sales = saleQuantity
 	');
 

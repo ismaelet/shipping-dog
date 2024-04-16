@@ -7,12 +7,12 @@ $search = $_GET['search'] ?? '';
 $search = strtolower(trim($search));
 
 if ($search) {
-	$results = DBOld::select("userID, " . $showField . " FROM " . $table . " WHERE userID = ? OR LOWER(" . $showField . ") LIKE CONCAT('%',?,'%') ORDER BY " . $showField . " ASC, userID DESC LIMIT 10", [$search, $search]);
+	$results = DBOld::select("user_id, " . $showField . " FROM " . $table . " WHERE user_id = ? OR LOWER(" . $showField . ") LIKE CONCAT('%',?,'%') ORDER BY " . $showField . " ASC, user_id DESC LIMIT 10", [$search, $search]);
 
 	while ($result = $results->fetch_assoc()) {
 		$response[] = [
-			'value-field' => $result['userID'],
-			'show-field' => $result['userID'] . ' - ' . $result[$showField],
+			'value-field' => $result['user_id'],
+			'show-field' => $result['user_id'] . ' - ' . $result[$showField],
 		];
 	}
 }

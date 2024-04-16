@@ -29,10 +29,10 @@ if (isset($_POST['change-status'])) {
 	}
 
 	if ($comment) {
-		if (DBOld::exists('ecommerce_carts_comments WHERE cartId = ?', $id)) {
-			DBOld::update('ecommerce_carts_comments SET comment=? WHERE cartId = ?', [$comment, $id]);
+		if (DBOld::exists('ecommerce_carts_comments WHERE cart_id = ?', $id)) {
+			DBOld::update('ecommerce_carts_comments SET comment=? WHERE cart_id = ?', [$comment, $id]);
 		} else {
-			DBOld::add('ecommerce_carts_comments (cartId, comment) VALUES (?, ?)', [$id, $comment]);
+			DBOld::add('ecommerce_carts_comments (cart_id, comment) VALUES (?, ?)', [$id, $comment]);
 		}
 	}
 

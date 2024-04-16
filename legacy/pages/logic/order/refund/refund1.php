@@ -13,22 +13,22 @@ include_once('setup.php');
 if (isset($_POST['submit'])) {
 
 	// Get the post data
-	$cartId = $_POST['cart_id'];
+	$cart_id = $_POST['cart_id'];
 	$email = strtolower(trim($_POST['email']));
 
 	// Check if the cart exists
-	$cart = Cart::join('addresses', 'addresses.cartID', '=', 'carts.ID')
-		->where('carts.ID', $cartId)
+	$cart = Cart::join('addresses', 'addresses.cart_id', '=', 'carts.id')
+		->where('carts.id', $cart_id)
 		->where('addresses.email', $email)
 		->first();
 
 	if ($cart) {
-		$changeRequest = ChangeRequest::where('old_cart_id', $cartId)->first();
+		$changeRequest = ChangeRequest::where('old_cart_id', $cart_id)->first();
 
 		if (!$changeRequest) {
 			// Create the change request
 			$changeRequest = ChangeRequest::create([
-				'old_cart_id' => $cartId,
+				'old_cart_id' => $cart_id,
 				'step' => 2,
 			]);
 		}

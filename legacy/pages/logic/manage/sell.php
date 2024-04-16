@@ -3,7 +3,7 @@
 global $user;
 
 // setup page
-if (is_seller()) redirect_old('/manage');
+if (App\Helpers\App::isSeller()) redirect_old('/manage');
 
 // form
 $inputs = [
@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
 	$name = trim($_POST['name']);
 	$desc = trim($_POST['desc']);
 
-	DBOld::add('stores (userID, name, description) VALUES (?, ?, ?)', [auth()->id(), $name, $desc]);
+	DBOld::add('stores (user_id, name, description) VALUES (?, ?, ?)', [auth()->id(), $name, $desc]);
 
 	redirect_old('/manage/new');
 }

@@ -3,7 +3,7 @@
 class Collection {
 
 	public $id;
-	public $sellerId;
+	public $seller_id;
 	public $name;
 	public $img;
 	public $img_m;
@@ -14,7 +14,7 @@ class Collection {
 
 	function __construct($id) {
 
-		$row = DBOld::row('* FROM collections WHERE ID=' . $id);
+		$row = DBOld::row('* FROM collections WHERE id=' . $id);
 
 		$this->id = $id;
 
@@ -22,7 +22,7 @@ class Collection {
 		$this->name = $row['name'];
 
 		//get the seller ID
-		$this->sellerId = $row['userID'];
+		$this->seller_id = $row['user_id'];
 
 		//get the status
 		$this->status = $row['status'];
@@ -44,14 +44,14 @@ class Collection {
 
 			$this->img_cust = false;
 
-			$res = DBOld::select('ID, color FROM designs WHERE collection=? ORDER BY ID DESC LIMIT 1', [$this->id]);
+			$res = DBOld::select('id, color FROM designs WHERE collection=? ORDER BY id DESC LIMIT 1', [$this->id]);
 
 			if ($res->num_rows) {
 
 				$row = $res->fetch_assoc();
 
 				$color = $row['color'];
-				$img = '/uploads/designs/' . $row['ID'] . '.png';
+				$img = '/uploads/designs/' . $row['id'] . '.png';
 			} else $img = false;
 		}
 

@@ -27,7 +27,7 @@ use App\View\Components\Interactions\FollowButton;
 
 			<!-- Follow button -->
 			<div class="flex justify-center mt-8 mb-4">
-				<?= FollowButton::render(['sellerId' => $seller->id]) ?>
+				<?= FollowButton::render(['seller_id' => $seller->id]) ?>
 			</div>
 
 			<div id="title-box" class="txt-cen">

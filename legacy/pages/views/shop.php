@@ -9,7 +9,7 @@
 
 			<!-- Search box -->
 			<form class="page-search" method="GET" autocomplete="off">
-				<input type="text" name="search" class="page-search__input" value="<?= $_GET['search'] ?? '' ?>" placeholder="Cerca un prodotto" maxlength="30" onfocus="$(this).next().addClass('focus');" onblur="$(this).next().removeClass('focus');" autocomplete="off">
+				<input type="search" name="search" class="page-search__input" value="<?= $_GET['search'] ?? '' ?>" placeholder="Cerca un prodotto" maxlength="30" onfocus="$(this).next().addClass('focus');" onblur="$(this).next().removeClass('focus');" autocomplete="off">
 
 				<button type="submit" class="page-search__button btn">
 					<?= embed_icon('search') ?>
@@ -21,8 +21,10 @@
 	</div>
 
 	<div id="cred">
-		<div id="cred-ico" <?= temp_bg($slid_des->seller->icon) ?>></div>
-		<p id="cred-txt"><a href="<?= $slid_des->url ?>"><?= $slid_des->name ?></a> by <a class="txt-c1" href="<?= $slid_des->seller->clientUrl ?>"><?= $slid_des->seller->name ?></a></p>
+		<img id="cred-ico" src="<?= $slid_des->seller->icon() ?>" />
+		<p id="cred-txt">
+			<a href="<?= $slid_des->url() ?>"><?= $slid_des->name ?></a> by <a class="txt-c1" href="<?= $slid_des->seller->url() ?>"><?= $slid_des->seller->name ?></a>
+		</p>
 	</div>
 </section>
 

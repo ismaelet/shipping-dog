@@ -9,7 +9,7 @@ $pageConfig['row-action'] = 'add?id={{id}}';
 * Query configuration
 */
 $queryConfig['table'] = 'items_sizes';
-$queryConfig['index'] = 'ID';
+$queryConfig['index'] = 'id';
 $query['where-search'] = "
 	ID = ? OR
 	tag LIKE CONCAT('%',?,'%') OR
@@ -20,7 +20,7 @@ $query['where-search'] = "
 * Fields
 */
 $fields = [
-	['title' => 'ID', 'name' => 'ID'],
+	['title' => 'id', 'name' => 'id'],
 	['title' => 'Nome', 'name' => 'name', 'size' => 1],
 	['title' => 'Sovrapprezzo', 'name' => 'price', 'size' => 1, 'parse' => 'price'],
 

@@ -7,7 +7,7 @@ namespace ViewManager\Ecommerce;
 class CartRecap {
 
 	public static function render(object $cart = null) {
-		$cart = $cart ?: cart_old();
+		$cart = $cart ?: \App\Helpers\App::cartOld();
 
 		ob_start();
 ?>

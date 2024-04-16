@@ -22,11 +22,13 @@
 
 #art-ico {
 	display: block;
-	background-color: var(--surface-secondary);
 	background-position: center;
 	background-size: cover;
-	border-radius: 100%;
-	padding-bottom: 100%;
+
+	img {
+		background-color: var(--surface-secondary);
+		border-radius: 100%;
+	}
 }
 
 #art-name-cell {

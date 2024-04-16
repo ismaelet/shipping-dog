@@ -11,21 +11,21 @@ class FollowerController extends Controller {
 	 * Follow a seller
 	 */
 	public static function follow(): int|false {
-		$sellerId = static::body('sellerId');
+		$seller_id = static::body('seller_id');
 		$userId = static::body('userId') ?? auth()->id();
 		$requestData = [
-			'userID' => $userId,
-			'followID' => $sellerId,
+			'user_id' => $userId,
+			'follower_id' => $seller_id,
 		];
 
 		if (!Follower::where($requestData)->count()) {
 
 			$follower = Follower::create([
-				'userID' => $userId,
-				'followID' => $sellerId,
+				'user_id' => $userId,
+				'follower_id' => $seller_id,
 			]);
 
-			return $follower->ID;
+			return $follower->id;
 		}
 
 		return false;
@@ -35,11 +35,11 @@ class FollowerController extends Controller {
 	 * Unfollow a seller
 	 */
 	public static function unfollow(): bool {
-		$sellerId = static::body('sellerId');
+		$seller_id = static::body('seller_id');
 		$userId = static::body('userId') ?? auth()->id();
 		$requestData = [
-			'userID' => $userId,
-			'followID' => $sellerId,
+			'user_id' => $userId,
+			'follower_id' => $seller_id,
 		];
 
 		return Follower::where($requestData)->delete();

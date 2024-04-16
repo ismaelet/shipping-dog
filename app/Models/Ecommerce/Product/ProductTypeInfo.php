@@ -13,6 +13,6 @@ class ProductTypeInfo extends Model {
 	 * The product type this info belongs to
 	 */
 	public function type(): BelongsTo {
-		return $this->belongsTo(ProductType::class, 'product_type_id', 'ID');
+		return $this->belongsTo(ProductType::class, 'product_type_id', 'id');
 	}
 }

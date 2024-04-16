@@ -11,10 +11,10 @@ class Gender {
 	public $name;
 
 	function __construct($id) {
-		if ($row = DBOld::row('* FROM items_genders WHERE ID = ?', [$id])) {
+		if ($row = DBOld::row('* FROM items_genders WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->slug = $row['tag'];
-			$this->name = $row['name_' . 'it'];
+			$this->name = $row['name'];
 		}
 	}
 }

@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductTypeMockup extends Model {
 
-	protected $primaryKey = 'ID';
+
 	protected $table = 'items_mockups';
-	protected $fillable = ['typeID', 'positionID', 'pos_x_min', 'pos_x_def', 'pos_y_min', 'pos_y_def', 'siz_x_max', 'siz_x_def', 'siz_y_max'];
+	protected $fillable = ['type_id', 'position_id', 'pos_x_min', 'pos_x_def', 'pos_y_min', 'pos_y_def', 'siz_x_max', 'siz_x_def', 'siz_y_max'];
 
 	/**
 	 * Get mockup by type ID
 	 */
-	public static function getByTypeId(int $typeId, ?int $positionId = null): self {
-		if ($positionId) {
-			return self::where('typeID', $typeId)->where('positionID', $positionId)->first();
+	public static function getByTypeId(int $type_id, ?int $position_id = null): self {
+		if ($position_id) {
+			return self::where('type_id', $type_id)->where('position_id', $position_id)->first();
 		} else {
-			return self::where('typeID', $typeId)->orderBy('positionID')->first();
+			return self::where('type_id', $type_id)->orderBy('position_id')->first();
 		}
 	}
 
@@ -26,17 +26,17 @@ class ProductTypeMockup extends Model {
 	 * Get the type of the mockup
 	 */
 	public function type(): BelongsTo {
-		return $this->belongsTo(ProductType::class, 'typeID', 'ID');
+		return $this->belongsTo(ProductType::class, 'type_id', 'id');
 	}
 
 	/**
 	 * Get the clothing image path
 	 */
-	public function clothingImage(?int $colorId = null, ?int $positionId = null): string {
-		$colorId = $colorId ?: $this->type->colorCollection()->first()->ID;
-		$positionId = $positionId ?: 1;
+	public function clothingImage(?int $colorId = null, ?int $position_id = null): string {
+		$colorId = $colorId ?: $this->type->colorCollection()->first()->id;
+		$position_id = $position_id ?: 1;
 		$color = ProductColor::find($colorId);
-		$position = ProductPosition::find($positionId);
+		$position = ProductPosition::find($position_id);
 		$imageSlug = $color->tag . '-' . $position->basicPositionId();
 
 		return '/uploads/product_types/mockups/' . $this->type->tag . '/' . $imageSlug . '.webp';

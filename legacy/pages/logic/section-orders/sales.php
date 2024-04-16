@@ -4,17 +4,17 @@
 $tbl = 'sales';
 
 // handle search
-$query['filter'] = "desID IN (SELECT ID FROM designs WHERE name LIKE CONCAT('%',?,'%')) OR storID IN (SELECT userID FROM stores WHERE name LIKE CONCAT('%',?,'%'))";
+$query['filter'] = "design_id IN (SELECT id FROM designs WHERE name LIKE CONCAT('%',?,'%')) OR seller_id IN (SELECT user_id FROM stores WHERE name LIKE CONCAT('%',?,'%'))";
 
 // select fields
 $inputs = [
-	['type' => 'hidden', 'field' => 'ID'],
+	['type' => 'hidden', 'field' => 'id'],
 
-	['title' => 'ID', 'field' => 'ID', 'size' => 's'],
-	['title' => 'Design', 'field' => 'desID', 'find' => 'name FROM designs WHERE ID = ?', 'size' => 'm'],
-	['title' => 'Negozio', 'field' => 'storID', 'find' => 'name FROM stores WHERE userID = ?', 'size' => 'm'],
-	['title' => 'Tipo', 'field' => 'typeID', 'find' => 'name_it FROM items_types WHERE ID = ?', 'size' => 'm'],
-	['title' => 'Colore', 'field' => 'colorID', 'find' => 'name_it FROM items_colors WHERE ID = ?', 'size' => 'm'],
+	['title' => 'id', 'field' => 'id', 'size' => 's'],
+	['title' => 'Design', 'field' => 'design_id', 'find' => 'name FROM designs WHERE id = ?', 'size' => 'm'],
+	['title' => 'Negozio', 'field' => 'seller_id', 'find' => 'name FROM stores WHERE user_id = ?', 'size' => 'm'],
+	['title' => 'Tipo', 'field' => 'type_id', 'find' => 'name FROM items_types WHERE id = ?', 'size' => 'm'],
+	['title' => 'Colore', 'field' => 'color_id', 'find' => 'name FROM items_colors WHERE id = ?', 'size' => 'm'],
 	['title' => 'Codice', 'field' => 'code', 'size' => 'm'],
 	['title' => 'Qt.', 'field' => 'amount', 'size' => 's'],
 	['title' => 'Guadagno', 'field' => 'gain', 'show' => 'num2', 'size' => 's'],

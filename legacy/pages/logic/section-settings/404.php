@@ -17,9 +17,9 @@ if (isset($_POST['view'])) {
 //add entry to ignore list
 if (isset($_POST['ignore'])) {
 
-	$id = $_POST['ID'];
+	$id = $_POST['id'];
 
-	$url = DBOld::find('details FROM errors WHERE ID = ?', [$id]);
+	$url = DBOld::find('details FROM errors WHERE id = ?', [$id]);
 
 	if (!DBOld::exists('errors_whitelist WHERE url=?', [$url])) DBOld::add('errors_whitelist (url) VALUES (?)', [$url]);
 
@@ -38,7 +38,7 @@ $query['filter'] = "name LIKE CONCAT('%',?,'%') OR category LIKE CONCAT('%',?,'%
 $inputs = [
 	[
 		'type' => 'hidden',
-		'field' => 'ID'
+		'field' => 'id'
 	],
 	[
 		'type' => 'hidden',

@@ -11,9 +11,7 @@ class ViewManager {
 	* Render methods
 	*/
 	// product card
-	public static function renderProductCard(object $product) {
-		$product = Product::find($product->id);
-
+	public static function renderProductCard(Product $product) {
 		ob_start();
 ?>
 
@@ -24,7 +22,7 @@ class ViewManager {
 					<p class="price blu"><?= $product->customerPriceString() ?></p>
 				</a>
 
-				<?= LikeButton::render(['designId' => $product->designId]) ?>
+				<?= LikeButton::render(['design_id' => $product->design_id]) ?>
 
 			</div>
 
@@ -40,7 +38,7 @@ class ViewManager {
 
 	// order list
 	public static function renderOrderList(object $cart = null) {
-		$cart = $cart ?: cart_old();
+		$cart = $cart ?: \App\Helpers\App::cartOld();
 
 		ob_start();
 	?>
@@ -89,7 +87,7 @@ class ViewManager {
 
 					</div>
 
-					<?php if (!$cart->statusId && !$cart->code && !$order->credit && $order->product->sellerId == $cart->customerId && $cart->usableCredit >= $order->price) { ?>
+					<?php if (!$cart->statusId && !$cart->code && !$order->credit && $order->product->seller_id == $cart->customerId && $cart->usableCredit >= $order->price) { ?>
 
 						<button class="use-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $order->id ?>">
 							<?= embed_icon('dollar') ?>

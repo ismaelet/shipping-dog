@@ -23,15 +23,15 @@ if (isset($_POST['submit'])) {
 
 	$id = (int) $_POST['id'];
 	$email = strtolower(trim($_POST['email']));
-	$cart = Cart::join('addresses', 'addresses.cartID', 'carts.ID')
-		->where('carts.ID', $id)
+	$cart = Cart::join('addresses', 'addresses.cart_id', 'carts.id')
+		->where('carts.id', $id)
 		->where('email', $email)
 		->where('status', '!=', '0')
 		->select('carts.*', 'addresses.email')
 		->first();
 
 	if ($cart) {
-		redirect_old('/order?id=' . $cart->ID . '&email=' . $email);
+		redirect_old('/order?id=' . $cart->id . '&email=' . $email);
 	} else {
 		$error = 'no_match';
 	}

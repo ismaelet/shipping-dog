@@ -9,10 +9,10 @@ $tbl = 'carts';
 $inputs = [
 	[
 		'type' => 'select',
-		'name' => 'shipID',
+		'name' => 'shipping_method_id',
 		'text' => 'Tipo di spedizione',
-		'query' => 'ID, name, tag FROM sys_shipping ORDER BY tier DESC, ID ASC',
-		'field-name' => 'ID',
+		'query' => 'ID, name, tag FROM sys_shipping ORDER BY tier DESC, id ASC',
+		'field-name' => 'id',
 		'field-show' => 'name',
 	],
 	[
@@ -32,20 +32,17 @@ $inputs = [
 //submit
 function _expand_add($tbl, $inputs) {
 
-	$shipID = $_POST['shipID'];
+	$shipping_method_id = $_POST['shipping_method_id'];
 
-	$buyer = 'T' . DBOld::add('temp_users (ID) VALUES (NULL)');
+	$user_id = 'T' . DBOld::add('temp_users (ID) VALUES (NULL)');
 
 	//generate cart
-	$cartID = DBOld::add('carts (buyer, shipID, status) VALUES (?, ?, 1)', [$buyer, $shipID]);
+	$cart_id = DBOld::add('carts (user_id, shipping_method_id, status) VALUES (?, ?, 1)', [$user_id, $shipping_method_id]);
 
-	DBOld::update('carts SET time=NOW() WHERE ID = ?', [$cartID]);
-
-	//generate cart data
-	DBOld::add('carts_data (cartID) VALUES (?)', [$cartID]);
+	DBOld::update('carts SET time=NOW() WHERE id = ?', [$cart_id]);
 
 	//generate address
-	$id = DBOld::add('addresses (buyer, cartID) VALUES (?, ?)', [$buyer, $cartID]);
+	$id = DBOld::add('addresses (user_id, cart_id) VALUES (?, ?)', [$user_id, $cart_id]);
 
 	//Save address
 	$addrRaw = $_POST['address'];
@@ -56,8 +53,8 @@ function _expand_add($tbl, $inputs) {
 
 	//get address name
 	while (isset($addrRaw[$i]) && empty(trim($addrRaw[$i]))) $i++;
-	if (isset($addrRaw[$i])) $aname = $addrRaw[$i];
-	else $aname = '';
+	if (isset($addrRaw[$i])) $full_name = $addrRaw[$i];
+	else $full_name = '';
 
 	$i++;
 
@@ -103,15 +100,15 @@ function _expand_add($tbl, $inputs) {
 
 	$i++;
 
-	$aname = ucwords(strtolower(trim($aname)));
-	$aname = str_replace('-', ',', $aname);
+	$full_name = ucwords(strtolower(trim($full_name)));
+	$full_name = str_replace('-', ',', $full_name);
 	$addr = ucwords(strtolower(trim($addr)));
 	$city = ucwords(strtolower(trim($city)));
 	$city = str_replace('-', ',', $city);
 	if (empty($reg)) $reg = $city;
 	$reg = (strlen(trim($reg)) == 2) ? strtoupper(trim($reg)) : ucwords(strtolower(trim($reg)));
 
-	DBOld::update('addresses SET aname = ?, address=?, number=?, zip=?, city=?, region=? WHERE ID = ?', [$aname, $addr, $num, $zip, $city, $reg, $id]);
+	DBOld::update('addresses SET full_name = ?, address=?, number=?, zip=?, city=?, region=? WHERE id = ?', [$full_name, $addr, $num, $zip, $city, $reg, $id]);
 
 	//get contact data
 	$addrRaw = $_POST['contacts'];
@@ -135,5 +132,5 @@ function _expand_add($tbl, $inputs) {
 	$email = strtolower(trim($email));
 	$phone = trim($phone);
 
-	DBOld::update('addresses SET email=?, phone=? WHERE ID = ?', [$email, $phone, $id]);
+	DBOld::update('addresses SET email=?, phone=? WHERE id = ?', [$email, $phone, $id]);
 }

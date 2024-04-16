@@ -133,14 +133,14 @@ const cartPriceStringSelector = '.js-cart-price-string'
  * Functions
  */
 // get cart ID
-async function cartId() {
-	return await call_function('cartId')
+async function cart_id() {
+	return await call_function('cart_id')
 }
 
 // update cart
 async function update_cart() {
 	// fatch data
-	const cartData = await get_class_properties('Ecommerce\\Cart', ['quantity', 'productPrice', 'productPriceString', 'priceString'], await cartId(), null, false)
+	const cartData = await get_class_properties('Ecommerce\\Cart', ['quantity', 'productPrice', 'productPriceString', 'priceString'], await cart_id(), null, false)
 
 	// update cart icon
 	if (parseInt(cartData.quantity)) {
@@ -214,10 +214,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 		/*
 		if (typeof vendorEvents !== 'undefined') {
 			if (typeof vendorEvents.meta.pixel.InitiateCheckout !== 'undefined') {
-				parameters.vendorMetaPixelInitiateCheckoutEventId = vendorEvents.meta.pixel.InitiateCheckout.eventId
+				parameters.vendorMetaPixelInitiateCheckoutEventId = vendorEvents.meta.pixel.InitiateCheckout.event_id
 			}
 			if (typeof vendorEvents.meta.pixel.AddToCart !== 'undefined') {
-				parameters.vendorMetaPixelAddToCartEventId = vendorEvents.meta.pixel.AddToCart.eventId
+				parameters.vendorMetaPixelAddToCartEventId = vendorEvents.meta.pixel.AddToCart.event_id
 			}
 		}
 		*/
@@ -251,13 +251,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 		if (logged) {
 			const module = self.parents('.js-wishlist-module')
-			const itemId = self.data('item-id')
+			const product_id = self.data('item-id')
 			const apiClass = 'Wishlist'
 			const willBeAdded = parseInt(self.data('added')) ? 0 : 1
 			const method = willBeAdded ? 'PUT' : 'DELETE'
 
 			const parameters = {
-				itemId: itemId,
+				product_id: product_id,
 			}
 
 			await API(apiClass, method, parameters, false)

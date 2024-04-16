@@ -16,7 +16,7 @@
 
 	<a href="<?= client_url('/contacts') ?>" class="btn">I nostri contatti</a>
 
-	<?php if ($address['buyer'] == auth()->id()) { ?>
+	<?php if ($address['user_id'] == auth()->id()) { ?>
 		<a class="btn btn--secondary" href="<?= client_url('/order?id=' . $id) ?>">Indietro</a>
 	<?php } ?>
 
@@ -34,7 +34,7 @@
 
 	<button type="submit" name="submit" id="submit" class="btn">Cambia Indirizzo</button>
 
-	<?php if ($address['buyer'] == auth()->id()) { ?>
+	<?php if ($address['user_id'] == auth()->id()) { ?>
 		<a class="btn btn--secondary" href="<?= client_url('/order?id=' . $id) ?>">Indietro</a>
 	<?php } ?>
 

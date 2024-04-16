@@ -25,7 +25,7 @@
 
 					<?php foreach ($oldProduct->type->sizes as $size) {
 
-						$measures = DBOld::find('val FROM items_types_measures WHERE typeId=? AND size=?', [$oldProduct->type->id, $size]);
+						$measures = DBOld::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$oldProduct->type->id, $size]);
 
 					?>
 
@@ -39,8 +39,8 @@
 
 				</div>
 
-				<?php if (DBOld::exists('items_types_measures WHERE typeId=? AND size=?', [$oldProduct->type->id, 'mat'])) { ?>
-					<p class="">Composizione: <?= DBOld::find('val FROM items_types_measures WHERE typeId=? AND size=?', [$oldProduct->type->id, 'mat']) ?></p>
+				<?php if (DBOld::exists('items_types_measures WHERE type_id=? AND size=?', [$oldProduct->type->id, 'mat'])) { ?>
+					<p class="">Composizione: <?= DBOld::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$oldProduct->type->id, 'mat']) ?></p>
 				<?php } ?>
 
 			</div>

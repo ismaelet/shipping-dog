@@ -11,7 +11,7 @@ if (!empty($_POST['search'])) {
 
 	while ($row = $res->fetch_assoc()) { ?>
 
-		<p class="ajax-search-item" data-id="<?= $row['ID']; ?>" data-txt="<?= $row['name']; ?>"><?= $row['name']; ?></p>
+		<p class="ajax-search-item" data-id="<?= $row['id']; ?>" data-txt="<?= $row['name']; ?>"><?= $row['name']; ?></p>
 
 <?php }
 }

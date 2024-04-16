@@ -5,34 +5,34 @@
 */
 $queryConfig['table'] = 'inventory';
 $queryConfig['index'] = 'id';
-$queryConfig['select'] = ['inventory.id', 'inventory.time', 'inventory.designId', 'designs.name', 'items_types.name as typeName', 'items_colors.name_it as colorName', 'items_sizes.name as sizeName', 'items_positions.name_it as positionName', 'extras.name as logoName', '(designId IN (SELECT ID FROM designs WHERE status = 1) AND designs.userID IN (SELECT userID FROM stores)) as inInventory'];
+$queryConfig['select'] = ['inventory.id', 'inventory.time', 'inventory.design_id', 'designs.name', 'items_types.name as typeName', 'items_colors.name as colorName', 'items_sizes.name as sizeName', 'items_positions.name as positionName', 'extras.name as logoName', '(design_id IN (SELECT id FROM designs WHERE status = 1) AND designs.user_id IN (SELECT user_id FROM stores)) as inInventory'];
 $queryConfig['from'] = '
 	inventory
 		INNER JOIN designs
-			ON inventory.designId = designs.ID
+			ON inventory.design_id = designs.id
 		LEFT JOIN items_types
-			ON inventory.typeId = items_types.ID
+			ON inventory.type_id = items_types.id
 		LEFT JOIN items_colors
-			ON inventory.colorId = items_colors.ID
+			ON inventory.colorId = items_colors.id
 		LEFT JOIN items_sizes
-			ON inventory.sizeId = items_sizes.ID
+			ON inventory.size_id = items_sizes.id
 		LEFT JOIN items_positions
-			ON inventory.positionId = items_positions.ID
+			ON inventory.position_id = items_positions.id
 		LEFT JOIN extras
-			ON inventory.logoId = extras.ID
+			ON inventory.logo_id = extras.id
 ';
 $queryConfig['where-search'] = "
 	designs.name LIKE CONCAT('%',?,'%') OR
 	items_types.name LIKE CONCAT('%',?,'%') OR
-	items_colors.name_it LIKE CONCAT('%',?,'%') OR
+	items_colors.name LIKE CONCAT('%',?,'%') OR
 	items_sizes.name LIKE CONCAT('%',?,'%') OR
-	items_positions.name_it LIKE CONCAT('%',?,'%') OR
+	items_positions.name LIKE CONCAT('%',?,'%') OR
 	extras.name LIKE CONCAT('%',?,'%')
 ";
 
 // select fields
 $fields = [
-	['title' => 'ID', 'name' => 'id',],
+	['title' => 'id', 'name' => 'id',],
 	['title' => 'Design', 'name' => 'name', 'size' => 2],
 	['title' => 'Tipo', 'name' => 'typeName',],
 	['title' => 'Colore', 'name' => 'colorName', 'size' => 1],

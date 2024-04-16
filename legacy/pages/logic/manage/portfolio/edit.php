@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\FileHelper;
+use App\Models\Ecommerce\Design as EcommerceDesign;
 use Ecommerce\Design;
 use Ecommerce\Product;
 use Ecommerce\Product\Color;
@@ -16,22 +17,23 @@ unset($_SESSION['done']);
 
 $id = $_GET['id'] ?? false;
 
-if (!$row = DBOld::row('userID FROM designs WHERE ID = ?', [$id])) redirect_old('/manage/portfolio');
+$design = EcommerceDesign::where('id', $id)
+	->where('user_id', auth()->id())
+	->first();
+
+if (!$design) {
+	redirect_old('/manage/portfolio');
+}
 
 $design = new Design($id);
 $seller = $design->seller;
-
-if (!$design->userIsOwner) {
-	redirect_old('/artist?id=' . $seller->id);
-}
-
 
 ViewOld::$title = 'Modifica: ' . $design->name;
 
 $custom = $design->custom;
 
 // generate data
-$res_colorD = DBOld::select('ID FROM items_colors WHERE hidden = 0 ORDER BY hidden ASC, preorder ASC, reorder ASC, name_it ASC');
+$res_colorD = DBOld::select('id FROM items_colors WHERE hidden = 0 ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
 
 // reupload design
 if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
@@ -65,17 +67,17 @@ if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
 	$ratio = round($reso[0] / $reso[1], 2);
 
 	// update ratio
-	DBOld::update('designs SET ratio=? WHERE ID = ?', [$ratio, $id]);
+	DBOld::update('designs SET ratio=? WHERE id = ?', [$ratio, $id]);
 
 	if (!$design->custom) {
 		// delete item images
-		$res = DBOld::select('ID from items WHERE desID = ?', [$id]);
-		while ($row = $res->fetch_assoc()) PreviewOld::deleteImages($row['ID']);
+		$res = DBOld::select('id from items WHERE design_id = ?', [$id]);
+		while ($row = $res->fetch_assoc()) PreviewOld::deleteImages($row['id']);
 	}
 
 	// delete design images
-	if (file_exists($file = public_storage_path('/designs/previews/' . $id . '.jpg'))) unlink($file);
-	if (file_exists($file = public_storage_path('/designs/previews/' . $id . '_m.jpg'))) unlink($file);
+	if (file_exists($file = public_storage('/designs/previews/' . $id . '.jpg'))) unlink($file);
+	if (file_exists($file = public_storage('/designs/previews/' . $id . '_m.jpg'))) unlink($file);
 
 	if ($dark) redirect_old('#des-dark-anch');
 	else redirect_old('#des-light-anch');
@@ -111,14 +113,14 @@ if (isset($_POST['colors-submit'])) {
 	// get default color
 	$color = new Color($_POST['colorD'][0]);
 
-	$types = DBOld::select('ID, colors FROM items_types');
+	$types = DBOld::select('id, colors FROM items_types');
 
 	// update colors of items
 	while ($row = $types->fetch_assoc()) {
 
-		$type = new Type($row['ID']);
+		$type = new Type($row['id']);
 
-		$productID = DBOld::find('ID FROM items WHERE desID = ? AND typeID = ?', [$id, $type->id]);
+		$productID = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$id, $type->id]);
 
 		$product = new Product($productID);
 
@@ -129,17 +131,17 @@ if (isset($_POST['colors-submit'])) {
 
 			$colors = implode(',', $colors);
 
-			DBOld::update('items SET colorID = ?, colors=? WHERE ID = ?', [$color->id, $colors, $product->id]);
+			DBOld::update('items SET color_id = ?, colors=? WHERE id = ?', [$color->id, $colors, $product->id]);
 		}
 	}
 
 	// update design
-	if (file_exists($file = public_storage_path('/designs/previews/' . $id . '.jpg'))) unlink($file);
-	if (file_exists($file = public_storage_path('/designs/previews/' . $id . '_m.jpg'))) unlink($file);
+	if (file_exists($file = public_storage('/designs/previews/' . $id . '.jpg'))) unlink($file);
+	if (file_exists($file = public_storage('/designs/previews/' . $id . '_m.jpg'))) unlink($file);
 
 	$colorHex = $_POST['color-hex'];
 
-	DBOld::update('designs SET color=? WHERE ID = ?', [$colorHex, $id]);
+	DBOld::update('designs SET color=? WHERE id = ?', [$colorHex, $id]);
 
 	// refresh
 	$_SESSION['done'] = 'colors';
@@ -149,7 +151,7 @@ if (isset($_POST['colors-submit'])) {
 
 // update colors
 if (isset($_POST['update-colors'])) {
-	$product = new Product($_POST['itemID']);
+	$product = new Product($_POST['product_id']);
 
 	// get available colors
 	$data = [];
@@ -168,19 +170,19 @@ if (isset($_POST['update-colors'])) {
 // update position
 if (isset($_POST['update-position'])) {
 
-	$product = new Product($_POST['itemID']);
+	$product = new Product($_POST['product_id']);
 
 	// update mockup
 	if (!$custom) {
 
 		$data = [
-			'positionID' => $_POST['positionID'],
+			'position_id' => $_POST['position_id'],
 			'size' => $_POST['mockup-size'],
 			'pos-x' => $_POST['mockup-x'],
 			'pos-y' => $_POST['mockup-y'],
 		];
 
-		PreviewOld::put($_POST['itemID'], $data);
+		PreviewOld::put($_POST['product_id'], $data);
 	}
 
 	// refresh
@@ -189,18 +191,18 @@ if (isset($_POST['update-position'])) {
 
 // disable item
 if (isset($_POST['off']) || isset($_POST['on'])) {
-	$typeId = $_POST['typeID'];
-	$productId = DBOld::find('ID FROM items WHERE desID = ? AND typeID = ?', [$id, $typeId]);
+	$type_id = $_POST['type_id'];
+	$productId = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$id, $type_id]);
 	$activate = isset($_POST['on']);
 
 	if ($productId) {
 		$product = new Product($productId);
 		$product->updateStatus($activate);
 	} else if ($activate) {
-		Product::new($id, $typeId);
+		Product::new($id, $type_id);
 	}
 
-	redirect_old('#item-' . $typeId);
+	redirect_old('#item-' . $type_id);
 }
 
 // delete design

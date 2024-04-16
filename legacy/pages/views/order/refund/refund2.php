@@ -16,7 +16,7 @@
 
 		<div class="item-row br-c1">
 			<label class="grid pad-1 clickable">
-				<input type="checkbox" class="hidden" name="order_id[]" value="<?= $order->ID ?>">
+				<input type="checkbox" class="hidden" name="order_id[]" value="<?= $order->id ?>">
 
 				<!-- Image -->
 				<div class="item-img-box">

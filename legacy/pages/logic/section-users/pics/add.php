@@ -10,8 +10,8 @@
 */
 $id = $_GET['id'] ?? null;
 $queryConfig['table'] = 'home_pics';
-$queryConfig['index-field'] = 'ID';
-$queryConfig['title-field'] = 'fname';
+$queryConfig['index-field'] = 'id';
+$queryConfig['title-field'] = 'first_name';
 
 $sel = [
 	'endpoint' => 'designs',
@@ -22,13 +22,13 @@ $sel = [
 
 $inputs = [
 	[
-		'name' => 'fname',
+		'name' => 'first_name',
 		'text' => 'Nome e cognome',
 		'text' => 'Nome',
 		'size' => 'shr',
 	],
 	[
-		'name' => 'lname',
+		'name' => 'last_name',
 		'text' => 'Cognome',
 		'size' => 'shr',
 	],
@@ -36,16 +36,16 @@ $inputs = [
 		'type' => 'select',
 		'name' => 'type',
 		'text' => 'Tipo',
-		'query' => 'tag, IF (gender=2, CONCAT(name_it," donna"), name_it) AS name FROM items_types ORDER BY ID ASC',
+		'query' => 'tag, IF (gender=2, CONCAT(name," donna"), name) AS name FROM items_types ORDER BY id ASC',
 		'field-name' => 'tag',
 		'field-show' => 'name',
 	],
 	[
 		'type' => 'search',
 		'text' => 'Design',
-		'name' => 'desID',
-		'value' => $id ? DBOld::find('desID FROM home_pics WHERE ID = ?', [$id]) : null,
-		'value-show' => $id ? DBOld::find('name FROM designs WHERE ID IN (SELECT desID FROM home_pics WHERE ID = ?)', [$id]) : null,
+		'name' => 'design_id',
+		'value' => $id ? DBOld::find('design_id FROM home_pics WHERE id = ?', [$id]) : null,
+		'value-show' => $id ? DBOld::find('name FROM designs WHERE id IN (SELECT design_id FROM home_pics WHERE id = ?)', [$id]) : null,
 		'search' => 'designs',
 		'required' => true,
 	],

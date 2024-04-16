@@ -20,7 +20,7 @@ $ecommerceConfig = [
 	/*'filters' => [
 		[
 			'title' => 'Tipo di prodotto',
-			'slug' => 'typeId',
+			'slug' => 'type_id',
 			'list' => DBOld::select('id, name, names FROM item_types ORDER BY names ASC, name ASC'),
 		],
 		[

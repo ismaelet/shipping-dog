@@ -27,11 +27,11 @@ class Cart {
 	use DatabaseObject;
 
 	public const TABLE = 'carts';
-	public const INDEX = 'ID';
-	public const CUSTOMER_INDEX = 'buyer';
-	public const SHIPPING_METHOD_INDEX = 'shipID';
-	public const PAYMENT_METHOD_INDEX = 'payID';
-	public const COUNTRY_INDEX = 'countID';
+	public const INDEX = 'id';
+	public const CUSTOMER_INDEX = 'user_id';
+	public const SHIPPING_METHOD_INDEX = 'shipping_method_id';
+	public const PAYMENT_METHOD_INDEX = 'payment_method_id';
+	public const COUNTRY_INDEX = 'country_id';
 	public const STEP_INDEX = 'step';
 	public const STATUS_INDEX = 'status';
 
@@ -339,7 +339,7 @@ class Cart {
 	*/
 	private function getOrders() {
 		$orders = [];
-		$ordersRes = DBOld::select('id FROM orders WHERE cartId = ? ORDER BY time ASC', [$this->id]);
+		$ordersRes = DBOld::select('id FROM orders WHERE cart_id = ? ORDER BY time ASC', [$this->id]);
 
 		while ($order = $ordersRes->fetch_assoc()) {
 			$orders[] = new Order($order['id']);
@@ -362,11 +362,11 @@ class Cart {
 
 		if ($this->quantity)
 			DBOld::update(
-				self::TABLE . ' SET tot = ?, credit = ?, shipID = ?, shipping = ?, credit_ship = ? WHERE ' . self::INDEX . ' = ?',
-				[$this->price, $this->usedCredit, $this->shipID, $this->fullShippingPrice, $this->shippingWithCredit, $this->id]
+				self::TABLE . ' SET tot = ?, credit = ?, shipping_method_id = ?, shipping = ?, credit_ship = ? WHERE ' . self::INDEX . ' = ?',
+				[$this->price, $this->usedCredit, $this->shipping_method_id, $this->fullShippingPrice, $this->shippingWithCredit, $this->id]
 			);
 		else {
-			DBOld::delete('carts WHERE ID = ?', $this->id);
+			DBOld::delete('carts WHERE id = ?', $this->id);
 		}
 	}
 
@@ -502,7 +502,7 @@ class Cart {
 	*/
 	public function removeCoupon() {
 		if ($this->couponId) {
-			DBOld::update("carts SET code='' WHERE ID = ?", [$this->id]);
+			DBOld::update("carts SET code='' WHERE id = ?", [$this->id]);
 
 			foreach ($this->orders as $order) {
 				$order->resetDiscount();
@@ -557,7 +557,7 @@ class Cart {
 		// remove used coupons
 		if ($this->couponId) {
 			if ($this->coupon->onePerCustomer) {
-				DBOld::add('codes_used (codeID, userID)', [$this->couponId, $this->customerId]);
+				DBOld::add('codes_used (coupon_id, user_id)', [$this->couponId, $this->customerId]);
 			}
 
 			if (!$this->coupon->permanent) {
@@ -587,10 +587,10 @@ class Cart {
 				inventory.id as inventoryId
 				FROM inventory
 				INNER JOIN
-					items_types ON inventory.typeId = ' . Type::TABLE . '.' . Type::INDEX . '
+					items_types ON inventory.type_id = ' . Type::TABLE . '.' . Type::INDEX . '
 				WHERE
-					designId = ? AND (typeId = ? OR sameAsId = ?) AND colorId = ? AND positionId = ? AND sizeId = ?',
-				[$order->designId, $order->typeId, $order->typeId, $order->colorId, $order->positionId, $order->sizeId]
+					design_id = ? AND (type_id = ? OR same_as_type_id = ?) AND colorId = ? AND position_id = ? AND size_id = ?',
+				[$order->design_id, $order->type_id, $order->type_id, $order->colorId, $order->position_id, $order->size_id]
 			);
 
 			if ($inventoryData) {
@@ -600,8 +600,8 @@ class Cart {
 				DBOld::delete('inventory WHERE id = ?', [$inventoryId]);
 			}
 
-			if ($this->customerId != $order->sellerId) {
-				DBOld::update(Seller::TABLE . ' SET credit = credit + ? WHERE ' . Seller::INDEX . ' = ?', [($order->gain * .1), $order->sellerId]);
+			if ($this->customerId != $order->seller_id) {
+				DBOld::update(Seller::TABLE . ' SET credit = credit + ? WHERE ' . Seller::INDEX . ' = ?', [($order->gain * .1), $order->seller_id]);
 			}
 		}
 	}
@@ -628,9 +628,9 @@ class Cart {
 				$ourDiscount = 0;
 
 				// check if the order matches the coupon requirements
-				$matchesDesign = !$coupon->designId || $coupon->designId == $order->designId;
-				$matchesSeller = !$coupon->sellerId || $coupon->sellerId == $order->sellerId;
-				$matchesType = !$coupon->typeId || $coupon->typeId == $order->typeId;
+				$matchesDesign = !$coupon->design_id || $coupon->design_id == $order->design_id;
+				$matchesSeller = !$coupon->seller_id || $coupon->seller_id == $order->seller_id;
+				$matchesType = !$coupon->type_id || $coupon->type_id == $order->type_id;
 				$matchesColor = !$coupon->colorId || $coupon->colorId == $order->colorId;
 
 				// calculate the discount amount

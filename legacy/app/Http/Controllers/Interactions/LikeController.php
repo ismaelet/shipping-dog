@@ -11,20 +11,20 @@ class LikeController extends Controller {
 	 * Like a design
 	 */
 	public static function like(): int|false {
-		$designId = static::body('designId');
+		$design_id = static::body('design_id');
 		$userId = static::body('userId') ?? auth()->id();
 		$requestData = [
-			'userID' => $userId,
-			'desID' => $designId,
+			'user_id' => $userId,
+			'design_id' => $design_id,
 		];
 
 		if (!Like::where($requestData)->count()) {
 			$like = Like::create([
-				'userID' => $userId,
-				'desID' => $designId,
+				'user_id' => $userId,
+				'design_id' => $design_id,
 			]);
 
-			return $like->ID;
+			return $like->id;
 		}
 
 		return false;
@@ -34,11 +34,11 @@ class LikeController extends Controller {
 	 * Unfollow a seller
 	 */
 	public static function unlike(): bool {
-		$designId = static::body('designId');
+		$design_id = static::body('design_id');
 		$userId = static::body('userId') ?? auth()->id();
 		$requestData = [
-			'userID' => $userId,
-			'desID' => $designId,
+			'user_id' => $userId,
+			'design_id' => $design_id,
 		];
 
 		return Like::where($requestData)->delete();

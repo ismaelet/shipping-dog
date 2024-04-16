@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 			recapShippingElement.dataset.shippingMethodId = shippingMethodId
 
-			call_class_method('Ecommerce\\Cart', 'updateShippingMethodId', [shippingMethodId], await cartId())
+			call_class_method('Ecommerce\\Cart', 'updateShippingMethodId', [shippingMethodId], await cart_id())
 
 			update_cart()
 		})
@@ -24,7 +24,7 @@ $(function () {
 	 */
 	$('.js-shipping-method').on('change', function () {
 		const self = $(this)
-		const cartId = parseInt(self.data('cart-id'))
+		const cart_id = parseInt(self.data('cart-id'))
 		const shippingMethodId = parseInt(self.val())
 		const shipped = parseInt(self.data('shipped'))
 		const addressForm = $('.address-form')
@@ -39,7 +39,7 @@ $(function () {
 			addressForm.addClass(localDeliveryClass)
 		}
 
-		update_cart(cartId, { shippingMethodId: shippingMethodId })
+		update_cart(cart_id, { shippingMethodId: shippingMethodId })
 	})
 
 	/*

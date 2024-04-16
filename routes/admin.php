@@ -1,24 +1,27 @@
 <?php
 
-use App\Http\Controllers\Admin\HomeController;
-use App\Http\Controllers\Admin\Users\UserFormController;
-use App\Http\Controllers\Admin\Users\UserListController;
+use App\Http\Controllers\Admin\Pages\DashboardController;
+use App\Http\Controllers\Admin\Resources\AdminCategoryController;
+use App\Http\Controllers\Admin\Resources\NewsletterSubscriberController;
+use App\Http\Controllers\Admin\Resources\UserController;
 use Illuminate\Support\Facades\Route;
 
 /**
  * Admin routes
  */
-Route::prefix('admin')->middleware('admin')->namespace('Admin')->group(function () {
+Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 	// Admin dashboard home
-	Route::get('/', [HomeController::class, 'index'])->name('admin');
-	Route::post('/', [HomeController::class, 'update']);
+	Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+	Route::post('/dashboard', [DashboardController::class, 'update']);
 
 	// Users
-	Route::get('/users/list', [UserListController::class, 'index'])->name('admin.users.list');
-	Route::post('/users/list', [UserListController::class, 'update']);
+	Route::resource('users', UserController::class)
+		->only(['index', 'edit', 'update', 'destroy']);
 
-	Route::get('/users/add', [UserFormController::class, 'index'])->name('admin.users.add');
-	Route::post('/users/add', [UserFormController::class, 'update']);
-	Route::get('/users/edit/{any}', [UserFormController::class, 'index'])->where('any', '.*')->name('admin.users.edit');
-	Route::post('/users/edit/{any}', [UserFormController::class, 'update'])->where('any', '.*');
+	// Newsletters
+	Route::resource('newsletter-subscribers', NewsletterSubscriberController::class)
+		->only(['index', 'destroy']);
+
+	// Settings - Categories
+	Route::resource('admin-categories', AdminCategoryController::class);
 });

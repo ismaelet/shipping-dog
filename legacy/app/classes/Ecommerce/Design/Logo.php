@@ -9,8 +9,8 @@ class Logo {
 	use DatabaseObject;
 
 	public const TABLE = 'extras';
-	public const INDEX = 'ID';
-	public const LOGO_GROUP_INDEX = 'extFID';
+	public const INDEX = 'id';
+	public const LOGO_GROUP_INDEX = 'logo_group_id';
 
 	/*
 	* Get methods
@@ -20,7 +20,7 @@ class Logo {
 	}
 
 	private function getName() {
-		return $this->name_it;
+		return $this->name;
 	}
 
 	private function getImage() {

@@ -37,10 +37,10 @@ use Ecommerce\Product\Type;
 
 			<?php while ($row = $res_cloth->fetch_assoc()) {
 
-				$type = new Type($row['ID']);
+				$type = new Type($row['id']);
 				$gender = new Gender($type->genderId);
 
-				$row_price = DBOld::row('* FROM prices_stores WHERE storeID = ? AND typeID = ?', [$seller->id, $type->id]) ?: DBOld::row('* FROM prices_default WHERE typeID = ?', [$type->id]);
+				$row_price = DBOld::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DBOld::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
 
 				$price = $row_price['price'];
 				$gain_w = $row_price['gain_w'];
@@ -81,9 +81,9 @@ use Ecommerce\Product\Type;
 
 			<?php while ($row = $res_acc->fetch_assoc()) {
 
-				$type = new Type($row['ID']);
+				$type = new Type($row['id']);
 
-				$row_price = DBOld::row('* FROM prices_stores WHERE storeID = ? AND typeID = ?', [$seller->id, $type->id]) ?: DBOld::row('* FROM prices_default WHERE typeID = ?', [$type->id]);
+				$row_price = DBOld::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DBOld::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
 
 				$price = $row_price['price'];
 				$gain_w = $row_price['gain_w'];

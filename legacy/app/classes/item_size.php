@@ -9,7 +9,7 @@ class Size {
 
 	function __construct($id) {
 
-		$row = DBOld::row('* FROM items_sizes WHERE ID = ?', [$id]);
+		$row = DBOld::row('* FROM items_sizes WHERE id = ?', [$id]);
 
 		$this->id = $id;
 		$this->slug = $row['tag'];
