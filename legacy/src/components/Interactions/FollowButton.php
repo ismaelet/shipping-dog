@@ -13,7 +13,7 @@ $seller = Seller::find($seller_id);
 		if ($seller_id != Auth::id()) {
 	?>
 
-			<div class="follow-button" x-data="{ followed: <?= $seller->isFollowed() ? 'true' : 'false' ?> }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; toggleFollow(<?= $seller_id ?>, followed)">
+			<div class="follow-button" x-data="{ followed: <?= $seller->isFollowed() ? 'true' : 'false' ?> }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; followed ? storeFollower(<?= $seller_id ?>) : destroyFollower(<?= $seller->auth_follower->id ?? null ?>);">
 				<span>segui</span>
 				<span>seguendo</span>
 				<span>non seguire</span>
@@ -74,35 +74,34 @@ $seller = Seller::find($seller_id);
 </style>
 
 <script>
-	function toggleFollow(seller_id, followed) {
-		if (followed) {
-			axios.post('/api/follow', {
-					seller_id: seller_id
-				})
-				.then(response => {
+	function storeFollower(sellerId) {
+		axios.post('/api/followers', {
+				user_id: sellerId,
+				follower_id: <?= Auth::id() ?>
+			})
+			.then(response => {
 
-					<?php if (env('DEBUG')) { ?>
-						console.log(response.data);
-					<?php } ?>
+				<?php if (env('DEBUG')) { ?>
+					console.log(response.data);
+				<?php } ?>
 
-				})
-				.catch(error => {
-					console.error(error);
-				});
-		} else {
-			axios.post('/api/unfollow', {
-					seller_id: seller_id
-				})
-				.then(response => {
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	}
 
-					<?php if (env('DEBUG')) { ?>
-						console.log(response.data);
-					<?php } ?>
+	function destroyFollower(followerId) {
+		axios.delete(`/api/followers/${followerId}`)
+			.then(response => {
 
-				})
-				.catch(error => {
-					console.error(error);
-				});
-		}
+				<?php if (env('DEBUG')) { ?>
+					console.log(response.data);
+				<?php } ?>
+
+			})
+			.catch(error => {
+				console.error(error);
+			});
 	}
 </script>

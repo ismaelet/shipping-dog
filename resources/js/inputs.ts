@@ -38,7 +38,6 @@ export function advancedInputBehaviorSetup() {
 				return parentForm.submit()
 			}
 
-			console.log(childForm)
 			if (childForm) {
 				return childForm.submit()
 			}

@@ -19,7 +19,7 @@ while ($row = $res->fetch_assoc()) {
 
 		<a class="collection" href="<?= $coll->url; ?>" style="background-color: <?= $coll->color; ?>;">
 
-			<div class="coll-img bgr <?php if (!$coll->img_cust) echo 'cont'; ?>" <?= $coll->img_m ? background_image($coll->img_m) : ''; ?>></div>
+			<div class="coll-img bgr <?php if (!$coll->img_cust) echo 'cont'; ?>" <?= $coll->img_m ? temp_bg($coll->img_m) : ''; ?>></div>
 
 			<div class="coll-cover bgr"></div>
 

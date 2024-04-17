@@ -2,19 +2,28 @@
 
 namespace App\Models\Ecommerce;
 
+use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductSize;
 use Ecommerce\Order as EcommerceOrder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model {
 
-
 	protected $table = 'orders';
 	protected $fillable = ['fullProductPrice', 'price_disc', 'productGain', 'gain_disc', 'credit'];
+
+	// * Relationship instances * //
+	/**
+	 * Get the order's cart
+	 */
+	public function cart(): BelongsTo {
+		return $this->belongsTo(Cart::class);
+	}
 
 	/**
 	 * Get the order's product
@@ -34,7 +43,7 @@ class Order extends Model {
 	 * Get the order's size
 	 */
 	public function size(): HasOne {
-		return $this->hasOne(ProductSize::class, 'id', 'sizeID');
+		return $this->hasOne(ProductSize::class, 'id', 'size_id');
 	}
 
 	/**
@@ -51,8 +60,19 @@ class Order extends Model {
 		return $this->hasOne(Logo::class, 'id', 'logo_id');
 	}
 
+	// * Advanced data * //
 	/**
-	 * Returns the description of the order.
+	 * Get the name of the order
+	 */
+	public function name(): string {
+		$name = $this->quantity > 1 ? [$this->quantity . 'x'] : [];
+		$name[] = $this->product && $this->product->status && !$this->product->deleted ? $this->product->name : 'Articolo rimosso';
+
+		return implode(' ', $name);
+	}
+
+	/**
+	 * Get the description of the order
 	 */
 	public function description(): string {
 		$product = $this->product;
@@ -66,9 +86,77 @@ class Order extends Model {
 		return $description;
 	}
 
+	public function condensedDescription(): string {
+		if (!$this->product || !$this->product->status || $this->product->deleted) {
+			return 'Articolo rimosso';
+		}
+
+		$type = $this->product->type->name;
+		// $type = $this->product->type->sibling && !$this->product->type->unisex ? $type . ' - ' . $this->product->type->gender_model->name : $type;
+		$size = $this->size_id ? 'Taglia: ' . $this->size->name : null;
+		$color = $this->color_id ? 'Colore: ' . $this->color->name : null;
+		$position = $this->position_id > 1 ? $this->position->name : null;
+		$logo = $this->logo_id ? $this->logo->name : null;
+
+		return implode('<br>', array_filter([$type, $size, $color, $position, $logo]));
+	}
+
 	/**
-	 * ! USES OLD CLASS
-	 * Returns the image of the order.
+	 * Get the price
+	 */
+	public function grossProductPrice(): float {
+		return $this->fullProductPrice;
+	}
+
+	public function productDiscount(): float {
+		return $this->price_disc;
+	}
+
+	public function productPrice(): float {
+		return $this->grossProductPrice() - $this->productDiscount();
+	}
+
+	public function grossPrice(): float {
+		return $this->grossProductPrice() * $this->quantity;
+	}
+
+	public function discount(): float {
+		return $this->credit ? $this->grossPrice() : $this->productDiscount() * $this->quantity;
+	}
+
+	public function price(): float {
+		return $this->grossPrice() - $this->discount();
+	}
+
+	public function priceString(): string {
+		return EcommerceHelper::price($this->price());
+	}
+
+	public function grossPriceString(): string {
+		return EcommerceHelper::price($this->grossPrice());
+	}
+
+	/**
+	 * Get the gain amount
+	 */
+	public function totalGain(): float {
+		return ($this->productGain - $this->gain_disc) * $this->quantity;
+	}
+
+	public function totalGainString(): string {
+		return EcommerceHelper::price($this->totalGain(), true);
+	}
+
+	/**
+	 * Get the time string
+	 */
+	public function timeString(): string {
+		return date('d/m/Y', strtotime($this->time));
+	}
+
+	// ! Deprecated ! //
+	/**
+	 * Returns the image of the order
 	 */
 	public function clientImage() {
 		$oldOrder = new EcommerceOrder($this->id);

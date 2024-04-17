@@ -33,7 +33,7 @@ if (isset($_POST['pay']) || isset($_POST['skip_payment']) || isset($_POST['refun
 	foreach ($changeRequest->realChanges as $change) {
 		$newSizeId = $_POST[$change->id . '_new_size_id'];
 
-		$change->old_size_id = $change->old_order->sizeID;
+		$change->old_size_id = $change->old_order->size_id;
 		$change->new_size_id = $newSizeId;
 		$change->save();
 	}

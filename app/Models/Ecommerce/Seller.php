@@ -9,6 +9,7 @@ use App\Models\Traits\ModelCache;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Seller class
@@ -162,11 +163,13 @@ class Seller extends Model {
 	/**
 	 * Check if the seller is followed by the logged user
 	 */
+	public function auth_follower(): HasOne {
+		return $this->hasOne(Follower::class, 'user_id', 'id')
+			->where('follower_id', auth()->id());
+	}
+
 	public function isFollowed(): bool {
-		return Follower::where([
-			'user_id' => auth()->id(),
-			'follower_id' => $this->user_id,
-		])->count() > 0;
+		return $this->auth_follower()->exists();
 	}
 
 	/**

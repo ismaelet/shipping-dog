@@ -4,12 +4,15 @@ namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
 use App\Helpers\PreviewHelper;
+use App\Models\Ecommerce\Design\Logo;
+use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductDescription;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductPrice;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Seller\SellerPrice;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -42,17 +45,56 @@ class Product extends Model {
 	}
 
 	/**
+	 * Get the product's logos
+	 */
+	public function logoGroup(): ?LogoGroup {
+		if (in_array($this->type_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])) {
+			return $this->design->logo_group;
+		}
+
+		return null;
+	}
+
+	public function logos(): ?Collection {
+		if ($this->logoGroup()) {
+			return $this->logoGroup()->logos;
+		}
+
+		return null;
+	}
+
+	public function logoId(int $logoId): void {
+		$this->logo_id = $logoId;
+	}
+
+	public function logo(): ?Logo {
+		if ($this->logo_id) {
+			return Logo::find($this->logo_id);
+		}
+
+		if ($this->logoGroup() && $this->logoGroup()->forced) {
+			return $this->logoGroup()->logos->first();
+		}
+
+		return null;
+	}
+
+	/**
 	 * Get the product's price
 	 */
 	public function price(): ProductPrice|SellerPrice|BasePrice {
 		// Check if the product has a specific price
-		if ($this->specific_price()->exists()) return $this->specific_price;
+		if ($this->specific_price) return $this->specific_price;
 
 		// Check if the product has a seller price
-		if ($this->seller_price()->exists()) return $this->seller_price;
+		if ($this->seller_price) return $this->seller_price;
 
 		// If not, return the base price
 		return $this->base_price;
+	}
+
+	public function priceString(): string {
+		return EcommerceHelper::price($this->price()->price);
 	}
 
 	public function specific_price(): HasOne {
@@ -67,7 +109,7 @@ class Product extends Model {
 		return $this->hasOne(BasePrice::class, 'type_id', 'type_id');
 	}
 
-	public function basePrice() {
+	public function sellerPrice() {
 		return $this->price()->price - $this->price()->gain_w / .75;
 	}
 
@@ -75,15 +117,20 @@ class Product extends Model {
 		return $this->price()->price ?? 0;
 	}
 
+	public function logoPrice(): float {
+		return $this->logo() ? $this->logo()->price : 0;
+	}
+
 	public function fullPrice(): float {
-		/**
-		 * ! Add logo price
-		 */
-		return $this->productPrice();
+		return $this->productPrice() + $this->logoPrice();
+	}
+
+	public function fullPriceString(): string {
+		return EcommerceHelper::price($this->fullPrice());
 	}
 
 	public function customerDiscount() {
-		return $this->userIsOwner() ? $this->fullPrice() - $this->basePrice() : 0;
+		return $this->userIsOwner() ? $this->fullPrice() - $this->sellerPrice() : 0;
 	}
 
 	public function customerPrice(): float {

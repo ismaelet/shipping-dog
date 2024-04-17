@@ -15,7 +15,7 @@ class Address {
 	public const CART_INDEX = 'cart_id';
 
 	public $id = null;
-	public $fullast_name;
+	public $full_name;
 	public $address;
 	public $number;
 	public $city;
@@ -31,7 +31,7 @@ class Address {
 	function __construct($id) {
 		if ($row = DBOld::row('* FROM addresses WHERE id = ?', [$id])) {
 			$this->id = $id;
-			$this->fullast_name = $row['full_name'];
+			$this->full_name = $row['full_name'];
 			$this->address = str_replace("\'", "'", $row['address']);
 			$this->number = $row['number'];
 			$this->city = $row['city'];
@@ -50,15 +50,15 @@ class Address {
 	* Get methods
 	*/
 	private function getfirst_name() {
-		return explode(' ', $this->fullast_name)[0];
+		return explode(' ', $this->full_name)[0];
 	}
 
 	private function getlast_name() {
-		return explode(' ', $this->fullast_name, 2)[1] ?? '';
+		return explode(' ', $this->full_name, 2)[1] ?? '';
 	}
 
 	private function getFullAddress() {
-		$fullAddress = $this->fullast_name;
+		$fullAddress = $this->full_name;
 		if ($this->address) $fullAddress .= '<br>' . $this->address;
 		if ($this->number) $fullAddress .= ', ' . $this->number;
 		if ($this->city) $fullAddress .= '<br>' . $this->zip . ' ' . $this->city;

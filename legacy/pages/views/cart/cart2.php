@@ -113,7 +113,7 @@ use ViewManager\Ecommerce\CartRecap;
 
 					<div class="grid gap1">
 
-						<?= Input::render(['name' => 'full_name', 'placeholder' => 'Nominativo di spedizione', 'value' => $address->fullast_name, 'required' => true, 'trim' => true]) ?>
+						<?= Input::render(['name' => 'full_name', 'placeholder' => 'Nominativo di spedizione', 'value' => $address->full_name, 'required' => true, 'trim' => true]) ?>
 
 						<div class="field">
 							<input type="text" id="inp_addr" class="input delivery-input" name="address" placeholder="Indirizzo" value="<?= $address->address ?>" maxlength="30" autocomplete="address-line1" <?= !\App\Helpers\App::cartOld()->localDelivery ? 'required' : '' ?>>

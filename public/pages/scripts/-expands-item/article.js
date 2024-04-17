@@ -88,13 +88,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		if (logoInput) {
 			if (logo_id) {
-				const logoImage = client_url('/uploads/shops/logos/' + logo_id + '.png')
+				get_logo(logo_id).then((response) => {
+					const logoImage = response.image
 
-				document.querySelector('.js-logo-image-background').classList.add('active')
+					document.querySelector('.js-logo-image-background').classList.add('active')
 
-				document.querySelectorAll('.js-logo-image').forEach((element) => {
-					element.classList.add('active')
-					element.src = logoImage
+					document.querySelectorAll('.js-logo-image').forEach((element) => {
+						element.classList.add('active')
+						element.src = logoImage
+					})
 				})
 			} else {
 				document.querySelector('.js-logo-image-background').classList.remove('active')
@@ -147,46 +149,43 @@ document.addEventListener('DOMContentLoaded', function () {
 	})
 
 	// update image
-	async function change_image() {
-		const position_id = get_position()
-		const colorId = get_colorId()
-
-		let timeout
-
-		timeout = setTimeout(function () {
+	function change_image() {
+		let timeout = setTimeout(function () {
 			$('#img-load').fadeIn()
 		}, 300)
 
 		// change main image
-		const url = (await get_class_properties('Ecommerce\\Product', 'clientFullImage', id, { colorId: colorId, position_id: position_id })).clientFullImage
+		get_product(id, get_colorId(), get_position(), get_logo_id()).then((response) => {
+			$('.js-main-image').attr('src', response.image)
 
-		clearTimeout(timeout)
-
-		$('.js-main-image').attr('src', url)
+			clearTimeout(timeout)
+			$('#img-load').fadeOut()
+		})
 
 		// change image for the logos
-		const urlFront = (await get_class_properties('Ecommerce\\Product', 'clientFullImage', id, { colorId: colorId })).clientFullImage
-
-		$('.js-front-image').attr('src', urlFront)
-
-		// hide the loading
-		$('#img-load').fadeOut()
+		get_product(id, get_colorId(), null, get_logo_id()).then((response) => {
+			$('.js-front-image').attr('src', response.image)
+		})
 	}
 
 	// update price
-	async function update_price() {
-		const colorId = get_colorId()
-		const logo_id = get_logo_id()
-		const fullPrice = (await get_class_properties('Ecommerce\\Product', 'fullPriceString', id, { colorId: colorId, logo_id: logo_id })).fullPriceString
-		const price = (await get_class_properties('Ecommerce\\Product', 'priceString', id, { colorId: colorId, logo_id: logo_id })).priceString
+	function update_price() {
+		get_product(id, get_colorId(), get_position(), get_logo_id())
+			.then((response) => {
+				const priceString = response.priceString
+				const fullPriceString = response.fullPriceString
 
-		document.querySelectorAll('.js-price').forEach((element) => {
-			element.innerHTML = price
-		})
+				document.querySelectorAll('.js-price').forEach((element) => {
+					element.innerHTML = priceString
+				})
 
-		document.querySelectorAll('.js-full-price').forEach((element) => {
-			element.innerHTML = fullPrice
-		})
+				document.querySelectorAll('.js-full-price').forEach((element) => {
+					element.innerHTML = fullPriceString
+				})
+			})
+			.catch((error) => {
+				console.error(error)
+			})
 	}
 
 	// zoom in
@@ -202,3 +201,47 @@ document.addEventListener('DOMContentLoaded', function () {
 		$('body').removeClass('fixed')
 	})
 })
+
+/**
+ * Retrieves the logo data from the server.
+ *
+ * @param {number} logoId - The ID of the logo.
+ * @returns {Promise} A promise that resolves to the logo data.
+ */
+async function get_logo(logoId) {
+	return axios
+		.get(`/api/logos/${logoId}`)
+		.then((response) => {
+			return response.data
+		})
+		.catch((error) => {
+			return error
+		})
+}
+
+/**
+ * Retrieves product information from the server.
+ *
+ * @param {number} productId - The ID of the product.
+ * @param {number} colorId - The ID of the color.
+ * @param {?number} positionId - The ID of the position.
+ * @param {number} logoId - The ID of the logo.
+ * @returns {Promise<Object>} - A promise that resolves to the product data.
+ */
+async function get_product(productId, colorId, positionId, logoId) {
+	return axios
+		.get(`/api/products/${productId}`, {
+			params: {
+				color_id: colorId,
+				position_id: positionId,
+				logo_id: logoId,
+				image_size: 1024,
+			},
+		})
+		.then((response) => {
+			return response.data
+		})
+		.catch((error) => {
+			return error
+		})
+}

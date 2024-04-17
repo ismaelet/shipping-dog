@@ -3,7 +3,6 @@
 namespace Ecommerce\Product;
 
 use DatabaseObject;
-use DBOld;
 
 class Color {
 

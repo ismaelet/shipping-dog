@@ -2,8 +2,10 @@
 
 namespace Ecommerce;
 
+use App\Models\Ecommerce\Cart;
 use App\Models\Ecommerce\Product;
 use App\View\Components\Interactions\LikeButton;
+use Illuminate\Support\Facades\Auth;
 
 class ViewManager {
 
@@ -39,6 +41,7 @@ class ViewManager {
 	// order list
 	public static function renderOrderList(object $cart = null) {
 		$cart = $cart ?: \App\Helpers\App::cartOld();
+		$cart = Cart::find($cart->id);
 
 		ob_start();
 	?>
@@ -52,32 +55,36 @@ class ViewManager {
 
 					<div class="row grid">
 						<!--Image-->
-						<a href="<?= $order->product->clientUrl ?>" class="img_cont">
-							<img src="<?= $order->product->clientImage ?>" class="img-fill">
-						</a>
+						<?php if ($order->product) { ?>
+							<a href="<?= $order->product ? $order->product->url() : '' ?>" class="img_cont">
+								<img src="<?= $order->product->image() ?>" class="img-fill">
+							</a>
+						<?php } else { ?>
+							<span></span>
+						<?php } ?>
 
 						<!--Data-->
 						<div class="art_data">
-							<a href="<?= $order->product->clientUrl ?>">
-								<h3 class="art_name"><?= $order->name ?></h3>
+							<a href="<?= $order->product ? $order->product->url() : null ?>">
+								<h3 class="art_name"><?= $order->name() ?></h3>
 							</a>
 
 							<p class="txt-bold">
-								<?= $order->discount ? '<span class="price-old">' . $order->fullPriceString . '</span>' : $order->priceString ?>
+								<?= $order->discount() ? '<span class="price-old">' . $order->grossPriceString() . '</span>' : $order->priceString() ?>
 							</p>
 
-							<?php if ($order->discount) { ?>
+							<?php if ($order->discount()) { ?>
 
-								<p class="price-promo txt-bold"><?= $order->priceString ?></p>
+								<p class="price-promo txt-bold"><?= $order->priceString() ?></p>
 
 							<?php } ?>
 
 							<p class="order-list__description">
-								<?= $order->fullDescription ?>
+								<?= $order->condensedDescription() ?>
 							</p>
 						</div>
 
-						<?php if (!$cart->statusId) { ?>
+						<?php if (!$cart->status) { ?>
 
 							<button type="submit" name="remove" class="remove icon-box" value="<?= $order->id ?>" formnovalidate="formnovalidate">
 								<?= embed_icon('close') ?>
@@ -87,14 +94,14 @@ class ViewManager {
 
 					</div>
 
-					<?php if (!$cart->statusId && !$cart->code && !$order->credit && $order->product->seller_id == $cart->customerId && $cart->usableCredit >= $order->price) { ?>
+					<?php if (!$cart->status && !$cart->coupon && !$order->credit && $order->seller_id == Auth::id() && $cart->usableCredit() >= $order->price->price) { ?>
 
 						<button class="use-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $order->id ?>">
 							<?= embed_icon('dollar') ?>
 							Usa il tuo credito
 						</button>
 
-					<?php } else if (!$cart->statusId && $order->credit) { ?>
+					<?php } else if (!$cart->status && $order->credit) { ?>
 
 						<button class="no-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_no_credit" value="<?= $order->id ?>">
 							<?= embed_icon('close') ?>

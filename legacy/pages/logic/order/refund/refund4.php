@@ -39,7 +39,7 @@ if (!$changeRequest->processed && $changeRequest->payed) {
 				'design_id' => $oldOrder->design_id,
 				'type_id' => $oldOrder->type_id,
 				'colorId' => $oldOrder->color_id,
-				'size_id' => $oldOrder->sizeID,
+				'size_id' => $oldOrder->size_id,
 				'position_id' => $oldOrder->position_id,
 				'logo_id' => $oldOrder->logo_id,
 			]);
@@ -47,7 +47,7 @@ if (!$changeRequest->processed && $changeRequest->payed) {
 			// Duplicate the old order
 			$newOrder = $oldOrder->replicate();
 			$newOrder->cart_id = $newCart->id;
-			$newOrder->sizeID = $change->new_size_id;
+			$newOrder->size_id = $change->new_size_id;
 			$newOrder->fullProductPrice = 0;
 			$newOrder->price_disc = 0;
 			$newOrder->productGain = 0;

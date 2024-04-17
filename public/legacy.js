@@ -14,12 +14,6 @@ async function AJAX(parcialEndpoint, parameters = {}, contentType = 'json', debu
 	// send the request
 	const response = await fetch(endpoint)
 
-	// debugger
-	if (debug) {
-		const debugResponse = response.clone()
-		console.log(await debugResponse.text())
-	}
-
 	// parse the response
 	responseData = await response.text()
 
@@ -28,7 +22,7 @@ async function AJAX(parcialEndpoint, parameters = {}, contentType = 'json', debu
 			try {
 				responseData = JSON.parse(responseData)
 			} catch (err) {
-				console.log('Error: ' + responseData)
+				// console.log('Error: ' + responseData)
 				responseData = null
 			}
 			break
@@ -50,7 +44,7 @@ async function call_function(functionName, funParameters = null, debug = false) 
 		parameters.arguments = funParameters
 	}
 
-	return await AJAX('/api/call-function/' + functionName, parameters, 'json', debug)
+	return await AJAX('/old-api/call-function/' + functionName, parameters, 'json', debug)
 }
 
 async function get_class_properties(className, propertyNames, objectId = null, setProperties = null, debug = false) {
@@ -63,7 +57,7 @@ async function get_class_properties(className, propertyNames, objectId = null, s
 		parameters.setProperties = format_set_request(setProperties)
 	}
 
-	return await AJAX('/api/get-class-properties/' + className, parameters, 'json', debug)
+	return await AJAX('/old-api/get-class-properties/' + className, parameters, 'json', debug)
 }
 
 async function call_class_method(className, methodName, funParameters = null, objectId = null, setProperties = null, debug = false) {
@@ -80,7 +74,7 @@ async function call_class_method(className, methodName, funParameters = null, ob
 		parameters.setProperties = format_set_request(setProperties)
 	}
 
-	return await AJAX('/api/call-class-method/' + className, parameters, 'json', debug)
+	return await AJAX('/old-api/call-class-method/' + className, parameters, 'json', debug)
 }
 
 /*

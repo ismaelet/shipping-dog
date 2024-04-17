@@ -23,7 +23,7 @@ class Order {
 	public const SELLER_INDEX = 'seller_id';
 	public const DESIGN_INDEX = 'design_id';
 	public const COLOR_INDEX = 'color_id';
-	public const SIZE_INDEX = 'sizeID';
+	public const SIZE_INDEX = 'size_id';
 	public const POSITION_INDEX = 'position_id';
 	public const LOGO_INDEX = 'logo_id';
 	public const PRODUCT_GAIN_FIELD = 'productGain';
@@ -290,7 +290,7 @@ class Order {
 
 			// add order
 			$orderId = DBOld::add(
-				'orders (user_id, cart_id, product_id, seller_id, design_id, type_id, color_id, sizeID, gender_id, position_id, logo_id, fullProductPrice, price_disc, productGain, quantity)',
+				'orders (user_id, cart_id, product_id, seller_id, design_id, type_id, color_id, size_id, gender_id, position_id, logo_id, fullProductPrice, price_disc, productGain, quantity)',
 				[Auth::id() ?: null, $cart->id, $product->id, $product->seller_id, $product->design_id, $product->type->id, $colorId, $size_id, $genderId, $position_id, $logo_id, $price, $product->customerDiscount, $product->customerGain, $quantity]
 			);
 

@@ -7,13 +7,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Address extends Model {
 
-
-	protected $table = 'addresses';
 	protected $fillable = ['cart_id', 'user_id', 'full_name', 'address', 'number', 'city', 'zip', 'country', 'email', 'phone'];
+
+	// * Relationship instances * //
 	/**
 	 * Get the address' cart
 	 */
 	public function cart(): BelongsTo {
 		return $this->belongsTo(Cart::class, 'cart_id', 'id');
+	}
+
+	// * Advanced data * //
+	/**
+	 * Get the full address
+	 */
+	public function fullAddress(): string {
+		$nameLine = $this->full_name;
+		$addressLine = $this->address;
+		$addressLine = $this->number ? $addressLine . ', ' . $this->number : $addressLine;
+		$cityLine = $this->zip . ' ' . $this->city;
+		$cityLine = $this->region ? $cityLine . ' (' . $this->region . ')' : $cityLine;
+
+		return implode('<br>', array_filter([$nameLine, $addressLine, $cityLine, $this->country]));
 	}
 }

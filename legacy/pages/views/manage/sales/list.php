@@ -48,7 +48,7 @@
 				I pagamenti dei guadagni accumulati non sono inviati automaticamente, ma devono essere richiesti cliccando qui sotto. È possibile richiedere il pagamento se il totale a pagare è superiore a <strong>25,00€ netti</strong> (31,25€ lordi).
 			</p>
 
-			<button type="button" class="btn button--auto-width" disabled>
+			<button type="button" class="btn button--auto-width place-center mar-t-1" disabled>
 				<?= embed_icon('dollar') ?>
 				Richiedi il pagamento
 			</button>

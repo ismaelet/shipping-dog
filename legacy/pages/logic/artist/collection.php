@@ -1,6 +1,8 @@
 <?php
 
-use Ecommerce\Seller;
+use App\Models\Ecommerce\Design;
+use App\Models\Ecommerce\Product;
+use App\Models\Ecommerce\Seller;
 
 $id = $_GET['id'] ?? 0;
 
@@ -9,7 +11,7 @@ if (!DBOld::exists('collections WHERE id = ?', [$id])) redirect_old('/shop');
 
 // get collection data
 $coll = new Collection($id);
-$seller = new Seller($coll->seller_id, ['name', 'status', 'followed', 'theme']);
+$seller = Seller::where('id', $coll->seller_id)->first();
 
 $vip = auth()->id() == $seller->id || is_admin();
 
@@ -19,13 +21,45 @@ if (!$seller->status && !$vip) redirect_old('/shop');
 // GET DESIGNS DATA
 $limit_new = 100;
 
-$res_items = DBOld::select('id FROM items WHERE status = 1 AND design_id IN (SELECT id FROM designs WHERE user_id = ? AND collection=?) ORDER BY sales DESC, design_id DESC, id ASC LIMIT ?', [$seller->id, $id, $limit_new]);
+$products = Product::where('status', 1)
+	->where('deleted', 0)
+	->whereHas('design', function ($query) use ($seller, $id) {
+		$query->where('user_id', $seller->id)
+			->where('collection', $id);
+	})
+	->orderBy('sales', 'desc')
+	->orderBy('design_id', 'desc')
+	->orderBy('id', 'asc')
+	->limit($limit_new)
+	->get();
 
-$res_add = DBOld::select('id FROM designs WHERE user_id = ? AND collection<>? AND status = 1 ORDER BY id DESC', [$seller->id, $id]);
-$addN = $res_add->num_rows;
+$products = Product::where('status', 1)
+	->where('deleted', 0)
+	->whereHas('design', function ($query) use ($seller, $id) {
+		$query->where('user_id', $seller->id)
+			->where('collection', $id);
+	})
+	->orderBy('sales', 'desc')
+	->orderBy('design_id', 'desc')
+	->orderBy('id', 'asc')
+	->limit($limit_new)
+	->get();
 
-$res_rem = DBOld::select('id FROM designs WHERE user_id = ? AND collection=? AND status = 1 ORDER BY id DESC', [$seller->id, $id]);
-$remN = $res_rem->num_rows;
+$designsToAdd = Design::where('user_id', $seller->id)
+	->where('collection', '!=', $id)
+	->where('status', 1)
+	->orderBy('id', 'desc')
+	->get();
+
+$addN = $designsToAdd->count();
+
+$designsToRemove = Design::where('user_id', $seller->id)
+	->where('collection', $id)
+	->where('status', 1)
+	->orderBy('id', 'desc')
+	->get();
+
+$remN = $designsToRemove->count();
 
 // add design to the collection
 if (isset($_POST['add'])) {

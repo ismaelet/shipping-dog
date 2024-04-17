@@ -63,7 +63,7 @@ $inputs = [
 	],
 	[
 		'type' => 'select',
-		'name' => 'sizeID',
+		'name' => 'size_id',
 		'text' => 'Taglia',
 		'query' => '* FROM items_sizes ORDER BY id ASC',
 		'field-name' => 'id',
@@ -90,11 +90,11 @@ function _expand_add($tbl, $inputs) {
 	$type_id = (int) $_POST['type_id'];
 	$color_id = (int) $_POST['color_id'];
 	$gender_id = (int) $_POST['gender_id'];
-	$sizeID = (int) $_POST['sizeID'];
+	$size_id = (int) $_POST['size_id'];
 
 	$productID = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$design_id, $type_id]);
 
-	DBOld::add('orders (cart_id, user_id, product_id, type_id, gender_id, color_id, sizeID) VALUES (?, ?, ?, ?, ?, ?, ?)', [$cart_id, $user_id, $productID, $type_id, $gender_id, $color_id, $sizeID]);
+	DBOld::add('orders (cart_id, user_id, product_id, type_id, gender_id, color_id, size_id) VALUES (?, ?, ?, ?, ?, ?, ?)', [$cart_id, $user_id, $productID, $type_id, $gender_id, $color_id, $size_id]);
 
 	if (isset($_POST['add-sale'])) {
 
@@ -112,5 +112,5 @@ function _expand_edit($tbl, $inputs, $index, $id) {
 
 	$productID = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$_POST['design_id'], $_POST['type_id']]);
 
-	DBOld::update('orders SET product_id = ?, type_id = ?, gender_id = ?, color_id = ?, sizeID = ? WHERE id = ?', [$productID, $_POST['type_id'], $_POST['gender_id'], $_POST['color_id'], $_POST['sizeID'], $id]);
+	DBOld::update('orders SET product_id = ?, type_id = ?, gender_id = ?, color_id = ?, size_id = ? WHERE id = ?', [$productID, $_POST['type_id'], $_POST['gender_id'], $_POST['color_id'], $_POST['size_id'], $id]);
 }

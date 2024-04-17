@@ -93,7 +93,9 @@ function background_image($img) {
 }
 
 function temp_bg($img) {
-	return 'style="background-image: url(' . asset('storage/' . $img) . ');"';
+	$img = str_replace(asset('/storage'), '', $img);
+
+	return 'style="background-image: url(' . public_asset($img) . ');"';
 }
 
 // put a svg as background image

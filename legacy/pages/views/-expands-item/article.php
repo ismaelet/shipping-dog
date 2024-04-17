@@ -167,30 +167,35 @@ use Ecommerce\Product\Type;
 		<section id="right-panel" class="grid">
 			<div class="">
 				<!-- Title -->
-				<h1 id="title"><?= $oldProduct->name ?></h1>
-				<p id="author"><?= $oldProduct->type->name ?> by <a class="txt-c1-h" href="<?= CLIENT_ROOT ?>/artist?id=<?= $oldProduct->seller->id ?>"><?= $oldProduct->seller->name ?></a></p>
+				<h1 id="title"><?= $product->name ?></h1>
+
+				<p id="author"><?= $product->type->name ?>
+					by <a class="txt-c1-h" href="<?= $product->seller->url() ?>">
+						<?= $product->seller->name ?>
+					</a>
+				</p>
 
 				<!-- Price -->
 				<div class="price-block">
 
-					<?php if ($oldProduct->customerDiscount) { ?>
+					<?php if ($product->customerDiscount()) { ?>
 
 						<!-- Price when there's a discount -->
-						<p class="price price-old heading-like js-full-price"><?= $oldProduct->fullPriceString ?></p>
-						<p class="price price-promo heading-like js-price"><?= $oldProduct->priceString ?></p>
+						<p class="price price-old heading-like js-full-price"><?= $product->fullPriceString() ?></p>
+						<p class="price price-promo heading-like js-price"><?= $product->priceString() ?></p>
 
 						<div class="flex-group">
-							<p class="price-txt">Prezzo scontato<?= $oldProduct->isUserOwner ? ' solo per te' : '' ?></p>
+							<p class="price-txt">Prezzo scontato<?= $product->userIsOwner() ? ' solo per te' : '' ?></p>
 
-							<?php if ($oldProduct->isUserOwner) {
-								info_box("Questo prezzo speciale è visibile a te, perché sei il proprietario di questo articolo. I clienti vedranno solo il prezzo normale di <span class='js-full-price'>" . $oldProduct->fullPriceString . "</span>");
+							<?php if ($product->userIsOwner()) {
+								info_box("Questo prezzo speciale è visibile a te, perché sei il proprietario di questo articolo. I clienti vedranno solo il prezzo normale di <span class='js-full-price'>" . $product->fullPriceString() . "</span>");
 							} ?>
 						</div>
 
 					<?php } else { ?>
 
 						<!-- Normal price -->
-						<p class="price txt-bold price-def heading-like js-price"><?= $oldProduct->priceString ?></p>
+						<p class="price txt-bold price-def heading-like js-price"><?= $product->priceString() ?></p>
 
 					<?php } ?>
 
@@ -368,7 +373,7 @@ use Ecommerce\Product\Type;
 								<?php } ?>
 
 								<!--checkboxs for extras-->
-								<?php foreach ($oldProduct->logos as $logoKey => $logo) { ?>
+								<?php foreach ($product->logos() as $logoKey => $logo) { ?>
 
 									<label class="logo-field__item" title="<?= $logo->name ?>">
 										<input type="radio" class="js-logo" name="logo-id" value="<?= $logo->id ?>" <?= $oldProduct->logoGroup->forced && !$logoKey ? 'checked' : null ?>>

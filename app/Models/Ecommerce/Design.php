@@ -3,6 +3,7 @@
 namespace App\Models\Ecommerce;
 
 use App\Models\Ecommerce\Design\CustomerPhoto;
+use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Design\Tag;
 use App\Models\User\Like;
 use Illuminate\Database\Eloquent\Model;
@@ -64,10 +65,24 @@ class Design extends Model {
 	}
 
 	/**
+	 * Get the design's logo group
+	 */
+	public function logo_group(): BelongsTo {
+		return $this->belongsTo(LogoGroup::class);
+	}
+
+	/**
 	 * Ge the desing's url, that is the url of the main product
 	 */
 	public function url(): ?string {
 		return $this->mainProduct ? $this->mainProduct->url() : null;
+	}
+
+	/**
+	 * Get the design's time string
+	 */
+	public function timeString(): string {
+		return date('d/m/Y', strtotime($this->created_at));
 	}
 
 	/**
@@ -80,11 +95,13 @@ class Design extends Model {
 	/**
 	 * Check if the design is liked by the logged user
 	 */
+	public function auth_user_like(): HasOne {
+		return $this->hasOne(Like::class)
+			->where('user_id', auth()->id());
+	}
+
 	public function isLiked(): bool {
-		return Like::where([
-			'user_id' => auth()->id(),
-			'design_id' => $this->id,
-		])->exists();
+		return $this->auth_user_like ? true : false;
 	}
 
 	/**

@@ -142,7 +142,7 @@
 			<div class="form-inputs">
 				<div class="form-field">
 					<p class="lbl">Nome completo</p>
-					<p><?= $cart->address->fullast_name ?></p>
+					<p><?= $cart->address->full_name ?></p>
 				</div>
 				<div class="form-field">
 					<p class="lbl">Contatti</p>

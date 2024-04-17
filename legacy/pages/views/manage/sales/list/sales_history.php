@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ecommerce\Order as EcommerceOrder;
 use Ecommerce\Order;
 
 if (!$year) $year = DBOld::row('YEAR(time) as year FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) ORDER BY time DESC', [$oldSeller->id])['year'];
@@ -29,20 +30,12 @@ while ($row_months = $res_months->fetch_assoc()) {
 	$month_tot = $row_month['totGain'];
 	$month_num = $row_month['count'];
 
-	//$res_saleM = DBOld::select('* FROM sales WHERE seller_id = ? AND YEAR(time)=? AND MONTH(time)=? ORDER BY time DESC', [$id, $year, $month]);
-	$sales = DBOld::select(
-		'
-		orders.id
-		FROM orders
-		LEFT JOIN carts ON orders.cart_id = carts.id
-		WHERE
-			YEAR(orders.time) = ? AND
-			MONTH(orders.time) = ? AND
-			seller_id = ? AND
-			carts.status > 0
-		ORDER BY carts.time DESC',
-		[$year, $month, $oldSeller->id]
-	);
+	$orders = EcommerceOrder::where('seller_id', $oldSeller->id)
+		->where('status', '>', 0)
+		->whereYear('time', $year)
+		->whereMonth('time', $month)
+		->orderByDesc('time')
+		->get();
 ?>
 
 	<div class="sales month-box pad-v-2 mar-b-1">
@@ -65,9 +58,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 					<p class="grid-item">Data</p>
 				</div>
 
-				<?php while ($sale = $sales->fetch_assoc()) {
-					$order = new Ecommerce\Order($sale['id']);
-				?>
+				<?php foreach ($orders as $order) { ?>
 
 					<!--sale line-->
 					<div class="grid-row <?php if ($row_dark) {
@@ -78,30 +69,33 @@ while ($row_months = $res_months->fetch_assoc()) {
 							<p class="list-inp">
 								<?php
 								if ($order->quantity > 1) echo $order->quantity . " x ";
-								echo $order->product->name ?: '- design rimosso -';
+								echo $order->product ? $order->product->name : '- design rimosso -';
 								?>
 							</p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->gainString ?></p>
+							<p class="list-inp"><?= $order->totalGainString() ?></p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->product->type->name ?></p>
+							<p class="list-inp"><?= $order->product->type->name ?? '' ?></p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->color->name ?></p>
+							<p class="list-inp"><?= $order->color->name ?? '' ?></p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->cart->coupon->code ?: '-' ?></p>
+							<p class="list-inp"><?= $order->cart->code ?: '-' ?></p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->timeString ?></p>
+							<p class="list-inp"><?= $order->timeString() ?></p>
 						</div>
 					</div>
+
 				<?php } ?>
+
 			</div>
 		</div>
 	</div>
+
 <?php } ?>
 
 <?php

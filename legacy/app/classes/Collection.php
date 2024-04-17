@@ -38,9 +38,9 @@ class Collection {
 
 		$color = '#aaa';
 
-		$img = '/uploads/shops/collections/' . $this->id . '.jpg';
+		$img = '/shops/collections/' . $this->id . '.jpg';
 
-		if (!file_exists(SERVER_ROOT . $img)) {
+		if (!file_exists(public_storage($img))) {
 
 			$this->img_cust = false;
 
@@ -51,7 +51,7 @@ class Collection {
 				$row = $res->fetch_assoc();
 
 				$color = $row['color'];
-				$img = '/uploads/designs/' . $row['id'] . '.png';
+				$img = '/designs/' . $row['id'] . '.png';
 			} else $img = false;
 		}
 

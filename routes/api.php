@@ -1,6 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\FollowerController;
+use App\Http\Controllers\Api\LikeController;
+use App\Http\Controllers\Api\LogoController;
+use App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,14 +17,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-	return $request->user();
-});
+/**
+ * Products
+ */
+Route::resource('/products', ProductController::class)->only(['show']);
 
+/**
+ * Logos
+ */
+Route::resource('/logos', LogoController::class)->only(['show']);
 
-// RouteOld::add('/api/like', function () {
-// 	echo json_encode(LikeController::like());
-// });
+/**
+ * Likes
+ */
+Route::resource('/likes', LikeController::class)->only(['store', 'destroy']);
+
+/**
+ * Followers
+ */
+Route::resource('/followers', FollowerController::class)->only(['store', 'destroy']);
 
 // RouteOld::add('/api/unlike', function () {
 // 	echo json_encode(LikeController::unlike());

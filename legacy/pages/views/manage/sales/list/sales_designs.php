@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ecommerce\Order as EcommerceOrder;
 use Ecommerce\Design;
 use Ecommerce\Order;
 
@@ -12,7 +13,15 @@ use function Ecommerce\format_price;
 
 	<?php
 	$row_dark = true;
-	$designs = DBOld::select('SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * quantity) as totGain, COUNT(*) as count, design_id FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) AND design_id IN (SELECT id FROM designs WHERE status = 1) GROUP BY design_id ORDER BY totGain DESC', [auth()->id()]);
+
+	$orders = EcommerceOrder::join('designs', 'orders.design_id', '=', 'designs.id')
+		->where('orders.seller_id', auth()->id())
+		->where('orders.status', '>', 0)
+		->where('designs.status', 1)
+		->groupBy('design_id')
+		->selectRaw('SUM((productGain - gain_disc) * quantity) as totGain, COUNT(*) as count, designs.*')
+		->orderByDesc('totGain')
+		->get();
 	?>
 
 	<div class="list-tbl-head">
@@ -23,14 +32,13 @@ use function Ecommerce\format_price;
 		<p class="list-name shr">Aggiunto il</p>
 	</div>
 
-	<?php while ($designData = $designs->fetch_assoc()) {
-
-		$design = new Design($designData['design_id']);
+	<?php foreach ($orders as $designData) {
 
 		//get last sale
-		$lastOrderId = DBOld::find('id FROM orders WHERE design_id=? AND cart_id IN (SELECT id FROM carts WHERE status>0) ORDER BY time DESC', [$design->id]);
-
-		$lastOrder = new Order($lastOrderId);
+		$lastOrder = EcommerceOrder::where('design_id', $designData->id)
+			->where('status', '>', 0)
+			->orderByDesc('time')
+			->first();
 	?>
 
 		<!--sale line-->
@@ -38,11 +46,21 @@ use function Ecommerce\format_price;
 									echo 'row_dark';
 									$row_dark = false;
 								} else $row_dark = 'true'; ?>">
-			<div class="list-cell"><input type="text" class="list-inp" value="<?= $designData['count'] ?>" disabled></div>
-			<div class="list-cell"><input type="text" class="list-inp" value="<?= $design->name ?>" disabled></div>
-			<div class="list-cell"><input type="text" class="list-inp" value="<?= format_price($designData['totGain']) ?>" disabled></div>
-			<div class="list-cell"><input type="text" class="list-inp" value="<?= $lastOrder->timeString ?>" disabled></div>
-			<div class="list-cell"><input type="text" class="list-inp" value="<?= $design->time ?>" disabled></div>
+			<div class="list-cell">
+				<p class="list-inp text-sm"><?= $designData->count ?></p>
+			</div>
+			<div class="list-cell">
+				<p class="list-inp text-sm"><?= $designData->name ?></p>
+			</div>
+			<div class="list-cell">
+				<p class="list-inp text-sm"><?= format_price($designData->totGain) ?></p>
+			</div>
+			<div class="list-cell">
+				<p class="list-inp text-sm"><?= $lastOrder->timeString() ?></p>
+			</div>
+			<div class="list-cell">
+				<p class="list-inp text-sm"><?= $designData->timeString() ?></p>
+			</div>
 		</div>
 
 	<?php } ?>

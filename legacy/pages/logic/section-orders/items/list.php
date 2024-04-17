@@ -21,7 +21,7 @@ $fields = [
 	['title' => 'Tipo', 'name' => 'type_id', 'type' => 'find', 'find' => 'name FROM items_types WHERE id = ?', 'size' => 'm'],
 	['title' => 'Modello', 'name' => 'gender_id', 'type' => 'find', 'find' => 'name FROM items_genders WHERE id = ?', 'size' => 'm'],
 	['title' => 'Colore', 'name' => 'color_id', 'type' => 'find', 'find' => 'name FROM items_colors WHERE id = ?', 'size' => 'm'],
-	['title' => 'Taglia', 'name' => 'sizeID', 'type' => 'find', 'find' => 'name FROM items_sizes WHERE id = ?', 'size' => 'm'],
+	['title' => 'Taglia', 'name' => 'size_id', 'type' => 'find', 'find' => 'name FROM items_sizes WHERE id = ?', 'size' => 'm'],
 
 	['type' => 'btn'],
 ];

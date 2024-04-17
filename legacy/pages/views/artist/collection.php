@@ -1,7 +1,6 @@
 <?php
 
 use App\View\Components\Interactions\FollowButton;
-use Ecommerce\Design;
 
 ?>
 
@@ -12,19 +11,19 @@ use Ecommerce\Design;
 	<div id="art_box">
 		<div id="art_bgr" class="brb2 br-e <?= $coll->img_cust ? 'cust' : '' ?>" style="background-color: <?= $coll->color ?>">
 			<div class="bgr <?php if (!$coll->img_cust) echo 'cont ';
-							if (!$coll->img) echo 'bgr-c1' ?>" <?php if ($coll->img) echo background_image($coll->img) ?>></div>
+							if (!$coll->img) echo 'bgr-c1' ?>" <?php if ($coll->img) echo temp_bg($coll->img) ?>></div>
 		</div>
 
 		<div id="art_head" class="main-wrap">
 
 			<!-- Shop icon -->
 			<div id="icon_box">
-				<a id="icon" href="<?= $seller->clientUrl ?>" <?= background_image($seller->icon) ?>></a>
+				<a id="icon" href="<?= $seller->url() ?>" <?= temp_bg($seller->icon()) ?>></a>
 			</div>
 
 			<!-- Shop data -->
 			<div id="art_data">
-				<a href="<?= $seller->clientUrl ?>">
+				<a href="<?= $seller->url() ?>">
 					<h1 id="title"><?= $seller->name ?></h1>
 				</a>
 
@@ -110,7 +109,9 @@ use Ecommerce\Design;
 			<!-- Gallery -->
 			<div class="folder grid4 grid3-1024w grid2-480w gap1">
 
-				<?= generate_item_list($res_items) ?>
+				<?php foreach ($products as $product) {
+					generate_item_box($product);
+				} ?>
 
 			</div>
 
@@ -135,18 +136,19 @@ use Ecommerce\Design;
 					<p class="txt-09rem">Seleziona i lavori da aggiungere alla collezione:</p>
 
 					<div class="gallery txt-cen mar-v-2">
-						<?php while ($row = $res_add->fetch_assoc()) {
 
-							$design = new Design($row['id'], 'img') ?>
+						<?php foreach ($designsToAdd as $design) { ?>
 
 							<label class="lbox-ele-box ele">
 								<input type="checkbox" class="hidden" name="add-cbx[]" value="<?= $design->id ?>">
 
 								<div class="lbox-ele clickable">
-									<div class="bgr" <?= background_image($design->image) ?>></div>
+									<div class="bgr" <?= temp_bg($design->image()) ?>></div>
 								</div>
 							</label>
+
 						<?php } ?>
+
 					</div>
 				</div>
 
@@ -173,18 +175,18 @@ use Ecommerce\Design;
 					<p class="txt-09rem mar-b-1">Seleziona i design che vuoi rimuovere dalla collezione (non saranno eliminati):</p>
 
 					<div class="gallery">
-						<?php while ($row = $res_rem->fetch_assoc()) {
-
-							$design = new Design($row['id']) ?>
+						<?php foreach ($designsToRemove as $design) { ?>
 
 							<label class="lbox-ele-box ele">
 								<input type="checkbox" class="hidden" name="remove-cbx[]" value="<?= $design->id ?>">
 
 								<div class="lbox-ele clickable">
-									<div class="bgr cont" <?= background_image($design->image) ?>></div>
+									<div class="bgr cont" <?= temp_bg($design->image()) ?>></div>
 								</div>
 							</label>
+
 						<?php } ?>
+
 					</div>
 
 				</div>

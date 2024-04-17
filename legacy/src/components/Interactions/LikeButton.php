@@ -14,7 +14,7 @@ $design = Design::find($design_id);
 			if ($design->seller->user_id != Auth::id()) {
 		?>
 
-				<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; toggleLike(<?= $design_id ?>, liked)" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
+				<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; liked ? storeLike(<?= $design_id ?>) : destroyLike(<?= $design->auth_user_like->id ?? null ?>);" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
 					<?= embed_icon('love-stroke') ?>
 					<?= embed_icon('love') ?>
 				</div>
@@ -53,64 +53,64 @@ $design = Design::find($design_id);
 		& svg {
 			--icon-size: 70%;
 			transition: opacity .2s;
-		}
-
-		&[data-liked="true"]:not(:hover) {
-			& svg:first-child {
-				opacity: 0;
-			}
-		}
-
-		&[data-liked="true"]:hover {
-			& svg:last-child {
-				opacity: 0;
-			}
+			opacity: 0;
 		}
 
 		&[data-liked="false"]:not(:hover) {
-			& svg:last-child {
-				opacity: 0;
+			& svg:first-child {
+				opacity: 1;
 			}
 		}
 
 		&[data-liked="false"]:hover {
+			& svg:last-child {
+				opacity: 1;
+			}
+		}
+
+		&[data-liked="true"]:not(:hover) {
+			& svg:last-child {
+				opacity: 1;
+			}
+		}
+
+		&[data-liked="true"]:hover {
 			& svg:first-child {
-				opacity: 0;
+				opacity: 1;
 			}
 		}
 	}
 </style>
 
 <script>
-	function toggleLike(design_id, liked) {
-		if (liked) {
-			axios.post('/api/like', {
-					design_id: design_id
-				})
-				.then(response => {
+	function storeLike(designId) {
+		axios.post('/api/likes', {
+				user_id: <?= Auth::id() ?>,
+				design_id: designId
+			})
+			.then(response => {
 
-					<?php if (env('DEBUG')) { ?>
-						console.log(response.data);
-					<?php } ?>
+				<?php if (env('DEBUG')) { ?>
+					console.log(response);
+				<?php } ?>
 
-				})
-				.catch(error => {
-					console.error(error);
-				});
-		} else {
-			axios.post('/api/unlike', {
-					design_id: design_id
-				})
-				.then(response => {
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	}
 
-					<?php if (env('DEBUG')) { ?>
-						console.log(response.data);
-					<?php } ?>
+	function destroyLike(likeId) {
+		axios.delete(`/api/likes/${likeId}`)
+			.then(response => {
 
-				})
-				.catch(error => {
-					console.error(error);
-				});
-		}
+				<?php if (env('DEBUG')) { ?>
+					console.log(response);
+				<?php } ?>
+
+			})
+			.catch(error => {
+				console.error(error);
+			});
 	}
 </script>

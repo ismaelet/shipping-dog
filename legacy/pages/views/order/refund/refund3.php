@@ -40,7 +40,7 @@
 									<?php $sizes = $change->old_order->product->type->sizeCollection();
 
 									$sizes = $sizes->filter(function ($item) use ($change) {
-										return $item->id != $change->old_order->sizeID;
+										return $item->id != $change->old_order->size_id;
 									});
 
 									foreach ($sizes as $key => $size) { ?>

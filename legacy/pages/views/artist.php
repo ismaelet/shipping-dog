@@ -187,7 +187,7 @@ use App\View\Components\Interactions\FollowButton;
 					<form class="lbox-form" method="POST">
 						<h1 class="lbox-title">Aggiungi una collezione</h1>
 						<div class="lbox-body">
-							<input type="text" name="name" class="inputshort" placeholder="Nome della collezione" required>
+							<input type="text" name="name" class="input" placeholder="Nome della collezione" required>
 						</div>
 						<div class="lbox-footer">
 							<button type="submit" name="add_folder" class="pbtn btn-full-width">Aggiungi</button>

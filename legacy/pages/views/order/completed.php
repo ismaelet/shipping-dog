@@ -8,11 +8,11 @@ use Ecommerce\ViewManager;
 
 <div id="slider">
 	<div class="bgr"></div>
-	<h1 id="slider-title">ORDINE <span class="txt-c1"><?= $cart->idCode ?></span></h1>
+	<h1 id="slider-title">ORDINE <span class="txt-c1"><?= $cart->idCode() ?></span></h1>
 </div>
 
 <div id="wrap" class="main-wrap pad-b-4">
-	<h2 id="title" class="txt-2rem background-status-color--<?= $cart->statusCode ?>"><?= $cart->statusName ?></h2>
+	<h2 id="title" class="txt-2rem background-status-color--<?= $cart->statusCode() ?>"><?= $cart->statusName() ?></h2>
 
 	<p id="head_txt" class="pad-v-2">
 		Il tuo ordine verrà spedito entro <strong>1-5 giorni lavorativi</strong> dal momento del pagamento. Riceverai una email dal <strong>corriere GLS</strong> con codice e istruzioni di <strong>tracciamento</strong> intorno alle <strong>20:00</strong> del giorno di spedizione. Abbiamo mandato una email di conferma al tuo indirizzo email. Nel caso non appaia entro 5 minuti dal momento del pagamento, consigliamo di controllare la <strong>cartella di spam</strong>.
@@ -40,11 +40,11 @@ use Ecommerce\ViewManager;
 
 						<div class="ship_box">
 							<h1 class="art_name">
-								<?= $cart->shippingMethod->name ?><br>
-								<span class="date"><?= $cart->shippingMethod->deliveryDateString ?></span>
+								<?= $cart->shipping_method->name ?><br>
+								<span class="date"><?= $cart->shipping_method->deliveryDateString ?></span>
 							</h1>
 
-							<p class="order-list__description"><?= $cart->shippingMethod->description ?></p>
+							<p class="order-list__description"><?= $cart->shipping_method->description ?></p>
 						</div>
 					</label>
 				</div>
@@ -55,11 +55,10 @@ use Ecommerce\ViewManager;
 				<h2 class="title">Indirizzo</h2>
 
 				<div id="addr_cont">
-					<p class="addr_txt">
-						<?= $cart->address->fullAddress ?><br>
-						-<br>
-						<?= $cart->address->email ?><br>
-						<?= $cart->address->phone ?>
+					<?= $cart->address->fullAddress() ?? '' ?><br>
+					-<br>
+					<?= $cart->address->email ?? '' ?><br>
+					<?= $cart->address->phone ?? '' ?>
 					</p>
 
 					<?php if ($cart->status == 1) { ?>

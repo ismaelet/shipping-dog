@@ -5,38 +5,45 @@
 
 [V] Search
 
-[X] Shop
+[V] Shop
 	[V] Search filter
 	[V] Sort filter
 	[V] Gender filter
 	[V] Accessory filter
 	[V] Tag filter
 	[V] Official shop
-	[X] Individual shop
-		[X] Collection
+	[V] Individual shop
+		[V] Collection
 
-[X] Product Page
-	[X] Logos
-	[X] Change color
-	[X] Change position
-	[X] Generate new image
-	[X] Follow button
-	[X] Like button
+[V] Product Page
+	[V] Logos
+	[V] Change color
+	[V] Change position
+	[V] Generate new image
+	[V] Follow button
+	[V] Like button
 	[V] Related products
 
 [V] Auth pages
 	[V] Login
 	[V]	Logout
 	[V] Register
+		[?] Register a new user
+	[V] Password reset
+		[V] Check if email is received
+		[?] Try to reset the password
 
 [X] Seller dashboard
 	[V] Settings
-	[V] Porfolio
+		[V] Edit the settings
+		[?] Reupload the icon
+		[?] Reupload the cover
+	[X] Porfolio
 		[V] List
 		[V] Add
 		[V] Edit
-	[X] Sales list
-		[X] Payment request
+	[V] Sales list
+		[V] Payment request
 			[?] PDF generation
 	[V] Edit prices
 	[V] Customer photos
@@ -46,6 +53,8 @@
 [X]	Profile
 	[V] Feed
 	[V] Personal data
+		[V] Try to edit the data
+		[?] Try to delete the account
 	[X] Order list
 		[X] Order page
 	[V] Wishlist

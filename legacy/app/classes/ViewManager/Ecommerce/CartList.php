@@ -2,6 +2,8 @@
 
 namespace ViewManager\Ecommerce;
 
+use App\Models\Ecommerce\Cart;
+
 use function Ecommerce\customer;
 
 class CartList {
@@ -31,26 +33,28 @@ class CartList {
 						<div class="cart-list__field cart-list__field--header"></div>
 					</div>
 
-					<?php foreach ($this->customer->confirmedCarts as $cart) { ?>
+					<?php foreach ($this->customer->confirmedCarts as $cart) {
+						$cart = Cart::find($cart->id);
+					?>
 
 						<div class="cart-list__cart">
-							<p class=" cart-list__field"><?= $cart->idCode ?></p>
+							<p class=" cart-list__field"><?= $cart->idCode() ?></p>
 							<p class="cart-list__field">
 
 								<?php foreach ($cart->orders as $order) {
-									echo $order->name . '<br>';
+									echo $order->name() . '<br>';
 								} ?>
 
 							</p>
-							<p class="cart-list__field"><?= $cart->priceString ?></p>
+							<p class="cart-list__field"><?= $cart->priceString() ?></p>
 							<p class="cart-list__field">
-								<span class="cart-list__status background-status-color--<?= $cart->statusCode ?>">
-									<?= $cart->statusName ?>
+								<span class="cart-list__status background-status-color--<?= $cart->statusCode() ?>">
+									<?= $cart->statusName() ?>
 								</span>
 							</p>
-							<p class="cart-list__field"><?= $cart->dateString ?></p>
+							<p class="cart-list__field"><?= $cart->timeString() ?></p>
 							<p class="cart-list__field">
-								<a class="cart-list__link text-link" href="<?= $cart->clientUrl ?>">
+								<a class="cart-list__link text-link" href="<?= $cart->url() ?>">
 									visualizza
 								</a>
 							</p>

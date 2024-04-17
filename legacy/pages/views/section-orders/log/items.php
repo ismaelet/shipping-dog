@@ -74,7 +74,7 @@ use App\View\Components\Form\SearchInput;
 					$orders = $filteredOrders
 						->where('seller_id', '=', $product->seller_id)
 						->where('design_id', '=', $product->design_id)
-						->sortBy('sizeID')
+						->sortBy('size_id')
 						->sortBy('color_id')
 						->sortBy('type_id');
 
@@ -127,7 +127,7 @@ use App\View\Components\Form\SearchInput;
 					->where('inventory', 0)
 					->where('type_id', '=', $typeOrder->type_id)
 					->sortBy('color_id')
-					->sortBy('sizeID');
+					->sortBy('size_id');
 
 				// Merge orders
 				foreach ($sortedByData as $order) {

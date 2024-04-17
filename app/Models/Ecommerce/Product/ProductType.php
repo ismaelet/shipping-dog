@@ -4,6 +4,7 @@ namespace App\Models\Ecommerce\Product;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -68,6 +69,13 @@ class ProductType extends Model {
 	 */
 	public function positionCollection(): Collection {
 		return ProductPosition::whereIn('id', $this->positionList())->get();
+	}
+
+	/**
+	 * Get the type's gender
+	 */
+	public function gender_model(): BelongsTo {
+		return $this->belongsTo(ProductGender::class, 'gender');
 	}
 
 	/**

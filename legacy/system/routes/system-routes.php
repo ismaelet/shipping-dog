@@ -19,7 +19,7 @@ RouteOld::add('/ajax/*', function ($path) {
 * API calls
 */
 // Function call
-RouteOld::add('/api/call-function/*', function ($path) {
+RouteOld::add('/old-api/call-function/*', function ($path) {
 	$response = [];
 
 	// request data
@@ -33,7 +33,7 @@ RouteOld::add('/api/call-function/*', function ($path) {
 });
 
 // Class interactions
-RouteOld::add(['/api/get-class-properties/*', '/api/call-class-method/*'], function ($path) {
+RouteOld::add(['/old-api/get-class-properties/*', '/old-api/call-class-method/*'], function ($path) {
 	$response = [];
 
 	// request data
