@@ -23,6 +23,9 @@ class Product extends Model {
 	protected $table = 'items';
 	protected $fillable = ['name', 'design_id', 'user_id', 'type_id', 'color_id', 'colors', 'status', 'positions'];
 
+	/***************************
+	 * * Relationship instances *
+	 ***************************/
 	/**
 	 * Get the product's seller
 	 */
@@ -44,6 +47,29 @@ class Product extends Model {
 		return $this->belongsTo(ProductType::class);
 	}
 
+	/**
+	 * Get the specific product's price
+	 */
+	public function specific_price(): HasOne {
+		return $this->hasOne(ProductPrice::class);
+	}
+
+	/**
+	 * Get the default seller's price for the product
+	 */
+	public function seller_price(): HasOne {
+		return $this->hasOne(SellerPrice::class, 'seller_id', 'user_id')->where('type_id', $this->type->id);
+	}
+
+	/**
+	 * Get the default platform price for the product
+	 */
+	public function base_price(): HasOne {
+		return $this->hasOne(BasePrice::class, 'type_id', 'type_id');
+	}
+	/************************
+	 * * Utility methods *
+	 ************************/
 	/**
 	 * Get the product's logos
 	 */
@@ -93,22 +119,6 @@ class Product extends Model {
 		return $this->base_price;
 	}
 
-	public function priceString(): string {
-		return EcommerceHelper::price($this->price()->price);
-	}
-
-	public function specific_price(): HasOne {
-		return $this->hasOne(ProductPrice::class);
-	}
-
-	public function seller_price(): HasOne {
-		return $this->hasOne(SellerPrice::class, 'seller_id', 'user_id')->where('type_id', $this->type->id);
-	}
-
-	public function base_price(): HasOne {
-		return $this->hasOne(BasePrice::class, 'type_id', 'type_id');
-	}
-
 	public function sellerPrice() {
 		return $this->price()->price - $this->price()->gain_w / .75;
 	}
@@ -125,10 +135,6 @@ class Product extends Model {
 		return $this->productPrice() + $this->logoPrice();
 	}
 
-	public function fullPriceString(): string {
-		return EcommerceHelper::price($this->fullPrice());
-	}
-
 	public function customerDiscount() {
 		return $this->userIsOwner() ? $this->fullPrice() - $this->sellerPrice() : 0;
 	}
@@ -137,8 +143,30 @@ class Product extends Model {
 		return $this->fullPrice() - $this->customerDiscount();
 	}
 
+	public function priceString(): string {
+		return EcommerceHelper::formatPrice($this->price()->price);
+	}
+
+	public function fullPriceString(): string {
+		return EcommerceHelper::formatPrice($this->fullPrice());
+	}
+
 	public function customerPriceString(): string {
-		return EcommerceHelper::price($this->customerPrice());
+		return EcommerceHelper::formatPrice($this->customerPrice());
+	}
+
+	/**
+	 * Get the product gain
+	 */
+	public function customerGain(): float {
+		return $this->userIsOwner() ? ($this->color()->type == 'w' ? $this->price()->gain_w : $this->price()->gain_c) : 0;
+	}
+
+	/**
+	 * Get the product's color
+	 */
+	public function color(): ProductColor {
+		return ProductColor::find($this->color_id);
 	}
 
 	/**

@@ -7,7 +7,6 @@ use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductSize;
-use Ecommerce\Order as EcommerceOrder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -17,12 +16,21 @@ class Order extends Model {
 	protected $table = 'orders';
 	protected $fillable = ['fullProductPrice', 'price_disc', 'productGain', 'gain_disc', 'credit'];
 
-	// * Relationship instances * //
+	/****************************
+	 * * Relationship instances *
+	 ****************************/
 	/**
 	 * Get the order's cart
 	 */
 	public function cart(): BelongsTo {
 		return $this->belongsTo(Cart::class);
+	}
+
+	/**
+	 * Get the order's seller
+	 */
+	public function seller(): BelongsTo {
+		return $this->belongsTo(Seller::class);
 	}
 
 	/**
@@ -59,8 +67,9 @@ class Order extends Model {
 	public function logo(): HasOne {
 		return $this->hasOne(Logo::class, 'id', 'logo_id');
 	}
-
-	// * Advanced data * //
+	/************************
+	 * * Utility methods *
+	 ************************/
 	/**
 	 * Get the name of the order
 	 */
@@ -129,11 +138,11 @@ class Order extends Model {
 	}
 
 	public function priceString(): string {
-		return EcommerceHelper::price($this->price());
+		return EcommerceHelper::formatPrice($this->price());
 	}
 
 	public function grossPriceString(): string {
-		return EcommerceHelper::price($this->grossPrice());
+		return EcommerceHelper::formatPrice($this->grossPrice());
 	}
 
 	/**
@@ -144,7 +153,7 @@ class Order extends Model {
 	}
 
 	public function totalGainString(): string {
-		return EcommerceHelper::price($this->totalGain(), true);
+		return EcommerceHelper::formatPrice($this->totalGain(), true);
 	}
 
 	/**
@@ -154,15 +163,22 @@ class Order extends Model {
 		return date('d/m/Y', strtotime($this->time));
 	}
 
-	// ! Deprecated ! //
 	/**
 	 * Returns the image of the order
 	 */
-	public function clientImage() {
-		$oldOrder = new EcommerceOrder($this->id);
+	public function image(): string {
+		return $this->product->image(null, $this->color_id, $this->position_id);
+	}
 
-		$image = $oldOrder->product->clientImage;
+	// * Actions * //
+	/**
+	 * Deletes the order
+	 */
+	public function delete(): bool|null {
+		$results = parent::delete();
 
-		return $image;
+		$this->cart->updateOrders();
+
+		return $results;
 	}
 }

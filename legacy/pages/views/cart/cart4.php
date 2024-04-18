@@ -55,7 +55,7 @@ use ViewManager\Ecommerce\CartRecap;
 							<div class="pay_box">
 								<h1 class="pay_name"><?= $row['name']; ?></h1>
 
-								<?php if (file_exists(SERVER_ROOT . '/pages/assets/cart/pay_' . $row['tag'] . '.png')) { ?>
+								<?php if (file_exists(base_path() . '/public/pages/assets/cart/pay_' . $row['tag'] . '.png')) { ?>
 									<div class="pay_img" <?= background_image('/pages/assets/cart/pay_' . $row['tag'] . '.png'); ?>></div>
 								<?php } ?>
 

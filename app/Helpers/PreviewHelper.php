@@ -14,6 +14,7 @@ class PreviewHelper {
 	public const BIG_IMAGE_SIZE = 1024;
 	public const DEFAULT_IMAGE_SIZE = self::SMALL_IMAGE_SIZE;
 	public const ALLOWED_IMAGE_SIZES = [self::SMALL_IMAGE_SIZE, self::BIG_IMAGE_SIZE];
+	public const PLACEHOLDER_IMAGE = 'product_types/mockups/no-image.webp';
 
 	private Product $product;
 	private ProductColor $color;
@@ -49,7 +50,7 @@ class PreviewHelper {
 		}
 
 		// Return the default image path
-		return public_asset('product_types/mockups/no-image.webp');
+		return public_asset(self::PLACEHOLDER_IMAGE);
 	}
 
 	private function fileName(): string {

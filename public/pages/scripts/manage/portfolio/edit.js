@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const changeName = document.querySelector(changeNameSelector)
 	const changeNameConfirmation = document.querySelector(changeNameConfirmationSelector)
 
-	const design_id = document.querySelector('#body').dataset.design_id
+	const design_id = document.querySelector('#body').dataset.designId
 
 	var timer
 
@@ -13,13 +13,19 @@ document.addEventListener('DOMContentLoaded', function () {
 		const name = changeName.value
 
 		if (name) {
-			call_class_method('Ecommerce\\Design', 'updateName', name, design_id)
+			update_design(design_id, { name: name })
+				.then((response) => {
+					console.log(response)
 
-			changeNameConfirmation.classList.add('active')
+					changeNameConfirmation.classList.add('active')
 
-			setTimeout(function () {
-				changeNameConfirmation.classList.remove('active')
-			}, 1000)
+					setTimeout(function () {
+						changeNameConfirmation.classList.remove('active')
+					}, 1000)
+				})
+				.catch((error) => {
+					console.error(error)
+				})
 		}
 	})
 
@@ -250,3 +256,20 @@ $(window).on('load', async function () {
 	box.html(html)
 	$('#items-load-bgr').fadeOut()
 })
+
+/**
+ * Updates a design with the specified designId using the provided data.
+ * @param {number} designId - The ID of the design to update.
+ * @param {object} data - The data to update the design with.
+ * @returns {Promise} - A promise that resolves to the updated design data or rejects with an error.
+ */
+async function update_design(designId, data) {
+	return axios
+		.patch(`/api/designs/${designId}`, data)
+		.then((response) => {
+			return response.data
+		})
+		.catch((error) => {
+			return error
+		})
+}

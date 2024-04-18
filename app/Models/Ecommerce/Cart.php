@@ -2,22 +2,24 @@
 
 namespace App\Models\Ecommerce;
 
+use App\Helpers\EcommerceHelper;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Session;
 
 use function Ecommerce\ecommerce_config;
 
 class Cart extends Model {
 
-
 	protected $table = 'carts';
-	protected $fillable = ['user_id', 'has_errors'];
+	protected $fillable = ['user_id', 'shipping_method_id', 'country_id', 'payment_method_id', 'code', 'quantity', 'credit_ship', 'shipping', 'status', 'step', 'time', 'courier_notes', 'shipping_notes', 'has_errors'];
 
-
-	// * Relationship instances * //
+	/***************************
+	 * * Relationship instances *
+	 ***************************/
 	/**
 	 * Get the cart's shipping method
 	 */
@@ -52,13 +54,147 @@ class Cart extends Model {
 	public function orders(): HasMany {
 		return $this->hasMany(Order::class);
 	}
-
-	// * Advanced data * //
+	/************************
+	 * * Utility methods *
+	 ************************/
 	/**
 	 * Generate the id code
 	 */
 	public function idCode(): string {
 		return '#' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+	}
+
+	/**
+	 * Get the cart's price
+	 */
+	public function price(): float {
+		return $this->updatePrice()->price;
+	}
+
+	public function orderPrice(): float {
+		$orderPrice = 0;
+
+		foreach ($this->orders as $order) {
+			$orderPrice += $order->price();
+		}
+
+		return $orderPrice;
+	}
+
+	public function grossOrderPrice(): float {
+		$grossOrderPrice = 0;
+
+		foreach ($this->orders as $order) {
+			$grossOrderPrice += $order->grossPrice();
+		}
+
+		return $grossOrderPrice;
+	}
+
+	public function grossShippingPrice(): float {
+		return $this->shipping_method ? $this->shipping_method->price($this->orders->sum('quantity')) : 0;
+	}
+
+	public function shippingPrice(): float {
+		return $this->credit_ship ? 0 : $this->grossShippingPrice();
+	}
+
+	public function orderDiscount(): float {
+		$orderDiscount = 0;
+
+		foreach ($this->orders as $order) {
+			$orderDiscount += $order->discount();
+		}
+
+		return $orderDiscount;
+	}
+
+	public function shippingDiscount(): float {
+		return $this->credit_ship ? $this->grossShippingPrice() : 0;
+	}
+
+	public function discount(): float {
+		return $this->orderDiscount() + $this->shippingDiscount();
+	}
+
+	public function shippingPriceString(): string {
+		return EcommerceHelper::formatPrice($this->shippingPrice());
+	}
+
+	public function priceString(): string {
+		return EcommerceHelper::formatPrice($this->price());
+	}
+
+	public function grossOrderPriceString(): string {
+		return EcommerceHelper::formatPrice($this->grossOrderPrice());
+	}
+
+	public function orderDiscountString(): string {
+		return EcommerceHelper::formatPrice($this->orderDiscount());
+	}
+
+	/**
+	 * Check if the cart has long delivery times
+	 */
+	public function longDeliveryTime(): bool {
+		foreach ($this->orders as $order) {
+			if ($order->product->type->preorder || $order->color->preorder) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get the cart's recap page url
+	 */
+	public function recapUrl(): string {
+		return '/order?id=' . $this->id . '&customerId=' . $this->user_id;
+	}
+
+	/**
+	 * Get the cart's time
+	 */
+	public function timeString(): string {
+		return date('d/m/Y', strtotime($this->time));
+	}
+
+	/************************
+	 * * Actions *
+	 ************************/
+	public function updateOrders(): self {
+		$this->updateQuantity();
+		$this->updatePrice();
+
+		return $this;
+	}
+
+	public function updateQuantity(): self {
+		$this->quantity = $this->orders->sum('quantity');
+		$this->save();
+
+		if (!$this->quantity) {
+			$this->delete();
+		}
+
+		return $this;
+	}
+
+	public function updatePrice(): self {
+		$orderPrice = $this->orderPrice();
+		$shippingPrice = $this->shippingPrice();
+
+		$this->price = $orderPrice + $shippingPrice;
+		// $this->save();
+
+		return $this;
+	}
+
+	public function delete(): bool {
+		Session::forget('cart_id');
+
+		return parent::delete();
 	}
 
 	// * Collections * //

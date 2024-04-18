@@ -1,6 +1,10 @@
 <?php
 
+use App\Helpers\StringHelper;
+
 use function Ecommerce\ecommerce_config;
+
+$cart = cart();
 
 ?>
 
@@ -18,25 +22,25 @@ use function Ecommerce\ecommerce_config;
 	<!-- Orders -->
 	<?php foreach ($cart->orders as $orderKey => $order) { ?>
 
-		<input type="hidden" name="item_name_<?= ($orderKey + 1) ?>" value="<?= str_replace('"', '\'', $order->description) ?>">
-		<input type="hidden" name="amount_<?= ($orderKey + 1) ?>" value="<?= $order->formattedFullPrice ?>">
+		<input type="hidden" name="item_name_<?= ($orderKey + 1) ?>" value="<?= str_replace('"', '\'', $order->description()) ?>">
+		<input type="hidden" name="amount_<?= ($orderKey + 1) ?>" value="<?= StringHelper::formatWithDot($order->grossPrice()) ?>">
 		<input type="hidden" name="quantity_<?= ($orderKey + 1) ?>" value="<?= $order->quantity ?>">
 		<input type="hidden" name="item_number_<?= ($orderKey + 1) ?>" value="<?= $order->id ?>">
 
 	<?php } ?>
 
 	<!-- Discount -->
-	<?php if ($cart->discount) { ?>
-		<input type="hidden" name="discount_amount_cart" value="<?= $cart->discountFrm ?>">
+	<?php if ($cart->discount()) { ?>
+		<input type="hidden" name="discount_amount_cart" value="<?= StringHelper::formatWithDot($cart->discount()) ?>">
 	<?php } ?>
 
 	<!-- Shipping data -->
 	<?php $row_addr = DBOld::row('* FROM addresses WHERE cart_id = ?', [$cart->id]) ?>
 
-	<input type="hidden" name="shipping_1" value="<?= $cart->shippingPriceFrm ?>">
-	<input type="hidden" name="first_name" value="<?= $cart->address->first_name ?>">
-	<input type="hidden" name="last_name" value="<?= $cart->address->last_name ?>">
-	<input type="hidden" name="address1" value="<?= $cart->address->address . ' ' . $cart->address->number ?>">
+	<input type="hidden" name="shipping_1" value="<?= StringHelper::formatWithDot($cart->shippingPrice()) ?>">
+	<input type="hidden" name="first_name" value="<?= explode(' ', $cart->address->full_name, 2)[0] ?>">
+	<input type="hidden" name="last_name" value="<?= explode(' ', $cart->address->full_name, 2)[1] ?? '' ?>">
+	<input type="hidden" name="address1" value="<?= $cart->address->address . ', ' . $cart->address->number ?>">
 	<input type="hidden" name="city" value="<?= $cart->address->city ?>">
 	<input type="hidden" name="state" value="<?= $cart->address->region ?>">
 	<input type="hidden" name="zip" value="<?= $cart->address->zip ?>">
@@ -46,7 +50,7 @@ use function Ecommerce\ecommerce_config;
 	<input type="hidden" name="night_phone_a" value="<?= $cart->address->phone ?>">
 
 	<!--CUSTOM DATA-->
-	<input type="hidden" name="custom" value="<?= $cart->id . '&' . $cart->customerId . '&it' ?>">
+	<input type="hidden" name="custom" value="<?= $cart->id . '&' . $cart->user_id . '&it' ?>">
 </form>
 
 <!-- Load icon -->

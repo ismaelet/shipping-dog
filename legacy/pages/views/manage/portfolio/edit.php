@@ -180,7 +180,6 @@
 					<div id="colors-anch" class="anchor"></div>
 
 					<h3 class="sec-title">Colori</h3>
-
 					<?php if ($done == 'colors') { ?><p class="confirmation">Colori modificati con successo</p><?php } ?>
 
 					<p class="mar-b-1 mar-t-05">

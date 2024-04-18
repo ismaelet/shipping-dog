@@ -2,6 +2,7 @@
 
 namespace Ecommerce;
 
+use App\Helpers\PreviewHelper;
 use App\Models\Ecommerce\Cart;
 use App\Models\Ecommerce\Product;
 use App\View\Components\Interactions\LikeButton;
@@ -57,10 +58,12 @@ class ViewManager {
 						<!--Image-->
 						<?php if ($order->product) { ?>
 							<a href="<?= $order->product ? $order->product->url() : '' ?>" class="img_cont">
-								<img src="<?= $order->product->image() ?>" class="img-fill">
+								<img src="<?= $order->image() ?>" class="img-fill">
 							</a>
 						<?php } else { ?>
-							<span></span>
+							<div>
+								<img src="<?= public_asset(PreviewHelper::PLACEHOLDER_IMAGE) ?>" class="img-fill">
+							</div>
 						<?php } ?>
 
 						<!--Data-->
@@ -94,7 +97,7 @@ class ViewManager {
 
 					</div>
 
-					<?php if (!$cart->status && !$cart->coupon && !$order->credit && $order->seller_id == Auth::id() && $cart->usableCredit() >= $order->price->price) { ?>
+					<?php if (!$cart->status && !$cart->coupon && !$order->credit && $order->seller_id == Auth::id() && $order->seller->credit() >= $order->price()) { ?>
 
 						<button class="use-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $order->id ?>">
 							<?= embed_icon('dollar') ?>

@@ -2,10 +2,9 @@
 
 use App\View\Components\Form\Input;
 use Ecommerce\ViewManager;
+use Illuminate\Support\Facades\Auth;
 use ViewManager\Ecommerce\CartFlowBar;
 use ViewManager\Ecommerce\CartRecap;
-
-
 
 ?>
 
@@ -35,7 +34,7 @@ use ViewManager\Ecommerce\CartRecap;
 					<h3 class="title">Metodo di spedizione</h3>
 
 					<p class="bott_txt">
-						<?php if (\App\Helpers\App::cartOld()->longDeliveryTime) { ?>
+						<?php if (cart()->longDeliveryTime()) { ?>
 							Il tuo ordine contiene un capo in <span class="txt-red txt-bold">preordine</span>. Se vuoi un <strong>tempo di consegna minore</strong>, ti consigliamo di selezionare solo magliette, felpe o accessori e con colore bianco, nero o grigio melange.<br>Se invece ti va bene la data di consegna indicata qui sotto, puoi lasciare l'ordine così com'è.<br><br>
 						<?php } ?>
 
@@ -60,13 +59,11 @@ use ViewManager\Ecommerce\CartRecap;
 				<section id="shipping" class="">
 					<div id="ship_cont">
 
-						<?php foreach ($shippingMethods as $shippingMethod) {
-							$shippingMethod->setAssociatedCart(\App\Helpers\App::cartOld());
-						?>
+						<?php foreach ($shippingMethods as $shippingMethod) { ?>
 
 							<label class="ship_row interactive">
 								<div class="checkbox">
-									<input type="radio" class="inp_cbx ship_cbx js-shipping-method js-cart-shipping-price-string" name="cbx_ship" value="<?= $shippingMethod->id ?>" <?= \App\Helpers\App::cartOld()->shippingMethodId == $shippingMethod->id ? 'checked' : '' ?> data-shipped="<?= $shippingMethod->shipped ? 1 : 0 ?>" data-cart-id="<?= \App\Helpers\App::cartOld()->id ?>" data-shipping-method-id="<?= $shippingMethod->id ?>" required>
+									<input type="radio" class="inp_cbx ship_cbx js-shipping-method js-cart-shipping-price-string" name="cbx_ship" value="<?= $shippingMethod->id ?>" <?= cart()->shipping_method_id == $shippingMethod->id ? 'checked' : '' ?> data-shipped="<?= $shippingMethod->isShipped() ? 1 : 0 ?>" data-cart-id="<?= cart()->id ?>" data-shipping-method-id="<?= $shippingMethod->id ?>" required>
 
 									<span></span>
 								</div>
@@ -74,10 +71,10 @@ use ViewManager\Ecommerce\CartRecap;
 								<div class="ship_box">
 									<h3 class="art_name">
 										<?= $shippingMethod->name ?><br>
-										<span class="date"><?= $shippingMethod->deliveryDateString ?></span>
+										<span class="date"><?= $shippingMethod->deliveryDateString(null, cart()->longDeliveryTime()) ?></span>
 									</h3>
-									<p class="order-list__description"><?= $shippingMethod->description ?></p>
-									<h3 class="price"><?= $shippingMethod->priceString ?></h3>
+									<p class="order-list__description"><?= $shippingMethod->desc ?></p>
+									<h3 class="price"><?= $shippingMethod->priceString(cart()->quantity) ?></h3>
 								</div>
 							</label>
 
@@ -85,7 +82,7 @@ use ViewManager\Ecommerce\CartRecap;
 
 							if (\App\Helpers\App::cartOld()->shippingMethodId == $shippingMethod->id) {
 
-								if ($shippingMethod->price && !\App\Helpers\App::cartOld()->couponId && !\App\Helpers\App::cartOld()->shippingWithCredit && \App\Helpers\App::cartOld()->usableCredit >= $shippingMethod->price) { ?>
+								if ($shippingMethod->price(cart()->quantity) && !cart()->coupon && !cart()->credit_ship && Auth::check() && Auth::user()->seller->credit() >= $shippingMethod->price(cart()->quantity)) { ?>
 
 									<button class="use-credit-btn credit-btn btn btn--secondary button--full-width mar-b-2" name="ship_credit">
 										<?= embed_icon('dollar') ?>
@@ -108,27 +105,27 @@ use ViewManager\Ecommerce\CartRecap;
 				</section>
 
 				<!-- Shipping address -->
-				<section id="address" class="address-form <?= \App\Helpers\App::cartOld()->localDelivery ? 'address-form--local-delivery' : '' ?>">
+				<section id="address" class="address-form <?= cart()->shipping_method->isLocalDelivery() ? 'address-form--local-delivery' : '' ?>">
 					<h3 class="title">Indirizzo</h3>
 
 					<div class="grid gap1">
 
-						<?= Input::render(['name' => 'full_name', 'placeholder' => 'Nominativo di spedizione', 'value' => $address->full_name, 'required' => true, 'trim' => true]) ?>
+						<?= Input::render(['name' => 'full_name', 'placeholder' => 'Nominativo di spedizione', 'value' => $address->full_name ?? '', 'required' => true, 'trim' => true]) ?>
 
 						<div class="field">
-							<input type="text" id="inp_addr" class="input delivery-input" name="address" placeholder="Indirizzo" value="<?= $address->address ?>" maxlength="30" autocomplete="address-line1" <?= !\App\Helpers\App::cartOld()->localDelivery ? 'required' : '' ?>>
-							<input type="text" id="inp_num" class="input delivery-input" name="number" placeholder="Numero civico" value="<?= $address->number ?>" maxlength="10" <?= !\App\Helpers\App::cartOld()->localDelivery ? 'required' : '' ?>>
+							<input type="text" id="inp_addr" class="input delivery-input" name="address" placeholder="Indirizzo" value="<?= $address->address ?? '' ?>" maxlength="30" autocomplete="address-line1" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
+							<input type="text" id="inp_num" class="input delivery-input" name="number" placeholder="Numero civico" value="<?= $address->number ?? '' ?>" maxlength="10" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
 						</div>
 
-						<input type="text" class="input delivery-input" name="city" placeholder="Città" value="<?= $address->city ?>" maxlength="30" autocomplete="address-level2" <?= !\App\Helpers\App::cartOld()->localDelivery ? 'required' : '' ?>>
+						<input type="text" class="input delivery-input" name="city" placeholder="Città" value="<?= $address->city ?? '' ?>" maxlength="30" autocomplete="address-level2" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
 
 						<div class="field">
-							<input type="text" class="input delivery-input" name="zip" placeholder="Codice postale" value="<?= trim($address->zip) ?>" maxlength="5" autocomplete="postal-code" <?= !\App\Helpers\App::cartOld()->localDelivery ? 'required' : '' ?>>
-							<input type="text" class="input delivery-input" name="region" placeholder="Provincia" value="<?= $address->region ?>" maxlength="2" autocomplete="address-level1" <?= !\App\Helpers\App::cartOld()->localDelivery ? 'required' : '' ?>>
+							<input type="text" class="input delivery-input" name="zip" placeholder="Codice postale" value="<?= trim($address->zip ?? '') ?>" maxlength="5" autocomplete="postal-code" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
+							<input type="text" class="input delivery-input" name="region" placeholder="Provincia" value="<?= $address->region ?? '' ?>" maxlength="2" autocomplete="address-level1" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
 						</div>
 
-						<input type="email" class="input" name="email" placeholder="Indirizzo e-mail" value="<?= $address->email ?>" maxlength="50" required autocomplete="email">
-						<input type="text" class="input js-input-no-space" name="phone" placeholder="Numero di telefono" value="<?= $address->phone ?>" maxlength="30" autocomplete="tel" required>
+						<input type="email" class="input" name="email" placeholder="Indirizzo e-mail" value="<?= $address->email ?? '' ?>" maxlength="50" required autocomplete="email">
+						<input type="text" class="input js-input-no-space" name="phone" placeholder="Numero di telefono" value="<?= $address->phone ?? '' ?>" maxlength="30" autocomplete="tel" required>
 
 					</div>
 

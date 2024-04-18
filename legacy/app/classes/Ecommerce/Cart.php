@@ -2,7 +2,9 @@
 
 namespace Ecommerce;
 
+use App\Models\Ecommerce\Cart as EcommerceCart;
 use App\Models\Ecommerce\InventoryItem;
+use App\Models\Ecommerce\Order as EcommerceOrder;
 use DBOld;
 use EmailService\Ecommerce\CartStatusUpdate;
 use DatabaseObject;
@@ -74,16 +76,6 @@ class Cart {
 	private function getStatusId() {
 		$statusId = $this->databaseEntry[self::STATUS_INDEX];
 
-		// if ($statusId == 2 && strtotime($this->time) < strtotime('-' . $this->shippingMethod->maximumWorkingDays . ' days')) {
-		// 	$statusId = 3;
-		// 	$this->updateStatusId($statusId, false);
-		// }
-
-		// if ($statusId == 3 && strtotime($this->time) < strtotime('-' . $this->shippingMethod->maximumRequiredDays . ' days')) {
-		// 	$statusId = 4;
-		// 	$this->updateStatusId($statusId, false);
-		// }
-
 		return $statusId;
 	}
 
@@ -107,6 +99,7 @@ class Cart {
 
 	private function getLongDeliveryTime() {
 		$longDeliveryTime = false;
+
 		foreach ($this->orders as $order) {
 			if ($order->type->preorder || $order->color->preorder) {
 				$longDeliveryTime = true;
@@ -362,7 +355,8 @@ class Cart {
 
 		if ($this->quantity)
 			DBOld::update(
-				self::TABLE . ' SET tot = ?, credit = ?, shipping_method_id = ?, shipping = ?, credit_ship = ? WHERE ' . self::INDEX . ' = ?',
+				'
+				carts SET tot = ?, credit = ?, shipping_method_id = ?, shipping = ?, credit_ship = ? WHERE id = ?',
 				[$this->price, $this->usedCredit, $this->shipping_method_id, $this->fullShippingPrice, $this->shippingWithCredit, $this->id]
 			);
 		else {
@@ -461,7 +455,8 @@ class Cart {
 	}
 
 	public function updateStepId(int $stepId) {
-		DBOld::update(self::TABLE . ' SET ' . self::STEP_INDEX . ' = ? WHERE ' . self::INDEX . '=?', [$stepId, $this->id]);
+		EcommerceCart::find($this->id)
+			->update(['step' => $stepId]);
 
 		$this->setStepId($stepId);
 
@@ -582,26 +577,28 @@ class Cart {
 
 	public function processOrders(): void {
 		foreach ($this->orders as $order) {
+			$order = EcommerceOrder::find($order->id);
+
 			$inventoryData = DBOld::row(
 				'
 				inventory.id as inventoryId
 				FROM inventory
 				INNER JOIN
-					items_types ON inventory.type_id = ' . Type::TABLE . '.' . Type::INDEX . '
+					items_types ON inventory.type_id = items_types.id
 				WHERE
-					design_id = ? AND (type_id = ? OR same_as_type_id = ?) AND colorId = ? AND position_id = ? AND size_id = ?',
-				[$order->design_id, $order->type_id, $order->type_id, $order->colorId, $order->position_id, $order->size_id]
+					design_id = ? AND (type_id = ? OR same_as_type_id = ?) AND color_id = ? AND position_id = ? AND size_id = ?',
+				[$order->design_id, $order->type_id, $order->type_id, $order->color_id, $order->position_id, $order->size_id]
 			);
 
 			if ($inventoryData) {
 				$inventoryId = $inventoryData['inventoryId'];
 
-				DBOld::update(Order::TABLE . ' SET inventory = 1 WHERE ' . Order::INDEX . ' = ?', [$order->id]);
+				DBOld::update('orders SET inventory = 1 WHERE id = ?', [$order->id]);
 				DBOld::delete('inventory WHERE id = ?', [$inventoryId]);
 			}
 
 			if ($this->customerId != $order->seller_id) {
-				DBOld::update(Seller::TABLE . ' SET credit = credit + ? WHERE ' . Seller::INDEX . ' = ?', [($order->gain * .1), $order->seller_id]);
+				DBOld::update('stores SET credit = credit + ? WHERE user_id = ?', [($order->gain * .1), $order->seller_id]);
 			}
 		}
 	}

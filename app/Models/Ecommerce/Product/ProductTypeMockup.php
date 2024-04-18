@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductTypeMockup extends Model {
 
-
 	protected $table = 'items_mockups';
 	protected $fillable = ['type_id', 'position_id', 'pos_x_min', 'pos_x_def', 'pos_y_min', 'pos_y_def', 'siz_x_max', 'siz_x_def', 'siz_y_max'];
 
 	/**
 	 * Get mockup by type ID
 	 */
-	public static function getByTypeId(int $type_id, ?int $position_id = null): self {
+	public static function firstByTypeId(int $type_id, ?int $position_id = null): self {
 		if ($position_id) {
 			return self::where('type_id', $type_id)->where('position_id', $position_id)->first();
 		} else {

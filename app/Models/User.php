@@ -80,8 +80,8 @@ class User extends Authenticatable {
 	/**
 	 * Get the user's shop
 	 */
-	public function shop(): HasOne {
-		return $this->hasOne(Seller::class, 'user_id', 'id');
+	public function seller(): HasOne {
+		return $this->hasOne(Seller::class);
 	}
 
 	/**

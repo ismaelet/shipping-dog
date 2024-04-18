@@ -27,7 +27,9 @@ class EcommerceHelper {
 		}
 
 		if (isset($_SESSION['cart_id'])) {
-			return Cart::find($_SESSION['cart_id']);
+			return Cart::where('id', $_SESSION['cart_id'])
+				->where('status', 0)
+				->first();
 		}
 
 		return null;
@@ -43,7 +45,7 @@ class EcommerceHelper {
 	/**
 	 * Format a price
 	 */
-	public static function price(float $price, bool $forceNumber = false): string {
+	public static function formatPrice(float $price, bool $forceNumber = false): string {
 		if ($price || $forceNumber) {
 			return StringHelper::formatWithComma($price) . ' €';
 		} else {

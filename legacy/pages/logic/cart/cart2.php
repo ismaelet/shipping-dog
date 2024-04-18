@@ -1,31 +1,21 @@
 <?php
 
+use App\Models\Ecommerce\Address as EcommerceAddress;
+use App\Models\Ecommerce\Order as EcommerceOrder;
+use App\Models\Ecommerce\ShippingMethod as EcommerceShippingMethod;
 use Ecommerce\Address;
-use Ecommerce\Cart;
 use Ecommerce\Coupon;
-use Ecommerce\Order;
-use Ecommerce\ShippingMethod;
-
-
-use function Ecommerce\cart_id;
-use function Ecommerce\customerId;
 
 // setup variables
 $loc = ViewOld::get('step');
 $error = $_GET['error'] ?? false;
 
 // address
-$addressId = DBOld::find('id FROM ' . Address::TABLE . ' WHERE ' . Address::CART_INDEX . ' = ?', [\App\Helpers\App::cartOld()->id]);
+$address = EcommerceAddress::where('cart_id', cart()->id)->first();
 
-if (!$addressId && auth()->id()) {
-	$addressId = DBOld::find('id FROM ' . Address::TABLE . ' WHERE ' . Address::CUSTOMER_INDEX . ' = ?', [auth()->id()]);
+if (!$address && auth()->check()) {
+	$address = EcommerceAddress::where('user_id', auth()->id())->latest()->first();
 }
-
-if (!$addressId) {
-	$addressId = DBOld::add(Address::TABLE . ' (cart_id) VALUES (?)', [\App\Helpers\App::cartOld()->id]);
-}
-
-$address = new Address($addressId);
 
 // setup cart
 $countries = DBOld::select('* FROM sys_country WHERE hidden = 0 ORDER BY name ASC');
@@ -38,18 +28,15 @@ $warning = warning_banner();
 */
 $shippingZones = DBOld::find('zone FROM sys_country WHERE id = ?', [\App\Helpers\App::cartOld()->countryId]);
 
-if (\App\Helpers\App::cartOld()->shippingMethodId != 1) {
+if (!in_array(cart()->shipping_method_id, EcommerceShippingMethod::FREE_SHIPPING_METHODS)) {
 	// if the shipping isn't free, fetch the shipping methods
-	$shippingMethodRes = DBOld::select('id FROM sys_shipping WHERE FIND_IN_SET(tag, ?) > 0 ORDER BY tier DESC', [$shippingZones]);
+	$shippingMethods =  EcommerceShippingMethod::whereRaw('FIND_IN_SET(tag, "' . $shippingZones . '") > 0')
+		->orderByDesc('tier')
+		->get();
 } else {
 	// if the shipping is free, fetch only the free shipping method
-	$shippingMethodRes = DBOld::select('id FROM sys_shipping WHERE id = 1');
+	$shippingMethods = EcommerceShippingMethod::where('id', EcommerceShippingMethod::FREE_SHIPPING_METHODS[0])->get();
 }
-
-$shippingMethods = rows_to_objects($shippingMethodRes, ShippingMethod::class);
-
-// checkout
-
 
 /**
  * Save the address
@@ -66,8 +53,9 @@ if (!empty($_POST)) {
 	$phone = trim($_POST['phone']);
 	$security = random_string();
 
-	DBOld::put(Address::TABLE, [
-		'cart_id' => \App\Helpers\App::cartOld()->id,
+	EcommerceAddress::updateOrCreate([
+		'cart_id' => cart()->id,
+	], [
 		'user_id' => auth()->id() ?: null,
 		'full_name' => $full_name,
 		'address' => $addr,
@@ -78,12 +66,16 @@ if (!empty($_POST)) {
 		'email' => $email,
 		'phone' => $phone,
 		'security' => $security
-	], \App\Helpers\App::cartOld()->addressId);
+	]);
 }
 
 // remove item
 if (isset($_POST['remove'])) {
-	(new Order($_POST['remove']))->delete();
+	$order = EcommerceOrder::find($_POST['remove']);
+
+	if ($order) {
+		$order->delete();
+	}
 
 	redirect_old();
 }

@@ -18,7 +18,7 @@ $sellerInput = [
 	'name' => 'seller_id',
 	'text' => 'Negozio',
 	'name-show' => null,
-	'value' => $product ? $product->seller_id : null,
+	'value' => $product ? $product->user_id : null,
 	'value-show' => $product ? $product->seller->name : null,
 	'required' => true,
 ];

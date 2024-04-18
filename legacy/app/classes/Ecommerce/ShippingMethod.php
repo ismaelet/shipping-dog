@@ -48,7 +48,7 @@ class ShippingMethod {
 	}
 
 	private function getName() {
-		return $this->name;
+		return $this->databaseEntry['name'];;
 	}
 
 	private function getDescription() {
@@ -84,6 +84,9 @@ class ShippingMethod {
 		return format_price($this->price, false);
 	}
 
+	/**
+	 * Get the delivery time
+	 */
 	private function getLocalDelivery() {
 		return $this->id == self::NO_DELIVERY_SHIPPING_METHOD_ID;
 	}

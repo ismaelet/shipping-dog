@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ecommerce\Cart as EcommerceCart;
 use Ecommerce\Cart;
 
 function cart_setup_old($user_idID, $stepId = false) {
@@ -170,7 +171,7 @@ function cart_flow($cart, $loc) {
 <?php }
 
 function cart_recap($cart, $active = true) {
-	$credit_used = 0;
+	$cart = EcommerceCart::find($cart->id);
 ?>
 
 	<div id="rec-pan">
@@ -181,31 +182,24 @@ function cart_recap($cart, $active = true) {
 
 			<div class="chck_item">
 				<p class="chck_name">Articoli</p>
-				<p class="chck_pric js-cart-products-price"><?= $cart->fullProductPriceString ?></p>
+				<p class="chck_pric js-cart-products-price"><?= $cart->grossOrderPriceString() ?></p>
 			</div>
 
 			<div class="chck_item">
 				<p class="chck_name">Spedizione</p>
-				<p id="chck_totShip" class="chck_pric js-cart-shipping-price-string js-recap-shipping-price" data-shipping-method-id="<?= $cart->shippingMethodId ?>"><?= $cart->shippingPriceString ?></p>
+				<p id="chck_totShip" class="chck_pric js-cart-shipping-price-string js-recap-shipping-price" data-shipping-method-id="<?= $cart->shipping_method_id ?>"><?= $cart->shippingPriceString() ?></p>
 			</div>
 
-			<?php if ($cart->discount) { ?>
+			<?php if ($cart->orderDiscount()) { ?>
 				<div class="chck_item">
 					<p class="chck_name">Sconto</p>
-					<p id="chck_totShip" class="chck_pric js-cart-discount">- <?= $cart->discountString ?></p>
-				</div>
-			<?php } ?>
-
-			<?php if ($credit_used) { ?>
-				<div class="chck_item">
-					<p class="chck_name" style="color: #ff0000;">Credito</p>
-					<p id="chck_totShip" class="chck_pric" style="color: #ff0000;"><?= format(-$credit_used) ?>€</p>
+					<p id="chck_totShip" class="chck_pric js-cart-discount">- <?= $cart->orderDiscountString() ?></p>
 				</div>
 			<?php } ?>
 
 			<div id="total" class="chck_item">
 				<p class="chck_name">Totale</p>
-				<p class="chck_pric js-cart-price-string"><?= $cart->priceString ?></p>
+				<p class="chck_pric js-cart-price-string"><?= $cart->priceString() ?></p>
 			</div>
 
 			<?php if ($active) { ?>

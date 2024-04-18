@@ -14,7 +14,7 @@ if (!$type->id) {
 
 ViewOld::setTitle('Mockup ' . $type->fullName);
 
-$mockupData = ProductTypeMockup::getByTypeId($type_id);
+$mockupData = ProductTypeMockup::firstByTypeId($type_id);
 
 $mockups = [];
 

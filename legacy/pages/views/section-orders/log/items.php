@@ -72,7 +72,7 @@ use App\View\Components\Form\SearchInput;
 
 					// Get the orders
 					$orders = $filteredOrders
-						->where('seller_id', '=', $product->seller_id)
+						->where('seller_id', '=', $product->user_id)
 						->where('design_id', '=', $product->design_id)
 						->sortBy('size_id')
 						->sortBy('color_id')

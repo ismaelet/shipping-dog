@@ -384,16 +384,11 @@ html[data-color-scheme='dark'] .item-panel .wrapper {
 }
 
 .item-panel .close-icon {
-	background-color: var(--text-color-strong);
 	width: 1.2rem;
 	height: 1.2rem;
 	position: absolute;
 	top: 1rem;
 	right: 1rem;
-}
-
-.item-panel .close-icon:hover {
-	background-color: var(--clr-1);
 }
 
 .item-panel .tabs {

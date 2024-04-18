@@ -5,7 +5,6 @@ namespace App\Models\Ecommerce;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Seller\Follower;
 use App\Models\Ecommerce\Seller\SellerPrice;
-use App\Models\Traits\ModelCache;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,23 +12,27 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Seller class
- * 
- * @method earned()
- * @method credit()
  */
 class Seller extends Model {
 
-	use ModelCache;
-
-	protected $primaryKey = 'user_id';
 	protected $table = 'stores';
 	protected $fillable = [];
 
+	/***************************
+	 * * Relationship instances *
+	 ***************************/
 	/**
 	 * Get the seller's designs
 	 */
 	public function designs(): HasMany {
 		return $this->hasMany(Design::class, 'user_id', 'user_id');
+	}
+
+	/**
+	 * Get the seller's orders
+	 */
+	public function orders(): HasMany {
+		return $this->hasMany(Order::class, 'seller_id', 'user_id');
 	}
 
 	/**
@@ -42,7 +45,7 @@ class Seller extends Model {
 	/**
 	 * Get the seller's prices
 	 */
-	public function prices() {
+	public function prices(): HasMany {
 		return $this->hasMany(SellerPrice::class, 'seller_id', 'user_id');
 	}
 
@@ -52,19 +55,14 @@ class Seller extends Model {
 	public function logoGroups(): HasMany {
 		return $this->hasMany(LogoGroup::class, 'seller_id', 'user_id');
 	}
-
+	/************************
+	 * * Utility methods *
+	 ************************/
 	/**
 	 * Get the formatted time string
 	 */
 	public function timeString(): string {
 		return date('d/m/Y', strtotime($this->time));
-	}
-
-	/**
-	 * Get the seller's orders
-	 */
-	public function orders(): HasMany {
-		return $this->hasMany(Order::class, 'seller_id', 'user_id');
 	}
 
 	/**
@@ -78,76 +76,44 @@ class Seller extends Model {
 	 * Get the seller's total sales
 	 */
 	public function earned(): float {
-		// Return cached value if exists
-		if ($this->getCache('earned') !== null) {
-			return $this->getCache('earned');
-		}
-
 		// Get the total sales
 		$count = $this->orders()
-			->join('carts', 'orders.cart_id', '=', 'carts.id')
-			->where('carts.status', '>', 0)
-			->selectRaw('SUM((productGain - gain_disc) * orders.quantity) as totalGain')
+			->where('status', '>', 0)
+			->selectRaw('SUM((productGain - gain_disc) * quantity) as totalGain')
 			->first();
 
 		// Round the value to 2 decimals
 		$earned = $count->totalGain;
 
 		if ($earned !== null) {
-			return $this->setCache('earned', round($earned, 2));
-		} else {
-			return $this->setCache('earned', 0);
+			return round($earned, 2);
 		}
+
+		return 0;
 	}
 
 	/**
 	 * Get the seller's credit
 	 */
-	public function credit() {
-		// Return cached value if exists
-		if ($this->getCache('credit') !== null) {
-			return $this->getCache('credit');
-		}
-
-		return $this->setCache('credit', round($this->earnedCredit() - $this->usedOrderCredit() - $this->usedShippingCredit(), 2));
+	public function credit(): float {
+		return round($this->earnedCredit() - $this->usedOrderCredit() - $this->usedShippingCredit(), 2);
 	}
 
-	/**
-	 * Get the seller's earned credit
-	 */
 	private function earnedCredit(): float {
-		if ($this->getCache('earnedCredit') !== null) {
-			return $this->getCache('earnedCredit');
-		}
-
-		return $this->setCache('earnedCredit', round($this->earned() * .1, 2));
+		return round($this->earned() * .1, 2);
 	}
 
-	/**
-	 * Get the seller's used credit to pay orders
-	 */
 	private function usedOrderCredit(): float {
-		if ($this->getCache('usedOrderCredit') !== null) {
-			return $this->getCache('usedOrderCredit');
-		}
-
 		$usedOrderCredit = $this->orders()
 			->where('user_id', '=', $this->user_id)
 			->where('credit', '=', 1)
-			->selectRaw('SUM((fullProductPrice - price_disc) * orders.quantity) as usedCredit')
-			->first()->usedCredit ?: 0;
+			->selectRaw('SUM((fullProductPrice - price_disc) * quantity) as usedCredit')
+			->value('usedCredit');
 
-		return $this->setCache('usedOrderCredit', round($usedOrderCredit, 2));
+		return $usedOrderCredit ? round($usedOrderCredit, 2) : 0;
 	}
 
-	/**
-	 * Get the seller's used credit to pay shipping
-	 */
 	private function usedShippingCredit(): float {
-		if ($this->getCache('usedShippingCredit') !== null) {
-			return $this->getCache('usedShippingCredit');
-		}
-
 		$usedShippingCredit = Cart::whereHas('orders', function ($query) {
 			$query->where('user_id', '=', $this->user_id);
 		})
@@ -155,9 +121,9 @@ class Seller extends Model {
 			->selectRaw('
 			SUM(CASE WHEN quantity = 1 THEN 5.9 ELSE 7.4 END) AS usedCredit
 		')
-			->first()->usedCredit ?: 0;
+			->value('usedCredit');
 
-		return $this->setCache('usedShippingCredit', round($usedShippingCredit, 2));
+		return $usedShippingCredit ? round($usedShippingCredit, 2) : 0;
 	}
 
 	/**
@@ -189,9 +155,7 @@ class Seller extends Model {
 		return public_asset('users/icons/0.jpg');
 	}
 
-	/**
-	 * Get the shops awaiting approval
-	 */
+	// * Static methods * //
 	public static function awaitingApproval(): Collection {
 		return self::where('status', 0)
 			->where('user_id', '!=', 2)
@@ -201,29 +165,5 @@ class Seller extends Model {
 					->where('status', 1);
 			})
 			->get();
-	}
-
-	/**
-	 * Delete the seller and clean up the related data
-	 */
-	public function deleteAndClean() {
-		// Delete designs
-		foreach ($this->designs as $design) {
-			$design->deleteAndClean(true);
-		}
-
-		// Delete logo groups
-		foreach ($this->logoGroups as $logoGroup) {
-			$logoGroup->deleteAndClean();
-		}
-
-		// Delete followers
-		$this->followers()->delete();
-
-		// Delete prices
-		$this->prices()->delete();
-
-		// Delete the seller
-		$this->delete();
 	}
 }

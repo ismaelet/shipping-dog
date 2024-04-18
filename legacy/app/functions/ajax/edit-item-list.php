@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Ecommerce\Product as EcommerceProduct;
+use App\Models\Ecommerce\Product\ProductMockup;
 use App\Models\Ecommerce\Product\ProductType;
+use App\Models\Ecommerce\Product\ProductTypeMockup;
 use Ecommerce\Design;
 use Ecommerce\Product;
 use Ecommerce\Product\Color;
@@ -95,7 +97,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 				<div class="wrapper">
 
-					<div class="close-icon item-panel-close icon clickable bgr-c900 bgr-c1-h" <?= embed_icon('actions/close') ?>></div>
+					<div class="close-icon item-panel-close icon clickable text-neutral-700"><?= embed_icon('close') ?></div>
 
 					<div class="content">
 
@@ -106,17 +108,19 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 								$enabled = in_array($position->id, $oldProduct->availablePositionIds);
 
-								$base = DBOld::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$oldProduct->type->id, $position->id]);
-								$mockup = DBOld::row('* FROM items_previews WHERE product_id = ? AND position_id = ?', [$oldProduct->id, $position->id]);
+								$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $position->id);
+								$productMockup = ProductMockup::where('product_id', $product->id)
+									->where('position_id', $position->id)
+									->first();
 
-								$pX = $mockup['pos_x'] ?? $base['pos_x_def'];
-								$pY = $mockup['pos_y'] ?? $base['pos_y_def'];
-								$sX = $sY = $mockup['size'] ?? $base['siz_x_def'];
+								$pX = $productMockup->pos_x ?? $productTypeMockup->pos_x_def;
+								$pY = $productMockup->pos_y ?? $productTypeMockup->pos_y_def;
+								$sX = $sY = $productMockup->size ?? $productTypeMockup->siz_x_def;
 
-								$sX_max = $base['siz_x_max'];
-								$sY_max = $base['siz_y_max'];
-								$pX_min = $base['pos_x_min'];
-								$pY_min = $base['pos_y_min'];
+								$sX_max = $productTypeMockup->siz_x_max;
+								$sY_max = $productTypeMockup->siz_y_max;
+								$pX_min = $productTypeMockup->pos_x_min;
+								$pY_min = $productTypeMockup->pos_y_min;
 
 								$orientation = $oldProduct->design->ratio > $sX_max / $sY_max;
 
@@ -246,18 +250,22 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 								<!-- Color tab -->
 								<?php } else {
-								$base = DBOld::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$oldProduct->type->id, $oldProduct->position_id]);
-								$mockup = DBOld::row('* FROM items_previews WHERE product_id = ? AND position_id = ?', [$oldProduct->id, $oldProduct->position_id]);
 
-								if ($base || $mockup) {
-									$pX = $mockup['pos_x'] ?? $base['pos_x_def'];
-									$pY = $mockup['pos_y'] ?? $base['pos_y_def'];
-									$sX = $sY = $mockup['size'] ?? $base['siz_x_def'];
+								$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $product->defaultPositionId());
 
-									$sX_max = $base['siz_x_max'];
-									$sY_max = $base['siz_y_max'];
-									$pX_min = $base['pos_x_min'];
-									$pY_min = $base['pos_y_min'];
+								$productMockup = ProductMockup::where('product_id', $product->id)
+									->where('position_id', $product->defaultPositionId())
+									->first();
+
+								if ($productTypeMockup || $productMockup) {
+									$pX = $productMockup->pos_x ?? $productTypeMockup->pos_x_def;
+									$pY = $productMockup->pos_y ?? $productTypeMockup->pos_y_def;
+									$sX = $sY = $productMockup->size ?? $productTypeMockup->siz_x_def;
+
+									$sX_max = $productTypeMockup->siz_x_max;
+									$sY_max = $productTypeMockup->siz_y_max;
+									$pX_min = $productTypeMockup->pos_x_min;
+									$pY_min = $productTypeMockup->pos_y_min;
 
 									$orientation = $oldProduct->design->ratio > $sX_max / $sY_max;
 
@@ -370,7 +378,8 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 															while ($row = $res_colorD->fetch_assoc()) {
 
-																$color = new Color($row['id']) ?>
+																$color = new Color($row['id']);
+															?>
 
 																<label class="inlb color-box <?php if (DBOld::exists("items WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'active' ?>">
 

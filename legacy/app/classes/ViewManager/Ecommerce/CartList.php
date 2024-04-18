@@ -26,7 +26,7 @@ class CartList {
 				<div class="cart-list__wrapper">
 					<div class="cart-list__header">
 						<p class="cart-list__field cart-list__field--header">Ordine</p>
-						<p class="cart-list__field cart-list__field--header">Prodotto</p>
+						<p class="cart-list__field cart-list__field--header">Prodotti</p>
 						<p class="cart-list__field cart-list__field--header">Totale</p>
 						<p class="cart-list__field cart-list__field--header">Stato</p>
 						<p class="cart-list__field cart-list__field--header">Data</p>
@@ -54,7 +54,7 @@ class CartList {
 							</p>
 							<p class="cart-list__field"><?= $cart->timeString() ?></p>
 							<p class="cart-list__field">
-								<a class="cart-list__link text-link" href="<?= $cart->url() ?>">
+								<a class="cart-list__link text-link" href="<?= $cart->recapUrl() ?>">
 									visualizza
 								</a>
 							</p>

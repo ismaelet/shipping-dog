@@ -3,6 +3,7 @@
 namespace Ecommerce;
 
 use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Product as EcommerceProduct;
 use DateTime;
 use DBOld;
 use Ecommerce\Design\Logo;
@@ -267,9 +268,14 @@ class Order {
 		$quantity = $config['quantity'] ?? 1;
 
 		if ($productId) {
-			$product = (new Product($productId))->setLogoId($logo_id);
+			$product = EcommerceProduct::find($productId);
+			$product->color_id = $colorId;
+			$product->position_id = $position_id;
+			$product->size_id = $size_id;
+			$product->logo_id = $logo_id;
+
 			$priceSize = DBOld::find('price FROM items_sizes WHERE id = ?', [$size_id]);
-			$price = $product->fullPrice + $priceSize;
+			$price = $product->fullPrice() + $priceSize;
 
 			if (Auth::check()) {
 				$cart = Cart::where('user_id', Auth::id())->where('status', 0)->first();
@@ -280,6 +286,11 @@ class Order {
 			} else {
 				if (isset($_SESSION['cart_id'])) {
 					$cart = Cart::find($_SESSION['cart_id']);
+
+					if (!$cart) {
+						$cart = Cart::create();
+						$_SESSION['cart_id'] = $cart->id;
+					}
 				} else {
 					$cart = Cart::create();
 					$_SESSION['cart_id'] = $cart->id;
@@ -291,10 +302,10 @@ class Order {
 			// add order
 			$orderId = DBOld::add(
 				'orders (user_id, cart_id, product_id, seller_id, design_id, type_id, color_id, size_id, gender_id, position_id, logo_id, fullProductPrice, price_disc, productGain, quantity)',
-				[Auth::id() ?: null, $cart->id, $product->id, $product->seller_id, $product->design_id, $product->type->id, $colorId, $size_id, $genderId, $position_id, $logo_id, $price, $product->customerDiscount, $product->customerGain, $quantity]
+				[Auth::id() ?: null, $cart->id, $product->id, $product->user_id, $product->design_id, $product->type->id, $colorId, $size_id, $genderId, $position_id, $logo_id, $price, $product->customerDiscount(), $product->customerGain(), $quantity]
 			);
 
-			DBOld::update(OldCart::TABLE . ' SET quantity = quantity + ? WHERE ' . OldCart::INDEX . ' = ?', [$quantity, $cart->id]);
+			$cart->updateOrders();
 
 			if ($oldCart->couponId) {
 				$couponId = $oldCart->couponId;

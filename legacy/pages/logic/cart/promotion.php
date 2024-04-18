@@ -1,15 +1,7 @@
 <?php
 
-
-use function Ecommerce\cart_id;
-use function Ecommerce\customerId;
-
-$cart = \App\Helpers\App::cartOld();
-
 $_SESSION['payment_type'] = 'buy';
-$_SESSION['payment_cart_id'] = $cart_id = $cart->id;
-
-$user_idID = customerId();
+$_SESSION['payment_cart_id'] = $cart_id = cart()->id;
 
 ob_start();
 

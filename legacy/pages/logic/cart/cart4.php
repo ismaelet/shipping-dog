@@ -1,7 +1,5 @@
 <?php
 
-
-
 // setup variables
 $warning = warning_banner();
 

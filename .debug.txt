@@ -33,12 +33,12 @@
 		[V] Check if email is received
 		[?] Try to reset the password
 
-[X] Seller dashboard
+[V] Seller dashboard
 	[V] Settings
 		[V] Edit the settings
 		[?] Reupload the icon
 		[?] Reupload the cover
-	[X] Porfolio
+	[V] Porfolio
 		[V] List
 		[V] Add
 		[V] Edit
@@ -50,31 +50,32 @@
 		[V] Index
 		[V] Create
 
-[X]	Profile
+[V]	Profile
 	[V] Feed
 	[V] Personal data
 		[V] Try to edit the data
 		[?] Try to delete the account
-	[X] Order list
-		[X] Order page
+	[V] Order list
+		[V] Order page
+		[?] Edit address
 	[V] Wishlist
 
-[X] Cart
-	[X] Add order to cart as guest
-	[X] Add order to cart as user
-	[X] Change shipping method
-	[X] Add coupon
-	[X] Pay with credit
-	[X] Paypal redirect
+[V] Cart
+	[V] Add order to cart as guest
+	[V] Add order to cart as user
+	[V] Change shipping method
+	[V] Add coupon
+	[?] Pay with credit
+	[V] Paypal redirect
 
-[X] Order confirmation
-	[X] Order confirmation
+[V] Order confirmation
+	[V] Order confirmation
+		[V] Free product
 		[?] Normal payment
-		[X] Free product
-	[?] Confirmation email
+	[V] Confirmation email
 
 [X] Support
-	[X] Order status
+	[V] Order status
 	[X] Change size
 		[X] Paypal redirect
 		[?] Change confirmation

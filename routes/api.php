@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DesignController;
 use App\Http\Controllers\Api\FollowerController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\LogoController;
@@ -16,6 +17,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+/**
+ * Designs
+ */
+Route::resource('/designs', DesignController::class)->only(['update']);
 
 /**
  * Products
@@ -36,7 +42,3 @@ Route::resource('/likes', LikeController::class)->only(['store', 'destroy']);
  * Followers
  */
 Route::resource('/followers', FollowerController::class)->only(['store', 'destroy']);
-
-// RouteOld::add('/api/unlike', function () {
-// 	echo json_encode(LikeController::unlike());
-// });

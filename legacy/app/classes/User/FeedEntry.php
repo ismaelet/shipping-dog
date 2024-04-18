@@ -2,6 +2,7 @@
 
 namespace User;
 
+use App\Models\Ecommerce\Order as EcommerceOrder;
 use DBOld;
 use DynamicProperties;
 use Ecommerce\Design;
@@ -51,7 +52,7 @@ class FeedEntry {
 	}
 
 	private function getorder() {
-		return $this->type_id == 2 ? new Order($this->event_id) : null;
+		return $this->type_id == 2 ? EcommerceOrder::find($this->event_id) : null;
 	}
 
 	private function getseller() {
@@ -69,7 +70,7 @@ class FeedEntry {
 				break;
 
 			case 2:
-				$text = 'Hai venduto <strong>' . $this->order->quantity . ' x</strong> <a class="design" href="' . $this->order->product->clientUrl . '">' . $this->order->product->name . '</a> per <strong>' . $this->order->gainString . '</strong>';
+				$text = 'Hai venduto <strong>' . $this->order->quantity . ' x</strong> <a class="design" href="' . $this->order->product->url() . '">' . $this->order->product->name . '</a> per <strong>' . $this->order->gainString . '</strong>';
 				break;
 
 			case 3:
@@ -99,10 +100,10 @@ class FeedEntry {
 				return public_asset('users/icons/0.jpg');
 			case 2:
 			case 5:
-				return $this->order->product->image;
+				return $this->order->image();
 			case 3:
 			case 4:
-				return $this->profile->icon;
+				return $this->profile->icon();
 			default:
 				return null;
 		}
