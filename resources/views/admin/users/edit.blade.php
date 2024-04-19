@@ -15,6 +15,10 @@
         <x-form.group>
             <x-inputs.label for="email">E-mail</x-inputs.label>
             <x-inputs.input name="email" placeholder="E-mail" value="{{ $record ? $record->email : '' }}" />
+
+            @error('email')
+                <x-inputs.warning>{{ $message }}</x-inputs.warning>
+            @enderror
         </x-form.group>
 
     </x-dashboard.form.panel>

@@ -4,8 +4,6 @@ use App\Http\Controllers\Admin\Pages\DashboardController;
 use App\Http\Controllers\Admin\Pages\LabelGeneratorController;
 use App\Http\Controllers\Admin\Pages\OrderLogController;
 use App\Http\Controllers\Admin\Pages\ProductLogController;
-use App\Http\Controllers\Admin\Resources\AdminCategoryController;
-use App\Http\Controllers\Admin\Resources\NewsletterSubscriberController;
 use App\Http\Controllers\Admin\Resources\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,15 +22,8 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 	 * * Resources
 	 */
 	// Users
-	Route::resource('users', UserController::class)
-		->only(['index', 'edit', 'update', 'destroy']);
-
-	// Newsletters
-	Route::resource('newsletter-subscribers', NewsletterSubscriberController::class)
-		->only(['index', 'destroy']);
-
-	// Settings - Categories
-	Route::resource('admin-categories', AdminCategoryController::class);
+	Route::resource('users', UserController::class)->only(['index', 'edit', 'update', 'destroy']);
+	Route::post('/users/{id}/login', [UserController::class, 'login'])->name('users.login');
 
 	/**
 	 * * Custom routes

@@ -60,8 +60,9 @@ trait ResourceIndexController {
 	private function records(Request $request): Collection {
 		$records = clone $this->query;
 		$currentPage = $request->page ?: 1;
+		$orderBy = $this->orderBy($request);
 
-		foreach ($this->orderBy($request) as $field => $direction) {
+		foreach ($orderBy as $field => $direction) {
 			$records->orderBy($field, $direction);
 		}
 

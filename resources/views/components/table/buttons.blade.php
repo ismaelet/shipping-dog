@@ -27,9 +27,9 @@
             @break
 
             @default
-                @if (isset($button['name']))
-                    {{-- Custom button --}}
-                    <button type="submit" name="login" title="{{ $button['label'] }}" @class([
+                <form action="{{ route('admin.' . $button['route'], $record->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" title="{{ $button['label'] }}" @class([
                         ...$classes,
                         'hover:text-primary' => $button['color'] == 'primary',
                         'hover:text-green' => $button['color'] == 'green',
@@ -39,13 +39,7 @@
                         value="{{ $record->id }}">
                         {!! embed_icon($button['icon']) !!}
                     </button>
-                @else
-                    {{-- Custom link --}}
-                    <a href="{{ str_replace('{id}', $record->id, $button['url']) }}" title="{{ $button['label'] }}"
-                        @class($classes)>
-                        {!! embed_icon($button['icon']) !!}
-                    </a>
-                @endif
+                </form>
         @endswitch
     @endforeach
 </div>

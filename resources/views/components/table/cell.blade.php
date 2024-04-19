@@ -3,7 +3,9 @@
 @php
     $editRoute = str_replace('index', 'edit', request()->route()->getName());
     $modelName = Str::singular($record->getTable());
-    $editRoute = Route::has($editRoute) ? route($editRoute, [$modelName => $record->id]) : null;
+    $editRoute = Route::has($editRoute)
+        ? route($editRoute, [$modelName => $record->id, 'index_parameters' => json_encode(request()->all())])
+        : null;
 @endphp
 
 <td class="align-middle">

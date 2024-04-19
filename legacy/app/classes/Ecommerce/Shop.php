@@ -62,8 +62,9 @@ class Shop {
 
 		// Start building the query
 		$products = Product::join('stores', 'items.user_id', '=', 'stores.user_id')
+			->leftJoin('designs', 'items.design_id', '=', 'designs.id')
 			->where('items.status', 1)
-			->where('deleted', 0);
+			->where('items.deleted', 0);
 
 		if ($this->id) {
 			// Filter for a specific shop
@@ -178,7 +179,7 @@ class Shop {
 				<p class="sort_txt">&middot;</p>
 
 				<label>
-					<input type="checkbox" class="sort-cbx hidden" name="sort" value="pop" <?php if ($this->sort == 'popular') echo 'checked' ?>>
+					<input type="checkbox" class="sort-cbx hidden" name="sort" value="popular" <?php if ($this->sort == 'popular') echo 'checked' ?>>
 					<p class="sort_txt clickable">Popolari</p>
 				</label>
 

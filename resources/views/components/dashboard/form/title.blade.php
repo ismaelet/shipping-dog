@@ -4,14 +4,15 @@
 
 @php
     $backRouteName = ArrayHelper::explodeLast('.', request()->route()->getName())[0] . '.index';
+    $backRouteParameters = request()->index_parameters ? json_decode(request()->index_parameters, true) : null;
+    $backRoute = $backRouteParameters ? route($backRouteName, $backRouteParameters) : route($backRouteName);
     $title = str_replace('Modifica:', '<span class=\'font-light\'>Modifica:</span> ', $title);
 @endphp
 
 <div class="flex gap-4 items-center">
 
     @if (Route::has($backRouteName))
-        <a class="border rounded w-10 aspect-square hover:text-neutral-700 transition-colors"
-            href="{{ route($backRouteName) }}">
+        <a class="border rounded w-10 aspect-square hover:text-neutral-700 transition-colors" href="{{ $backRoute }}">
             {!! embed_icon('navigation/previous', ['fill-none', 'h-1/3']) !!}
         </a>
     @endif

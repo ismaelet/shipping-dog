@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Pages;
 
 use App\Http\Controllers\Controller;
-use App\Models\Ecommerce\Cart;
 
 class DashboardController extends Controller {
 

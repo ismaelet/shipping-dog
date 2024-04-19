@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 class ResourceController extends Controller {
 
-	use ResourceIndexController, ResourceEditController;
+	use ResourceIndexController, ResourceEditController, ResourceUpdateController;
 
 	/**
 	 * Get the section.

@@ -6,7 +6,7 @@
 [V] Search
 
 [V] Shop
-	[V] Search filter
+	[V] Search filter (popular, new, custom => pokememes)
 	[V] Sort filter
 	[V] Gender filter
 	[V] Accessory filter
@@ -93,8 +93,8 @@
 		[V] Order log
 		[V] Product log
 	[V] Users
-		[V] Index
-		[V] Edit
+		[X] Index
+		[X] Edit
 	[X] Shops
 		[X] Payments
 			[X] Index

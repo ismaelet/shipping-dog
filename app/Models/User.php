@@ -22,12 +22,7 @@ class User extends Authenticatable {
 	/**
 	 * The attributes that are mass assignable
 	 */
-	protected $fillable = [
-		'username',
-		'name',
-		'email',
-		'password',
-	];
+	protected $fillable = ['username', 'first_name', 'last_name', 'email', 'password',];
 
 	/**
 	 * The attributes that should be hidden for serialization
