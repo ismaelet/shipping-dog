@@ -11,7 +11,7 @@ $pageConfig['row-action'] = 'add?id={{id}}';
 $queryConfig['table'] = 'items_types';
 $queryConfig['index'] = 'id';
 $query['where-search'] = "
-	ID = ? OR
+	id = ? OR
 	tag LIKE CONCAT('%',?,'%') OR
 	name LIKE CONCAT('%',?,'%') OR
 	name LIKE CONCAT('%',?,'%') OR
@@ -36,8 +36,8 @@ $fields = [
 
 $buttons = [
 	['type' => 'edit'],
-	['title' => 'Mockup', 'color' => 'green', 'url' => 'mockups?id={{ID}}'],
-	['title' => 'Prezzi', 'color' => 'yellow', 'url' => 'prices?id={{ID}}'],
+	['title' => 'Mockup', 'color' => 'green', 'url' => 'mockups/edit?id={{id}}'],
+	['title' => 'Prezzi', 'color' => 'yellow', 'url' => 'prices?id={{id}}'],
 ];
 
 function _expand_results(&$entry, $field, $key, $row) {

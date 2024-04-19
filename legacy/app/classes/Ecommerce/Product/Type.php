@@ -93,12 +93,12 @@ class Type {
 		$colors = [];
 
 		foreach ($this->availableColorSlugs as $colorSlug) {
-			$colorId = $all ?
+			$color_id = $all ?
 				DBOld::find('id FROM items_colors WHERE tag = ?', [$colorSlug]) :
 				DBOld::find('id FROM items_colors WHERE tag = ? AND hidden = 0', [$colorSlug]);
 
-			if ($colorId) {
-				$colors[] = new Color($colorId);
+			if ($color_id) {
+				$colors[] = new Color($color_id);
 			}
 		}
 
@@ -119,8 +119,8 @@ class Type {
 		return $positions;
 	}
 
-	public function getImage(int $colorId, $position_id = null) {
-		$color = new Color($colorId);
+	public function getImage(int $color_id, $position_id = null) {
+		$color = new Color($color_id);
 		$position_id = $position_id ?: $this->basicPositionId;
 		$position = new Position($position_id);
 		$imageSlug = $color->slug . '-' . $position->imagePositionId;
@@ -147,10 +147,10 @@ class Type {
 		return $image;
 	}
 
-	public function getDetailsImage(int $colorId, int $position_id = null) {
+	public function getDetailsImage(int $color_id, int $position_id = null) {
 		if (!$position_id) $position_id = $this->basicPositionId;
 
-		$color = new Color($colorId);
+		$color = new Color($color_id);
 		$imageSlug = $color->slug . '-' . $position_id;
 		$image = $this->data['detail-images'][$imageSlug] ?? null;
 

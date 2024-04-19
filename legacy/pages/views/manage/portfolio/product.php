@@ -68,7 +68,7 @@
 
 					<div class="color js-color">
 						<label class="">
-							<input type="radio" class="color__checkbox js-default-color" name="default-color-id" value="<?= $color->id ?>" <?= $oldProduct && $oldProduct->colorId == $color->id ? 'checked' : '' ?> required>
+							<input type="radio" class="color__checkbox js-default-color" name="default-color-id" value="<?= $color->id ?>" <?= $oldProduct && $oldProduct->color_id == $color->id ? 'checked' : '' ?> required>
 							<div class="color__icon" style="--_color1: #<?= $color->hex ?>; --_color2: #<?= $color->secondHex ?: $color->hex ?>"></div>
 						</label>
 

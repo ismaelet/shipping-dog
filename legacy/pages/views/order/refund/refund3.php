@@ -17,7 +17,7 @@
 
 								<!--Image-->
 								<div class="img_cont">
-									<img src="<?= $change->old_order->clientImage() ?>" class="item-img img-fill">
+									<img src="<?= $change->old_order->image() ?>" class="item-img img-fill">
 								</div>
 							</div>
 						</div>
@@ -87,12 +87,6 @@
 <?php if ($actualChanges) { ?>
 
 	<button type="submit" name="pay" id="submit" class="btn">Paga ritiro (<strong>8,00€</strong>)</button>
-
-	<?php if (is_admin()) { ?>
-
-		<button type="submit" name="skip_payment" class="btn btn--secondary" formnovalidate>Procedi senza pagare</button>
-
-	<?php } ?>
 
 <?php } else { ?>
 

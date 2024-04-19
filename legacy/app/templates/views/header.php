@@ -96,7 +96,6 @@
 
 							//check seller filter
 							if (isset($h_link['seller'])) {
-
 								if ($h_link['seller'] && !App\Helpers\App::isSeller()) $h_valid = false;
 								else if (!$h_link['seller'] && App\Helpers\App::isSeller()) $h_valid = false;
 							}

@@ -3,11 +3,14 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
+use App\Mail\OrderStatusMail;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 use function Ecommerce\ecommerce_config;
@@ -15,11 +18,18 @@ use function Ecommerce\ecommerce_config;
 class Cart extends Model {
 
 	protected $table = 'carts';
-	protected $fillable = ['user_id', 'shipping_method_id', 'country_id', 'payment_method_id', 'code', 'quantity', 'credit_ship', 'shipping', 'status', 'step', 'time', 'courier_notes', 'shipping_notes', 'has_errors'];
+	protected $fillable = ['user_id', 'shipping_method_id', 'country_id', 'payment_method_id', 'code', 'quantity', 'credit_ship', 'shipping', 'status', 'step', 'time', 'courier_notes', 'shipping_notes', 'has_errors', 'created_at', 'updated_at'];
 
 	/***************************
 	 * * Relationship instances *
 	 ***************************/
+	/**
+	 * Get the cart's user
+	 */
+	public function user(): BelongsTo {
+		return $this->belongsTo(User::class);
+	}
+
 	/**
 	 * Get the cart's shipping method
 	 */
@@ -136,9 +146,9 @@ class Cart extends Model {
 	/**
 	 * Check if the cart has long delivery times
 	 */
-	public function longDeliveryTime(): bool {
+	public function hasLongDelivery(): bool {
 		foreach ($this->orders as $order) {
-			if ($order->product->type->preorder || $order->color->preorder) {
+			if ($order->product && ($order->product->type->preorder || $order->color->preorder)) {
 				return true;
 			}
 		}
@@ -163,6 +173,9 @@ class Cart extends Model {
 	/************************
 	 * * Actions *
 	 ************************/
+	/**
+	 * Recheck and update the cart's content
+	 */
 	public function updateOrders(): self {
 		$this->updateQuantity();
 		$this->updatePrice();
@@ -170,6 +183,9 @@ class Cart extends Model {
 		return $this;
 	}
 
+	/**
+	 * Recheck and update the cart's product quantity
+	 */
 	public function updateQuantity(): self {
 		$this->quantity = $this->orders->sum('quantity');
 		$this->save();
@@ -181,6 +197,9 @@ class Cart extends Model {
 		return $this;
 	}
 
+	/**
+	 * Recheck and update the cart's price
+	 */
 	public function updatePrice(): self {
 		$orderPrice = $this->orderPrice();
 		$shippingPrice = $this->shippingPrice();
@@ -191,13 +210,86 @@ class Cart extends Model {
 		return $this;
 	}
 
+	/**
+	 * Confirm the cart
+	 */
+	public function confirm(bool $sendNotification = true): void {
+		// Update the cart
+		$this->update([
+			'created_at' => date('Y-m-d H:i:s'),
+			'status' => 1,
+		]);
+
+		// Remove the shipping price from the user's credit, if it was payed with the credit
+		if ($this->credit_ship && $this->user && $this->user->isSeller()) {
+			$this->user->seller->update(['credit' => $this->user->seller->credit - $this->grossShippingPrice()]);
+		}
+
+		// Destroy used coupons
+		if ($this->coupon) {
+			if ($this->coupon->one_per_acccount) {
+				UsedCoupon::create(['coupon_id' => $this->coupon->id, 'user_id' => $this->user_id]);
+			}
+
+			if (!$this->coupon->permanent) {
+				$this->coupon->delete();
+			}
+		}
+
+		// Send the confirmation email
+		Mail::to($this->address->email)->send(new OrderStatusMail($this));
+
+		// Confirm the individual orders
+		$this->confirmOrders();
+	}
+
+	/**
+	 * Confirm the individual orders in the cart
+	 */
+	public function confirmOrders(): void {
+		foreach ($this->orders as $order) {
+			// Check if the order is in the inventory
+			$inventoryItem = InventoryItem::where('design_id', $order->design_id)
+				->whereIn('type_id', [$order->type_id, $order->type->same_as_type_id ?? 0])
+				->where('color_id', $order->color_id)
+				->where('size_id', $order->size_id)
+				->where('position_id', $order->position_id)
+				->first();
+
+			if ($inventoryItem) {
+				$order->update(['inventory' => 1]);
+				$inventoryItem->delete();
+			}
+
+			// Update the seller's data
+			if ($order->seller) {
+				// Update the amount earned by the seller
+				$order->seller->update(['earned' => $order->seller->earned + $order->totalGain()]);
+
+				// Update the seller's credit
+				if ($order->credit) {
+					// Remove from the seller's credit if they used it to pay for the order
+					$order->seller->update(['credit' => $order->seller->credit - $order->price()]);
+				} else if ($order->seller_id !== $this->user_id) {
+					// Add to the seller's credit if no credit was used to pay for the order and the buyer isn't the seller
+					$order->seller->update(['credit' => $order->seller->credit + ($order->totalGain() * .1)]);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Delete the cart
+	 */
 	public function delete(): bool {
 		Session::forget('cart_id');
 
 		return parent::delete();
 	}
 
-	// * Collections * //
+	/************************
+	 * * Static methods *
+	 ************************/
 	/**
 	 * Get the unlabelled carts
 	 */

@@ -29,7 +29,7 @@ $inputs = [
 	],
 	[
 		'type' => 'select',
-		'name' => 'colorId',
+		'name' => 'color_id',
 		'text' => 'Colore',
 		'query' => '* FROM items_colors ORDER BY id ASC',
 		'field-name' => 'id',

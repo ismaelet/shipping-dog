@@ -7,7 +7,7 @@ use Ecommerce\Product as OldProduct;
 // get variabiles
 $id = $_GET['id'] ?? null;
 $oldProductPositionId = $_GET['position_id'] ?? null;
-$oldProductColorId = $_GET['colorId'] ?? null;
+$oldProductColorId = $_GET['color_id'] ?? null;
 
 // select item data
 $product = $id ? Product::find($id) : null;
@@ -109,7 +109,7 @@ if (isset($_POST['submit'])) {
 	$config['product_id'] = $id;
 	$config['quantity'] = $_POST['quantity'];
 
-	if (isset($_POST['cbx-color'])) foreach ($_POST['cbx-color'] as $config['colorId']);
+	if (isset($_POST['cbx-color'])) foreach ($_POST['cbx-color'] as $config['color_id']);
 	if (isset($_POST['cbx-size'])) foreach ($_POST['cbx-size'] as $config['size_id']);
 	if (isset($_POST['cbx-gender'])) foreach ($_POST['cbx-gender'] as $config['genderId']);
 

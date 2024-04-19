@@ -58,7 +58,7 @@ $fields = [
 ];
 
 $buttons = [
-	['title' => 'Gestisci', 'url' => 'edit?id={{ID}}'],
+	['title' => 'Gestisci', 'url' => 'edit?id={{id}}'],
 	['title' => 'Rinvia l\'email', 'color' => 'green', 'name' => 'resend-status-email'],
 ];
 

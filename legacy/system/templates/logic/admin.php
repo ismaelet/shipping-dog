@@ -4,14 +4,12 @@
 
 use App\Models\Admin\AdminCategory;
 use App\Models\Admin\AdminSection;
+use Illuminate\Support\Facades\Route;
 
 $currentSection = false;
 
-if (strpos(ViewOld::$name, '-')) {
-	$currentPath = explode('/', explode('section-', ViewOld::$name)[1], 2);
-	$currentCategory = AdminCategory::where('slug', $currentPath[0])->first();
-	$currentSection = $currentCategory ? AdminSection::where('slug', $currentPath[1])->where('category_id', $currentCategory->id)->first() : null;
-}
+$currentRoute = explode('admin/', $_SERVER['REQUEST_URI'], 2)[1] ?? null;
+$currentRoute = explode('/', $currentRoute);
 
 // fetch categories
 $menu['categories'] = [];

@@ -28,14 +28,6 @@ if (isset($_POST['change-status'])) {
 		$cart->updateStatus($status, false);
 	}
 
-	if ($comment) {
-		if (DBOld::exists('ecommerce_carts_comments WHERE cart_id = ?', $id)) {
-			DBOld::update('ecommerce_carts_comments SET comment=? WHERE cart_id = ?', [$comment, $id]);
-		} else {
-			DBOld::add('ecommerce_carts_comments (cart_id, comment) VALUES (?, ?)', [$id, $comment]);
-		}
-	}
-
 	redirect_old('?id=' . $cart->id . '&updated=1');
 }
 

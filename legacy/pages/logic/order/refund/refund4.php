@@ -38,7 +38,7 @@ if (!$changeRequest->processed && $changeRequest->payed) {
 			InventoryItem::create([
 				'design_id' => $oldOrder->design_id,
 				'type_id' => $oldOrder->type_id,
-				'colorId' => $oldOrder->color_id,
+				'color_id' => $oldOrder->color_id,
 				'size_id' => $oldOrder->size_id,
 				'position_id' => $oldOrder->position_id,
 				'logo_id' => $oldOrder->logo_id,

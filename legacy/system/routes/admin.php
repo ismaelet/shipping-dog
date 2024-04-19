@@ -1,28 +1,32 @@
 <?php
 
-use App\Models\Admin\AdminCategory;
+use App\Helpers\ArrayHelper;
 use App\Models\Admin\AdminSection;
 
 $sections = AdminSection::all();
 
 foreach ($sections as $section) {
-	if ($section->category) {
-		RouteOld::add('/admin/' . $section->category->slug . '/' . $section->slug, function ($path) {
-			global $id;
+	RouteOld::add('/admin/' . $section->resource . '/' . $section->action, function ($path) {
+		global $id;
 
-			$id = $_GET['id'] ?? null;
+		$id = $_GET['id'] ?? null;
 
-			// fetch section data
-			$uriParts = explode('/', explode('admin/', $path)[1], 2);
-			$category = AdminCategory::where('slug', $uriParts[0])->first();
-			$section = AdminSection::where('slug', $uriParts[1])->where('category_id', $category->id)->first();
+		// fetch section data
+		$uriParts = ArrayHelper::explodeLast('/', trim($path, '/admin'));
+		$section = AdminSection::where('resource', $uriParts[0])
+			->where('action', $uriParts[1])
+			->first();
 
-			// setup view
-			ViewOld::setPage('section-' . $section->category->slug . '/' . $section->slug)
+		$template = in_array($section->action, ['index']) ? 'admin-list' : 'admin-form';
+		$template = in_array($section->id, [50]) ? 'admin' : $template;
+
+		// setup view
+		if ($section) {
+			ViewOld::setPage('admin/' . $section->resource . '/' . $section->action)
 				->setTitle($section->name)
-				->setTemplate(in_array($section->template, ['admin', 'void']) ? $section->template : 'admin-' . $section->template)
+				->setTemplate($template)
 				->addMiddlewares(['admin'])
 				->show();
-		});
-	}
+		}
+	});
 }

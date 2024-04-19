@@ -42,16 +42,16 @@ document.addEventListener('DOMContentLoaded', function () {
 	})
 
 	// get properties
-	function get_colorId() {
-		var colorId
+	function get_color_id() {
+		var color_id
 
 		if ($('#color .cbx:checked').length) {
-			colorId = $('#color .cbx:checked').data('id')
+			color_id = $('#color .cbx:checked').data('id')
 		} else {
-			colorId = 0
+			color_id = 0
 		}
 
-		return colorId
+		return color_id
 	}
 
 	// get properties
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		}, 300)
 
 		// change main image
-		get_product(id, get_colorId(), get_position(), get_logo_id()).then((response) => {
+		get_product(id, get_color_id(), get_position(), get_logo_id()).then((response) => {
 			$('.js-main-image').attr('src', response.image)
 
 			clearTimeout(timeout)
@@ -163,20 +163,20 @@ document.addEventListener('DOMContentLoaded', function () {
 		})
 
 		// change image for the logos
-		get_product(id, get_colorId(), null, get_logo_id()).then((response) => {
+		get_product(id, get_color_id(), null, get_logo_id()).then((response) => {
 			$('.js-front-image').attr('src', response.image)
 		})
 	}
 
 	// update price
 	function update_price() {
-		get_product(id, get_colorId(), get_position(), get_logo_id())
+		get_product(id, get_color_id(), get_position(), get_logo_id())
 			.then((response) => {
-				const priceString = response.priceString
+				const customerPriceString = response.customerPriceString
 				const fullPriceString = response.fullPriceString
 
 				document.querySelectorAll('.js-price').forEach((element) => {
-					element.innerHTML = priceString
+					element.innerHTML = customerPriceString
 				})
 
 				document.querySelectorAll('.js-full-price').forEach((element) => {
@@ -223,16 +223,16 @@ async function get_logo(logoId) {
  * Retrieves product information from the server.
  *
  * @param {number} productId - The ID of the product.
- * @param {number} colorId - The ID of the color.
+ * @param {number} color_id - The ID of the color.
  * @param {?number} positionId - The ID of the position.
  * @param {number} logoId - The ID of the logo.
  * @returns {Promise<Object>} - A promise that resolves to the product data.
  */
-async function get_product(productId, colorId, positionId, logoId) {
+async function get_product(productId, color_id, positionId, logoId) {
 	return axios
 		.get(`/api/products/${productId}`, {
 			params: {
-				color_id: colorId,
+				color_id: color_id,
 				position_id: positionId,
 				logo_id: logoId,
 				image_size: 1024,

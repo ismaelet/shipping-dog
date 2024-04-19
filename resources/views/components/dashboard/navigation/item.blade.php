@@ -1,7 +1,7 @@
 @props(['item'])
 
 @php
-    $checked = $item['route_name'] == Route::currentRouteName();
+    $checked = trim($item['route_name'], '.') == Route::currentRouteName();
 @endphp
 
 @pushOnce('styles')

@@ -8,12 +8,11 @@
     foreach ($years as $key => $year) {
         $yearlyRevenue = [];
 
-        $monthlyRevenue = Order::join('carts', 'orders.cart_id', '=', 'carts.id')
-            ->selectRaw('MONTH(carts.time) as month, SUM(fullProductPrice) as total_sales')
-            ->whereYear('carts.time', $year)
-            ->where('status', '>', 0)
+        $monthlyRevenue = Order::where('status', '>', 0)
+            ->whereYear('created_at', $year)
             ->groupBy('month')
             ->orderBy('month')
+            ->selectRaw('MONTH(created_at) as month, SUM(fullProductPrice) as total_sales')
             ->get();
 
         foreach ($months as $key => $month) {

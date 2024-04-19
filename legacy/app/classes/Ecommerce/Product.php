@@ -68,7 +68,7 @@ class Product {
 	}
 
 	private function getFullUrl() {
-		return $this->url . '&colorId=' . $this->color->id . '&position_id=' . $this->position->id;
+		return $this->url . '&color_id=' . $this->color->id . '&position_id=' . $this->position->id;
 	}
 
 	private function getClientFullUrl() {
@@ -104,7 +104,7 @@ class Product {
 	}
 
 	private function getColor() {
-		return new Color($this->colorId);
+		return new Color($this->color_id);
 	}
 
 	private function getGenderId() {
@@ -205,7 +205,7 @@ class Product {
 		return EcommerceProduct::find($this->id);
 	}
 	public function getImage(int $imageSize = null) {
-		return (new PreviewHelper($this->getNewProduct(), $imageSize, $this->colorId, $this->position_id))
+		return (new PreviewHelper($this->getNewProduct(), $imageSize, $this->color_id, $this->position_id))
 			->image();
 	}
 
@@ -228,7 +228,7 @@ class Product {
 	}
 
 	public function getFullImage() {
-		return (new PreviewHelper($this->getNewProduct(), PreviewOld::BIG_IMAGE_SIZE, $this->colorId, $this->position_id))
+		return (new PreviewHelper($this->getNewProduct(), PreviewOld::BIG_IMAGE_SIZE, $this->color_id, $this->position_id))
 			->image();
 	}
 
@@ -320,8 +320,8 @@ class Product {
 	/*
 	* Set methods
 	*/
-	public function setColorId(int $colorId = null) {
-		$this->data['colorId'] = $colorId;
+	public function setColorId(int $color_id = null) {
+		$this->data['color_id'] = $color_id;
 
 		unset($this->data['color']);
 
@@ -363,13 +363,13 @@ class Product {
 		return $this;
 	}
 
-	public function updateColorId(int $colorId) {
-		$oldColorId = $this->colorId;
+	public function updateColorId(int $color_id) {
+		$oldColorId = $this->color_id;
 
-		$this->setColorId($colorId);
+		$this->setColorId($color_id);
 
-		if ($this->colorId != $oldColorId) {
-			DBOld::update('items SET color_id = ? WHERE id = ?', [$colorId, $this->id]);
+		if ($this->color_id != $oldColorId) {
+			DBOld::update('items SET color_id = ? WHERE id = ?', [$color_id, $this->id]);
 		}
 
 		return $this;
@@ -427,7 +427,7 @@ class Product {
 				$availableColorSlugs[] = $color->tag;
 			}
 
-			$colorId = isset($colors[0]) ? $colors[0]->id : 0;
+			$color_id = isset($colors[0]) ? $colors[0]->id : 0;
 			$availableColorSlugs = implode(',', $availableColorSlugs);
 
 			// Create the item
@@ -436,7 +436,7 @@ class Product {
 				'design_id' => $design->id,
 				'user_id' => $design->user_id,
 				'type_id' => $type->id,
-				'color_id' => $colorId,
+				'color_id' => $color_id,
 				'colors' => $availableColorSlugs,
 				'positions' => implode(',', $type->positionList()),
 				'status' => 1,

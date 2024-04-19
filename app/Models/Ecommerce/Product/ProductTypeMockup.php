@@ -31,14 +31,14 @@ class ProductTypeMockup extends Model {
 	/**
 	 * Get the clothing image path
 	 */
-	public function clothingImage(?int $colorId = null, ?int $position_id = null): string {
-		$colorId = $colorId ?: $this->type->colorCollection()->first()->id;
+	public function clothingImage(?int $color_id = null, ?int $position_id = null): string {
+		$color_id = $color_id ?: $this->type->colorCollection()->first()->id;
 		$position_id = $position_id ?: 1;
-		$color = ProductColor::find($colorId);
+		$color = ProductColor::find($color_id);
 		$position = ProductPosition::find($position_id);
 		$imageSlug = $color->tag . '-' . $position->basicPositionId();
 
-		return '/uploads/product_types/mockups/' . $this->type->tag . '/' . $imageSlug . '.webp';
+		return '/product_types/mockups/' . $this->type->tag . '/' . $imageSlug . '.webp';
 	}
 
 	/**
@@ -46,7 +46,7 @@ class ProductTypeMockup extends Model {
 	 */
 	public function overlayImage(): ?string {
 		$file = str_replace('.', '-det.', $this->clothingImage());
-		$serverFile = public_server_path($file);
+		$serverFile = public_storage($file);
 
 		return file_exists($serverFile) ? $file : null;
 	}

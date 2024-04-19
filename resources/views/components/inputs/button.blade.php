@@ -73,8 +73,9 @@
 
             /* Auto width version */
             &[data-size="auto"] {
-                width: auto;
+                width: max-content;
                 min-width: unset;
+                max-width: 100%;
             }
 
             /* Button with icons */

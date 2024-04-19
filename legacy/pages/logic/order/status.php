@@ -21,7 +21,7 @@ $inputs = [
 //submit
 if (isset($_POST['submit'])) {
 
-	$id = (int) $_POST['id'];
+	$id = (int) trim($_POST['id'], '#');
 	$email = strtolower(trim($_POST['email']));
 	$cart = Cart::join('addresses', 'addresses.cart_id', 'carts.id')
 		->where('carts.id', $id)

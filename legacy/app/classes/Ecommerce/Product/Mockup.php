@@ -2,17 +2,19 @@
 
 namespace Ecommerce\Product;
 
+use App\Models\Ecommerce\Product\ProductColor;
+
 class Mockup {
 
 	private $data = [];
 
 	public $type_id;
-	public $colorId;
+	public $color_id;
 	public $position_id;
 
-	function __construct($type_id, $colorId, $position_id) {
+	function __construct($type_id, $color_id, $position_id) {
 		$this->type_id = $type_id;
-		$this->colorId = $colorId;
+		$this->color_id = $color_id;
 		$this->position_id = $position_id;
 	}
 
@@ -28,15 +30,15 @@ class Mockup {
 				case 'frontImage':
 					return $this->data['frontImage'] = $this->getFrontImage();
 				case 'hasBackgroundImage':
-					return $this->data['hasBackgroundImage'] = file_exists(public_server_path($this->getBackgroundImage()));
+					return $this->data['hasBackgroundImage'] = file_exists(public_storage($this->getBackgroundImage()));
 				case 'hasFrontImage':
-					return $this->data['hasFrontImage'] = file_exists(public_server_path($this->getFrontImage()));
+					return $this->data['hasFrontImage'] = file_exists(public_storage($this->getFrontImage()));
 
 					// related classes
 				case 'type':
 					return $this->data['type'] = new Type($this->type_id);
 				case 'color':
-					return $this->data['color'] = new Color($this->colorId);
+					return $this->data['color'] = ProductColor::find($this->color_id);
 				case 'position':
 					return $this->data['position'] = new Position($this->position_id);
 			}
@@ -44,13 +46,13 @@ class Mockup {
 	}
 
 	private function getBackgroundImage() {
-		$image = '/uploads/product_types/mockups/' . $this->type->slug . '/' . $this->color->slug . '-' . $this->position_id . '.webp';
+		$image = 'product_types/mockups/' . $this->type->slug . '/' . $this->color->tag . '-' . $this->position_id . '.webp';
 
 		return $image;
 	}
 
 	private function getFrontImage() {
-		$image = '/uploads/product_types/mockups/' . $this->type->slug . '/' . $this->color->slug . '-' . $this->position_id . '-det.webp';
+		$image = 'product_types/mockups/' . $this->type->slug . '/' . $this->color->tag . '-' . $this->position_id . '-det.webp';
 
 		return $image;
 	}

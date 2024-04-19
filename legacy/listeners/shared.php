@@ -1,15 +1,14 @@
 <?php
 
-use Ecommerce\Cart;
+use App\Models\Ecommerce\Address;
+use App\Models\Ecommerce\Cart;
 
-// setup variables
-$cart = new Cart($cart_id);
-$codNoga = false;
+$cart = Cart::find($cart_id);
 
-// add paypal code
-$txnID = isset($_POST['txn_id']) ? $_POST['txn_id'] : 0;
+// Add the transaction ID
+if (isset($_POST['txn_id'])) {
+	Address::where('cart_id', $cart_id)->update(['txnID' => $_POST['txn_id']]);
+}
 
-DBOld::update('addresses SET txnID = ? WHERE cart_id = ?', [$txnID, $cart->id]);
-
-// PROCESS ORDERS
+// Confirm the cart
 $cart->confirm();

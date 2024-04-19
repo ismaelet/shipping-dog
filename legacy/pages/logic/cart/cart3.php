@@ -18,7 +18,7 @@ if (isset($_POST['add-to-cart'])) {
 	// fetch order data
 	$config['product_id'] = $_POST['id'];
 	$config['quantity'] = $_POST['quantity'];
-	$config['colorId'] = $_POST['color'];
+	$config['color_id'] = $_POST['color'];
 	$config['size_id'] = $_POST['size'];
 
 	Order::add($config);

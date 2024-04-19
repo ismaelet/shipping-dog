@@ -3,7 +3,7 @@
 
 		<div class="">
 			<!-- Title -->
-			<div class="menu__header" href="/admin">
+			<div class="menu__header" href="/admin/dashboard">
 				<?= $navigationLogo ?>
 				<h1 class="menu__title"><?= sys_config('name') ?></h1>
 			</div>
@@ -26,7 +26,7 @@
 
 					<!-- Home link -->
 					<div class="menu-item">
-						<a class="menu-item__header" href="/admin">
+						<a class="menu-item__header" href="/admin/dashboard">
 							<?= embed_icon('home') ?>
 							<p class="menu-item__title">Home</p>
 						</a>

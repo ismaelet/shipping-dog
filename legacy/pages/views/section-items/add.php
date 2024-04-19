@@ -41,7 +41,7 @@
 
 			<div class="color js-color">
 				<label class="">
-					<input type="checkbox" class="color__checkbox js-default-color" name="default-color-id" value="<?= $color->id ?>" <?= $product && $product->colorId == $color->id ? 'checked' : '' ?>>
+					<input type="checkbox" class="color__checkbox js-default-color" name="default-color-id" value="<?= $color->id ?>" <?= $product && $product->color_id == $color->id ? 'checked' : '' ?>>
 					<div class="color__icon" style="--_color1: #<?= $color->hex ?>; --_color2: #<?= $color->secondHex ?: $color->hex ?>"></div>
 				</label>
 

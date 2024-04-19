@@ -13,7 +13,7 @@ $queryConfig['from'] = '
 		LEFT JOIN items_types
 			ON inventory.type_id = items_types.id
 		LEFT JOIN items_colors
-			ON inventory.colorId = items_colors.id
+			ON inventory.color_id = items_colors.id
 		LEFT JOIN items_sizes
 			ON inventory.size_id = items_sizes.id
 		LEFT JOIN items_positions

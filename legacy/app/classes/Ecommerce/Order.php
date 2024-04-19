@@ -79,7 +79,7 @@ class Order {
 
 	private function getProduct() {
 		return (new Product($this->productId))
-			->setColorId($this->colorId)
+			->setColorId($this->color_id)
 			->setPositionId($this->position_id);
 	}
 
@@ -92,7 +92,7 @@ class Order {
 	}
 
 	private function getColor() {
-		return new Color($this->colorId);
+		return new Color($this->color_id);
 	}
 
 	private function getCart() {
@@ -260,7 +260,7 @@ class Order {
 	public static function add($config) {
 		$orderId = null;
 		$productId = $config['product_id'];
-		$colorId = $config['colorId'] ?? 0;
+		$color_id = $config['color_id'] ?? 0;
 		$size_id = $config['size_id'] ?? 0;
 		$genderId = $config['genderId'] ?? 0;
 		$logo_id = $config['logo_id'] ?? 0;
@@ -269,7 +269,7 @@ class Order {
 
 		if ($productId) {
 			$product = EcommerceProduct::find($productId);
-			$product->color_id = $colorId;
+			$product->color_id = $color_id;
 			$product->position_id = $position_id;
 			$product->size_id = $size_id;
 			$product->logo_id = $logo_id;
@@ -302,7 +302,7 @@ class Order {
 			// add order
 			$orderId = DBOld::add(
 				'orders (user_id, cart_id, product_id, seller_id, design_id, type_id, color_id, size_id, gender_id, position_id, logo_id, fullProductPrice, price_disc, productGain, quantity)',
-				[Auth::id() ?: null, $cart->id, $product->id, $product->user_id, $product->design_id, $product->type->id, $colorId, $size_id, $genderId, $position_id, $logo_id, $price, $product->customerDiscount(), $product->customerGain(), $quantity]
+				[Auth::id() ?: null, $cart->id, $product->id, $product->user_id, $product->design_id, $product->type->id, $color_id, $size_id, $genderId, $position_id, $logo_id, $price, $product->customerDiscount(), $product->customerGain(), $quantity]
 			);
 
 			$cart->updateOrders();

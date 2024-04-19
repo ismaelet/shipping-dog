@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const self = $(this)
 		const panel = self.parents('.item-panel')
 		const item = self.parents('.item')
-		const colorId = self.data('color-id')
+		const color_id = self.data('color-id')
 		const dark = parseInt(self.data('dark'))
 
 		item.find('.image').each(async function () {
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			let parameters = {
 				type_id: type_id,
-				colorId: colorId,
+				color_id: color_id,
 				position_id: position_id,
 			}
 

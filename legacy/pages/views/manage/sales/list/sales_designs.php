@@ -18,8 +18,8 @@ use function Ecommerce\format_price;
 		->where('orders.seller_id', auth()->id())
 		->where('orders.status', '>', 0)
 		->where('designs.status', 1)
-		->groupBy('design_id')
-		->selectRaw('SUM((productGain - gain_disc) * quantity) as totGain, COUNT(*) as count, designs.*')
+		->selectRaw('SUM((productGain - gain_disc) * quantity) as totGain, COUNT(*) as count, designs.name, designs.id, designs.time')
+		->groupBy(['designs.id', 'designs.name', 'designs.time'])
 		->orderByDesc('totGain')
 		->get();
 	?>

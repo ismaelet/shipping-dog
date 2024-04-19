@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Address extends Model {
 
-	protected $fillable = ['cart_id', 'user_id', 'full_name', 'address', 'number', 'city', 'zip', 'region', 'country', 'email', 'phone'];
+	protected $fillable = ['cart_id', 'user_id', 'full_name', 'address', 'number', 'city', 'zip', 'region', 'country', 'email', 'phone', 'txnID'];
 
 	/*****************************
 	 * * Relationship instances *

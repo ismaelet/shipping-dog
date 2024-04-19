@@ -26,8 +26,8 @@ if (isset($_POST['remove'])) {
  */
 if (isset($_POST['pay']) || isset($_POST['skip_payment']) || isset($_POST['refund'])) {
 
-	$changeRequest->step = $changeRequest->step + 1;
-	$changeRequest->save();
+	// $changeRequest->step = $changeRequest->step + 1;
+	// $changeRequest->save();
 
 	// Store the new size
 	foreach ($changeRequest->realChanges as $change) {
@@ -41,11 +41,5 @@ if (isset($_POST['pay']) || isset($_POST['skip_payment']) || isset($_POST['refun
 	if (isset($_POST['pay'])) {
 		// Redirect to PayPal
 		redirect_old('/refund/paypal');
-	} else if (isset($_POST['skip_payment'])) {
-		// Mark the change request as payed (used by admins)
-		$changeRequest->payed = true;
-		$changeRequest->save();
-
-		redirect_old('/refund?step=' . $changeRequest->step);
 	}
 }

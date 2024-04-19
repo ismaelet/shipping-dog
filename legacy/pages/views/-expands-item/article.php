@@ -178,24 +178,24 @@ use Ecommerce\Product\Type;
 				<!-- Price -->
 				<div class="price-block">
 
-					<?php if ($product->customerDiscount()) { ?>
+					<?php if ($product->userIsOwner()) { ?>
 
 						<!-- Price when there's a discount -->
-						<p class="price price-old heading-like js-full-price"><?= $product->fullPriceString() ?></p>
-						<p class="price price-promo heading-like js-price"><?= $product->priceString() ?></p>
+						<p class="price price-old heading-like"><?= $product->fullPriceString() ?></p>
+						<p class="price price-promo heading-like"><?= $product->sellerPriceString() ?></p>
 
 						<div class="flex-group">
 							<p class="price-txt">Prezzo scontato<?= $product->userIsOwner() ? ' solo per te' : '' ?></p>
 
 							<?php if ($product->userIsOwner()) {
-								info_box("Questo prezzo speciale è visibile a te, perché sei il proprietario di questo articolo. I clienti vedranno solo il prezzo normale di <span class='js-full-price'>" . $product->fullPriceString() . "</span>");
+								info_box("Questo prezzo speciale è visibile a te, perché sei il proprietario di questo articolo. I clienti vedranno solo il prezzo normale di <span class=''>" . $product->fullPriceString() . "</span>");
 							} ?>
 						</div>
 
 					<?php } else { ?>
 
 						<!-- Normal price -->
-						<p class="price txt-bold price-def heading-like js-price"><?= $product->priceString() ?></p>
+						<p class="price txt-bold price-def heading-like js-price"><?= $product->customerPriceString() ?></p>
 
 					<?php } ?>
 

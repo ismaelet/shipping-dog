@@ -7,16 +7,19 @@ use App\Models\Ecommerce\Seller;
 $id = $_GET['id'] ?? 0;
 
 // redirect if not found
-if (!DBOld::exists('collections WHERE id = ?', [$id])) redirect_old('/shop');
+if (!DBOld::exists('collections WHERE id = ?', [$id])) {
+	redirect_old('/shop');
+}
 
 // get collection data
 $coll = new Collection($id);
 $seller = Seller::where('id', $coll->seller_id)->first();
-
-$vip = auth()->id() == $seller->id || is_admin();
+$userIsOwner = auth()->check() && auth()->id() == $seller->id;
 
 // redirect if the shop isn't public
-if (!$seller->status && !$vip) redirect_old('/shop');
+if (!$seller->status && !$userIsOwner) {
+	redirect_old('/shop');
+}
 
 // GET DESIGNS DATA
 $limit_new = 100;

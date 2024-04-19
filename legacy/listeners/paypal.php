@@ -73,6 +73,7 @@ if ($res == 'VERIFIED') {
 				$changeRequestId = explode(':', $cust_array[1])[1];
 				$changeRequest = ChangeRequest::find($changeRequestId);
 				$changeRequest->payed = true;
+				$changeRequest->step = 4;
 				$changeRequest->save();
 			} else {
 				// Normal purchase

@@ -52,7 +52,7 @@ use App\View\Components\Interactions\FollowButton;
 
 				<h1 class="stitle inlb maro05"> > </h1>
 
-				<?php if ($vip) { ?>
+				<?php if ($userIsOwner) { ?>
 
 					<div class="inlb">
 						<input type="text" id="name-inp" class="inputinlb" name="name" placeholder="Nome collezione" value="<?= $coll->name ?>" data-id="<?= $id ?>">
@@ -67,7 +67,7 @@ use App\View\Components\Interactions\FollowButton;
 				<?php } ?>
 			</div>
 
-			<?php if ($vip) { ?>
+			<?php if ($userIsOwner) { ?>
 				<div class="commands mar-b-2">
 
 					<button type="button" class="sub_txt gre mar-t-1 lbox-open marr1" data-tar="#lbox-add">
@@ -120,7 +120,7 @@ use App\View\Components\Interactions\FollowButton;
 </div>
 
 <!-- Lightboxes -->
-<?php if ($vip) { ?>
+<?php if ($userIsOwner) { ?>
 
 	<!-- Add a design -->
 	<div id="lbox-add" class="lbox">

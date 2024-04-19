@@ -40,7 +40,7 @@ class AdminSection extends Model {
 			return route($routeName);
 		}
 
-		return '/' . str_replace('.', '/', $routeName);
+		return '/admin/' . $this->resource . '/' . $this->action;
 	}
 
 	/**

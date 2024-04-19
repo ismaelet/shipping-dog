@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 /**
  * Class ProductType
  * 
- * @method string image(?int $colorId = null, ?int $position_id = null)
+ * @method string image(?int $color_id = null, ?int $position_id = null)
  */
 class ProductType extends Model {
 
@@ -88,8 +88,8 @@ class ProductType extends Model {
 	/**
 	 * Get the type's image
 	 */
-	public function image(?int $colorId = null, ?int $position_id = null, string $suffix = ''): ?string {
-		$color = $colorId ? ProductColor::find($colorId) : $this->colorCollection()->first();
+	public function image(?int $color_id = null, ?int $position_id = null, string $suffix = ''): ?string {
+		$color = $color_id ? ProductColor::find($color_id) : $this->colorCollection()->first();
 		$position = $position_id ? ProductPosition::find($position_id) : $this->positionCollection()->first();
 
 		if (file_exists(public_storage($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.webp'))) {
@@ -110,7 +110,7 @@ class ProductType extends Model {
 	/**
 	 * Get the type's details image
 	 */
-	public function details(?int $colorId = null, ?int $position_id = null): ?string {
-		return $this->image($colorId, $position_id, '-det');
+	public function details(?int $color_id = null, ?int $position_id = null): ?string {
+		return $this->image($color_id, $position_id, '-det');
 	}
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller {
 
@@ -37,6 +38,7 @@ class ProductController extends Controller {
 			'positions' => $product->positions,
 			'priceString' => $product->priceString(),
 			'fullPriceString' => $product->fullPriceString(),
+			'customerPriceString' => $product->fullPriceString(),
 			'image' => $product->image($request->image_size, $request->color_id, $request->position_id),
 		]);
 	}

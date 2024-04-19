@@ -11,8 +11,10 @@
 	[V] Gender filter
 	[V] Accessory filter
 	[V] Tag filter
+	[V] Like button
 	[V] Official shop
 	[V] Individual shop
+		[V] Follow button
 		[V] Collection
 
 [V] Product Page
@@ -20,31 +22,31 @@
 	[V] Change color
 	[V] Change position
 	[V] Generate new image
-	[V] Follow button
-	[V] Like button
 	[V] Related products
+	[V] Description
+	[V] Stock image
+	[V] Size guide
+	[V] Owner price
+	[V] Customer price
 
 [V] Auth pages
 	[V] Login
 	[V]	Logout
 	[V] Register
-		[?] Register a new user
 	[V] Password reset
 		[V] Check if email is received
-		[?] Try to reset the password
+		[V] Reset page
 
 [V] Seller dashboard
 	[V] Settings
 		[V] Edit the settings
-		[?] Reupload the icon
-		[?] Reupload the cover
 	[V] Porfolio
 		[V] List
 		[V] Add
 		[V] Edit
 	[V] Sales list
-		[V] Payment request
-			[?] PDF generation
+		[V] By time
+		[V] By design
 	[V] Edit prices
 	[V] Customer photos
 		[V] Index
@@ -54,38 +56,33 @@
 	[V] Feed
 	[V] Personal data
 		[V] Try to edit the data
-		[?] Try to delete the account
 	[V] Order list
 		[V] Order page
-		[?] Edit address
 	[V] Wishlist
 
 [V] Cart
 	[V] Add order to cart as guest
 	[V] Add order to cart as user
+	[V] Remove an order from the cart
 	[V] Change shipping method
 	[V] Add coupon
-	[?] Pay with credit
 	[V] Paypal redirect
+	[V] Complete the order for free
 
 [V] Order confirmation
 	[V] Order confirmation
 		[V] Free product
-		[?] Normal payment
 	[V] Confirmation email
 
-[X] Support
-	[V] Order status
-	[X] Change size
-		[X] Paypal redirect
-		[?] Change confirmation
-
-[X] Infos
+[V] Support
 	[V] Contacts
 	[V] FAQ
-	[X] Sale terms
-	[X] Contract
-	[X] Privacy Policy
+	[V] Sale terms
+	[V] Contract
+	[V] Privacy Policy
+	[V] Order status
+	[V] Change size
+		[V] Paypal redirect
 
 [X] Admin dashboard
 	[V] Dashboard
@@ -93,11 +90,11 @@
 		[X] Index
 		[X] Show
 		[X] Update
-		[X] Order log
-		[X] Product log
-	[X] Users
-		[X] Index
-		[X] Edit
+		[V] Order log
+		[V] Product log
+	[V] Users
+		[V] Index
+		[V] Edit
 	[X] Shops
 		[X] Payments
 			[X] Index
@@ -105,4 +102,60 @@
 	[X] Coupons
 		[X] Index
 		[X]	Create
-	[X] Labels
+	[V] Labels
+
+
+------------------- RARE CHECKS -------------------
+
+[?] Auth pages
+	[?] Register a new user
+	[?] Try to reset the password
+
+[?] Seller dashboard
+	[?] Create a new shop
+	[?] Settings
+		[?] Reupload the icon
+		[?] Reupload the cover
+	[?] Portfolio
+		[?] Change product order
+		[?] Edit a design
+			[?] Change name
+			[?] Change background color
+			[?] Change tags
+			[?] Change default color
+			[?] Reupload the graphic
+			[?] Add black variant and reupload it
+			[?] Add vectorial file
+			[?] Enable a product
+			[?] Disable a product
+			[?] Change product design position
+			[?] Change product design default color
+			[?] Change product design available colors
+		[?] Custom product
+			[?] Upload a custom product
+			[?] Edit a custom product
+	[?] Payment request
+		[?] PDF generation
+
+[?] Collection
+	[?] Add a new collection
+	[?] Delete a collection
+	[?] Add a design to a collection
+	[?] Remove a design from a collection
+	[?] Change collection name
+
+[?] Profile
+	[?] Try to change the password
+	[?] Try to delete the account
+	[?] Edit an order's address
+
+[?] Cart
+	[?] Pay for an order
+
+[?] Listeners
+	[?] Confirm order
+	[?] Confirm size change
+	[?] Send confirmation email
+
+[?] Support
+	[?] Send a request email

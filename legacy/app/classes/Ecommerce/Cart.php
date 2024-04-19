@@ -540,7 +540,7 @@ class Cart {
 
 	public function confirm(bool $sendNotification = true): void {
 		// update cart time
-		DBOld::update(self::TABLE . ' SET time = NOW() WHERE ' . self::INDEX . ' = ?', [$this->id]);
+		DBOld::update(self::TABLE . ' SET time = NOW(), created_at = NOW() WHERE ' . self::INDEX . ' = ?', [$this->id]);
 
 		// update seller's balance
 		DBOld::update(Seller::TABLE . ' SET earned = earned + ? WHERE ' . Seller::INDEX . ' = ?', [$this->gain, $this->customerId]);
@@ -628,7 +628,7 @@ class Cart {
 				$matchesDesign = !$coupon->design_id || $coupon->design_id == $order->design_id;
 				$matchesSeller = !$coupon->seller_id || $coupon->seller_id == $order->seller_id;
 				$matchesType = !$coupon->type_id || $coupon->type_id == $order->type_id;
-				$matchesColor = !$coupon->colorId || $coupon->colorId == $order->colorId;
+				$matchesColor = !$coupon->color_id || $coupon->color_id == $order->color_id;
 
 				// calculate the discount amount
 				if ($matchesDesign && $matchesSeller && $matchesType && $matchesColor) {

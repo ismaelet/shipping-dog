@@ -333,6 +333,11 @@
             line-height: 1;
             text-align: left;
             transition: background 0.2s;
+
+            &:hover {
+                background-color: var(--color-surface-500);
+                color: var(--color-neutral-700);
+            }
         }
 
         .h-drop-link a {

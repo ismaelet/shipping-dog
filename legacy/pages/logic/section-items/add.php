@@ -43,7 +43,7 @@ while ($colorRow = $colorRows->fetch_assoc()) {
 
 // image upload
 if (isset($_POST['upload'])) {
-	$colorId = $_POST['upload'];
+	$color_id = $_POST['upload'];
 
 	$files = [
 		['size' => 1024, 'quality' => 90, 'subfolder' => null],
@@ -53,7 +53,7 @@ if (isset($_POST['upload'])) {
 	];
 
 	foreach ($files as $file) {
-		$url = PUBLIC_SERVER_ROOT . $product->setColorId($colorId)->image($file['size'], 1);
+		$url = PUBLIC_SERVER_ROOT . $product->setColorId($color_id)->image($file['size'], 1);
 
 		if ($file['subfolder']) {
 			$url = str_replace('/items', '/items/_custom', $url);
@@ -61,7 +61,7 @@ if (isset($_POST['upload'])) {
 
 		$imageData = [
 			'mode' => 'max',
-			'name' => 'file-' . $colorId,
+			'name' => 'file-' . $color_id,
 			'size' => $file['size'],
 			'quality' => $file['quality'],
 			'url' => $url

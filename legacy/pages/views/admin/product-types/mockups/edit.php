@@ -69,14 +69,14 @@
 
 			<div class="preview-image grid stack-content" style="--default-x-size: <?= $mockupData->siz_x_def ?>; --max-x-size: <?= $mockupData->siz_x_max ?>; --max-y-size: <?= $mockupData->siz_y_max ?>; --default-x-position: <?= $mockupData->pos_x_def ?>; --starting-x-position: <?= $mockupData->pos_x_min ?>; --default-y-position: <?= $mockupData->pos_y_def ?>; --starting-y-position: <?= $mockupData->pos_y_min ?>;">
 				<img src="<?= public_asset('product_types/mockups/bgr/grey.png') ?>" alt="">
-				<img src="<?= public_client_path($mockupData->clothingImage()) ?>" alt="">
+				<img src="<?= public_asset($mockupData->clothingImage()) ?>" alt="">
 
 				<div class="max-printable-area"></div>
 				<div class="default-printable-area"></div>
 
 				<?php if ($mockupData->overlayImage()) { ?>
 
-					<img src="<?= public_client_path($mockupData->overlayImage()) ?>" alt="">
+					<img src="<?= public_asset($mockupData->overlayImage()) ?>" alt="">
 
 				<?php } ?>
 
@@ -88,17 +88,17 @@
 
 		<?php foreach ($mockups as $mockup) { ?>
 
-			<div class="mockup panel" id="<?= $mockup->colorId . '-' . $mockup->position_id ?>">
+			<div class="mockup panel" id="<?= $mockup->color_id . '-' . $mockup->position_id ?>">
 				<h3 class="block-title"><?= $mockup->nameWithoutType ?></h3>
 
 				<div class="grid-flow mar-t-1" data-columns="2" data-spacing="400">
 					<!-- Background image -->
 					<form class="mockup__background background-fill" method="POST" enctype="multipart/form-data">
-						<label class="mockup__image fill-all replace-image <?= !$mockup->hasBackgroundImage ? 'replace-image--fixed' : '' ?>">
+						<label class="mockup__image fill-all bg-surface-500 replace-image <?= !$mockup->hasBackgroundImage ? 'replace-image--fixed' : '' ?>">
 							<input type="file" name="file" class="js-submit-on-change">
 							<input type="hidden" name="image-url" value="<?= $mockup->backgroundImage ?>">
 							<input type="hidden" name="type-id" value="<?= $mockup->type_id ?>">
-							<input type="hidden" name="color-id" value="<?= $mockup->colorId ?>">
+							<input type="hidden" name="color-id" value="<?= $mockup->color_id ?>">
 							<input type="hidden" name="position-id" value="<?= $mockup->position_id ?>">
 							<img class="mockup__image image-fill" <?= $mockup->hasBackgroundImage ? 'src="' . public_asset($mockup->backgroundImage) . '"' : '' ?> alt="">
 						</label>
@@ -106,11 +106,11 @@
 
 					<!-- Front image -->
 					<form class="mockup__background background-fill" method="POST" enctype="multipart/form-data">
-						<label class="mockup__image fill-all replace-image <?= !$mockup->hasFrontImage ? 'replace-image--fixed' : '' ?>">
+						<label class="mockup__image fill-all bg-surface-500 replace-image <?= !$mockup->hasFrontImage ? 'replace-image--fixed' : '' ?>">
 							<input type="file" name="file" class="js-submit-on-change">
 							<input type="hidden" name="image-url" value="<?= $mockup->frontImage ?>">
 							<input type="hidden" name="type-id" value="<?= $mockup->type_id ?>">
-							<input type="hidden" name="color-id" value="<?= $mockup->colorId ?>">
+							<input type="hidden" name="color-id" value="<?= $mockup->color_id ?>">
 							<input type="hidden" name="position-id" value="<?= $mockup->position_id ?>">
 							<img class="mockup__image image-fill" <?= $mockup->hasFrontImage ? 'src="' . public_asset($mockup->frontImage) . '"' : '' ?> alt="">
 						</label>

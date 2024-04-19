@@ -34,7 +34,7 @@ $fields = [
 ];
 
 $buttons = [
-	['title' => 'Modifica', 'url' => 'add?id={{ID}}'],
+	['title' => 'Modifica', 'url' => 'add?id={{id}}'],
 ];
 
 function _expand_results(&$entry, $field, $key, $row) {

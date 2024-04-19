@@ -61,10 +61,10 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 		// upload product images
 		if (!empty($_POST['colors'])) {
 			foreach ($_POST['colors'] as $colorSlug) {
-				$colorId = DBOld::find('id FROM items_colors WHERE tag = ?', [$colorSlug]);
+				$color_id = DBOld::find('id FROM items_colors WHERE tag = ?', [$colorSlug]);
 
-				if ($_FILES['file-' . $colorId]['name']) {
-					upload_product_image($oldProduct, $colorId);
+				if ($_FILES['file-' . $color_id]['name']) {
+					upload_product_image($oldProduct, $color_id);
 				}
 			}
 		}
@@ -112,8 +112,8 @@ if (isset($_POST['delete'])) {
 
 // image upload
 if (isset($_POST['upload'])) {
-	$colorId = $_POST['upload'];
-	$color = ProductColor::find($colorId);
+	$color_id = $_POST['upload'];
+	$color = ProductColor::find($color_id);
 	$colors = explode(',', $product->colors);
 
 	if (!in_array($color->tag, $colors)) {
@@ -122,23 +122,23 @@ if (isset($_POST['upload'])) {
 		$product->save();
 	}
 
-	upload_product_image($oldProduct, $colorId);
+	upload_product_image($oldProduct, $color_id);
 
 	redirect_old('#active-colors');
 }
 
-function upload_product_image($oldProduct, $colorId) {
+function upload_product_image($oldProduct, $color_id) {
 	$files = [
 		['size' => 1024, 'quality' => 90],
 		['size' => 400, 'quality' => 80],
 	];
 
 	foreach ($files as $file) {
-		$url = $oldProduct->setColorId($colorId)->getServerSpecificImage($file['size']);
+		$url = $oldProduct->setColorId($color_id)->getServerSpecificImage($file['size']);
 
 		$imageData = [
 			'mode' => 'max',
-			'name' => 'file-' . $colorId,
+			'name' => 'file-' . $color_id,
 			'size' => $file['size'],
 			'quality' => $file['quality'],
 			'url' => $url

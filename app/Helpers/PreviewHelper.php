@@ -21,9 +21,9 @@ class PreviewHelper {
 	private ProductPosition $position;
 	private int $imageSize;
 
-	function __construct(Product $product, ?int $imageSize = 400, ?int $colorId = null, ?int $position_id = null) {
+	function __construct(Product $product, ?int $imageSize = 400, ?int $color_id = null, ?int $position_id = null) {
 		$this->product = $product;
-		$this->color = $colorId ? ProductColor::find($colorId) : $product->default_color;
+		$this->color = $color_id ? ProductColor::find($color_id) : $product->default_color;
 		$this->position = $position_id ? ProductPosition::find($position_id) : $product->defaultPosition();
 		$this->imageSize = in_array($imageSize, self::ALLOWED_IMAGE_SIZES) ? $imageSize : self::DEFAULT_IMAGE_SIZE;
 	}

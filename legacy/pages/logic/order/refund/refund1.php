@@ -13,7 +13,7 @@ include_once('setup.php');
 if (isset($_POST['submit'])) {
 
 	// Get the post data
-	$cart_id = $_POST['cart_id'];
+	$cart_id = (int) trim($_POST['cart_id'], '#');
 	$email = strtolower(trim($_POST['email']));
 
 	// Check if the cart exists

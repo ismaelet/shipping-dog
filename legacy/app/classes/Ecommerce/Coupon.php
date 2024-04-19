@@ -29,7 +29,7 @@ class Coupon {
 	public $seller_id;
 	public $design_id;
 	public $type_id;
-	public $colorId;
+	public $color_id;
 	public $ourPercentageDiscount;
 	public $ourPercentageDiscountTwo;
 	public $ourPercentageDiscountMultiple;
@@ -57,7 +57,7 @@ class Coupon {
 			$this->seller_id = $row['seller_id'];
 			$this->design_id = $row['design_id'];
 			$this->type_id = $row['type_id'];
-			$this->colorId = $row['color_id'];
+			$this->color_id = $row['color_id'];
 			$this->ourPercentageDiscount = $row['mod_us'];
 			$this->ourPercentageDiscountTwo = $row['mod_us2'];
 			$this->ourPercentageDiscountMultiple = $row['mod_us3'];

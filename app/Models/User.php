@@ -88,6 +88,6 @@ class User extends Authenticatable {
 	 * Check if the user is a seller
 	 */
 	public function isSeller(): bool {
-		return (bool) $this->shop;
+		return (bool) $this->seller;
 	}
 }

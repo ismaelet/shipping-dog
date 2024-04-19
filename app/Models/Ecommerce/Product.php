@@ -74,7 +74,7 @@ class Product extends Model {
 	 * Get the product's logos
 	 */
 	public function logoGroup(): ?LogoGroup {
-		if (in_array($this->type_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])) {
+		if ($this->design && in_array($this->type_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])) {
 			return $this->design->logo_group;
 		}
 
@@ -151,6 +151,10 @@ class Product extends Model {
 		return EcommerceHelper::formatPrice($this->fullPrice());
 	}
 
+	public function sellerPriceString(): string {
+		return EcommerceHelper::formatPrice($this->sellerPrice());
+	}
+
 	public function customerPriceString(): string {
 		return EcommerceHelper::formatPrice($this->customerPrice());
 	}
@@ -194,8 +198,8 @@ class Product extends Model {
 	/**
 	 * Get the product's preview
 	 */
-	public function preview(?int $imageSize, ?int $colorId, ?int $position_id): PreviewHelper {
-		return new PreviewHelper($this, $imageSize, $colorId, $position_id);
+	public function preview(?int $imageSize, ?int $color_id, ?int $position_id): PreviewHelper {
+		return new PreviewHelper($this, $imageSize, $color_id, $position_id);
 	}
 
 	/**
@@ -220,7 +224,7 @@ class Product extends Model {
 	 * Get the product's url
 	 */
 	public function url(): string {
-		return public_client_url('/shop/item?id=' . $this->id);
+		return '/shop/item?id=' . $this->id;
 	}
 
 	/**
@@ -238,8 +242,8 @@ class Product extends Model {
 	/**
 	 * Get the product's image
 	 */
-	public function image(?int $imageSize = null, ?int $colorId = null, ?int $position_id = null): string {
-		return $this->preview($imageSize, $colorId, $position_id)->image();
+	public function image(?int $imageSize = null, ?int $color_id = null, ?int $position_id = null): string {
+		return $this->preview($imageSize, $color_id, $position_id)->image();
 	}
 
 	/**

@@ -50,10 +50,10 @@ if (isset($_POST['edit'])) {
 */
 if (isset($_POST['image-url'])) {
 	$type_id = $_POST['type-id'];
-	$colorId = $_POST['color-id'];
+	$color_id = $_POST['color-id'];
 	$position_id = $_POST['position-id'];
 
-	$color =  new Color($colorId);
+	$color =  new Color($color_id);
 
 	$fileData = [
 		'url' => public_server_path($_POST['image-url']),
@@ -67,5 +67,5 @@ if (isset($_POST['image-url'])) {
 
 	array_map('unlink', $files);
 
-	redirect_old('#' . $colorId . '-' . $position_id);
+	redirect_old('#' . $color_id . '-' . $position_id);
 }

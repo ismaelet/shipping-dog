@@ -124,7 +124,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 								$orientation = $oldProduct->design->ratio > $sX_max / $sY_max;
 
-								$clothing = $type->image($oldProduct->colorId, $position->imagePositionId);
+								$clothing = $type->image($oldProduct->color_id, $position->imagePositionId);
 						?>
 
 								<section class="section<?= $key ?> section positions <?= $key == 1 ? 'active' : '' ?> <?= $enabled ? '' : 'disabled' ?>" data-enabled="<?= $enabled ? 1 : 0 ?>" data-image-position="<?= $position->imagePositionId ?>">
@@ -270,7 +270,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 									$orientation = $oldProduct->design->ratio > $sX_max / $sY_max;
 
 									// $clothingImagePosition = $position->base_of ?: $position->id;
-									$clothing = $type->image($oldProduct->colorId, $oldProduct->position_id);
+									$clothing = $type->image($oldProduct->color_id, $oldProduct->position_id);
 								?>
 
 									<section class="section<?= $key ?> section colors <?= $key == 1 ? 'active' : '' ?>" data-image-position="<?= $oldProduct->type->basicPositionId ?>">

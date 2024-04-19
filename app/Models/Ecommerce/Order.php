@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Order extends Model {
 
 	protected $table = 'orders';
-	protected $fillable = ['fullProductPrice', 'price_disc', 'productGain', 'gain_disc', 'credit'];
+	protected $fillable = ['fullProductPrice', 'price_disc', 'productGain', 'gain_disc', 'credit', 'inventory'];
 
 	/****************************
 	 * * Relationship instances *
@@ -36,8 +36,8 @@ class Order extends Model {
 	/**
 	 * Get the order's product
 	 */
-	public function product(): HasOne {
-		return $this->hasOne(Product::class, 'id', 'product_id');
+	public function product(): BelongsTo {
+		return $this->belongsTo(Product::class);
 	}
 
 	/**
@@ -78,6 +78,13 @@ class Order extends Model {
 		$name[] = $this->product && $this->product->status && !$this->product->deleted ? $this->product->name : 'Articolo rimosso';
 
 		return implode(' ', $name);
+	}
+
+	/**
+	 * Get the name of the order, including the design name
+	 */
+	public function fullName(): string {
+		return ($this->design_id ? $this->design_id . ' - ' : '') . $this->name() . ' (' . $this->description() . ')';
 	}
 
 	/**

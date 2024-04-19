@@ -13,7 +13,7 @@
     </x-slot>
 
     <x-slot name="action">
-        <a href="/admin/shipping/courier" class="hover:text-primary-400 transition-colors">Visualizza</a>
+        <a href="/admin/labels/generate" class="hover:text-primary-400 transition-colors">Visualizza</a>
     </x-slot>
 
 </x-dashboard.widget>

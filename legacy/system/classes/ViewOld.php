@@ -2,7 +2,7 @@
 
 class ViewOld {
 	public static $name = null;
-	public static $title;
+	public static $title = null;
 	public static $tabTitle;
 	public static $thumbnail = null;
 	public static $description;

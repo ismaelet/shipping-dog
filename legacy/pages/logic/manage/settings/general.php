@@ -89,5 +89,5 @@ if (isset($_POST['edit-socials'])) {
 
 	DBOld::update('links SET site=?, facebook=?, instagram=?, twitter=?, youtube=? WHERE user_id = ?', [$site, $fb, $inst, $twit, $yt, auth()->id()]);
 
-	redirect_old('&saved=socials#socials');
+	redirect_old();
 }

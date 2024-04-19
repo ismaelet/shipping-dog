@@ -34,7 +34,7 @@ use ViewManager\Ecommerce\CartRecap;
 					<h3 class="title">Metodo di spedizione</h3>
 
 					<p class="bott_txt">
-						<?php if (cart()->longDeliveryTime()) { ?>
+						<?php if (cart()->hasLongDelivery()) { ?>
 							Il tuo ordine contiene un capo in <span class="txt-red txt-bold">preordine</span>. Se vuoi un <strong>tempo di consegna minore</strong>, ti consigliamo di selezionare solo magliette, felpe o accessori e con colore bianco, nero o grigio melange.<br>Se invece ti va bene la data di consegna indicata qui sotto, puoi lasciare l'ordine così com'è.<br><br>
 						<?php } ?>
 
@@ -71,7 +71,7 @@ use ViewManager\Ecommerce\CartRecap;
 								<div class="ship_box">
 									<h3 class="art_name">
 										<?= $shippingMethod->name ?><br>
-										<span class="date"><?= $shippingMethod->deliveryDateString(null, cart()->longDeliveryTime()) ?></span>
+										<span class="date"><?= $shippingMethod->deliveryDateString(null, cart()->hasLongDelivery()) ?></span>
 									</h3>
 									<p class="order-list__description"><?= $shippingMethod->desc ?></p>
 									<h3 class="price"><?= $shippingMethod->priceString(cart()->quantity) ?></h3>

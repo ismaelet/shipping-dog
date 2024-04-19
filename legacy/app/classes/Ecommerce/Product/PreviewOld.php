@@ -100,7 +100,7 @@ class PreviewOld {
 		$backgroundImage = server_root() . '/uploads/product_types/mockups/bgr/grey.png';
 
 		// clothing
-		$clothingImage = server_root() . $this->product->type->getImage($this->product->colorId, $this->product->position_id);
+		$clothingImage = server_root() . $this->product->type->getImage($this->product->color_id, $this->product->position_id);
 		$clothingImageType = strpos($clothingImage, '.webp') ? 'webp' : 'png';
 
 		$details = file_exists($file = str_replace('.' . $clothingImageType, '-det.' . $clothingImageType, $clothingImage)) ? $file : false;

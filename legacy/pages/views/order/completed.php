@@ -41,7 +41,7 @@ use Ecommerce\ViewManager;
 						<div class="ship_box">
 							<h1 class="art_name">
 								<?= $cart->shipping_method->name ?><br>
-								<span class="date"><?= $cart->shipping_method->deliveryDateString($cart->time, $cart->longDeliveryTime()) ?></span>
+								<span class="date"><?= $cart->shipping_method->deliveryDateString($cart->time, $cart->hasLongDelivery()) ?></span>
 							</h1>
 
 							<p class="order-list__description"><?= $cart->shipping_method->description ?></p>
@@ -50,38 +50,40 @@ use Ecommerce\ViewManager;
 				</div>
 			</section>
 
-			<!-- Address -->
-			<section id="addr_sect" class="section">
-				<h2 class="title">Indirizzo</h2>
+			<?php if ($cart->address) { ?>
+				<!-- Address -->
+				<section id="addr_sect" class="section">
+					<h2 class="title">Indirizzo</h2>
 
-				<div id="addr_cont">
-					<?= $cart->address->fullAddress() ?? '' ?><br>
-					-<br>
-					<?= $cart->address->email ?? '' ?><br>
-					<?= $cart->address->phone ?? '' ?>
-					</p>
+					<div id="addr_cont">
+						<?= $cart->address->fullAddress() ?? '' ?><br>
+						-<br>
+						<?= $cart->address->email ?? '' ?><br>
+						<?= $cart->address->phone ?? '' ?>
+						</p>
 
-					<?php if ($cart->status == 1) { ?>
+						<?php if ($cart->status == 1) { ?>
 
-						<a href="<?= client_url('/order/address?id=' . $cart->id . '&key=' . $cart->address->secretNumber) ?>">
-							<p class="edit-address">Modifica l'indirizzo</p>
-						</a>
+							<a href="<?= client_url('/order/address?id=' . $cart->id . '&key=' . $cart->address->secretNumber) ?>">
+								<p class="edit-address">Modifica l'indirizzo</p>
+							</a>
 
-					<?php } ?>
+						<?php } ?>
 
-				</div>
-			</section>
+					</div>
+				</section>
 		</div>
+	<?php } ?>
 
-		<div id="right_panel" class="panel">
+	<div id="right_panel" class="panel">
 
-			<!-- Orders -->
-			<?= ViewManager::renderOrderList($cart) ?>
+		<!-- Orders -->
+		<?= ViewManager::renderOrderList($cart) ?>
 
-			<!-- Recap -->
-			<?php cart_recap($cart, false) ?>
+		<!-- Recap -->
+		<?php cart_recap($cart, false) ?>
 
-		</div>
+	</div>
 
 	</div>
 </div>

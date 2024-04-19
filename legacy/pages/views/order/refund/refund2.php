@@ -20,7 +20,7 @@
 
 				<!-- Image -->
 				<div class="item-img-box">
-					<img src="<?= $order->clientImage() ?>" class="item-img img-fill">
+					<img src="<?= $order->image() ?>" class="item-img img-fill">
 				</div>
 
 				<!-- Data -->

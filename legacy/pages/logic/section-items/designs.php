@@ -30,8 +30,8 @@ $buttons = [
 	['type' => 'edit'],
 	['type' => 'delete'],
 	['title' => 'Rigenera', 'name' => 'generate',  'color' => 'green'],
-	['title' => 'Originale', 'url' => public_asset('designs_originals/{{ID}}.png'), 'color' => 'yellow', 'download' => true],
-	['title' => 'Originale su nero', 'url' => public_asset('designs_originals/{{ID}}_dark.png'), 'color' => 'white', 'download' => true],
+	['title' => 'Originale', 'url' => public_asset('designs_originals/{{id}}.png'), 'color' => 'yellow', 'download' => true],
+	['title' => 'Originale su nero', 'url' => public_asset('designs_originals/{{id}}_dark.png'), 'color' => 'white', 'download' => true],
 ];
 
 function _expand_buttons(&$button, $key, $row) {

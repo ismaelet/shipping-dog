@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Seller extends Model {
 
 	protected $table = 'stores';
-	protected $fillable = [];
+	protected $fillable = ['credit', 'earned'];
 
 	/***************************
 	 * * Relationship instances *

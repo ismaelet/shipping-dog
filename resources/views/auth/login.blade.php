@@ -2,6 +2,7 @@
     <style>
         main .input {
             padding-inline: 1.5em;
+            border-radius: var(--border-radius-1000)
         }
     </style>
 @endpushOnce
@@ -13,16 +14,16 @@
 	potrai vendere le tue grafiche stampate su tantissimi capi e accessori.">
 
     <x-slot name="formBody">
-        <x-form.input type="hidden" name="url" :value="old('url')" class="rounded-lg" />
-        <x-form.input type="text" name="login" :value="old('login')" placeholder="Username o E-mail" required />
-        <x-form.input type="password" name="password" placeholder="Password" required />
+        <x-inputs.input type="hidden" name="url" :value="old('url')" />
+        <x-inputs.input type="text" name="login" :value="old('login')" placeholder="Username o E-mail" required />
+        <x-inputs.input type="password" name="password" placeholder="Password" required />
 
         @session('error')
-            <p class="error">{{ $value }}</p>
+            <x-inputs.warning>{{ $value }}</x-inputs.warning>
         @endsession
 
         <div class="flex items-center justify-between">
-            <x-form.checkbox name="remember" text="Resta connesso" checked />
+            <x-inputs.checkbox name="remember" text="Resta connesso" checked />
 
             <a href="/recover" class="text-right hover:text-neutral-700 transition-colors">
                 <p class="">Hai dimenticato la password?</p>
@@ -31,7 +32,7 @@
     </x-slot>
 
     <x-slot name="formFooter">
-        <x-form.button type="submit">Log In</x-form.button>
-        <x-form.button :href="route('register')" variant="secondary">Registrati</x-form.button>
+        <x-inputs.button type="submit">Log In</x-inputs.button>
+        <x-inputs.button :href="route('register')" variant="secondary">Registrati</x-inputs.button>
     </x-slot>
 </x-templates.auth>

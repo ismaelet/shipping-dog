@@ -40,4 +40,8 @@ class RouteOld {
 				->show();
 		}
 	}
+
+	public static function getRoutes() {
+		return self::$routes;
+	}
 }
