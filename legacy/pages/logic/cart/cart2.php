@@ -3,8 +3,19 @@
 use App\Models\Ecommerce\Address as EcommerceAddress;
 use App\Models\Ecommerce\Order as EcommerceOrder;
 use App\Models\Ecommerce\ShippingMethod as EcommerceShippingMethod;
-use Ecommerce\Address;
 use Ecommerce\Coupon;
+
+/**
+ * TEMP
+ */
+// $ordersToFix = EcommerceOrder::where('id', '>=', 92026)
+// 	->get();
+
+
+// foreach ($ordersToFix as $order) {
+// 	$order->productGain = $order->product->sellerGain();
+// 	$order->save();
+// }
 
 // setup variables
 $loc = ViewOld::get('step');

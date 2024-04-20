@@ -302,7 +302,7 @@ class Order {
 			// add order
 			$orderId = DBOld::add(
 				'orders (user_id, cart_id, product_id, seller_id, design_id, type_id, color_id, size_id, gender_id, position_id, logo_id, fullProductPrice, price_disc, productGain, quantity)',
-				[Auth::id() ?: null, $cart->id, $product->id, $product->user_id, $product->design_id, $product->type->id, $color_id, $size_id, $genderId, $position_id, $logo_id, $price, $product->customerDiscount(), $product->customerGain(), $quantity]
+				[Auth::id() ?: null, $cart->id, $product->id, $product->user_id, $product->design_id, $product->type->id, $color_id, $size_id, $genderId, $position_id, $logo_id, $price, $product->customerDiscount(), $product->sellerGain(), $quantity]
 			);
 
 			$cart->updateOrders();

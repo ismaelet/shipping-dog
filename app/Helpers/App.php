@@ -9,9 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class App {
 	public static function isSeller(): bool {
+		if (!Auth::check()) {
+			return false;
+		}
+
 		$user = User::find(Auth::id());
 
-		return Auth::check() && $user->isSeller();
+		return $user->isSeller();
 	}
 
 	public static function userOld(): ?OldUser {

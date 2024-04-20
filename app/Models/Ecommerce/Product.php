@@ -162,8 +162,8 @@ class Product extends Model {
 	/**
 	 * Get the product gain
 	 */
-	public function customerGain(): float {
-		return $this->userIsOwner() ? ($this->color()->type == 'w' ? $this->price()->gain_w : $this->price()->gain_c) : 0;
+	public function sellerGain(): float {
+		return $this->userIsOwner() ? 0 : ($this->color()->type == 'w' ? $this->price()->gain_w : $this->price()->gain_c);
 	}
 
 	/**
