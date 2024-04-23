@@ -130,7 +130,10 @@
                                         @endforeach
 
                                         @foreach ($mergedOrders as $orderDescription => $quantity)
-                                            <p>{!! $quantity . ' x ' . $orderDescription !!}</p>
+                                            <a href="{{ $order->product->fullUrl($order->color_id, $order->position_id) }}"
+                                                target="_bank">
+                                                <p>{!! $quantity . ' x ' . $orderDescription !!}</p>
+                                            </a>
                                         @endforeach
                                     </div>
                                 @endforeach

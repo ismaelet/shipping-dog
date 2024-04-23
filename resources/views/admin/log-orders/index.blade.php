@@ -17,16 +17,60 @@
 @pushOnce('scripts')
     <script defer>
         document.addEventListener('DOMContentLoaded', function() {
+            // Copy from cart set in the header
             document.querySelector('.js-copy-orders').addEventListener('click', async function() {
+                cartId = document.querySelector('.js-first-cart').value
+
+                copyOrdersContent(cartId)
+            })
+
+            // Copy from specific cart
+            document.querySelectorAll('.js-copy-from-cart').forEach((button) => {
+                button.addEventListener('click', async function() {
+                    cartId = this.getAttribute('data-id')
+
+                    copyOrdersContent(cartId)
+                })
+            })
+
+            // Copy the orders content
+            function copyOrdersContent(startingCartId) {
+                let orders = []
+                let order = document.querySelector(`.js-order[data-id="${startingCartId}"]`);
+
+                orders.push(order);
+
+                while (nextOrder = selectNextOrder(order)) {
+                    order = nextOrder;
+
+                    if (order) {
+                        orders.push(order);
+                    }
+                }
+
                 // Get the HTML content of the entire document
                 let text = '';
 
-                document.querySelectorAll('.js-order').forEach((order) => {
-                    text += order.outerHTML + '--------<br><br><br>';
+                orders.forEach((order) => {
+                    order.querySelectorAll('.js-to-copy').forEach((element) => {
+                        text += element.outerHTML;
+                    })
+
+                    text += '--------<br><br>';
                 })
 
                 copyRichTextToClipboard(text)
-            })
+            }
+
+            function selectNextOrder(order) {
+                const nextSibling = order.closest('article').nextElementSibling
+
+                if (nextSibling) {
+                    return nextSibling.querySelector('.js-order');
+                }
+
+                return null;
+            }
 
             async function copyRichTextToClipboard(html) {
                 try {
@@ -57,11 +101,15 @@
 
         {{-- Recap form --}}
         <x-dashboard.form.panel title="Azioni">
-            <div class="flex gap-4">
-                <x-inputs.button class="grow js-copy-orders">
-                    {!! embed_icon('copy') !!}
-                    Copia il log
-                </x-inputs.button>
+            <div class="grid gap-4">
+                <x-form.group>
+                    <x-inputs.label>Copia a partire da:</x-inputs.label>
+                    <x-inputs.input :value="$carts->first()->id" class="js-first-cart" placeholder="A partire da" data-size="3" />
+                    <x-inputs.button class="grow js-copy-orders">
+                        {!! embed_icon('copy') !!}
+                        Copia il log
+                    </x-inputs.button>
+                </x-form.group>
 
                 @if ($carts->count())
                     <x-inputs.button type="submit" name="submit" value="clean_log" variant="secondary" class="grow">
@@ -84,17 +132,20 @@
                             : $title;
                 @endphp
 
-                <x-dashboard.form.panel :title="$title" id="carts" class="order log js-order">
+                <x-dashboard.form.panel :title="$title" id="carts" class="order log js-order"
+                    data-id="{{ $cart->id }}">
 
                     {{-- Order header --}}
-                    <p>[{{ $cart->id }} - {{ date('Y-m-d H:i:s', strtotime($cart->time)) }}]</p>
+                    <p class="js-to-copy">[{{ $cart->id }} - {{ date('Y-m-d H:i:s', strtotime($cart->time)) }}]</p>
 
                     {{-- Address --}}
                     @if ($cart->address)
                         {{-- If found --}}
-                        <div>
+                        <div class="js-to-copy">
                             <p>{!! $cart->address->fullAddress() !!}</p>
                             ---
+                        </div>
+                        <div>
                             <p>{{ $cart->address->email }}</p>
                             <p>{{ $cart->address->phone }}</p>
                         </div>
@@ -137,7 +188,7 @@
                     @endif
 
                     {{-- Orders --}}
-                    <div>
+                    <div class="js-to-copy">
                         @foreach ($cart->orders as $order)
                             <p>
                                 @if ($order->inventory == 1)
@@ -148,7 +199,8 @@
                                     <span class="font-bold text-dark-green">! SIMILE IN INVENTARIO !</span>
                                 @endif
 
-                                <a href="{{ $order->product->url() }}" target="_blank">
+                                <a href="{{ $order->product->fullUrl($order->color_id, $order->position_id) }}"
+                                    target="_blank">
                                     {{ $order->fullName() }}
                                 </a>
                             </p>
@@ -156,14 +208,20 @@
                     </div>
 
                     {{-- Shipping --}}
-                    <p>{!! $cart->shipping_method->name !!}, {!! $cart->shipping_method->deliveryDateString($cart->created_at, $cart->hasLongDelivery()) !!}</p>
+                    <p class="js-to-copy">{!! $cart->shipping_method->name !!}, {!! $cart->shipping_method->deliveryDateString($cart->created_at, $cart->hasLongDelivery()) !!}</p>
 
                     {{-- Price --}}
                     @if (!$cart->change_request)
-                        <p>Totale: <strong>{!! $cart->priceString() !!}</strong></p>
+                        <p class="js-to-copy">Totale: <strong>{!! $cart->priceString() !!}</strong></p>
                     @else
-                        <p class="font-bold text-blue">CAMBIO TAGLIA</p>
+                        <p class="font-bold text-blue js-to-copy">CAMBIO TAGLIA</p>
                     @endif
+
+                    <x-inputs.button class="js-copy-from-cart" data-id="{{ $cart->id }}" size="small"
+                        variant="secondary">
+                        {!! embed_icon('copy') !!}
+                        Copia a partire da qui
+                    </x-inputs.button>
                 </x-dashboard.form.panel>
             @endforeach
         @else

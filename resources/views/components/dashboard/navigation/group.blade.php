@@ -36,6 +36,10 @@
                 overflow: hidden;
             }
         }
+
+        .navigation-divisor:last-child {
+            display: none;
+        }
     </style>
 @endpushOnce
 
@@ -71,4 +75,4 @@
 
 </ul>
 
-<span class="border-b"></span>
+<span class="navigation-divisor border-b"></span>

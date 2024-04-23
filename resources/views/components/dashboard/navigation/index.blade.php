@@ -40,12 +40,6 @@
                 @foreach ($navigationGroups as $navigationGroup)
                     <x-dashboard.navigation.group :navigation-group="$navigationGroup" />
                 @endforeach
-
-                <a class="button-shutdown surface rounded gap-2 leading-10 mt-3 font-heading transition-colors hover:text-neutral-700"
-                    href="{{ route('logout') }}">
-                    {!! embed_icon('exit', ['w-1em']) !!}
-                    Esci
-                </a>
             </div>
 
         </div>

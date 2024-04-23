@@ -121,6 +121,40 @@ class Design extends Model {
 		return public_asset('product_types/mockups/no-image.webp');
 	}
 
+	public function originalImage(): ?string {
+
+		if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '.ai'))) {
+			return public_asset($file);
+		}
+
+		if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '.pdf'))) {
+			return public_asset($file);
+		}
+
+		if (file_exists(public_storage($file = 'designs_originals/' . $this->id . '.png'))) {
+			return public_asset($file);
+		}
+
+		return null;
+	}
+
+	public function originalDarkImage(): ?string {
+
+		if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '_dark.ai'))) {
+			return public_asset($file);
+		}
+
+		if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '_dark.pdf'))) {
+			return public_asset($file);
+		}
+
+		if (file_exists(public_storage($file = 'designs_originals/' . $this->id . '_dark.png'))) {
+			return public_asset($file);
+		}
+
+		return null;
+	}
+
 	/**
 	 * Delete the design and clean the related data
 	 */

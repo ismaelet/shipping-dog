@@ -72,6 +72,18 @@
     }
 
     $navigationGroups[] = $mainGroup;
+
+    // Add the link to log out
+    $publicSiteGroup = [
+        [
+            'name' => 'Logout',
+            'icon' => 'logout',
+            'checked' => false,
+            'url' => route('logout'),
+        ],
+    ];
+
+    $navigationGroups[] = $publicSiteGroup;
 @endphp
 
 @pushOnce('styles')

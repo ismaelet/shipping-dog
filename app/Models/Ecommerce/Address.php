@@ -32,6 +32,6 @@ class Address extends Model {
 		$cityLine = $this->zip . ' ' . $this->city;
 		$cityLine = $this->region ? $cityLine . ' (' . $this->region . ')' : $cityLine;
 
-		return implode('<br>', array_filter([$nameLine, $addressLine, $cityLine, $this->country]));
+		return implode('<br>', array_filter([$nameLine, $addressLine, $cityLine]));
 	}
 }

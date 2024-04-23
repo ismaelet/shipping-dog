@@ -227,6 +227,20 @@ class Product extends Model {
 		return '/shop/item?id=' . $this->id;
 	}
 
+	public function fullUrl(?int $color_id = null, ?int $position_id = null): string {
+		$parameters = ['id' => $this->id];
+
+		if ($color_id) {
+			$parameters['color_id'] = $color_id;
+		}
+
+		if ($position_id) {
+			$parameters['position_id'] = $position_id;
+		}
+
+		return '/shop/item?' . http_build_query($parameters);
+	}
+
 	/**
 	 * Get the base product, without any design
 	 */
