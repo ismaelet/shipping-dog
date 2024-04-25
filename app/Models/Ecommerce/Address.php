@@ -34,4 +34,11 @@ class Address extends Model {
 
 		return implode('<br>', array_filter([$nameLine, $addressLine, $cityLine]));
 	}
+
+	/**
+	 * Get the customer's contacts
+	 */
+	public function contacts(): string {
+		return implode('<br>', array_filter([$this->phone, $this->email]));
+	}
 }

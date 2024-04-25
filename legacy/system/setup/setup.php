@@ -22,7 +22,8 @@ spl_autoload_register(function ($name) {
 			include_once __DIR__ . ('/../../../' . lcfirst($name) . '.php');
 			break;
 		case strpos($name, 'App') === 0:
-			include_once __DIR__ . ('/../../' . lcfirst($name) . '.php');
+			if (file_exists($file = __DIR__ . ('/../../' . lcfirst($name) . '.php')))
+				include_once $file;
 			break;
 		case file_exists($file = __DIR__ . ('/../../app/classes/' . $name . '.php')):
 			include_once $file;

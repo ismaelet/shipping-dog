@@ -4,7 +4,9 @@
 * Page configuration
 */
 
-use Ecommerce\Cart;
+use App\Mail\OrderStatusMail;
+use App\Models\Ecommerce\Cart;
+use Illuminate\Support\Facades\Mail;
 
 $pageConfig['add'] = false;
 $pageConfig['row-action'] = 'edit?id={{id}}';
@@ -65,43 +67,45 @@ $buttons = [
 //expand results
 function _expand_results(&$entry, $field, $key, $row) {
 
-	$cart = new Cart($row['id']);
+	$cart = Cart::find($row['id']);
 
 	if ($key == 0) {
 		// id
-		$entry['value'] = $cart->idCode;
+		$entry['value'] = $cart->idCode();
 	} else if ($key == 1) {
 		// basic data
-		$entry['value'] = $cart->dateString . '<br>';
-		if (!$cart->customer->guest) $entry['value'] .= 'ID cliente: ' . $cart->customerId . '<br>';
-		$entry['value'] .= 'Spedizione: ' . $cart->shippingMethod->shortName . '<br>';
-		$entry['value'] .= 'Pagamento: ' . $cart->paymentMethod->name . '<br>';
-		if ($cart->couponCode) $entry['value'] .= 'Codice sconto: ' . $cart->coupon->code . '<br>';
+		$entry['value'] = $cart->timeString() . '<br>';
+		if ($cart->customer) $entry['value'] .= 'ID cliente: ' . $cart->customerId . '<br>';
+		$entry['value'] .= $cart->shipping_method->name . '<br>';
+		$entry['value'] .= 'Pagamento: ' . $cart->payment_method?->name . '<br>';
+		if ($cart->coupon) $entry['value'] .= 'Codice sconto: ' . $cart->coupon->code . '<br>';
 	} else if ($key == 2) {
 		// address
-		$entry['value'] = $cart->address->fullAddress;
+		$entry['value'] = $cart->address->fullAddress();
 	} else if ($key == 3) {
 		// contacts
-		$entry['value'] = $cart->address->contacts;
+		$entry['value'] = $cart->address->contacts();
 	} else if ($key == 4) {
 		// orders
 		if ($cart->quantity) {
 			$entry['value'] = '';
 
 			foreach ($cart->orders as $order) {
-				$entry['value'] .= $order->name . '<br>';
+				$entry['value'] .= $order->fullName() . '<br>';
 			}
 		} else $entry['value'] = '- Nessun articolo registrato -<br>';
 	} else if ($key == 5) {
 		// price
-		$entry['value'] = $cart->priceString;
+		$entry['value'] = $cart->priceString();
 	} else if ($key == 6) {
 		// status
-		$entry['value'] = '<span class="order-status background-status-color--' . $cart->statusCode . '">' . $cart->adminStatusName . '</span>';
+		$entry['value'] = '<span class="order-status background-status-color--' . $cart->statusCode() . '">' . $cart->statusName() . '</span>';
 	}
 }
 
 // resend status email
 if (isset($_POST['resend-status-email'])) {
-	(new Cart($_POST['id']))->sendStatusEmail(true);
+	$cart = Cart::find($_POST['id']);
+
+	Mail::to($cart->address->email)->send(new OrderStatusMail($cart));
 }

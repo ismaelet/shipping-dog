@@ -93,9 +93,9 @@ class Order extends Model {
 	public function description(): string {
 		$product = $this->product;
 
-		$description = $product->type->name;
-		$description .= $this->size && strpos($product->type->sizes, ',') ? ' ' . $this->size->name : '';
-		$description .= $this->color && strpos($product->type->colors, ',') ? ' ' . $this->color->name : '';
+		$description = $product?->type->name;
+		$description .= $this->size && strpos($product?->type->sizes, ',') ? ' ' . $this->size->name : '';
+		$description .= $this->color && strpos($product?->type->colors, ',') ? ' ' . $this->color->name : '';
 		$description .= $this->logo ? ' ' . $this->logo->name : '';
 		$description .= $this->position_id && $this->position_id > 1 ? ' ' . $this->position->name : '';
 

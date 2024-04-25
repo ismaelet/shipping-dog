@@ -38,6 +38,13 @@ class Cart extends Model {
 	}
 
 	/**
+	 * Get the cart's payment method
+	 */
+	public function payment_method(): BelongsTo {
+		return $this->belongsTo(PaymentMethod::class);
+	}
+
+	/**
 	 * Get the cart's address
 	 */
 	public function address(): HasOne {

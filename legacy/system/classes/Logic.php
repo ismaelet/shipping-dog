@@ -57,14 +57,13 @@ class Logic {
 	public static function load() {
 		sort_subvalue(self::$files, 'priority');
 
-		//dd(self::$files);
-
 		foreach (self::$files as $file) {
 			if ($file['url']) self::loadFile($file['url']);
 
 			if ($file['type'] == 'template') {
 				StyleLoader::add($file['name'], 'template');
 				ScriptLoader::add($file['name'], 'template');
+			} else {
 			}
 		}
 	}

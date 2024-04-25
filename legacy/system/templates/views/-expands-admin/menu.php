@@ -27,8 +27,8 @@
 					<!-- Home link -->
 					<div class="menu-item">
 						<a class="menu-item__header" href="/admin/dashboard">
-							<?= embed_icon('home') ?>
-							<p class="menu-item__title">Home</p>
+							<?= embed_icon('dashboard') ?>
+							<p class="menu-item__title">Dashboard</p>
 						</a>
 					</div>
 
