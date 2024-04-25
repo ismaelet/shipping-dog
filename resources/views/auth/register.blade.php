@@ -53,7 +53,7 @@
     </x-slot>
 
     <x-slot name="formFooter">
-        <x-form.button type="submit">Registrati</x-form.button>
-        <x-form.button href="{{ route('login') }}" variant="secondary">{{ __('Back') }}</x-form.button>
+        <x-inputs.button type="submit">Registrati</x-inputs.button>
+        <x-inputs.button href="{{ route('login') }}" variant="secondary">{{ __('Back') }}</x-inputs.button>
     </x-slot>
 </x-templates.auth>

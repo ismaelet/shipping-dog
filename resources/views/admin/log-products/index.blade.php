@@ -13,30 +13,53 @@
 @pushOnce('scripts')
     <script defer>
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.js-copy-orders').addEventListener('click', async function() {
-                // Get the HTML content of the entire document
-                const designText = '------ DESIGN ------' + document.querySelector('#designs')
-                    .outerHTML + '<br><br><br>'
-                const productsText = '------ PRODOTTI ------' + document.querySelector('#products')
-                    .outerHTML
+            /*
+             * Show the apply button
+             */
+            const searchInput = document.querySelector('[name="start_cart_id"]')
+            const startingCartName = searchInput.value
 
-                copyRichTextToClipboard(designText + productsText)
+            searchInput.addEventListener('input', function() {
+                if (this.value !== startingCartName) {
+                    document.querySelector('.js-apply-search').classList.remove('hidden')
+                    document.querySelector('.js-apply-search').classList.add('contents')
+                } else {
+                    document.querySelector('.js-apply-search').classList.remove('contents')
+                    document.querySelector('.js-apply-search').classList.add('hidden')
+                }
             })
 
-            async function copyRichTextToClipboard(html) {
-                try {
-                    await navigator.clipboard.write([
-                        new ClipboardItem({
-                            'text/html': new Blob([html], {
-                                type: 'text/html'
+            /*
+             * Copy all the orders to the clipboard
+             */
+            const copyAllButton = document.querySelector('.js-copy-orders')
+
+            if (copyAllButton) {
+                copyAllButton.addEventListener('click', async function() {
+                    // Get the HTML content of the entire document
+                    const designText = '------ DESIGN ------' + document.querySelector('#designs')
+                        .outerHTML + '<br><br><br>'
+                    const productsText = '------ PRODOTTI ------' + document.querySelector('#products')
+                        .outerHTML
+
+                    copyRichTextToClipboard(designText + productsText)
+                })
+
+                async function copyRichTextToClipboard(html) {
+                    try {
+                        await navigator.clipboard.write([
+                            new ClipboardItem({
+                                'text/html': new Blob([html], {
+                                    type: 'text/html'
+                                }),
                             }),
-                        }),
-                    ])
-                    console.log('Rich text copied to clipboard')
-                    return true
-                } catch (err) {
-                    console.error('Failed to copy rich text: ', err)
-                    return false
+                        ])
+                        console.log('Rich text copied to clipboard')
+                        return true
+                    } catch (err) {
+                        console.error('Failed to copy rich text: ', err)
+                        return false
+                    }
                 }
             }
         })
@@ -52,25 +75,36 @@
         <x-dashboard.form.panel :title="($validCarts->count() ? $filteredOrders->count() : 0) . ' Articoli da fare'">
             <x-inputs.label>Parti dall'ordine:</x-inputs.label>
 
-            <div class="flex gap-4 items-center">
-                <form action="" method="POST" class="w-full">
-                    <x-inputs.search-input search="carts" stored-name="start_cart_id"
+            <div class="flex gap-4 items-center w-full">
+                <form action="" method="POST" class="contents">
+                    <x-inputs.search-input class="grow" search="carts" stored-name="start_cart_id"
                         stored-value="{{ $startFromCart ? $startFromCart->id : null }}"
                         shown-value="{{ $startFromCart ? $startFromCart->id . ' - ' . $startFromCart->address->full_name : '' }}"
                         placeholder="Ordine da cui partire" required />
+
+                    <div class="hidden js-apply-search">
+                        <x-inputs.button type="submit" variant="secondary" size="auto">
+                            <?= embed_icon('correct') ?>
+                            Applica
+                        </x-inputs.button>
+                    </div>
                 </form>
 
-                <form action="" method="POST">
-                    <x-inputs.button type="submit" name="submit" value="clean_log" variant="secondary" size="auto">
-                        <?= embed_icon('clean') ?>
-                        Pulisci log
+                @if ($validCarts->count())
+                    <form action="" method="POST" class="grid h-full">
+                        <x-inputs.button type="submit" name="submit" value="clean_log" variant="secondary"
+                            size="auto">
+                            <?= embed_icon('clean') ?>
+                            Pulisci log
+                        </x-inputs.button>
+                    </form>
+
+                    <x-inputs.button class="js-copy-orders" size="auto">
+                        <?= embed_icon('copy') ?>Copia tutto
                     </x-inputs.button>
-                </form>
+                @endif
             </div>
 
-            <x-inputs.button class="js-copy-orders">
-                <?= embed_icon('copy') ?>Copia tutto
-            </x-inputs.button>
         </x-dashboard.form.panel>
 
         {{-- Logs --}}

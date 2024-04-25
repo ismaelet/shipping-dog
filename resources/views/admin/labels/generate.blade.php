@@ -1,7 +1,10 @@
-<x-dashboard.form title="Genera le etichette">
+<x-layouts.admin-dashboard>
+    <x-dashboard.typography.main-heading class=" mb-12">Genera le etichette</x-dashboard.typography.main-heading>
+
     <x-dashboard.form.panel title="Etichette da generare">
 
-        <div class="grid gap-12">
+        <form class="grid gap-12" method="POST">
+            @csrf
             @session('success')
                 <x-form.group>
                     <x-inputs.alert-success>{{ $value }}</x-inputs.alert-success>
@@ -17,7 +20,6 @@
                     placeholder="Fino all'ordine numero" data-size="2" required />
             </x-form.group>
 
-
             <div class="grid justify-center gap-4">
                 <x-inputs.button type="sumit" name="submit" value="generate">
                     {!! embed_icon('download') !!}
@@ -29,7 +31,7 @@
                     Elabora gli ordini
                 </x-inputs.button>
             </div>
-        </div>
+        </form>
 
     </x-dashboard.form.panel>
-</x-dashboard.form>
+</x-layouts.admin-dashboard>

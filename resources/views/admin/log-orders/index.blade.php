@@ -17,12 +17,35 @@
 @pushOnce('scripts')
     <script defer>
         document.addEventListener('DOMContentLoaded', function() {
-            // Copy from cart set in the header
-            document.querySelector('.js-copy-orders').addEventListener('click', async function() {
-                cartId = document.querySelector('.js-first-cart').value
+            /*
+             * Show the apply button
+             */
+            const searchInput = document.querySelector('[name="start_cart_id"]')
+            const startingCartName = searchInput.value
 
-                copyOrdersContent(cartId)
+            searchInput.addEventListener('input', function() {
+                if (this.value !== startingCartName) {
+                    document.querySelector('.js-apply-search').classList.remove('hidden')
+                    document.querySelector('.js-apply-search').classList.add('contents')
+                } else {
+                    document.querySelector('.js-apply-search').classList.remove('contents')
+                    document.querySelector('.js-apply-search').classList.add('hidden')
+                }
             })
+
+            /*
+             * Copy the orders content
+             */
+            const copyAllButton = document.querySelector('.js-copy-orders');
+
+            // Copy from cart set in the header
+            if (copyAllButton) {
+                copyAllButton.addEventListener('click', async function() {
+                    cartId = document.querySelector('[name="start_copy_cart_id"]').value
+
+                    copyOrdersContent(cartId)
+                })
+            }
 
             // Copy from specific cart
             document.querySelectorAll('.js-copy-from-cart').forEach((button) => {
@@ -100,24 +123,55 @@
         <x-dashboard.typography.main-heading>Log degli ordini</x-dashboard.typography.main-heading>
 
         {{-- Recap form --}}
-        <x-dashboard.form.panel title="Azioni">
-            <div class="grid gap-4">
-                <x-form.group>
-                    <x-inputs.label>Copia a partire da:</x-inputs.label>
-                    <x-inputs.input :value="$carts->first()->id" class="js-first-cart" placeholder="A partire da" data-size="3" />
-                    <x-inputs.button class="grow js-copy-orders">
-                        {!! embed_icon('copy') !!}
-                        Copia il log
-                    </x-inputs.button>
-                </x-form.group>
+        <x-dashboard.form.panel :title="'Mostrando ' . $carts->count() . ' ordini'">
+            <div class="grid gap-8">
 
-                @if ($carts->count())
-                    <x-inputs.button type="submit" name="submit" value="clean_log" variant="secondary" class="grow">
-                        {!! embed_icon('delete') !!}
-                        Pulisci il log
-                    </x-inputs.button>
-                @else
+                @if ($carts->first())
+                    <x-form.group>
+                        <x-inputs.label>Copia a partire da:</x-inputs.label>
+                        <div class="flex gap-4">
+                            <x-inputs.search-input search="carts" stored-name="start_copy_cart_id"
+                                stored-value="{{ $carts->first()->id }}"
+                                shown-value="{{ $carts->first()->id . ' - ' . $carts->first()->address->full_name }}"
+                                placeholder="Ordine da cui copiare" :where="$cartsFilter" required class="grow" />
+
+                            <x-inputs.button class="js-copy-orders" size="auto">
+                                {!! embed_icon('copy') !!}
+                                Copia il log
+                            </x-inputs.button>
+                        </div>
+                    </x-form.group>
                 @endif
+
+                <x-form.group>
+                    <x-inputs.label>Carica a partire da:</x-inputs.label>
+
+                    <div class="flex gap-4">
+                        <form action="" method="POST" class="contents">
+                            <x-inputs.search-input search="carts" stored-name="start_cart_id"
+                                stored-value="{{ $carts->first()->id ?? '' }}"
+                                shown-value="{{ $carts->first() ? $carts->first()->id . ' - ' . $carts->first()->address->full_name : '' }}"
+                                placeholder="Ordine da cui partire" required class="grow" />
+
+                            <div class="hidden js-apply-search">
+                                <x-inputs.button type="submit" variant="secondary" size="auto">
+                                    <?= embed_icon('correct') ?>
+                                    Applica
+                                </x-inputs.button>
+                            </div>
+                        </form>
+
+                        @if ($carts->count())
+                            <form action="" method="POST" class="contents">
+                                <x-inputs.button type="submit" name="submit" value="clean_log" variant="secondary"
+                                    class="" size="auto">
+                                    {!! embed_icon('delete') !!}
+                                    Pulisci il log
+                                </x-inputs.button>
+                            </form>
+                        @endif
+                    </div>
+                </x-form.group>
             </div>
         </x-dashboard.form.panel>
 
@@ -227,7 +281,10 @@
         @else
             <x-dashboard.form.panel>
                 <p class="py-8">
-                    Nessun ordine registrato dopo il <?= (new DateTime($date))->format('d/m/Y') ?>
+                    Nessun ordine registrato dopo le <span
+                        class="font-bold text-neutral-700"><?= (new DateTime($startFromTime))->format('H:i:s') ?></span>
+                    del <span
+                        class="font-bold text-neutral-700"><?= (new DateTime($startFromTime))->format('d/m/Y') ?></span>
                 </p>
             </x-dashboard.form.panel>
         @endif

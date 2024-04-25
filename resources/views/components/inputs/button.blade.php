@@ -6,80 +6,55 @@
 ])
 
 @php
-    $classes = 'button px-16 rounded-full font-heading text-center text-sm sm:text-base';
+    $classes = 'button px-8 rounded-full font-heading text-center text-sm sm:text-base transition-colors';
 @endphp
 
 @pushOnce('styles')
     <style>
         .button {
+            --icon-size: 1em;
             display: inline-block;
             min-width: 12rem;
-            transition: color .2s, background-color .2s, border-color .2s;
 
-            /* Icons handling */
-            &:has(svg) {
-                display: flex;
-            }
-
-            /* Primary button */
+            /* Variants */
             &[data-variant="primary"] {
-                --_color: var(--color-primary-400-hsl);
-                --_shadow-intensity: 0.4;
                 padding-block: 1em;
-                background-color: hsl(var(--_color));
-                box-shadow: 0 .25rem 3rem -1rem hsl(var(--_color) / var(--_shadow-intensity));
+                background-color: var(--color-primary-400);
+                box-shadow: 0px 1rem 4rem -1rem hsl(var(--color-primary-400-hsl) / .6);
                 color: #fff;
 
-                /* Primary button: Dark color scheme */
-                [data-color-scheme="dark"] &,
-                [data-local-color-scheme="dark"] & {
-                    --_shadow-intensity: 0.4;
-                }
-
-                /* Primary button: Hover */
                 &:hover {
-                    --_color: var(--color-primary-500-hsl);
+                    background-color: var(--color-primary-500);
                 }
             }
 
-            /* Secondary button */
             &[data-variant="secondary"] {
-                --_border-width: 1px;
-                --_border-color: currentColor;
-                --_color: var(--color-neutral-700);
                 padding-block: calc(1em - var(--border-width));
-                border: var(--_border-width) solid var(--_border-color);
-                color: var(--_color);
+                border: var(--border-width) solid var(--color-neutral-400);
+                color: var(--color-neutral-700);
 
-                /* Secondary button: Dark color scheme */
-                [data-color-scheme="dark"] &,
-                [data-local-color-scheme="dark"] & {
-                    --_border-width: var(--border-width);
-                    --_border-color: var(--color-neutral-300);
-                }
-
-                /* Secondary button: Hover */
                 &:hover {
-                    --_border-color: var(--color-primary-400);
-                    --_color: var(--color-primary-400);
+                    color: var(--color-neutral-700);
+                    border-color: var(--color-neutral-700);
                 }
             }
 
-            /* Small version */
+            /* Sizes */
             &[data-size="small"] {
                 min-width: 8rem;
                 font-size: var(--font-size-300);
             }
 
-            /* Auto width version */
             &[data-size="auto"] {
-                width: max-content;
                 min-width: unset;
-                max-width: 100%;
+                height: 100%;
+                padding-block: unset;
             }
 
-            /* Button with icons */
+            /* With icons */
             &:has(svg) {
+                display: flex;
+                align-items: center;
                 gap: 0.5em;
             }
         }

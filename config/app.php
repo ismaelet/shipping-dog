@@ -70,7 +70,7 @@ return [
     |
     */
 
-	'timezone' => 'UTC',
+	'timezone' => 'Europe/Rome',
 
 	/*
     |--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ return [
     |
     */
 
-	'locale' => 'en',
+	'locale' => 'it',
 
 	/*
     |--------------------------------------------------------------------------
@@ -182,7 +182,7 @@ return [
     */
 
 	'aliases' => Facade::defaultAliases()->merge([
-		// 'Example' => App\Facades\Example::class,
+		'ArrayHelper' => App\Helpers\ArrayHelper::class,
 	])->toArray(),
 
 ];

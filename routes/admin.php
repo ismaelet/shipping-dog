@@ -34,6 +34,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 	 */
 	// Logs
 	Route::get('log-orders', [OrderLogController::class, 'index'])->name('log-orders');
+	Route::post('log-orders', [OrderLogController::class, 'update']);
 	Route::get('log-products', [ProductLogController::class, 'index'])->name('log-products');
 	Route::post('log-products', [ProductLogController::class, 'update']);
 

@@ -20,8 +20,8 @@
             </div>
 
             <div>
-                <x-form.button href="{{ route('user-dashboard.personal-data') }}" variant="secondary"
-                    size="small">Modifica</x-form.button>
+                <x-inputs.button href="{{ route('user-dashboard.personal-data') }}" variant="secondary"
+                    size="small">Modifica</x-inputs.button>
             </div>
         </div>
     </x-templates.user-dashboard.panel>

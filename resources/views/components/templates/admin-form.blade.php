@@ -12,15 +12,15 @@
 
             <div class="flex gap-8">
                 @if ($type == 'add')
-                    <x-form.button name="add">
+                    <x-inputs.button name="add">
                         {!! embed_icon('add') !!}
                         Aggiungi
-                    </x-form.button>
+                    </x-inputs.button>
                 @else
-                    <x-form.button name="update">
+                    <x-inputs.button name="update">
                         {!! embed_icon('save') !!}
                         Salva
-                    </x-form.button>
+                    </x-inputs.button>
                 @endif
             </div>
         </form>

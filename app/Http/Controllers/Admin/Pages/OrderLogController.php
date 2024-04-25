@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Cart;
-use App\Models\Ecommerce\Order;
 use App\Models\Framework\Configuration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,7 +16,8 @@ class OrderLogController extends Controller {
 	 */
 	public function index(Request $request): View {
 		// fetch date
-		$startFromTime = Configuration::where('name', 'log_date')->value('value');
+		$startFromTime = Configuration::where('name', 'order_log_start_from')->value('value');
+
 		$carts = Cart::where('created_at', '>=', $startFromTime)
 			->where('status', '>', 0)
 			->oldest()
@@ -25,6 +25,8 @@ class OrderLogController extends Controller {
 
 		return view('admin.log-orders.index')->with([
 			'carts' => $carts,
+			'cartsFilter' => $carts->first() ? [['carts.created_at', '>=', $carts->first()->created_at]] : [],
+			'startFromTime' => $startFromTime,
 		]);
 	}
 

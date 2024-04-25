@@ -6,7 +6,7 @@
     </x-slot:body>
 
     <x-slot:footer>
-        <x-form.button type="submit">Esci</x-form.button>
-        <x-form.button href="/profile" variant="secondary">Indietro</x-form.button>
+        <x-inputs.button type="submit">Esci</x-inputs.button>
+        <x-inputs.button href="/profile" variant="secondary">Indietro</x-inputs.button>
     </x-slot:footer>
 </x-templates.form>

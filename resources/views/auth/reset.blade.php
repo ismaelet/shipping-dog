@@ -27,14 +27,15 @@
     <x-slot name="footer">
 
         @if (session('error'))
-            <x-form.button variant="secondary" :href="route('auth.recover')">{{ __('Richiedi un nuovo codice') }}</x-form.button>
+            <x-inputs.button variant="secondary"
+                :href="route('auth.recover')">{{ __('Richiedi un nuovo codice') }}</x-inputs.button>
         @else
             @if (!session('submitted'))
                 {{-- If the form hasn't been submitted or the email is not found --}}
-                <x-form.button type="submit">Reimposta la password</x-form.button>
+                <x-inputs.button type="submit">Reimposta la password</x-inputs.button>
             @endif
 
-            <x-form.button variant="secondary" :href="route('login')">{{ __('Torna al login') }}</x-form.button>
+            <x-inputs.button variant="secondary" :href="route('login')">{{ __('Torna al login') }}</x-inputs.button>
         @endif
 
     </x-slot>

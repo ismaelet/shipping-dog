@@ -64,6 +64,7 @@ class Cart extends Model {
 	public function orders(): HasMany {
 		return $this->hasMany(Order::class);
 	}
+
 	/************************
 	 * * Utility methods *
 	 ************************/
@@ -71,7 +72,7 @@ class Cart extends Model {
 	 * Generate the id code
 	 */
 	public function idCode(): string {
-		return '#' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+		return '#' . str_pad($this->id, 5, '0', STR_PAD_LEFT);
 	}
 
 	/**
@@ -148,7 +149,7 @@ class Cart extends Model {
 	 */
 	public function hasLongDelivery(): bool {
 		foreach ($this->orders as $order) {
-			if ($order->product && ($order->product->type->preorder || $order->color->preorder)) {
+			if ($order->product && ($order->product->type?->preorder || $order->color?->preorder)) {
 				return true;
 			}
 		}

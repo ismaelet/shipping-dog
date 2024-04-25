@@ -1,3 +1,14 @@
+@props([
+    'search',
+    'storedName',
+    'storedValue',
+    'shownValue',
+    'where',
+    'exclude',
+    'placeholder' => 'Cerca...',
+    'required' => false,
+])
+
 @pushOnce('styles')
     <style>
         .search-input {
@@ -40,7 +51,7 @@
         function highlight_search_result(text, search) {
             let pattern = new RegExp('(' + search + ')', 'ig')
 
-            return text.replace(pattern, '<strong>$1</strong>')
+            return text.replace(pattern, '<span class="font-bold text-neutral-700">$1</span>')
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -59,26 +70,27 @@
                     const storedInput = searchBlock.querySelector('.js-search-store')
                     const shownInput = element
                     const dropDown = searchBlock.querySelector('.js-search-dropdown')
-                    const parcialEndpoint = searchBlock.dataset.endpoint
+                    const endpoint = '/api/' + searchBlock.dataset.endpoint
                     const filter = shownInput.value
                     const exclude = searchBlock.dataset.exclude
-
-                    // Generate the endpoint
-                    let fullEndpoint =
-                        `/api/${parcialEndpoint}?filter=${encodeURIComponent(filter)}`
-
-                    if (exclude) {
-                        fullEndpoint += `&exclude=${exclude}`
-                    }
+                    const where = searchBlock.dataset.where ? JSON.parse(searchBlock.dataset
+                        .where) : {}
 
                     // Empty the previous results
                     dropDown.innerHTML = ''
+                    storedInput.value = ''
 
                     // Fetch the results
-                    axios.get(fullEndpoint)
+                    axios.get(endpoint, {
+                            params: {
+                                filter: filter,
+                                exclude: exclude,
+                                where: where
+                            }
+                        })
                         .then(response => {
                             // Get the results
-                            const results = response.data
+                            const results = response.data.data
                             const count = results.length
 
                             if (count) {
@@ -102,7 +114,7 @@
                         })
                         .catch(error => {
                             // Log the error
-                            console.error(error);
+                            console.error(error.response.data.message);
                         });
                 })
             })
@@ -121,6 +133,7 @@
                         storedInput.value = event.target.dataset.id
                         shownInput.value = event.target.dataset.text
 
+                        storedInput.dispatchEvent(new Event('input'))
                         shownInput.focus()
 
                         dropDown.classList.remove('active')
@@ -177,15 +190,14 @@
     </script>
 @endpushOnce
 
-<div class="search-input grid js-search-input" data-endpoint="<?= $search ?>"
-    <?= isset($where) ? 'data-where="' . implode(',', $where) . '"' : '' ?>
-    <?= isset($exclude) ? 'data-exclude="' . implode(',', $exclude) . '"' : '' ?>>
+<div {{ $attributes->class(['search-input', 'grid', 'js-search-input']) }} data-endpoint="{{ $search }}"
+    {!! isset($where) ? 'data-where="' . htmlspecialchars(json_encode($where), ENT_QUOTES, 'UTF-8') . '"' : '' !!} {!! isset($exclude) ? 'data-exclude="' . implode(',', $exclude) . '"' : '' !!}>
 
-    <input type="hidden" class="js-search-store" name="<?= $storedName ?>" value="<?= $storedValue ?? '' ?>"
-        <?= isset($required) ? 'required' : '' ?>>
+    <input type="hidden" class="js-search-store" name="{{ $storedName }}" value="{{ $storedValue ?? '' }}"
+        @required($required)>
 
-    <x-inputs.input class="js-search-show" :name="$shownName ?? null" value="{{ $shownValue ?? '' }}"
-        placeholder="{{ $placeholder ?? '' }}" :required="$required ?? null" autocomplete="off" />
+    <x-inputs.input class="js-search-show" :name="$shownName ?? null" :value="$shownValue ?? ''" :placeholder="$placeholder" :required="$required ?? null"
+        autocomplete="off" />
 
     <div class="search-input__dropdown js-search-dropdown">
         <!-- Populated after fetch -->
