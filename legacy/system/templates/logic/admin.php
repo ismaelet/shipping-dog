@@ -4,7 +4,6 @@
 
 use App\Models\Admin\AdminCategory;
 use App\Models\Admin\AdminSection;
-use Illuminate\Support\Facades\Route;
 
 $currentSection = false;
 
@@ -34,7 +33,7 @@ foreach ($categories as $categoryData) {
 			$section = [];
 			$section['name'] = $sectionData->name;
 			$section['checked'] = $currentSection && $category['checked'] && ($sectionData->slug == $currentSection['slug'] || ($sectionData->hidden && str_replace('add', 'list',  $currentSection['slug'])));
-			$section['url'] = '/admin/' . $sectionData->category->slug . '/' . $sectionData->slug;
+			$section['url'] = $sectionData->url();
 
 			$category['sections'][] = $section;
 		}

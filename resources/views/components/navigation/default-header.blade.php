@@ -66,7 +66,7 @@
     ];
     $header['links'][] = ['title' => 'Vendi', 'loc' => 'sell', 'url' => '/sell', 'seller' => false];
     $header['links'][] = ['title' => 'Supporto', 'loc' => 'info', 'url' => '/infos.faq', 'drop' => 'info'];
-    $header['links'][] = ['title' => 'Gestione', 'loc' => 'admin', 'url' => '/admin', 'admin' => true];
+    $header['links'][] = ['title' => 'Gestione', 'loc' => 'admin', 'url' => '/admin/dashboard', 'admin' => true];
 
     // dropdowns
     $header['dropdowns']['shop'] = [

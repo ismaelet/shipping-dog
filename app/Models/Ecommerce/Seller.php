@@ -2,9 +2,11 @@
 
 namespace App\Models\Ecommerce;
 
+use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Seller\Follower;
 use App\Models\Ecommerce\Seller\SellerPrice;
+use App\Models\Ecommerce\Shop\Payment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -50,11 +52,26 @@ class Seller extends Model {
 	}
 
 	/**
+	 * Get the seller's payments
+	 */
+	public function payments(): HasMany {
+		return $this->hasMany(Payment::class)->where('other', false);
+	}
+
+	/**
+	 * Get the seller's other transfers
+	 */
+	public function other_transfers(): HasMany {
+		return $this->hasMany(Payment::class)->where('other', true);
+	}
+
+	/**
 	 * Get the seller's logo groups
 	 */
 	public function logoGroups(): HasMany {
 		return $this->hasMany(LogoGroup::class, 'seller_id', 'user_id');
 	}
+
 	/************************
 	 * * Utility methods *
 	 ************************/
@@ -72,6 +89,38 @@ class Seller extends Model {
 		return '/artist?id=' . $this->user_id;
 	}
 
+	/**
+	 * Check if the seller is followed by the logged user
+	 */
+	public function auth_follower(): HasOne {
+		return $this->hasOne(Follower::class, 'user_id', 'id')
+			->where('follower_id', auth()->id());
+	}
+
+	public function isFollowed(): bool {
+		return $this->auth_follower()->exists();
+	}
+
+	/**
+	 * Get the seller's icon
+	 */
+	public function icon(): string {
+		$icon = 'users/icons/' . $this->user_id;
+
+		if (file_exists(public_storage($icon . '.webp'))) {
+			return public_asset($icon . '.webp');
+		}
+
+		if (file_exists(public_storage($icon . '.jpg'))) {
+			return public_asset($icon . '.jpg');
+		}
+
+		return public_asset('users/icons/0.jpg');
+	}
+
+	/************************
+	 * * Sellers balance *
+	 ************************/
 	/**
 	 * Get the seller's total sales
 	 */
@@ -127,35 +176,52 @@ class Seller extends Model {
 	}
 
 	/**
-	 * Check if the seller is followed by the logged user
+	 * Get the payed amount
 	 */
-	public function auth_follower(): HasOne {
-		return $this->hasOne(Follower::class, 'user_id', 'id')
-			->where('follower_id', auth()->id());
-	}
-
-	public function isFollowed(): bool {
-		return $this->auth_follower()->exists();
+	public function payed(): float {
+		return round($this->payments()->sum('value'), 2);
 	}
 
 	/**
-	 * Get the seller's icon
+	 * Get the other transfers amount
 	 */
-	public function icon(): string {
-		$icon = 'users/icons/' . $this->user_id;
-
-		if (file_exists(public_storage($icon . '.webp'))) {
-			return public_asset($icon . '.webp');
-		}
-
-		if (file_exists(public_storage($icon . '.jpg'))) {
-			return public_asset($icon . '.jpg');
-		}
-
-		return public_asset('users/icons/0.jpg');
+	public function otherTransferAmount(): float {
+		return round($this->other_transfers()->sum('value'), 2);
 	}
 
-	// * Static methods * //
+	/**
+	 * Get the amount to be payed
+	 */
+	public function toBePayed() {
+		return $this->earned() - $this->payed() + $this->otherTransferAmount();
+	}
+
+	/**
+	 * Get the formatted balance
+	 */
+	public function earnedString(): string {
+		return EcommerceHelper::formatPrice($this->earned(), true);
+	}
+
+	public function payedString(): string {
+		return EcommerceHelper::formatPrice($this->payed(), true);
+	}
+
+	public function otherTransferAmountString(): string {
+		return EcommerceHelper::formatPrice($this->otherTransferAmount(), true);
+	}
+
+	public function creditString(): string {
+		return EcommerceHelper::formatPrice($this->credit(), true);
+	}
+
+	public function toBePayedString(): string {
+		return EcommerceHelper::formatPrice($this->toBePayed(), true);
+	}
+
+	/************************
+	 * * Static methods *
+	 ************************/
 	public static function awaitingApproval(): Collection {
 		return self::where('status', 0)
 			->where('user_id', '!=', 2)

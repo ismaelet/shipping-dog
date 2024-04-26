@@ -10,7 +10,7 @@
 	<!-- Add button -->
 	<?php if ($pageConfig['add']) { ?>
 
-		<a href="add" class="icon-add icon-box">
+		<a href="edit" class="icon-add icon-box">
 			<?= embed_icon('add') ?>
 		</a>
 

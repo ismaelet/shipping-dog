@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Pages\LabelGeneratorController;
 use App\Http\Controllers\Admin\Pages\OrderLogController;
 use App\Http\Controllers\Admin\Pages\ProductLogController;
 use App\Http\Controllers\Admin\Resources\DesignController;
+use App\Http\Controllers\Admin\Resources\SellerController;
 use App\Http\Controllers\Admin\Resources\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,9 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 	// Users
 	Route::resource('users', UserController::class)->only(['index', 'edit', 'update', 'destroy']);
 	Route::post('/users/{id}/login', [UserController::class, 'login'])->name('users.login');
+
+	// Sellers
+	Route::resource('sellers', SellerController::class)->only(['index']);
 
 	// Designs
 	Route::resource('designs', DesignController::class)->only(['index']);

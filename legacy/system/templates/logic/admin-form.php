@@ -26,7 +26,7 @@ $pageConfig['free'] = $pageConfig['free'] ?? false;
 $pageConfig['centered'] = $pageConfig['centered'] ?? false;
 $pageConfig['upload'] = $pageConfig['upload'] ?? false;
 $pageConfig['confirm'] = $pageConfig['confirm'] ?? null;
-$pageConfig['return-page'] = $pageConfig['return-page'] ?? 'list';
+$pageConfig['return-page'] = $pageConfig['return-page'] ?? 'index';
 
 /*
 * Query configuration

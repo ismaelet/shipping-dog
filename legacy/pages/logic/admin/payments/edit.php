@@ -49,5 +49,5 @@ function _expand_add($tbl, $inputs) {
 
 	form_db_add($tbl, $inputs);
 
-	redirect_old('/admin/shops/payments/list');
+	redirect_old('/admin/payments/index');
 }
