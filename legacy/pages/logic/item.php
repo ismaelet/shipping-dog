@@ -13,11 +13,20 @@ $oldProductColorId = $_GET['color_id'] ?? null;
 $product = $id ? Product::find($id) : null;
 $oldProduct = $id ? new OldProduct($id) : null;
 
-// if not found
-if (!$id || !$oldProduct->id || (!is_admin() && (!$oldProduct->statusId && !$oldProduct->isUserOwner) || $oldProduct->deleted)) {
+// Redirect to the shop it the product or seller was not found
+if (!$product || !$product->seller || !$product->status || $product->deleted) {
 	redirect_old('/shop');
 }
 
+// redirect to the shop if the seller is not active and the user is not the seller or an admin
+if (!$product->seller->status && !$product->isUserOwner && !is_admin()) {
+	redirect_old('/shop');
+}
+
+// get item seller
+$seller = $product->seller;
+
+// Set product properties
 if ($oldProductPositionId) {
 	$oldProduct->setPositionId($oldProductPositionId);
 }
@@ -29,15 +38,11 @@ if ($oldProductColorId) {
 ViewOld::setThumbnail($oldProduct->clientFullImage)
 	->setTitle($oldProduct->name);
 
-// get item seller
-$seller = $product->seller;
-
 // redirect if not public
 $owner = $oldProduct->isUserOwner;
 $vip = $owner || is_admin() ? true : false;
 
 $wip = !$seller->status;
-if ($wip && !$vip) redirect_old('/shop');
 
 // select following status
 $foll = DBOld::exists('followers WHERE user_id = ? AND follower_id = ?', [auth()->id(), $oldProduct->seller->id]);

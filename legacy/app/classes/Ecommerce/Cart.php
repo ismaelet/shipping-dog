@@ -3,12 +3,10 @@
 namespace Ecommerce;
 
 use App\Models\Ecommerce\Cart as EcommerceCart;
-use App\Models\Ecommerce\InventoryItem;
 use App\Models\Ecommerce\Order as EcommerceOrder;
 use DBOld;
 use EmailService\Ecommerce\CartStatusUpdate;
 use DatabaseObject;
-use Ecommerce\Product\Type;
 use ViewOld;
 
 /**

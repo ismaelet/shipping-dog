@@ -36,6 +36,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 
 	// Carts
 	Route::resource('carts', CartController::class)->only(['index', 'edit', 'update']);
+	Route::post('/carts/{id}/resend-email', [CartController::class, 'resendEmail'])->name('carts.resend-email');
 
 	/**
 	 * * Custom routes

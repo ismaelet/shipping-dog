@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin\Resources;
 
 use App\Http\Controllers\Admin\ResourceController;
+use App\Mail\OrderStatusMail;
 use App\Models\Ecommerce\Cart;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class CartController extends ResourceController {
@@ -22,6 +25,8 @@ class CartController extends ResourceController {
 		['label' => 'Stato', 'name' => 'status', 'type' => 'method', 'method' => 'statusTag',],
 		['label' => 'Data', 'name' => 'created_at', 'type' => 'date'],
 	];
+
+	protected array $orderBy = ['created_at' => 'desc'];
 
 	/**
 	 * - Edit action configuration
@@ -60,6 +65,12 @@ class CartController extends ResourceController {
 		// Add the buttons
 		$this->buttons = [
 			[
+				'label' => 'Reinvia email',
+				'icon' => 'send-email',
+				'color' => 'primary',
+				'route' => 'carts.resend-email',
+			],
+			[
 				'type' => 'edit',
 			],
 		];
@@ -94,5 +105,20 @@ class CartController extends ResourceController {
 		}
 
 		return redirect()->back();
+	}
+
+	/**
+	 * * Resend email action
+	 */
+	public function resendEmail(int $id): RedirectResponse {
+		$cart = Cart::find($id);
+
+		$result = Mail::to($cart->address->email)->send(new OrderStatusMail($cart));
+
+		if ($result) {
+			return redirect()->back()->with('status', 'Email inviata correttamente');
+		} else {
+			return redirect()->back()->with('error', 'Errore durante l\'invio dell\'email');
+		}
 	}
 }

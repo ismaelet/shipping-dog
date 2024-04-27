@@ -209,7 +209,7 @@ class Product extends Model {
 		return $this->positions ? explode(',', $this->positions)[0] : 0;
 	}
 
-	public function defaultPosition(): ProductPosition {
+	public function defaultPosition(): ?ProductPosition {
 		return ProductPosition::find($this->defaultPositionId());
 	}
 
