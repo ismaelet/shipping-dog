@@ -12,6 +12,11 @@ $queryConfig = ViewOld::get('queryConfig');
 $fields = ViewOld::get('fields');
 $buttons = ViewOld::get('buttons') ?? [];
 
+if (empty($queryConfig)) {
+	abort(404);
+	exit;
+}
+
 /*
 * Page configuration fields
 *	? (bool) add: manages the visibility of the add button

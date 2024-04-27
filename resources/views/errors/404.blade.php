@@ -1,16 +1,22 @@
-@push('styles')
-    <style>
-        .page-background {
-            opacity: 0.3;
-        }
-    </style>
-@endpush
-
 <x-templates.empty>
-    <div class="grid gap-8 content-center justify-items-center">
-        <x-typography.main-heading>Errore 404</x-typography.main-heading>
-        <x-typography.main-subheading>Pagina non trovata</x-typography.main-subheading>
-        <x-inputs.button href="{{ route('home') }}" variant="secondary" size="auto">Torna alla
-            home</x-inputs.button>
-    </div>
+	<div
+		class="stack-content grid"
+		data-local-color-scheme="dark"
+	>
+		<div
+			class="background-fill opacity-20"
+			style="background-image: url({{ Vite::image('404-background.webp') }})"
+		></div>
+
+		<div class="relative grid content-center justify-items-center gap-8">
+			<x-typography.main-heading>Errore 404</x-typography.main-heading>
+			<x-typography.main-subheading>Pagina non trovata</x-typography.main-subheading>
+			<x-inputs.button
+				href="/"
+				variant="secondary"
+			>
+				Torna alla home
+			</x-inputs.button>
+		</div>
+	</div>
 </x-templates.empty>

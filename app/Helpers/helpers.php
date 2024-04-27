@@ -17,18 +17,14 @@ function dd_array(array $array): void {
  * Check if the user is an admin
  */
 function is_admin(): bool {
-	$user = User::find(Auth::id());
-
-	return Auth::check() && $user->isAdmin();
+	return Auth::check() && Auth::user()->isAdmin();
 }
 
 /**
  * Check if the user is a supervisor
  */
 function is_supervisor(): bool {
-	$user = User::find(Auth::id());
-
-	return Auth::check() && $user->isSupervisor();
+	return Auth::check() && Auth::user()->isSupervisor();
 }
 
 /**

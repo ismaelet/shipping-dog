@@ -1,12 +1,12 @@
 <?php
 
-use function Psy\debug;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RouteOld {
 
 	private static $routes = [];
 
-	public static function add($paths, $function) {
+	public static function add($paths, $function): void {
 
 		$paths = (array) $paths;
 
@@ -33,15 +33,15 @@ class RouteOld {
 
 		// error 404
 		if (!$path_found) {
-			ViewOld::setPage('errors/404')
-				->setTitle('Error 404')
-				->setTemplate('void')
-				->setMiddlewares()
-				->show();
+			self::error404();
 		}
 	}
 
-	public static function getRoutes() {
+	public static function getRoutes(): array {
 		return self::$routes;
+	}
+
+	public static function error404(): NotFoundHttpException {
+		return abort(404);
 	}
 }
