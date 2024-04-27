@@ -29,7 +29,7 @@ use App\View\View;
 	<?= View::stackedScripts() ?>
 
 	<!-- Favicon -->
-	<?= favicon() . PHP_EOL ?>
+	<link rel="icon" href="<?= asset('favicon.ico') ?>">
 </head>
 
 <body>

@@ -3,7 +3,6 @@
 use App\Helpers\EcommerceHelper;
 use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Cart;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 /**

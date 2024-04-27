@@ -7,7 +7,6 @@ use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductMockup;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
-use Exception;
 
 class PreviewHelper {
 
@@ -28,13 +27,7 @@ class PreviewHelper {
 		$this->imageSize = in_array($imageSize, self::ALLOWED_IMAGE_SIZES) ? $imageSize : self::DEFAULT_IMAGE_SIZE;
 
 		// Set the position
-		$position = $position_id && ProductPosition::find($position_id) ? ProductPosition::find($position_id) : $product->defaultPosition();
-
-		if (!$position) {
-			report(new Exception('No valid position for product: ' . $product->id));
-		}
-
-		$this->position = $position;
+		$this->position = $position_id && ProductPosition::find($position_id) ? ProductPosition::find($position_id) : $product->defaultPosition();
 	}
 
 	/*

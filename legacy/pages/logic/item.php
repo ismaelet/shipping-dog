@@ -65,7 +65,7 @@ $relatedGarments = rows_to_objects(
 	OldProduct::class
 );
 
-$relatedAccessories = rows_to_objects(DBOld::select("id FROM items WHERE design_id = ? AND type_id <> ? AND type_id IN (SELECT id FROM items_types WHERE category='m') AND status = 1 ORDER BY type_id ASC", [$oldProduct->design->id, $oldProduct->type->id]), OldProduct::class);
+$relatedAccessories = rows_to_objects(DBOld::select("id FROM items WHERE design_id = ? AND type_id <> ? AND type_id IN (SELECT id FROM items_types WHERE category='m') AND status = 1 AND deleted = 0 ORDER BY type_id ASC", [$oldProduct->design->id, $oldProduct->type->id]), OldProduct::class);
 
 $relatedProdutsVariables = [$seller->id, $oldProduct->design->id, $oldProduct->type->id, 8];
 $relatedProdutsVariables = array_merge($relatedProdutsVariables, $relatedProdutsVariables);
