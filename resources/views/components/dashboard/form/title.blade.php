@@ -5,7 +5,11 @@
 @php
     $backRouteName = ArrayHelper::explodeLast('.', request()->route()->getName())[0] . '.index';
     $backRouteParameters = request()->index_parameters ? json_decode(request()->index_parameters, true) : null;
-    $backRoute = $backRouteParameters ? route($backRouteName, $backRouteParameters) : route($backRouteName);
+    $backRoute = Route::has($backRouteName)
+        ? ($backRouteParameters
+            ? route($backRouteName, $backRouteParameters)
+            : route($backRouteName))
+        : null;
     $title = str_replace('Modifica:', '<span class=\'font-light\'>Modifica:</span> ', $title);
 @endphp
 

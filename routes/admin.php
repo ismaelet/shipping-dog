@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Pages\DashboardController;
 use App\Http\Controllers\Admin\Pages\LabelGeneratorController;
 use App\Http\Controllers\Admin\Pages\OrderLogController;
 use App\Http\Controllers\Admin\Pages\ProductLogController;
+use App\Http\Controllers\Admin\Resources\CartController;
 use App\Http\Controllers\Admin\Resources\DesignController;
 use App\Http\Controllers\Admin\Resources\SellerController;
 use App\Http\Controllers\Admin\Resources\UserController;
@@ -32,6 +33,9 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 
 	// Designs
 	Route::resource('designs', DesignController::class)->only(['index']);
+
+	// Carts
+	Route::resource('carts', CartController::class)->only(['index', 'edit', 'update']);
 
 	/**
 	 * * Custom routes

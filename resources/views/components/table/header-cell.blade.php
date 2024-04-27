@@ -29,25 +29,29 @@
     'px-4',
     'text-left',
     'align-middle',
-    'cursor-pointer',
     'font-medium',
-    'hover:text-primary',
-    'transition-colors',
     'text-center' =>
         isset($column['type']) && in_array($column['type'], ['bool']),
-    'js-submit-form',
+    'cursor-pointer' => isset($column['name']),
+    'hover:text-primary' => isset($column['name']),
+    'transition-colors' => isset($column['name']),
+    'js-submit-form' => isset($column['name']),
 ])>
-    @if ($hasName)
-        <form method="GET">
-            <input type="hidden" name="order_by" value="{{ $column['name'] }}">
-            <input type="hidden" name="order_direction" value="{{ $newOrderDirection }}">
-            <input type="hidden" name="search" value="{{ request()->search }}">
+    @isset($column['label'])
+        @if ($hasName)
+            <form method="GET">
+                <input type="hidden" name="order_by" value="{{ $column['name'] }}">
+                <input type="hidden" name="order_direction" value="{{ $newOrderDirection }}">
+                <input type="hidden" name="search" value="{{ request()->search }}">
 
+                {{ $column['label'] }}
+
+                @if ($active)
+                    {!! $orderDirection == 'desc' ? '&#x25BE;' : '&#x25B4;' !!}
+                @endif
+            </form>
+        @else
             {{ $column['label'] }}
-
-            @if ($active)
-                {!! $orderDirection == 'desc' ? '&#x25BE;' : '&#x25B4;' !!}
-            @endif
-        </form>
-    @endif
+        @endif
+    @endisset
 </th>

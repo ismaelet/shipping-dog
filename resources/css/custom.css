@@ -90,6 +90,8 @@
 		/* 2.1.8 Utility colors */
 		--color-success-400-hsl: 145deg 63% 50%;
 		--color-error-400-hsl: 0deg 100% 50%;
+		--color-success-500-hsl: 145deg 63% 40%;
+		--color-error-500-hsl: 0deg 100% 40%;
 
 		/*
 		* 2.2. Borders

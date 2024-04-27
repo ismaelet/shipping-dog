@@ -79,5 +79,50 @@ return [
 
 	'ecommerce' => [
 		'vat' => '02397230224',
+
+		'cart_statuses' => [
+			'-1' => [
+				'tag' => 'canceled',
+				'label' => 'Cancellato',
+				'color' => '#ff6f6f',
+				'icon' => 'close',
+			],
+			'0' => [
+				'tag' => 'open',
+				'label' => 'Non completato',
+				'color' => '#ccc',
+				'icon' => 'pause',
+			],
+			'1' => [
+				'tag' => 'received',
+				'label' => 'Ricevuto',
+				'color' => '#92e9ff',
+				'icon' => 'waiting',
+			],
+			'2' => [
+				'tag' => 'label-ready',
+				'label' => 'Pronto',
+				'color' => '#ffc677',
+				'icon' => 'correct',
+			],
+			'3' => [
+				'tag' => 'shipped',
+				'label' => 'Spedito',
+				'color' => '#ff9600',
+				'icon' => 'shipping',
+			],
+			'4' => [
+				'tag' => 'delivered',
+				'label' => 'Consegnato',
+				'color' => '#44c544',
+				'icon' => 'delivered',
+			],
+			'5' => [
+				'tag' => 'change',
+				'label' => 'Cambio',
+				'color' => '#44c544',
+				'icon' => 'change',
+			],
+		],
 	],
 ];

@@ -17,6 +17,31 @@
         </span>
     @break
 
+    @case('method')
+        @php
+            $methods = explode('.', $column['method']);
+            $value = $record;
+
+            foreach ($methods as $method) {
+                if ($method == end($methods)) {
+                    $value = isset($value) ? $value->{$method}() : null;
+                } else {
+                    $value = $value->{$method};
+                }
+            }
+        @endphp
+
+        <span @class([
+            'whitespace-nowrap' => isset($column['wrap']) && !$column['wrap'],
+        ])>
+            {!! $value !!}
+        </span>
+    @break
+
     @default
-        {{ $record->{$column['name']} ?: '-' }}
+        <span @class([
+            'whitespace-nowrap' => isset($column['wrap']) && !$column['wrap'],
+        ])>
+            {!! $record->{$column['name']} ?: '-' !!}
+        </span>
 @endswitch

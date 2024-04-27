@@ -9,7 +9,7 @@ use App\Models\Ecommerce\Cart;
 use Illuminate\Support\Facades\Mail;
 
 $pageConfig['add'] = false;
-$pageConfig['row-action'] = 'edit?id={{id}}';
+$pageConfig['row-action'] = '{{id}}/edit';
 
 /*
 * Query configuration
@@ -60,7 +60,6 @@ $fields = [
 ];
 
 $buttons = [
-	['title' => 'Gestisci', 'url' => 'edit?id={{id}}'],
 	['title' => 'Rinvia l\'email', 'color' => 'green', 'name' => 'resend-status-email'],
 ];
 

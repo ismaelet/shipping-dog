@@ -1,5 +1,5 @@
 export default {
-	content: ['./resources/**/*.blade.php', './resources/**/*.js', './resources/**/*.vue', './legacy/**/*.php'],
+	content: ['./app/Models/**/*.php', './resources/**/*.blade.php', './resources/**/*.js', './resources/**/*.vue', './legacy/**/*.php'],
 	theme: {
 		// Custom colors
 		colors: {

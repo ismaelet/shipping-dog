@@ -10,7 +10,7 @@
 
 <td class="align-middle">
 
-    @if (isset($column['name']))
+    @if (isset($column['label']))
         @if ($editRoute)
             <a href="{{ $editRoute }}">
         @endif

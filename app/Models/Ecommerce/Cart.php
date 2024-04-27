@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
-use function Ecommerce\ecommerce_config;
-
 class Cart extends Model {
 
 	protected $table = 'carts';
@@ -80,6 +78,29 @@ class Cart extends Model {
 	 */
 	public function idCode(): string {
 		return '#' . str_pad($this->id, 5, '0', STR_PAD_LEFT);
+	}
+
+	/**
+	 * Status data
+	 */
+	public function statusCode(): string {
+		return config('custom.ecommerce.cart_statuses')[$this->status]['tag'];
+	}
+
+	public function statusName(): string {
+		return config('custom.ecommerce.cart_statuses')[$this->status]['label'];
+	}
+
+	public function statusColor(): string {
+		return config('custom.ecommerce.cart_statuses')[$this->status]['color'];
+	}
+
+	public function statusIcon(): string {
+		return config('custom.ecommerce.cart_statuses')[$this->status]['icon'];
+	}
+
+	public function statusTag(): string {
+		return '<span class="px-4 py-1 gap-2 text-background rounded whitespace-nowrap" style="--icon-size: 1em; background-color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon()) . ' ' . $this->statusName() . '</span>';
 	}
 
 	/**
@@ -151,6 +172,10 @@ class Cart extends Model {
 		return EcommerceHelper::formatPrice($this->orderDiscount());
 	}
 
+	public function discountString(): string {
+		return EcommerceHelper::formatPrice($this->discount());
+	}
+
 	/**
 	 * Check if the cart has long delivery times
 	 */
@@ -162,6 +187,19 @@ class Cart extends Model {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get a string with the cart's orders
+	 */
+	public function ordersString(): string {
+		$ordersString = '';
+
+		foreach ($this->orders as $order) {
+			$ordersString .= $order->quantity . 'x ' . $order->fullName() . '<br>';
+		}
+
+		return $ordersString;
 	}
 
 	/**
@@ -305,14 +343,5 @@ class Cart extends Model {
 		return self::where('status', 1)
 			->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
 			->get();
-	}
-
-	// ! Deprecated ! //
-	public function statusCode(): string {
-		return ecommerce_config('cart-statuses')[$this->status][0];
-	}
-
-	public function statusName() {
-		return ecommerce_config('cart-statuses')[$this->status][1];
 	}
 }

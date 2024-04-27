@@ -3,6 +3,7 @@
     'type' => 'button',
     'variant' => 'primary',
     'size' => 'regular',
+    'color' => 'default',
 ])
 
 @php
@@ -16,23 +17,44 @@
             display: inline-block;
             min-width: 12rem;
 
-            /* Variants */
+            /* Primary button */
             &[data-variant="primary"] {
                 padding-block: 1em;
                 background-color: var(--color-primary-400);
                 box-shadow: 0px 1rem 4rem -1rem hsl(var(--color-primary-400-hsl) / .6);
                 color: #fff;
 
+                /* Primary button: Hover state */
                 &:hover {
                     background-color: var(--color-primary-500);
                 }
             }
 
+            /* Secondary button */
             &[data-variant="secondary"] {
                 padding-block: calc(1em - var(--border-width));
                 border: var(--border-width) solid var(--color-neutral-400);
                 color: var(--color-neutral-700);
 
+                /* Secondary button: Dark color scheme */
+                [data-color-scheme="dark"] &,
+                [data-local-color-scheme="dark"] & {
+                    border-color: var(--color-neutral-250);
+                }
+
+                /* Secondary button: Error color */
+                &[data-color="error"] {
+                    border-color: var(--color-error-400);
+                    color: var(--color-error-400);
+
+                    /* Secondary button: Error color - hover state */
+                    &:hover {
+                        color: var(--color-error-500);
+                        border-color: var(--color-error-500);
+                    }
+                }
+
+                /* Secondary button: Hover state */
                 &:hover {
                     color: var(--color-neutral-700);
                     border-color: var(--color-neutral-700);
@@ -51,7 +73,7 @@
                 padding-block: unset;
             }
 
-            /* With icons */
+            /* If contains icons */
             &:has(svg) {
                 display: flex;
                 align-items: center;
@@ -63,8 +85,8 @@
 
 @if ($href)
     <a href="{{ $href }}" {{ $attributes->class($classes) }}" data-variant="{{ $variant }}"
-        data-size="{{ $size }}">{{ $slot }}</a>
+        data-size="{{ $size }}" data-color="{{ $color }}">{{ $slot }}</a>
 @else
     <button type="{{ $type }}" {{ $attributes->class($classes) }}" data-variant="{{ $variant }}"
-        data-size="{{ $size }}">{{ $slot }}</button>
+        data-size="{{ $size }}" data-color="{{ $color }}">{{ $slot }}</button>
 @endif

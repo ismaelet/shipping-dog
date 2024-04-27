@@ -7,15 +7,12 @@
         .search-bar {
             grid-template-columns: 1.25rem 1fr 1.25rem;
 
-            [data-color-scheme="light"] & {
-                border: var(--border);
-            }
-
             &:has(:focus) .search-icon {
                 color: var(--color-primary-500);
             }
 
             .input {
+                background-color: transparent;
                 line-height: 3.5rem;
                 border: none !important;
                 outline: none !important;
@@ -39,7 +36,7 @@
     </script>
 @endpushOnce
 
-<search class="search-bar grid px-6 bg-surface-400 rounded gap-2"">
+<search class="search-bar grid px-6 border rounded gap-2"">
     <div class="search-icon cursor-pointer transition-colors" x-data @click="table_search">
         {!! embed_icon('search') !!}
     </div>
