@@ -17,6 +17,7 @@ class CartController extends Controller {
 		$carts = Cart::join('addresses', 'carts.id', '=', 'addresses.cart_id')
 			->where('carts.status', '!=', 0);
 
+		// Filter the data
 		if ($request->filter) {
 			$carts = $carts->where(function ($query) use ($request) {
 				$query->where('carts.id', 'like', '%' . $request->filter . '%')
