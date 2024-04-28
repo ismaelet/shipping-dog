@@ -1,18 +1,16 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
 use App\Helpers\PreviewHelper;
 use App\Models\Ecommerce\Design as NewDesign;
 use App\Models\Ecommerce\Product as EcommerceProduct;
 use App\Models\Ecommerce\Product\ProductType;
-use DBOld;
-use Ecommerce\Product\Type;
-use Ecommerce\Product\Color;
-use Ecommerce\Product\Position;
-use Ecommerce\Product\PreviewOld;
-use DatabaseObject;
-use Ecommerce\Design\Logo;
+use Legacy\Classes\Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Product\Position;
+use Legacy\Classes\Ecommerce\Product\PreviewOld;
+use Legacy\Classes\Ecommerce\Design\Logo;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -39,7 +37,7 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class Product {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'items';
 	public const INDEX = 'id';
@@ -59,8 +57,8 @@ class Product {
 		return $this->databaseEntry['name'] ?: $this->design->name;
 	}
 
-	private function getUrl() {
-		return '/shop/item?id=' . $this->id;
+	private function getUrl(): string {
+		return $this->getNewProduct()->url();
 	}
 
 	private function getClientUrl() {
@@ -238,8 +236,8 @@ class Product {
 
 	private function getPriceData() {
 		$priceData =
-			DBOld::row('* FROM items_prices WHERE product_id = ?', [$this->id]) ?: (DBOld::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$this->seller->id, $this->type->id]) ?:
-				DBOld::row('* FROM prices_default WHERE type_id = ?', [$this->type->id])
+			\Legacy\System\Classes\LegacyDB::row('* FROM items_prices WHERE product_id = ?', [$this->id]) ?: (\Legacy\System\Classes\LegacyDB::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$this->seller->id, $this->type->id]) ?:
+				\Legacy\System\Classes\LegacyDB::row('* FROM prices_default WHERE type_id = ?', [$this->type->id])
 			);
 
 		return $priceData;
@@ -356,7 +354,7 @@ class Product {
 	public function updateColors(array $availableColorSlugs) {
 		$availableColorSlugsString = implode(',', $availableColorSlugs);
 
-		DBOld::update('items SET colors=? WHERE id = ?', [$availableColorSlugsString, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update('items SET colors=? WHERE id = ?', [$availableColorSlugsString, $this->id]);
 
 		$this->data['availableColorSlugs'] = $availableColorSlugs;
 
@@ -369,7 +367,7 @@ class Product {
 		$this->setColorId($color_id);
 
 		if ($this->color_id != $oldColorId) {
-			DBOld::update('items SET color_id = ? WHERE id = ?', [$color_id, $this->id]);
+			\Legacy\System\Classes\LegacyDB::update('items SET color_id = ? WHERE id = ?', [$color_id, $this->id]);
 		}
 
 		return $this;
@@ -378,7 +376,7 @@ class Product {
 	public function updateStatus(bool $published) {
 		$statusId = $published ? 1 : 0;
 
-		DBOld::update('items SET status=? WHERE id = ?', [$statusId, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update('items SET status=? WHERE id = ?', [$statusId, $this->id]);
 
 		$this->setStatusId($published);
 
@@ -390,7 +388,7 @@ class Product {
 			$position_ids = implode(',', $position_ids);
 		}
 
-		DBOld::update('items SET positions=? WHERE id = ?', [$position_ids, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update('items SET positions=? WHERE id = ?', [$position_ids, $this->id]);
 
 		$this->data['position_ids'] = $position_ids;
 
@@ -404,7 +402,7 @@ class Product {
 		$newWhiteGain = $priceDifference * 0.75 + $this->whiteGain;
 		$newColoredGain = $priceDifference * 0.75 + $this->coloredGain;
 
-		DBOld::update('items_prices SET price = ?, gain_w = ?, gain_c = ? WHERE product_id = ?', [$newPrice, $newWhiteGain, $newColoredGain, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update('items_prices SET price = ?, gain_w = ?, gain_c = ? WHERE product_id = ?', [$newPrice, $newWhiteGain, $newColoredGain, $this->id]);
 
 		return $this;
 	}
@@ -450,12 +448,12 @@ class Product {
 
 	public function delete(bool $permanently = false) {
 		if ($permanently || $this->isCustom) {
-			DBOld::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
-			DBOld::delete('items_info WHERE product_id = ?', [$this->id]);
-			DBOld::delete('items_previews WHERE product_id = ?', [$this->id]);
-			DBOld::delete('items_prices WHERE product_id = ?', [$this->id]);
+			\Legacy\System\Classes\LegacyDB::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
+			\Legacy\System\Classes\LegacyDB::delete('items_info WHERE product_id = ?', [$this->id]);
+			\Legacy\System\Classes\LegacyDB::delete('items_previews WHERE product_id = ?', [$this->id]);
+			\Legacy\System\Classes\LegacyDB::delete('items_prices WHERE product_id = ?', [$this->id]);
 		} else {
-			DBOld::update(self::TABLE . ' SET deleted = 1 WHERE ' . self::INDEX . ' = ?', [$this->id]);
+			\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET deleted = 1 WHERE ' . self::INDEX . ' = ?', [$this->id]);
 		}
 
 		$this->reset();

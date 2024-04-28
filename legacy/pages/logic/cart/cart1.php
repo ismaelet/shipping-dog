@@ -6,7 +6,7 @@ $error = false;
 
 // setup functions
 if (isset($_POST['guest'])) {
-	\App\Helpers\App::cartOld()->advanceAndredirect_old();
+	cart_old()->advanceAndredirect_old();
 }
 
 // login

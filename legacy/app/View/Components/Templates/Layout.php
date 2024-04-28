@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View\Components\Templates;
+namespace Legacy\View\Components\Templates;
 
-use App\View\Components\Component;
+use Legacy\View\Components\Component;
 
 class Layout extends Component {
 }

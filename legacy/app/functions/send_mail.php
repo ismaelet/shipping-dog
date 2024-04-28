@@ -3,9 +3,9 @@
 function send_email($email, $cart_id) {
 
 	//generate email text
-	$user_id = DBOld::find('user_id FROM carts WHERE id = ?', [$cart_id]);
+	$user_id = \Legacy\System\Classes\LegacyDB::find('user_id FROM carts WHERE id = ?', [$cart_id]);
 
-	$row_addr = DBOld::row('* FROM addresses WHERE cart_id = ?', [$cart_id]);
+	$row_addr = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE cart_id = ?', [$cart_id]);
 
 	$addr_full_name = $row_addr['full_name'];
 	$addr_strt = $row_addr['address'];
@@ -18,7 +18,7 @@ function send_email($email, $cart_id) {
 	$toemail = $row_addr['email'];
 
 	$orders = '';
-	$res_ord = DBOld::select('id FROM orders WHERE cart_id = ? ORDER BY id ASC', [$cart_id]);
+	$res_ord = \Legacy\System\Classes\LegacyDB::select('id FROM orders WHERE cart_id = ? ORDER BY id ASC', [$cart_id]);
 
 	while ($row_ord = $res_ord->fetch_assoc()) {
 

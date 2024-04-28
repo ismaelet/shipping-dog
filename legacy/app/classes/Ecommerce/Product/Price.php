@@ -1,8 +1,8 @@
 <?php
 
-namespace Ecommerce\Product;
+namespace Legacy\Classes\Ecommerce\Product;
 
-use DBOld;
+use LegacyDB;
 
 class Price {
 
@@ -13,8 +13,8 @@ class Price {
 
 	function __construct($product) {
 		if ($row =
-			DBOld::row('* FROM items_prices WHERE product_id = ?', [$product->id]) ?: (DBOld::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$product->seller->id, $product->type->id]) ?:
-				DBOld::row('* FROM prices_default WHERE type_id = ?', [$product->type->id])
+			\Legacy\System\Classes\LegacyDB::row('* FROM items_prices WHERE product_id = ?', [$product->id]) ?: (\Legacy\System\Classes\LegacyDB::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$product->seller->id, $product->type->id]) ?:
+				\Legacy\System\Classes\LegacyDB::row('* FROM prices_default WHERE type_id = ?', [$product->type->id])
 			)
 		) {
 			$this->price = format($row['price']);

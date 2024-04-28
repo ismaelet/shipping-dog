@@ -6,7 +6,7 @@ use Email;
 
 class CartStatusUpdate {
 	public static function send(object $cart = null, string $statusCode = null, bool $forceSend = false, bool $debug = false) {
-		$cart = $cart ?: \App\Helpers\App::cartOld();
+		$cart = $cart ?: cart_old();
 		$orderList = '';
 		$statusCode = $statusCode ?: $cart->statusCode;
 		$emailContent = file_get_contents(base_path() . '/public/templates/assets/template-emails/cart-update.html');

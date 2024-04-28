@@ -8,7 +8,7 @@ use Email;
 
 class CartTrackingUpdate {
 	public static function send(object $cart = null, bool $debug = false) {
-		$cart = $cart ?: \App\Helpers\App::cartOld();
+		$cart = $cart ?: cart_old();
 		$emailContent = file_get_contents(public_server_path('/app/templates/assets/emails/cart-tracking.html'));
 
 		// populate mail body

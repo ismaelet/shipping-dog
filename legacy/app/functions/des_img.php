@@ -1,6 +1,6 @@
 <?php
 
-use Ecommerce\Design;
+use Legacy\Classes\Ecommerce\Design;
 
 function des_img_gen(int $design_id): void {
 
@@ -29,9 +29,9 @@ function des_img_gen(int $design_id): void {
 		//bgr
 		$src_image = imagecreatetruecolor($w, $h);
 
-		if (isset($design->color)) $design->color = DBOld::find('color FROM designs WHERE id = ?', [$design->id]);
+		if (isset($design->color)) $design->color = \Legacy\System\Classes\LegacyDB::find('color FROM designs WHERE id = ?', [$design->id]);
 
-		$rgba = parse_rgba(DBOld::find('color FROM designs WHERE id = ?', [$design->id]));
+		$rgba = parse_rgba(\Legacy\System\Classes\LegacyDB::find('color FROM designs WHERE id = ?', [$design->id]));
 		$color = imagecolorallocate($src_image, $rgba[0], $rgba[1], $rgba[2]);
 
 		imagefilledrectangle($src_image, 0, 0, $w - 1, $h - 1, $color);

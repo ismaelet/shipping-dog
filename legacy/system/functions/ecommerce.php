@@ -1,38 +1,11 @@
 <?php
 
-namespace Ecommerce;
-
-use DBOld;
-
-function ecommerce_config($paramenter) {
-	global $ecommerceConfig;
-
-	if (empty($ecommerceConfig)) include_once(__DIR__ . '../../../app/config/ecommerce-config.php');
-
-	return $ecommerceConfig[$paramenter];
-}
-
-// 1.2 Formatting
-function format_price($price, $alwaysNumber = true) {
-	if ($price || $alwaysNumber) {
-		switch (ecommerce_config('currency')) {
-			case 'BRL':
-				$priceString = 'R$ ' . formatc($price);
-				break;
-			case 'EUR':
-			default:
-				$priceString = formatc($price) . ' €';
-		}
-	} else {
-		$priceString = ('Free');
-	}
-
-	return $priceString;
-}
+namespace Legacy\Classes\Ecommerce;
 
 /*
 * 2. Customer
 */
+
 function customer() {
 	global $customer;
 
@@ -70,24 +43,24 @@ function associate_cart_setup_old($permanentCustomerId, $guestCustomerId = false
 		$guestCustomer = $guestCustomerId ? new Customer($guestCustomerId) : $customer;
 
 		if (!$permanentCustomer->id) {
-			DBOld::add('ecommerce_customers (userId)', [$permanentCustomerId]);
+			\Legacy\System\Classes\LegacyDB::add('ecommerce_customers (userId)', [$permanentCustomerId]);
 			$permanentCustomer = new Customer($permanentCustomerId);
 		}
 
 		if ($guestCustomer->hasCart) {
 			if ($permanentCustomer->hasCart) {
 				// if the user has a cart transfer the guest orders to it
-				DBOld::update('ecommerce_orders SET cart_id = ? WHERE cart_id = ?', [$permanentCustomer->cart->id, $guestCustomer->cart->id]);
-				DBOld::delete('ecommerce_carts WHERE id = ?', [$guestCustomer->cart->id]);
+				\Legacy\System\Classes\LegacyDB::update('ecommerce_orders SET cart_id = ? WHERE cart_id = ?', [$permanentCustomer->cart->id, $guestCustomer->cart->id]);
+				\Legacy\System\Classes\LegacyDB::delete('ecommerce_carts WHERE id = ?', [$guestCustomer->cart->id]);
 			} else {
 				// otherwise convert the session cart to the user cart
-				DBOld::update('ecommerce_carts SET customerId=? WHERE id = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
-				DBOld::update('ecommerce_orders SET customerId=? WHERE cart_id = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
+				\Legacy\System\Classes\LegacyDB::update('ecommerce_carts SET customerId=? WHERE id = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
+				\Legacy\System\Classes\LegacyDB::update('ecommerce_orders SET customerId=? WHERE cart_id = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
 
 				// add an address
 				if (!$guestCustomer->cart->addressId) {
-					$addressId = DBOld::find('id FROM ecommerce_addresses WHERE customerId=? ORDER BY id DESC', [$permanentCustomer->id]);
-					DBOld::update('ecommerce_carts SET addressId=? WHERE id = ?', [$addressId, $guestCustomer->cart->id]);
+					$addressId = \Legacy\System\Classes\LegacyDB::find('id FROM ecommerce_addresses WHERE customerId=? ORDER BY id DESC', [$permanentCustomer->id]);
+					\Legacy\System\Classes\LegacyDB::update('ecommerce_carts SET addressId=? WHERE id = ?', [$addressId, $guestCustomer->cart->id]);
 				}
 			}
 		}

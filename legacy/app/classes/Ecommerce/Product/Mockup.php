@@ -1,6 +1,6 @@
 <?php
 
-namespace Ecommerce\Product;
+namespace Legacy\Classes\Ecommerce\Product;
 
 use App\Models\Ecommerce\Product\ProductColor;
 

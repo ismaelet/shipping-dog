@@ -33,11 +33,11 @@ $buttons = [
 if (isset($_POST['generate'])) {
 	$id = $_POST['id'];
 
-	if (!DBOld::find('custom FROM designs WHERE id = ?', [$id])) {
-		$res = DBOld::select('id from items WHERE design_id = ?', [$id]);
+	if (!\Legacy\System\Classes\LegacyDB::find('custom FROM designs WHERE id = ?', [$id])) {
+		$res = \Legacy\System\Classes\LegacyDB::select('id from items WHERE design_id = ?', [$id]);
 
 		while ($row = $res->fetch_assoc()) {
-			$product = new Ecommerce\Product($row['id'], 'type');
+			$product = new \Legacy\Classes\Ecommerce\Product($row['id'], 'type');
 			$files = glob(PUBLIC_SERVER_ROOT . '/uploads/products/' . $product->type->slug . '/' . $product->id . '*');
 
 			array_map('unlink', $files);

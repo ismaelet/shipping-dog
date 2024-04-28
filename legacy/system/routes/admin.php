@@ -6,7 +6,7 @@ use App\Models\Admin\AdminSection;
 $sections = AdminSection::all();
 
 foreach ($sections as $section) {
-	RouteOld::add('/admin/' . $section->resource . '/' . $section->action, function ($path) {
+	\Legacy\System\Classes\LegacyRoute::add('/admin/' . $section->resource . '/' . $section->action, function ($path) {
 		global $id;
 
 		$id = $_GET['id'] ?? null;
@@ -22,7 +22,7 @@ foreach ($sections as $section) {
 
 		// setup view
 		if ($section) {
-			ViewOld::setPage('admin/' . $section->resource . '/' . $section->action)
+			\Legacy\System\Classes\LegacyView::setPage('admin/' . $section->resource . '/' . $section->action)
 				->setTitle($section->name)
 				->setTemplate($template)
 				->addMiddlewares(['admin'])

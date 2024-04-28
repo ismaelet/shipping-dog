@@ -18,21 +18,23 @@ spl_autoload_register(function ($name) {
 	$name = str_replace('\\', '/', $name);
 
 	switch (true) {
-		case strpos($name, 'App/Model') === 0 || strpos($name, 'App/Helpers') === 0:
-			include_once __DIR__ . ('/../../../' . lcfirst($name) . '.php');
+		case strpos($name, 'App/Models') === 0 || strpos($name, 'App/Helpers') === 0:
+			include_once base_path() . lcfirst($name) . '.php';
 			break;
-		case strpos($name, 'App') === 0:
-			if (file_exists($file = __DIR__ . ('/../../' . lcfirst($name) . '.php')))
-				include_once $file;
+		case strpos($name, 'Legacy/Models') === 0:
+			include_once base_path() . '/legacy/app/Models/' . str_replace('Legacy/Models/', '', $name) . '.php';
 			break;
-		case file_exists($file = __DIR__ . ('/../../app/classes/' . $name . '.php')):
-			include_once $file;
+		case strpos($name, 'Legacy/Classes') === 0:
+			include_once base_path() . '/legacy/app/classes/' . str_replace('Legacy/Classes/', '', $name) . '.php';
 			break;
-		case file_exists($file = __DIR__ . ('/../classes/' . $name . '.php')):
-			include_once $file;
+		case strpos($name, 'Legacy/View') === 0:
+			include_once base_path() . '/legacy/app/View/' . str_replace('Legacy/View/', '', $name) . '.php';
 			break;
-		case file_exists($file = __DIR__ . ('/../traits/' . $name . '.php')):
-			include_once $file;
+		case strpos($name, 'Legacy/System/Classes') === 0:
+			include_once base_path() . '/legacy/system/classes/' . str_replace('Legacy/System/Classes/', '', $name) . '.php';
+			break;
+		case strpos($name, 'Legacy/System/Traits') === 0:
+			include_once base_path() . '/legacy/system/traits/' . str_replace('Legacy/System/Traits/', '', $name) . '.php';
 			break;
 	}
 
@@ -162,6 +164,6 @@ class Setup {
 		}
 
 		// render page
-		RouteOld::run();
+		\Legacy\System\Classes\LegacyRoute::run();
 	}
 }

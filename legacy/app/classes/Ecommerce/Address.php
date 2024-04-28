@@ -1,13 +1,13 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
-use DBOld;
-use DynamicProperties;
+use LegacyDB;
+use \Legacy\System\Traits\DynamicProperties;
 
 class Address {
 
-	use DynamicProperties;
+	use \Legacy\System\Traits\DynamicProperties;
 
 	public const TABLE = 'addresses';
 	public const INDEX = 'id';
@@ -29,7 +29,7 @@ class Address {
 	public $secretNumber;
 
 	function __construct($id) {
-		if ($row = DBOld::row('* FROM addresses WHERE id = ?', [$id])) {
+		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->full_name = $row['full_name'];
 			$this->address = str_replace("\'", "'", $row['address']);

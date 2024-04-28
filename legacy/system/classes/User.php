@@ -1,10 +1,10 @@
 <?php
 
-use DatabaseObject;
+namespace Legacy\System\Classes;
 
 class User {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'users';
 	public const INDEX = 'id';
@@ -32,7 +32,7 @@ class User {
 	/*
 
 	function __construct($id) {
-		if ($row = DBOld::row('* FROM users WHERE id = ?', [$id])) {
+		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM users WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->username = $row['username'] ?: $row['email'];
 			$this->userfirst_name = ucfirst($row['first_name']);
@@ -108,8 +108,8 @@ class User {
 	}
 
 	private function getPhone() {
-		$customerId = DBOld::find('id FROM ecommerce_customers WHERE userId=?', [$this->id]);
-		$phone = DBOld::find('phone FROM ecommerce_addresses WHERE customerId=? ORDER BY time DESC', [$customerId]);
+		$customerId = \Legacy\System\Classes\LegacyDB::find('id FROM ecommerce_customers WHERE userId=?', [$this->id]);
+		$phone = \Legacy\System\Classes\LegacyDB::find('phone FROM ecommerce_addresses WHERE customerId=? ORDER BY time DESC', [$customerId]);
 
 		return $phone;
 	}

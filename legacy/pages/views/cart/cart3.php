@@ -15,7 +15,7 @@
 		<!-- Flow bar -->
 		<?php
 
-		use Ecommerce\Product;
+		use Legacy\Classes\Ecommerce\Product;
 
 		cart_flow($cart, $loc) ?>
 

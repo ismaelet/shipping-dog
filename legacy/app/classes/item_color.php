@@ -12,7 +12,7 @@ class Color {
 
 		if ($id) {
 
-			$row = DBOld::row('* FROM items_colors WHERE id = ?', [$id]);
+			$row = \Legacy\System\Classes\LegacyDB::row('* FROM items_colors WHERE id = ?', [$id]);
 
 			$this->id = $id;
 			$this->name = $row['name'];

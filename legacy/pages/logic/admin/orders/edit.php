@@ -1,6 +1,6 @@
 <?php
 
-use Ecommerce\Cart;
+use Legacy\Classes\Ecommerce\Cart;
 
 global $id;
 global $cart;
@@ -13,7 +13,7 @@ $added = false;
 * Setup cart
 */
 $cart = new Cart($id);
-ViewOld::$title = 'Ordine ' . $cart->idCode;
+\Legacy\System\Classes\LegacyView::$title = 'Ordine ' . $cart->idCode;
 
 /*
 * Form events

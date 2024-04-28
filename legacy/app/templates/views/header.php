@@ -112,7 +112,7 @@
 							if ($h_valid) { ?>
 
 								<div class="h-link">
-									<p class="h-link-txt <?php if (isset($h_link['loc']) && ViewOld::$location == $h_link['loc']) echo 'active' ?>">
+									<p class="h-link-txt <?php if (isset($h_link['loc']) && \Legacy\System\Classes\LegacyView::$location == $h_link['loc']) echo 'active' ?>">
 										<a href="<?= $h_link['url'] ?>">
 											<?= $h_link['title'] ?>
 											<?php if (isset($h_link['drop'])) echo ' <span class="h-drop-ico">&#x25BC;</span>' ?>
@@ -162,7 +162,7 @@
 					<?php } ?>
 
 					<!-- Favorites icon -->
-					<?php if ($header['wishlist'] && DBOld::exists('likes WHERE user_id = ?', [auth()->id()])) { ?>
+					<?php if ($header['wishlist'] && \Legacy\System\Classes\LegacyDB::exists('likes WHERE user_id = ?', [auth()->id()])) { ?>
 
 						<a id="h-wish" class="wish icon-box h-link al-mid h-icon" href="<?= client_url('/wishlist') ?>">
 							<?= embed_icon('love') ?>

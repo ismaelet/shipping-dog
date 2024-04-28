@@ -1,8 +1,8 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
-use DBOld;
+use LegacyDB;
 
 class PaymentMethod {
 
@@ -10,7 +10,7 @@ class PaymentMethod {
 	public $name;
 
 	function __construct($id) {
-		if ($row = DBOld::row('* FROM sys_payment WHERE id = ?', [$id])) {
+		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM sys_payment WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->name = $row['name'];
 		}

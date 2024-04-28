@@ -5,11 +5,11 @@ $dett_str = $apply = '';
 $design_id = $row['design_id'];
 $seller_id = $row['seller_id'];
 
-if ($design_id) $apply = DBOld::find('name FROM designs WHERE id = ?', [$design_id]);
-else if ($seller_id) $apply = DBOld::find('name FROM stores WHERE user_id = ?', [$seller_id]);
+if ($design_id) $apply = \Legacy\System\Classes\LegacyDB::find('name FROM designs WHERE id = ?', [$design_id]);
+else if ($seller_id) $apply = \Legacy\System\Classes\LegacyDB::find('name FROM stores WHERE user_id = ?', [$seller_id]);
 
-if ($row['type_id']) $apply .= 'Tipo: ' . DBOld::find('name FROM items_types WHERE id = ?', [$row['type_id']]);
-if ($row['color_id']) $apply .= 'Colore: ' . DBOld::find('name FROM items_colors WHERE id = ?', [$row['color_id']]);
+if ($row['type_id']) $apply .= 'Tipo: ' . \Legacy\System\Classes\LegacyDB::find('name FROM items_types WHERE id = ?', [$row['type_id']]);
+if ($row['color_id']) $apply .= 'Colore: ' . \Legacy\System\Classes\LegacyDB::find('name FROM items_colors WHERE id = ?', [$row['color_id']]);
 
 if (empty($apply)) $apply = 'Tutti';
 
@@ -33,10 +33,10 @@ $inputs[4]['value'] = $flat_str;
 $inputs[4]['value'] = 'aaaa';
 
 //type
-$type = DBOld::find('name FROM items_types WHERE id = ?', [$row['type_id']]) ?: 'Tutti';
+$type = \Legacy\System\Classes\LegacyDB::find('name FROM items_types WHERE id = ?', [$row['type_id']]) ?: 'Tutti';
 
 //color
-$color = DBOld::find('name FROM items_colors WHERE id = ?', [$row['color_id']]) ?: 'Tutti';
+$color = \Legacy\System\Classes\LegacyDB::find('name FROM items_colors WHERE id = ?', [$row['color_id']]) ?: 'Tutti';
 
 //time
 $time_start = date('Y-m-d', strtotime($row['time_start']));

@@ -1,10 +1,10 @@
 <?php
 
-namespace ViewManager\Ecommerce;
+namespace Legacy\Classes\ViewManager\Ecommerce;
 
-use DBOld;
-use Ecommerce\Product\Type;
-use Ecommerce\ViewManager;
+use LegacyDB;
+use Legacy\Classes\Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\ViewManager;
 
 class PromotionShopTemplate {
 
@@ -71,10 +71,10 @@ class PromotionShopTemplate {
 
 								<div class="gender-ddown">
 									<?php
-									if ($shopData->id) $res = DBOld::select("
+									if ($shopData->id) $res = \Legacy\System\Classes\LegacyDB::select("
 										id FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$shopData->id]);
 
-									else $res = DBOld::select("
+									else $res = \Legacy\System\Classes\LegacyDB::select("
 										id FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
 
 									while ($row = $res->fetch_assoc()) {
@@ -104,10 +104,10 @@ class PromotionShopTemplate {
 									<?php
 
 									if ($shopData->id) {
-										$res = DBOld::select("
+										$res = \Legacy\System\Classes\LegacyDB::select("
 										id FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$shopData->id]);
 									} else {
-										$res = DBOld::select("
+										$res = \Legacy\System\Classes\LegacyDB::select("
 										id FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
 									}
 
@@ -138,10 +138,10 @@ class PromotionShopTemplate {
 									<?php
 
 									if ($shopData->id) {
-										$res = DBOld::select("
+										$res = \Legacy\System\Classes\LegacyDB::select("
 										id FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$shopData->id]);
 									} else {
-										$res = DBOld::select("
+										$res = \Legacy\System\Classes\LegacyDB::select("
 										id FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY name ASC");
 									}
 
@@ -169,7 +169,7 @@ class PromotionShopTemplate {
 
 						<!-- Tags -->
 						<?php if (!$shopData->id) {
-							$res_tags = DBOld::select('tag FROM sys_tags WHERE hide=0 ORDER BY count DESC LIMIT 20') ?>
+							$res_tags = \Legacy\System\Classes\LegacyDB::select('tag FROM sys_tags WHERE hide=0 ORDER BY count DESC LIMIT 20') ?>
 
 							<div class="srch-box gallery">
 								<h3 class="srch-title pad-t-3 mar-b-05">Tag popolari</h3>

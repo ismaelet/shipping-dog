@@ -3,7 +3,7 @@
 /*
 * Ajax calls
 */
-RouteOld::add('/ajax/*', function ($path) {
+\Legacy\System\Classes\LegacyRoute::add('/ajax/*', function ($path) {
 	$ajaxFile = null;
 	$ajaxRequest = explode('ajax/', $path)[1] ?? null;
 	$ajaxModule = explode('?', $ajaxRequest)[0] ?? null;
@@ -19,7 +19,7 @@ RouteOld::add('/ajax/*', function ($path) {
 * API calls
 */
 // Function call
-RouteOld::add('/old-api/call-function/*', function ($path) {
+\Legacy\System\Classes\LegacyRoute::add('/old-api/call-function/*', function ($path) {
 	$response = [];
 
 	// request data
@@ -30,10 +30,11 @@ RouteOld::add('/old-api/call-function/*', function ($path) {
 	$response = call_user_func($functionName, ...$arguments);
 
 	echo json_encode($response);
+	exit;
 });
 
 // Class interactions
-RouteOld::add(['/old-api/get-class-properties/*', '/old-api/call-class-method/*'], function ($path) {
+\Legacy\System\Classes\LegacyRoute::add(['/old-api/get-class-properties/*', '/old-api/call-class-method/*'], function ($path) {
 	$response = [];
 
 	// request data
@@ -87,11 +88,12 @@ RouteOld::add(['/old-api/get-class-properties/*', '/old-api/call-class-method/*'
 	}
 
 	echo json_encode($response);
+	exit;
 });
 
 /*
 * Favicon
 */
-RouteOld::add('/favicon.ico', function () {
+\Legacy\System\Classes\LegacyRoute::add('/favicon.ico', function () {
 	include(SERVER_ROOT . '/app/assets/favicon/favicon.ico');
 });

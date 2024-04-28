@@ -38,8 +38,8 @@
 
 						$imgID = $row['id'];
 
-						$des_name = DBOld::find('name FROM designs WHERE id = ?', [$row['design_id']]);
-						$type_name = DBOld::find('name FROM items_types WHERE tag = ?', [$row['type']]) ?>
+						$des_name = \Legacy\System\Classes\LegacyDB::find('name FROM designs WHERE id = ?', [$row['design_id']]);
+						$type_name = \Legacy\System\Classes\LegacyDB::find('name FROM items_types WHERE tag = ?', [$row['type']]) ?>
 
 						<form class="list-row <?php if ($i % 2) echo 'dark' ?>" method="POST">
 							<input type="hidden" name="imgID" value="<?= $imgID ?>">

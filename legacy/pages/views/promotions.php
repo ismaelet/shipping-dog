@@ -1,6 +1,6 @@
 <?php
 
-use Ecommerce\PromotionShop;
+use Legacy\Classes\Ecommerce\PromotionShop;
 
 ?>
 

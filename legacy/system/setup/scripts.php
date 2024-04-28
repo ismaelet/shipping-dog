@@ -12,17 +12,17 @@ function scripts($view) {
 	foreach ($files as $file) load_script($file);
 
 	//load the template and page scripts
-	if (file_exists($file = SERVER_ROOT . '/app/templates/scripts/' . ViewOld::$template . '.js')) load_script($file);
-	else if (file_exists($file = SERVER_ROOT . '/system/templates/scripts/' . ViewOld::$template . '.js')) load_script($file);
+	if (file_exists($file = SERVER_ROOT . '/app/templates/scripts/' . \Legacy\System\Classes\LegacyView::$template . '.js')) load_script($file);
+	else if (file_exists($file = SERVER_ROOT . '/system/templates/scripts/' . \Legacy\System\Classes\LegacyView::$template . '.js')) load_script($file);
 
-	if (file_exists($file = SERVER_ROOT . '/pages/scripts/' . ViewOld::$name . '.js')) load_script($file);
+	if (file_exists($file = SERVER_ROOT . '/pages/scripts/' . \Legacy\System\Classes\LegacyView::$name . '.js')) load_script($file);
 
 	//load the scripts in the page js folder, if present
-	$files = glob(SERVER_ROOT . '/pages/scripts/' . ViewOld::$name . '/*.js');
+	$files = glob(SERVER_ROOT . '/pages/scripts/' . \Legacy\System\Classes\LegacyView::$name . '/*.js');
 	foreach ($files as $file) load_script($file);
 
 	//load additional scripts, if present
-	foreach (ViewOld::$scripts as $file) load_script($file);
+	foreach (\Legacy\System\Classes\LegacyView::$scripts as $file) load_script($file);
 }
 
 //load a script

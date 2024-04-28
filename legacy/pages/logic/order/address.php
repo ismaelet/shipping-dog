@@ -2,7 +2,7 @@
 
 //setup page
 
-use Ecommerce\Cart;
+use Legacy\Classes\Ecommerce\Cart;
 
 $id = $_GET['id'] ?? false;
 $cart = new Cart($id);
@@ -11,9 +11,9 @@ $done = $_SESSION['form-done'] ?? false;
 unset($_SESSION['form-done']);
 
 //fetch data
-if (!$address = DBOld::row('* FROM addresses WHERE cart_id = ? AND security=?', [$id, $security])) redirect_old('/');
+if (!$address = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE cart_id = ? AND security=?', [$id, $security])) redirect_old('/');
 
-$status = DBOld::find('status FROM carts WHERE id = ?', [$id]);
+$status = \Legacy\System\Classes\LegacyDB::find('status FROM carts WHERE id = ?', [$id]);
 
 if (!$status) redirect_old('/cart');
 

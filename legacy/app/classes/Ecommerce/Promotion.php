@@ -1,15 +1,15 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
-use DatabaseObject;
+use \Legacy\System\Traits\DatabaseObject;
 
 /**
  * Promotion class
  */
 class Promotion {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'inventory';
 	public const INDEX = 'id';

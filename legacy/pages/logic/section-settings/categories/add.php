@@ -37,11 +37,11 @@ $inputs = [
  * Form handling
  */
 function _expand_edit($table, $inputs, $index, $id) {
-	$old = DBOld::find('slug FROM admin_categories WHERE id = ?', $id);
+	$old = \Legacy\System\Classes\LegacyDB::find('slug FROM admin_categories WHERE id = ?', $id);
 
 	form_db_update($table, $inputs, $index, $id);
 
-	DBOld::update('admin_sections SET category=? WHERE category=?', [$_POST['slug'], $old]);
+	\Legacy\System\Classes\LegacyDB::update('admin_sections SET category=? WHERE category=?', [$_POST['slug'], $old]);
 
 	if (file_exists($file = SERVER_ROOT . '/app/assets/icons/navigation/' . $old . '.svg')) rename($file, SERVER_ROOT . '/app/assets/icons/navigation/' . $_POST['slug'] . '.svg');
 }

@@ -5,6 +5,6 @@ function plugin_side_scroller() {
 
 	global $view;
 
-	ViewOld::$styles->add(__DIR__ . '/style.css');
-	ViewOld::$scripts->add(__DIR__ . '/script.js');
+	\Legacy\System\Classes\LegacyView::$styles->add(__DIR__ . '/style.css');
+	\Legacy\System\Classes\LegacyView::$scripts->add(__DIR__ . '/script.js');
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
 use App\Models\Ecommerce\Design\LogoGroup as DesignLogoGroup;
-use DBOld;
-use Ecommerce\Design\LogoGroup;
-use Ecommerce\Product;
-use DatabaseObject;
+use LegacyDB;
+use Legacy\Classes\Ecommerce\Design\LogoGroup;
+use Legacy\Classes\Ecommerce\Product;
+use \Legacy\System\Traits\DatabaseObject;
 
 /**
  * Design class
@@ -16,7 +16,7 @@ use DatabaseObject;
  */
 class Design {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'designs';
 	public const INDEX = 'id';
@@ -44,18 +44,18 @@ class Design {
 	}
 
 	private function getProductCount() {
-		return  DBOld::count('items WHERE design_id = ? AND status = 1', [$this->id]);
+		return  \Legacy\System\Classes\LegacyDB::count('items WHERE design_id = ? AND status = 1', [$this->id]);
 	}
 
 	private function getMainProduct() {
-		$productId = DBOld::find('id FROM items WHERE design_id = ? AND status = 1 ORDER BY type_id ASC', [$this->id]);
+		$productId = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND status = 1 ORDER BY type_id ASC', [$this->id]);
 
 		return  new Product($productId);
 	}
 
 	private function getProducts() {
 		$products = [];
-		$productEntries = DBOld::select(Product::INDEX . ' FROM ' . Product::TABLE . ' WHERE ' . Product::DESIGN_INDEX . ' = ?', [$this->id]);
+		$productEntries = \Legacy\System\Classes\LegacyDB::select(Product::INDEX . ' FROM ' . Product::TABLE . ' WHERE ' . Product::DESIGN_INDEX . ' = ?', [$this->id]);
 
 		while ($productEntry = $productEntries->fetch_assoc()) {
 			$products[] = new Product($productEntry[Product::INDEX]);
@@ -87,7 +87,7 @@ class Design {
 	private function loved() {
 		global $user;
 
-		$loved = auth()->check() && DBOld::exists('likes WHERE user_id = ? AND design_id = ?', [auth()->id(), $this->id]);
+		$loved = auth()->check() && \Legacy\System\Classes\LegacyDB::exists('likes WHERE user_id = ? AND design_id = ?', [auth()->id(), $this->id]);
 
 		return $loved;
 	}
@@ -114,7 +114,7 @@ class Design {
 
 	private function getTags() {
 		if ($this->id) {
-			$tags = DBOld::find('tags FROM designs_tags WHERE design_id = ?', [$this->id]);
+			$tags = \Legacy\System\Classes\LegacyDB::find('tags FROM designs_tags WHERE design_id = ?', [$this->id]);
 
 			if ($tags) {
 				return explode(',', $tags);
@@ -138,11 +138,11 @@ class Design {
 
 	public function delete(bool $permanently = false) {
 		if ($permanently) {
-			DBOld::delete('designs WHERE id = ?', [$this->id]);
-			DBOld::delete('designs_tags WHERE design_id = ?', [$this->id]);
-			DBOld::delete('likes WHERE design_id = ?', [$this->id]);
+			\Legacy\System\Classes\LegacyDB::delete('designs WHERE id = ?', [$this->id]);
+			\Legacy\System\Classes\LegacyDB::delete('designs_tags WHERE design_id = ?', [$this->id]);
+			\Legacy\System\Classes\LegacyDB::delete('likes WHERE design_id = ?', [$this->id]);
 		} else {
-			DBOld::update('designs SET status=0 WHERE id = ?', [$this->id]);
+			\Legacy\System\Classes\LegacyDB::update('designs SET status=0 WHERE id = ?', [$this->id]);
 		}
 
 		foreach ($this->products as $product) {
@@ -160,8 +160,8 @@ class Design {
 	 */
 	public function updateName(string $name) {
 		if ($name) {
-			DBOld::update(self::TABLE . ' SET name = ? WHERE ' . self::INDEX . ' = ?', [$name, $this->id]);
-			DBOld::update(Product::TABLE . ' SET name = ? WHERE ' . Product::DESIGN_INDEX . ' = ?', [$name, $this->id]);
+			\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET name = ? WHERE ' . self::INDEX . ' = ?', [$name, $this->id]);
+			\Legacy\System\Classes\LegacyDB::update(Product::TABLE . ' SET name = ? WHERE ' . Product::DESIGN_INDEX . ' = ?', [$name, $this->id]);
 
 			unset($this->data['name']);
 			unset($this->data['fullName']);

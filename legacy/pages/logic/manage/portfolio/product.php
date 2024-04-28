@@ -4,19 +4,19 @@ use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPrice;
 use App\Models\Ecommerce\Product\ProductType;
-use Ecommerce\Product as OldProduct;
-use Ecommerce\Product\Color;
-use Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product as OldProduct;
+use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Product\Type;
 
 $productId = $_GET['id'] ?? null;
 $oldProduct = $productId ? new OldProduct($productId) : null;
 $product = Product::find($productId);
-$seller = ViewOld::get('seller');
+$seller = \Legacy\System\Classes\LegacyView::get('seller');
 $saved = $_GET['saved'] ?? false;
 
 // fetch types
 $types = [];
-$typeRows = DBOld::select('id FROM items_types WHERE id<>16 ORDER BY category ASC, id ASC');
+$typeRows = \Legacy\System\Classes\LegacyDB::select('id FROM items_types WHERE id<>16 ORDER BY category ASC, id ASC');
 
 while ($typeRow = $typeRows->fetch_assoc()) {
 	$type = new Type($typeRow['id']);
@@ -25,7 +25,7 @@ while ($typeRow = $typeRows->fetch_assoc()) {
 
 // fetch colors
 $colors = [];
-$colorRows = DBOld::select('id FROM items_colors ORDER BY reorder ASC, id ASC');
+$colorRows = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors ORDER BY reorder ASC, id ASC');
 
 while ($colorRow = $colorRows->fetch_assoc()) {
 	$color = new Color($colorRow['id']);
@@ -61,7 +61,7 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 		// upload product images
 		if (!empty($_POST['colors'])) {
 			foreach ($_POST['colors'] as $colorSlug) {
-				$color_id = DBOld::find('id FROM items_colors WHERE tag = ?', [$colorSlug]);
+				$color_id = \Legacy\System\Classes\LegacyDB::find('id FROM items_colors WHERE tag = ?', [$colorSlug]);
 
 				if ($_FILES['file-' . $color_id]['name']) {
 					upload_product_image($oldProduct, $color_id);
@@ -78,7 +78,7 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 		]);
 	}
 
-	DBOld::put('items_info', ['description' => $description], $oldProduct->id);
+	\Legacy\System\Classes\LegacyDB::put('items_info', ['description' => $description], $oldProduct->id);
 
 	// Price
 	ProductPrice::updateOrCreate(['product_id' => $product->id], [

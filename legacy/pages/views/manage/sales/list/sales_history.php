@@ -1,11 +1,11 @@
 <?php
 
 use App\Models\Ecommerce\Order as EcommerceOrder;
-use Ecommerce\Order;
+use Legacy\Classes\Ecommerce\Order;
 
-if (!$year) $year = DBOld::row('YEAR(time) as year FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) ORDER BY time DESC', [$oldSeller->id])['year'];
+if (!$year) $year = \Legacy\System\Classes\LegacyDB::row('YEAR(time) as year FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) ORDER BY time DESC', [$oldSeller->id])['year'];
 
-$res_months = DBOld::select('MONTH(time) as month FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$oldSeller->id, $year]);
+$res_months = \Legacy\System\Classes\LegacyDB::select('MONTH(time) as month FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$oldSeller->id, $year]);
 
 while ($row_months = $res_months->fetch_assoc()) {
 
@@ -14,7 +14,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 	$month = $row_months['month'];
 	$month_str = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
 
-	$row_month = DBOld::row(
+	$row_month = \Legacy\System\Classes\LegacyDB::row(
 		'
 		SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * orders.quantity) as totGain, COUNT(*) as count
 		FROM orders
@@ -100,7 +100,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 
 <?php
 
-$res_year = DBOld::select('YEAR(time) as year FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$oldSeller->id]);
+$res_year = \Legacy\System\Classes\LegacyDB::select('YEAR(time) as year FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$oldSeller->id]);
 
 if ($res_year->num_rows > 1) { ?>
 

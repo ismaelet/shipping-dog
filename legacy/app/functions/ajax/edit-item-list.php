@@ -4,20 +4,20 @@ use App\Models\Ecommerce\Product as EcommerceProduct;
 use App\Models\Ecommerce\Product\ProductMockup;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
-use Ecommerce\Design;
-use Ecommerce\Product;
-use Ecommerce\Product\Color;
-use Ecommerce\Product\Gender;
-use Ecommerce\Product\Position;
-use Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Design;
+use Legacy\Classes\Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Product\Gender;
+use Legacy\Classes\Ecommerce\Product\Position;
+use Legacy\Classes\Ecommerce\Product\Type;
 
 $oldDesign_id = $_GET['design_id'];
 $oldDesign = new Design($oldDesign_id);
 
 if (!$oldDesign->custom && auth()->id() != 1) {
-	$oldTypes = DBOld::select('id FROM items_types WHERE hidden = 0 ORDER BY category ASC, id ASC');
+	$oldTypes = \Legacy\System\Classes\LegacyDB::select('id FROM items_types WHERE hidden = 0 ORDER BY category ASC, id ASC');
 } else {
-	$oldTypes = DBOld::select('id FROM items_types ORDER BY hidden ASC, category ASC, id ASC');
+	$oldTypes = \Legacy\System\Classes\LegacyDB::select('id FROM items_types ORDER BY hidden ASC, category ASC, id ASC');
 }
 
 while ($oldTypeRow = $oldTypes->fetch_assoc()) {
@@ -25,7 +25,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 	$type = ProductType::find($oldType->id);
 	$gender = new Gender($oldType->genderId);
 
-	$oldProductId = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$oldDesign->id, $oldType->id]);
+	$oldProductId = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$oldDesign->id, $oldType->id]);
 
 	$oldProduct = new Product($oldProductId);
 	$product = EcommerceProduct::find($oldProduct->id);
@@ -66,20 +66,26 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 			<input type="hidden" name="type_id" value="<?= $oldType->id ?>">
 
-			<button type="submit" name="off" class="btn off-btn switch-btn ">
-				<?= embed_icon('actions/add-bgr') ?>
-				Attivo
-			</button>
+			<?php if ($oldProduct->status) { ?>
 
-			<button type="submit" name="on" class="btn on-btn switch-btn">
-				<?= embed_icon('actions/add-bgr') ?>
-				Disattivato
-			</button>
+				<button type="submit" name="off" class="btn off-btn switch-btn ">
+					<?= embed_icon('actions/add-bgr') ?>
+					Attivo
+				</button>
 
-			<p class="sbtn edit-btn switch-btn item-panel-open">
-				<?= embed_icon('settings') ?>
-				Modifica
-			</p>
+				<p class="sbtn edit-btn switch-btn item-panel-open">
+					<?= embed_icon('settings') ?>
+					Modifica
+				</p>
+
+			<?php } else { ?>
+
+				<button type="submit" name="on" class="btn btn--secondary on-btn switch-btn">
+					<?= embed_icon('actions/add-bgr') ?>
+					Disattivato
+				</button>
+
+			<?php } ?>
 
 		</form>
 
@@ -342,7 +348,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 														<div class="inp-box color-grid">
 															<?php
 
-															$res_colorA = DBOld::select('id FROM items_colors ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
+															$res_colorA = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
 
 															while ($row = $res_colorA->fetch_assoc()) {
 
@@ -352,7 +358,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 																	<label class="color-box">
 
-																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (DBOld::exists("items WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'checked' ?>>
+																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (\Legacy\System\Classes\LegacyDB::exists("items WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'checked' ?>>
 
 																		<div class="color-icon" style="background-color: #<?= $color->hex ?>;"></div>
 
@@ -374,16 +380,16 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 															<?php
 
-															$res_colorD = DBOld::select('id FROM items_colors ORDER BY id ASC');
+															$res_colorD = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors ORDER BY id ASC');
 
 															while ($row = $res_colorD->fetch_assoc()) {
 
 																$color = new Color($row['id']);
 															?>
 
-																<label class="inlb color-box <?php if (DBOld::exists("items WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'active' ?>">
+																<label class="inlb color-box <?php if (\Legacy\System\Classes\LegacyDB::exists("items WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'active' ?>">
 
-																	<input type="checkbox" class="cbx hidden colorD-<?= $color->slug ?>" name="colorD" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-color-id="<?= $color->id ?>" data-dark="<?= $color->dark ? 1 : 0 ?>" <?php if ($color->id == DBOld::find('color_id FROM items WHERE id = ?', [$oldProduct->id])) echo 'checked' ?>>
+																	<input type="checkbox" class="cbx hidden colorD-<?= $color->slug ?>" name="colorD" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-color-id="<?= $color->id ?>" data-dark="<?= $color->dark ? 1 : 0 ?>" <?php if ($color->id == \Legacy\System\Classes\LegacyDB::find('color_id FROM items WHERE id = ?', [$oldProduct->id])) echo 'checked' ?>>
 
 																	<div class="color-icon" for="item-colorD-<?= $color->slug ?>" style="background-color: #<?= $color->hex ?>;"></div>
 																</label>

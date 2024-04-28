@@ -9,7 +9,7 @@
 		<a href="list" class="title-arrow border border-radius">
 			<?= embed_icon('navigation/arrow1-left') ?>
 		</a>
-		<h1 class="add_title"><?= ViewOld::$title ?></h1>
+		<h1 class="add_title"><?= \Legacy\System\Classes\LegacyView::$title ?></h1>
 	</div>
 
 	<?php if ($updated) { ?>

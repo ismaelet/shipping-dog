@@ -25,4 +25,4 @@ if (!$cart) {
 
 $customerId = $cart->user_id;
 
-ViewOld::setTitle('Ordine ' . $cart->idCode());
+\Legacy\System\Classes\LegacyView::setTitle('Ordine ' . $cart->idCode());

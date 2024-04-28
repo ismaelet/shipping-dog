@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View\Components\Interactions;
+namespace Legacy\View\Components\Interactions;
 
-use App\View\Components\Component;
+use Legacy\View\Components\Component;
 
 class LikeButton extends Component {
 }

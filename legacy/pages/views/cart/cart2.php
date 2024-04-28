@@ -1,10 +1,10 @@
 <?php
 
-use App\View\Components\Form\Input;
-use Ecommerce\ViewManager;
 use Illuminate\Support\Facades\Auth;
-use ViewManager\Ecommerce\CartFlowBar;
-use ViewManager\Ecommerce\CartRecap;
+use Legacy\Classes\Ecommerce\ViewManager;
+use Legacy\Classes\ViewManager\Ecommerce\CartFlowBar;
+use Legacy\Classes\ViewManager\Ecommerce\CartRecap;
+use Legacy\View\Components\Form\Input;
 
 ?>
 
@@ -42,11 +42,11 @@ use ViewManager\Ecommerce\CartRecap;
 					</p>
 
 					<select id="count_sel" name="country_id" class="sel" onChange="if ($(this).val() !== '0') {$('#country').click();}">
-						<option value="0" <?php if (!\App\Helpers\App::cartOld()->countryId) echo 'selected' ?>>Seleziona:</option>
+						<option value="0" <?php if (!cart_old()->countryId) echo 'selected' ?>>Seleziona:</option>
 
 						<?php while ($country = $countries->fetch_assoc()) { ?>
 
-							<option value="<?= $country['id'] ?>" <?php if (\App\Helpers\App::cartOld()->countryId == $country['id']) echo 'selected' ?>><?= $country['name'] ?></option>
+							<option value="<?= $country['id'] ?>" <?php if (cart_old()->countryId == $country['id']) echo 'selected' ?>><?= $country['name'] ?></option>
 
 						<?php } ?>
 
@@ -80,7 +80,7 @@ use ViewManager\Ecommerce\CartRecap;
 
 							<?php
 
-							if (\App\Helpers\App::cartOld()->shippingMethodId == $shippingMethod->id) {
+							if (cart_old()->shippingMethodId == $shippingMethod->id) {
 
 								if ($shippingMethod->price(cart()->quantity) && !cart()->coupon && !cart()->credit_ship && Auth::check() && Auth::user()->isSeller() && Auth::user()->seller->credit() >= $shippingMethod->price(cart()->quantity)) { ?>
 
@@ -89,7 +89,7 @@ use ViewManager\Ecommerce\CartRecap;
 										Usa il tuo credito
 									</button>
 
-								<?php } else if (\App\Helpers\App::cartOld()->shippingWithCredit) { ?>
+								<?php } else if (cart_old()->shippingWithCredit) { ?>
 
 									<button class="no-credit-btn credit-btn btn btn--secondary button--full-width mar-b-2" name="ship_no_credit">
 										<?= embed_icon('close') ?>
@@ -138,15 +138,15 @@ use ViewManager\Ecommerce\CartRecap;
 				<!-- Orders -->
 				<?= ViewManager::renderOrderList() ?>
 
-				<?php if (\App\Helpers\App::cartOld()->promotion) { ?>
+				<?php if (cart_old()->promotion) { ?>
 
 					<!-- Promotion -->
 					<section id="promotion" class="">
-						<h3 class="title"><?= \App\Helpers\App::cartOld()->promotion_data['name'] ?></h3>
-						<p><?= \App\Helpers\App::cartOld()->promotion_data['info'] ?></p>
+						<h3 class="title"><?= cart_old()->promotion_data['name'] ?></h3>
+						<p><?= cart_old()->promotion_data['info'] ?></p>
 					</section>
 
-				<?php } else if (!\App\Helpers\App::cartOld()->usedProductCredit) { ?>
+				<?php } else if (!cart_old()->usedProductCredit) { ?>
 
 					<!-- Discount code -->
 					<section id="code" class="">
@@ -154,7 +154,7 @@ use ViewManager\Ecommerce\CartRecap;
 						<div id="code-anch" class="anchor"></div>
 						<div id="code_cont" method="POST" action="#code-anch">
 
-							<?php if (!\App\Helpers\App::cartOld()->couponId) { ?>
+							<?php if (!cart_old()->couponId) { ?>
 
 								<input type="text" id="code-inp" name="code" class="input wide" placeholder="Codice sconto (opzionale)" onFocus="$('.err').hide()">
 								<?php if ($error == 'coupon-invalid') { ?><p class="error mar-t-1">Il codice inserito non esiste</p><?php } ?>
@@ -168,7 +168,7 @@ use ViewManager\Ecommerce\CartRecap;
 							<?php } else { ?>
 
 								<p class="code_txt">
-									Codice usato: <span class="code txt-c1"><?= \App\Helpers\App::cartOld()->coupon->code ?></span>
+									Codice usato: <span class="code txt-c1"><?= cart_old()->coupon->code ?></span>
 								</p>
 								<button type="submit" name="del_code" id="code_remove" formnovalidate>Rimuovi</button>
 
@@ -179,7 +179,7 @@ use ViewManager\Ecommerce\CartRecap;
 
 				<?php } ?>
 
-				<?php if (App\Helpers\App::isSeller() && !\App\Helpers\App::cartOld()->couponId && \App\Helpers\App::cartOld()->customer->credit) { ?>
+				<?php if (App\Helpers\App::isSeller() && !cart_old()->couponId && cart_old()->customer->credit) { ?>
 
 					<!-- Used credit panel -->
 					<section id="credit-section" class="">
@@ -187,10 +187,10 @@ use ViewManager\Ecommerce\CartRecap;
 
 						<p>Per ogni vendita realizzata ottieni un <strong>10% di bonus</strong> sui guadagni, che puoi usare per pagare le spese di spedizione oppure per comprare articoli del tuo negozio.<br><br>Questo credito non può essere usato insieme ad un codice sconto ed è possibile usarlo solo se si ha abbastanza credito da coprire l'intero prezzo del prodotto.</p>
 
-						<p class="mar-t-1 txt-med txt-1rem txt-cen">Hai usato <strong><?= formatc(\App\Helpers\App::cartOld()->usedCredit) ?> € / <?= formatc(\App\Helpers\App::cartOld()->customer->credit) ?> €</strong></p>
+						<p class="mar-t-1 txt-med txt-1rem txt-cen">Hai usato <strong><?= formatc(cart_old()->usedCredit) ?> € / <?= formatc(cart_old()->customer->credit) ?> €</strong></p>
 
 						<div class="total-credit">
-							<div class="used-credit" style="width: <?= round(\App\Helpers\App::cartOld()->usedCredit / \App\Helpers\App::cartOld()->customer->credit * 100) ?>%"></div>
+							<div class="used-credit" style="width: <?= round(cart_old()->usedCredit / cart_old()->customer->credit * 100) ?>%"></div>
 						</div>
 
 

@@ -1,14 +1,14 @@
 <?php
 
-use Ecommerce\Seller;
+use Legacy\Classes\Ecommerce\Seller;
 
 $saved = $_GET['saved'] ?? false;
 $seller = new Seller(auth()->id());
 
 // get socials data
-$row_link = DBOld::row('* FROM links WHERE user_id = ?', [auth()->id()]);
+$row_link = \Legacy\System\Classes\LegacyDB::row('* FROM links WHERE user_id = ?', [auth()->id()]);
 
-if (!$row_link) DBOld::add('links (user_id) VALUES (?)', [auth()->id()]);
+if (!$row_link) \Legacy\System\Classes\LegacyDB::add('links (user_id) VALUES (?)', [auth()->id()]);
 
 // edit shop data
 if (isset($_POST['edit'])) {
@@ -18,7 +18,7 @@ if (isset($_POST['edit'])) {
 
 	if (empty($name)) $name = $seller->name;
 
-	DBOld::update(Seller::TABLE . ' SET name = ?, description = ?, sort = ? WHERE ' . Seller::INDEX . ' = ?', [$name, $desc, $sort, auth()->id()]);
+	\Legacy\System\Classes\LegacyDB::update(Seller::TABLE . ' SET name = ?, description = ?, sort = ? WHERE ' . Seller::INDEX . ' = ?', [$name, $desc, $sort, auth()->id()]);
 
 	redirect_old();
 }
@@ -85,9 +85,9 @@ if (isset($_POST['edit-socials'])) {
 	if ($pos = strpos($yt, 'youtube.com/')) $yt = substr($yt, $pos + 12);
 	$yt = strtok($yt, '/');
 
-	if (!DBOld::exists('links WHERE user_id = ?', [auth()->id()])) DBOld::add('links (user_id) VALUE (?)', [auth()->id()]);
+	if (!\Legacy\System\Classes\LegacyDB::exists('links WHERE user_id = ?', [auth()->id()])) \Legacy\System\Classes\LegacyDB::add('links (user_id) VALUE (?)', [auth()->id()]);
 
-	DBOld::update('links SET site=?, facebook=?, instagram=?, twitter=?, youtube=? WHERE user_id = ?', [$site, $fb, $inst, $twit, $yt, auth()->id()]);
+	\Legacy\System\Classes\LegacyDB::update('links SET site=?, facebook=?, instagram=?, twitter=?, youtube=? WHERE user_id = ?', [$site, $fb, $inst, $twit, $yt, auth()->id()]);
 
 	redirect_old();
 }

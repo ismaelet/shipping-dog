@@ -3,13 +3,12 @@
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Design\DesignCollection;
 use App\Models\Ecommerce\Product;
-use App\Models\Ecommerce\Seller;
-use Collection as OldCollection;
+use Legacy\Classes\Collection;
 
 $id = $_GET['id'] ?? 0;
 
 // get collection data
-$coll = new OldCollection($id);
+$coll = new Collection($id);
 $collection = DesignCollection::find($id);
 $seller = $collection->seller;
 
@@ -75,13 +74,13 @@ if (isset($_POST['add'])) {
 	// add the designs
 	if (isset($_POST['add-cbx'])) foreach ($_POST['add-cbx'] as $design_id) {
 
-		DBOld::update('designs SET collection=? WHERE id = ?', [$id, $design_id]);
+		\Legacy\System\Classes\LegacyDB::update('designs SET collection=? WHERE id = ?', [$id, $design_id]);
 
 		$added = true;
 	}
 
 	// publish the collection if it's not empty
-	if (!$coll->status && $added) DBOld::update('collections SET status=2 WHERE id = ?', [$id]);
+	if (!$coll->status && $added) \Legacy\System\Classes\LegacyDB::update('collections SET status=2 WHERE id = ?', [$id]);
 
 	redirect_old();
 }
@@ -91,11 +90,11 @@ if (isset($_POST['remove'])) {
 
 	// remove designs
 	if (isset($_POST['remove-cbx'])) foreach ($_POST['remove-cbx'] as $design_id)
-		DBOld::update('designs SET collection=0 WHERE id = ?', [$design_id]);
+		\Legacy\System\Classes\LegacyDB::update('designs SET collection=0 WHERE id = ?', [$design_id]);
 
 	// hide the collection if it's now empty
-	if (!DBOld::exists('designs WHERE collection=?', [$id]))
-		DBOld::update('collections SET status=0 WHERE id = ?', [$id]);
+	if (!\Legacy\System\Classes\LegacyDB::exists('designs WHERE collection=?', [$id]))
+		\Legacy\System\Classes\LegacyDB::update('collections SET status=0 WHERE id = ?', [$id]);
 
 	redirect_old();
 }
@@ -115,8 +114,8 @@ if (isset($_POST['img-change'])) {
 // delete collection
 if (isset($_POST['delete'])) {
 
-	DBOld::update('designs SET collection=0 WHERE collection=?', [$id]);
-	DBOld::delete('collections WHERE id = ?', [$id]);
+	\Legacy\System\Classes\LegacyDB::update('designs SET collection=0 WHERE collection=?', [$id]);
+	\Legacy\System\Classes\LegacyDB::delete('collections WHERE id = ?', [$id]);
 
 	redirect_old('/artist?id=' . $seller->id);
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\System\Classes;
+
 class Viewer {
 	const SYSTEM_TEMPLATES = SERVER_ROOT . '/system/templates';
 	const APP_TEMPLATES = SERVER_ROOT . '/app/templates';
@@ -18,8 +20,8 @@ class Viewer {
 	static public function render() {
 
 		// fetch the view files
-		self::$templateFile = self::getTemplateFile(ViewOld::$template);
-		if (file_exists($file = self::VIEWS_PATH . '/' . ViewOld::$name . '.php')) self::$viewFile = $file;
+		self::$templateFile = self::getTemplateFile(\Legacy\System\Classes\LegacyView::$template);
+		if (file_exists($file = self::VIEWS_PATH . '/' . \Legacy\System\Classes\LegacyView::$name . '.php')) self::$viewFile = $file;
 
 		echo self::renderView();
 	}
@@ -43,7 +45,7 @@ class Viewer {
 		$parentName = false;
 
 		// access variables
-		foreach (ViewOld::$variables as $var => $value) {
+		foreach (\Legacy\System\Classes\LegacyView::$variables as $var => $value) {
 			${$var} = $value;
 		}
 

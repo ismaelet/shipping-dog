@@ -1,6 +1,6 @@
 <?php
 
-use Ecommerce\Order;
+use Legacy\Classes\Ecommerce\Order;
 
 
 
@@ -9,7 +9,7 @@ $skip = true;
 
 // skip when there are no active promotions
 if ($skip || isset($_POST['submit'])) {
-	\App\Helpers\App::cartOld()->advanceAndredirect_old();
+	cart_old()->advanceAndredirect_old();
 }
 
 // add item to cart

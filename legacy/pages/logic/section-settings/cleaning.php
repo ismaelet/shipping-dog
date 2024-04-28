@@ -1,9 +1,9 @@
 <?php
 
-use Ecommerce\Cart;
+use Legacy\Classes\Ecommerce\Cart;
 
 // counts
-$cartCount = DBOld::count(Cart::TABLE . ' WHERE status = 0 AND time < NOW() - INTERVAL 30 DAY');
+$cartCount = \Legacy\System\Classes\LegacyDB::count(Cart::TABLE . ' WHERE status = 0 AND time < NOW() - INTERVAL 30 DAY');
 
 // panels
 $panels = [
@@ -12,7 +12,7 @@ $panels = [
 
 // cleaning
 if (isset($_POST['carts'])) {
-	$carts = DBOld::select(Cart::INDEX . ' FROM ' . Cart::TABLE . ' WHERE status = 0 AND time < NOW() - INTERVAL 30 DAY');
+	$carts = \Legacy\System\Classes\LegacyDB::select(Cart::INDEX . ' FROM ' . Cart::TABLE . ' WHERE status = 0 AND time < NOW() - INTERVAL 30 DAY');
 
 	while ($cartRow = $carts->fetch_assoc()) {
 		$cart = new Cart($cartRow[Cart::INDEX]);

@@ -1,17 +1,12 @@
 <?php
 
-namespace ViewManager\Ecommerce;
-
-use ViewOld;
-
-
-use function Ecommerce\ecommerce_config;
+namespace Legacy\Classes\ViewManager\Ecommerce;
 
 class CartFlowBar {
 
 	public static function render(int $currentStepId = null, object $cart = null) {
-		$cart = $cart ?: \App\Helpers\App::cartOld();
-		$currentStepId = $currentStepId ?: (ViewOld::get('currentStepId') ?: $cart->stepId);
+		$cart = $cart ?: cart_old();
+		$currentStepId = $currentStepId ?: (\Legacy\System\Classes\LegacyView::get('currentStepId') ?: $cart->stepId);
 
 		ob_start();
 ?>

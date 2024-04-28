@@ -3,22 +3,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	const id = $('#item').data('id')
 
-	// fix height
-	fix_height()
-	change_logo()
-
-	$(window).resize(function () {
-		fix_height()
-	})
-
-	function fix_height() {
-		if ($(window).width() > 1024) {
-			$('#right-panel').css('min-height', $('#left-panel .wrap').outerHeight() + 'px')
-		} else {
-			$('#right-panel').css('min-height', '0')
-		}
-	}
-
 	// change properties
 	$('#color .cbx').on('change', function () {
 		$('#color .cbx').prop('checked', false)

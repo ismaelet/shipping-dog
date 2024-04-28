@@ -1,21 +1,21 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
 use App\Models\Ecommerce\Cart;
 use App\Models\Ecommerce\Product as EcommerceProduct;
 use DateTime;
-use DBOld;
-use Ecommerce\Design\Logo;
-use Ecommerce\Product\Color;
-use Ecommerce\Product\Size;
-use DatabaseObject;
-use Ecommerce\Cart as OldCart;
+use LegacyDB;
+use Legacy\Classes\Ecommerce\Design\Logo;
+use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Product\Size;
+use \Legacy\System\Traits\DatabaseObject;
+use Legacy\Classes\Ecommerce\Cart as OldCart;
 use Illuminate\Support\Facades\Auth;
 
 class Order {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'orders';
 	public const INDEX = 'id';
@@ -235,7 +235,7 @@ class Order {
 	public function updateDiscount(float $discountAmount) {
 		$discountAmount = round($discountAmount, 2);
 
-		DBOld::update('orders SET price_disc=? WHERE id = ?', [$discountAmount, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update('orders SET price_disc=? WHERE id = ?', [$discountAmount, $this->id]);
 
 		$this->data['fixedDiscount'] = $discountAmount;
 		$this->data = [];
@@ -246,7 +246,7 @@ class Order {
 	public function updateGainReduction(float $gainReduction) {
 		$gainReduction = round($gainReduction, 2);
 
-		DBOld::update('orders SET gain_disc=? WHERE id = ?', [$gainReduction, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update('orders SET gain_disc=? WHERE id = ?', [$gainReduction, $this->id]);
 
 		$this->data['gainReduction'] = $gainReduction;
 		unset($this->data['totalGain']);
@@ -274,7 +274,7 @@ class Order {
 			$product->size_id = $size_id;
 			$product->logo_id = $logo_id;
 
-			$priceSize = DBOld::find('price FROM items_sizes WHERE id = ?', [$size_id]);
+			$priceSize = \Legacy\System\Classes\LegacyDB::find('price FROM items_sizes WHERE id = ?', [$size_id]);
 			$price = $product->fullPrice() + $priceSize;
 
 			if (Auth::check()) {
@@ -300,7 +300,7 @@ class Order {
 			$oldCart = new OldCart($cart->id);
 
 			// add order
-			$orderId = DBOld::add(
+			$orderId = \Legacy\System\Classes\LegacyDB::add(
 				'orders (user_id, cart_id, product_id, seller_id, design_id, type_id, color_id, size_id, gender_id, position_id, logo_id, fullProductPrice, price_disc, productGain, quantity)',
 				[Auth::id() ?: null, $cart->id, $product->id, $product->user_id, $product->design_id, $product->type->id, $color_id, $size_id, $genderId, $position_id, $logo_id, $price, $product->customerDiscount(), $product->sellerGain(), $quantity]
 			);
@@ -320,8 +320,8 @@ class Order {
 	}
 
 	public function delete() {
-		DBOld::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
-		DBOld::update(OldCart::TABLE . ' SET quantity = quantity - ? WHERE ' . OldCart::INDEX . ' = ?', [$this->quantity, $this->cart->id]);
+		\Legacy\System\Classes\LegacyDB::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
+		\Legacy\System\Classes\LegacyDB::update(OldCart::TABLE . ' SET quantity = quantity - ? WHERE ' . OldCart::INDEX . ' = ?', [$this->quantity, $this->cart->id]);
 
 		$this->cart->resetDynamicProperties();
 	}

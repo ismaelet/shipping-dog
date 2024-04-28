@@ -33,7 +33,12 @@
 		"psr-4": {
 			"App\\": "app/",
 			"Database\\Factories\\": "database/factories/",
-			"Database\\Seeders\\": "database/seeders/"
+			"Database\\Seeders\\": "database/seeders/",
+			"Legacy\\Models\\": "legacy/app/Models/",
+			"Legacy\\Classes\\": "legacy/app/classes/",
+			"Legacy\\View\\": "legacy/app/View/",
+			"Legacy\\System\\Classes\\": "legacy/system/classes/",
+			"Legacy\\System\\Traits\\": "legacy/system/traits/"
 		}
 	},
 	"autoload-dev": {

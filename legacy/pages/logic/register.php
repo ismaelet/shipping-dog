@@ -1,6 +1,6 @@
 <?php
 
-StyleLoader::add('login', 'page');
+\Legacy\System\Classes\StyleLoader::add('login', 'page');
 
 // setup page
 $error = false;
@@ -8,15 +8,15 @@ $error = false;
 // submit
 if (isset($_POST['submit'])) {
 	// check for errors
-	if (DBOld::exists('users WHERE username = ?', [$_POST['username']])) $error = 'user_match';
-	else if (DBOld::exists('users WHERE email=?', [$_POST['email']])) $error = 'email_match';
+	if (\Legacy\System\Classes\LegacyDB::exists('users WHERE username = ?', [$_POST['username']])) $error = 'user_match';
+	else if (\Legacy\System\Classes\LegacyDB::exists('users WHERE email=?', [$_POST['email']])) $error = 'email_match';
 	else if (strlen($_POST['password']) < 6) $error = 'pass_short';
 	else if ($_POST['password'] != $_POST['pass_conf']) $error = 'pass_match';
 	else {
 		// add user
-		$id = DBOld::add('users (username, password, email) VALUES (?, MD5(?), ?)', [$_POST['username'], $_POST['password'], $_POST['email']]);
+		$id = \Legacy\System\Classes\LegacyDB::add('users (username, password, email) VALUES (?, MD5(?), ?)', [$_POST['username'], $_POST['password'], $_POST['email']]);
 
-		DBOld::add('links (user_id) VALUES (?)', [$id]);
+		\Legacy\System\Classes\LegacyDB::add('links (user_id) VALUES (?)', [$id]);
 
 		standard_login($_POST['username'], $_POST['password']);
 	}

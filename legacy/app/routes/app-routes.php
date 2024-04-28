@@ -1,38 +1,38 @@
 <?php
 
 // homepage
-RouteOld::add(['/', '/home'], function () {
-	ViewOld::setPage('home')
+\Legacy\System\Classes\LegacyRoute::add(['/', '/home'], function () {
+	\Legacy\System\Classes\LegacyView::setPage('home')
 		->setLocation('home')
 		->show();
 });
 
 // gallery of client pics
-RouteOld::add('/fan-pics', function () {
-	ViewOld::setPage('fan-pics')
+\Legacy\System\Classes\LegacyRoute::add('/fan-pics', function () {
+	\Legacy\System\Classes\LegacyView::setPage('fan-pics')
 		->setLocation('fan-pics')
 		->show();
 });
 
 // contacts
-RouteOld::add('/contacts', function () {
-	ViewOld::setPage('infos/contacts')
+\Legacy\System\Classes\LegacyRoute::add('/contacts', function () {
+	\Legacy\System\Classes\LegacyView::setPage('infos/contacts')
 		->setLocation('info')
 		->setTitle('Contatti')
 		->show();
 });
 
 // faq
-RouteOld::add('/infos/faq', function () {
-	ViewOld::setPage('infos/faq')
+\Legacy\System\Classes\LegacyRoute::add('/infos/faq', function () {
+	\Legacy\System\Classes\LegacyView::setPage('infos/faq')
 		->setTitle('FAQ')
 		->setLocation('info')
 		->show();
 });
 
 // contract
-RouteOld::add('/infos/contract', function () {
-	ViewOld::setPage('infos/contract')
+\Legacy\System\Classes\LegacyRoute::add('/infos/contract', function () {
+	\Legacy\System\Classes\LegacyView::setPage('infos/contract')
 		->setTitle('Condizioni di invio')
 		->setTemplate('form')
 		->setLocation('info')
@@ -40,8 +40,8 @@ RouteOld::add('/infos/contract', function () {
 });
 
 // selling terms
-RouteOld::add('/infos/terms', function () {
-	ViewOld::setPage('infos/terms')
+\Legacy\System\Classes\LegacyRoute::add('/infos/terms', function () {
+	\Legacy\System\Classes\LegacyView::setPage('infos/terms')
 		->setTitle('Condizioni di vendita')
 		->setTemplate('form')
 		->setLocation('info')
@@ -49,8 +49,8 @@ RouteOld::add('/infos/terms', function () {
 });
 
 // privacy
-RouteOld::add('/infos/privacy', function () {
-	ViewOld::setPage('infos/privacy')
+\Legacy\System\Classes\LegacyRoute::add('/infos/privacy', function () {
+	\Legacy\System\Classes\LegacyView::setPage('infos/privacy')
 		->setTitle('Privacy policy')
 		->setTemplate('form')
 		->setLocation('info')

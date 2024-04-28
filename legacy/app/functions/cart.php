@@ -1,12 +1,12 @@
 <?php
 
 use App\Models\Ecommerce\Cart as EcommerceCart;
-use Ecommerce\Cart;
+use Legacy\Classes\Ecommerce\Cart;
 
 function cart_setup_old($user_idID, $stepId = false) {
 
 	// setup cart
-	$cart_id = DBOld::find('id FROM carts WHERE user_id=? and status=0', [$user_idID]);
+	$cart_id = \Legacy\System\Classes\LegacyDB::find('id FROM carts WHERE user_id=? and status=0', [$user_idID]);
 
 	// redirect if the cart doesn't exists
 	if (!$cart_id) redirect_old('/cart/empty');
@@ -14,7 +14,7 @@ function cart_setup_old($user_idID, $stepId = false) {
 	// clean and redirect if the cart is empty
 	if (!cart_quantity()) {
 
-		DBOld::delete('carts WHERE id = ?', $cart_id);
+		\Legacy\System\Classes\LegacyDB::delete('carts WHERE id = ?', $cart_id);
 
 		redirect_old('/cart/empty');
 	}
@@ -32,7 +32,7 @@ function cart_setup_old($user_idID, $stepId = false) {
 
 		$valid = false;
 
-		$row = DBOld::row('time_start, time_end FROM codes WHERE code=?', $code);
+		$row = \Legacy\System\Classes\LegacyDB::row('time_start, time_end FROM codes WHERE code=?', $code);
 
 		if ($row && strtotime($row['time_end']) > strtotime('now') && strtotime($row['time_start']) < strtotime('now')) $valid = true;
 
@@ -71,8 +71,8 @@ function cart_promotions(&$cart) {
 		//remove expired promotions
 		if ($cart->promotion && ($cart->promotion != $promotion['code'] || !$promotion['active'])) {
 
-			DBOld::update('carts SET promotion="" WHERE id = ?', [$cart->id]);
-			DBOld::update('orders SET price_disc=0, gain_disc=0 WHERE cart_id = ?', [$cart->id]);
+			\Legacy\System\Classes\LegacyDB::update('carts SET promotion="" WHERE id = ?', [$cart->id]);
+			\Legacy\System\Classes\LegacyDB::update('orders SET price_disc=0, gain_disc=0 WHERE cart_id = ?', [$cart->id]);
 
 			redirect_old();
 		}
@@ -85,7 +85,7 @@ function cart_promotions(&$cart) {
 			//add the promotion
 			if (!$cart->code) {
 
-				$triggered = DBOld::count($promotion['trigger'][1], $promotion['trigger'][2]) >= $promotion['trigger'][3];
+				$triggered = \Legacy\System\Classes\LegacyDB::count($promotion['trigger'][1], $promotion['trigger'][2]) >= $promotion['trigger'][3];
 
 				//if triggered
 				if ($triggered && !$cart->promotion) {
@@ -95,17 +95,17 @@ function cart_promotions(&$cart) {
 					//add promotion to the cart
 					$cart->promotion = $promotion['code'];
 
-					DBOld::update('carts SET promotion=? WHERE id = ?', [$promotion['code'], $cart->id]);
+					\Legacy\System\Classes\LegacyDB::update('carts SET promotion=? WHERE id = ?', [$promotion['code'], $cart->id]);
 
 					//add discount to orders
-					$orders = DBOld::select('id, price FROM orders WHERE cart_id = ?', [$cart->id]);
+					$orders = \Legacy\System\Classes\LegacyDB::select('id, price FROM orders WHERE cart_id = ?', [$cart->id]);
 
 					while ($order = $orders->fetch_assoc()) {
 
 						$price_disc = round($order['price'] * $promotion['discount'], 2);
 						$gain_disc = round($order['price'] * $promotion['discount-shop'] / 100, 2);
 
-						DBOld::update('orders SET price_disc=?, gain_disc=? WHERE id = ?', [$price_disc, $gain_disc, $order['id']]);
+						\Legacy\System\Classes\LegacyDB::update('orders SET price_disc=?, gain_disc=? WHERE id = ?', [$price_disc, $gain_disc, $order['id']]);
 					}
 
 					redirect_old();
@@ -114,8 +114,8 @@ function cart_promotions(&$cart) {
 				//if not triggered anymore
 				if ($cart->promotion && !$triggered) {
 
-					DBOld::update('carts SET promotion="" WHERE id = ?', [$cart->id]);
-					DBOld::update('orders SET price_disc=0, gain_disc=0 WHERE cart_id = ?', [$cart->id]);
+					\Legacy\System\Classes\LegacyDB::update('carts SET promotion="" WHERE id = ?', [$cart->id]);
+					\Legacy\System\Classes\LegacyDB::update('orders SET price_disc=0, gain_disc=0 WHERE cart_id = ?', [$cart->id]);
 
 					redirect_old();
 				}

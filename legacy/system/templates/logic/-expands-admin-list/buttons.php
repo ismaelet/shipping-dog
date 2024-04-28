@@ -2,7 +2,7 @@
 
 //  setup variables
 $results = [];
-$buttons = ViewOld::get('buttons');
+$buttons = \Legacy\System\Classes\LegacyView::get('buttons');
 
 //  generate the buttons
 foreach ($buttons as $i => $raw) {

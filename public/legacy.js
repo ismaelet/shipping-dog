@@ -1,7 +1,7 @@
 /*
  * Ajax call
  */
-async function AJAX(parcialEndpoint, parameters = {}, contentType = 'json', debug = false) {
+async function AJAX(parcialEndpoint, parameters = {}, contentType = 'json', debug = true) {
 	let responseData
 
 	// generate endpoint
@@ -37,17 +37,17 @@ async function AJAX(parcialEndpoint, parameters = {}, contentType = 'json', debu
 	return responseData
 }
 
-async function call_function(functionName, funParameters = null, debug = false) {
+async function call_function(functionName, funParameters = null, debug = true) {
 	let parameters = {}
 
 	if (funParameters) {
 		parameters.arguments = funParameters
 	}
 
-	return await AJAX('/old-api/call-function/' + functionName, parameters, 'json', debug)
+	return await AJAX('/old-api/call-function/' + functionName, parameters, 'json', true)
 }
 
-async function get_class_properties(className, propertyNames, objectId = null, setProperties = null, debug = false) {
+async function get_class_properties(className, propertyNames, objectId = null, setProperties = null, debug = true) {
 	let parameters = {
 		scope: propertyNames,
 		objectId: objectId,
@@ -60,7 +60,7 @@ async function get_class_properties(className, propertyNames, objectId = null, s
 	return await AJAX('/old-api/get-class-properties/' + className, parameters, 'json', debug)
 }
 
-async function call_class_method(className, methodName, funParameters = null, objectId = null, setProperties = null, debug = false) {
+async function call_class_method(className, methodName, funParameters = null, objectId = null, setProperties = null, debug = true) {
 	let parameters = {
 		scope: methodName,
 		objectId: objectId,
@@ -134,7 +134,7 @@ async function cart_id() {
 // update cart
 async function update_cart() {
 	// fatch data
-	const cartData = await get_class_properties('Ecommerce\\Cart', ['quantity', 'productPrice', 'productPriceString', 'priceString'], await cart_id(), null, false)
+	const cartData = await get_class_properties('Legacy\\Classes\\Ecommerce\\Cart', ['quantity', 'productPrice', 'productPriceString', 'priceString'], await cart_id(), null, false)
 
 	// update cart icon
 	if (parseInt(cartData.quantity)) {
@@ -168,7 +168,7 @@ function update_shipping() {
 
 	shippingElements.forEach(async (element) => {
 		const shippingMethodId = element.dataset.shippingMethodId
-		const shippingPrice = (await get_class_properties('Ecommerce\\ShippingMethod', 'priceString', shippingMethodId)).priceString
+		const shippingPrice = (await get_class_properties('Legacy\\Classes\\Ecommerce\\ShippingMethod', 'priceString', shippingMethodId)).priceString
 
 		element.textContent = shippingPrice
 	})
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 		await AJAX('ecommerce-orders', parameters, null, false)
 
 		// populate and show the cart dropdown
-		const orderList = await call_class_method('Ecommerce\\ViewManager', 'renderOrderList')
+		const orderList = await call_class_method('Legacy\\Classes\\Ecommerce\\ViewManager', 'renderOrderList', null, null, null, true)
 
 		update_cart()
 

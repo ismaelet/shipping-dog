@@ -11,7 +11,7 @@ use App\Models\Ecommerce\Product\ProductTypeMeasure;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Product\ProductTypeInfo;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
-use Ecommerce\Product as OldProduct;
+use Legacy\Classes\Ecommerce\Product as OldProduct;
 
 global $id;
 
@@ -271,15 +271,15 @@ FormController::setEdit(function ($id) {
 
 	// Add the new colors
 	foreach ($colorsToAdd as $color) {
-		DBOld::update((new Product)->getTable() . " SET colors = CONCAT(colors, ',$color') WHERE type_id = ?", [$productType->id]);
-		DBOld::update((new Product)->getTable() . " SET colors = TRIM(LEADING ',' FROM colors) WHERE type_id = ?", [$productType->id]);
+		\Legacy\System\Classes\LegacyDB::update((new Product)->getTable() . " SET colors = CONCAT(colors, ',$color') WHERE type_id = ?", [$productType->id]);
+		\Legacy\System\Classes\LegacyDB::update((new Product)->getTable() . " SET colors = TRIM(LEADING ',' FROM colors) WHERE type_id = ?", [$productType->id]);
 	}
 
 	// Remove the old colors
 	foreach ($colorsToRemove as $color) {
-		DBOld::update((new Product)->getTable() . " SET colors = CONCAT(',', colors, ',') WHERE type_id = ?", [$productType->id]);
-		DBOld::update((new Product)->getTable() . " SET colors = REPLACE(colors, ',$color,', ',') WHERE type_id = ?", [$productType->id]);
-		DBOld::update((new Product)->getTable() . " SET colors = TRIM(BOTH ',' FROM colors) WHERE type_id = ?", [$productType->id]);
+		\Legacy\System\Classes\LegacyDB::update((new Product)->getTable() . " SET colors = CONCAT(',', colors, ',') WHERE type_id = ?", [$productType->id]);
+		\Legacy\System\Classes\LegacyDB::update((new Product)->getTable() . " SET colors = REPLACE(colors, ',$color,', ',') WHERE type_id = ?", [$productType->id]);
+		\Legacy\System\Classes\LegacyDB::update((new Product)->getTable() . " SET colors = TRIM(BOTH ',' FROM colors) WHERE type_id = ?", [$productType->id]);
 	}
 
 	if (!$oldStatus && $public) {

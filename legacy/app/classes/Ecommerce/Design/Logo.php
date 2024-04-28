@@ -1,12 +1,12 @@
 <?php
 
-namespace Ecommerce\Design;
+namespace Legacy\Classes\Ecommerce\Design;
 
-use DatabaseObject;
+use \Legacy\System\Traits\DatabaseObject;
 
 class Logo {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'extras';
 	public const INDEX = 'id';

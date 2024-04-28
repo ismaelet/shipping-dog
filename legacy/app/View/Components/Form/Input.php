@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View\Components\Form;
+namespace Legacy\View\Components\Form;
 
-use App\View\Components\Component;
+use Legacy\View\Components\Component;
 
 class Input extends Component {
 }

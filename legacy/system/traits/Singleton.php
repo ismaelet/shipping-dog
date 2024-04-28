@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\System\Traits;
+
 trait Singleton {
 
 	private static $instance;

@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\Ecommerce\Order as EcommerceOrder;
-use Ecommerce\Design;
-use Ecommerce\Order;
+use Legacy\Classes\Ecommerce\Design;
+use Legacy\Classes\Ecommerce\Order;
 
-use function Ecommerce\format_price;
+
 
 ?>
 

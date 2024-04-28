@@ -1,37 +1,37 @@
 <?php
 
 // shop
-RouteOld::add('/shop', function () {
-	ViewOld::setPage('shop');
-	ViewOld::$title = 'Negozio';
-	ViewOld::$location = 'shop';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/shop', function () {
+	\Legacy\System\Classes\LegacyView::setPage('shop');
+	\Legacy\System\Classes\LegacyView::$title = 'Negozio';
+	\Legacy\System\Classes\LegacyView::$location = 'shop';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // item
-RouteOld::add(['/shop/item', '/item'], function () {
-	ViewOld::setPage('item');
-	ViewOld::$location = 'shop';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add(['/shop/item', '/item'], function () {
+	\Legacy\System\Classes\LegacyView::setPage('item');
+	\Legacy\System\Classes\LegacyView::$location = 'shop';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // promotions
-RouteOld::add('/promotions', function () {
-	ViewOld::setPage('promotions');
-	ViewOld::$title = 'Promozioni';
-	ViewOld::$location = 'promotions';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/promotions', function () {
+	\Legacy\System\Classes\LegacyView::setPage('promotions');
+	\Legacy\System\Classes\LegacyView::$title = 'Promozioni';
+	\Legacy\System\Classes\LegacyView::$location = 'promotions';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 //search
-RouteOld::add('/search', function () {
-	ViewOld::setPage('search');
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/search', function () {
+	\Legacy\System\Classes\LegacyView::setPage('search');
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // wishlist
-RouteOld::add('/wishlist', function () {
-	ViewOld::setPage('wishlist');
-	ViewOld::$middlewares = ['logged'];
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/wishlist', function () {
+	\Legacy\System\Classes\LegacyView::setPage('wishlist');
+	\Legacy\System\Classes\LegacyView::$middlewares = ['logged'];
+	\Legacy\System\Classes\LegacyView::show();
 });

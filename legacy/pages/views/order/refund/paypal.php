@@ -1,6 +1,6 @@
 <?php
 
-use function Ecommerce\ecommerce_config;
+
 
 ?>
 

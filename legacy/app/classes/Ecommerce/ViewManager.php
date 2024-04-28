@@ -1,11 +1,11 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
 use App\Helpers\PreviewHelper;
 use App\Models\Ecommerce\Cart;
 use App\Models\Ecommerce\Product;
-use App\View\Components\Interactions\LikeButton;
+use Legacy\View\Components\Interactions\LikeButton;
 use Illuminate\Support\Facades\Auth;
 
 class ViewManager {
@@ -41,7 +41,7 @@ class ViewManager {
 
 	// order list
 	public static function renderOrderList(object $cart = null) {
-		$cart = $cart ?: \App\Helpers\App::cartOld();
+		$cart = $cart ?: cart_old();
 		$cart = Cart::find($cart->id);
 
 		ob_start();

@@ -1,8 +1,10 @@
 <?php
 
+namespace Legacy\System\Classes;
+
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class RouteOld {
+class LegacyRoute {
 
 	private static $routes = [];
 

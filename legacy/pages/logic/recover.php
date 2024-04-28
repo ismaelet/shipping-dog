@@ -8,13 +8,13 @@ $done = false;
 if (isset($_POST['submit'])) {
 	$email = $_POST['email'];
 
-	if ($userData = DBOld::row('ID, username FROM users WHERE email=?', [$email])) {
+	if ($userData = \Legacy\System\Classes\LegacyDB::row('ID, username FROM users WHERE email=?', [$email])) {
 		if (!isset($_SESSION['recover-sent'])) {
 			$_SESSION['recover-sent'] = true;
 
 			$newPassword = bin2hex(random_bytes(6));
 
-			DBOld::update('users SET password=? WHERE id = ?', [$newPassword, $userData['id']]);
+			\Legacy\System\Classes\LegacyDB::update('users SET password=? WHERE id = ?', [$newPassword, $userData['id']]);
 
 			$mailText = '<h1 style="text-align: center; padding-bottom: 16px; font-weight: 600;">Recupero dati di accesso</h1>
 			<p>Come richiesto, abbiamo reimpostato la tua password di accesso. Dopo il primo accesso potrai cambiarla in una password a tua scelta. I nuovi dati di accesso sono i seguenti:<br><br>

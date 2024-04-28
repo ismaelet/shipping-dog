@@ -1,6 +1,6 @@
 <?php
 
-use App\View\Components\Form\SearchInput;
+use Legacy\View\Components\Form\SearchInput;
 
 ?>
 

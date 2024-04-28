@@ -22,7 +22,7 @@ class ProductController extends Controller {
 
 		// Set the logo
 		if ($request->has('logo_id')) {
-			$product->logoId($request->logo_id);
+			$product->logo_id = $request->logo_id;
 		}
 
 		return response()->json([

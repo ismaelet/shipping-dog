@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\System\Classes;
+
 class Query {
 
 	public $stmt = false;

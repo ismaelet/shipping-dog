@@ -1,11 +1,11 @@
 <?php
 
-use App\View\Components\Interactions\LikeButton;
-use Ecommerce\Product\Color;
-use Ecommerce\Product\Gender;
-use Ecommerce\Product\Position;
-use Ecommerce\Product\Size;
-use Ecommerce\Product\Type;
+use Legacy\View\Components\Interactions\LikeButton;
+use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Product\Gender;
+use Legacy\Classes\Ecommerce\Product\Position;
+use Legacy\Classes\Ecommerce\Product\Size;
+use Legacy\Classes\Ecommerce\Product\Type;
 
 ?>
 
@@ -203,7 +203,7 @@ use Ecommerce\Product\Type;
 
 				<!-- Colors -->
 				<?php if (!empty($oldProduct->type->availableColorSlugs)) {
-					$res = DBOld::select('id FROM items_colors ORDER BY reorder ASC, name ASC');
+					$res = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors ORDER BY reorder ASC, name ASC');
 				?>
 
 					<section id="color" class="field <?php if (count($oldProduct->availableColorSlugs) < 2) echo 'hide' ?>">
@@ -242,8 +242,8 @@ use Ecommerce\Product\Type;
 				<!-- Size -->
 				<?php if (!empty($oldProduct->type->sizes)) {
 					$new = true;
-					$size_table = DBOld::exists('items_types_measures WHERE type_id=?', [$oldProduct->type->id]) && $product->type->category == 'c';
-					$res = DBOld::select('id FROM items_sizes');
+					$size_table = \Legacy\System\Classes\LegacyDB::exists('items_types_measures WHERE type_id=?', [$oldProduct->type->id]) && $product->type->category == 'c';
+					$res = \Legacy\System\Classes\LegacyDB::select('id FROM items_sizes');
 				?>
 
 					<section id="size" class="field">
@@ -311,7 +311,7 @@ use Ecommerce\Product\Type;
 								$gender = new Gender($genderId);
 
 								if ($key) {
-									$relatedProduct = new Ecommerce\Product(DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$oldProduct->design->id, $oldProduct->type->sibling]));
+									$relatedProduct = new \Legacy\Classes\Ecommerce\Product(\Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$oldProduct->design->id, $oldProduct->type->sibling]));
 								}
 
 							?>

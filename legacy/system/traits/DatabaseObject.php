@@ -1,6 +1,8 @@
 <?php
 
+namespace Legacy\System\Traits;
+
 trait DatabaseObject {
 	use ConstructFromDatabase;
-	use DynamicProperties;
+	use \Legacy\System\Traits\DynamicProperties;
 }

@@ -1,52 +1,52 @@
 <?php
 
 // login
-RouteOld::add('/login', function () {
-	ViewOld::setPage('login');
-	ViewOld::$title = 'Login';
-	ViewOld::$middlewares = ['not-logged'];
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/login', function () {
+	\Legacy\System\Classes\LegacyView::setPage('login');
+	\Legacy\System\Classes\LegacyView::$title = 'Login';
+	\Legacy\System\Classes\LegacyView::$middlewares = ['not-logged'];
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // register
-RouteOld::add('/register', function () {
-	ViewOld::setPage('register');
-	ViewOld::$title = 'Registrati';
-	ViewOld::$middlewares = ['not-logged'];
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/register', function () {
+	\Legacy\System\Classes\LegacyView::setPage('register');
+	\Legacy\System\Classes\LegacyView::$title = 'Registrati';
+	\Legacy\System\Classes\LegacyView::$middlewares = ['not-logged'];
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // logout
-RouteOld::add('/logout', function () {
-	ViewOld::setPage('logout');
-	ViewOld::$title = 'Logout';
-	ViewOld::$template = 'form';
-	ViewOld::$middlewares = ['logged'];
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/logout', function () {
+	\Legacy\System\Classes\LegacyView::setPage('logout');
+	\Legacy\System\Classes\LegacyView::$title = 'Logout';
+	\Legacy\System\Classes\LegacyView::$template = 'form';
+	\Legacy\System\Classes\LegacyView::$middlewares = ['logged'];
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // recover
-RouteOld::add('/recover', function () {
-	ViewOld::setPage('recover');
-	ViewOld::$title = 'Recupera l\'accesso';
-	ViewOld::$template = 'form';
-	ViewOld::$middlewares = ['not-logged'];
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/recover', function () {
+	\Legacy\System\Classes\LegacyView::setPage('recover');
+	\Legacy\System\Classes\LegacyView::$title = 'Recupera l\'accesso';
+	\Legacy\System\Classes\LegacyView::$template = 'form';
+	\Legacy\System\Classes\LegacyView::$middlewares = ['not-logged'];
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // offiline
-RouteOld::add('/offline', function () {
-	ViewOld::setPage('errors/offline');
-	ViewOld::$title = 'Offline';
-	ViewOld::$template = 'void';
-	ViewOld::$middlewares = [];
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/offline', function () {
+	\Legacy\System\Classes\LegacyView::setPage('errors/offline');
+	\Legacy\System\Classes\LegacyView::$title = 'Offline';
+	\Legacy\System\Classes\LegacyView::$template = 'void';
+	\Legacy\System\Classes\LegacyView::$middlewares = [];
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // maintenance
-RouteOld::add('/wip', function () {
-	ViewOld::setPage('errors/wip');
-	ViewOld::$title = 'Under construction';
-	ViewOld::$template = 'void';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/wip', function () {
+	\Legacy\System\Classes\LegacyView::setPage('errors/wip');
+	\Legacy\System\Classes\LegacyView::$title = 'Under construction';
+	\Legacy\System\Classes\LegacyView::$template = 'void';
+	\Legacy\System\Classes\LegacyView::show();
 });

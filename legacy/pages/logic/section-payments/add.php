@@ -46,8 +46,8 @@ function _expand_add($tbl, $inputs) {
 
 	$value = str_replace(',', '.', $_POST['value']);
 
-	if (isset($_POST['other'])) DBOld::update('stores SET flat=flat+? WHERE user_id = ?', [$value, $_POST['seller_id']]);
-	else DBOld::update('stores SET payed=payed+?, request=0 WHERE user_id = ?', [$value, $_POST['seller_id']]);
+	if (isset($_POST['other'])) \Legacy\System\Classes\LegacyDB::update('stores SET flat=flat+? WHERE user_id = ?', [$value, $_POST['seller_id']]);
+	else \Legacy\System\Classes\LegacyDB::update('stores SET payed=payed+?, request=0 WHERE user_id = ?', [$value, $_POST['seller_id']]);
 
 	form_db_add($tbl, $inputs);
 }

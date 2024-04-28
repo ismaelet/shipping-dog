@@ -2,7 +2,7 @@
 
 use App\Models\Ecommerce\Address;
 use App\Models\Ecommerce\Cart as EcommerceCart;
-use Ecommerce\Cart as Cart;
+use Legacy\Classes\Ecommerce\Cart as Cart;
 
 ?>
 
@@ -61,11 +61,11 @@ use Ecommerce\Cart as Cart;
 			}
 
 			$code_str = empty($row['code']) ? '' : '<br><br>Sconto: ' . $row['code'];
-			$name_str = DBOld::exists('users WHERE id = ? AND level = 1', [$user_id]) ? ' *' : '';
+			$name_str = \Legacy\System\Classes\LegacyDB::exists('users WHERE id = ? AND level = 1', [$user_id]) ? ' *' : '';
 
 			$ord_str = '';
 
-			$res_ord = DBOld::select('id FROM orders WHERE cart_id = ? ORDER BY time ASC', [$cart->id]);
+			$res_ord = \Legacy\System\Classes\LegacyDB::select('id FROM orders WHERE cart_id = ? ORDER BY time ASC', [$cart->id]);
 
 			// if ($newCart->has_errors) {
 			// 	$paypalOrderIds = [];

@@ -2,8 +2,8 @@
 
 use App\Models\Ecommerce\Design as EcommerceDesign;
 use App\Models\Ecommerce\Product as EcommerceProduct;
-use Ecommerce\Design;
-use Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Design;
+use Legacy\Classes\Ecommerce\Product;
 
 ?>
 

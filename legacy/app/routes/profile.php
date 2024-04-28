@@ -1,10 +1,10 @@
 <?php
 
 // profile
-RouteOld::add(['/profile', '/profile/*'], function ($path) {
+\Legacy\System\Classes\LegacyRoute::add(['/profile', '/profile/*'], function ($path) {
 	$page = explode('profile/', $path)[1] ?? 'feed';
 
-	ViewOld::setPage('profile/' . $page)
+	\Legacy\System\Classes\LegacyView::setPage('profile/' . $page)
 		->addMiddlewares(['logged'])
 		->setTemplate('profile')
 		->set('profileLocation', $page)

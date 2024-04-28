@@ -21,23 +21,23 @@ $ecommerceConfig = [
 		[
 			'title' => 'Tipo di prodotto',
 			'slug' => 'type_id',
-			'list' => DBOld::select('id, name, names FROM item_types ORDER BY names ASC, name ASC'),
+			'list' => \Legacy\System\Classes\LegacyDB::select('id, name, names FROM item_types ORDER BY names ASC, name ASC'),
 		],
 		[
 			'title' => 'Birrificio',
 			'slug' => 'breweryId',
-			'list' => DBOld::select('id, name FROM item_breweries ORDER BY name ASC'),
+			'list' => \Legacy\System\Classes\LegacyDB::select('id, name FROM item_breweries ORDER BY name ASC'),
 		],
 		[
 			'title' => 'Nazione',
 			'slug' => 'nationalityId',
-			'list' => DBOld::select('id, name FROM item_nationalities ORDER BY name ASC'),
+			'list' => \Legacy\System\Classes\LegacyDB::select('id, name FROM item_nationalities ORDER BY name ASC'),
 			'sql' => 'breweryId IN (SELECT id FROM item_breweries WHERE nationalityId=?)',
 		],
 		[
 			'title' => 'Stile',
 			'slug' => 'styleId',
-			'list' => DBOld::select('id, name FROM item_styles ORDER BY name ASC'),
+			'list' => \Legacy\System\Classes\LegacyDB::select('id, name FROM item_styles ORDER BY name ASC'),
 		]
 	],*/
 

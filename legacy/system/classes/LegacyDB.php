@@ -1,61 +1,25 @@
 <?php
 
-class DBOld {
+namespace Legacy\System\Classes;
+
+use Exception;
+use mysqli;
+
+class LegacyDB {
+
+	private static $connection = null;
 
 	private static $queries = [];
-	private static $impossibleToImprove = [
-		'select * from addresses where id = ? limit 1',
-		'select * from designs where id = ? limit 1',
-		'select * from users where id = ? limit 1',
-		'select * from orders where id = ? limit 1',
-		'select * from orders where cartid = ? limit 1',
-		'select * from sys_shipping where id = ? liID = ?mit 1',
-		'select * from carts where id = ? limit 1',
-		'select * from items where id = ? limit 1',
-		'select * from stores where userid = ? limit 1',
-		'select * from items_types where id = ? limit 1',
-		'select * from items_colors where id = ? limit 1',
-		'select * from items_positions where id = ? limit 1',
-		'select * from items_genders where id = ? limit 1',
-		'select * from sys_shipping where id = ? limit 1',
-		'select * from items_sizes where id = ? limit 1',
-		'select * from extras where id = ? limit 1',
-		'select * from items_mockups where typeid = ? and positionid = ? limit 1',
-		'select * from items_previews where itemid = ? and positionid = ? limit 1',
-		'select * from prices_stores where storeid = ? and typeid = ? limit 1',
-		'select 1 from stores where userid = ? limit 1',
-		'select 1 from users where id = ? and level = 1 limit 1',
-		'select id from items_colors where tag = ? limit 1',
-		'select id from addresses where cartid = ? limit 1',
-		'select id from carts where user_id = ? AND status = 0 limit 1',
-		'select value from config where name = ? limit 1',
-		'select value from variables where name = ? limit 1',
-		'select count(*) as num from orders where cartid = ? limit 1',
-		'select column_name from information_schema.columns where table_schema = ? and table_name = ?',
-	];
 
 	// generic query
 	static function execute(string $query, $values = []) {
-		global $con;
-
 		$values = !empty($values) ? (array) $values : null;
 
 		// prepare the query
-		$stmt = $con->prepare($query);
+		$stmt = self::connection()->prepare($query);
 
 		// execute the query
 		if ($stmt) {
-
-			// logged{
-			if (env('DEBUG')) {
-				if (strpos($query, 'WHERE') && !in_array(strtolower($query), self::$impossibleToImprove)) {
-					if (!in_array($query, array_keys(self::$queries))) {
-						self::$queries[$query] = 1;
-					} else {
-						self::$queries[$query]++;
-					}
-				}
-			}
 
 			$types = [];
 
@@ -229,5 +193,25 @@ class DBOld {
 		});
 
 		return implode('<br>' . PHP_EOL, $queries);
+	}
+
+	private static function connection() {
+		if (self::$connection) {
+			return self::$connection;
+		}
+
+		if (!sys_config('static')) {
+			try {
+				$con = new mysqli(sys_config('hostname'), sys_config('username'), sys_config('password'), sys_config('database'));
+				$con->query('SET NAMES utf8');
+
+				return self::$connection = $con;
+			} catch (Exception $e) {
+				$error = $e->getMessage();
+
+				error_log('Connection error: ' . $error . PHP_EOL . 'On page: ' . $_SERVER['REQUEST_URI']);
+				echo $error;
+			}
+		}
 	}
 }

@@ -7,7 +7,7 @@ if (!empty($_POST['search'])) {
 
 	$filter = empty($_POST['filter']) ? '' : 'AND ' . $_POST['filter'];
 
-	$res = DBOld::select("ID, name FROM designs WHERE name LIKE CONCAT('%',?,'%') " . $filter . " ORDER BY sales DESC LIMIT 0,6", [$_POST['search']]);
+	$res = \Legacy\System\Classes\LegacyDB::select("ID, name FROM designs WHERE name LIKE CONCAT('%',?,'%') " . $filter . " ORDER BY sales DESC LIMIT 0,6", [$_POST['search']]);
 
 	while ($row = $res->fetch_assoc()) { ?>
 

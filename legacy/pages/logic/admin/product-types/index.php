@@ -48,7 +48,7 @@ function _expand_results(&$entry, $field, $key, $row) {
 		$entry['value'] = [];
 
 		foreach ($colors as $color)
-			if ($colorString = DBOld::find('name FROM items_colors WHERE tag = ?', [$color])) $entry['value'][] = $colorString;
+			if ($colorString = \Legacy\System\Classes\LegacyDB::find('name FROM items_colors WHERE tag = ?', [$color])) $entry['value'][] = $colorString;
 
 		asort($entry['value']);
 

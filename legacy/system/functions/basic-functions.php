@@ -1,11 +1,5 @@
 <?php
 
-// access the system config
-function sys_config($field) {
-	global $sysConfig;
-	return $sysConfig[$field] ?? null;
-}
-
 // access the vendor config
 function vendorConfig($field) {
 	global $vendorConfig;

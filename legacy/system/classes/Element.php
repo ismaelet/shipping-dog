@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\System\Classes;
+
 class Element {
 
 	public $name;

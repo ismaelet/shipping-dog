@@ -17,9 +17,9 @@ $searchConfig = [
 
 if ($id) {
 
-	$productID = DBOld::find('product_id FROM orders WHERE id = ?', $id);
+	$productID = \Legacy\System\Classes\LegacyDB::find('product_id FROM orders WHERE id = ?', $id);
 
-	$design = DBOld::row('ID, name FROM designs WHERE id IN (SELECT design_id FROM items WHERE id = ?)', $productID);
+	$design = \Legacy\System\Classes\LegacyDB::row('ID, name FROM designs WHERE id IN (SELECT design_id FROM items WHERE id = ?)', $productID);
 
 	$searchConfig['value-id'] = $design['id'] ?? 0;
 	$searchConfig['value-show'] = $design['name'] ?? '';
@@ -84,7 +84,7 @@ if ($id) $inputs[0]['val'] = $design['id'] ?? 0;
 function _expand_add($tbl, $inputs) {
 
 	$cart_id = (int) $_GET['filter'];
-	$user_id = DBOld::find('user_id FROM carts WHERE id = ?', $cart_id);
+	$user_id = \Legacy\System\Classes\LegacyDB::find('user_id FROM carts WHERE id = ?', $cart_id);
 
 	$design_id = (int) $_POST['design_id'];
 	$type_id = (int) $_POST['type_id'];
@@ -92,25 +92,25 @@ function _expand_add($tbl, $inputs) {
 	$gender_id = (int) $_POST['gender_id'];
 	$size_id = (int) $_POST['size_id'];
 
-	$productID = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$design_id, $type_id]);
+	$productID = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$design_id, $type_id]);
 
-	DBOld::add('orders (cart_id, user_id, product_id, type_id, gender_id, color_id, size_id) VALUES (?, ?, ?, ?, ?, ?, ?)', [$cart_id, $user_id, $productID, $type_id, $gender_id, $color_id, $size_id]);
+	\Legacy\System\Classes\LegacyDB::add('orders (cart_id, user_id, product_id, type_id, gender_id, color_id, size_id) VALUES (?, ?, ?, ?, ?, ?, ?)', [$cart_id, $user_id, $productID, $type_id, $gender_id, $color_id, $size_id]);
 
 	if (isset($_POST['add-sale'])) {
 
-		$shopID = DBOld::find('user_id FROM designs WHERE id = ?', $design_id);
-		$gain = $color_id > 1 ? DBOld::find('gain_c FROM items_prices WHERE product_id = ?', $productID) : DBOld::find('gain_w FROM items_prices WHERE product_id = ?', $productID);
+		$shopID = \Legacy\System\Classes\LegacyDB::find('user_id FROM designs WHERE id = ?', $design_id);
+		$gain = $color_id > 1 ? \Legacy\System\Classes\LegacyDB::find('gain_c FROM items_prices WHERE product_id = ?', $productID) : \Legacy\System\Classes\LegacyDB::find('gain_w FROM items_prices WHERE product_id = ?', $productID);
 
-		DBOld::add('sales (design_id, seller_id, amount, gain, type_id, color_id) VALUES (?, ?, ?, ?, ?, ?)', [$design_id, $shopID, 1, $gain, $type_id, $color_id]);
+		\Legacy\System\Classes\LegacyDB::add('sales (design_id, seller_id, amount, gain, type_id, color_id) VALUES (?, ?, ?, ?, ?, ?)', [$design_id, $shopID, 1, $gain, $type_id, $color_id]);
 
-		DBOld::update('stores SET sales=sales+1, total=total+? WHERE user_id = ?', [$gain, $shopID]);
+		\Legacy\System\Classes\LegacyDB::update('stores SET sales=sales+1, total=total+? WHERE user_id = ?', [$gain, $shopID]);
 	}
 }
 
 //edit
 function _expand_edit($tbl, $inputs, $index, $id) {
 
-	$productID = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$_POST['design_id'], $_POST['type_id']]);
+	$productID = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$_POST['design_id'], $_POST['type_id']]);
 
-	DBOld::update('orders SET product_id = ?, type_id = ?, gender_id = ?, color_id = ?, size_id = ? WHERE id = ?', [$productID, $_POST['type_id'], $_POST['gender_id'], $_POST['color_id'], $_POST['size_id'], $id]);
+	\Legacy\System\Classes\LegacyDB::update('orders SET product_id = ?, type_id = ?, gender_id = ?, color_id = ?, size_id = ? WHERE id = ?', [$productID, $_POST['type_id'], $_POST['gender_id'], $_POST['color_id'], $_POST['size_id'], $id]);
 }

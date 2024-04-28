@@ -3,7 +3,7 @@
 use App\Models\Ecommerce\Address as EcommerceAddress;
 use App\Models\Ecommerce\Order as EcommerceOrder;
 use App\Models\Ecommerce\ShippingMethod as EcommerceShippingMethod;
-use Ecommerce\Coupon;
+use Legacy\Classes\Ecommerce\Coupon;
 
 /**
  * TEMP
@@ -18,7 +18,7 @@ use Ecommerce\Coupon;
 // }
 
 // setup variables
-$loc = ViewOld::get('step');
+$loc = \Legacy\System\Classes\LegacyView::get('step');
 $error = $_GET['error'] ?? false;
 
 // address
@@ -29,7 +29,7 @@ if (!$address && auth()->check()) {
 }
 
 // setup cart
-$countries = DBOld::select('* FROM sys_country WHERE hidden = 0 ORDER BY name ASC');
+$countries = \Legacy\System\Classes\LegacyDB::select('* FROM sys_country WHERE hidden = 0 ORDER BY name ASC');
 
 // setup warnings
 $warning = warning_banner();
@@ -37,7 +37,7 @@ $warning = warning_banner();
 /*
 * Shipping methods
 */
-$shippingZones = DBOld::find('zone FROM sys_country WHERE id = ?', [\App\Helpers\App::cartOld()->countryId]);
+$shippingZones = \Legacy\System\Classes\LegacyDB::find('zone FROM sys_country WHERE id = ?', [cart_old()->countryId]);
 
 if (!in_array(cart()->shipping_method_id, EcommerceShippingMethod::FREE_SHIPPING_METHODS)) {
 	// if the shipping isn't free, fetch the shipping methods
@@ -94,7 +94,7 @@ if (isset($_POST['remove'])) {
 // add code
 if (isset($_POST['add_code'])) {
 	$coupon = Coupon::generateFromCode($_POST['code']);
-	$error = \App\Helpers\App::cartOld()->addCoupon($coupon->id);
+	$error = cart_old()->addCoupon($coupon->id);
 
 	if (!$error) {
 		redirect_old('#code-anch');
@@ -105,37 +105,37 @@ if (isset($_POST['add_code'])) {
 
 // remove code
 if (isset($_POST['del_code'])) {
-	\App\Helpers\App::cartOld()->removeCoupon();
+	cart_old()->removeCoupon();
 
 	redirect_old('#code-anch');
 }
 
 if (isset($_POST['item_credit'])) {
-	DBOld::update('orders SET credit=1 WHERE id = ?', [$_POST['item_credit']]);
+	\Legacy\System\Classes\LegacyDB::update('orders SET credit=1 WHERE id = ?', [$_POST['item_credit']]);
 
-	\App\Helpers\App::cartOld()->update();
+	cart_old()->update();
 
 	redirect_old('#items');
 }
 
 if (isset($_POST['item_no_credit'])) {
-	DBOld::update('orders SET credit=0 WHERE id = ?', [$_POST['item_no_credit']]);
+	\Legacy\System\Classes\LegacyDB::update('orders SET credit=0 WHERE id = ?', [$_POST['item_no_credit']]);
 
-	\App\Helpers\App::cartOld()->update();
+	cart_old()->update();
 
 	redirect_old('#items');
 }
 
 if (isset($_POST['ship_credit'])) {
-	\App\Helpers\App::cartOld()->updateShippingMethodId(1);
-	\App\Helpers\App::cartOld()->updateShippingWithCredit(true);
+	cart_old()->updateShippingMethodId(1);
+	cart_old()->updateShippingWithCredit(true);
 
 	redirect_old('#shipping');
 }
 
 if (isset($_POST['ship_no_credit'])) {
-	\App\Helpers\App::cartOld()->updateShippingMethodId(2);
-	\App\Helpers\App::cartOld()->updateShippingWithCredit(false);
+	cart_old()->updateShippingMethodId(2);
+	cart_old()->updateShippingWithCredit(false);
 
 	redirect_old('#shipping');
 }
@@ -144,5 +144,5 @@ if (isset($_POST['ship_no_credit'])) {
  * Advance to next step
  */
 if (isset($_POST['submit'])) {
-	\App\Helpers\App::cartOld()->advanceAndredirect_old();
+	cart_old()->advanceAndredirect_old();
 }

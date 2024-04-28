@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Ecommerce\Design;
-use Ecommerce\Shop;
+use Legacy\Classes\Ecommerce\Shop;
 
 // get slider image data
 $slid_des = Design::find(1612);

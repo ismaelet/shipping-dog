@@ -1,6 +1,8 @@
 <?php
 
-class ViewOld {
+namespace Legacy\System\Classes;
+
+class LegacyView {
 	public static $name = null;
 	public static $title = null;
 	public static $tabTitle;
@@ -53,7 +55,7 @@ class ViewOld {
 
 	public static function setThumbnail(string $thumbnail = null) {
 		if ($thumbnail) {
-			self::$thumbnail = strpos($thumbnail, CLIENT_ROOT) === 0 ? $thumbnail : client_path($thumbnail);
+			self::$thumbnail = $thumbnail;
 		}
 
 		return new static;
@@ -115,16 +117,17 @@ class ViewOld {
 		if (!self::$url) self::$url = SERVER_ROOT . '/pages/views/' . self::$name . '.php';
 
 		// load the middlewares
+		MiddlewareLoader::__constructStatic();
 		foreach (self::$middlewares as $middleware) MiddlewareLoader::run($middleware);
 
 		// load the logic
-		Logic::add(self::$template, 'template');
-		Logic::add(self::$name, 'page');
-		Logic::load();
+		\Legacy\System\Classes\Logic::add(self::$template, 'template');
+		\Legacy\System\Classes\Logic::add(self::$name, 'page');
+		\Legacy\System\Classes\Logic::load();
 
 		// load page resources
-		StyleLoader::addPageStyles(ViewOld::$name);
-		ScriptLoader::addPageScripts(ViewOld::$name);
+		\Legacy\System\Classes\StyleLoader::addPageStyles(\Legacy\System\Classes\LegacyView::$name);
+		\Legacy\System\Classes\ScriptLoader::addPageScripts(\Legacy\System\Classes\LegacyView::$name);
 
 		// render page
 		Viewer::render();

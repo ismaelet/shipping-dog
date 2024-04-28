@@ -67,8 +67,8 @@ $inputs = [
 			'type' => 'search',
 			'text' => 'Applica solo a questi design',
 			'name' => 'design_id',
-			'value' => $id ? DBOld::find('design_id FROM codes WHERE id = ?', [$id]) : null,
-			'value-show' => $id ? DBOld::find('name FROM designs WHERE id IN (SELECT design_id FROM codes WHERE id = ?)', [$id]) : null,
+			'value' => $id ? \Legacy\System\Classes\LegacyDB::find('design_id FROM codes WHERE id = ?', [$id]) : null,
+			'value-show' => $id ? \Legacy\System\Classes\LegacyDB::find('name FROM designs WHERE id IN (SELECT design_id FROM codes WHERE id = ?)', [$id]) : null,
 			'search' => 'designs',
 			'parse' => 'int',
 		],
@@ -76,8 +76,8 @@ $inputs = [
 			'type' => 'search',
 			'text' => 'Applica solo a questo shop',
 			'name' => 'seller_id',
-			'value' => $id ? DBOld::find('seller_id FROM codes WHERE id = ?', [$id]) : null,
-			'value-show' => $id ? DBOld::find('name FROM stores WHERE user_id IN (SELECT seller_id FROM codes WHERE id = ?)', [$id]) : null,
+			'value' => $id ? \Legacy\System\Classes\LegacyDB::find('seller_id FROM codes WHERE id = ?', [$id]) : null,
+			'value-show' => $id ? \Legacy\System\Classes\LegacyDB::find('name FROM stores WHERE user_id IN (SELECT seller_id FROM codes WHERE id = ?)', [$id]) : null,
 			'search' => 'sellers',
 			'parse' => 'int',
 		],
@@ -215,7 +215,7 @@ if (!$id) {
 
 		$code = sprintf('%06d', rand(100, 999999));
 
-		if (!DBOld::exists('codes WHERE code=?', [$code])) $new = true;
+		if (!\Legacy\System\Classes\LegacyDB::exists('codes WHERE code=?', [$code])) $new = true;
 	}
 
 	$inputs[0][1]['value'] = $code;

@@ -1,14 +1,14 @@
 <?php
 
-namespace Ecommerce\Product;
+namespace Legacy\Classes\Ecommerce\Product;
 
-use DBOld;
-use Ecommerce\Product;
-use DynamicProperties;
+use LegacyDB;
+use Legacy\Classes\Ecommerce\Product;
+use \Legacy\System\Traits\DynamicProperties;
 
 class PreviewOld {
 
-	use DynamicProperties;
+	use \Legacy\System\Traits\DynamicProperties;
 
 	public const SMALL_IMAGE_SIZE = 400;
 	public const BIG_IMAGE_SIZE = 1024;
@@ -74,13 +74,13 @@ class PreviewOld {
 	static function put($id, $data) {
 		$result = false;
 		$product = new Product($id);
-		$base = DBOld::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$product->type->id, $data['position_id']]);
+		$base = \Legacy\System\Classes\LegacyDB::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$product->type->id, $data['position_id']]);
 
 		if ($data['size'] != $base['siz_x_def'] || $data['pos-x'] != $base['pos_x_def'] || $data['pos-y'] != $base['pos_y_def']) {
-			if (DBOld::exists('items_previews WHERE product_id = ? AND position_id = ?', [$product->id, $data['position_id']]))
-				$result = DBOld::update('items_previews SET size=?, pos_x=?, pos_y=? WHERE product_id = ? AND position_id = ?', [$data['size'], $data['pos-x'], $data['pos-y'], $product->id, $data['position_id']]);
+			if (\Legacy\System\Classes\LegacyDB::exists('items_previews WHERE product_id = ? AND position_id = ?', [$product->id, $data['position_id']]))
+				$result = \Legacy\System\Classes\LegacyDB::update('items_previews SET size=?, pos_x=?, pos_y=? WHERE product_id = ? AND position_id = ?', [$data['size'], $data['pos-x'], $data['pos-y'], $product->id, $data['position_id']]);
 			else
-				$result = DBOld::add('items_previews (product_id, position_id, size, pos_x, pos_y) VALUES (?, ?, ?, ?, ?)', [$product->id, $data['position_id'], $data['size'], $data['pos-x'], $data['pos-y']]);
+				$result = \Legacy\System\Classes\LegacyDB::add('items_previews (product_id, position_id, size, pos_x, pos_y) VALUES (?, ?, ?, ?, ?)', [$product->id, $data['position_id'], $data['size'], $data['pos-x'], $data['pos-y']]);
 
 			self::deleteImages($product->id);
 		}
@@ -91,10 +91,10 @@ class PreviewOld {
 	// generate a missing image
 	private function generateImage() {
 		// fetch mockup base data
-		$mockupFrameworkData = DBOld::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$this->product->type_id, $this->product->position_id]);
+		$mockupFrameworkData = \Legacy\System\Classes\LegacyDB::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$this->product->type_id, $this->product->position_id]);
 
 		// fetch mockup design data
-		$mockupProductData = DBOld::row('* FROM items_previews WHERE product_id = ? AND position_id = ?', [$this->product->id, $this->product->position_id]);
+		$mockupProductData = \Legacy\System\Classes\LegacyDB::row('* FROM items_previews WHERE product_id = ? AND position_id = ?', [$this->product->id, $this->product->position_id]);
 
 		// background
 		$backgroundImage = server_root() . '/uploads/product_types/mockups/bgr/grey.png';

@@ -15,10 +15,10 @@ if (isset($_POST['edit_data'])) {
 	$first_name = trim($_POST['first_name']);
 	$last_name = trim($_POST['last_name']);
 
-	if (DBOld::exists('users WHERE username = ? AND ID<>?', [$username, auth()->id()])) $_SESSION['error'] = 'user_match';
-	else if (DBOld::exists('users WHERE email=? AND ID<>?', [$email, auth()->id()])) $_SESSION['error'] = 'email_match';
+	if (\Legacy\System\Classes\LegacyDB::exists('users WHERE username = ? AND ID<>?', [$username, auth()->id()])) $_SESSION['error'] = 'user_match';
+	else if (\Legacy\System\Classes\LegacyDB::exists('users WHERE email=? AND ID<>?', [$email, auth()->id()])) $_SESSION['error'] = 'email_match';
 	else {
-		DBOld::update('users SET username = ?, email=?, first_name = ?, last_name = ? WHERE id = ?', [$username, $email, $first_name, $last_name, auth()->id()]);
+		\Legacy\System\Classes\LegacyDB::update('users SET username = ?, email=?, first_name = ?, last_name = ? WHERE id = ?', [$username, $email, $first_name, $last_name, auth()->id()]);
 
 		$_SESSION['done'] = 'data';
 	}
@@ -33,13 +33,13 @@ if (isset($_POST['edit_pass'])) {
 	$passNew = $_POST['passNew'];
 	$passConf = $_POST['passConf'];
 
-	$db_password = DBOld::find('password FROM users WHERE id = ?', auth()->id());
+	$db_password = \Legacy\System\Classes\LegacyDB::find('password FROM users WHERE id = ?', auth()->id());
 
 	// update old MD5 passwords
 	if ($db_password[0] != '$' && md5($passOld) == $db_password) {
 
 		$db_password = password_hash($passOld, PASSWORD_DEFAULT);
-		DBOld::update('users SET password=? WHERE id = ?', [$db_password, auth()->id()]);
+		\Legacy\System\Classes\LegacyDB::update('users SET password=? WHERE id = ?', [$db_password, auth()->id()]);
 	}
 
 	if (!password_verify($passOld, $db_password)) $_SESSION['error'] = 'pass_bad';
@@ -48,7 +48,7 @@ if (isset($_POST['edit_pass'])) {
 
 		$passNew = password_hash($passNew, PASSWORD_DEFAULT);
 
-		DBOld::update('users SET password=? WHERE id = ?', [$passNew, auth()->id()]);
+		\Legacy\System\Classes\LegacyDB::update('users SET password=? WHERE id = ?', [$passNew, auth()->id()]);
 
 		$_SESSION['done'] = 'pass';
 	}

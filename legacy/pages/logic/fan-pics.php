@@ -1,3 +1,3 @@
 <?php
 
-$client_pics = DBOld::select('* FROM home_pics ORDER BY id DESC',);
+$client_pics = \Legacy\System\Classes\LegacyDB::select('* FROM home_pics ORDER BY id DESC',);

@@ -1,5 +1,5 @@
 <?php
-$user = App\Helpers\App::userOld();
+$user = user_old();
 ?>
 
 <div id="slider" class="">

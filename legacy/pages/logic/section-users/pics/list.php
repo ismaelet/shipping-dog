@@ -36,7 +36,7 @@ if (isset($_POST['delete'])) {
 
 	$id = $_POST['id'];
 
-	DBOld::delete('home_pics WHERE id = ?', [$id]);
+	\Legacy\System\Classes\LegacyDB::delete('home_pics WHERE id = ?', [$id]);
 
 	if (file_exists($file = PUBLIC_SERVER_ROOT . '/uploads/users/testimonials/' . $id . '.jpg')) unlink($file);
 }

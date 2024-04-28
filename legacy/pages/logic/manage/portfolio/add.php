@@ -3,9 +3,9 @@
 use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Design as EcommerceDesign;
 use App\Models\Ecommerce\Product\ProductType;
-use Ecommerce\Design;
-use Ecommerce\Design\LogoGroup;
-use Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Design;
+use Legacy\Classes\Ecommerce\Design\LogoGroup;
+use Legacy\Classes\Ecommerce\Product;
 use Illuminate\Support\Facades\Auth;
 
 global $user;
@@ -106,7 +106,7 @@ function add_new_design(): string|false {
 	}
 
 	// Get design ID
-	$design_id = DBOld::row('MAX(ID) as max FROM designs')['max'] + 1;
+	$design_id = \Legacy\System\Classes\LegacyDB::row('MAX(ID) as max FROM designs')['max'] + 1;
 
 	// Upload image
 	$file_vector = false;
@@ -155,10 +155,10 @@ function add_new_design(): string|false {
 	]);
 
 	// Add logo
-	$sellerLogoGroupId = DBOld::find(LogoGroup::INDEX . ' FROM ' . LogoGroup::TABLE . ' WHERE ' . LogoGroup::SELLER_INDEX . ' = ? ORDER BY ' . LogoGroup::INDEX . ' DESC', [auth()->id()]);
+	$sellerLogoGroupId = \Legacy\System\Classes\LegacyDB::find(LogoGroup::INDEX . ' FROM ' . LogoGroup::TABLE . ' WHERE ' . LogoGroup::SELLER_INDEX . ' = ? ORDER BY ' . LogoGroup::INDEX . ' DESC', [auth()->id()]);
 
 	if ($sellerLogoGroupId) {
-		DBOld::update(Design::TABLE . ' SET ' . Design::LOGO_GROUP_INDEX . ' = ? WHERE ' . Design::INDEX . ' = ?', [$sellerLogoGroupId, $design_id]);
+		\Legacy\System\Classes\LegacyDB::update(Design::TABLE . ' SET ' . Design::LOGO_GROUP_INDEX . ' = ? WHERE ' . Design::INDEX . ' = ?', [$sellerLogoGroupId, $design_id]);
 	}
 
 	// Add items
@@ -172,7 +172,7 @@ function add_new_design(): string|false {
 	}
 
 	// Make the user an artist if it's a regular user
-	DBOld::update('users SET level = 1 WHERE id = ? AND level=0', [auth()->id()]);
+	\Legacy\System\Classes\LegacyDB::update('users SET level = 1 WHERE id = ? AND level=0', [auth()->id()]);
 
 	// Add tags
 	update_tags($_POST['tags'], $design_id);

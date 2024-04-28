@@ -7,9 +7,9 @@
 	<!-- Request -->
 	<?php
 
-	use function Ecommerce\format_price;
 
-	if (DBOld::find('request FROM stores WHERE user_id = ?', [$oldSeller->id])) { ?>
+
+	if (\Legacy\System\Classes\LegacyDB::find('request FROM stores WHERE user_id = ?', [$oldSeller->id])) { ?>
 
 		<div class="request">
 

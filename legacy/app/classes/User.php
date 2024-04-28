@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\Classes;
+
 class User {
 
 	private $data = [];
@@ -18,7 +20,7 @@ class User {
 	public $rank_str;
 
 	function __construct(int $id = null) {
-		if ($row = DBOld::row('* FROM users WHERE id = ?', [$id])) {
+		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM users WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->user_idId = $this->id;
 			$this->username = $row['username'];
@@ -92,6 +94,6 @@ class User {
 
 	// check if the user is a seller
 	function isSeller() {
-		return DBOld::exists('stores WHERE user_id = ?', [$this->id]);
+		return \Legacy\System\Classes\LegacyDB::exists('stores WHERE user_id = ?', [$this->id]);
 	}
 }

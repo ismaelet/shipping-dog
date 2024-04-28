@@ -2,8 +2,8 @@
 
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
-use Ecommerce\Product\Color;
-use Ecommerce\Product\Mockup;
+use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Product\Mockup;
 
 $type_id = $_GET['id'];
 $type = ProductType::find($type_id);
@@ -12,7 +12,7 @@ if (!$type->id) {
 	redirect_old('list');
 }
 
-ViewOld::setTitle('Mockup ' . $type->fullName);
+\Legacy\System\Classes\LegacyView::setTitle('Mockup ' . $type->fullName);
 
 $mockupData = ProductTypeMockup::firstByTypeId($type_id);
 

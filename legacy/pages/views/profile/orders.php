@@ -1,6 +1,6 @@
 <?php
 
-use ViewManager\Ecommerce\CartList;
+use Legacy\Classes\ViewManager\Ecommerce\CartList;
 
 ?>
 

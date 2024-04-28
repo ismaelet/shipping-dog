@@ -1,7 +1,7 @@
 <?php
 
-use Ecommerce\Product\Gender;
-use Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product\Gender;
+use Legacy\Classes\Ecommerce\Product\Type;
 
 ?>
 
@@ -40,7 +40,7 @@ use Ecommerce\Product\Type;
 				$type = new Type($row['id']);
 				$gender = new Gender($type->genderId);
 
-				$row_price = DBOld::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DBOld::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
+				$row_price = \Legacy\System\Classes\LegacyDB::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: \Legacy\System\Classes\LegacyDB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
 
 				$price = $row_price['price'];
 				$gain_w = $row_price['gain_w'];
@@ -83,7 +83,7 @@ use Ecommerce\Product\Type;
 
 				$type = new Type($row['id']);
 
-				$row_price = DBOld::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DBOld::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
+				$row_price = \Legacy\System\Classes\LegacyDB::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: \Legacy\System\Classes\LegacyDB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
 
 				$price = $row_price['price'];
 				$gain_w = $row_price['gain_w'];

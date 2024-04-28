@@ -1,6 +1,6 @@
 <?php
 
-use ViewManager\Ecommerce\CartFlowBar;
+use Legacy\Classes\ViewManager\Ecommerce\CartFlowBar;
 
 ?>
 

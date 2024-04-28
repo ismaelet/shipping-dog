@@ -1,6 +1,6 @@
 <?php
 
-use Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Product;
 
 $response = [];
 $productId = $_GET['id'];

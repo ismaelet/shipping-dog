@@ -2,7 +2,7 @@
 
 // setup variables
 
-use Ecommerce\Seller;
+use Legacy\Classes\Ecommerce\Seller;
 
 $tbl = 'payment_requests';
 $index = 'seller_id';
@@ -39,7 +39,7 @@ if (!$seller->id || $seller->toPay <= 31.25) {
 $waitingDays = ceil($seller->toPay / 100);
 
 // fetch the seller data
-$data = DBOld::row('* FROM ' . $tbl . ' WHERE ' . $index . '=?', [auth()->id()]);
+$data = \Legacy\System\Classes\LegacyDB::row('* FROM ' . $tbl . ' WHERE ' . $index . '=?', [auth()->id()]);
 
 $inputs = [
 	[
@@ -94,13 +94,13 @@ if (isset($_POST['submit'])) {
 
 if (isset($_POST['download'])) {
 
-	DBOld::update('stores SET request = 1 WHERE user_id = ?', [auth()->id()]);
+	\Legacy\System\Classes\LegacyDB::update('stores SET request = 1 WHERE user_id = ?', [auth()->id()]);
 
 	if ($data['total'] == $seller->toPay && file_exists($documents[0]['server-path'])) {
 		redirect_old($documents[0]['client-path']);
 	} else {
-		DBOld::update('stores SET request = 1 WHERE user_id = ?', [auth()->id()]);
-		DBOld::update('payment_requests SET total = ? WHERE seller_id = ?', [$seller->toPay, auth()->id()]);
+		\Legacy\System\Classes\LegacyDB::update('stores SET request = 1 WHERE user_id = ?', [auth()->id()]);
+		\Legacy\System\Classes\LegacyDB::update('payment_requests SET total = ? WHERE seller_id = ?', [$seller->toPay, auth()->id()]);
 
 		foreach ($documents as $document) {
 

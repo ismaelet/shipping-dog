@@ -11,14 +11,14 @@ $pageConfig['centered'] = true;
 if (isset($_POST['update'])) {
 	$updateType = $_POST['update'];
 
-	DBOld::update('stores SET sales=0, recent_sales=0');
-	DBOld::update('designs SET sales=0, recent_sales=0');
-	DBOld::update('items SET sales=0, recent_sales=0');
+	\Legacy\System\Classes\LegacyDB::update('stores SET sales=0, recent_sales=0');
+	\Legacy\System\Classes\LegacyDB::update('designs SET sales=0, recent_sales=0');
+	\Legacy\System\Classes\LegacyDB::update('items SET sales=0, recent_sales=0');
 
 	/*
 	* Recent sales
 	*/
-	DBOld::update('
+	\Legacy\System\Classes\LegacyDB::update('
 		stores
 		INNER JOIN (
 			SELECT seller_id, SUM(orders.quantity) as saleQuantity
@@ -31,7 +31,7 @@ if (isset($_POST['update'])) {
 		SET recent_sales = saleQuantity
 	');
 
-	DBOld::update('
+	\Legacy\System\Classes\LegacyDB::update('
 		designs
 		INNER JOIN (
 			SELECT design_id, SUM(orders.quantity) as saleQuantity
@@ -44,7 +44,7 @@ if (isset($_POST['update'])) {
 		SET recent_sales = saleQuantity
 	');
 
-	DBOld::update('
+	\Legacy\System\Classes\LegacyDB::update('
 		items
 		INNER JOIN (
 			SELECT product_id, SUM(orders.quantity) as saleQuantity
@@ -60,7 +60,7 @@ if (isset($_POST['update'])) {
 	/*
 	* Total sales
 	*/
-	DBOld::update('
+	\Legacy\System\Classes\LegacyDB::update('
 		stores
 		INNER JOIN (
 			SELECT seller_id, SUM(orders.quantity) as saleQuantity
@@ -73,7 +73,7 @@ if (isset($_POST['update'])) {
 		SET sales = saleQuantity
 	');
 
-	DBOld::update('
+	\Legacy\System\Classes\LegacyDB::update('
 		designs
 		INNER JOIN (
 			SELECT design_id, SUM(orders.quantity) as saleQuantity
@@ -86,7 +86,7 @@ if (isset($_POST['update'])) {
 		SET sales = saleQuantity
 	');
 
-	DBOld::update('
+	\Legacy\System\Classes\LegacyDB::update('
 		items
 		INNER JOIN (
 			SELECT product_id, SUM(orders.quantity) as saleQuantity

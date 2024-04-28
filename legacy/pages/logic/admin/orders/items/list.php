@@ -3,7 +3,7 @@
 //setup page
 $id = $_GET['id'] ?? false;
 
-if (!DBOld::exists('carts WHERE status>0 AND ID = ?', $id)) redirect_old('/orders/list');
+if (!\Legacy\System\Classes\LegacyDB::exists('carts WHERE status>0 AND ID = ?', $id)) redirect_old('/orders/list');
 
 $index = 'id';
 $tbl = 'orders';

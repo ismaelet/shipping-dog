@@ -1,6 +1,6 @@
 <?php
 
-use Ecommerce\ViewManager;
+use Legacy\Classes\Ecommerce\ViewManager;
 
 ?>
 

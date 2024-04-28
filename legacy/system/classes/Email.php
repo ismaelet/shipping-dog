@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\System\Classes;
+
 /**
  * Requires: phpmailer/phpmailer
  */

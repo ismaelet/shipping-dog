@@ -10,7 +10,7 @@ if (strlen($search) > 2) {
 	$search = trim(strtolower($search));
 
 	//get design results
-	$res_des = DBOld::select(
+	$res_des = \Legacy\System\Classes\LegacyDB::select(
 
 		"id FROM designs WHERE (
 
@@ -33,7 +33,7 @@ if (strlen($search) > 2) {
 	$desN = $res_des->num_rows;
 
 	//get seller results
-	$res_sell = DBOld::select("user_id FROM stores WHERE name LIKE CONCAT('%',?,'%') AND status = 1 ORDER BY user_id DESC LIMIT " . $max, [$search]);
+	$res_sell = \Legacy\System\Classes\LegacyDB::select("user_id FROM stores WHERE name LIKE CONCAT('%',?,'%') AND status = 1 ORDER BY user_id DESC LIMIT " . $max, [$search]);
 
 	$sellN = $res_sell->num_rows;
 

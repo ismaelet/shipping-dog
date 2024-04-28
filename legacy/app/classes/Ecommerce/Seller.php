@@ -1,11 +1,9 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
 use App\Models\Ecommerce\Seller as EcommerceSeller;
-use DBOld;
-use DatabaseObject;
-use User;
+use Legacy\Classes\User;
 
 /**
  * Seller class
@@ -17,7 +15,7 @@ use User;
  */
 class Seller {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'stores';
 	public const INDEX = 'user_id';
@@ -45,7 +43,7 @@ class Seller {
 	}
 
 	private function getFollowed() {
-		return auth()->check() && DBOld::exists('followers WHERE user_id = ? AND follower_id = ?', [auth()->id(), $this->id]);
+		return auth()->check() && \Legacy\System\Classes\LegacyDB::exists('followers WHERE user_id = ? AND follower_id = ?', [auth()->id(), $this->id]);
 	}
 
 	private function getUserData() {
@@ -69,7 +67,7 @@ class Seller {
 	}
 
 	private function getEarned(): float {
-		$earned = DBOld::row(
+		$earned = \Legacy\System\Classes\LegacyDB::row(
 			'
 		SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * orders.quantity) as totGain
 		FROM orders INNER JOIN carts ON orders.cart_id = carts.id
@@ -89,7 +87,7 @@ class Seller {
 	}
 
 	private function getPayed() {
-		return DBOld::sum('value FROM stores_payments WHERE seller_id = ? AND other = 0', [$this->id]);
+		return \Legacy\System\Classes\LegacyDB::sum('value FROM stores_payments WHERE seller_id = ? AND other = 0', [$this->id]);
 	}
 
 	private function getPayedString() {
@@ -97,7 +95,7 @@ class Seller {
 	}
 
 	private function getOtherTransfers() {
-		return DBOld::sum('value FROM stores_payments WHERE seller_id = ? AND other = 1', [$this->id]);
+		return \Legacy\System\Classes\LegacyDB::sum('value FROM stores_payments WHERE seller_id = ? AND other = 1', [$this->id]);
 	}
 
 	private function getOtherTransfersString() {
@@ -121,11 +119,11 @@ class Seller {
 	}
 
 	private function getDesigns() {
-		return rows_to_objects(DBOld::select(Design::INDEX . ' FROM ' . Design::TABLE . ' WHERE ' . Design::SELLER_INDEX . ' = ?', [$this->id]), Design::class);
+		return rows_to_objects(\Legacy\System\Classes\LegacyDB::select(Design::INDEX . ' FROM ' . Design::TABLE . ' WHERE ' . Design::SELLER_INDEX . ' = ?', [$this->id]), Design::class);
 	}
 
 	private function getProducts() {
-		return rows_to_objects(DBOld::select(Product::INDEX . ' FROM ' . Product::TABLE . ' WHERE ' . Product::SELLER_INDEX . ' = ?', [$this->id]), Product::class);
+		return rows_to_objects(\Legacy\System\Classes\LegacyDB::select(Product::INDEX . ' FROM ' . Product::TABLE . ' WHERE ' . Product::SELLER_INDEX . ' = ?', [$this->id]), Product::class);
 	}
 
 	private function getStatusId() {
@@ -145,7 +143,7 @@ class Seller {
 	* Update methods
 	*/
 	public function updateStatusId(int $statusId) {
-		DBOld::update(self::TABLE . ' SET ' . ' status = ? WHERE ' . self::INDEX . ' = ?', [$statusId, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET ' . ' status = ? WHERE ' . self::INDEX . ' = ?', [$statusId, $this->id]);
 
 		$this->setStatusId($statusId);
 	}
@@ -154,8 +152,8 @@ class Seller {
 	* Instance methods
 	*/
 	public function delete() {
-		DBOld::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
-		DBOld::delete('stores_payments WHERE seller_id = ?', [$this->id]);
+		\Legacy\System\Classes\LegacyDB::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
+		\Legacy\System\Classes\LegacyDB::delete('stores_payments WHERE seller_id = ?', [$this->id]);
 
 		foreach ($this->designs as $design) {
 			$design->delete(true);

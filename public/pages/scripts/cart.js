@@ -8,7 +8,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 			recapShippingElement.dataset.shippingMethodId = shippingMethodId
 
-			call_class_method('Ecommerce\\Cart', 'updateShippingMethodId', [shippingMethodId], await cart_id())
+			const cartId = await cart_id()
+
+			console.log(cartId)
+
+			call_class_method('Legacy\\Classes\\Ecommerce\\Cart', 'updateShippingMethodId', [shippingMethodId], cartId, null, true)
 
 			update_cart()
 		})

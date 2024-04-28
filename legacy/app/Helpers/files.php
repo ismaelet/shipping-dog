@@ -3,19 +3,6 @@
 /**
  * Urls
  */
-function generate_base_url(string $file = '') {
-	if (!strpos($file, '.')) {
-		$file .= '.webp';
-	}
-
-	if ($file[0] == '/') {
-		$url = $file;
-	} else {
-		$url = assets_directory(ViewOld::$url) . $file;
-	}
-
-	return $url;
-}
 
 function client_path(string $file = '') {
 	$url = asset('' . file_time(generate_base_url($file)));
@@ -28,22 +15,6 @@ function public_client_path(string $file = '') {
 		$url = PUBLIC_CLIENT_ROOT . file_time(generate_base_url($file));
 	} else {
 		$url = client_path($file);
-	}
-
-	return $url;
-}
-
-function server_path(string $file = '') {
-	$url = SERVER_ROOT . generate_base_url($file);
-
-	return $url;
-}
-
-function public_server_path(string $file = '') {
-	if (defined('PUBLIC_SERVER_ROOT')) {
-		$url = PUBLIC_SERVER_ROOT . generate_base_url($file);
-	} else {
-		$url = server_path($file);
 	}
 
 	return $url;
@@ -64,20 +35,6 @@ function public_server_directory(string $path = '') {
 */
 function new_url(string $parcialUrl = '') {
 	return $parcialUrl;
-}
-
-function client_url(string $parcialUrl = '') {
-	return CLIENT_ROOT . $parcialUrl;
-}
-
-function public_client_url(string $parcialUrl = '') {
-	if (defined('PUBLIC_CLIENT_ROOT')) {
-		$url = PUBLIC_CLIENT_ROOT . $parcialUrl;
-	} else {
-		$url = client_url($parcialUrl);
-	}
-
-	return $url;
 }
 
 // avoid cache if the chached file is not up to date
@@ -108,7 +65,7 @@ function icon_url_raw($file) {
 	$file = $file . '.svg';
 
 	if ($file[0] == '/') $urlRaw = $file;
-	else if (file_exists(SERVER_ROOT . $path = assets_directory(ViewOld::$url) . $file)) $urlRaw = $path;
+	else if (file_exists(SERVER_ROOT . $path = assets_directory(\Legacy\System\Classes\LegacyView::$url) . $file)) $urlRaw = $path;
 	else if (file_exists(SERVER_ROOT . $path = APP_ICONS_DIR . $file)) $urlRaw = $path;
 	else $urlRaw = ICONS_DIR . $file;
 
@@ -211,24 +168,6 @@ function public_server_root() {
 /*
 * Redirect
 */
-function redirect_old($path = false) {
-	if (empty($path)) {
-		$url = $_SERVER['REQUEST_URI'];
-	} else if ($path[0] == '?') {
-		$url = explode('?', $_SERVER['REQUEST_URI'])[0] . $path;
-	} else if ($path[0] == '#') {
-		$url = explode('#', $_SERVER['REQUEST_URI'])[0] . $path;
-	} else if ($path[0] == '&') {
-		$url = $_SERVER['REQUEST_URI'] . $path;
-	} else if ($path[0] == '/') {
-		$url = client_url($path);
-	} else {
-		$url = $path;
-	}
-
-	header('Location: ' . $url);
-	exit();
-}
 
 
 /**

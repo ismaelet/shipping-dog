@@ -2,16 +2,16 @@
 
 //get collections
 if ($vip)
-	$res = DBOld::select('id FROM collections WHERE user_id = ? ORDER BY position ASC, id DESC', [$id]);
+	$res = \Legacy\System\Classes\LegacyDB::select('id FROM collections WHERE user_id = ? ORDER BY position ASC, id DESC', [$id]);
 else
-	$res = DBOld::select('id FROM collections WHERE user_id = ? AND ID IN (SELECT collection FROM designs) ORDER BY position ASC, id DESC', [$id]);
+	$res = \Legacy\System\Classes\LegacyDB::select('id FROM collections WHERE user_id = ? AND ID IN (SELECT collection FROM designs) ORDER BY position ASC, id DESC', [$id]);
 
 //generate collections
 $i = $vip ? 1 : 0;
 while ($row = $res->fetch_assoc()) {
 	$i++;
 
-	$coll = new Collection($row['id']); ?>
+	$coll = new \Legacy\Classes\Collection($row['id']); ?>
 
 	<div id="coll-box<?= $i ?>" class="coll-ele al-top coll-box sort-box <?php if ($i > $collBlock) echo 'hidden'; ?>" data-id="<?= $coll->id; ?>">
 

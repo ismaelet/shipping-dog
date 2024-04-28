@@ -3,7 +3,7 @@
 // setup variables
 $__listResults = [];
 $asd = [];
-$fields = ViewOld::get('fields');
+$fields = \Legacy\System\Classes\LegacyView::get('fields');
 
 // generate the results
 while ($row = $res->fetch_assoc()) {
@@ -22,7 +22,7 @@ while ($row = $res->fetch_assoc()) {
 
 		// get value
 		if (isset($field['value'])) $entry['value'] = $field['value'];
-		else if ($field['type'] == 'find') $entry['value'] = DBOld::find($field['find'], [$row[$field['name']]]) ?: '-';
+		else if ($field['type'] == 'find') $entry['value'] = \Legacy\System\Classes\LegacyDB::find($field['find'], [$row[$field['name']]]) ?: '-';
 		else if ($field['name'] && isset($row[$field['name']])) $entry['value'] = strlen($row[$field['name']]) ? $row[$field['name']] : '-';
 
 		// adjust value

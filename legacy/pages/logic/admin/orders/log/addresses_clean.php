@@ -11,7 +11,7 @@ $pageConfig['return-page'] = 'addresses';
 $queryConfig['table'] = 'variables';
 $queryConfig['index-field'] = 'name';
 $queryConfig['title-field'] = 'name';
-$queryConfig['entry'] = DBOld::row('id, name FROM ' . $queryConfig['table'] . ' WHERE name="log_date"');
+$queryConfig['entry'] = \Legacy\System\Classes\LegacyDB::row('id, name FROM ' . $queryConfig['table'] . ' WHERE name="log_date"');
 
 /*
 * Fields

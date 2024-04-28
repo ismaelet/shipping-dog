@@ -1,8 +1,8 @@
 <?php
 
-namespace Ecommerce\Product;
+namespace Legacy\Classes\Ecommerce\Product;
 
-use DBOld;
+use LegacyDB;
 
 class Size {
 
@@ -15,7 +15,7 @@ class Size {
 	public $price;
 
 	function __construct(int $id) {
-		if ($row = DBOld::row('* FROM ' . self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$id])) {
+		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM ' . self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$id])) {
 			$this->id = $id;
 			$this->slug = $row['tag'];
 			$this->name = $row['name'];

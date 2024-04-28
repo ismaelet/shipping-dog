@@ -77,9 +77,9 @@ if (isset($_POST['submit'])) {
 	$design_id = $_POST['design_id'];
 	$type = $_POST['type'];
 
-	if (DBOld::exists('designs WHERE id = ? AND user_id = ?', [$design_id, auth()->id()])) {
+	if (\Legacy\System\Classes\LegacyDB::exists('designs WHERE id = ? AND user_id = ?', [$design_id, auth()->id()])) {
 
-		$imgID = DBOld::add('home_pics (first_name, last_name, design_id, type) VALUES (?, ?, ?, ?)', [$first_name, $last_name, $design_id, $type]);
+		$imgID = \Legacy\System\Classes\LegacyDB::add('home_pics (first_name, last_name, design_id, type) VALUES (?, ?, ?, ?)', [$first_name, $last_name, $design_id, $type]);
 
 		$file = '/uploads/users/testimonials/' . $imgID . '.jpg';
 

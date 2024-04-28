@@ -12,6 +12,7 @@ use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductPrice;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Seller\SellerPrice;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,56 +24,44 @@ class Product extends Model {
 	protected $table = 'items';
 	protected $fillable = ['name', 'design_id', 'user_id', 'type_id', 'color_id', 'colors', 'status', 'positions'];
 
-	/***************************
-	 * * Relationship instances *
-	 ***************************/
 	/**
-	 * Get the product's seller
+	 * * Relationship instances *
 	 */
+	// Get the product's seller
 	public function seller(): BelongsTo {
 		return $this->belongsTo(Seller::class, 'user_id', 'user_id');
 	}
 
-	/**
-	 * Get the product's design
-	 */
+	// Get the product's design
 	public function design(): BelongsTo {
 		return $this->belongsTo(Design::class);
 	}
 
-	/**
-	 * Get the product's type
-	 */
+	// Get the product's type
 	public function type(): BelongsTo {
 		return $this->belongsTo(ProductType::class);
 	}
 
-	/**
-	 * Get the specific product's price
-	 */
+	// Get the product's price
 	public function specific_price(): HasOne {
 		return $this->hasOne(ProductPrice::class);
 	}
 
-	/**
-	 * Get the default seller's price for the product
-	 */
+	// Get the seller price
 	public function seller_price(): HasOne {
 		return $this->hasOne(SellerPrice::class, 'seller_id', 'user_id')->where('type_id', $this->type->id);
 	}
 
-	/**
-	 * Get the default platform price for the product
-	 */
+	// Get the platform price
 	public function base_price(): HasOne {
 		return $this->hasOne(BasePrice::class, 'type_id', 'type_id');
 	}
-	/************************
-	 * * Utility methods *
-	 ************************/
+
 	/**
-	 * Get the product's logos
+	 * * Utility methods
 	 */
+	// ~ Logos
+	// Get the product's logo group
 	public function logoGroup(): ?LogoGroup {
 		if ($this->design && in_array($this->type_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])) {
 			return $this->design->logo_group;
@@ -81,6 +70,7 @@ class Product extends Model {
 		return null;
 	}
 
+	// Get the product's logos
 	public function logos(): ?Collection {
 		if ($this->logoGroup()) {
 			return $this->logoGroup()->logos;
@@ -89,10 +79,15 @@ class Product extends Model {
 		return null;
 	}
 
-	public function logoId(int $logoId): void {
-		$this->logo_id = $logoId;
+	// Set the product's logo id
+	public function logoId(): Attribute {
+		return Attribute::make(
+			get: fn (?int $value) => $value,
+			set: fn (int $value) => $value,
+		);
 	}
 
+	// Get the product's logo
 	public function logo(): ?Logo {
 		if ($this->logo_id) {
 			return Logo::find($this->logo_id);
@@ -105,9 +100,8 @@ class Product extends Model {
 		return null;
 	}
 
-	/**
-	 * Get the product's price
-	 */
+	// ~ Prices
+	// Get the product's price
 	public function price(): ProductPrice|SellerPrice|BasePrice {
 		// Check if the product has a specific price
 		if ($this->specific_price) return $this->specific_price;
@@ -224,7 +218,7 @@ class Product extends Model {
 	 * Get the product's url
 	 */
 	public function url(): string {
-		return '/shop/item?id=' . $this->id;
+		return env('APP_ENV') == 'local' ? '/products/' . $this->slug() : '/shop/item?id=' . $this->id;
 	}
 
 	public function fullUrl(?int $color_id = null, ?int $position_id = null): string {
@@ -238,7 +232,8 @@ class Product extends Model {
 			$parameters['position_id'] = $position_id;
 		}
 
-		return '/shop/item?' . http_build_query($parameters);
+		return env('APP_ENV') == 'local' ? $this->url() . '?' . http_build_query($parameters)
+			: '/shop/item?' . http_build_query($parameters);;
 	}
 
 	/**

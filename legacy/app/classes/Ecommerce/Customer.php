@@ -1,20 +1,17 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
 use App\Models\Ecommerce\Seller as EcommerceSeller;
-use DBOld;
-use Ecommerce\Seller;
-use DynamicProperties;
+use Legacy\Classes\Ecommerce\Seller;
 
 class Customer {
 
-	use DynamicProperties;
+	use \Legacy\System\Traits\DynamicProperties;
 
 	public const TABLE = 'users';
 	public const INDEX = 'id';
 	public const USER_INDEX = 'userId';
-
 
 	/*
 	* Database methods
@@ -22,7 +19,7 @@ class Customer {
 	public static function new() {
 		global $customer;
 
-		$customerId = $_SESSION['customerId'] = 'T' . DBOld::add('temp_users (ID) VALUES (NULL)');
+		$customerId = $_SESSION['customerId'] = 'T' . \Legacy\System\Classes\LegacyDB::add('temp_users (ID) VALUES (NULL)');
 		$customer = new self($customerId);
 
 		return $customer;
@@ -40,12 +37,12 @@ class Customer {
 	}
 
 	private function getCart() {
-		$cart_id = DBOld::find(Cart::INDEX . ' FROM ' . Cart::TABLE . ' WHERE ' . Cart::CUSTOMER_INDEX . ' = ? AND status = 0', [$this->id]);
+		$cart_id = \Legacy\System\Classes\LegacyDB::find(Cart::INDEX . ' FROM ' . Cart::TABLE . ' WHERE ' . Cart::CUSTOMER_INDEX . ' = ? AND status = 0', [$this->id]);
 		return new Cart($cart_id);
 	}
 
 	private function getConfirmedCarts() {
-		return rows_to_objects(DBOld::select(Cart::INDEX . ' FROM ' . Cart::TABLE . ' WHERE ' . Cart::CUSTOMER_INDEX . ' = ? AND status <> 0 ORDER BY time DESC', [$this->id]), Cart::class);
+		return rows_to_objects(\Legacy\System\Classes\LegacyDB::select(Cart::INDEX . ' FROM ' . Cart::TABLE . ' WHERE ' . Cart::CUSTOMER_INDEX . ' = ? AND status <> 0 ORDER BY time DESC', [$this->id]), Cart::class);
 	}
 
 	private function getConfirmedCartsCount() {
@@ -53,7 +50,7 @@ class Customer {
 	}
 
 	private function getDefaultAddressId() {
-		return DBOld::find(Address::INDEX . ' FROM ' . Address::TABLE . ' WHERE ' . Address::CUSTOMER_INDEX . ' = ? ORDER BY ' . Address::INDEX . ' DESC', [$this->id]);
+		return \Legacy\System\Classes\LegacyDB::find(Address::INDEX . ' FROM ' . Address::TABLE . ' WHERE ' . Address::CUSTOMER_INDEX . ' = ? ORDER BY ' . Address::INDEX . ' DESC', [$this->id]);
 	}
 
 	private function getDefaultAddress() {
@@ -70,7 +67,7 @@ class Customer {
 	}
 
 	private function getIsSeller() {
-		return DBOld::exists(Seller::TABLE . ' WHERE ' . Seller::INDEX . ' = ?', [$this->id]);
+		return \Legacy\System\Classes\LegacyDB::exists(Seller::TABLE . ' WHERE ' . Seller::INDEX . ' = ?', [$this->id]);
 	}
 
 	/*

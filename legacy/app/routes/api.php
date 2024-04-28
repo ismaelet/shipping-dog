@@ -7,7 +7,7 @@ use App\Http\Controllers\Interactions\LikeController;
 /**
  * Carts
  */
-RouteOld::add('/api/carts', function () {
+\Legacy\System\Classes\LegacyRoute::add('/api/carts', function () {
 	echo json_encode(CartController::get());
 });
 
@@ -15,21 +15,21 @@ RouteOld::add('/api/carts', function () {
 /**
  * Likes
  */
-RouteOld::add('/api/like', function () {
+\Legacy\System\Classes\LegacyRoute::add('/api/like', function () {
 	echo json_encode(LikeController::like());
 });
 
-RouteOld::add('/api/unlike', function () {
+\Legacy\System\Classes\LegacyRoute::add('/api/unlike', function () {
 	echo json_encode(LikeController::unlike());
 });
 
 /**
  * Followers
  */
-RouteOld::add('/api/follow', function () {
+\Legacy\System\Classes\LegacyRoute::add('/api/follow', function () {
 	echo json_encode(FollowerController::follow());
 });
 
-RouteOld::add('/api/unfollow', function () {
+\Legacy\System\Classes\LegacyRoute::add('/api/unfollow', function () {
 	echo json_encode(FollowerController::unfollow());
 });

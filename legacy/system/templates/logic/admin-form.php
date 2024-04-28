@@ -3,13 +3,13 @@
 use App\Http\Controllers\Admin\FormController;
 
 $id = $_GET['id'] ?? null;
-$entry = ViewOld::get('entry') ?? null;
-$queryConfig = ViewOld::get('queryConfig');
-$pageConfig = ViewOld::get('pageConfig') ?? [];
+$entry = \Legacy\System\Classes\LegacyView::get('entry') ?? null;
+$queryConfig = \Legacy\System\Classes\LegacyView::get('queryConfig');
+$pageConfig = \Legacy\System\Classes\LegacyView::get('pageConfig') ?? [];
 $listFilters = $_GET['list-filters'] ?? null;
-$error = ViewOld::get('error') ?? false;
-$done = ViewOld::get('done') ?? false;
-$inputs = ViewOld::get('inputs') ?? null;
+$error = \Legacy\System\Classes\LegacyView::get('error') ?? false;
+$done = \Legacy\System\Classes\LegacyView::get('done') ?? false;
+$inputs = \Legacy\System\Classes\LegacyView::get('inputs') ?? null;
 $pageConfig['edit'] = (bool) $id;
 
 /*
@@ -21,7 +21,7 @@ $pageConfig['edit'] = (bool) $id;
 *	? (string) confirm: is set, the user will have to agree to the confirmation message to procede
 *	? (string) return-page: the relative path of the page to go back after the form submit
 */
-$pageConfig['title'] = $pageConfig['title'] ?? ViewOld::$title;
+$pageConfig['title'] = $pageConfig['title'] ?? \Legacy\System\Classes\LegacyView::$title;
 $pageConfig['free'] = $pageConfig['free'] ?? false;
 $pageConfig['centered'] = $pageConfig['centered'] ?? false;
 $pageConfig['upload'] = $pageConfig['upload'] ?? false;
@@ -45,7 +45,7 @@ $pageConfig['return-url'] .= $pageConfig['edit'] ? '#row' . $id : null;
 
 // fetch entry data
 if ($pageConfig['edit']) {
-	$entry = $entry ?? DBOld::row($queryConfig['select'] . ' FROM ' . $queryConfig['from'] . ' WHERE ' . $queryConfig['index-field'] . '=?', [$id]);
+	$entry = $entry ?? \Legacy\System\Classes\LegacyDB::row($queryConfig['select'] . ' FROM ' . $queryConfig['from'] . ' WHERE ' . $queryConfig['index-field'] . '=?', [$id]);
 	$pageConfig['title'] = ('Edit') . ': ' . $entry[$queryConfig['title-field']];
 }
 

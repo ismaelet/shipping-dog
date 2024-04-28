@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Ecommerce\Design;
-use Ecommerce\Seller;
+use Legacy\Classes\Ecommerce\Seller;
 
 ?>
 

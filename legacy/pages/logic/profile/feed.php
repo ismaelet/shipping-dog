@@ -1,12 +1,12 @@
 <?php
 
-use User\FeedEntry;
+use Legacy\Classes\User\FeedEntry;
 
 $loc = 'feed';
 
 // get feed
 $feedEntries = [];
-$feedEntryRows = DBOld::select(
+$feedEntryRows = \Legacy\System\Classes\LegacyDB::select(
 	'
 	orders.id as event_id, 2 AS type, carts.time AS time
 		FROM orders INNER JOIN carts ON orders.cart_id = carts.id WHERE seller_id = ? AND carts.status > 0

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View\Components;
+namespace Legacy\View\Components;
 
-use App\View\View;
+use Legacy\View\View;
 use Exception;
 
 class Component {
@@ -37,7 +37,7 @@ class Component {
 		if (self::class == static::class) {
 			$componentView = '/src/views/' . $componentName . '.php';
 		} else {
-			$componentName = str_replace('\\', '/', ucfirst(explode('App\View\Components\\', static::class)[1]));
+			$componentName = str_replace('\\', '/', ucfirst(explode('Legacy\View\Components\\', static::class)[1]));
 			$componentView = '/src/components/' . $componentName . '.php';
 		}
 
@@ -82,7 +82,7 @@ class Component {
 		if (strpos($content, '<x-template.')) {
 			$templateName = explode('>', explode('<x-template.', $content, 2)[1], 2)[0];
 			$innerHtml = extract_markup('x-template.' . $templateName, $html);
-			$templateClass = 'App\View\Components\Templates\\' . ucfirst($templateName);
+			$templateClass = 'Legacy\View\Components\Templates\\' . ucfirst($templateName);
 			$render = $templateClass::render(['slot' => $innerHtml]);
 		} else {
 			$render = $html;

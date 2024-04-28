@@ -11,13 +11,13 @@ if (isset($_POST['submit'])) {
 
 	$rows = [];
 
-	$products = DBOld::select('id FROM items WHERE status=1 AND type_id NOT IN (4, 7, 9, 13, 11) ORDER BY id DESC LIMIT 1000');
+	$products = \Legacy\System\Classes\LegacyDB::select('id FROM items WHERE status=1 AND type_id NOT IN (4, 7, 9, 13, 11) ORDER BY id DESC LIMIT 1000');
 
 	while ($product = $products->fetch_assoc()) {
 
 		$row = [];
 
-		$product_obj = new Ecommerce\Product($product['id'], ['name', 'type', 'img', 'price']);
+		$product_obj = new \Legacy\Classes\Ecommerce\Product($product['id'], ['name', 'type', 'img', 'price']);
 
 		$row['id'] = $product_obj->id;
 		$row['title'] = $product_obj->name . ' - ' . $product_obj->type->name;

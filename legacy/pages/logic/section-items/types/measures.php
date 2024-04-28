@@ -3,7 +3,7 @@
 global $id;
 
 //setup page
-$typeName = DBOld::find('name FROM items_types WHERE id = ?', $id);
+$typeName = \Legacy\System\Classes\LegacyDB::find('name FROM items_types WHERE id = ?', $id);
 
 $tbl = 'items_types_measures';
 $index = 'type_id';
@@ -12,7 +12,7 @@ $title = 'Modifica dimensioni di "' . $typeName . '"';
 //form
 $inputs = [];
 
-$measures = DBOld::select('* FROM ' . $tbl . ' WHERE type_id=? AND size<>"mat"', $id);
+$measures = \Legacy\System\Classes\LegacyDB::select('* FROM ' . $tbl . ' WHERE type_id=? AND size<>"mat"', $id);
 
 while ($measure = $measures->fetch_assoc()) {
 
@@ -24,10 +24,10 @@ while ($measure = $measures->fetch_assoc()) {
 
 function _expand_edit($tbl, $inputs, $index, $id) {
 
-	$measures = DBOld::select('size FROM ' . $tbl . ' WHERE type_id=? AND size<>"mat"', $id);
+	$measures = \Legacy\System\Classes\LegacyDB::select('size FROM ' . $tbl . ' WHERE type_id=? AND size<>"mat"', $id);
 
 	while ($measure = $measures->fetch_assoc()) {
 
-		DBOld::update($tbl . ' SET val=? WHERE type_id=? AND size=?', [$_POST[$measure['size']], $id, $measure['size']]);
+		\Legacy\System\Classes\LegacyDB::update($tbl . ' SET val=? WHERE type_id=? AND size=?', [$_POST[$measure['size']], $id, $measure['size']]);
 	}
 }

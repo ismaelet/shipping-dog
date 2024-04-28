@@ -1,8 +1,8 @@
 <?php
 
-namespace Ecommerce\Product;
+namespace Legacy\Classes\Ecommerce\Product;
 
-use DBOld;
+use LegacyDB;
 
 class Gender {
 
@@ -11,7 +11,7 @@ class Gender {
 	public $name;
 
 	function __construct($id) {
-		if ($row = DBOld::row('* FROM items_genders WHERE id = ?', [$id])) {
+		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM items_genders WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->slug = $row['tag'];
 			$this->name = $row['name'];

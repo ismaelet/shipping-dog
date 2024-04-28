@@ -38,12 +38,12 @@ $buttons = [
 */
 if (isset($_POST['delete-expand'])) {
 	$id = $_POST['id'];
-	$payment = DBOld::row('* FROM stores_payments WHERE id = ?', $id);
+	$payment = \Legacy\System\Classes\LegacyDB::row('* FROM stores_payments WHERE id = ?', $id);
 
-	if ($payment['other']) DBOld::update('stores SET flat=flat-? WHERE user_id = ?', [$payment['value'], $payment['seller_id']]);
-	else DBOld::update('stores SET payed=payed-? WHERE user_id = ?', [$payment['value'], $payment['seller_id']]);
+	if ($payment['other']) \Legacy\System\Classes\LegacyDB::update('stores SET flat=flat-? WHERE user_id = ?', [$payment['value'], $payment['seller_id']]);
+	else \Legacy\System\Classes\LegacyDB::update('stores SET payed=payed-? WHERE user_id = ?', [$payment['value'], $payment['seller_id']]);
 
-	DBOld::delete('stores_payments WHERE id = ?', [$id]);
+	\Legacy\System\Classes\LegacyDB::delete('stores_payments WHERE id = ?', [$id]);
 
 	redirect_old();
 }

@@ -65,8 +65,8 @@ $inputs = [
 ];
 
 if ($id) {
-	$design_id = DBOld::find('design_id FROM inventory WHERE id = ?', $id);
-	$designName = DBOld::find('name FROM designs WHERE id = ?', $design_id);
+	$design_id = \Legacy\System\Classes\LegacyDB::find('design_id FROM inventory WHERE id = ?', $id);
+	$designName = \Legacy\System\Classes\LegacyDB::find('name FROM designs WHERE id = ?', $design_id);
 
 	$inputs['design']['value'] = $design_id;
 	$inputs['design']['value-show'] = $designName;

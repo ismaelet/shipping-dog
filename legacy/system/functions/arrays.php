@@ -1,5 +1,7 @@
 <?php
 
+use Legacy\System\Classes\Query_Result;
+
 function explode_last($separator, $string) {
 	$array = explode($separator, $string);
 	return end($array);
@@ -34,14 +36,4 @@ function extract_subvalue(array $array, mixed $subKey) {
 function array_to_sql($array) {
 	$sqlArray = is_array($array) ? "'" . implode("','", $array) . "'" : '';
 	return $sqlArray;
-}
-
-function rows_to_objects(Query_Result $rows = null, string $className) {
-	$objects = [];
-
-	while ($row = $rows->fetch_assoc()) {
-		$objects[] = new $className($row[$className::INDEX]);
-	}
-
-	return $objects;
 }

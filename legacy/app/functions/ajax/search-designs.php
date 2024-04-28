@@ -7,7 +7,7 @@ $search = $_GET['search'] ?? '';
 $search = trim($search);
 
 if ($search) {
-	$results = DBOld::select("ID, CONCAT(ID, ' - ', name) AS " . $showField . " FROM " . $table . " WHERE id = ? OR name LIKE CONCAT('%',?,'%') ORDER BY " . $showField . " ASC LIMIT 10", [$search, $search]);
+	$results = \Legacy\System\Classes\LegacyDB::select("ID, CONCAT(ID, ' - ', name) AS " . $showField . " FROM " . $table . " WHERE id = ? OR name LIKE CONCAT('%',?,'%') ORDER BY " . $showField . " ASC LIMIT 10", [$search, $search]);
 
 	while ($result = $results->fetch_assoc()) {
 		$response[] = [

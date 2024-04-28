@@ -3,7 +3,7 @@
 $response = [];
 
 $productId = $_GET['id'];
-$product = new Ecommerce\Product($productId);
+$product = new \Legacy\Classes\Ecommerce\Product($productId);
 
 $scope = explode(',', $_GET['scope']);
 $parameters = isset($_GET['parameters']) ? explode(',', $_GET['parameters']) : null;

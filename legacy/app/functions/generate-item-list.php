@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Ecommerce\Product;
-use Ecommerce\ViewManager;
+use Legacy\Classes\Ecommerce\ViewManager;
 
 function generate_item_list($res) {
 	while ($row = $res->fetch_assoc()) {

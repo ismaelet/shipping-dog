@@ -1,17 +1,14 @@
 <?php
 
-namespace User;
+namespace Legacy\Classes\User;
 
 use App\Models\Ecommerce\Order as EcommerceOrder;
-use DBOld;
-use DynamicProperties;
-use Ecommerce\Design;
-use User;
-use Ecommerce\Order;
+use Legacy\Classes\Ecommerce\Design;
+use Legacy\Classes\User;
 
 class FeedEntry {
 
-	use DynamicProperties;
+	use \Legacy\System\Traits\DynamicProperties;
 
 	public const INDEX = 'event_id';
 
@@ -44,7 +41,7 @@ class FeedEntry {
 	}
 
 	private function getnews() {
-		return $this->type_id == 1 ? DBOld::find('text FROM news WHERE id = ?', $this->event_id) : null;
+		return $this->type_id == 1 ? \Legacy\System\Classes\LegacyDB::find('text FROM news WHERE id = ?', $this->event_id) : null;
 	}
 
 	private function getprofile() {

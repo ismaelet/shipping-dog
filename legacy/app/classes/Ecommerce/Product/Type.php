@@ -1,9 +1,9 @@
 <?php
 
-namespace Ecommerce\Product;
+namespace Legacy\Classes\Ecommerce\Product;
 
-use DBOld;
-use Ecommerce\Product;
+use LegacyDB;
+use Legacy\Classes\Ecommerce\Product;
 
 class Type {
 
@@ -31,7 +31,7 @@ class Type {
 	public $availablePositionIds;
 
 	function __construct($id) {
-		if ($row = DBOld::row('* FROM items_types WHERE id = ?', [$id])) {
+		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM items_types WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->slug = $row['tag'];
 			$this->name = $row['name'];
@@ -94,8 +94,8 @@ class Type {
 
 		foreach ($this->availableColorSlugs as $colorSlug) {
 			$color_id = $all ?
-				DBOld::find('id FROM items_colors WHERE tag = ?', [$colorSlug]) :
-				DBOld::find('id FROM items_colors WHERE tag = ? AND hidden = 0', [$colorSlug]);
+				\Legacy\System\Classes\LegacyDB::find('id FROM items_colors WHERE tag = ?', [$colorSlug]) :
+				\Legacy\System\Classes\LegacyDB::find('id FROM items_colors WHERE tag = ? AND hidden = 0', [$colorSlug]);
 
 			if ($color_id) {
 				$colors[] = new Color($color_id);

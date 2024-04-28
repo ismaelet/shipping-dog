@@ -11,11 +11,11 @@ $title = 'full_name';
 $id = $_GET['id'] ?? false;
 
 //create entry if doesn't exists
-if ($id && !DBOld::exists('addresses WHERE cart_id = ?', [$id])) {
+if ($id && !\Legacy\System\Classes\LegacyDB::exists('addresses WHERE cart_id = ?', [$id])) {
 
-	$user_id = DBOld::find('user_id FROM carts WHERE id = ?', [$id]);
+	$user_id = \Legacy\System\Classes\LegacyDB::find('user_id FROM carts WHERE id = ?', [$id]);
 
-	DBOld::add('addresses (cart_id, user_id) VALUES (?, ?)', [$id, $user_id]);
+	\Legacy\System\Classes\LegacyDB::add('addresses (cart_id, user_id) VALUES (?, ?)', [$id, $user_id]);
 }
 
 //submit
@@ -32,7 +32,7 @@ if (isset($_POST['edit'])) {
 
 	$comment = $_POST['comment'];
 
-	DBOld::update('addresses SET full_name = ?, address=?, number=?, zip=?, city=?, region=?, email=?, phone=? WHERE cart_id = ?', [$full_name, $addr, $num, $zip, $city, $reg, $email, $phone, $id]);
+	\Legacy\System\Classes\LegacyDB::update('addresses SET full_name = ?, address=?, number=?, zip=?, city=?, region=?, email=?, phone=? WHERE cart_id = ?', [$full_name, $addr, $num, $zip, $city, $reg, $email, $phone, $id]);
 
 	redirect_old('list' . $hash);
 }

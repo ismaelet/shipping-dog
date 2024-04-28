@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
 	$name = trim($_POST['name']);
 	$desc = trim($_POST['desc']);
 
-	DBOld::add('stores (user_id, name, description) VALUES (?, ?, ?)', [auth()->id(), $name, $desc]);
+	\Legacy\System\Classes\LegacyDB::add('stores (user_id, name, description) VALUES (?, ?, ?)', [auth()->id(), $name, $desc]);
 
 	redirect_old('/manage/new');
 }

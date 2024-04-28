@@ -2,7 +2,7 @@
 
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Product;
-use Ecommerce\Seller;
+use Legacy\Classes\Ecommerce\Seller;
 
 $productN = 20;
 $popularDesignCount = 20;
@@ -26,10 +26,10 @@ $popularDesigns = Design::join('stores', 'designs.user_id', '=', 'stores.user_id
 	->get('designs.*');
 
 // sellers
-$sellers = rows_to_objects(DBOld::select(Seller::INDEX . ' FROM ' . Seller::TABLE . ' WHERE status = 1 ORDER BY recent_sales DESC, user_id ASC LIMIT ?', [$sellerCount]), 'Ecommerce\Seller');
+$sellers = rows_to_objects(\Legacy\System\Classes\LegacyDB::select(Seller::INDEX . ' FROM ' . Seller::TABLE . ' WHERE status = 1 ORDER BY recent_sales DESC, user_id ASC LIMIT ?', [$sellerCount]), Seller::class);
 
 // customer pics
-$client_pics = DBOld::select('* FROM home_pics ORDER BY id DESC LIMIT ?', [$fanPicsCount]);
+$client_pics = \Legacy\System\Classes\LegacyDB::select('* FROM home_pics ORDER BY id DESC LIMIT ?', [$fanPicsCount]);
 
 // categories
 $categories = [

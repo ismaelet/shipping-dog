@@ -2,7 +2,7 @@
 
 use App\Helpers\StringHelper;
 
-use function Ecommerce\ecommerce_config;
+
 
 $cart = cart();
 
@@ -35,7 +35,7 @@ $cart = cart();
 	<?php } ?>
 
 	<!-- Shipping data -->
-	<?php $row_addr = DBOld::row('* FROM addresses WHERE cart_id = ?', [$cart->id]) ?>
+	<?php $row_addr = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE cart_id = ?', [$cart->id]) ?>
 
 	<input type="hidden" name="shipping_1" value="<?= StringHelper::formatWithDot($cart->shippingPrice()) ?>">
 	<input type="hidden" name="first_name" value="<?= explode(' ', $cart->address->full_name, 2)[0] ?>">

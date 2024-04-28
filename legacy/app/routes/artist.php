@@ -1,121 +1,121 @@
 <?php
 
 // artist shop
-RouteOld::add('/artist', function () {
-	ViewOld::setPage('artist');
-	ViewOld::$location = 'artist';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/artist', function () {
+	\Legacy\System\Classes\LegacyView::setPage('artist');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // collection
-RouteOld::add('/artist/collection', function () {
-	ViewOld::setPage('artist/collection');
-	ViewOld::$location = 'artist';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/artist/collection', function () {
+	\Legacy\System\Classes\LegacyView::setPage('artist/collection');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // start selling
-RouteOld::add('/sell', function () {
-	ViewOld::setPage('manage/sell');
-	ViewOld::$location = 'sell';
-	ViewOld::$title = 'Vendi';
-	ViewOld::$template = 'form';
-	ViewOld::$middlewares = ['logged'];
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/sell', function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/sell');
+	\Legacy\System\Classes\LegacyView::$location = 'sell';
+	\Legacy\System\Classes\LegacyView::$title = 'Vendi';
+	\Legacy\System\Classes\LegacyView::$template = 'form';
+	\Legacy\System\Classes\LegacyView::$middlewares = ['logged'];
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // new artist
-RouteOld::add('/manage/new', function () {
-	ViewOld::setPage('manage/new');
-	ViewOld::$location = 'artist';
-	ViewOld::$template = 'form';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/manage/new', function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/new');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::$template = 'form';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // manage - general settings
-RouteOld::add(['/manage', '/manage/settings', '/manage/settings/general'], function () {
-	ViewOld::setPage('manage/settings/general');
-	ViewOld::$location = 'artist';
-	ViewOld::$title = 'Gestione';
-	ViewOld::$template = 'manage';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add(['/manage', '/manage/settings', '/manage/settings/general'], function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/settings/general');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::$title = 'Gestione';
+	\Legacy\System\Classes\LegacyView::$template = 'manage';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // manage - portfolio
-RouteOld::add(['/manage/portfolio', '/manage/portfolio/list'], function () {
-	ViewOld::setPage('manage/portfolio/list');
-	ViewOld::$location = 'artist';
-	ViewOld::$title = 'Portfolio';
-	ViewOld::$template = 'manage';
+\Legacy\System\Classes\LegacyRoute::add(['/manage/portfolio', '/manage/portfolio/list'], function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/portfolio/list');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::$title = 'Portfolio';
+	\Legacy\System\Classes\LegacyView::$template = 'manage';
 
-	ViewOld::show();
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // manage - upload a design
-RouteOld::add('/manage/portfolio/add', function () {
-	ViewOld::setPage('manage/portfolio/add');
-	ViewOld::$location = 'artist';
-	ViewOld::$title = 'Carica lavoro';
-	ViewOld::$template = 'manage';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/manage/portfolio/add', function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/portfolio/add');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::$title = 'Carica lavoro';
+	\Legacy\System\Classes\LegacyView::$template = 'manage';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // manage - edit a product
-RouteOld::add('/manage/portfolio/product', function () {
-	ViewOld::setPage('manage/portfolio/product');
-	ViewOld::$location = 'artist';
-	ViewOld::$template = 'manage';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/manage/portfolio/product', function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/portfolio/product');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::$template = 'manage';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // manage - edit a design
-RouteOld::add('/manage/portfolio/edit', function () {
-	ViewOld::setPage('manage/portfolio/edit');
-	ViewOld::$location = 'artist';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/manage/portfolio/edit', function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/portfolio/edit');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // manage - customers pics list
-RouteOld::add(['/manage/pics', '/manage/pics/list'], function () {
-	ViewOld::setPage('manage/pics/list');
-	ViewOld::$location = 'artist';
-	ViewOld::$title = 'Foto Clienti';
-	ViewOld::$template = 'manage';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add(['/manage/pics', '/manage/pics/list'], function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/pics/list');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::$title = 'Foto Clienti';
+	\Legacy\System\Classes\LegacyView::$template = 'manage';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // manage - customers pics add
-RouteOld::add('/manage/pics/add', function () {
-	ViewOld::setPage('manage/pics/add');
-	ViewOld::$location = 'artist';
-	ViewOld::$title = 'Foto Clienti';
-	ViewOld::$template = 'manage';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/manage/pics/add', function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/pics/add');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::$title = 'Foto Clienti';
+	\Legacy\System\Classes\LegacyView::$template = 'manage';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // manage - sales list
-RouteOld::add(['/manage/sales', '/manage/sales/list'], function () {
-	ViewOld::setPage('manage/sales/list');
-	ViewOld::$location = 'artist';
-	ViewOld::$title = 'Lista Vendite';
-	ViewOld::$template = 'manage';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add(['/manage/sales', '/manage/sales/list'], function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/sales/list');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::$title = 'Lista Vendite';
+	\Legacy\System\Classes\LegacyView::$template = 'manage';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // manage - prices
-RouteOld::add('/manage/sales/prices', function () {
-	ViewOld::setPage('manage/sales/prices');
-	ViewOld::$location = 'artist';
-	ViewOld::$title = 'Prezzi';
-	ViewOld::$template = 'manage';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/manage/sales/prices', function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/sales/prices');
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::$title = 'Prezzi';
+	\Legacy\System\Classes\LegacyView::$template = 'manage';
+	\Legacy\System\Classes\LegacyView::show();
 });
 
 // manage - request a payment
-RouteOld::add('/manage/payments/request', function () {
-	ViewOld::setPage('manage/payments/request');
-	ViewOld::$title = 'Richiedi un pagamento';
-	ViewOld::$location = 'artist';
-	ViewOld::$template = 'form';
-	ViewOld::show();
+\Legacy\System\Classes\LegacyRoute::add('/manage/payments/request', function () {
+	\Legacy\System\Classes\LegacyView::setPage('manage/payments/request');
+	\Legacy\System\Classes\LegacyView::$title = 'Richiedi un pagamento';
+	\Legacy\System\Classes\LegacyView::$location = 'artist';
+	\Legacy\System\Classes\LegacyView::$template = 'form';
+	\Legacy\System\Classes\LegacyView::show();
 });

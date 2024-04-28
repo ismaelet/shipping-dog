@@ -1,6 +1,6 @@
 <?php
 
-namespace ViewManager\Ecommerce;
+namespace Legacy\Classes\ViewManager\Ecommerce;
 
 use App\Models\Ecommerce\Cart;
 

@@ -4,15 +4,15 @@
  * TEMP
  */
 
-use Ecommerce\Coupon;
+use Legacy\Classes\Ecommerce\Coupon;
 
-$tempCoupons = DBOld::select(Coupon::INDEX . ' FROM ' . Coupon::TABLE);
+$tempCoupons = \Legacy\System\Classes\LegacyDB::select(Coupon::INDEX . ' FROM ' . Coupon::TABLE);
 
 while ($tempCouponRow = $tempCoupons->fetch_assoc()) {
 	$coupon = new Coupon($tempCouponRow[Coupon::INDEX]);
 
 	if ($coupon->isExpired) {
-		DBOld::delete(Coupon::TABLE . ' WHERE ' . Coupon::INDEX . ' = ?', [$coupon->id]);
+		\Legacy\System\Classes\LegacyDB::delete(Coupon::TABLE . ' WHERE ' . Coupon::INDEX . ' = ?', [$coupon->id]);
 	}
 }
 
@@ -47,8 +47,8 @@ $buttons = [
 function _expand_results(&$entry, $field, $key, $row) {
 
 	if ($key == 2) {
-		if ($row['design_id']) $entry['value'] = DBOld::find('name FROM designs WHERE id = ?', [$row['design_id']]);
-		else if ($row['seller_id']) $entry['value'] = DBOld::find('name FROM stores WHERE user_id = ?', [$row['seller_id']]);
+		if ($row['design_id']) $entry['value'] = \Legacy\System\Classes\LegacyDB::find('name FROM designs WHERE id = ?', [$row['design_id']]);
+		else if ($row['seller_id']) $entry['value'] = \Legacy\System\Classes\LegacyDB::find('name FROM stores WHERE user_id = ?', [$row['seller_id']]);
 		else $entry['value'] = 'Tutti';
 	} else if ($key == 3) {
 		$entry['value'] = !$row['mod_us'] && !$row['mod_them'] ? 'nessuno' : '<span class="txt-bold">' . ($row['mod_us'] + $row['mod_them']) . '%</span>: ' . $row['mod_us'] . '% nostro, ' . $row['mod_them'] . '% del negozio';

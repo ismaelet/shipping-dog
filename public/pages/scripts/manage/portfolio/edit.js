@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			})
 
 		if (positions.length) {
-			await call_class_method('Ecommerce\\Product', 'updatePositionIds', '[' + positions.join(',') + ']', id)
+			await call_class_method('Legacy\\Classes\\Ecommerce\\Product', 'updatePositionIds', '[' + positions.join(',') + ']', id, null, true)
 		}
 
 		if (positions == '') {

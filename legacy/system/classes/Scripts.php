@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\System\Classes;
+
 class Scripts {
 
 	private $list = [];
@@ -16,11 +18,11 @@ class Scripts {
 		foreach ($files as $file) $this->add($this->getFileName($file), 'app');
 
 		// add page script
-		$this->add(ViewOld::$name, 'page', 4);
+		$this->add(\Legacy\System\Classes\LegacyView::$name, 'page', 4);
 
 		// add additional page scripts
-		$files = glob(SERVER_ROOT . '/pages/scripts/-expands-' . ViewOld::$name . '/*.js');
-		foreach ($files as $file) $this->add('-expands-' . ViewOld::$name . '/' . $this->getFileName($file), 'page', 5);
+		$files = glob(SERVER_ROOT . '/pages/scripts/-expands-' . \Legacy\System\Classes\LegacyView::$name . '/*.js');
+		foreach ($files as $file) $this->add('-expands-' . \Legacy\System\Classes\LegacyView::$name . '/' . $this->getFileName($file), 'page', 5);
 	}
 
 	// load a script

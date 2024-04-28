@@ -1,12 +1,12 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
-use DBOld;
-use Ecommerce\Product\Type;
+use LegacyDB;
+use Legacy\Classes\Ecommerce\Product\Type;
 
 class Shop {
 
@@ -43,7 +43,7 @@ class Shop {
 		if (isset($_GET['sort']) && in_array($_GET['sort'], ['new', 'popular', 'custom'])) {
 			$this->sort = $_GET['sort'];
 		} else if ($this->id) {
-			switch (DBOld::find('sort FROM stores WHERE user_id = ?', $this->id)) {
+			switch (\Legacy\System\Classes\LegacyDB::find('sort FROM stores WHERE user_id = ?', $this->id)) {
 				case 3:
 					$this->sort = 'custom';
 					break;
@@ -225,10 +225,10 @@ class Shop {
 
 								<div class="gender-ddown">
 									<?php
-									if ($this->id) $res = DBOld::select("
+									if ($this->id) $res = \Legacy\System\Classes\LegacyDB::select("
 											id FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
 
-									else $res = DBOld::select("
+									else $res = \Legacy\System\Classes\LegacyDB::select("
 											id FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
 
 									while ($row = $res->fetch_assoc()) {
@@ -258,10 +258,10 @@ class Shop {
 									<?php
 
 									if ($this->id) {
-										$res = DBOld::select("
+										$res = \Legacy\System\Classes\LegacyDB::select("
 											id FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
 									} else {
-										$res = DBOld::select("
+										$res = \Legacy\System\Classes\LegacyDB::select("
 											id FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
 									}
 
@@ -292,10 +292,10 @@ class Shop {
 									<?php
 
 									if ($this->id) {
-										$res = DBOld::select("
+										$res = \Legacy\System\Classes\LegacyDB::select("
 											id FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$this->id]);
 									} else {
-										$res = DBOld::select("
+										$res = \Legacy\System\Classes\LegacyDB::select("
 											id FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY name ASC");
 									}
 
@@ -323,7 +323,7 @@ class Shop {
 
 						<!-- Tags -->
 						<?php if (!$this->id) {
-							$res_tags = DBOld::select('tag FROM sys_tags WHERE hide=0 ORDER BY count DESC LIMIT 20') ?>
+							$res_tags = \Legacy\System\Classes\LegacyDB::select('tag FROM sys_tags WHERE hide=0 ORDER BY count DESC LIMIT 20') ?>
 
 							<div class="srch-box gallery">
 								<h3 class="srch-title pad-t-3 mar-b-05">Tag popolari</h3>

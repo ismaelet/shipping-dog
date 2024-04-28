@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\Classes;
+
 class Collection {
 
 	public $id;
@@ -14,7 +16,7 @@ class Collection {
 
 	function __construct($id) {
 
-		$row = DBOld::row('* FROM collections WHERE id=' . $id);
+		$row = \Legacy\System\Classes\LegacyDB::row('* FROM collections WHERE id=' . $id);
 
 		$this->id = $id;
 
@@ -44,7 +46,7 @@ class Collection {
 
 			$this->img_cust = false;
 
-			$res = DBOld::select('id, color FROM designs WHERE collection=? ORDER BY id DESC LIMIT 1', [$this->id]);
+			$res = \Legacy\System\Classes\LegacyDB::select('id, color FROM designs WHERE collection=? ORDER BY id DESC LIMIT 1', [$this->id]);
 
 			if ($res->num_rows) {
 

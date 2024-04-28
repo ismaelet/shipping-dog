@@ -1,9 +1,9 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
-use DBOld;
-use DynamicProperties;
+use LegacyDB;
+use \Legacy\System\Traits\DynamicProperties;
 
 /**
  * Coupon class
@@ -12,7 +12,7 @@ use DynamicProperties;
  */
 class Coupon {
 
-	use DynamicProperties;
+	use \Legacy\System\Traits\DynamicProperties;
 
 	public const TABLE = 'codes';
 	public const INDEX = 'id';
@@ -46,7 +46,7 @@ class Coupon {
 	// private $minPrice;
 
 	function __construct($id) {
-		if ($row = DBOld::row('* FROM codes WHERE id = ?', [$id])) {
+		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM codes WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->code = $row['code'];
 			$this->timeStart = $row['time_start'];
@@ -81,7 +81,7 @@ class Coupon {
 	 * Get methods
 	 */
 	private function getUsed() {
-		return $this->data['used'] = DBOld::exists('codes_used WHERE coupon_id = ? AND user_id = ?', [$this->id, auth()->id()]);
+		return $this->data['used'] = \Legacy\System\Classes\LegacyDB::exists('codes_used WHERE coupon_id = ? AND user_id = ?', [$this->id, auth()->id()]);
 	}
 
 	private function getIsValid() {
@@ -119,7 +119,7 @@ class Coupon {
 	 */
 	public static function generateFromCode(string $code) {
 		$code = strtoupper(trim($code));
-		$couponId = DBOld::find('id FROM codes WHERE code=?', [$code]);
+		$couponId = \Legacy\System\Classes\LegacyDB::find('id FROM codes WHERE code=?', [$code]);
 
 		return new self($couponId);
 	}

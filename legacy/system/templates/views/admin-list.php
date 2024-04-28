@@ -5,7 +5,7 @@
 <!-- Title -->
 <section id="title" class="mar-b-1">
 
-	<h1 class="txt-med"><?= ViewOld::$title ?></h1>
+	<h1 class="txt-med"><?= \Legacy\System\Classes\LegacyView::$title ?></h1>
 
 	<!-- Add button -->
 	<?php if ($pageConfig['add']) { ?>

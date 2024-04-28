@@ -26,7 +26,7 @@
 
 				<p class="data-title inlb"><?= $custom ? 'Immagine di anteprima' : 'Su capi chiari' ?></p><?php
 
-																											use Ecommerce\Product\Color;
+																											use Legacy\Classes\Ecommerce\Product\Color;
 
 																											if ($custom) info_box("Questa immagine è usata solo nelle sezioni dove compare la grafica senza un mockup. Essendo questo un prodotto particolare i mockup non vengono creati automaticamente.") ?>
 
@@ -215,7 +215,7 @@
 							<div class="inp-box color-grid">
 
 								<?php
-								$defaultColorId = DBOld::find('color_id FROM items WHERE design_id = ? AND type_id=1', [$design->id]);
+								$defaultColorId = \Legacy\System\Classes\LegacyDB::find('color_id FROM items WHERE design_id = ? AND type_id=1', [$design->id]);
 								while ($row = $res_colorD->fetch_assoc()) {
 									$color = new Color($row['id']);
 								?>

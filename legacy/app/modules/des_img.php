@@ -25,9 +25,9 @@ function des_img_gen($design) {
 		//bgr
 		$src_image = imagecreatetruecolor($w, $h);
 
-		if (isset($design->color)) $design->color = DBOld::find('color FROM designs WHERE id = ?', [$design->id]);
+		if (isset($design->color)) $design->color = \Legacy\System\Classes\LegacyDB::find('color FROM designs WHERE id = ?', [$design->id]);
 
-		$color_hex = DBOld::find('color FROM designs WHERE id = ?', [$design->id]);
+		$color_hex = \Legacy\System\Classes\LegacyDB::find('color FROM designs WHERE id = ?', [$design->id]);
 		if ($color_hex == '#FFFFFF') $color = imagecolorallocate($src_image, 255, 255, 255);
 		else $color = imagecolorallocate($src_image, 0, 0, 0);
 

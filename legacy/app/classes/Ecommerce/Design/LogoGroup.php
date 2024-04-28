@@ -1,13 +1,13 @@
 <?php
 
-namespace Ecommerce\Design;
+namespace Legacy\Classes\Ecommerce\Design;
 
-use DBOld;
-use DatabaseObject;
+use LegacyDB;
+use \Legacy\System\Traits\DatabaseObject;
 
 class LogoGroup {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'extras_folder';
 	public const INDEX = 'id';
@@ -25,6 +25,6 @@ class LogoGroup {
 	}
 
 	private function getLogos() {
-		return rows_to_objects(DBOld::select(Logo::INDEX . ' FROM ' . Logo::TABLE . ' WHERE ' . Logo::LOGO_GROUP_INDEX . ' = ?', [$this->id]), Logo::class);
+		return rows_to_objects(\Legacy\System\Classes\LegacyDB::select(Logo::INDEX . ' FROM ' . Logo::TABLE . ' WHERE ' . Logo::LOGO_GROUP_INDEX . ' = ?', [$this->id]), Logo::class);
 	}
 }

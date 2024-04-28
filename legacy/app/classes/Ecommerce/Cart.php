@@ -1,13 +1,10 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
 use App\Models\Ecommerce\Cart as EcommerceCart;
 use App\Models\Ecommerce\Order as EcommerceOrder;
-use DBOld;
 use EmailService\Ecommerce\CartStatusUpdate;
-use DatabaseObject;
-use ViewOld;
 
 /**
  * Cart Object
@@ -24,7 +21,7 @@ use ViewOld;
  */
 class Cart {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'carts';
 	public const INDEX = 'id';
@@ -82,7 +79,7 @@ class Cart {
 	}
 
 	private function getAddressId() {
-		$addressId = DBOld::find(Address::INDEX . ' FROM ' . Address::TABLE . ' WHERE ' . Address::CART_INDEX . ' = ? ORDER BY ' . Address::INDEX . ' DESC', [$this->id]);
+		$addressId = \Legacy\System\Classes\LegacyDB::find(Address::INDEX . ' FROM ' . Address::TABLE . ' WHERE ' . Address::CART_INDEX . ' = ? ORDER BY ' . Address::INDEX . ' DESC', [$this->id]);
 
 		return $addressId;
 	}
@@ -92,7 +89,7 @@ class Cart {
 	}
 
 	private function getCouponId() {
-		return DBOld::find('id FROM codes WHERE code=?', [$this->couponCode]);
+		return \Legacy\System\Classes\LegacyDB::find('id FROM codes WHERE code=?', [$this->couponCode]);
 	}
 
 	private function getLongDeliveryTime() {
@@ -242,7 +239,7 @@ class Cart {
 	}
 
 	private function getQuantity() {
-		return DBOld::count(Order::TABLE . ' WHERE ' . Order::CART_INDEX . ' = ?', [$this->id]);
+		return \Legacy\System\Classes\LegacyDB::count(Order::TABLE . ' WHERE ' . Order::CART_INDEX . ' = ?', [$this->id]);
 	}
 
 	private function getLocalDelivery() {
@@ -330,7 +327,7 @@ class Cart {
 	*/
 	private function getOrders() {
 		$orders = [];
-		$ordersRes = DBOld::select('id FROM orders WHERE cart_id = ? ORDER BY time ASC', [$this->id]);
+		$ordersRes = \Legacy\System\Classes\LegacyDB::select('id FROM orders WHERE cart_id = ? ORDER BY time ASC', [$this->id]);
 
 		while ($order = $ordersRes->fetch_assoc()) {
 			$orders[] = new Order($order['id']);
@@ -352,20 +349,20 @@ class Cart {
 		}
 
 		if ($this->quantity)
-			DBOld::update(
+			\Legacy\System\Classes\LegacyDB::update(
 				'
 				carts SET tot = ?, credit = ?, shipping_method_id = ?, shipping = ?, credit_ship = ? WHERE id = ?',
 				[$this->price, $this->usedCredit, $this->shipping_method_id, $this->fullShippingPrice, $this->shippingWithCredit, $this->id]
 			);
 		else {
-			DBOld::delete('carts WHERE id = ?', $this->id);
+			\Legacy\System\Classes\LegacyDB::delete('carts WHERE id = ?', $this->id);
 		}
 	}
 
 	public function updateTracking($tracking) {
 		$this->data['tracking'] = trim($tracking);
 
-		DBOld::update('carts SET tracking=? WHERE id = ?', [$this->tracking, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update('carts SET tracking=? WHERE id = ?', [$this->tracking, $this->id]);
 		//if ($this->tracking) send_tracking_email($this->id);
 	}
 
@@ -424,7 +421,7 @@ class Cart {
 		$shippingMethod = new ShippingMethod($shippingMethodId);
 
 		if ($shippingMethod->id) {
-			DBOld::update(self::TABLE . ' SET ' . self::SHIPPING_METHOD_INDEX . ' = ? WHERE ' . self::INDEX . ' = ?', [$shippingMethod->id, $this->id]);
+			\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET ' . self::SHIPPING_METHOD_INDEX . ' = ? WHERE ' . self::INDEX . ' = ?', [$shippingMethod->id, $this->id]);
 
 			$this->setShippingMethodId($shippingMethod->id);
 		}
@@ -433,7 +430,7 @@ class Cart {
 	}
 
 	public function updateShippingWithCredit(bool $usingCredit) {
-		DBOld::update(self::TABLE . ' SET credit_ship = ? WHERE ' . self::INDEX . ' = ?', [$usingCredit ? 1 : 0, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET credit_ship = ? WHERE ' . self::INDEX . ' = ?', [$usingCredit ? 1 : 0, $this->id]);
 
 		$this->setShippingWithCredit($usingCredit);
 
@@ -444,7 +441,7 @@ class Cart {
 		$paymentMethod = new PaymentMethod($paymentMethodId);
 
 		if ($paymentMethod->id) {
-			DBOld::update(self::TABLE . ' SET ' . self::PAYMENT_METHOD_INDEX . ' = ? WHERE ' . self::INDEX . ' = ?', [$paymentMethod->id, $this->id]);
+			\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET ' . self::PAYMENT_METHOD_INDEX . ' = ? WHERE ' . self::INDEX . ' = ?', [$paymentMethod->id, $this->id]);
 
 			$this->setPaymentMethodId($paymentMethod->id);
 		}
@@ -462,7 +459,7 @@ class Cart {
 	}
 
 	public function updateStatusId(int $statusId, $sendNotification = true) {
-		DBOld::update(self::TABLE . ' SET ' . self::STATUS_INDEX . ' = ?, ' . self::STEP_INDEX . ' = ? WHERE ' . self::INDEX . ' = ?', [$statusId, count(ecommerce_config('cart-page')['steps']), $this->id]);
+		\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET ' . self::STATUS_INDEX . ' = ?, ' . self::STEP_INDEX . ' = ? WHERE ' . self::INDEX . ' = ?', [$statusId, count(ecommerce_config('cart-page')['steps']), $this->id]);
 
 		$this->setStatusId($statusId);
 
@@ -485,9 +482,9 @@ class Cart {
 	* Istance methods
 	*/
 	public function delete() {
-		DBOld::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
-		DBOld::delete(Order::TABLE . ' WHERE ' . Order::CART_INDEX . ' = ?', [$this->id]);
-		DBOld::delete(Address::TABLE . ' WHERE ' . Address::CART_INDEX . ' = ?', [$this->id]);
+		\Legacy\System\Classes\LegacyDB::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
+		\Legacy\System\Classes\LegacyDB::delete(Order::TABLE . ' WHERE ' . Order::CART_INDEX . ' = ?', [$this->id]);
+		\Legacy\System\Classes\LegacyDB::delete(Address::TABLE . ' WHERE ' . Address::CART_INDEX . ' = ?', [$this->id]);
 	}
 
 	/*
@@ -495,7 +492,7 @@ class Cart {
 	*/
 	public function removeCoupon() {
 		if ($this->couponId) {
-			DBOld::update("carts SET code='' WHERE id = ?", [$this->id]);
+			\Legacy\System\Classes\LegacyDB::update("carts SET code='' WHERE id = ?", [$this->id]);
 
 			foreach ($this->orders as $order) {
 				$order->resetDiscount();
@@ -516,7 +513,7 @@ class Cart {
 	*/
 	public function advance(int|null $nextStepId = null) {
 		if (!$nextStepId) {
-			$currentStepId = ViewOld::get('currentStepId');
+			$currentStepId = \Legacy\System\Classes\LegacyView::get('currentStepId');
 
 			if ($this->stepId == $currentStepId) {
 				$nextStepId = $currentStepId + 1;
@@ -538,23 +535,23 @@ class Cart {
 
 	public function confirm(bool $sendNotification = true): void {
 		// update cart time
-		DBOld::update(self::TABLE . ' SET time = NOW(), created_at = NOW() WHERE ' . self::INDEX . ' = ?', [$this->id]);
+		\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET time = NOW(), created_at = NOW() WHERE ' . self::INDEX . ' = ?', [$this->id]);
 
 		// update seller's balance
-		DBOld::update(Seller::TABLE . ' SET earned = earned + ? WHERE ' . Seller::INDEX . ' = ?', [$this->gain, $this->customerId]);
+		\Legacy\System\Classes\LegacyDB::update(Seller::TABLE . ' SET earned = earned + ? WHERE ' . Seller::INDEX . ' = ?', [$this->gain, $this->customerId]);
 
 		if ($this->customer->isSeller) {
-			DBOld::update(Seller::TABLE . ' SET credit = credit - ? WHERE ' . Seller::INDEX . ' = ?', [$this->usedCredit, $this->customerId]);
+			\Legacy\System\Classes\LegacyDB::update(Seller::TABLE . ' SET credit = credit - ? WHERE ' . Seller::INDEX . ' = ?', [$this->usedCredit, $this->customerId]);
 		}
 
 		// remove used coupons
 		if ($this->couponId) {
 			if ($this->coupon->onePerCustomer) {
-				DBOld::add('codes_used (coupon_id, user_id)', [$this->couponId, $this->customerId]);
+				\Legacy\System\Classes\LegacyDB::add('codes_used (coupon_id, user_id)', [$this->couponId, $this->customerId]);
 			}
 
 			if (!$this->coupon->permanent) {
-				DBOld::delete(Coupon::TABLE . ' WHERE ' . Coupon::INDEX . ' = ?', [$this->couponId]);
+				\Legacy\System\Classes\LegacyDB::delete(Coupon::TABLE . ' WHERE ' . Coupon::INDEX . ' = ?', [$this->couponId]);
 			}
 		}
 
@@ -577,7 +574,7 @@ class Cart {
 		foreach ($this->orders as $order) {
 			$order = EcommerceOrder::find($order->id);
 
-			$inventoryData = DBOld::row(
+			$inventoryData = \Legacy\System\Classes\LegacyDB::row(
 				'
 				inventory.id as inventoryId
 				FROM inventory
@@ -591,12 +588,12 @@ class Cart {
 			if ($inventoryData) {
 				$inventoryId = $inventoryData['inventoryId'];
 
-				DBOld::update('orders SET inventory = 1 WHERE id = ?', [$order->id]);
-				DBOld::delete('inventory WHERE id = ?', [$inventoryId]);
+				\Legacy\System\Classes\LegacyDB::update('orders SET inventory = 1 WHERE id = ?', [$order->id]);
+				\Legacy\System\Classes\LegacyDB::delete('inventory WHERE id = ?', [$inventoryId]);
 			}
 
 			if ($this->customerId != $order->seller_id) {
-				DBOld::update('stores SET credit = credit + ? WHERE user_id = ?', [($order->gain * .1), $order->seller_id]);
+				\Legacy\System\Classes\LegacyDB::update('stores SET credit = credit + ? WHERE user_id = ?', [($order->gain * .1), $order->seller_id]);
 			}
 		}
 	}
@@ -677,7 +674,7 @@ class Cart {
 				}
 			}
 
-			DBOld::update(self::TABLE . ' SET code = ? WHERE ' . self::INDEX . ' = ?', [$coupon->code, $this->id]);
+			\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET code = ? WHERE ' . self::INDEX . ' = ?', [$coupon->code, $this->id]);
 
 			$this->data['couponCode'] = $coupon->code;
 			$this->data = [];

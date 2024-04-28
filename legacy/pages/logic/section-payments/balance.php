@@ -4,9 +4,9 @@
 * Page configurations
 */
 
-use Ecommerce\Seller;
+use Legacy\Classes\Ecommerce\Seller;
 
-use function Ecommerce\format_price;
+
 
 $pageConfig['add'] = false;
 

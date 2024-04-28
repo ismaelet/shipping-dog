@@ -1,9 +1,9 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
-use DBOld;
-use DatabaseObject;
+use LegacyDB;
+use \Legacy\System\Traits\DatabaseObject;
 
 /**
  * Shipping method
@@ -25,7 +25,7 @@ use DatabaseObject;
  */
 class ShippingMethod {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'sys_shipping';
 	public const INDEX = 'id';
@@ -56,7 +56,7 @@ class ShippingMethod {
 	}
 
 	private function getAssociatedCart() {
-		return cart_id() ? \App\Helpers\App::cartOld() : null;
+		return cart_id() ? cart_old() : null;
 	}
 
 	private function getProductQuantity() {
@@ -67,7 +67,7 @@ class ShippingMethod {
 		$price = 0;
 
 		// fetch shipping data
-		$shipping = DBOld::row('* FROM sys_shipping WHERE id = ?', [$this->id]);
+		$shipping = \Legacy\System\Classes\LegacyDB::row('* FROM sys_shipping WHERE id = ?', [$this->id]);
 
 		if ($shipping) {
 			// calculate price
@@ -123,7 +123,7 @@ class ShippingMethod {
 		$daysPassed = 0;
 		$workDaysPassed = 0;
 
-		$cart = $this->associatedCart ?: \App\Helpers\App::cartOld();
+		$cart = $this->associatedCart ?: cart_old();
 		$cartTime = $cart->statusId ? $cart->time : date('Y-m-d');
 
 		$weekDayNumber = date('N', strtotime($cartTime));

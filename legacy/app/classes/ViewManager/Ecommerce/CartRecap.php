@@ -1,13 +1,13 @@
 <?php
 
-namespace ViewManager\Ecommerce;
+namespace Legacy\Classes\ViewManager\Ecommerce;
 
 
 
 class CartRecap {
 
 	public static function render(object $cart = null) {
-		$cart = $cart ?: \App\Helpers\App::cartOld();
+		$cart = $cart ?: cart_old();
 
 		ob_start();
 ?>

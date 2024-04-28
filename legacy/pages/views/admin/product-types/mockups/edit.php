@@ -1,6 +1,6 @@
 {% block content %}
 
-<h1 class="section-heading mar-b-3"><?= ViewOld::$title ?></h1>
+<h1 class="section-heading mar-b-3"><?= \Legacy\System\Classes\LegacyView::$title ?></h1>
 
 <div class="grid gap-8">
 	<div class="panel">

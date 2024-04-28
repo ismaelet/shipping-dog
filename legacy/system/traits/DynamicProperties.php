@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\System\Traits;
+
 trait DynamicProperties {
 
 	private $data = [];

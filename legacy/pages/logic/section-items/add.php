@@ -1,8 +1,8 @@
 <?php
 
-use Ecommerce\Product;
-use Ecommerce\Product\Color;
-use Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Product\Type;
 
 $id = $_GET['id'] ?? null;
 $product = $id ? new Product($id) : null;
@@ -25,7 +25,7 @@ $sellerInput = [
 
 // fetch types
 $types = [];
-$typeRows = DBOld::select('id FROM items_types ORDER BY category ASC, id ASC');
+$typeRows = \Legacy\System\Classes\LegacyDB::select('id FROM items_types ORDER BY category ASC, id ASC');
 
 while ($typeRow = $typeRows->fetch_assoc()) {
 	$type = new Type($typeRow['id']);
@@ -34,7 +34,7 @@ while ($typeRow = $typeRows->fetch_assoc()) {
 
 // fetch colors
 $colors = [];
-$colorRows = DBOld::select('id FROM items_colors ORDER BY reorder ASC, id ASC');
+$colorRows = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors ORDER BY reorder ASC, id ASC');
 
 while ($colorRow = $colorRows->fetch_assoc()) {
 	$color = new Color($colorRow['id']);
@@ -80,9 +80,9 @@ function _expand_add($table) {
 	$defaultColorId = $_POST['default-color-id'];
 	$colors = implode(',', $_POST['colors']);
 
-	$productId = DBOld::add($table . ' (name, design_id, user_id, type_id, color_id, colors, positions, status)', [$name, 0, $seller_id, $type_id, $defaultColorId, $colors, 1, 1]);
+	$productId = \Legacy\System\Classes\LegacyDB::add($table . ' (name, design_id, user_id, type_id, color_id, colors, positions, status)', [$name, 0, $seller_id, $type_id, $defaultColorId, $colors, 1, 1]);
 
-	DBOld::add('items_prices (product_id, price)', [$productId, $price]);
+	\Legacy\System\Classes\LegacyDB::add('items_prices (product_id, price)', [$productId, $price]);
 }
 
 // edit
@@ -94,12 +94,12 @@ function _expand_edit($table, $inputs, $index, $id) {
 	$defaultColorId = $_POST['default-color-id'];
 	$colors = implode(',', $_POST['colors']);
 
-	DBOld::update($table . ' SET name = ?, user_id = ?, type_id = ?, color_id = ?, colors=? WHERE id = ?', [$name, $seller_id, $type_id, $defaultColorId, $colors, $id]);
+	\Legacy\System\Classes\LegacyDB::update($table . ' SET name = ?, user_id = ?, type_id = ?, color_id = ?, colors=? WHERE id = ?', [$name, $seller_id, $type_id, $defaultColorId, $colors, $id]);
 
-	if (DBOld::exists('items_prices WHERE product_id = ?', [$id])) {
-		DBOld::update('items_prices SET price=? WHERE product_id = ?', [$price, $id]);
+	if (\Legacy\System\Classes\LegacyDB::exists('items_prices WHERE product_id = ?', [$id])) {
+		\Legacy\System\Classes\LegacyDB::update('items_prices SET price=? WHERE product_id = ?', [$price, $id]);
 	} else {
-		DBOld::add('items_prices (product_id, price)', [$id, $price]);
+		\Legacy\System\Classes\LegacyDB::add('items_prices (product_id, price)', [$id, $price]);
 	}
 
 	if ($_FILES['cover-image']['name']) {

@@ -33,8 +33,8 @@ if (isset($_POST['submit'])) {
 
 	$priceDifference = (float) str_replace(',', '.', $_POST['price-difference']);
 
-	DBOld::update('prices_default SET price=price+? WHERE type_id=?', [$priceDifference, $type_id]);
-	DBOld::update('prices_stores SET price=price+? WHERE type_id=?', [$priceDifference, $type_id]);
+	\Legacy\System\Classes\LegacyDB::update('prices_default SET price=price+? WHERE type_id=?', [$priceDifference, $type_id]);
+	\Legacy\System\Classes\LegacyDB::update('prices_stores SET price=price+? WHERE type_id=?', [$priceDifference, $type_id]);
 
 	redirect_old();
 }

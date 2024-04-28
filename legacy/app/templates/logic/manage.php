@@ -1,6 +1,6 @@
 <?php
 
-use Ecommerce\Seller;
+use Legacy\Classes\Ecommerce\Seller;
 
 global $user, $seller;
 
@@ -11,7 +11,7 @@ if (!$seller->id) {
 }
 
 // setup navigation bar
-$this_path = str_replace('manage/', '', ViewOld::$name);
+$this_path = str_replace('manage/', '', \Legacy\System\Classes\LegacyView::$name);
 $this_cat = substr($this_path, 0, strpos($this_path, '/'));
 $this_page = substr($this_path, strpos($this_path, '/') + 1);
 

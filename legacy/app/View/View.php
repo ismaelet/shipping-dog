@@ -1,8 +1,8 @@
 <?php
 
-namespace App\View;
+namespace Legacy\View;
 
-use App\View\Components\Component;
+use Legacy\View\Components\Component;
 
 class View {
 

@@ -1,7 +1,7 @@
 <?php
 
-use Ecommerce\Order;
-use Ecommerce\Product\Size;
+use Legacy\Classes\Ecommerce\Order;
+use Legacy\Classes\Ecommerce\Product\Size;
 
 ?>
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\System\Classes;
+
 class StyleLoader {
 
 	private static $list = [];
@@ -66,6 +68,8 @@ class StyleLoader {
 
 	// load all the styles
 	public static function load() {
+		self::__constructStatic();
+
 		$list = [];
 
 		sort_subvalue(self::$list, 0);

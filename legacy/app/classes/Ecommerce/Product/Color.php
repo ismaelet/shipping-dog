@@ -1,12 +1,12 @@
 <?php
 
-namespace Ecommerce\Product;
+namespace Legacy\Classes\Ecommerce\Product;
 
-use DatabaseObject;
+use \Legacy\System\Traits\DatabaseObject;
 
 class Color {
 
-	use DatabaseObject;
+	use \Legacy\System\Traits\DatabaseObject;
 
 	public const TABLE = 'items_colors';
 	public const INDEX = 'id';

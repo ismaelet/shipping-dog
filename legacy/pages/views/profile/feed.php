@@ -1,6 +1,6 @@
 <?php
 
-use User\FeedEntry;
+use Legacy\Classes\User\FeedEntry;
 
 ?>
 

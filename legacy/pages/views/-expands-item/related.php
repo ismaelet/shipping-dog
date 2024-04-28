@@ -1,6 +1,6 @@
 <?php
 
-use App\View\Components\Interactions\FollowButton;
+use Legacy\View\Components\Interactions\FollowButton;
 
 ?>
 

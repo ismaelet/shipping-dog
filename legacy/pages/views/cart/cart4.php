@@ -1,8 +1,8 @@
 <?php
 
-use Ecommerce\ShippingMethod;
-use ViewManager\Ecommerce\CartFlowBar;
-use ViewManager\Ecommerce\CartRecap;
+use Legacy\Classes\Ecommerce\ShippingMethod;
+use Legacy\Classes\ViewManager\Ecommerce\CartFlowBar;
+use Legacy\Classes\ViewManager\Ecommerce\CartRecap;
 
 
 
@@ -28,7 +28,7 @@ use ViewManager\Ecommerce\CartRecap;
 
 			<?php } ?>
 
-			<?php if (\App\Helpers\App::cartOld()->shippingMethodId == ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID) { ?>
+			<?php if (cart_old()->shippingMethodId == ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID) { ?>
 
 				<p class="center-content input-warning">Hai scelto di ritirare il capo in sede, quindi l'ordine NON verrà spedito, ma dovrai ritirarlo nella nostra sede in Piazza Scopoli, 9, 38033 Cavalese (TN)</p>
 
@@ -45,7 +45,7 @@ use ViewManager\Ecommerce\CartRecap;
 
 						<label class="pay_row">
 							<div class="pay_cbx_box">
-								<input type="radio" class="inp_cbx pay_cbx" name="cbx_pay" value="<?= $row['id'] ?>" <?php if (\App\Helpers\App::cartOld()->paymentMethodId == $row['id']) echo 'checked'; ?>>
+								<input type="radio" class="inp_cbx pay_cbx" name="cbx_pay" value="<?= $row['id'] ?>" <?php if (cart_old()->paymentMethodId == $row['id']) echo 'checked'; ?>>
 
 								<div class="icon">
 									<div class="icon-dot"></div>

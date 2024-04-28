@@ -34,15 +34,15 @@ function _expand_add($tbl, $inputs) {
 
 	$shipping_method_id = $_POST['shipping_method_id'];
 
-	$user_id = 'T' . DBOld::add('temp_users (ID) VALUES (NULL)');
+	$user_id = 'T' . \Legacy\System\Classes\LegacyDB::add('temp_users (ID) VALUES (NULL)');
 
 	//generate cart
-	$cart_id = DBOld::add('carts (user_id, shipping_method_id, status) VALUES (?, ?, 1)', [$user_id, $shipping_method_id]);
+	$cart_id = \Legacy\System\Classes\LegacyDB::add('carts (user_id, shipping_method_id, status) VALUES (?, ?, 1)', [$user_id, $shipping_method_id]);
 
-	DBOld::update('carts SET time=NOW() WHERE id = ?', [$cart_id]);
+	\Legacy\System\Classes\LegacyDB::update('carts SET time=NOW() WHERE id = ?', [$cart_id]);
 
 	//generate address
-	$id = DBOld::add('addresses (user_id, cart_id) VALUES (?, ?)', [$user_id, $cart_id]);
+	$id = \Legacy\System\Classes\LegacyDB::add('addresses (user_id, cart_id) VALUES (?, ?)', [$user_id, $cart_id]);
 
 	//Save address
 	$addrRaw = $_POST['address'];
@@ -108,7 +108,7 @@ function _expand_add($tbl, $inputs) {
 	if (empty($reg)) $reg = $city;
 	$reg = (strlen(trim($reg)) == 2) ? strtoupper(trim($reg)) : ucwords(strtolower(trim($reg)));
 
-	DBOld::update('addresses SET full_name = ?, address=?, number=?, zip=?, city=?, region=? WHERE id = ?', [$full_name, $addr, $num, $zip, $city, $reg, $id]);
+	\Legacy\System\Classes\LegacyDB::update('addresses SET full_name = ?, address=?, number=?, zip=?, city=?, region=? WHERE id = ?', [$full_name, $addr, $num, $zip, $city, $reg, $id]);
 
 	//get contact data
 	$addrRaw = $_POST['contacts'];
@@ -132,5 +132,5 @@ function _expand_add($tbl, $inputs) {
 	$email = strtolower(trim($email));
 	$phone = trim($phone);
 
-	DBOld::update('addresses SET email=?, phone=? WHERE id = ?', [$email, $phone, $id]);
+	\Legacy\System\Classes\LegacyDB::update('addresses SET email=?, phone=? WHERE id = ?', [$email, $phone, $id]);
 }

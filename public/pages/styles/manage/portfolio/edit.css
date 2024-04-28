@@ -318,14 +318,9 @@ img {
 .off-btn {
 	background: linear-gradient(#ffa525, #e58700);
 }
-.on-btn {
-	background: linear-gradient(#ddd, #eee);
-}
+
 .off-btn .btn-bgr {
 	background: linear-gradient(#e58700, #ffa525);
-}
-.on-btn .btn-bgr {
-	background: linear-gradient(#eee, #ddd);
 }
 
 /* Item panel */

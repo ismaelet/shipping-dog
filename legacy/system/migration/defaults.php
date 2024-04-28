@@ -3,7 +3,7 @@
 global $con;
 
 // config table
-DBOld::execute('
+\Legacy\System\Classes\LegacyDB::execute('
 	CREATE TABLE IF NOT EXISTS config (
 		id INT(3) AUTO_INCREMENT PRIMARY KEY,
 		name VARCHAR(30),
@@ -11,10 +11,10 @@ DBOld::execute('
 	)
 ');
 
-if (!DBOld::exists('config WHERE name="public"')) DBOld::add('config (name, value) VALUES (?, ?)', ['public', 1]);
+if (!\Legacy\System\Classes\LegacyDB::exists('config WHERE name="public"')) \Legacy\System\Classes\LegacyDB::add('config (name, value) VALUES (?, ?)', ['public', 1]);
 
 // users table
-DBOld::execute('
+\Legacy\System\Classes\LegacyDB::execute('
 	CREATE TABLE IF NOT EXISTS users (
 		id INT(11) AUTO_INCREMENT PRIMARY KEY,
 		username VARCHAR(50) DEFAULT "",
@@ -29,7 +29,7 @@ DBOld::execute('
 ');
 
 // password resets
-DBOld::execute('
+\Legacy\System\Classes\LegacyDB::execute('
 	CREATE TABLE IF NOT EXISTS user_resets (
 		id INT(11) AUTO_INCREMENT PRIMARY KEY,
 		user_id INT(11),

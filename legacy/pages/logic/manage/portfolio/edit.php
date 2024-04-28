@@ -2,11 +2,11 @@
 
 use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Design as EcommerceDesign;
-use Ecommerce\Design;
-use Ecommerce\Product;
-use Ecommerce\Product\Color;
-use Ecommerce\Product\PreviewOld;
-use Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Design;
+use Legacy\Classes\Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Product\PreviewOld;
+use Legacy\Classes\Ecommerce\Product\Type;
 
 // setup page
 $error = $_SESSION['error'] ?? false;
@@ -28,12 +28,12 @@ if (!$design) {
 $design = new Design($id);
 $seller = $design->seller;
 
-ViewOld::$title = 'Modifica: ' . $design->name;
+\Legacy\System\Classes\LegacyView::$title = 'Modifica: ' . $design->name;
 
 $custom = $design->custom;
 
 // generate data
-$res_colorD = DBOld::select('id FROM items_colors WHERE hidden = 0 ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
+$res_colorD = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors WHERE hidden = 0 ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
 
 // reupload design
 if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
@@ -67,11 +67,11 @@ if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
 	$ratio = round($reso[0] / $reso[1], 2);
 
 	// update ratio
-	DBOld::update('designs SET ratio=? WHERE id = ?', [$ratio, $id]);
+	\Legacy\System\Classes\LegacyDB::update('designs SET ratio=? WHERE id = ?', [$ratio, $id]);
 
 	if (!$design->custom) {
 		// delete item images
-		$res = DBOld::select('id from items WHERE design_id = ?', [$id]);
+		$res = \Legacy\System\Classes\LegacyDB::select('id from items WHERE design_id = ?', [$id]);
 		while ($row = $res->fetch_assoc()) PreviewOld::deleteImages($row['id']);
 	}
 
@@ -113,14 +113,14 @@ if (isset($_POST['colors-submit'])) {
 	// get default color
 	$color = new Color($_POST['colorD'][0]);
 
-	$types = DBOld::select('id, colors FROM items_types');
+	$types = \Legacy\System\Classes\LegacyDB::select('id, colors FROM items_types');
 
 	// update colors of items
 	while ($row = $types->fetch_assoc()) {
 
 		$type = new Type($row['id']);
 
-		$productID = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$id, $type->id]);
+		$productID = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$id, $type->id]);
 
 		$product = new Product($productID);
 
@@ -131,7 +131,7 @@ if (isset($_POST['colors-submit'])) {
 
 			$colors = implode(',', $colors);
 
-			DBOld::update('items SET color_id = ?, colors=? WHERE id = ?', [$color->id, $colors, $product->id]);
+			\Legacy\System\Classes\LegacyDB::update('items SET color_id = ?, colors=? WHERE id = ?', [$color->id, $colors, $product->id]);
 		}
 	}
 
@@ -141,7 +141,7 @@ if (isset($_POST['colors-submit'])) {
 
 	$colorHex = $_POST['color-hex'];
 
-	DBOld::update('designs SET color=? WHERE id = ?', [$colorHex, $id]);
+	\Legacy\System\Classes\LegacyDB::update('designs SET color=? WHERE id = ?', [$colorHex, $id]);
 
 	// refresh
 	$_SESSION['done'] = 'colors';
@@ -192,7 +192,7 @@ if (isset($_POST['update-position'])) {
 // disable item
 if (isset($_POST['off']) || isset($_POST['on'])) {
 	$type_id = $_POST['type_id'];
-	$productId = DBOld::find('id FROM items WHERE design_id = ? AND type_id = ?', [$id, $type_id]);
+	$productId = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$id, $type_id]);
 	$activate = isset($_POST['on']);
 
 	if ($productId) {

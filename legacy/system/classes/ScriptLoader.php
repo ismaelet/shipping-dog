@@ -1,5 +1,7 @@
 <?php
 
+namespace Legacy\System\Classes;
+
 class ScriptLoader {
 
 	private static $list = [];
@@ -58,6 +60,8 @@ class ScriptLoader {
 	*/
 	// load all the scripts
 	public static function load() {
+		self::__constructStatic();
+
 		$list = [];
 
 		sort_subvalue(self::$list, 0);

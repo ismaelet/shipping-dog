@@ -15,17 +15,17 @@ function styles($view) {
 	foreach ($files as $file) load_style($file);
 
 	//load template and page styles
-	if (file_exists($file = SERVER_ROOT . '/app/templates/styles/' . ViewOld::$template . '.css')) load_style($file);
-	else if (file_exists($file = SERVER_ROOT . '/system/templates/styles/' . ViewOld::$template . '.css')) load_style($file);
+	if (file_exists($file = SERVER_ROOT . '/app/templates/styles/' . \Legacy\System\Classes\LegacyView::$template . '.css')) load_style($file);
+	else if (file_exists($file = SERVER_ROOT . '/system/templates/styles/' . \Legacy\System\Classes\LegacyView::$template . '.css')) load_style($file);
 
-	if (file_exists($file = SERVER_ROOT . '/pages/styles/' . ViewOld::$name . '.css')) load_style($file);
+	if (file_exists($file = SERVER_ROOT . '/pages/styles/' . \Legacy\System\Classes\LegacyView::$name . '.css')) load_style($file);
 
 	//load styles in the page css folder, if present
-	$files = glob(SERVER_ROOT . '/pages/styles/' . ViewOld::$name . '/*.css');
+	$files = glob(SERVER_ROOT . '/pages/styles/' . \Legacy\System\Classes\LegacyView::$name . '/*.css');
 	foreach ($files as $file) load_style($file);
 
 	//load additional styles, if present
-	foreach (ViewOld::$styles as $file) load_style($file);
+	foreach (\Legacy\System\Classes\LegacyView::$styles as $file) load_style($file);
 }
 
 //load a style

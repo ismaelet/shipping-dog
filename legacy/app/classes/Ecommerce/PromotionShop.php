@@ -1,10 +1,10 @@
 <?php
 
-namespace Ecommerce;
+namespace Legacy\Classes\Ecommerce;
 
-use DBOld;
-use DynamicProperties;
-use ViewManager\Ecommerce\PromotionShopTemplate;
+use LegacyDB;
+use \Legacy\System\Traits\DynamicProperties;
+use Legacy\Classes\ViewManager\Ecommerce\PromotionShopTemplate;
 
 /**
  * PromotionShop
@@ -13,7 +13,7 @@ use ViewManager\Ecommerce\PromotionShopTemplate;
  */
 class PromotionShop {
 
-	use DynamicProperties;
+	use \Legacy\System\Traits\DynamicProperties;
 
 	private const LIMIT = 40;
 	private const ALLOWED_SORT_TYPES = ['new', 'price'];
@@ -23,11 +23,11 @@ class PromotionShop {
 	}
 
 	private function getPromotions() {
-		return rows_to_objects(DBOld::select(Promotion::INDEX . ' FROM ' . Promotion::TABLE . ' LIMIT ?', [self::LIMIT]), Promotion::class);
+		return rows_to_objects(\Legacy\System\Classes\LegacyDB::select(Promotion::INDEX . ' FROM ' . Promotion::TABLE . ' LIMIT ?', [self::LIMIT]), Promotion::class);
 	}
 
 	private function getPromotionCount() {
-		return DBOld::count(Promotion::TABLE);
+		return \Legacy\System\Classes\LegacyDB::count(Promotion::TABLE);
 	}
 
 	private function getSortBy() {
