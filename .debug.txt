@@ -1,98 +1,98 @@
-[V] Home
-	[V] Header
-		[V] Color scheme switcher
-	[V] Footer
+[X] Home
+	[X] Header
+		[X] Color scheme switcher
+	[X] Footer
 
-[V] Search
+[X] Search
 
-[V] Shop
-	[V] Search filter (popular, new, custom => pokememes)
-	[V] Sort filter
-	[V] Gender filter
-	[V] Accessory filter
-	[V] Tag filter
-	[V] Like button
-	[V] Official shop
-	[V] Individual shop
-		[V] Follow button
-		[V] Collection
+[X] Shop
+	[X] Search filter (popular, new, custom => pokememes)
+	[X] Sort filter
+	[X] Gender filter
+	[X] Accessory filter
+	[X] Tag filter
+	[X] Like button
+	[X] Official shop
+	[X] Individual shop
+		[X] Follow button
+		[X] Collection
 
-[V] Product Page
-	[V] Logos
-	[V] Change color
-	[V] Change position
-	[V] Generate new image
-	[V] Related products
-	[V] Description
-	[V] Stock image
-	[V] Size guide
-	[V] Owner price
-	[V] Customer price
+[X] Product Page
+	[X] Logos
+	[X] Change color
+	[X] Change position
+	[X] Generate new image
+	[X] Related products
+	[X] Description
+	[X] Stock image
+	[X] Size guide
+	[X] Owner price
+	[X] Customer price
 
-[V] Auth pages
-	[V] Login
-	[V]	Logout
-	[V] Register
-	[V] Password reset
-		[V] Check if email is received
-		[V] Reset page
+[X] Auth pages
+	[X] Login
+	[X]	Logout
+	[X] Register
+	[X] Password reset
+		[X] Check if email is received
+		[X] Reset page
 
-[V] Seller dashboard
-	[V] Settings
-		[V] Edit the settings
-	[V] Porfolio
-		[V] List
-		[V] Add
-		[V] Edit
-	[V] Sales list
-		[V] By time
-		[V] By design
-	[V] Edit prices
-	[V] Customer photos
-		[V] Index
-		[V] Create
+[X] Seller dashboard
+	[X] Settings
+		[X] Edit the settings
+	[X] Porfolio
+		[X] List
+		[X] Add
+		[X] Edit
+	[X] Sales list
+		[X] By time
+		[X] By design
+	[X] Edit prices
+	[X] Customer photos
+		[X] Index
+		[X] Create
 
-[V]	Profile
-	[V] Feed
-	[V] Personal data
-		[V] Try to edit the data
-	[V] Order list
-		[V] Order page
-	[V] Wishlist
+[X]	Profile
+	[X] Feed
+	[X] Personal data
+		[X] Try to edit the data
+	[X] Order list
+		[X] Order page
+	[X] Wishlist
 
-[V] Cart
-	[V] Add order to cart as guest
-	[V] Add order to cart as user
-	[V] Remove an order from the cart
-	[V] Change shipping method
-	[V] Add coupon
-	[V] Paypal redirect
-	[V] Complete the order for free
+[X] Cart
+	[X] Add order to cart as guest
+	[X] Add order to cart as user
+	[X] Remove an order from the cart
+	[X] Change shipping method
+	[X] Add coupon
+	[X] Paypal redirect
+	[X] Complete the order for free
 
-[V] Order confirmation
-	[V] Order confirmation
-		[V] Free product
-	[V] Confirmation email
+[X] Order confirmation
+	[X] Order confirmation
+		[X] Free product
+	[X] Confirmation email
 
-[V] Support
-	[V] Contacts
-	[V] FAQ
-	[V] Sale terms
-	[V] Contract
-	[V] Privacy Policy
-	[V] Order status
-	[V] Change size
-		[V] Paypal redirect
+[X] Support
+	[X] Contacts
+	[X] FAQ
+	[X] Sale terms
+	[X] Contract
+	[X] Privacy Policy
+	[X] Order status
+	[X] Change size
+		[X] Paypal redirect
 
 [X] Admin dashboard
-	[V] Dashboard
+	[X] Dashboard
 	[X] Orders
 		[X] Index
 		[X] Show
 		[X] Update
-		[V] Order log
-		[V] Product log
-	[V] Users
+		[X] Order log
+		[X] Product log
+	[X] Users
 		[X] Index
 		[X] Edit
 	[X] Shops
@@ -102,7 +102,7 @@
 	[X] Coupons
 		[X] Index
 		[X]	Create
-	[V] Labels
+	[X] Labels
 
 
 ------------------- RARE CHECKS -------------------

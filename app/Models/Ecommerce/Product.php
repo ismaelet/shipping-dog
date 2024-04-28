@@ -218,7 +218,7 @@ class Product extends Model {
 	 * Get the product's url
 	 */
 	public function url(): string {
-		return env('APP_ENV') == 'local' ? '/products/' . $this->slug() : '/shop/item?id=' . $this->id;
+		return '/products/' . $this->slug();
 	}
 
 	public function fullUrl(?int $color_id = null, ?int $position_id = null): string {

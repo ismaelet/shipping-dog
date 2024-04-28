@@ -28,12 +28,12 @@ use Legacy\View\Components\Interactions\FollowButton;
 </section>
 
 <!-- Tags -->
-<?php if ($oldProduct->design->tags) { ?>
+<?php if ($legacyProduct->design->tags) { ?>
 
 	<section id="tag-sec" class="">
 		<div id="tag-block" class="main-wrap txt-cen pad-t-3">
 
-			<?php foreach ($oldProduct->design->tags as $slug) {
+			<?php foreach ($legacyProduct->design->tags as $slug) {
 				$slug = str_replace('#', '', $slug);
 			?>
 

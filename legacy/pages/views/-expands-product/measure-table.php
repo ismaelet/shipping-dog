@@ -23,9 +23,9 @@
 
 					<p class="txt-bold txt-line">Altezza:</p>
 
-					<?php foreach ($oldProduct->type->sizes as $size) {
+					<?php foreach ($legacyProduct->type->sizes as $size) {
 
-						$measures = \Legacy\System\Classes\LegacyDB::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$oldProduct->type->id, $size]);
+						$measures = \Legacy\System\Classes\LegacyDB::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$legacyProduct->type->id, $size]);
 
 					?>
 
@@ -39,8 +39,8 @@
 
 				</div>
 
-				<?php if (\Legacy\System\Classes\LegacyDB::exists('items_types_measures WHERE type_id=? AND size=?', [$oldProduct->type->id, 'mat'])) { ?>
-					<p class="">Composizione: <?= \Legacy\System\Classes\LegacyDB::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$oldProduct->type->id, 'mat']) ?></p>
+				<?php if (\Legacy\System\Classes\LegacyDB::exists('items_types_measures WHERE type_id=? AND size=?', [$legacyProduct->type->id, 'mat'])) { ?>
+					<p class="">Composizione: <?= \Legacy\System\Classes\LegacyDB::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$legacyProduct->type->id, 'mat']) ?></p>
 				<?php } ?>
 
 			</div>

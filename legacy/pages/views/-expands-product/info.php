@@ -3,18 +3,18 @@
 $desc = null;
 $dett = null;
 
-$res = \Legacy\System\Classes\LegacyDB::select('* FROM items_info WHERE product_id=' . $oldProduct->id);
+$res = \Legacy\System\Classes\LegacyDB::select('* FROM items_info WHERE product_id=' . $legacyProduct->id);
 
 if ($row = $res->fetch_assoc()) {
 	$desc = $row['description'];
 	$dett = str_replace(array('-', "\r\n"), array('&middot;', '<br>'), $row['details']);
-} else if (!$oldProduct->isCustom) {
+} else if (!$legacyProduct->isCustom) {
 	include_once('descriptions.php');
 }
 
 ?>
 
-<?php if ($desc || $dett || $oldProduct->coverImage) { ?>
+<?php if ($desc || $dett || $legacyProduct->coverImage) { ?>
 
 	<section id="info-sec" class="va-cen">
 
@@ -46,7 +46,7 @@ if ($row = $res->fetch_assoc()) {
 							<h3 class="desc_stitle">Descrizione</h3>
 							<p class="desc_txt"><?= $desc ?: '-' ?></p><br>
 
-							<?php if (!$oldProduct->isCustom) { ?>
+							<?php if (!$legacyProduct->isCustom) { ?>
 								<h3 class="desc_stitle">Dettagli prodotto</h3>
 								<p class="desc_txt"><?= $dett ?: '-' ?></p>
 							<?php } ?>
@@ -58,11 +58,11 @@ if ($row = $res->fetch_assoc()) {
 
 		<?php } ?>
 
-		<?php if ($oldProduct->coverImage) { ?>
+		<?php if ($legacyProduct->coverImage) { ?>
 
 			<div id="info-rig" class="hei-100">
 
-				<img src="<?= $oldProduct->clientCoverImage ?>" class="image-cover">
+				<img src="<?= $legacyProduct->clientCoverImage ?>" class="image-cover">
 			</div>
 
 		<?php } ?>

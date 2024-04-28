@@ -5,6 +5,7 @@ namespace Legacy\Classes\Ecommerce;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
+use Illuminate\Support\Facades\Cache;
 use LegacyDB;
 use Legacy\Classes\Ecommerce\Product\Type;
 
@@ -12,7 +13,7 @@ class Shop {
 
 	public $id = 0;
 	public $seed = 0;
-	public $resN = 0;
+	public $productCount = 0;
 	public $size = 40;
 	public $search = '';
 	public $type = false;
@@ -140,22 +141,28 @@ class Shop {
 			});
 		}
 
-		// General showcase
-		$generalShowcase = !$this->gender && !$this->type;
+		/**
+		 * * Fetch the products
+		 */
+		// Setup the cache
+		$cacheKeyParameters = md5(http_build_query(request()->all()));
+		$cacheInterval = $this->id ? 10 : 60 * 60;
+
+		// Get the product count
+		$productCount = Cache::remember('shop-count-' . $cacheKeyParameters, $this->id ? $cacheInterval : $cacheInterval * 24, function () use ($products) {
+			return $products->count();
+		});
 
 		// Get the products
-		$productCount = $products->count();
-		$products = $products->limit($this->size)
-			->offset($start)
-			->get('items.*');
+		$products = Cache::remember('shop-' . $cacheKeyParameters, $cacheInterval, function () use ($products, $start) {
+			return $products->limit($this->size)
+				->offset($start)
+				->get('items.*');
+		});
 
-
-		// get item number
-		$this->resN = $productCount;
-
-		$productResults = $products;
-
-		$this->products = $productResults;
+		// store the result
+		$this->productCount = $productCount;
+		$this->products = $products;
 	}
 
 	public function render() { ?>
@@ -166,7 +173,7 @@ class Shop {
 				<input type="hidden" name="id" value="<?= $this->id ?>">
 			<?php } ?>
 
-			<input type="hidden" id="js-itemN" value="<?= $this->resN ?>">
+			<input type="hidden" id="js-itemN" value="<?= $this->productCount ?>">
 
 			<!-- Sort items -->
 			<section id="shop-sort">
@@ -380,7 +387,7 @@ class Shop {
 					<!-- Pages -->
 					<?php
 
-					$pageN = ceil($this->resN / $this->size);
+					$pageN = ceil($this->productCount / $this->size);
 
 					if ($pageN > 1) {
 
