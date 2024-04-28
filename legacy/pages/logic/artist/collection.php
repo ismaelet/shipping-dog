@@ -1,23 +1,26 @@
 <?php
 
 use App\Models\Ecommerce\Design;
+use App\Models\Ecommerce\Design\DesignCollection;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Seller;
+use Collection as OldCollection;
 
 $id = $_GET['id'] ?? 0;
 
-// redirect if not found
-if (!DBOld::exists('collections WHERE id = ?', [$id])) {
+// get collection data
+$coll = new OldCollection($id);
+$collection = DesignCollection::find($id);
+$seller = $collection->seller;
+
+if (!$collection || !$seller) {
 	redirect_old('/shop');
 }
 
-// get collection data
-$coll = new Collection($id);
-$seller = Seller::where('id', $coll->seller_id)->first();
+// redirect if the shop isn't public
 $userIsOwner = auth()->check() && auth()->id() == $seller->id;
 
-// redirect if the shop isn't public
-if (!$seller->status && !$userIsOwner) {
+if (!$seller->status && !$userIsOwner && !is_admin()) {
 	redirect_old('/shop');
 }
 
