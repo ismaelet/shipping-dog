@@ -1,9 +1,3 @@
-<?php
-
-use Legacy\Classes\Ecommerce\Design;
-
-?>
-
 <section id="client-pics">
 	<div class="header">
 		<div class="main-wrap txt-cen">
@@ -31,18 +25,18 @@ use Legacy\Classes\Ecommerce\Design;
 	<div class="main-wrap">
 		<div class="gallery">
 
-			<?php while ($row = $client_pics->fetch_assoc()) {
-				$design = new Design($row['design_id'], ['name', 'url']);
-				$last_name = empty($row['last_name']) || $row['last_name'] == '-' ? '' : substr($row['last_name'], 0, 1) . '.';
+			<?php foreach ($customerPhotos as $customerPhoto) { ?>
 
-			?>
-
-				<a href="<?= $design->url ?>" class="client__image image stack-items">
-					<img src="<?= public_asset('users/testimonials/' . $row['id'] . '.jpg') ?>" alt="" loading="lazy" class="img-fill">
+				<a href="<?= $customerPhoto->design?->url() ?>" class="client__image image stack-items">
+					<img src="<?= $customerPhoto->image() ?>" alt="" loading="lazy" class="img-fill">
 					<div class="overlay pad-2 grid va-cen txt-cen">
 						<div class="title-box">
-							<p class="design-name txt-wht txt-11rem txt-bold txt-line"><?= $design->name ?></p>
-							<p class="client-name txt-wht txt-upp txt-line"><?= $row['first_name'] . ' ' . $last_name ?></p>
+
+							<?php if ($customerPhoto->design) { ?>
+								<p class="design-name txt-wht txt-11rem txt-bold txt-line"><?= $customerPhoto->design->name ?></p>
+							<?php } ?>
+
+							<p class="client-name txt-wht txt-upp txt-line"><?= $customerPhoto->fullName() ?></p>
 						</div>
 					</div>
 				</a>

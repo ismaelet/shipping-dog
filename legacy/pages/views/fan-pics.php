@@ -27,7 +27,7 @@ use Legacy\Classes\Ecommerce\Design;
 
 			?>
 
-				<a href="<?= $design->url ?>" class="image stack-items">
+				<a <?= $design->id ? 'href="' . $design->url . '"' : '' ?> class="image stack-items">
 					<img src="<?= public_asset('users/testimonials/' . $row['id'] . '.jpg') ?>" alt="" loading="lazy" class="img-fill">
 					<div class="overlay pad-2 grid va-cen txt-cen">
 						<div class="title-box">
