@@ -124,7 +124,7 @@ class ShippingMethod {
 		$workDaysPassed = 0;
 
 		$cart = $this->associatedCart ?: cart_old();
-		$cartTime = $cart->statusId ? $cart->time : date('Y-m-d');
+		$cartTime = $cart->statusId ? $cart->created_at : date('Y-m-d');
 
 		$weekDayNumber = date('N', strtotime($cartTime));
 

@@ -37,12 +37,15 @@
 			if (copyAllButton) {
 				copyAllButton.addEventListener('click', async function() {
 					// Get the HTML content of the entire document
-					const designText = '------ DESIGN ------' + document.querySelector('#designs')
-						.outerHTML + '<br><br><br>'
-					const productsText = '------ PRODOTTI ------' + document.querySelector('#products')
-						.outerHTML
+					let text = '<style>* {line-height: 1 !important;}</style>';
 
-					copyRichTextToClipboard(designText + productsText)
+					text += '------ DESIGN ------<br>'
+					text += document.querySelector('#designs').innerHTML
+
+					text += '<br>------ PRODOTTI ------<br>'
+					text += document.querySelector('#products').innerHTML
+
+					copyRichTextToClipboard(text)
 				})
 
 				async function copyRichTextToClipboard(html) {
@@ -149,7 +152,7 @@
 					@foreach ($sortedBySellers as $sellerOrder)
 						{{-- Sellers --}}
 						<div class="seller">
-							<h3 class="text-primary">[ {{ strtoupper($sellerOrder->storeName) }} ]</h3>
+							<h3 class="text-primary js-to-copy">[ {{ strtoupper($sellerOrder->storeName) }} ]</h3>
 
 							@php
 								// Get the orders
@@ -163,7 +166,7 @@
 								@foreach ($sortedByProducts as $product)
 									{{-- Designs --}}
 									<div class="designs">
-										<p class="text-neutral-700">
+										<p class="js-to-copy text-neutral-700">
 											{{ ($product->design_id ? $product->design_id . ' - ' : '') . $product->productName }}
 										</p>
 
@@ -196,6 +199,7 @@
 											<a
 												href="{{ $order->product->fullUrl($order->color_id, $order->position_id) }}"
 												target="_bank"
+												class="js-to-copy"
 											>
 												<p>{!! $quantity . ' x ' . $orderDescription !!}</p>
 											</a>
@@ -225,7 +229,7 @@
 					@foreach ($sortedByTypes as $typeOrder)
 						{{-- Product type --}}
 						<div class="product-type">
-							<h3 class="text-primary">[ {{ strtoupper($typeOrder->productTypeName) }} ]</h3>
+							<h3 class="text-primary js-to-copy">[ {{ strtoupper($typeOrder->productTypeName) }} ]</h3>
 
 							@php
 								$mergedOrders = [];
@@ -255,7 +259,7 @@
 							@endforeach
 
 							@foreach ($mergedOrders as $orderDescription => $quantity)
-								<p>{{ $quantity . ' x ' . $orderDescription }}</p>
+								<p class="js-to-copy">{{ $quantity . ' x ' . $orderDescription }}</p>
 							@endforeach
 						</div>
 					@endforeach

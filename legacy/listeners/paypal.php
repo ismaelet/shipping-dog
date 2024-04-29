@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Ecommerce\ChangeRequest;
+use Illuminate\Support\Facades\Log;
 
 include(substr(__DIR__, 0, strpos(__DIR__, 'listeners')) . '/system/setup/setup.php');
 
@@ -45,6 +46,8 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
 
+Log::warning(['Request incoming from PayPal' => $raw_post_data]);
+
 if (!($res = curl_exec($ch))) {
 
 	curl_close($ch);
@@ -53,6 +56,8 @@ if (!($res = curl_exec($ch))) {
 }
 
 curl_close($ch);
+
+Log::warning(['Request parsed' => $res]);
 
 //process the transaction
 if ($res == 'VERIFIED') {

@@ -51,24 +51,27 @@ if ($pageConfig['edit']) {
 
 // add
 if (isset($_POST['add'])) {
-	if (FormController::add()) {
-	} else if (function_exists('_expand_add')) {
+
+	if (function_exists('_expand_add')) {
 		$error = _expand_add($queryConfig['table'], $inputs);
 	} else {
 		form_db_add($queryConfig['table'], $inputs);
 	}
 
-	header('Location: ' . $pageConfig['return-url']);
+	$pageConfig['return-url'] = str_replace('edit', 'index', $_SERVER['REQUEST_URI']);
+
+	redirect_old($pageConfig['return-url']);
 }
 
 // edit
 if (isset($_POST['edit'])) {
-	if (FormController::edit(['id' => $id])) {
-	} else if (function_exists('_expand_edit')) {
+	if (function_exists('_expand_edit')) {
 		$error = _expand_edit($queryConfig['table'], $inputs, $queryConfig['index-field'], $id);
 	} else {
 		form_db_update($queryConfig['table'], $inputs, $queryConfig['index-field'], $id);
 	}
 
-	header('Location: ' . $pageConfig['return-url']);
+	$pageConfig['return-url'] = str_replace('edit', 'index', $_SERVER['REQUEST_URI']);
+
+	redirect_old($pageConfig['return-url']);
 }

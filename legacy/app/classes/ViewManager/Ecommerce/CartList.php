@@ -3,15 +3,15 @@
 namespace Legacy\Classes\ViewManager\Ecommerce;
 
 use App\Models\Ecommerce\Cart;
-
-use function Ecommerce\customer;
+use Illuminate\Support\Facades\Auth;
+use Legacy\Classes\Ecommerce\Customer;
 
 class CartList {
 
 	private $customer;
 
 	function __construct(object $customer = null) {
-		$this->customer = $customer ?: customer();
+		$this->customer = $customer ?: new Customer(Auth::id());
 	}
 
 	/*

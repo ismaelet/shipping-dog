@@ -67,5 +67,8 @@ if (isset($_POST['edit_icon'])) {
 // delete account
 if (isset($_POST['delete-account'])) {
 	delete_user(auth()->id());
-	logout();
+	auth()->logout();
+	session()->flush();
+
+	return redirect()->route('login');
 }

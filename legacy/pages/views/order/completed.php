@@ -41,7 +41,7 @@ use Legacy\Classes\Ecommerce\ViewManager;
 						<div class="ship_box">
 							<h1 class="art_name">
 								<?= $cart->shipping_method->name ?><br>
-								<span class="date"><?= $cart->shipping_method->deliveryDateString($cart->time, $cart->hasLongDelivery()) ?></span>
+								<span class="date"><?= $cart->shipping_method->deliveryDateString($cart->created_at, $cart->hasLongDelivery()) ?></span>
 							</h1>
 
 							<p class="order-list__description"><?= $cart->shipping_method->description ?></p>

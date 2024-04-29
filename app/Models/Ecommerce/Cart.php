@@ -213,7 +213,7 @@ class Cart extends Model {
 	 * Get the cart's time
 	 */
 	public function timeString(): string {
-		return date('d/m/Y', strtotime($this->time));
+		return date('d/m/Y', strtotime($this->created_at));
 	}
 
 	/************************

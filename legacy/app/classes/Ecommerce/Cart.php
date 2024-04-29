@@ -106,7 +106,7 @@ class Cart {
 	}
 
 	private function getDateString() {
-		return date('d/m/Y', strtotime($this->time));
+		return date('d/m/Y', strtotime($this->created_at));
 	}
 
 	private function getUrl() {
