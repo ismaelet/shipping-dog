@@ -1,186 +1,196 @@
 @php
 
-    // elements
-    $footer['logo'] = false;
-    $footer['contacts'] = true;
+	// elements
+	$footer['logo'] = false;
+	$footer['contacts'] = true;
 
-    // links
-    $footer['columns'] = [
-        ['Esplora', [['Home', 'home'], ['Prodotti', 'shop'], ['Vendi', 'sell']]],
+	// links
+	$footer['columns'] = [
+	    ['Esplora', [['Home', 'home'], ['Prodotti', 'shop'], ['Vendi', 'sell']]],
 
-        [
-            'Supporto',
-            [
-                ['Contatti', 'contacts'],
-                ['FAQ', 'infos.faq'],
-                ['Cambio taglia', 'refund'],
-                ['Stato ordine', 'order/status'],
-            ],
-        ],
+	    [
+	        'Supporto',
+	        [
+	            ['Contatti', 'contacts'],
+	            ['FAQ', 'infos.faq'],
+	            ['Cambio taglia', 'refund'],
+	            ['Stato ordine', 'order/status'],
+	        ],
+	    ],
 
-        [
-            'Legali',
-            [
-                ['Condizioni di vendita', 'infos.sale-terms'],
-                ['Condizioni di invio', 'infos.contract'],
-                ['Privacy policy', 'infos.privacy'],
-                ['P. IVA ' . config('custom.ecommerce.vat')],
-            ],
-        ],
-    ];
+	    [
+	        'Legali',
+	        [
+	            ['Condizioni di vendita', 'infos.sale-terms'],
+	            ['Condizioni di invio', 'infos.contract'],
+	            ['Privacy policy', 'infos.privacy'],
+	            ['P. IVA ' . config('custom.ecommerce.vat')],
+	        ],
+	    ],
+	];
 
-    // contacts
-    $footer['contacts'] = ['instagram', 'facebook', 'email'];
+	// contacts
+	$footer['contacts'] = ['instagram', 'facebook', 'email'];
 
 @endphp
 
 @push('styles')
-    <style>
-        /* Structure */
-        footer {
-            background-color: var(--color-surface-200);
-        }
+	<style>
+		/* Structure */
+		footer {
+			background-color: var(--color-surface-200);
+		}
 
-        html[data-color-scheme='light'] footer {
-            color: var(--text-color-strong);
-        }
+		html[data-color-scheme='light'] footer {
+			color: var(--text-color-strong);
+		}
 
-        /* Links */
-        #footer-body {
-            display: flex;
-            grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-            padding-block: 4rem 2rem;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: space-between;
-        }
+		/* Links */
+		#footer-body {
+			display: flex;
+			grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+			padding-block: 4rem 2rem;
+			flex-wrap: wrap;
+			gap: 2rem;
+			justify-content: space-between;
+		}
 
-        .footer-title {
-            padding-bottom: 1rem;
-            font-weight: 600;
-            font-size: 1.2rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
+		.footer-title {
+			padding-bottom: 1rem;
+			font-weight: 600;
+			font-size: 1.2rem;
+			letter-spacing: 0.05em;
+			text-transform: uppercase;
+		}
 
-        footer .links {
-            display: grid;
-            gap: 5px;
-        }
+		footer .links {
+			display: grid;
+			gap: 5px;
+		}
 
-        .footer-link {
-            transition: color 0.2s;
-        }
+		.footer-link {
+			transition: color 0.2s;
+		}
 
-        html[data-color-scheme='dark'] .footer-link {
-            color: var(--text-color-fade);
-        }
+		html[data-color-scheme='dark'] .footer-link {
+			color: var(--text-color-fade);
+		}
 
-        .footer-link.active a:hover {
-            color: #fff;
-        }
+		.footer-link.active a:hover {
+			color: #fff;
+		}
 
-        .contacts ul {
-            gap: 5px;
-        }
+		.contacts ul {
+			gap: 5px;
+		}
 
-        .footer-soc-icon {
-            --icon-size: 50%;
-            border-radius: 5px;
-            width: 2.5rem;
-            height: 2.5rem;
-            transition: background-color 0.4s;
-        }
+		.footer-soc-icon {
+			--icon-size: 50%;
+			border-radius: 5px;
+			width: 2.5rem;
+			height: 2.5rem;
+			transition: background-color 0.4s;
+		}
 
-        @media (max-width: 768px) {
-            #footer-body {
-                display: grid;
-            }
-        }
+		@media (max-width: 768px) {
+			#footer-body {
+				display: grid;
+			}
+		}
 
-        /* Bottom notes */
-        #footer-notes {
-            border-top: 1px solid var(--surface-secondary);
-            padding-block: 2rem;
-            color: var(--text-color-fade-more);
-        }
+		/* Bottom notes */
+		#footer-notes {
+			border-top: 1px solid var(--surface-secondary);
+			padding-block: 2rem;
+			color: var(--text-color-fade-more);
+		}
 
-        #footer-notes a {
-            transition: color 0.2s;
-        }
-    </style>
+		#footer-notes a {
+			transition: color 0.2s;
+		}
+	</style>
 @endpush
 
 <footer>
 
-    <div id="footer-wrap" class="content-grid">
+	<div
+		id="footer-wrap"
+		class="content-grid"
+	>
 
-        <div id="footer-body" class="">
+		<div
+			id="footer-body"
+			class=""
+		>
 
-            <?php foreach ($footer['columns'] as $f_column) { ?>
+			<?php foreach ($footer['columns'] as $f_column) { ?>
 
-            <div class="footer-col">
+			<div class="footer-col">
 
-                <h3 class="footer-title"><?= $f_column[0] ?></h3>
+				<h3 class="footer-title"><?= $f_column[0] ?></h3>
 
-                <ul class="links">
+				<ul class="links">
 
-                    <?php foreach ($f_column[1] as $f_link) { ?>
+					<?php foreach ($f_column[1] as $f_link) { ?>
 
-                    <li class="text-neutral-300">
+					<li class="text-neutral-300">
 
-                        <?php if (isset($f_link[1])) { ?>
+						<?php if (isset($f_link[1])) { ?>
 
-                        <p class="footer-link active">
-                            <a href="<?= $f_link[1] ?>"><?= $f_link[0] ?></a>
-                        </p>
+						<p class="footer-link active">
+							<a href="<?= $f_link[1] ?>"><?= $f_link[0] ?></a>
+						</p>
 
-                        <?php } else { ?>
+						<?php } else { ?>
 
-                        <p class="footer-link"><?= $f_link[0] ?></p>
+						<p class="footer-link"><?= $f_link[0] ?></p>
 
-                        <?php } ?>
+						<?php } ?>
 
-                    </li>
+					</li>
 
-                    <?php } ?>
+					<?php } ?>
 
-                </ul>
+				</ul>
 
-            </div>
+			</div>
 
-            <?php } ?>
+			<?php } ?>
 
-            <?php if ($footer['contacts']) { ?>
+			<?php if ($footer['contacts']) { ?>
 
-            <div class="contacts footer-col">
-                <h3 class="footer-title">Contatti</h3>
+			<div class="contacts footer-col">
+				<h3 class="footer-title">Contatti</h3>
 
-                <ul class="flex">
+				<ul class="flex flex-wrap">
 
-                    @foreach (config('custom.social_media') as $socialMediaTag => $socialMedia)
-                        <li>
-                            <a href="{{ $socialMedia['url'] }}"
-                                class="footer-soc-icon hover:text-neutral-700 bg-surface-500 hover:bg-primary transition-colors center-items">
-                                <?= embed_icon('contacts/' . $socialMediaTag) ?>
-                            </a>
-                        </li>
-                    @endforeach
+					@foreach (config('custom.social_media') as $socialMediaTag => $socialMedia)
+						<li>
+							<a
+								href="{{ $socialMedia['url'] }}"
+								class="footer-soc-icon bg-surface-500 hover:bg-primary center-items transition-colors hover:text-neutral-700"
+							>
+								<?= embed_icon('contacts/' . $socialMediaTag) ?>
+							</a>
+						</li>
+					@endforeach
 
-                </ul>
-            </div>
+				</ul>
+			</div>
 
-            <?php } ?>
+			<?php } ?>
 
-        </div>
+		</div>
 
-        <p class="border-t border-neutral-200 text-neutral-300 py-6">
-            Copyright © <?= getdate()['year'] ?> <span
-                class="font-medium text-neutral-700"><?= config('custom.meta_data.full_name') ?></span>. Il
-            copyright © di ogni grafica appartiene al rispettivo proprietario.
-            <br>Sito web realizzato da <a class="font-medium text-neutral-700"
-                href="emailto:ismaele.tuffanelli@gmail.com">Ismaele
-                Tuffanelli</a>
-        </p>
-    </div>
+		<p class="border-t border-neutral-200 py-6 text-neutral-300">
+			Copyright © <?= getdate()['year'] ?> <span
+				class="font-medium text-neutral-700"><?= config('custom.meta_data.full_name') ?></span>. Il
+			copyright © di ogni grafica appartiene al rispettivo proprietario.
+			<br>Sito web realizzato da <a
+				class="font-medium text-neutral-700"
+				href="emailto:ismaele.tuffanelli@gmail.com"
+			>Ismaele
+				Tuffanelli</a>
+		</p>
+	</div>
 </footer>

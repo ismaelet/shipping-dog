@@ -5,12 +5,10 @@ namespace Legacy\Classes\Ecommerce;
 use App\Models\Ecommerce\Cart;
 use App\Models\Ecommerce\Product as EcommerceProduct;
 use DateTime;
-use LegacyDB;
 use Legacy\Classes\Ecommerce\Design\Logo;
 use Legacy\Classes\Ecommerce\Product\Color;
 use Legacy\Classes\Ecommerce\Product\Size;
-use \Legacy\System\Traits\DatabaseObject;
-use Legacy\Classes\Ecommerce\Cart as OldCart;
+use Legacy\Classes\Ecommerce\Cart as LegacyCart;
 use Illuminate\Support\Facades\Auth;
 
 class Order {
@@ -72,7 +70,7 @@ class Order {
 		return $this->gain_disc;
 	}
 
-	private function getTimeString() {
+	private function getcreatedAtString() {
 		return (new DateTime($this->time))
 			->format('Y-m-d');
 	}
@@ -96,7 +94,11 @@ class Order {
 	}
 
 	private function getCart() {
-		return new OldCart($this->cart_id);
+		return new LegacyCart($this->cart_id);
+	}
+
+	private function newCart() {
+		return Cart::find($this->cart_id);
 	}
 
 	private function getSize() {
@@ -240,6 +242,8 @@ class Order {
 		$this->data['fixedDiscount'] = $discountAmount;
 		$this->data = [];
 
+		$this->newCart()->updatePrice();
+
 		return $this;
 	}
 
@@ -250,6 +254,8 @@ class Order {
 
 		$this->data['gainReduction'] = $gainReduction;
 		unset($this->data['totalGain']);
+
+		$this->newCart()->updatePrice();
 
 		return $this;
 	}
@@ -297,7 +303,7 @@ class Order {
 				}
 			}
 
-			$oldCart = new OldCart($cart->id);
+			$LegacyCart = new LegacyCart($cart->id);
 
 			// add order
 			$orderId = \Legacy\System\Classes\LegacyDB::add(
@@ -307,10 +313,10 @@ class Order {
 
 			$cart->updateOrders();
 
-			if ($oldCart->couponId) {
-				$couponId = $oldCart->couponId;
-				$oldCart->removeCoupon();
-				$oldCart->addCoupon($couponId);
+			if ($LegacyCart->couponId) {
+				$couponId = $LegacyCart->couponId;
+				$LegacyCart->removeCoupon();
+				$LegacyCart->addCoupon($couponId);
 			}
 		}
 
@@ -321,7 +327,9 @@ class Order {
 
 	public function delete() {
 		\Legacy\System\Classes\LegacyDB::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
-		\Legacy\System\Classes\LegacyDB::update(OldCart::TABLE . ' SET quantity = quantity - ? WHERE ' . OldCart::INDEX . ' = ?', [$this->quantity, $this->cart->id]);
+		\Legacy\System\Classes\LegacyDB::update(LegacyCart::TABLE . ' SET quantity = quantity - ? WHERE ' . LegacyCart::INDEX . ' = ?', [$this->quantity, $this->cart->id]);
+
+		$this->newCart()->updateOrders();
 
 		$this->cart->resetDynamicProperties();
 	}

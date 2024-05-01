@@ -37,7 +37,7 @@ $cart = cart();
 	<!-- Shipping data -->
 	<?php $row_addr = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE cart_id = ?', [$cart->id]) ?>
 
-	<input type="hidden" name="shipping_1" value="<?= StringHelper::formatWithDot($cart->shippingPrice()) ?>">
+	<input type="hidden" name="shipping_1" value="<?= StringHelper::formatWithDot($cart->shippingFee()) ?>">
 	<input type="hidden" name="first_name" value="<?= explode(' ', $cart->address->full_name, 2)[0] ?>">
 	<input type="hidden" name="last_name" value="<?= explode(' ', $cart->address->full_name, 2)[1] ?? '' ?>">
 	<input type="hidden" name="address1" value="<?= $cart->address->address . ', ' . $cart->address->number ?>">

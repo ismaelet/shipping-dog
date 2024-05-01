@@ -16,7 +16,7 @@ $saved = $_GET['saved'] ?? false;
 
 // fetch types
 $types = [];
-$typeRows = \Legacy\System\Classes\LegacyDB::select('id FROM items_types WHERE id<>16 ORDER BY category ASC, id ASC');
+$typeRows = \Legacy\System\Classes\LegacyDB::select('id FROM product_types WHERE id<>16 ORDER BY category ASC, id ASC');
 
 while ($typeRow = $typeRows->fetch_assoc()) {
 	$type = new Type($typeRow['id']);

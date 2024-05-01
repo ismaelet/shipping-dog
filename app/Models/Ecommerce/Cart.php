@@ -11,173 +11,119 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * Represents a shopping cart in the e-commerce system.
+ */
 class Cart extends Model {
 
-	protected $table = 'carts';
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
 	protected $fillable = ['user_id', 'shipping_method_id', 'country_id', 'payment_method_id', 'code', 'quantity', 'credit_ship', 'shipping', 'status', 'step', 'time', 'courier_notes', 'shipping_notes', 'has_errors', 'created_at', 'updated_at'];
 
-	/***************************
-	 * * Relationship instances *
-	 ***************************/
+
+	// * Relationships * //
 	/**
-	 * Get the cart's user
+	 * Get the cart's user.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function user(): BelongsTo {
 		return $this->belongsTo(User::class);
 	}
 
 	/**
-	 * Get the cart's shipping method
+	 * Get the cart's shipping method.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function shipping_method(): BelongsTo {
 		return $this->belongsTo(ShippingMethod::class);
 	}
 
 	/**
-	 * Get the cart's payment method
+	 * Get the cart's payment method.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function payment_method(): BelongsTo {
 		return $this->belongsTo(PaymentMethod::class);
 	}
 
 	/**
-	 * Get the cart's address
+	 * Get the cart's address.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function address(): HasOne {
 		return $this->hasOne(Address::class);
 	}
 
 	/**
-	 * Get the cart coupon
+	 * Get the cart's coupon.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function coupon(): HasOne {
 		return $this->hasOne(Coupon::class, 'code', 'code');
 	}
 
 	/**
-	 * Get the change request that generated this cart
+	 * Get the cart's change request.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function change_request(): HasOne {
-		return $this->HasOne(ChangeRequest::class, 'new_cart_id');
+		return $this->hasOne(ChangeRequest::class, 'new_cart_id');
 	}
 
 	/**
-	 * Get the orders in the cart
+	 * Get the cart's orders.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function orders(): HasMany {
 		return $this->hasMany(Order::class);
 	}
 
-	/************************
-	 * * Utility methods *
-	 ************************/
+
+	// * Attributes * //
 	/**
-	 * Generate the id code
+	 * Get the cart's code.
+	 *
+	 * @return string
 	 */
 	public function idCode(): string {
 		return '#' . str_pad($this->id, 5, '0', STR_PAD_LEFT);
 	}
 
 	/**
-	 * Status data
+	 * Get the cart's created at date as a string.
+	 *
+	 * @return string
 	 */
-	public function statusCode(): string {
-		return config('custom.ecommerce.cart_statuses')[$this->status]['tag'];
-	}
-
-	public function statusName(): string {
-		return config('custom.ecommerce.cart_statuses')[$this->status]['label'];
-	}
-
-	public function statusColor(): string {
-		return config('custom.ecommerce.cart_statuses')[$this->status]['color'];
-	}
-
-	public function statusIcon(): string {
-		return config('custom.ecommerce.cart_statuses')[$this->status]['icon'];
-	}
-
-	public function statusTag(): string {
-		return '<span class="px-4 py-1 gap-2 text-background rounded whitespace-nowrap" style="--icon-size: 1em; background-color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon()) . ' ' . $this->statusName() . '</span>';
+	public function createdAtString(): string {
+		return date('d/m/Y', strtotime($this->created_at));
 	}
 
 	/**
-	 * Get the cart's price
+	 * Get the cart's recap URL.
+	 *
+	 * @return string
 	 */
-	public function price(): float {
-		return $this->updatePrice()->price;
-	}
-
-	public function orderPrice(): float {
-		$orderPrice = 0;
-
-		foreach ($this->orders as $order) {
-			$orderPrice += $order->price();
-		}
-
-		return $orderPrice;
-	}
-
-	public function grossOrderPrice(): float {
-		$grossOrderPrice = 0;
-
-		foreach ($this->orders as $order) {
-			$grossOrderPrice += $order->grossPrice();
-		}
-
-		return $grossOrderPrice;
-	}
-
-	public function grossShippingPrice(): float {
-		return $this->shipping_method ? $this->shipping_method->price($this->orders->sum('quantity')) : 0;
-	}
-
-	public function shippingPrice(): float {
-		return $this->credit_ship ? 0 : $this->grossShippingPrice();
-	}
-
-	public function orderDiscount(): float {
-		$orderDiscount = 0;
-
-		foreach ($this->orders as $order) {
-			$orderDiscount += $order->discount();
-		}
-
-		return $orderDiscount;
-	}
-
-	public function shippingDiscount(): float {
-		return $this->credit_ship ? $this->grossShippingPrice() : 0;
-	}
-
-	public function discount(): float {
-		return $this->orderDiscount() + $this->shippingDiscount();
-	}
-
-	public function shippingPriceString(): string {
-		return EcommerceHelper::formatPrice($this->shippingPrice());
-	}
-
-	public function priceString(): string {
-		return EcommerceHelper::formatPrice($this->price());
-	}
-
-	public function grossOrderPriceString(): string {
-		return EcommerceHelper::formatPrice($this->grossOrderPrice());
-	}
-
-	public function orderDiscountString(): string {
-		return EcommerceHelper::formatPrice($this->orderDiscount());
-	}
-
-	public function discountString(): string {
-		return EcommerceHelper::formatPrice($this->discount());
+	public function recapUrl(): string {
+		return '/order?id=' . $this->id . '&customerId=' . $this->user_id;
 	}
 
 	/**
-	 * Check if the cart has long delivery times
+	 * Check if the cart has a long delivery time.
+	 *
+	 * @return bool
 	 */
 	public function hasLongDelivery(): bool {
 		foreach ($this->orders as $order) {
@@ -190,7 +136,9 @@ class Cart extends Model {
 	}
 
 	/**
-	 * Get a string with the cart's orders
+	 * Get the cart's orders as a string.
+	 *
+	 * @return string
 	 */
 	public function ordersString(): string {
 		$ordersString = '';
@@ -202,25 +150,241 @@ class Cart extends Model {
 		return $ordersString;
 	}
 
+
+	// ~ Attributes: Steps ~ //
 	/**
-	 * Get the cart's recap page url
+	 * Get the cart's step tag.
+	 *
+	 * @return string
 	 */
-	public function recapUrl(): string {
-		return '/order?id=' . $this->id . '&customerId=' . $this->user_id;
+	public function stepTag(): string {
+		return config('ecommerce.cart.steps')[$this->step]['tag'];
+	}
+
+
+	// ~ Attributes: Status ~ //
+	/**
+	 * Get the cart's status tag.
+	 *
+	 * @return string
+	 */
+	public function statusTag(): string {
+		return config('ecommerce.cart.statuses')[$this->status]['tag'];
 	}
 
 	/**
-	 * Get the cart's time
+	 * Get the cart's status name.
+	 *
+	 * @return string
 	 */
-	public function timeString(): string {
-		return date('d/m/Y', strtotime($this->created_at));
+	public function statusName(): string {
+		return config('ecommerce.cart.statuses')[$this->status]['label'];
 	}
 
-	/************************
-	 * * Actions *
-	 ************************/
 	/**
-	 * Recheck and update the cart's content
+	 * Get the cart's status color.
+	 *
+	 * @return string
+	 */
+	public function statusColor(): string {
+		return config('ecommerce.cart.statuses')[$this->status]['color'];
+	}
+
+	/**
+	 * Get the status icon.
+	 *
+	 * @return string
+	 */
+	public function statusIcon(): string {
+		return config('ecommerce.cart.statuses')[$this->status]['icon'];
+	}
+
+	/**
+	 * Get the cart's status label.
+	 *
+	 * @return string
+	 */
+	public function statusLabel(): string {
+		return '<span class="px-4 py-1 gap-2 text-background rounded whitespace-nowrap" style="--icon-size: 1em; background-color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon()) . ' ' . $this->statusName() . '</span>';
+	}
+
+
+	// ~ Attributes: Price ~ //
+	/**
+	 * Get the cart's total price.
+	 *
+	 * @return float
+	 */
+	public function price(): float {
+		return $this->updatePrice()->price;
+	}
+
+	/**
+	 * Get the cart's orders net price.
+	 *
+	 * @return float
+	 */
+	public function ordersPrice(): float {
+		$ordersPrice = 0;
+
+		foreach ($this->orders as $order) {
+			$ordersPrice += $order->price();
+		}
+
+		return $ordersPrice;
+	}
+
+	/**
+	 * Get the cart's orders gross price.
+	 *
+	 * @return float
+	 */
+	public function grossOrdersPrice(): float {
+		$grossOrdersPrice = 0;
+
+		foreach ($this->orders as $order) {
+			$grossOrdersPrice += $order->grossPrice();
+		}
+
+		return $grossOrdersPrice;
+	}
+
+	/**
+	 * Get the cart's net shipping fee.
+	 *
+	 * @return float
+	 */
+	public function shippingFee(): float {
+		return $this->credit_ship ? 0 : $this->grossShippingFee();
+	}
+
+	/**
+	 * Get the cart's gross shipping fee.
+	 *
+	 * @return float
+	 */
+	public function grossShippingFee(): float {
+		return $this->shipping_method ? $this->shipping_method->price($this->orders->sum('quantity')) : 0;
+	}
+
+	/**
+	 * Get the cart's total discount.
+	 *
+	 * @return float
+	 */
+	public function discount(): float {
+		return $this->ordersDiscount() + $this->shippingDiscount();
+	}
+
+	/**
+	 * Get the cart's total orders discount.
+	 *
+	 * @return float
+	 */
+	public function ordersDiscount(): float {
+		$ordersDiscount = 0;
+
+		foreach ($this->orders as $order) {
+			$ordersDiscount += $order->discount();
+		}
+
+		return $ordersDiscount;
+	}
+
+	/**
+	 * Get the cart's shipping discount.
+	 *
+	 * @return float
+	 */
+	public function shippingDiscount(): float {
+		return $this->credit_ship ? $this->grossShippingFee() : 0;
+	}
+
+	/**
+	 * Get the cart's price formatted as a price string.
+	 *
+	 * @return string
+	 */
+	public function priceString(): string {
+		return EcommerceHelper::formatPrice($this->price());
+	}
+
+	/**
+	 * Get the cart's gross orders price formatted as a price string.
+	 *
+	 * @return string
+	 */
+	public function grossOrdersPriceString(): string {
+		return EcommerceHelper::formatPrice($this->grossOrdersPrice());
+	}
+
+	/**
+	 * Get the cart's shipping fee formatted as a price string.
+	 *
+	 * @return string
+	 */
+	public function shippingFeeString(): string {
+		return EcommerceHelper::formatPrice($this->shippingFee());
+	}
+
+	/**
+	 * Get the cart's total discount formatted as a price string.
+	 *
+	 * @return string
+	 */
+	public function discountString(): string {
+		return EcommerceHelper::formatPrice($this->discount());
+	}
+
+	/**
+	 * Get the cart's orders discount formatted as a price string.
+	 *
+	 * @return string
+	 */
+	public function ordersDiscountString(): string {
+		return EcommerceHelper::formatPrice($this->ordersDiscount());
+	}
+
+
+	// * Actions * //
+	/**
+	 * Advance the cart to the next step or to a specific step.
+	 *
+	 * @param string|null $advanceToStepTag The tag of the step to advance to (optional)
+	 * @return self The updated Cart instance
+	 */
+	public function advance(?string $advanceToStepTag = null): self {
+		// If no specific step is given, advance to the next step
+		if (!$advanceToStepTag) {
+			// The current cart step
+			$currentStep = $this->step;
+
+			// The page step
+			$pageStepTag = explode('.', Route::currentRouteName())[1] ?? null;
+			$pageStep = EcommerceHelper::stepFromTag($pageStepTag);
+
+			// Advance to the next step, if the current cart step is equal to the page step
+			if ($currentStep == $pageStep) {
+				$this->step++;
+				$this->save();
+			}
+		} else {
+			// Advance to the given step
+			$advanceToStep = EcommerceHelper::stepFromTag($advanceToStepTag);
+
+			if ($advanceToStep) {
+				$this->step = $advanceToStep;
+				$this->save();
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Update the cart's quantity and price.
+	 *
+	 * @return self
 	 */
 	public function updateOrders(): self {
 		$this->updateQuantity();
@@ -230,7 +394,9 @@ class Cart extends Model {
 	}
 
 	/**
-	 * Recheck and update the cart's product quantity
+	 * Update the cart's quantity.
+	 *
+	 * @return self
 	 */
 	public function updateQuantity(): self {
 		$this->quantity = $this->orders->sum('quantity');
@@ -244,20 +410,25 @@ class Cart extends Model {
 	}
 
 	/**
-	 * Recheck and update the cart's price
+	 * Update the cart's price.
+	 *
+	 * @return self
 	 */
 	public function updatePrice(): self {
-		$orderPrice = $this->orderPrice();
-		$shippingPrice = $this->shippingPrice();
+		$ordersPrice = $this->ordersPrice();
+		$shippingFee = $this->shippingFee();
 
-		$this->price = $orderPrice + $shippingPrice;
-		// $this->save();
+		$this->price = $ordersPrice + $shippingFee;
+		$this->save();
 
 		return $this;
 	}
 
 	/**
-	 * Confirm the cart
+	 * Confirm the cart.
+	 *
+	 * @param bool $sendNotification
+	 * @return void
 	 */
 	public function confirm(bool $sendNotification = true): void {
 		// Update the cart
@@ -266,9 +437,9 @@ class Cart extends Model {
 			'status' => 1,
 		]);
 
-		// Remove the shipping price from the user's credit, if it was payed with the credit
+		// Remove the shipping price from the user's credit, if it was paid with the credit
 		if ($this->credit_ship && $this->user && $this->user->isSeller()) {
-			$this->user->seller->update(['credit' => $this->user->seller->credit - $this->grossShippingPrice()]);
+			$this->user->seller->update(['credit' => $this->user->seller->credit - $this->grossShippingFee()]);
 		}
 
 		// Destroy used coupons
@@ -283,14 +454,18 @@ class Cart extends Model {
 		}
 
 		// Send the confirmation email
-		Mail::to($this->address->email)->send(new OrderStatusMail($this));
+		if ($sendNotification) {
+			Mail::to($this->address->email)->send(new OrderStatusMail($this));
+		}
 
 		// Confirm the individual orders
 		$this->confirmOrders();
 	}
 
 	/**
-	 * Confirm the individual orders in the cart
+	 * Confirm the cart's orders.
+	 *
+	 * @return void
 	 */
 	public function confirmOrders(): void {
 		foreach ($this->orders as $order) {
@@ -325,7 +500,9 @@ class Cart extends Model {
 	}
 
 	/**
-	 * Delete the cart
+	 * Delete the cart.
+	 *
+	 * @return bool
 	 */
 	public function delete(): bool {
 		Session::forget('cart_id');
@@ -333,11 +510,12 @@ class Cart extends Model {
 		return parent::delete();
 	}
 
-	/************************
-	 * * Static methods *
-	 ************************/
+
+	// * Static methods * //
 	/**
-	 * Get the unlabelled carts
+	 * Get the carts that need a label to be printed.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection
 	 */
 	public static function unlabelled(): Collection {
 		return self::where('status', 1)

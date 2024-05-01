@@ -106,7 +106,7 @@
 					</div>
 				</form>
 
-				@if ($filteredOrders->count())
+				@if ($filteredOrders?->count())
 					<form
 						action=""
 						method="POST"

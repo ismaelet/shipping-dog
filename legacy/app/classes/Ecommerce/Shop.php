@@ -6,7 +6,6 @@ use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
 use Illuminate\Support\Facades\Cache;
-use LegacyDB;
 use Legacy\Classes\Ecommerce\Product\Type;
 
 class Shop {
@@ -233,10 +232,10 @@ class Shop {
 								<div class="gender-ddown">
 									<?php
 									if ($this->id) $res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
+											id FROM product_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
 
 									else $res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM items_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
+											id FROM product_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
 
 									while ($row = $res->fetch_assoc()) {
 
@@ -266,10 +265,10 @@ class Shop {
 
 									if ($this->id) {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
+											id FROM product_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
 									} else {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM items_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
+											id FROM product_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {
@@ -300,10 +299,10 @@ class Shop {
 
 									if ($this->id) {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$this->id]);
+											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$this->id]);
 									} else {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM items_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY name ASC");
+											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY name ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {

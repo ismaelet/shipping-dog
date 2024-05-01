@@ -78,7 +78,7 @@ class Seller extends Model {
 	/**
 	 * Get the formatted time string
 	 */
-	public function timeString(): string {
+	public function createdAtString(): string {
 		return date('d/m/Y', strtotime($this->time));
 	}
 

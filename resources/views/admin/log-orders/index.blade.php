@@ -223,7 +223,7 @@
 				>
 
 					{{-- Order header --}}
-					<p class="js-to-copy">[{{ $cart->id }} - {{ $cart->timeString() }}]</p>
+					<p class="js-to-copy">[{{ $cart->id }} - {{ $cart->createdAtString() }}]</p>
 
 					{{-- Address --}}
 					@if ($cart->address)

@@ -22,7 +22,7 @@ class CartRecap {
 
 				<div class="chck_item">
 					<p class="chck_name">Spedizione</p>
-					<p id="chck_totShip" class="chck_pric js-cart-shipping-price-string js-recap-shipping-price" data-shipping-method-id="<?= $cart->shippingMethodId ?>"><?= $cart->shippingPriceString ?></p>
+					<p id="chck_totShip" class="chck_pric js-cart-shipping-price-string js-recap-shipping-price" data-shipping-method-id="<?= $cart->shippingMethodId ?>"><?= $cart->shippingFeeString ?></p>
 				</div>
 
 				<?php if ($cart->discount) { ?>

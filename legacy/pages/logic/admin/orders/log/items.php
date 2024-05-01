@@ -16,10 +16,10 @@ if ($validCarts->count()) {
 		->join('addresses', 'addresses.cart_id', '=', 'carts.id')
 		->join('stores', 'stores.user_id', '=', 'orders.seller_id')
 		->join('items', 'items.id', '=', 'orders.product_id')
-		->join('items_types', 'items_types.id', '=', 'orders.type_id')
+		->join('product_types', 'product_types.id', '=', 'orders.type_id')
 		->where('carts.status', '>', 0)
 		->where('carts.time', '>=', $startFromTime)
-		->select('carts.id as cart_id', 'carts.time as confirmedTime', 'orders.*', 'stores.name as storeName', 'addresses.full_name as customerName', 'items.name as productName', 'items_types.name as productTypeName')
+		->select('carts.id as cart_id', 'carts.time as confirmedTime', 'orders.*', 'stores.name as storeName', 'addresses.full_name as customerName', 'items.name as productName', 'product_types.name as productTypeName')
 		->get();
 
 	// Get the first cart

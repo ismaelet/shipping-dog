@@ -56,10 +56,10 @@ use Legacy\Classes\Ecommerce\Order;
 				<p class="list-inp text-sm"><?= format_price($designData->totGain) ?></p>
 			</div>
 			<div class="list-cell">
-				<p class="list-inp text-sm"><?= $lastOrder->timeString() ?></p>
+				<p class="list-inp text-sm"><?= $lastOrder->createdAtString() ?></p>
 			</div>
 			<div class="list-cell">
-				<p class="list-inp text-sm"><?= $designData->timeString() ?></p>
+				<p class="list-inp text-sm"><?= $designData->createdAtString() ?></p>
 			</div>
 		</div>
 

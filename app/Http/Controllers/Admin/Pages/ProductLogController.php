@@ -15,7 +15,7 @@ class ProductLogController extends Controller {
 	/**
 	 * Display the page
 	 */
-	public function index(Request $request): View {
+	public function index(): View {
 
 		// Get the date from which to start the log
 		$startFromTime = Configuration::where('name', 'product_log_start_from')->value('value');
@@ -28,10 +28,10 @@ class ProductLogController extends Controller {
 				->join('addresses', 'addresses.cart_id', '=', 'carts.id')
 				->join('stores', 'stores.user_id', '=', 'orders.seller_id')
 				->join('items', 'items.id', '=', 'orders.product_id')
-				->join('items_types', 'items_types.id', '=', 'orders.type_id')
+				->join('product_types', 'product_types.id', '=', 'orders.type_id')
 				->where('carts.status', '>', 0)
 				->where('carts.created_at', '>=', $startFromTime)
-				->select('carts.id as cart_id', 'carts.created_at as confirmedTime', 'orders.*', 'stores.name as storeName', 'addresses.full_name as customerName', 'items.name as productName', 'items_types.name as productTypeName')
+				->select('carts.id as cart_id', 'carts.created_at as confirmedTime', 'orders.*', 'stores.name as storeName', 'addresses.full_name as customerName', 'items.name as productName', 'product_types.name as productTypeName')
 				->get();
 
 			// Get the first cart
@@ -76,5 +76,7 @@ class ProductLogController extends Controller {
 
 			return redirect()->back();
 		}
+
+		return redirect()->back();
 	}
 }

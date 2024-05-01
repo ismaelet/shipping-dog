@@ -10,6 +10,7 @@ use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductDescription;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductPrice;
+use App\Models\Ecommerce\Product\ProductSize;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Seller\SellerPrice;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -24,83 +25,87 @@ class Product extends Model {
 	protected $table = 'items';
 	protected $fillable = ['name', 'design_id', 'user_id', 'type_id', 'color_id', 'colors', 'status', 'positions'];
 
+
+	// * Mutators * //
 	/**
-	 * * Relationship instances *
+	 * The size ID attribute mutator.
+	 *
+	 * @return Attribute The size ID attribute.
 	 */
-	// Get the product's seller
-	public function seller(): BelongsTo {
-		return $this->belongsTo(Seller::class, 'user_id', 'user_id');
-	}
-
-	// Get the product's design
-	public function design(): BelongsTo {
-		return $this->belongsTo(Design::class);
-	}
-
-	// Get the product's type
-	public function type(): BelongsTo {
-		return $this->belongsTo(ProductType::class);
-	}
-
-	// Get the product's price
-	public function specific_price(): HasOne {
-		return $this->hasOne(ProductPrice::class);
-	}
-
-	// Get the seller price
-	public function seller_price(): HasOne {
-		return $this->hasOne(SellerPrice::class, 'seller_id', 'user_id')->where('type_id', $this->type->id);
-	}
-
-	// Get the platform price
-	public function base_price(): HasOne {
-		return $this->hasOne(BasePrice::class, 'type_id', 'type_id');
-	}
-
-	/**
-	 * * Utility methods
-	 */
-	// ~ Logos
-	// Get the product's logo group
-	public function logoGroup(): ?LogoGroup {
-		if ($this->design && in_array($this->type_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])) {
-			return $this->design->logo_group;
-		}
-
-		return null;
-	}
-
-	// Get the product's logos
-	public function logos(): ?Collection {
-		if ($this->logoGroup()) {
-			return $this->logoGroup()->logos;
-		}
-
-		return null;
-	}
-
-	// Set the product's logo id
-	public function logoId(): Attribute {
+	public function size_id(): Attribute {
 		return Attribute::make(
 			get: fn (?int $value) => $value,
 			set: fn (int $value) => $value,
 		);
 	}
 
-	// Get the product's logo
-	public function logo(): ?Logo {
-		if ($this->logo_id) {
-			return Logo::find($this->logo_id);
-		}
-
-		if ($this->logoGroup() && $this->logoGroup()->forced) {
-			return $this->logoGroup()->logos->first();
-		}
-
-		return null;
+	//* Relationships * //
+	/**
+	 * Get the product's seller.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function seller(): BelongsTo {
+		return $this->belongsTo(Seller::class, 'user_id', 'user_id');
 	}
 
-	// ~ Prices
+	/**
+	 * Get the product's design.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function design(): BelongsTo {
+		return $this->belongsTo(Design::class);
+	}
+
+	/**
+	 * Get the product's type.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function type(): BelongsTo {
+		return $this->belongsTo(ProductType::class);
+	}
+
+	/**
+	 * Get the product's price.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
+	public function specific_price(): HasOne {
+		return $this->hasOne(ProductPrice::class);
+	}
+
+	/**
+	 * Get the seller price.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
+	public function seller_price(): HasOne {
+		return $this->hasOne(SellerPrice::class, 'seller_id', 'user_id')->where('type_id', $this->type->id);
+	}
+
+	/**
+	 * Get the platform price.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
+	public function base_price(): HasOne {
+		return $this->hasOne(BasePrice::class, 'type_id', 'type_id');
+	}
+
+	/**
+	 * Get the size of the product.
+	 *
+	 * @return ProductSize|null The size of the product, or null if no size is set.
+	 */
+	public function size(): BelongsTo {
+		return $this->belongsTo(ProductSize::class, 'size_id');
+	}
+
+
+	// * Attributes * //
+	// ~ Attributes: Prices ~ //
 	// Get the product's price
 	public function price(): ProductPrice|SellerPrice|BasePrice {
 		// Check if the product has a specific price
@@ -122,11 +127,15 @@ class Product extends Model {
 	}
 
 	public function logoPrice(): float {
-		return $this->logo() ? $this->logo()->price : 0;
+		return $this->logo()?->price ?: 0;
+	}
+
+	public function positionPrice(): float {
+		return $this->position?->price ?: 0;
 	}
 
 	public function fullPrice(): float {
-		return $this->productPrice() + $this->logoPrice();
+		return $this->productPrice() + $this->logoPrice() + $this->positionPrice();
 	}
 
 	public function customerDiscount() {
@@ -269,6 +278,63 @@ class Product extends Model {
 		return $this->user_id == auth()->id();
 	}
 
+	// ~ Attributes: Logos ~ //
+	/**
+	 * Get the product's logo group.
+	 *
+	 * @return LogoGroup|null The logo group associated with the product, or null if not available.
+	 */
+	public function logoGroup(): ?LogoGroup {
+		if ($this->design && in_array($this->type_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])) {
+			return $this->design->logo_group;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get the product's logos.
+	 *
+	 * @return \Illuminate\Support\Collection|null
+	 */
+	public function logos(): ?Collection {
+		if ($this->logoGroup()) {
+			return $this->logoGroup()->logos;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Set the product's logo id.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Attributes\Attribute
+	 */
+	public function logoId(): Attribute {
+		return Attribute::make(
+			get: fn (?int $value) => $value,
+			set: fn (int $value) => $value,
+		);
+	}
+
+	/**
+	 * Get the product's logo.
+	 *
+	 * @return \App\Models\Ecommerce\Logo|null
+	 */
+	public function logo(): ?Logo {
+		if ($this->logo_id) {
+			return Logo::find($this->logo_id);
+		}
+
+		if ($this->logoGroup() && $this->logoGroup()->forced) {
+			return $this->logoGroup()->logos->first();
+		}
+
+		return null;
+	}
+
+	// ! Legacy methods
 	/**
 	 * Delete the product and clean the related data
 	 */

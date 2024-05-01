@@ -87,7 +87,7 @@
                             <p style="">Spedizione:</p>
                         </td>
                         <td>
-                            <p style="text-align: right">{{ $cart->shippingPriceString() }}</p>
+                            <p style="text-align: right">{{ $cart->shippingFeeString() }}</p>
                         </td>
                     </tr>
                     <tr>

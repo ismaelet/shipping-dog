@@ -9,69 +9,92 @@ use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductSize;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * Represents an order in the e-commerce system.
+ */
 class Order extends Model {
 
-	protected $table = 'orders';
-	protected $fillable = ['fullProductPrice', 'price_disc', 'productGain', 'gain_disc', 'credit', 'inventory'];
-
-	/****************************
-	 * * Relationship instances *
-	 ****************************/
 	/**
-	 * Get the order's cart
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $fillable = ['fullProductPrice', 'price_disc', 'productGain', 'gain_disc', 'credit', 'inventory', 'quantity', 'time', 'user_id', 'cart_id', 'product_id', 'seller_id', 'design_id', 'type_id', 'color_id', 'size_id', 'gender_id', 'position_id', 'logo_id'];
+
+
+	// * Relationships * //
+
+	/**
+	 * Get the cart that the order belongs to.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function cart(): BelongsTo {
 		return $this->belongsTo(Cart::class);
 	}
 
 	/**
-	 * Get the order's seller
+	 * Get the order's seller.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function seller(): BelongsTo {
 		return $this->belongsTo(Seller::class);
 	}
 
 	/**
-	 * Get the order's product
+	 * Get the order's product.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function product(): BelongsTo {
 		return $this->belongsTo(Product::class);
 	}
 
 	/**
-	 * Get the order's color
+	 * Get the order's color.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function color(): HasOne {
-		return $this->hasOne(ProductColor::class, 'id', 'color_id');
+	public function color(): BelongsTo {
+		return $this->belongsTo(ProductColor::class);
 	}
 
 	/**
-	 * Get the order's size
+	 * Get the order's size.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function size(): HasOne {
-		return $this->hasOne(ProductSize::class, 'id', 'size_id');
+	public function size(): BelongsTo {
+		return $this->belongsTo(ProductSize::class);
 	}
 
 	/**
-	 * Get the order's position
+	 * Get the order's position.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function position(): HasOne {
-		return $this->hasOne(ProductPosition::class, 'id', 'position_id');
+	public function position(): BelongsTo {
+		return $this->belongsTo(ProductPosition::class);
 	}
 
 	/**
-	 * Get the order's logo
+	 * Get the order's logo.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function logo(): HasOne {
-		return $this->hasOne(Logo::class, 'id', 'logo_id');
+	public function logo(): BelongsTo {
+		return $this->belongsTo(Logo::class);
 	}
-	/************************
-	 * * Utility methods *
-	 ************************/
+
+
+	// * Utility methods * //
+
 	/**
-	 * Get the name of the order
+	 * Get the name of the order.
+	 *
+	 * @return string
 	 */
 	public function name(): string {
 		$name = $this->quantity > 1 ? [$this->quantity . 'x'] : [];
@@ -81,14 +104,18 @@ class Order extends Model {
 	}
 
 	/**
-	 * Get the name of the order, including the design name
+	 * Get the the name of the order, including the design's name and id.
+	 *
+	 * @return string
 	 */
 	public function fullName(): string {
 		return ($this->design_id ? $this->design_id . ' - ' : '') . $this->name() . ' (' . $this->description() . ')';
 	}
 
 	/**
-	 * Get the description of the order
+	 * Get the description of the order.
+	 *
+	 * @return string
 	 */
 	public function description(): string {
 		$product = $this->product;
@@ -102,13 +129,17 @@ class Order extends Model {
 		return $description;
 	}
 
-	public function condensedDescription(): string {
+	/**
+	 * Get the full description of the order.
+	 *
+	 * @return string
+	 */
+	public function multilineDescription(): string {
 		if (!$this->product || !$this->product->status || $this->product->deleted) {
 			return 'Articolo rimosso';
 		}
 
 		$type = $this->product->type->name;
-		// $type = $this->product->type->sibling && !$this->product->type->unisex ? $type . ' - ' . $this->product->type->gender_model->name : $type;
 		$size = $this->size_id ? 'Taglia: ' . $this->size->name : null;
 		$color = $this->color_id ? 'Colore: ' . $this->color->name : null;
 		$position = $this->position_id > 1 ? $this->position->name : null;
@@ -118,74 +149,132 @@ class Order extends Model {
 	}
 
 	/**
-	 * Get the price
-	 */
-	public function grossProductPrice(): float {
-		return $this->fullProductPrice;
-	}
-
-	public function productDiscount(): float {
-		return $this->price_disc;
-	}
-
-	public function productPrice(): float {
-		return $this->grossProductPrice() - $this->productDiscount();
-	}
-
-	public function grossPrice(): float {
-		return $this->grossProductPrice() * $this->quantity;
-	}
-
-	public function discount(): float {
-		return $this->credit ? $this->grossPrice() : $this->productDiscount() * $this->quantity;
-	}
-
-	public function price(): float {
-		return $this->grossPrice() - $this->discount();
-	}
-
-	public function priceString(): string {
-		return EcommerceHelper::formatPrice($this->price());
-	}
-
-	public function grossPriceString(): string {
-		return EcommerceHelper::formatPrice($this->grossPrice());
-	}
-
-	/**
-	 * Get the gain amount
-	 */
-	public function totalGain(): float {
-		return ($this->productGain - $this->gain_disc) * $this->quantity;
-	}
-
-	public function totalGainString(): string {
-		return EcommerceHelper::formatPrice($this->totalGain(), true);
-	}
-
-	/**
-	 * Get the time string
-	 */
-	public function timeString(): string {
-		return date('d/m/Y', strtotime($this->time));
-	}
-
-	/**
-	 * Returns the image of the order
+	 * Returns the image of the order.
+	 *
+	 * @return string
 	 */
 	public function image(): string {
 		return $this->product->image(null, $this->color_id, $this->position_id);
 	}
 
-	// * Actions * //
 	/**
-	 * Deletes the order
+	 * Get the creation date of the order as a string.
+	 *
+	 * @return string
+	 */
+	public function createdAtString(): string {
+		return date('d/m/Y', strtotime($this->time));
+	}
+
+
+	// ~ Price ~ //
+
+	/**
+	 * Get the gross price of a single product.
+	 *
+	 * @return float
+	 */
+	public function grossProductPrice(): float {
+		return $this->fullProductPrice;
+	}
+
+	/**
+	 * Get the discount of a single product.
+	 *
+	 * @return float
+	 */
+	public function productDiscount(): float {
+		return $this->price_disc;
+	}
+
+	/**
+	 * Get the price of a single product.
+	 *
+	 * @return float
+	 */
+	public function productPrice(): float {
+		return $this->grossProductPrice() - $this->productDiscount();
+	}
+
+	/**
+	 * Get the total gross price of the order.
+	 *
+	 * @return float
+	 */
+	public function grossPrice(): float {
+		return $this->grossProductPrice() * $this->quantity;
+	}
+
+	/**
+	 * Get the total discount.
+	 *
+	 * @return float
+	 */
+	public function discount(): float {
+		return $this->credit ? $this->grossPrice() : $this->productDiscount() * $this->quantity;
+	}
+
+	/**
+	 * Get the total price of the order.
+	 *
+	 * @return float
+	 */
+	public function price(): float {
+		return $this->grossPrice() - $this->discount();
+	}
+
+	/**
+	 * Get the seller's total gain for the order.
+	 *
+	 * @return float
+	 */
+	public function totalGain(): float {
+		return ($this->productGain - $this->gain_disc) * $this->quantity;
+	}
+
+	/**
+	 * Get the price of the order as a formatted string.
+	 *
+	 * @return string
+	 */
+	public function priceString(): string {
+		return EcommerceHelper::formatPrice($this->price());
+	}
+
+	/**
+	 * Get the gross price of the order as a formatted string.
+	 *
+	 * @return string
+	 */
+	public function grossPriceString(): string {
+		return EcommerceHelper::formatPrice($this->grossPrice());
+	}
+
+	/**
+	 * Get the seller's total gain for the order as a formatted string.
+	 *
+	 * @return string
+	 */
+	public function totalGainString(): string {
+		return EcommerceHelper::formatPrice($this->totalGain(), true);
+	}
+
+
+	// * Actions * //
+
+	/**
+	 * Deletes the order.
+	 *
+	 * @return bool|null
 	 */
 	public function delete(): bool|null {
-		$results = parent::delete();
+		$result = parent::delete();
+		$cart = $this->cart;
 
-		$this->cart->updateOrders();
+		if ($cart->orders->isEmpty()) {
+			$cart->delete();
+		}
 
-		return $results;
+		return $result;
 	}
 }

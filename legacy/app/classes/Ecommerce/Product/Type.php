@@ -7,7 +7,7 @@ use Legacy\Classes\Ecommerce\Product;
 
 class Type {
 
-	public const TABLE = 'items_types';
+	public const TABLE = 'product_types';
 	public const INDEX = 'id';
 	public const GENDER_INDEX = 'genderID';
 
@@ -31,7 +31,7 @@ class Type {
 	public $availablePositionIds;
 
 	function __construct($id) {
-		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM items_types WHERE id = ?', [$id])) {
+		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM product_types WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->slug = $row['tag'];
 			$this->name = $row['name'];

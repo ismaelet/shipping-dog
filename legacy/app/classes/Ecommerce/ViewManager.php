@@ -83,7 +83,7 @@ class ViewManager {
 							<?php } ?>
 
 							<p class="order-list__description">
-								<?= $order->condensedDescription() ?>
+								<?= $order->multilineDescription() ?>
 							</p>
 						</div>
 

@@ -18,7 +18,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 
 				<!-- Name and data -->
 				<h1 id="art-name" class="txt-bold"><a href="<?= $product->seller->url() ?>"><?= $product->seller->name ?></a></h1>
-				<p id="art-date">membro dal <?= $product->seller->timeString() ?></p>
+				<p id="art-date">membro dal <?= $product->seller->createdAtString() ?></p>
 
 				<!-- Follow artist -->
 				<?= FollowButton::render(['seller_id' => $product->seller->id]) ?>

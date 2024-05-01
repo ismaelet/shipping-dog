@@ -12,29 +12,46 @@ use Illuminate\View\View;
 
 class CartController extends ResourceController {
 
+	// ~ Index action configuration ~ //
 	/**
-	 * - Index action configuration
+	 * The columns array for the resource.
+	 *
+	 * @var array
 	 */
 	protected array $columns = [
 		['label' => 'ID', 'name' => 'id'],
 		['label' => 'Destinatario', 'name' => 'full_name', 'type' =>  'method', 'method' => 'address.fullAddress'],
 		['label' => 'Articoli', 'type' =>  'method', 'method' => 'ordersString',],
 		// ['label' => 'Spedizione', 'name' => 'shipping_method_name'],
-		['label' => 'Totale', 'name' => 'tot', 'type' => 'method', 'method' => 'priceString', 'wrap' => false],
+		['label' => 'Totale', 'name' => 'price', 'type' => 'price',],
 		['label' => 'Registrato', 'name' => 'user_id', 'type' => 'bool'],
-		['label' => 'Stato', 'name' => 'status', 'type' => 'method', 'method' => 'statusTag',],
+		['label' => 'Stato', 'name' => 'status', 'type' => 'method', 'method' => 'statusLabel',],
 		['label' => 'Data', 'name' => 'created_at', 'type' => 'date'],
 	];
 
+	/**
+	 * The default order by array for the resource.
+	 *
+	 * @var array
+	 */
 	protected array $orderBy = ['created_at' => 'desc'];
 
+
+	// ~ Edit action configuration ~ //
 	/**
-	 * - Edit action configuration
+	 * The field used as the title for the resource.
+	 *
+	 * @var string
 	 */
 	protected string $titleField = 'id';
 
+
+	// * Index action * //
 	/**
-	 * * Index action
+	 * Display a listing of the resource.
+	 *
+	 * @param \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function index(Request $request): View {
 		// Prepare the query
@@ -78,8 +95,13 @@ class CartController extends ResourceController {
 		return $this->_index($request);
 	}
 
+
+	// * Edit action * //
 	/**
-	 * * Edit action
+	 * Edit a resource record.
+	 *
+	 * @param int $id The ID of the resource record to edit.
+	 * @return \Illuminate\View\View The view for editing the resource record.
 	 */
 	public function edit(int $id): View {
 		$this->record = Cart::find($id);
@@ -87,8 +109,14 @@ class CartController extends ResourceController {
 		return $this->_edit();
 	}
 
+
+	// * Update action * //
 	/**
-	 * * Update action
+	 * Update the resource.
+	 *
+	 * @param \Illuminate\Http\Request $request
+	 * @param int $id
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function update(Request $request, int $id) {
 		// Find the record
@@ -107,8 +135,13 @@ class CartController extends ResourceController {
 		return redirect()->back();
 	}
 
+
+	// * Custom actions * //
 	/**
-	 * * Resend email action
+	 * Resend the email for a specific cart.
+	 *
+	 * @param int $id The ID of the cart.
+	 * @return \Illuminate\Http\RedirectResponse The redirect response.
 	 */
 	public function resendEmail(int $id): RedirectResponse {
 		$cart = Cart::find($id);

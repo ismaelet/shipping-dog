@@ -14,7 +14,7 @@ $fields = [
 	['title' => 'id', 'name' => 'id'],
 	['title' => 'Nome', 'name' => 'name', 'size' => 1],
 	['title' => 'Artista', 'type' => 'find', 'name' => 'user_id', 'find' => 'name FROM stores WHERE user_id = ?', 'size' => 1],
-	['title' => 'Tipo', 'type' => 'find', 'name' => 'type_id', 'find' => 'name FROM items_types WHERE id = ?', 'size' => 1],
+	['title' => 'Tipo', 'type' => 'find', 'name' => 'type_id', 'find' => 'name FROM product_types WHERE id = ?', 'size' => 1],
 	// ['title' => 'Vendite', 'name' => 'sales', 'size' => 'm', 'parse' => 'int'],
 	// ['title' => 'Vendite rec.', 'name' => 'recent_sales', 'size' => 'm', 'parse' => 'int'],
 	['title' => 'Data', 'name' => 'time',],

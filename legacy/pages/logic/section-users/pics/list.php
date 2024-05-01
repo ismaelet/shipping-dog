@@ -18,7 +18,7 @@ $fields = [
 	['title' => 'Nome', 'name' => 'first_name', 'size' => 1],
 	['title' => 'Cognome', 'name' => 'last_name', 'size' => 1],
 	['title' => 'Design', 'name' => 'design_id', 'type' => 'find', 'find' => 'name FROM designs WHERE id = ?',],
-	['title' => 'Tipo', 'name' => 'type', 'type' => 'find', 'find' => 'name FROM items_types WHERE tag = ?',],
+	['title' => 'Tipo', 'name' => 'type', 'type' => 'find', 'find' => 'name FROM product_types WHERE tag = ?',],
 	['title' => 'Data', 'name' => 'time',],
 
 	['type' => 'hidden', 'name' => 'id'],

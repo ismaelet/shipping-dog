@@ -64,7 +64,7 @@ class CartStatusUpdate {
 		$emailContent = str_replace('{{ payment }}', $cart->paymentMethod->name ?: '-', $emailContent);
 		$emailContent = str_replace('{{ shipping }}', $cart->shippingMethod->name, $emailContent);
 		$emailContent = str_replace('{{ order-list }}', $orderList, $emailContent);
-		$emailContent = str_replace('{{ shipping-price }}', $cart->shippingPriceString, $emailContent);
+		$emailContent = str_replace('{{ shipping-price }}', $cart->shippingFeeString, $emailContent);
 		$emailContent = str_replace('{{ total-price }}', $cart->priceString, $emailContent);
 
 		$emailBody = Email::prepareBody($emailContent);

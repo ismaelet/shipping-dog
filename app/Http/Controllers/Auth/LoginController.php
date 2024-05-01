@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,7 +21,7 @@ class LoginController extends Controller {
 	/**
 	 * Authenticate the user
 	 */
-	public function auth(Request $request) {
+	public function auth(Request $request): RedirectResponse {
 		// Validate the request 
 		$credentials = $request->validate([
 			'login' => ['required'],
@@ -36,7 +37,11 @@ class LoginController extends Controller {
 		if (Auth::attempt($credentials, $request->filled('remember'))) {
 			$request->session()->regenerate();
 
-			return redirect('/profile');
+			if ($request->has('redirect')) {
+				return back();
+			} else {
+				return redirect('/profile');
+			}
 		}
 
 		return back()->with([

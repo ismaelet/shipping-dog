@@ -1,12 +1,16 @@
 <?php
 
+use App\Models\Ecommerce\Cart;
+
 $_SESSION['payment_type'] = 'buy';
-$_SESSION['payment_cart_id'] = $cart_id = cart()->id;
+$_SESSION['payment_cart_id'] = $cart_id = cart()?->id;
 
-ob_start();
+$cart = Cart::find($cart_id);
 
-require_once(SERVER_ROOT . '/listeners/shared.php');
+if ($cart) {
+	require_once(base_path() . '/legacy/listeners/shared.php');
 
-ob_end_clean();
-
-redirect_old($cart->url);
+	redirect_old($cart->recapUrl());
+} else {
+	redirect_old('/cart');
+}

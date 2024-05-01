@@ -13,7 +13,7 @@ $inputs = [
 	['title' => 'id', 'field' => 'id', 'size' => 's'],
 	['title' => 'Design', 'field' => 'design_id', 'find' => 'name FROM designs WHERE id = ?', 'size' => 'm'],
 	['title' => 'Negozio', 'field' => 'seller_id', 'find' => 'name FROM stores WHERE user_id = ?', 'size' => 'm'],
-	['title' => 'Tipo', 'field' => 'type_id', 'find' => 'name FROM items_types WHERE id = ?', 'size' => 'm'],
+	['title' => 'Tipo', 'field' => 'type_id', 'find' => 'name FROM product_types WHERE id = ?', 'size' => 'm'],
 	['title' => 'Colore', 'field' => 'color_id', 'find' => 'name FROM items_colors WHERE id = ?', 'size' => 'm'],
 	['title' => 'Codice', 'field' => 'code', 'size' => 'm'],
 	['title' => 'Qt.', 'field' => 'amount', 'size' => 's'],

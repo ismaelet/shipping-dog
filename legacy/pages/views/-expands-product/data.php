@@ -23,7 +23,9 @@ use Legacy\Classes\Ecommerce\Product\Type;
 
 	<?php } ?>
 
-	<form method="POST" class="content grid gap3 al-top">
+	<form action="<?= route('orders.store') ?>" method="POST" class="content grid gap3 al-top">
+
+		<input type="hidden" name="product_id" value="<?= $product->id ?>">
 
 		<div id="left-panel" class="mar-h-auto">
 
@@ -221,7 +223,7 @@ use Legacy\Classes\Ecommerce\Product\Type;
 
 								if ((in_array($color->slug, $legacyProduct->type->availableColorSlugs) || $legacyProduct->isCustom) && in_array($color->slug, $legacyProduct->availableColorSlugs)) { ?>
 
-									<input type="checkbox" class="cbx" id="cbx-color-<?= $color->slug ?>" name="cbx-color[]" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-id="<?= $color->id ?>" <?php if ($color->slug == $legacyProduct->color->slug) echo 'checked' ?>>
+									<input type="radio" class="cbx" id="cbx-color-<?= $color->slug ?>" name="color_id" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-id="<?= $color->id ?>" <?php if ($color->slug == $legacyProduct->color->slug) echo 'checked' ?>>
 
 									<label for="cbx-color-<?= $color->slug ?>" class="color-box">
 
@@ -270,10 +272,10 @@ use Legacy\Classes\Ecommerce\Product\Type;
 
 									<div class="size_box">
 										<input type="hidden" value="<?= $sizeM->price ?>">
-										<input type="checkbox" class="cbx" id="cbx-type_<?= $sizeM->slug ?>" name="cbx-size[]" value="<?= $sizeM->id ?>" <?php if ($new) {
-																																								echo 'checked';
-																																								$new = false;
-																																							} ?>>
+										<input type="radio" class="cbx" id="cbx-type_<?= $sizeM->slug ?>" name="size_id" value="<?= $sizeM->id ?>" <?php if ($new) {
+																																						echo 'checked';
+																																						$new = false;
+																																					} ?>>
 
 										<label class="size_lbl" for="cbx-type_<?= $sizeM->slug ?>">
 											<h1 class="size_txt txt-upp"><?= $sizeM->name ?></h1>
@@ -326,7 +328,7 @@ use Legacy\Classes\Ecommerce\Product\Type;
 							?>
 
 									<div class="gend_box">
-										<input type="checkbox" class="cbx" id="cbx-gend_<?= $gender->slug ?>" name="cbx-gender[]" value="<?= $gender->id ?>" <?= !$relatedProduct ? 'checked' : '' ?>>
+										<input type="radio" class="cbx" id="cbx-gend_<?= $gender->slug ?>" name="gender_id" value="<?= $gender->id ?>" <?= !$relatedProduct ? 'checked' : '' ?>>
 
 										<a <?= $relatedProduct ? 'href="' . $relatedProduct->url() . '"' : '' ?> class="gend_lbl">
 											<h1 class="gend_txt"><?= $gender->name ?></h1>
@@ -354,7 +356,7 @@ use Legacy\Classes\Ecommerce\Product\Type;
 						?>
 
 							<label class="data-selector data-selector--position">
-								<input type="checkbox" class="js-change-position" name="cbx-pos[]" value="<?= $position->id ?>" <?php if (!$key) echo 'checked' ?>>
+								<input type="checkbox" class="js-change-position" name="position_id" value="<?= $position->id ?>" <?php if (!$key) echo 'checked' ?>>
 								<p class="data-selector__label"><?= $position->name ?></p>
 							</label>
 
@@ -376,7 +378,7 @@ use Legacy\Classes\Ecommerce\Product\Type;
 								<?php if (!$legacyProduct->logoGroup->forced) { ?>
 
 									<label class="logo-field__item">
-										<input type="radio" class="js-logo" name="logo-id" value="0" checked>
+										<input type="radio" class="js-logo" name="logo_id" value="0" checked>
 										<?= embed_icon('close') ?>
 									</label>
 
@@ -443,7 +445,7 @@ use Legacy\Classes\Ecommerce\Product\Type;
 
 					<?php if (($legacyProduct->statusId && !$legacyProduct->deleted) || $owner) { ?>
 
-						<button type="submit" id="submit" name="submit" class="add-to-cart btn button--full-width">
+						<button type="submit" id="submit" class="add-to-cart btn button--full-width">
 							<?= embed_icon('cart') ?>
 							Aggiungi al carrello
 						</button>

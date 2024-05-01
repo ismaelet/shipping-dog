@@ -1,7 +1,5 @@
 <?php
 
-
-
 $error = false;
 
 // setup functions

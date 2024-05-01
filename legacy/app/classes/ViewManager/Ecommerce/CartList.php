@@ -48,11 +48,11 @@ class CartList {
 							</p>
 							<p class="cart-list__field"><?= $cart->priceString() ?></p>
 							<p class="cart-list__field">
-								<span class="cart-list__status background-status-color--<?= $cart->statusCode() ?>">
+								<span class="cart-list__status background-status-color--<?= $cart->statusTag() ?>">
 									<?= $cart->statusName() ?>
 								</span>
 							</p>
-							<p class="cart-list__field"><?= $cart->timeString() ?></p>
+							<p class="cart-list__field"><?= $cart->createdAtString() ?></p>
 							<p class="cart-list__field">
 								<a class="cart-list__link text-link" href="<?= $cart->recapUrl() ?>">
 									visualizza

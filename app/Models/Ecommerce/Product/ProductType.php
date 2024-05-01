@@ -2,21 +2,36 @@
 
 namespace App\Models\Ecommerce\Product;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-/**
- * Class ProductType
- * 
- * @method string image(?int $color_id = null, ?int $position_id = null)
- */
 class ProductType extends Model {
 
-
-	protected $table = 'items_types';
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
 	protected $fillable = ['tag', 'name', 'name', 'names', 'gender', 'sibling', 'unisex', 'sizes', 'positions', 'category', 'colors', 'hidden'];
+
+
+	// * Relationships * //
+
+	/**
+	 * Get the positions associated with the product type.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function positions(): BelongsToMany {
+		return $this->belongsToMany(ProductPosition::class);
+	}
+
+
+	// * Attributes * //
 
 	/**
 	 * The list of the type's colors as array

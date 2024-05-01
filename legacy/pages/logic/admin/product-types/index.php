@@ -8,7 +8,7 @@ $pageConfig['row-action'] = 'add?id={{id}}';
 /*
 * Query configuration
 */
-$queryConfig['table'] = 'items_types';
+$queryConfig['table'] = 'product_types';
 $queryConfig['index'] = 'id';
 $query['where-search'] = "
 	id = ? OR

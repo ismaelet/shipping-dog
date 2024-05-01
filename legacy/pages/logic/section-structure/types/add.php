@@ -20,7 +20,7 @@ $productType = $id ? ProductType::find($id) : null;
 /**
  * Query configuration
  */
-$queryConfig['table'] = 'items_types';
+$queryConfig['table'] = 'product_types';
 $queryConfig['index-field'] = 'id';
 $queryConfig['title-field'] = 'name';
 
@@ -86,7 +86,7 @@ $inputs = [
 			'type' => 'select',
 			'name' => 'sibling',
 			'text' => 'Modello',
-			'query' => 'ID, name FROM items_types ORDER BY id ASC',
+			'query' => 'ID, name FROM product_types ORDER BY id ASC',
 			'field-name' => 'id',
 			'field-show' => 'name',
 			'empty' => true,

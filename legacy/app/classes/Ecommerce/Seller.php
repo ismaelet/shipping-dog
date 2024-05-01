@@ -30,7 +30,7 @@ class Seller {
 		return $this->custom;
 	}
 
-	private function getTimeString() {
+	private function getcreatedAtString() {
 		return date('m/Y', strtotime($this->time));
 	}
 

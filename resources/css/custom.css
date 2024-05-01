@@ -62,6 +62,7 @@
 		/* 2.1.3 Neutral light */
 		--color-neutral-light-100-hsl: var(--theme-h) var(--theme-light-s) 100%;
 		--color-neutral-light-200-hsl: var(--theme-h) var(--theme-light-s) 93%;
+		--color-neutral-light-250-hsl: var(--theme-h) var(--theme-light-s) 85%;
 		--color-neutral-light-300-hsl: var(--theme-h) var(--theme-light-s) 50%;
 		--color-neutral-light-400-hsl: var(--theme-h) var(--theme-light-s) 31%;
 		--color-neutral-light-700-hsl: var(--theme-h) var(--theme-light-s) 13%;
@@ -96,7 +97,7 @@
 		/*
 		* 2.2. Borders
 		*/
-		--border-width: 2px;
+		--border-width: 1px;
 		--border-color: var(--color-neutral-200);
 		--border: var(--border-width) solid var(--border-color);
 		--border-radius-100: 0.125rem;
@@ -167,6 +168,7 @@
 		/* 2.7.1 Neutral colors */
 		--color-neutral-100-hsl: var(--color-neutral-light-100-hsl);
 		--color-neutral-200-hsl: var(--color-neutral-light-200-hsl);
+		--color-neutral-250-hsl: var(--color-neutral-light-250-hsl);
 		--color-neutral-300-hsl: var(--color-neutral-light-300-hsl);
 		--color-neutral-400-hsl: var(--color-neutral-light-400-hsl);
 		--color-neutral-700-hsl: var(--color-neutral-light-700-hsl);

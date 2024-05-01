@@ -3,7 +3,7 @@
 global $id;
 
 //setup page
-$typeName = \Legacy\System\Classes\LegacyDB::find('name FROM items_types WHERE id = ?', $id);
+$typeName = \Legacy\System\Classes\LegacyDB::find('name FROM product_types WHERE id = ?', $id);
 
 $tbl = 'items_types_measures';
 $index = 'type_id';

@@ -1,47 +1,53 @@
 @switch($column['type'] ?? 'default')
-    @case('int')
-        {{ $record->{$column['name']} ?: '0' }}
-    @break
+	@case('int')
+		{{ $record->{$column['name']} ?: '0' }}
+	@break
 
-    @case('float')
-        {{ $record->{$column['name']} ?: '0.00' }}
-    @break
+	@case('float')
+		{{ $record->{$column['name']} ?: '0.00' }}
+	@break
 
-    @case('date')
-        {{ $record->{$column['name']} ? $record->{$column['name']}->format('d/m/Y') : '-' }}
-    @break
+	@case('price')
+		<span class="whitespace-nowrap">
+			{{ \App\Helpers\EcommerceHelper::formatPrice($record->{$column['name']}, true) }}
+		</span>
+	@break
 
-    @case('bool')
-        <span class="h-4">
-            {!! embed_icon($record->{$column['name']} ? 'correct' : 'wrong') !!}
-        </span>
-    @break
+	@case('date')
+		{{ $record->{$column['name']} ? $record->{$column['name']}->format('d/m/Y') : '-' }}
+	@break
 
-    @case('method')
-        @php
-            $methods = explode('.', $column['method']);
-            $value = $record;
+	@case('bool')
+		<span class="h-4">
+			{!! embed_icon($record->{$column['name']} ? 'correct' : 'wrong') !!}
+		</span>
+	@break
 
-            foreach ($methods as $method) {
-                if ($method == end($methods)) {
-                    $value = isset($value) ? $value->{$method}() : null;
-                } else {
-                    $value = $value->{$method};
-                }
-            }
-        @endphp
+	@case('method')
+		@php
+			$methods = explode('.', $column['method']);
+			$value = $record;
 
-        <span @class([
-            'whitespace-nowrap' => isset($column['wrap']) && !$column['wrap'],
-        ])>
-            {!! $value !!}
-        </span>
-    @break
+			foreach ($methods as $method) {
+			    if ($method == end($methods)) {
+			        $value = isset($value) ? $value->{$method}() : null;
+			    } else {
+			        $value = $value->{$method};
+			    }
+			}
+		@endphp
 
-    @default
-        <span @class([
-            'whitespace-nowrap' => isset($column['wrap']) && !$column['wrap'],
-        ])>
-            {!! $record->{$column['name']} ?: '-' !!}
-        </span>
+		<span @class([
+			'whitespace-nowrap' => isset($column['wrap']) && !$column['wrap'],
+		])>
+			{!! $value !!}
+		</span>
+	@break
+
+	@default
+		<span @class([
+			'whitespace-nowrap' => isset($column['wrap']) && !$column['wrap'],
+		])>
+			{!! $record->{$column['name']} ?: '-' !!}
+		</span>
 @endswitch

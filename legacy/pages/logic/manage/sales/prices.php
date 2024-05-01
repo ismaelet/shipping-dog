@@ -8,13 +8,13 @@ global $user;
 $done = false;
 
 // get types
-$res_cloth = \Legacy\System\Classes\LegacyDB::select('id FROM items_types WHERE category=? AND hidden = 0 ORDER BY id ASC', ['c']);
-$res_acc = \Legacy\System\Classes\LegacyDB::select('id FROM items_types WHERE category=? AND hidden = 0 ORDER BY id ASC', ['m']);
+$res_cloth = \Legacy\System\Classes\LegacyDB::select('id FROM product_types WHERE category=? AND hidden = 0 ORDER BY id ASC', ['c']);
+$res_acc = \Legacy\System\Classes\LegacyDB::select('id FROM product_types WHERE category=? AND hidden = 0 ORDER BY id ASC', ['m']);
 
 // UPDATE PRICES
 if (isset($_POST['submit'])) {
 
-	$res = \Legacy\System\Classes\LegacyDB::select('id FROM items_types WHERE hidden = 0 ORDER BY id ASC');
+	$res = \Legacy\System\Classes\LegacyDB::select('id FROM product_types WHERE hidden = 0 ORDER BY id ASC');
 
 	while ($row = $res->fetch_assoc()) {
 

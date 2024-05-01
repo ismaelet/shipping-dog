@@ -11,3 +11,5 @@ $warning = warning_banner();
 
 // setup shop
 $shop = new Shop();
+
+\Legacy\System\Classes\LegacyView::setTitle('Negozio');

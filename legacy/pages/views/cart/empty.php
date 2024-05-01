@@ -1,13 +1,1 @@
-{% block main %}
-
-<div class="main-wrap self-align-center grid-flow center-content pad-v-5" data-spacing="700">
-	<div class="empty-cart__icon">
-		<?= embed_icon('empty-cart') ?>
-	</div>
-
-	<h1 class="section-heading">Il tuo carrello è vuoto</h1>
-	<p class="text--big">Puoi cercare dei prodotti da acquistare qui</p>
-	<a href="<?= client_url('/shop') ?>" class="btn">Catalogo</a>
-</div>
-
-{% end main %}
+<!-- OLD -->

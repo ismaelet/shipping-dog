@@ -41,7 +41,7 @@ $queryConfig['where-search'] = "
 			design_id IN (SELECT id FROM designs WHERE id = ? OR name LIKE CONCAT('%',?,'%'))
 	) OR
 	
-	ID IN (SELECT cart_id FROM orders WHERE type_id IN (SELECT id FROM items_types WHERE name=CONCAT('%',?,'%')))
+	ID IN (SELECT cart_id FROM orders WHERE type_id IN (SELECT id FROM product_types WHERE name=CONCAT('%',?,'%')))
 )";
 
 /*
@@ -73,7 +73,7 @@ function _expand_results(&$entry, $field, $key, $row) {
 		$entry['value'] = $cart->idCode();
 	} else if ($key == 1) {
 		// basic data
-		$entry['value'] = $cart->timeString() . '<br>';
+		$entry['value'] = $cart->createdAtString() . '<br>';
 		if ($cart->customer) $entry['value'] .= 'ID cliente: ' . $cart->customerId . '<br>';
 		$entry['value'] .= $cart->shipping_method->name . '<br>';
 		$entry['value'] .= 'Pagamento: ' . $cart->payment_method?->name . '<br>';
@@ -98,7 +98,7 @@ function _expand_results(&$entry, $field, $key, $row) {
 		$entry['value'] = $cart->priceString();
 	} else if ($key == 6) {
 		// status
-		$entry['value'] = '<span class="order-status background-status-color--' . $cart->statusCode() . '">' . $cart->statusName() . '</span>';
+		$entry['value'] = '<span class="order-status background-status-color--' . $cart->statusTag() . '">' . $cart->statusName() . '</span>';
 	}
 }
 

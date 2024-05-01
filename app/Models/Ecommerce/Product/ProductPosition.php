@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class ProductPosition extends Model {
 
 
-	protected $table = 'items_positions';
 	protected $fillable = [];
 
 	/**

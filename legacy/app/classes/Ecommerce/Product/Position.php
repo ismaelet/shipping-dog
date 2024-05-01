@@ -15,7 +15,7 @@ class Position {
 	public $imagePositionId;
 
 	function __construct($id) {
-		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM items_positions WHERE id = ?', [$id])) {
+		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM product_positions WHERE id = ?', [$id])) {
 			$this->id = $id;
 			$this->name = $row['name'];
 			$this->info = $row['info'];

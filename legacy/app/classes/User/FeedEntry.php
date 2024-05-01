@@ -2,7 +2,7 @@
 
 namespace Legacy\Classes\User;
 
-use App\Models\Ecommerce\Order as EcommerceOrder;
+use App\Models\Ecommerce\Order;
 use Legacy\Classes\Ecommerce\Design;
 use Legacy\Classes\User;
 
@@ -24,7 +24,7 @@ class FeedEntry {
 		$this->time = $row['time'] ?? null;
 	}
 
-	private function gettimeString() {
+	private function getTimeString() {
 		return date('d-m-Y', strtotime($this->time));
 	}
 
@@ -48,8 +48,8 @@ class FeedEntry {
 		return in_array($this->type_id, [3, 4]) ? new User($this->subjectId) : null;
 	}
 
-	private function getorder() {
-		return $this->type_id == 2 ? EcommerceOrder::find($this->event_id) : null;
+	private function getOrder() {
+		return $this->type_id == 2 ? Order::find($this->event_id) : null;
 	}
 
 	private function getseller() {
@@ -67,7 +67,7 @@ class FeedEntry {
 				break;
 
 			case 2:
-				$text = 'Hai venduto <strong>' . $this->order->quantity . ' x</strong> <a class="design" href="' . $this->order->product->url() . '">' . $this->order->product->name . '</a> per <strong>' . $this->order->gainString . '</strong>';
+				$text = 'Hai venduto <strong>' . $this->order->quantity . ' x</strong> <a class="design" href="' . $this->order->product->url() . '">' . $this->order->product->name . '</a> per <strong>' . $this->order->totalGainString() . '</strong>';
 				break;
 
 			case 3:

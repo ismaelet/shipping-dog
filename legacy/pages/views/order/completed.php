@@ -12,7 +12,7 @@ use Legacy\Classes\Ecommerce\ViewManager;
 </div>
 
 <div id="wrap" class="main-wrap pad-b-4">
-	<h2 id="title" class="txt-2rem background-status-color--<?= $cart->statusCode() ?>"><?= $cart->statusName() ?></h2>
+	<h2 id="title" class="txt-2rem background-status-color--<?= $cart->statusTag() ?>"><?= $cart->statusName() ?></h2>
 
 	<p id="head_txt" class="pad-v-2">
 		Il tuo ordine verrà spedito entro <strong>1-5 giorni lavorativi</strong> dal momento del pagamento. Riceverai una email dal <strong>corriere GLS</strong> con codice e istruzioni di <strong>tracciamento</strong> intorno alle <strong>20:00</strong> del giorno di spedizione. Abbiamo mandato una email di conferma al tuo indirizzo email. Nel caso non appaia entro 5 minuti dal momento del pagamento, consigliamo di controllare la <strong>cartella di spam</strong>.

@@ -15,9 +15,9 @@ $oldDesign_id = $_GET['design_id'];
 $oldDesign = new Design($oldDesign_id);
 
 if (!$oldDesign->custom && auth()->id() != 1) {
-	$oldTypes = \Legacy\System\Classes\LegacyDB::select('id FROM items_types WHERE hidden = 0 ORDER BY category ASC, id ASC');
+	$oldTypes = \Legacy\System\Classes\LegacyDB::select('id FROM product_types WHERE hidden = 0 ORDER BY category ASC, id ASC');
 } else {
-	$oldTypes = \Legacy\System\Classes\LegacyDB::select('id FROM items_types ORDER BY hidden ASC, category ASC, id ASC');
+	$oldTypes = \Legacy\System\Classes\LegacyDB::select('id FROM product_types ORDER BY hidden ASC, category ASC, id ASC');
 }
 
 while ($oldTypeRow = $oldTypes->fetch_assoc()) {

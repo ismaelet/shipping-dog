@@ -81,7 +81,7 @@ class Design extends Model {
 	/**
 	 * Get the design's time string
 	 */
-	public function timeString(): string {
+	public function createdAtString(): string {
 		return date('d/m/Y', strtotime($this->created_at));
 	}
 

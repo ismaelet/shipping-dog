@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
  * Auth routes
  */
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
-Route::post('/login', [LoginController::class, 'auth'])->middleware('guest');
+Route::post('/login', [LoginController::class, 'auth'])->middleware('guest')->name('login.auth');
 
 Route::get('/register', [RegisterController::class, 'index'])->name('register')->middleware('guest');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest');

@@ -58,15 +58,15 @@ if ($productPositionId) {
 $relatedGarments = rows_to_objects(
 	LegacyDB::select(
 		"items.id FROM items
-		INNER JOIN items_types ON items.type_id = items_types.id
+		INNER JOIN product_types ON items.type_id = product_types.id
 		WHERE design_id = ? AND type_id <> ? AND category='c' AND items.status = 1 AND items.deleted = 0
-		ORDER BY type_id ASC, items.sort ASC, items_types.sort ASC, items_types.id ASC",
+		ORDER BY type_id ASC, items.sort ASC, product_types.sort ASC, product_types.id ASC",
 		[$legacyProduct->design_id, $legacyProduct->type_id]
 	),
 	LegacyProduct::class
 );
 
-$relatedAccessories = rows_to_objects(LegacyDB::select("id FROM items WHERE design_id = ? AND type_id <> ? AND type_id IN (SELECT id FROM items_types WHERE category='m') AND status = 1 AND deleted = 0 ORDER BY type_id ASC", [$legacyProduct->design_id, $legacyProduct->type_id]), LegacyProduct::class);
+$relatedAccessories = rows_to_objects(LegacyDB::select("id FROM items WHERE design_id = ? AND type_id <> ? AND type_id IN (SELECT id FROM product_types WHERE category='m') AND status = 1 AND deleted = 0 ORDER BY type_id ASC", [$legacyProduct->design_id, $legacyProduct->type_id]), LegacyProduct::class);
 
 $relatedGarmentCount = count($relatedGarments);
 $relatedAccessoryCount = count($relatedAccessories);

@@ -1,6 +1,7 @@
 <?php
 
-// setup variabiles
+use Legacy\System\Classes\Email;
+
 $sent = false;
 $error = false;
 

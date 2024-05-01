@@ -120,7 +120,7 @@ const cartQuantitySelector = '.js-cart-quantity'
 const cartDataQuantitySelector = '.js-cart-data-quantity'
 const cartProductPriceSelector = '.js-cart-product-price'
 const cartProductPriceStringSelector = '.js-cart-product-price-string'
-const cartShippingPriceStringSelector = '.js-cart-shipping-price-string'
+const cartShippingFeeStringSelector = '.js-cart-shipping-price-string'
 const cartPriceStringSelector = '.js-cart-price-string'
 
 /*
@@ -164,13 +164,13 @@ async function update_cart() {
 
 // update shipping
 function update_shipping() {
-	const shippingElements = document.querySelectorAll(cartShippingPriceStringSelector)
+	const shippingElements = document.querySelectorAll(cartShippingFeeStringSelector)
 
 	shippingElements.forEach(async (element) => {
 		const shippingMethodId = element.dataset.shippingMethodId
-		const shippingPrice = (await get_class_properties('Legacy\\Classes\\Ecommerce\\ShippingMethod', 'priceString', shippingMethodId)).priceString
+		const shippingFee = (await get_class_properties('Legacy\\Classes\\Ecommerce\\ShippingMethod', 'priceString', shippingMethodId)).priceString
 
-		element.textContent = shippingPrice
+		element.textContent = shippingFee
 	})
 }
 

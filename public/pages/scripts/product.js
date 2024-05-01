@@ -4,24 +4,15 @@ document.addEventListener('DOMContentLoaded', function () {
 	const id = $('#item').data('id')
 
 	// change properties
-	$('#color .cbx').on('change', function () {
-		$('#color .cbx').prop('checked', false)
-		$(this).prop('checked', true)
-
+	$('[name="color_id"]').on('input', function () {
 		change_image()
 	})
 
-	$('#size .cbx').on('change', function () {
-		$('#size .cbx').prop('checked', false)
-		$(this).prop('checked', true)
-
+	$('[name="size_id"]').on('input', function () {
 		update_price()
 	})
 
-	$('.js-change-position').on('change', function () {
-		$('.js-change-position').prop('checked', false)
-		$(this).prop('checked', true)
-
+	$('[name="position_id"]').on('input', function () {
 		change_image()
 	})
 

@@ -182,18 +182,18 @@ function cart_recap($cart, $active = true) {
 
 			<div class="chck_item">
 				<p class="chck_name">Articoli</p>
-				<p class="chck_pric js-cart-products-price"><?= $cart->grossOrderPriceString() ?></p>
+				<p class="chck_pric js-cart-products-price"><?= $cart->grossOrdersPriceString() ?></p>
 			</div>
 
 			<div class="chck_item">
 				<p class="chck_name">Spedizione</p>
-				<p id="chck_totShip" class="chck_pric js-cart-shipping-price-string js-recap-shipping-price" data-shipping-method-id="<?= $cart->shipping_method_id ?>"><?= $cart->shippingPriceString() ?></p>
+				<p id="chck_totShip" class="chck_pric js-cart-shipping-price-string js-recap-shipping-price" data-shipping-method-id="<?= $cart->shipping_method_id ?>"><?= $cart->shippingFeeString() ?></p>
 			</div>
 
-			<?php if ($cart->orderDiscount()) { ?>
+			<?php if ($cart->ordersDiscount()) { ?>
 				<div class="chck_item">
 					<p class="chck_name">Sconto</p>
-					<p id="chck_totShip" class="chck_pric js-cart-discount">- <?= $cart->orderDiscountString() ?></p>
+					<p id="chck_totShip" class="chck_pric js-cart-discount">- <?= $cart->ordersDiscountString() ?></p>
 				</div>
 			<?php } ?>
 

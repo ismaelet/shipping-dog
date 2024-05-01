@@ -86,7 +86,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 							<p class="list-inp"><?= $order->cart->code ?: '-' ?></p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->timeString() ?></p>
+							<p class="list-inp"><?= $order->createdAtString() ?></p>
 						</div>
 					</div>
 

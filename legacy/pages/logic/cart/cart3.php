@@ -2,14 +2,12 @@
 
 use Legacy\Classes\Ecommerce\Order;
 
-
-
 // setup variables
 $skip = true;
 
 // skip when there are no active promotions
 if ($skip || isset($_POST['submit'])) {
-	cart_old()->advanceAndredirect_old();
+	cart_old()->advanceAndredirect_old(4);
 }
 
 // add item to cart

@@ -1,20 +1,22 @@
 <?php
 
+use App\Helpers\ArrayHelper;
 
-\Legacy\System\Classes\LegacyRoute::add('/cart', function () {
-	$cartSteps = ecommerce_config('cart-page')['steps'];
-	$currentStepId = $_GET['step-id'] ?? null;
-	$currentStepId = in_array($currentStepId, array_keys($cartSteps)) ? $currentStepId : null;
+\Legacy\System\Classes\LegacyRoute::add('/cart/*', function (string $path) {
+	$cartSteps = config('ecommerce.cart.steps');
+	$currentStep = ArrayHelper::explodeLast('/', $path)[1];
+	$currentStepId = array_search($currentStep, array_column($cartSteps, 'tag')) + 1;
+	$cartStep = cart()?->step;
 
-	if (!cart_old() || !cart_old()->quantity) {
+	if (!$cartStep) {
 		redirect_old('/cart/empty');
 	}
 
-	if (!$currentStepId || $currentStepId > cart_old()->stepId) {
-		redirect_old(cart_old()->openUrl);
+	if (!$currentStepId || $currentStepId > $cartStep) {
+		redirect_old('/cart/' . $cartSteps[$cartStep]['tag']);
 	}
 
-	if ($cartSteps[$currentStepId][1] == 'login' && auth()->check()) {
+	if ($currentStep == 'access' && auth()->check()) {
 		cart_old()->advanceAndredirect_old(2);
 	}
 

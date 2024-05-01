@@ -1,8 +1,6 @@
 <?php
 
-use App\Helpers\EcommerceHelper;
 use App\Helpers\FileHelper;
-use App\Models\Ecommerce\Cart;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -52,25 +50,4 @@ function embed_svg(string $fileName, array $customClasses = []): ?string {
  */
 function embed_icon(string $fileName, array $customClasses = []): ?string {
 	return FileHelper::embedSvg($fileName, $customClasses, true);
-}
-
-/**
- * Get the ID of the active cart
- */
-function cart_id(): ?int {
-	return EcommerceHelper::cart_id();
-}
-
-/**
- * Get the active cart
- */
-function cart(): ?Cart {
-	return EcommerceHelper::cart();
-}
-
-/**
- * Get the number of items in the cart
- */
-function cart_quantity(): int {
-	return EcommerceHelper::cartQuantity();
 }

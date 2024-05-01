@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\LegacyController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,17 +17,17 @@ use Illuminate\Support\Facades\Route;
 /**
  * Auth routes
  */
-if (file_exists(__DIR__ . '/authentication.php')) include_once __DIR__ . '/authentication.php';
+include_once __DIR__ . '/authentication.php';
 
 /**
  * Admin routes
  */
-if (file_exists(__DIR__ . '/admin.php')) include_once __DIR__ . '/admin.php';
+include_once __DIR__ . '/admin.php';
 
 /**
- * Product routes
+ * Ecommerce routes
  */
-// Route::get('/products/{slug}', [ProductController::class, 'show'])->name('product');
+include_once __DIR__ . '/web-ecommerce.php';
 
 /**
  * Legacy routes

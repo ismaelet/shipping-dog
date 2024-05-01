@@ -129,7 +129,7 @@ class Cart {
 		return client_path($this->openUrl);
 	}
 
-	private function getStatusCode() {
+	private function getstatusTag() {
 		return ecommerce_config('cart-statuses')[$this->statusId][0];
 	}
 
@@ -191,16 +191,16 @@ class Cart {
 		return format_price($this->discount);
 	}
 
-	private function getshippingPrice() {
-		return !$this->shippingWithCredit ? $this->fullShippingPrice : 0;
+	private function getshippingFee() {
+		return !$this->shippingWithCredit ? $this->fullShippingFee : 0;
 	}
 
-	private function getShippingPriceFrm() {
-		return format($this->shippingPrice);
+	private function getShippingFeeFrm() {
+		return format($this->shippingFee);
 	}
 
-	private function getShippingPriceString() {
-		return format_price($this->shippingPrice);
+	private function getShippingFeeString() {
+		return format_price($this->shippingFee);
 	}
 
 	private function getCredit() {
@@ -265,7 +265,7 @@ class Cart {
 	* Prices
 	*/
 	private function calcPrice() {
-		return $this->data['totalPrice'] = round($this->fullProductPrice - $this->discount + $this->shippingPrice, 2);
+		return $this->data['totalPrice'] = round($this->fullProductPrice - $this->discount + $this->shippingFee, 2);
 	}
 
 	private function calcproductPrice() {
@@ -288,11 +288,11 @@ class Cart {
 		return $discount;
 	}
 
-	private function getFullShippingPrice() {
+	private function getFullShippingFee() {
 		return $this->shippingMethod->price;
 	}
 
-	private function getNotFreeShippingPrice() {
+	private function getNotFreeShippingFee() {
 		return (new ShippingMethod(ShippingMethod::PRIMARY_SHIPPING_METHOD_ID))
 			->setAssociatedCart($this)
 			->price;
@@ -311,7 +311,7 @@ class Cart {
 	}
 
 	private function getUsedShippingCredit() {
-		return $this->shippingWithCredit ? $this->notFreeShippingPrice : 0;
+		return $this->shippingWithCredit ? $this->notFreeShippingFee : 0;
 	}
 
 	private function getUsedCredit() {
@@ -352,7 +352,7 @@ class Cart {
 			\Legacy\System\Classes\LegacyDB::update(
 				'
 				carts SET tot = ?, credit = ?, shipping_method_id = ?, shipping = ?, credit_ship = ? WHERE id = ?',
-				[$this->price, $this->usedCredit, $this->shipping_method_id, $this->fullShippingPrice, $this->shippingWithCredit, $this->id]
+				[$this->price, $this->usedCredit, $this->shipping_method_id, $this->fullShippingFee, $this->shippingWithCredit, $this->id]
 			);
 		else {
 			\Legacy\System\Classes\LegacyDB::delete('carts WHERE id = ?', $this->id);
@@ -426,6 +426,8 @@ class Cart {
 			$this->setShippingMethodId($shippingMethod->id);
 		}
 
+		$this->newCart()->updatePrice();
+
 		return $this;
 	}
 
@@ -433,6 +435,8 @@ class Cart {
 		\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET credit_ship = ? WHERE ' . self::INDEX . ' = ?', [$usingCredit ? 1 : 0, $this->id]);
 
 		$this->setShippingWithCredit($usingCredit);
+
+		$this->newCart()->updatePrice();
 
 		return $this;
 	}
@@ -447,6 +451,10 @@ class Cart {
 		}
 
 		return $this;
+	}
+
+	public function newCart(): ?EcommerceCart {
+		return EcommerceCart::find($this->id);
 	}
 
 	public function updateStepId(int $stepId) {
@@ -506,6 +514,8 @@ class Cart {
 			$this->data['couponCode'] = null;
 			$this->data = [];
 		}
+
+		$this->newCart()->updatePrice();
 	}
 
 	/*
@@ -513,14 +523,10 @@ class Cart {
 	*/
 	public function advance(int|null $nextStepId = null) {
 		if (!$nextStepId) {
-			$currentStepId = \Legacy\System\Classes\LegacyView::get('currentStepId');
+			$nextStepId = $this->stepId + 1;
+		}
 
-			if ($this->stepId == $currentStepId) {
-				$nextStepId = $currentStepId + 1;
-
-				$this->updateStepId($nextStepId);
-			}
-		} else {
+		if (in_array($nextStepId, array_keys(config('ecommerce.cart.steps')))) {
 			$this->updateStepId($nextStepId);
 		}
 
@@ -579,7 +585,7 @@ class Cart {
 				inventory.id as inventoryId
 				FROM inventory
 				INNER JOIN
-					items_types ON inventory.type_id = items_types.id
+					product_types ON inventory.type_id = product_types.id
 				WHERE
 					design_id = ? AND (type_id = ? OR same_as_type_id = ?) AND color_id = ? AND position_id = ? AND size_id = ?',
 				[$order->design_id, $order->type_id, $order->type_id, $order->color_id, $order->position_id, $order->size_id]
@@ -681,6 +687,8 @@ class Cart {
 		} else {
 			$error = $coupon->error;
 		}
+
+		$this->newCart()->updatePrice();
 
 		return $error;
 	}

@@ -36,7 +36,7 @@ $inputs = [
 		'type' => 'select',
 		'name' => 'type_id',
 		'text' => 'Tipo',
-		'query' => 'ID, IF (gender=2, CONCAT(name," donna"), name) AS name FROM items_types ORDER BY id ASC',
+		'query' => 'ID, IF (gender=2, CONCAT(name," donna"), name) AS name FROM product_types ORDER BY id ASC',
 		'field-name' => 'id',
 		'field-show' => 'name',
 		'parse' => 'int',

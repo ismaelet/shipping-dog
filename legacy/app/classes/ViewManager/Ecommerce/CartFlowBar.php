@@ -2,33 +2,39 @@
 
 namespace Legacy\Classes\ViewManager\Ecommerce;
 
+use App\Helpers\EcommerceHelper;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 class CartFlowBar {
 
-	public static function render(int $currentStepId = null, object $cart = null) {
-		$cart = $cart ?: cart_old();
-		$currentStepId = $currentStepId ?: (\Legacy\System\Classes\LegacyView::get('currentStepId') ?: $cart->stepId);
+	public static function render() {
+		$cart = cart();
+		$pageStepTag = explode('.', Route::currentRouteName())[1] ?? null;
+		$pageStep = EcommerceHelper::stepFromTag($pageStepTag);
+		$cartStep = $cart->step;
 
 		ob_start();
 ?>
 
 		<section id="flow-bar">
 
-			<?php foreach (ecommerce_config('cart-page')['steps'] as $stepId => $stepData) { ?>
+			<?php foreach (config('ecommerce.cart.steps') as $step => $stepData) { ?>
 
 				<!-- Line -->
-				<?php if ($stepId > 1) { ?>
+				<?php if ($step > 1) { ?>
 
-					<div class="flow-line <?= $stepId <= $cart->stepId ? 'active' : '' ?>"></div>
+					<div class="flow-line <?= $step <= $cartStep ? 'active' : '' ?>"></div>
 
 				<?php } ?>
 
 				<!-- Step -->
-				<div class="flow-step <?= $stepId < $cart->stepId || $stepId == $currentStepId ? 'active' : '' ?> <?= $stepId == $currentStepId ? 'this' : '' ?>">
+				<div class="flow-step <?= $step <= $cartStep ? 'active' : '' ?> <?= $step == $pageStep ? 'this' : '' ?>">
 
 					<!-- Number -->
-					<a <?= $stepId <= $cart->stepId && $stepId != $currentStepId ? 'href="' . client_url('/cart?step-id=' . $stepId) . '"' : '' ?> class="flow-circle center-items">
+					<a <?= $step <= $cartStep && $step != $pageStep && !($stepData['tag'] == 'access' && Auth::check()) ? 'href="' . route('cart.' . $stepData['tag']) . '"' : '' ?> class="flow-circle center-items">
 
-						<?php if ($stepId < $currentStepId) { ?>
+						<?php if ($step < $pageStep) { ?>
 
 							<div class="flow-icon icon-box">
 								<?= embed_icon('correct') ?>
@@ -36,14 +42,14 @@ class CartFlowBar {
 
 						<?php } else { ?>
 
-							<p class="flow-num"><?= $stepId ?></p>
+							<p class="flow-num"><?= $step ?></p>
 
 						<?php } ?>
 
 					</a>
 
 					<!-- Text -->
-					<p class="flow-txt"><?= $stepData[0] ?></p>
+					<p class="flow-txt"><?= $stepData['label'] ?></p>
 
 				</div>
 

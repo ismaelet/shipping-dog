@@ -113,7 +113,7 @@ if (isset($_POST['colors-submit'])) {
 	// get default color
 	$color = new Color($_POST['colorD'][0]);
 
-	$types = \Legacy\System\Classes\LegacyDB::select('id, colors FROM items_types');
+	$types = \Legacy\System\Classes\LegacyDB::select('id, colors FROM product_types');
 
 	// update colors of items
 	while ($row = $types->fetch_assoc()) {
