@@ -2,9 +2,7 @@
 
 use App\Helpers\StringHelper;
 
-
-
-$cart = cart();
+$order = cart();
 
 ?>
 
@@ -19,38 +17,38 @@ $cart = cart();
 	<input type="hidden" name="lc" value="it_IT">
 	<input type="hidden" name="currency_code" value="EUR">
 
-	<!-- Orders -->
-	<?php foreach ($cart->orders as $orderKey => $order) { ?>
+	<!-- order_items -->
+	<?php foreach ($order->order_items as $orderItemKey => $orderItem) { ?>
 
-		<input type="hidden" name="item_name_<?= ($orderKey + 1) ?>" value="<?= str_replace('"', '\'', $order->description()) ?>">
-		<input type="hidden" name="amount_<?= ($orderKey + 1) ?>" value="<?= StringHelper::formatWithDot($order->grossPrice()) ?>">
-		<input type="hidden" name="quantity_<?= ($orderKey + 1) ?>" value="<?= $order->quantity ?>">
-		<input type="hidden" name="item_number_<?= ($orderKey + 1) ?>" value="<?= $order->id ?>">
+		<input type="hidden" name="item_name_<?= ($orderItemKey + 1) ?>" value="<?= str_replace('"', '\'', $orderItem->description()) ?>">
+		<input type="hidden" name="amount_<?= ($orderItemKey + 1) ?>" value="<?= StringHelper::formatWithDot($orderItem->grossPrice()) ?>">
+		<input type="hidden" name="quantity_<?= ($orderItemKey + 1) ?>" value="<?= $orderItem->quantity ?>">
+		<input type="hidden" name="item_number_<?= ($orderItemKey + 1) ?>" value="<?= $orderItem->id ?>">
 
 	<?php } ?>
 
 	<!-- Discount -->
-	<?php if ($cart->discount()) { ?>
-		<input type="hidden" name="discount_amount_cart" value="<?= StringHelper::formatWithDot($cart->discount()) ?>">
+	<?php if ($order->discount()) { ?>
+		<input type="hidden" name="discount_amount_cart" value="<?= StringHelper::formatWithDot($order->discount()) ?>">
 	<?php } ?>
 
 	<!-- Shipping data -->
-	<?php $row_addr = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE cart_id = ?', [$cart->id]) ?>
+	<?php $row_addr = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE order_id = ?', [$order->id]) ?>
 
-	<input type="hidden" name="shipping_1" value="<?= StringHelper::formatWithDot($cart->shippingFee()) ?>">
-	<input type="hidden" name="first_name" value="<?= explode(' ', $cart->address->full_name, 2)[0] ?>">
-	<input type="hidden" name="last_name" value="<?= explode(' ', $cart->address->full_name, 2)[1] ?? '' ?>">
-	<input type="hidden" name="address1" value="<?= $cart->address->address . ', ' . $cart->address->number ?>">
-	<input type="hidden" name="city" value="<?= $cart->address->city ?>">
-	<input type="hidden" name="state" value="<?= $cart->address->region ?>">
-	<input type="hidden" name="zip" value="<?= $cart->address->zip ?>">
+	<input type="hidden" name="shipping_1" value="<?= StringHelper::formatWithDot($order->shippingFee()) ?>">
+	<input type="hidden" name="first_name" value="<?= explode(' ', $order->address->full_name, 2)[0] ?>">
+	<input type="hidden" name="last_name" value="<?= explode(' ', $order->address->full_name, 2)[1] ?? '' ?>">
+	<input type="hidden" name="address1" value="<?= $order->address->address . ', ' . $order->address->number ?>">
+	<input type="hidden" name="city" value="<?= $order->address->city ?>">
+	<input type="hidden" name="state" value="<?= $order->address->region ?>">
+	<input type="hidden" name="zip" value="<?= $order->address->zip ?>">
 	<input type="hidden" name="lc" value="IT">
 	<input type="hidden" name="country" value="IT">
-	<input type="hidden" name="email" value="<?= $cart->address->email ?>">
-	<input type="hidden" name="night_phone_a" value="<?= $cart->address->phone ?>">
+	<input type="hidden" name="email" value="<?= $order->address->email ?>">
+	<input type="hidden" name="night_phone_a" value="<?= $order->address->phone ?>">
 
 	<!--CUSTOM DATA-->
-	<input type="hidden" name="custom" value="<?= $cart->id . '&' . $cart->user_id . '&it' ?>">
+	<input type="hidden" name="custom" value="<?= $order->id . '&' . $order->user_id . '&it' ?>">
 </form>
 
 <!-- Load icon -->

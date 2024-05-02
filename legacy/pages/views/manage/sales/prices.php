@@ -1,7 +1,7 @@
 <?php
 
 use Legacy\Classes\Ecommerce\Product\Gender;
-use Legacy\Classes\Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 ?>
 

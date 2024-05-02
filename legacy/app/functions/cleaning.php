@@ -78,13 +78,13 @@ function delete_temp($id) {
 
 	\Legacy\System\Classes\LegacyDB::delete('temp_users WHERE id = ?', $id);
 
-	$cart_id = \Legacy\System\Classes\LegacyDB::find('id FROM carts WHERE user_id=? AND status=0', [$id]);
+	$order_id = \Legacy\System\Classes\LegacyDB::find('id FROM orders WHERE user_id=? AND status=0', [$id]);
 
-	if ($cart_id) delete_cart_setup_old($cart_id);
+	if ($order_id) delete_cart_setup_old($order_id);
 }
 
 function delete_cart_setup_old($id) {
 
-	\Legacy\System\Classes\LegacyDB::delete('carts WHERE id = ?', $id);
-	\Legacy\System\Classes\LegacyDB::delete('addresses WHERE cart_id = ?', $id);
+	\Legacy\System\Classes\LegacyDB::delete('orders WHERE id = ?', $id);
+	\Legacy\System\Classes\LegacyDB::delete('addresses WHERE order_id = ?', $id);
 }

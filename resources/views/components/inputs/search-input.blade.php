@@ -13,6 +13,12 @@
 	<style>
 		.search-input {
 			position: relative;
+
+			&:not(:has(.search-input__dropdown.active)):not([data-searching="true"]) {
+				input:placeholder-shown+input:not(:placeholder-shown) {
+					outline-color: var(--color-error-400);
+				}
+			}
 		}
 
 		.search-input__dropdown {
@@ -48,6 +54,9 @@
 
 @pushOnce('scripts')
 	<script defer>
+		let searching = false
+		let queuedSearch = false
+
 		function highlight_search_result(text, search) {
 			let pattern = new RegExp('(' + search + ')', 'ig')
 
@@ -55,82 +64,139 @@
 		}
 
 		document.addEventListener('DOMContentLoaded', function() {
+
 			/**
 			 * Fetch the search results
 			 */
 			document.querySelectorAll('.js-search-show').forEach((element) => {
+				// Fetch the results on keyup
 				element.addEventListener('keyup', async (event) => {
+
 					// Prevent arrow keys from triggering the search
 					if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
 						return false;
 					}
 
-					// Set the search parameters
+					// Fetch the results
+					fetch_results(element, event.key != 'Backspace')
+				})
+
+				// Fetch the results on focus
+				element.addEventListener('focus', async () => {
 					const searchBlock = element.closest('.js-search-input')
 					const storedInput = searchBlock.querySelector('.js-search-store')
-					const shownInput = element
-					const dropDown = searchBlock.querySelector('.js-search-dropdown')
-					const endpoint = '/api/' + searchBlock.dataset.endpoint
-					const filter = shownInput.value
-					const exclude = searchBlock.dataset.exclude
-					const where = searchBlock.dataset.where ? JSON.parse(searchBlock.dataset
-						.where) : {}
 
-					// Empty the previous results
-					dropDown.innerHTML = ''
-					storedInput.value = ''
-
-					// Fetch the results
-					axios.get(endpoint, {
-							params: {
-								filter: filter,
-								exclude: exclude,
-								where: where
-							}
-						})
-						.then(response => {
-							// Get the results
-							const results = response.data.data
-							const count = results.length
-
-							if (count) {
-								dropDown.innerHTML = ''
-
-								// Populate the dropdown
-								for (const result of results) {
-									const itemText = highlight_search_result(result.name,
-										filter)
-
-									dropDown.insertAdjacentHTML('beforeend',
-										`<p class="search-input__item js-search-item" data-id="${result.id}" data-text="${result.name}" tabindex="-1">${itemText}</p>`
-									)
-
-									dropDown.classList.add('active')
-								}
-
-								if (count == 1) {
-									selectSearchResult(dropDown.querySelector(
-										'.js-search-item'))
-								}
-							} else {
-								// Hide the dropdown
-								dropDown.classList.remove('active')
-							}
-						})
-						.catch(error => {
-							// Log the error
-							console.error(error.response.data.message);
-						});
+					if (element.value && !storedInput.value) {
+						// Fetch the results
+						fetch_results(element, false)
+					}
 				})
 			})
+
+			function fetch_results(element, allowAutoComplete = true) {
+
+				// Set the search parameters
+				const searchBlock = element.closest('.js-search-input')
+				const storedInput = searchBlock.querySelector('.js-search-store')
+				const shownInput = element
+				const dropDown = searchBlock.querySelector('.js-search-dropdown')
+				const endpoint = '/api/' + searchBlock.dataset.endpoint
+				const filter = shownInput.value
+				const exclude = searchBlock.dataset.exclude
+				const where = searchBlock.dataset.where ? JSON.parse(searchBlock.dataset
+					.where) : {}
+
+				// Empty the previous results
+				dropDown.classList.remove('active')
+				dropDown.innerHTML = ''
+				storedInput.value = ''
+
+				if (filter) {
+					if (searching) {
+						queuedSearch = true
+					} else {
+						searching = true
+						searchBlock.dataset.searching = true
+
+						return axios.get(endpoint, {
+								params: {
+									filter: filter,
+									exclude: exclude,
+									where: where
+								}
+							})
+							.then(response => {
+								// Get the results
+								const results = response.data.data
+								const count = results.length
+
+								if (count && !queuedSearch) {
+									dropDown.innerHTML = ''
+
+									// Populate the dropdown
+									for (const result of results) {
+										const itemText = highlight_search_result(result.name,
+											filter)
+
+										dropDown.insertAdjacentHTML('beforeend',
+											`<p class="search-input__item js-search-item" data-id="${result.id}" data-text="${result.name}" tabindex="-1">${itemText}</p>`
+										)
+
+										dropDown.classList.add('active')
+									}
+
+									if (count == 1 && allowAutoComplete) {
+										selectSearchResult(dropDown.querySelector(
+											'.js-search-item'))
+									}
+								} else {
+									// Hide the dropdown
+									dropDown.classList.remove('active')
+								}
+							})
+							.catch(error => {
+								// Log the error
+								console.log(error)
+								console.error(error.response.data.message);
+							})
+							.finally(() => {
+								// Set the searching flag to false
+								searching = false
+								searchBlock.dataset.searching = false
+
+								if (queuedSearch) {
+									// Search again if a new search was queued
+									queuedSearch = false
+
+									const newFilter = shownInput.value
+
+									fetch_results(element)
+								}
+							});
+					}
+				}
+			}
+
+			/**
+			 * Close the dropdown when clicking outside
+			 */
+			document.body.addEventListener('click', function(event) {
+				const searchDropdowns = document.querySelector('.js-search-dropdown');
+
+				if (!searchDropdowns.contains(event.target)) {
+					searchDropdowns.classList.remove('active')
+				}
+			});
 
 			/**
 			 * Select the search result
 			 */
 			document.querySelectorAll('.js-search-input').forEach((element) => {
 				element.addEventListener('click', (event) => {
-					if (event.target.classList.contains('js-search-item')) {
-						selectSearchResult(event.target)
+					const searchItem = event.target.closest('.js-search-item');
+
+					if (searchItem) {
+						selectSearchResult(searchItem)
 					}
 				})
 			})
@@ -204,13 +270,15 @@
 	data-endpoint="{{ $search }}"
 	{!! isset($where) ? 'data-where="' . htmlspecialchars(json_encode($where), ENT_QUOTES, 'UTF-8') . '"' : '' !!}
 	{!! isset($exclude) ? 'data-exclude="' . implode(',', $exclude) . '"' : '' !!}
+	data-searching="false"
 >
 
 	<input
-		type="hidden"
-		class="js-search-store"
+		type="text"
+		class="js-search-store hidden"
 		name="{{ $storedName }}"
 		value="{{ $storedValue ?? '' }}"
+		placeholder="id"
 		@required($required)
 	>
 
@@ -224,6 +292,6 @@
 	/>
 
 	<div class="search-input__dropdown js-search-dropdown">
-		<!-- Populated after fetch -->
+		{{-- Populated after fetch --}}
 	</div>
 </div>

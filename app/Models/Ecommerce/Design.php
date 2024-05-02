@@ -53,8 +53,8 @@ class Design extends Model {
 	/**
 	 * Get the design's tags
 	 */
-	public function tags(): HasMany {
-		return $this->hasMany(Tag::class);
+	public function tags(): HasOne {
+		return $this->hasOne(Tag::class);
 	}
 
 	/**

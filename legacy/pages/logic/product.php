@@ -2,7 +2,7 @@
 
 use App\Helpers\ArrayHelper;
 use App\Models\Ecommerce\Product;
-use Legacy\Classes\Ecommerce\Order as LegacyOrder;
+use Legacy\Classes\Ecommerce\OrderItemItem as LegacyOrderItemItem;
 use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 use Legacy\System\Classes\LegacyDB;
 use Legacy\System\Classes\LegacyView;
@@ -131,7 +131,7 @@ if (isset($_POST['submit'])) {
 		$config['position_id'] = $legacyProduct->availablePositionIds[0];
 	}
 
-	LegacyOrder::add($config);
+	LegacyOrderItemItem::add($config);
 
 	redirect_old('/cart');
 }

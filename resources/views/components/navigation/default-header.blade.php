@@ -70,26 +70,26 @@
 
 	// dropdowns
 	$header['dropdowns']['shop'] = [
-	    ['Abbigliamento Donna', '/shop', ['gender' => 'f']],
-	    ['Abbigliamento Uomo', '/shop', ['gender' => 'm']],
-	    ['Accessori', '/shop', ['group' => 'm']],
-	    ['Ufficiali', '/artist', ['id' => '1']],
+	    ['Abbigliamento Donna', 'shop', ['gender' => 'f']],
+	    ['Abbigliamento Uomo', 'shop', ['gender' => 'm']],
+	    ['Accessori', 'shop', ['group' => 'm']],
+	    ['Ufficiali', 'seller', ['id' => '1']],
 	];
 
 	$header['dropdowns']['info'] = [
-	    ['Contatti', '/contacts'],
-	    ['Cambio taglia o reso', '/refund'],
-	    ['Stato ordine', '/order/status'],
-	    ['Domande frequenti', '/infos.faq'],
+	    ['Contatti', 'contacts'],
+	    ['Cambio taglia o reso', 'refund'],
+	    ['Stato ordine', 'order_items.status'],
+	    ['Domande frequenti', 'infos.faq'],
 	];
 
 	$header['dropdowns']['artist'] = [
-	    ['Il mio negozio', '/artist', ['id' => auth()->id()]],
-	    ['Le mie grafiche', '/manage/portfolio'],
-	    ['Carica una grafica', '/manage/portfolio/add'],
-	    ['Vendite realizzate', '/manage/sales/list'],
-	    ['Modifica prezzi', '/manage/sales/prices'],
-	    ['Gestisci', '/manage'],
+	    ['Il mio negozio', 'seller', ['id' => auth()->id()]],
+	    ['Le mie grafiche', 'seller-dashboard.portfolio'],
+	    ['Carica una grafica', 'seller-dashboard.portfolio.add'],
+	    ['Vendite realizzate', 'seller-dashboard.sales'],
+	    ['Modifica prezzi', 'seller-dashboard.prices'],
+	    ['Gestisci', 'seller-dashboard'],
 	];
 
 	// login bar
@@ -248,10 +248,6 @@
 			padding: 0 1rem;
 			height: 45px;
 			line-height: 45px;
-		}
-
-		[data-color-scheme='dark'] .header-search__input {
-			--input-background: var(--color-surface-500);
 		}
 
 		#h-srch-cbx:checked~#h-srch-ico-box svg {
@@ -437,30 +433,9 @@
 		}
 
 		.h-log-txt {
-			display: inline-block;
-			color: var(--h-text-color);
-			transition: color 0.4s, background 0.4s, border 0.4s;
-		}
-
-		.h-log-txt.main {
-			padding: 0 1.7rem;
-			border-width: 2px;
-			border-style: solid;
-			border-radius: 10em;
-			font-weight: 600;
-			text-transform: lowercase;
-			line-height: calc(3rem - 2px);
-			transition: color 0.2s, background 0.2s, border 0.2s;
-		}
-
-		.h-log-txt.main:hover {
-			background-color: var(--text-color-strong);
-			border-color: var(--text-color-strong);
-			color: var(--bgr);
-		}
-
-		[data-color-scheme='dark'] .h-log-txt.main {
-			font-weight: 500;
+			padding-inline: 1.7rem;
+			font-weight: var(--font-weight-semibold);
+			line-height: 3rem;
 		}
 
 		/* Mobile menu icon */
@@ -789,7 +764,8 @@
 
 											@foreach ($header['dropdowns'][$h_link['drop']] as $h_drop_link)
 												<p class="h-drop-link bgr-wht-h txt-wht txt-blk-h"><a
-														href="<?= $h_drop_link[1] ?>"><?= $h_drop_link[0] ?></a></p>
+														href="{{ route($h_drop_link[1], $h_drop_link[2] ?? null) }}"
+													>{{ $h_drop_link[0] }}</a></p>
 											@endforeach
 
 										</div>
@@ -859,12 +835,16 @@
 				>
 
 					@if (auth()->id())
-						<a href="<?= $header['logged-link'][1] ?>">
-							<p class="h-log-txt br-c1-h txt-upp main"><?= $header['logged-link'][0] ?></p>
+						<a href="{{ $header['logged-link'][1] }}">
+							<p class="h-log-txt surface hover:bg-primary hover:border-primary rounded-full transition-colors">
+								{{ $header['logged-link'][0] }}
+							</p>
 						</a>
 					@else
-						<a href="<?= $header['login-link'][1] ?>">
-							<p class="h-log-txt br-c1-h txt-upp main"><?= $header['login-link'][0] ?></p>
+						<a href="{{ $header['login-link'][1] }}">
+							<p class="h-log-txt surface hover:bg-primary hover:border-primary rounded-full transition-colors">
+								{{ $header['login-link'][0] }}
+							</p>
 						</a>
 					@endif
 

@@ -88,13 +88,13 @@ function get_paypal_transactions() {
  * Find the order by cart ID
  */
 function paypal_find_order($id) {
-	$_SESSION['paypal_orders'] = $orders = $_SESSION['paypal_orders'] ?? get_paypal_transactions()->transaction_details;
+	$_SESSION['paypal_order_items'] = $order_items = $_SESSION['paypal_order_items'] ?? get_paypal_transactions()->transaction_details;
 
-	foreach ($orders as $order) {
-		$cart_id = explode('&', $order->transaction_info->custom_field ?? null)[0];
+	foreach ($order_items as $orderItem) {
+		$order_id = explode('&', $orderItem->transaction_info->custom_field ?? null)[0];
 
-		if ($cart_id == $id) {
-			return $order;
+		if ($order_id == $id) {
+			return $orderItem;
 		}
 	}
 }

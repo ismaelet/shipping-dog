@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 			recapShippingElement.dataset.shippingMethodId = shippingMethodId
 
-			const cartId = await cart_id()
+			const cartId = await order_id()
 
 			console.log(cartId)
 
@@ -28,7 +28,7 @@ $(function () {
 	 */
 	$('.js-shipping-method').on('change', function () {
 		const self = $(this)
-		const cart_id = parseInt(self.data('cart-id'))
+		const order_id = parseInt(self.data('cart-id'))
 		const shippingMethodId = parseInt(self.val())
 		const shipped = parseInt(self.data('shipped'))
 		const addressForm = $('.address-form')
@@ -43,7 +43,7 @@ $(function () {
 			addressForm.addClass(localDeliveryClass)
 		}
 
-		update_cart(cart_id, { shippingMethodId: shippingMethodId })
+		update_cart(order_id, { shippingMethodId: shippingMethodId })
 	})
 
 	/*

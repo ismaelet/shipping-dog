@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\DesignController;
 use App\Http\Controllers\Api\FollowerController;
 use App\Http\Controllers\Api\LikeController;
@@ -35,9 +35,9 @@ Route::resource('/products', ProductController::class)->only(['show']);
 Route::resource('/logos', LogoController::class)->only(['show']);
 
 /**
- * Carts
+ * orders
  */
-Route::resource('/carts', CartController::class)->only(['index']);
+Route::resource('/orders', OrderController::class)->only(['index']);
 
 /**
  * Likes

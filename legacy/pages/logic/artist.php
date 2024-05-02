@@ -1,6 +1,6 @@
 <?php
 
-use Legacy\Classes\Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 use Legacy\Classes\Ecommerce\Seller;
 use Legacy\Classes\Ecommerce\Shop;
 
@@ -40,7 +40,7 @@ $shop_size = $id == 187 ? 10 : 20;
 $row_link = \Legacy\System\Classes\LegacyDB::row('* FROM links WHERE user_id = ?', [$id]);
 
 $hasItems = \Legacy\System\Classes\LegacyDB::exists('items WHERE user_id = ? AND status > 0', [$id]);
-$productCount = \Legacy\System\Classes\LegacyDB::count(Product::TABLE . ' WHERE ' . Product::SELLER_INDEX . ' = ? AND status > 0', [$id]);
+$productCount = \Legacy\System\Classes\LegacyDB::count(LegacyProduct::TABLE . ' WHERE ' . LegacyProduct::SELLER_INDEX . ' = ? AND status > 0', [$id]);
 $likeN = \Legacy\System\Classes\LegacyDB::count('likes WHERE design_id IN (SELECT id FROM designs WHERE user_id = ?)', [$id]);
 $follN = \Legacy\System\Classes\LegacyDB::count('followers WHERE follower_id = ?', [$id]);
 
@@ -60,3 +60,5 @@ if (isset($_POST['add_folder'])) {
 }
 
 $shop = new Shop();
+
+\Legacy\System\Classes\LegacyView::setTitle($seller->name);

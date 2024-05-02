@@ -1,23 +1,23 @@
 <?php
 
 use App\Helpers\EcommerceHelper;
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 
 /**
  * Get the ID of the active cart.
  *
  * @return int|null The ID of the active cart, or null if no active cart exists
  */
-function cart_id(): ?int {
+function order_id(): ?int {
 	return EcommerceHelper::cartId();
 }
 
 /**
  * Get the active cart.
  *
- * @return Cart|null The active cart object, or null if no active cart exists.
+ * @return \App\Models\Ecommerce\Order|null The active cart object, or null if no active cart exists.
  */
-function cart(): ?Cart {
+function cart(): ?Order {
 	return EcommerceHelper::cart();
 }
 

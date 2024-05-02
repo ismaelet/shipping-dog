@@ -1,12 +1,12 @@
 <?php
 
 use App\Helpers\FileHelper;
-use App\Models\Ecommerce\Design as EcommerceDesign;
-use Legacy\Classes\Ecommerce\Design;
-use Legacy\Classes\Ecommerce\Product;
-use Legacy\Classes\Ecommerce\Product\Color;
-use Legacy\Classes\Ecommerce\Product\PreviewOld;
-use Legacy\Classes\Ecommerce\Product\Type;
+use App\Models\Ecommerce\Design;
+use Legacy\Classes\Ecommerce\Design as LegacyDesign;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
+use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
+use Legacy\Classes\Ecommerce\Product\PreviewOld as LegacyPreview;
+use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 // setup page
 $error = $_SESSION['error'] ?? false;
@@ -17,7 +17,7 @@ unset($_SESSION['done']);
 
 $id = $_GET['id'] ?? false;
 
-$design = EcommerceDesign::where('id', $id)
+$design = Design::where('id', $id)
 	->where('user_id', auth()->id())
 	->first();
 
@@ -25,7 +25,6 @@ if (!$design) {
 	redirect_old('/manage/portfolio');
 }
 
-$design = new Design($id);
 $seller = $design->seller;
 
 \Legacy\System\Classes\LegacyView::$title = 'Modifica: ' . $design->name;
@@ -72,7 +71,7 @@ if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
 	if (!$design->custom) {
 		// delete item images
 		$res = \Legacy\System\Classes\LegacyDB::select('id from items WHERE design_id = ?', [$id]);
-		while ($row = $res->fetch_assoc()) PreviewOld::deleteImages($row['id']);
+		while ($row = $res->fetch_assoc()) LegacyPreview::deleteImages($row['id']);
 	}
 
 	// delete design images
@@ -111,18 +110,18 @@ if (isset($_POST['tags-submit'])) {
 if (isset($_POST['colors-submit'])) {
 
 	// get default color
-	$color = new Color($_POST['colorD'][0]);
+	$color = new LegacyProductColor($_POST['colorD'][0]);
 
 	$types = \Legacy\System\Classes\LegacyDB::select('id, colors FROM product_types');
 
 	// update colors of items
 	while ($row = $types->fetch_assoc()) {
 
-		$type = new Type($row['id']);
+		$type = new LegacyProductType($row['id']);
 
 		$productID = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$id, $type->id]);
 
-		$product = new Product($productID);
+		$product = new LegacyProduct($productID);
 
 		if ($productID && $product->color->id != $color->id && in_array($color->slug, $type->availableColorSlugs)) {
 			$colors = $product->availableColorSlugs;
@@ -151,7 +150,7 @@ if (isset($_POST['colors-submit'])) {
 
 // update colors
 if (isset($_POST['update-colors'])) {
-	$product = new Product($_POST['product_id']);
+	$product = new LegacyProduct($_POST['product_id']);
 
 	// get available colors
 	$data = [];
@@ -170,7 +169,7 @@ if (isset($_POST['update-colors'])) {
 // update position
 if (isset($_POST['update-position'])) {
 
-	$product = new Product($_POST['product_id']);
+	$product = new LegacyProduct($_POST['product_id']);
 
 	// update mockup
 	if (!$custom) {
@@ -182,7 +181,7 @@ if (isset($_POST['update-position'])) {
 			'pos-y' => $_POST['mockup-y'],
 		];
 
-		PreviewOld::put($_POST['product_id'], $data);
+		LegacyPreview::put($_POST['product_id'], $data);
 	}
 
 	// refresh
@@ -196,10 +195,10 @@ if (isset($_POST['off']) || isset($_POST['on'])) {
 	$activate = isset($_POST['on']);
 
 	if ($productId) {
-		$product = new Product($productId);
+		$product = new LegacyProduct($productId);
 		$product->updateStatus($activate);
 	} else if ($activate) {
-		Product::new($id, $type_id);
+		LegacyProduct::new($id, $type_id);
 	}
 
 	redirect_old('#item-' . $type_id);

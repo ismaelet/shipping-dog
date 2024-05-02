@@ -49,18 +49,18 @@ function associate_cart_setup_old($permanentCustomerId, $guestCustomerId = false
 
 		if ($guestCustomer->hasCart) {
 			if ($permanentCustomer->hasCart) {
-				// if the user has a cart transfer the guest orders to it
-				\Legacy\System\Classes\LegacyDB::update('ecommerce_orders SET cart_id = ? WHERE cart_id = ?', [$permanentCustomer->cart->id, $guestCustomer->cart->id]);
-				\Legacy\System\Classes\LegacyDB::delete('ecommerce_carts WHERE id = ?', [$guestCustomer->cart->id]);
+				// if the user has a cart transfer the guest order_items to it
+				\Legacy\System\Classes\LegacyDB::update('ecommerce_order_items SET order_id = ? WHERE order_id = ?', [$permanentCustomer->order->id, $guestCustomer->order->id]);
+				\Legacy\System\Classes\LegacyDB::delete('ecommerce_orders WHERE id = ?', [$guestCustomer->order->id]);
 			} else {
 				// otherwise convert the session cart to the user cart
-				\Legacy\System\Classes\LegacyDB::update('ecommerce_carts SET customerId=? WHERE id = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
-				\Legacy\System\Classes\LegacyDB::update('ecommerce_orders SET customerId=? WHERE cart_id = ?', [$permanentCustomer->id, $guestCustomer->cart->id]);
+				\Legacy\System\Classes\LegacyDB::update('ecommerce_orders SET customerId=? WHERE id = ?', [$permanentCustomer->id, $guestCustomer->order->id]);
+				\Legacy\System\Classes\LegacyDB::update('ecommerce_order_items SET customerId=? WHERE order_id = ?', [$permanentCustomer->id, $guestCustomer->order->id]);
 
 				// add an address
-				if (!$guestCustomer->cart->addressId) {
+				if (!$guestCustomer->order->addressId) {
 					$addressId = \Legacy\System\Classes\LegacyDB::find('id FROM ecommerce_addresses WHERE customerId=? ORDER BY id DESC', [$permanentCustomer->id]);
-					\Legacy\System\Classes\LegacyDB::update('ecommerce_carts SET addressId=? WHERE id = ?', [$addressId, $guestCustomer->cart->id]);
+					\Legacy\System\Classes\LegacyDB::update('ecommerce_orders SET addressId=? WHERE id = ?', [$addressId, $guestCustomer->order->id]);
 				}
 			}
 		}
@@ -72,22 +72,22 @@ function associate_cart_setup_old($permanentCustomerId, $guestCustomerId = false
 /*
 * 4. Downloads
 */
-function download_quote($cart_id) {
+function download_quote($order_id) {
 	$debug = false;
-	$cart = new Cart($cart_id);
+	$order = new Cart($order_id);
 
 	// products
 	$productsHtml = [];
 
-	foreach ($cart->orders as $orderKey => $order) {
+	foreach ($order->order_items as $orderItemKey => $orderItem) {
 		$productsHtml[] = '
-		<div class="product product--' . ($orderKey % 2 ? 'even' : 'odd') . '">
-			<p>' . $order->product->idCode . '</p>
-			<p>' . $order->product->name . '</p>
-			<p>' . $order->quantity . '</p>
-			<p>' . $order->netPriceString . '</p>
-			<p>' . $order->vatString . '</p>
-			<p>' . $order->priceString . '</p>
+		<div class="product product--' . ($orderItemKey % 2 ? 'even' : 'odd') . '">
+			<p>' . $orderItem->product->idCode . '</p>
+			<p>' . $orderItem->product->name . '</p>
+			<p>' . $orderItem->quantity . '</p>
+			<p>' . $orderItem->netPriceString . '</p>
+			<p>' . $orderItem->vatString . '</p>
+			<p>' . $orderItem->priceString . '</p>
 		</div>';
 	}
 
@@ -96,11 +96,11 @@ function download_quote($cart_id) {
 	// populate
 	$html = file_get_contents(SERVER_ROOT . '/app/templates/views/quote.html');
 	$html = str_replace('{{ date }}', date("d/m/Y"), $html);
-	$html = str_replace('{{ quote-number }}', $cart->idCode, $html);
-	$html = str_replace('{{ cart-net-price }}', $cart->netPriceString, $html);
-	$html = str_replace('{{ cart-vat }}', $cart->vatString, $html);
-	$html = str_replace('{{ cart-gross-price }}', $cart->priceString, $html);
-	$html = str_replace('{{ customer-name }}', $cart->customer->name, $html);
+	$html = str_replace('{{ quote-number }}', $order->idCode, $html);
+	$html = str_replace('{{ cart-net-price }}', $order->netPriceString, $html);
+	$html = str_replace('{{ cart-vat }}', $order->vatString, $html);
+	$html = str_replace('{{ cart-gross-price }}', $order->priceString, $html);
+	$html = str_replace('{{ customer-name }}', $order->customer->name, $html);
 	$html = str_replace('{{ products }}', $productsHtml, $html);
 
 	// generate the pdf
@@ -113,7 +113,7 @@ function download_quote($cart_id) {
 		$dompdf->loadHtml($html);
 		$dompdf->setPaper('A4', 'portrait');
 		$dompdf->render();
-		$dompdf->stream('Preventivo_' . str_replace('#', '', $cart->idCode) . '.pdf');
+		$dompdf->stream('Preventivo_' . str_replace('#', '', $order->idCode) . '.pdf');
 	} else {
 		exit($html);
 	}

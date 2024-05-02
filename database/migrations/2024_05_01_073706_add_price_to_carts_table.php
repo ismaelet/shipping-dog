@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,15 +10,15 @@ return new class extends Migration {
 	 * Run the migrations.
 	 */
 	public function up(): void {
-		if (!Schema::hasColumn('carts', 'price')) {
-			Schema::table('carts', function (Blueprint $table) {
+		if (!Schema::hasColumn('orders', 'price')) {
+			Schema::table('orders', function (Blueprint $table) {
 				$table->decimal('price')->after('tot')->default(0);
 			});
 		}
 
-		Cart::where('price', 0)->get()->each(function ($cart) {
-			$cart->price = $cart->price();
-			$cart->save();
+		Order::where('price', 0)->get()->each(function ($order) {
+			$order->price = $order->price();
+			$order->save();
 		});
 	}
 
@@ -26,7 +26,7 @@ return new class extends Migration {
 	 * Reverse the migrations.
 	 */
 	public function down(): void {
-		Schema::table('carts', function (Blueprint $table) {
+		Schema::table('orders', function (Blueprint $table) {
 			$table->dropColumn('price');
 		});
 	}

@@ -1,3 +1,9 @@
+<?php
+
+use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
+
+?>
+
 {% block main %}
 
 <div id="body" class="main-wrap pad-t-4 pad-b-3" data-hroot="<?= CLIENT_ROOT ?>" data-design-id="<?= $design->id ?>">
@@ -24,11 +30,11 @@
 
 				<div id="des-light-anch" class="anchor"></div>
 
-				<p class="data-title inlb"><?= $custom ? 'Immagine di anteprima' : 'Su capi chiari' ?></p><?php
+				<p class="data-title inlb"><?= $custom ? 'Immagine di anteprima' : 'Su capi chiari' ?></p>
 
-																											use Legacy\Classes\Ecommerce\Product\Color;
+				<?php
 
-																											if ($custom) info_box("Questa immagine è usata solo nelle sezioni dove compare la grafica senza un mockup. Essendo questo un prodotto particolare i mockup non vengono creati automaticamente.") ?>
+				if ($custom) info_box("Questa immagine è usata solo nelle sezioni dove compare la grafica senza un mockup. Essendo questo un prodotto particolare i mockup non vengono creati automaticamente.") ?>
 
 				<div id="des-light" class="des-box pos-rel" onclick="$(this).parent().find('.file-inp').click();">
 
@@ -166,7 +172,7 @@
 				<?php if ($done == 'tags') { ?><p class="confirmation">Tag modificati con successo</p><?php } ?>
 
 				<div class="">
-					<textarea name="tags" class="textarea mar0" placeholder="(Opzionale) Puoi inserire fino a 10 tag separati da virgola. I tag rendono il tuo design più facile da trovare."><?= $design->tags ? implode(',', $design->tags) : '' ?></textarea>
+					<textarea name="tags" class="textarea mar0" placeholder="(Opzionale) Puoi inserire fino a 10 tag separati da virgola. I tag rendono il tuo design più facile da trovare."><?= $design->tags?->tags ?></textarea>
 				</div>
 
 				<button type="submit" class="btn button--full-width mar-t-1" name="tags-submit">Aggiorna</button>
@@ -217,7 +223,7 @@
 								<?php
 								$defaultColorId = \Legacy\System\Classes\LegacyDB::find('color_id FROM items WHERE design_id = ? AND type_id=1', [$design->id]);
 								while ($row = $res_colorD->fetch_assoc()) {
-									$color = new Color($row['id']);
+									$color = new LegacyColor($row['id']);
 								?>
 
 									<label class="inlb color-box active">
@@ -258,7 +264,9 @@
 			</div>
 
 			<!-- AJAX -->
-			<div class="async-items" data-design-id="<?= $design->id ?>"></div>
+			<div class="async-items" data-design-id="<?= $design->id ?>">
+				<?= include_once(base_path() . '/legacy/app/functions/ajax/edit-item-list.php') ?>
+			</div>
 
 		</div>
 

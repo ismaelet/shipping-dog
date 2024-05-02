@@ -1,4 +1,4 @@
-@props(['title' => null, 'theme' => 'classic', 'colorScheme' => null])
+@props(['title' => null, 'theme' => 'modern', 'colorScheme' => null])
 
 @php
 	$appName = config('app.name');

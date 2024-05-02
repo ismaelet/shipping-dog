@@ -1,5 +1,5 @@
 /*
-* Orders
+* order_items
 */
 .status-icon {
 	position: relative;
@@ -34,12 +34,12 @@
 	font-weight: var(--fw-semibold);
 }
 
-.orders {
+.order_items {
 	display: grid;
 	gap: 1rem;
 }
 
-.orders-header {
+.order_items-header {
 	display: flex;
 	margin-bottom: 1rem;
 	justify-content: space-between;

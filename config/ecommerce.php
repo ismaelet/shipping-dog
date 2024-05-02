@@ -51,24 +51,30 @@ return [
 				'icon' => 'waiting',
 			],
 			'2' => [
+				'tag' => 'confirmed',
+				'label' => 'Confermato',
+				'color' => 'hsl(120, 80%, 50%)',
+				'icon' => 'correct',
+			],
+			'3' => [
 				'tag' => 'label-ready',
 				'label' => 'Pronto',
 				'color' => '#ffc677',
 				'icon' => 'correct',
 			],
-			'3' => [
+			'4' => [
 				'tag' => 'shipped',
 				'label' => 'Spedito',
 				'color' => '#ff9600',
 				'icon' => 'shipping',
 			],
-			'4' => [
+			'5' => [
 				'tag' => 'delivered',
 				'label' => 'Consegnato',
 				'color' => '#44c544',
 				'icon' => 'delivered',
 			],
-			'5' => [
+			'6' => [
 				'tag' => 'change',
 				'label' => 'Cambio',
 				'color' => '#44c544',

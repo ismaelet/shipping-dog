@@ -5,7 +5,7 @@ namespace Legacy\Classes\Ecommerce;
 use App\Models\Ecommerce\Design\LogoGroup as DesignLogoGroup;
 use LegacyDB;
 use Legacy\Classes\Ecommerce\Design\LogoGroup;
-use Legacy\Classes\Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 use \Legacy\System\Traits\DatabaseObject;
 
 /**

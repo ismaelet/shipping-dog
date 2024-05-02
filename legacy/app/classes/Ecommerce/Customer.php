@@ -36,17 +36,12 @@ class Customer {
 		return (bool) $this->id;
 	}
 
-	private function getCart() {
-		$cart_id = \Legacy\System\Classes\LegacyDB::find(Cart::INDEX . ' FROM ' . Cart::TABLE . ' WHERE ' . Cart::CUSTOMER_INDEX . ' = ? AND status = 0', [$this->id]);
-		return new Cart($cart_id);
+	private function getConfirmedorders() {
+		return rows_to_objects(\Legacy\System\Classes\LegacyDB::select(Order::INDEX . ' FROM ' . Order::TABLE . ' WHERE ' . Order::CUSTOMER_INDEX . ' = ? AND status <> 0 ORDER BY created_at DESC', [$this->id]), Order::class);
 	}
 
-	private function getConfirmedCarts() {
-		return rows_to_objects(\Legacy\System\Classes\LegacyDB::select(Cart::INDEX . ' FROM ' . Cart::TABLE . ' WHERE ' . Cart::CUSTOMER_INDEX . ' = ? AND status <> 0 ORDER BY time DESC', [$this->id]), Cart::class);
-	}
-
-	private function getConfirmedCartsCount() {
-		return count($this->confirmedCarts);
+	private function getConfirmedordersCount() {
+		return count($this->confirmedorders);
 	}
 
 	private function getDefaultAddressId() {
@@ -73,9 +68,9 @@ class Customer {
 	/*
 	* Set methods
 	*/
-	public function setCart(object $cart) {
+	public function setCart(object $order) {
 		$this->data[] = [];
-		$this->data['cart'] = $cart;
+		$this->data['cart'] = $order;
 
 		return $this;
 	}

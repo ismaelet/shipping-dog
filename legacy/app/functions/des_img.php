@@ -1,10 +1,10 @@
 <?php
 
-use Legacy\Classes\Ecommerce\Design;
+use App\Models\Ecommerce\Design;
 
 function des_img_gen(int $design_id): void {
 
-	$design = new Design($design_id);
+	$design = Design::find($design_id);
 
 	//design path
 	$des_path = public_storage('designs/' . $design->id . '.png');

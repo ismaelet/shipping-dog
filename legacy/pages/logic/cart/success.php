@@ -4,14 +4,14 @@ global $con;
 
 $id = 0;
 
-if (isset($_SESSION['payment_cart_id'])) $id = $_SESSION['payment_cart_id'];
+if (isset($_SESSION['payment_order_id'])) $id = $_SESSION['payment_order_id'];
 
 //process normal payment
 if (isset($_SESSION['payment_type']) && $_SESSION['payment_type'] == 'buy') {
 
-	if (\Legacy\System\Classes\LegacyDB::exists('carts WHERE id = ? AND (step=3 OR step=4) AND (status=0 OR status = 1)', [$id])) {
+	if (\Legacy\System\Classes\LegacyDB::exists('orders WHERE id = ? AND (step=3 OR step=4) AND (status=0 OR status = 1)', [$id])) {
 
-		\Legacy\System\Classes\LegacyDB::update('carts SET step=5, status = 1 WHERE id = ?', [$id]);
+		\Legacy\System\Classes\LegacyDB::update('orders SET step=5, status = 1 WHERE id = ?', [$id]);
 
 		$_SESSION['completed'] = true;
 
@@ -21,9 +21,9 @@ if (isset($_SESSION['payment_type']) && $_SESSION['payment_type'] == 'buy') {
 	//process change
 } else if (isset($_SESSION['payment_type']) && $_SESSION['payment_type'] == 'change') {
 
-	if (\Legacy\System\Classes\LegacyDB::exists('refunds WHERE cart_id = ? AND (status=3 OR status=4)', [$id])) {
+	if (\Legacy\System\Classes\LegacyDB::exists('refunds WHERE order_id = ? AND (status=3 OR status=4)', [$id])) {
 
-		\Legacy\System\Classes\LegacyDB::update('refunds SET status=4, payed=1 WHERE cart_id = ?', [$id]);
+		\Legacy\System\Classes\LegacyDB::update('refunds SET status=4, payed=1 WHERE order_id = ?', [$id]);
 
 		redirect_old('/refund?step=4');
 	} else redirect_old('/refund');

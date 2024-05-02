@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Route;
 class CartFlowBar {
 
 	public static function render() {
-		$cart = cart();
+		$order = cart();
 		$pageStepTag = explode('.', Route::currentRouteName())[1] ?? null;
 		$pageStep = EcommerceHelper::stepFromTag($pageStepTag);
-		$cartStep = $cart->step;
+		$orderItemstep = $order->step;
 
 		ob_start();
 ?>
@@ -24,15 +24,15 @@ class CartFlowBar {
 				<!-- Line -->
 				<?php if ($step > 1) { ?>
 
-					<div class="flow-line <?= $step <= $cartStep ? 'active' : '' ?>"></div>
+					<div class="flow-line <?= $step <= $orderItemstep ? 'active' : '' ?>"></div>
 
 				<?php } ?>
 
 				<!-- Step -->
-				<div class="flow-step <?= $step <= $cartStep ? 'active' : '' ?> <?= $step == $pageStep ? 'this' : '' ?>">
+				<div class="flow-step <?= $step <= $orderItemstep ? 'active' : '' ?> <?= $step == $pageStep ? 'this' : '' ?>">
 
 					<!-- Number -->
-					<a <?= $step <= $cartStep && $step != $pageStep && !($stepData['tag'] == 'access' && Auth::check()) ? 'href="' . route('cart.' . $stepData['tag']) . '"' : '' ?> class="flow-circle center-items">
+					<a <?= $step <= $orderItemstep && $step != $pageStep && !($stepData['tag'] == 'access' && Auth::check()) ? 'href="' . route('cart.' . $stepData['tag']) . '"' : '' ?> class="flow-circle center-items">
 
 						<?php if ($step < $pageStep) { ?>
 

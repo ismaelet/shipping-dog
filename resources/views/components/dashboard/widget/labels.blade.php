@@ -1,7 +1,7 @@
 @php
-	use App\Models\Ecommerce\Cart;
+	use App\Models\Ecommerce\Order;
 
-	$labels = Cart::unlabelled();
+	$labels = Order::unlabelled();
 	$labelCount = $labels->count();
 	$firstCartDate = $labels->sortBy('created_at')->first()->created_at ?? null;
 	$firstCartDate = $firstCartDate ? $firstCartDate->format('d/m/Y') : null;

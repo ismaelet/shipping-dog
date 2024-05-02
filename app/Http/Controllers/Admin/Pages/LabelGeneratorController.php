@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Pages;
 
+use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Address;
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\ShippingMethod;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,17 +17,17 @@ class LabelGeneratorController extends Controller {
 	/**
 	 * Display the page
 	 */
-	public function index(Request $request): View {
-		$carts = Cart::where('status', 1)
-			->whereNotIn('shipping_method_id', ShippingMethod::NO_DELIVERY_SHIPPING_METHODS);
+	public function index(): View {
+		$orderItems = Order::where('status', EcommerceHelper::statusFromTag('confirmed'))
+			->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels());
 
-		if ($carts->count()) {
-			$firstCart = (clone $carts)->oldest()->first();
-			$lastCart = $carts->latest()->first();
+		if ($orderItems->count()) {
+			$firstCart = (clone $orderItems)->oldest()->first();
+			$lastCart = $orderItems->latest()->first();
 		} else {
 			$firstCart = null;
-			$lastCart = Cart::where('status', '>', 0)
-				->whereNotIn('shipping_method_id', ShippingMethod::NO_DELIVERY_SHIPPING_METHODS)
+			$lastCart = Order::where('status', '>', 0)
+				->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
 				->orderByDesc('created_at')
 				->first();
 		}
@@ -40,20 +41,24 @@ class LabelGeneratorController extends Controller {
 	/**
 	 * Generate the labels
 	 */
-	public function generate(Request $request): RedirectResponse {
+	public function generate(Request $request): RedirectResponse|bool {
 		// submit
 		if ($request->submit == 'generate') {
 			$rows = [];
 
-			$firstSelectedCart = Cart::find($request->first_cart_id);
-			$lastSelectedCart = Cart::find($request->last_cart_id);
+			$firstSelectedCart = Order::find($request->first_order_id);
+			$lastSelectedCart = Order::find($request->last_order_id);
 
 			if ($firstSelectedCart && $lastSelectedCart) {
 
-				$addresses = Address::join('carts', 'addresses.cart_id', '=', 'carts.id')
-					->where('carts.status', '>', 0)
-					->whereBetween('carts.created_at', [$firstSelectedCart->created_at, $lastSelectedCart->created_at])
-					->oldest('carts.created_at')
+				if ($firstSelectedCart->created_at > $lastSelectedCart->created_at) {
+					return redirect()->back()->with('error', 'Il primo ordine deve essere precedente al secondo');
+				}
+
+				$addresses = Address::join('orders', 'addresses.order_id', '=', 'orders.id')
+					->where('orders.status', '>', 0)
+					->whereBetween('orders.created_at', [$firstSelectedCart->created_at, $lastSelectedCart->created_at])
+					->oldest('orders.created_at')
 					->get('addresses.*');
 
 				foreach ($addresses as $address) {
@@ -72,12 +77,14 @@ class LabelGeneratorController extends Controller {
 				}
 
 				$xlsx = SimpleXLSXGen::fromArray($rows);
-				$xlsx->downloadAs('Etichette-Corriere.xlsx');
+				return $xlsx->downloadAs('Etichette-Corriere.xlsx');
 			}
 		}
 
 		if ($request->submit == 'process_all') {
-			// Cart::where('status', 1)->where('shipping_method_id', '!=', ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID)->update(['status' => 2]);
+			Order::where('status', EcommerceHelper::statusFromTag('confirmed'))
+				->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
+				->update(['status' => EcommerceHelper::statusFromTag('label-ready')]);
 
 			return redirect()->back()->with('success', 'Tutti gli ordini sono stati processati');
 		}

@@ -21,7 +21,7 @@
 			&[data-variant="primary"] {
 				padding-block: 1em;
 				background-color: var(--color-primary-400);
-				box-shadow: 0px 1rem 4rem -1rem hsl(var(--color-primary-400-hsl) / .6);
+				box-shadow: 0px 1rem 4rem -1rem hsl(var(--color-primary-400-hsl) / .4);
 				color: #fff;
 
 				/* Primary button: Hover state */

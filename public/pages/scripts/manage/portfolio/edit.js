@@ -248,12 +248,6 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 $(window).on('load', async function () {
-	const box = $('.async-items')
-	const design_id = box.data('design-id')
-
-	let html = await AJAX('edit-item-list', { design_id: design_id }, 'text', true)
-
-	box.html(html)
 	$('#items-load-bgr').fadeOut()
 })
 

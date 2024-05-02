@@ -6,15 +6,15 @@ $viewStep = 2;
 
 include_once('setup.php');
 
-$orders = $changeRequest->old_cart->orders;
+$order_items = $changeRequest->old_cart->order_items;
 
 if (isset($_POST['submit'])) {
 	if (isset($_POST['order_id'])) {
-		foreach ($_POST['order_id'] as $orderKey => $orderId) {
-			$is_change = $_POST['is_change'][$orderKey];
+		foreach ($_POST['order_id'] as $orderItemKey => $orderItemId) {
+			$is_change = $_POST['is_change'][$orderItemKey];
 
 			Change::create([
-				'old_order_id' => $orderId,
+				'old_order_id' => $orderItemId,
 				'change_request_id' => $changeRequest->id,
 				'is_change' => $is_change,
 			]);

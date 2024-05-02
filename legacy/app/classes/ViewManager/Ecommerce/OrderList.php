@@ -2,11 +2,11 @@
 
 namespace Legacy\Classes\ViewManager\Ecommerce;
 
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 use Illuminate\Support\Facades\Auth;
 use Legacy\Classes\Ecommerce\Customer;
 
-class CartList {
+class OrderList {
 
 	private $customer;
 
@@ -20,7 +20,7 @@ class CartList {
 	public function render() {
 		ob_start();
 
-		if ($this->customer->confirmedCartsCount) { ?>
+		if ($this->customer->confirmedordersCount) { ?>
 
 			<section class="cart-list">
 				<div class="cart-list__wrapper">
@@ -33,28 +33,26 @@ class CartList {
 						<div class="cart-list__field cart-list__field--header"></div>
 					</div>
 
-					<?php foreach ($this->customer->confirmedCarts as $cart) {
-						$cart = Cart::find($cart->id);
+					<?php foreach ($this->customer->confirmedorders as $order) {
+						$order = Order::find($order->id);
 					?>
 
 						<div class="cart-list__cart">
-							<p class=" cart-list__field"><?= $cart->idCode() ?></p>
+							<p class=" cart-list__field"><?= $order->idCode() ?></p>
 							<p class="cart-list__field">
 
-								<?php foreach ($cart->orders as $order) {
-									echo $order->name() . '<br>';
+								<?php foreach ($order->order_items as $orderItem) {
+									echo $orderItem->name() . '<br>';
 								} ?>
 
 							</p>
-							<p class="cart-list__field"><?= $cart->priceString() ?></p>
+							<p class="cart-list__field"><?= $order->priceString() ?></p>
 							<p class="cart-list__field">
-								<span class="cart-list__status background-status-color--<?= $cart->statusTag() ?>">
-									<?= $cart->statusName() ?>
-								</span>
+								<?= $order->statusLabel() ?>
 							</p>
-							<p class="cart-list__field"><?= $cart->createdAtString() ?></p>
+							<p class="cart-list__field"><?= $order->createdAtString() ?></p>
 							<p class="cart-list__field">
-								<a class="cart-list__link text-link" href="<?= $cart->recapUrl() ?>">
+								<a class="cart-list__link text-link" href="<?= $order->recapUrl() ?>">
 									visualizza
 								</a>
 							</p>

@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\Ecommerce\Address;
-use App\Models\Ecommerce\Cart as EcommerceCart;
-use Legacy\Classes\Ecommerce\Cart as Cart;
+use App\Models\Ecommerce\Order;
+use Legacy\Classes\Ecommerce\OrderItem as Cart;
 
 ?>
 
@@ -12,8 +12,8 @@ use Legacy\Classes\Ecommerce\Cart as Cart;
 	<?php if ($res_sel->num_rows) {
 		while ($row = $res_sel->fetch_assoc()) {
 
-			$cart = new Cart($row['id']);
-			$newCart = EcommerceCart::find($cart->id);
+			$order = new Cart($row['id']);
+			$newOrder = EcommerceOrder::find($order->id);
 			$user_id = $row['user_id'];
 			$shipping_method_id = $row['shipping_method_id'];
 			$reg = (strpos($user_id, 'T') !== false) ? false : true;
@@ -23,20 +23,20 @@ use Legacy\Classes\Ecommerce\Cart as Cart;
 
 			// $pay = $row['payment_method_id'] == 1 ? 'PayPal' : 'Altro pagamento';
 
-			if ($cart->addressId) {
+			if ($order->addressId) {
 				$address =
-					$cart->address->fullAddress . '<br>'
-					. $cart->address->email . '<br>'
-					. $cart->address->phone;
+					$order->address->fullAddress . '<br>'
+					. $order->address->email . '<br>'
+					. $order->address->phone;
 			} else {
 				$address = "<br><span style='color:red'>!!! Errore nell'indirizzo !!!</span>";
 
 				// Set the cart as having errors
-				$newCart->has_errors = 1;
-				$newCart->save();
+				$newOrder->has_errors = 1;
+				$newOrder->save();
 
 				// Get the PayPal data
-				$paypalData = paypal_find_order($cart->id);
+				$paypalData = paypal_find_order($order->id);
 
 				if ($paypalData) {
 
@@ -46,8 +46,8 @@ use Legacy\Classes\Ecommerce\Cart as Cart;
 					$addressLine1 = implode(" ", $addressLine1);
 
 					Address::create([
-						'cart_id' => $cart->id,
-						'user_id' => $reg ? $cart->user_id : null,
+						'order_id' => $order->id,
+						'user_id' => $reg ? $order->user_id : null,
 						'full_name' => $paypalData->shipping_info->name,
 						'address' => $addressLine1,
 						'number' => $addressNumber,
@@ -65,44 +65,44 @@ use Legacy\Classes\Ecommerce\Cart as Cart;
 
 			$ord_str = '';
 
-			$res_ord = \Legacy\System\Classes\LegacyDB::select('id FROM orders WHERE cart_id = ? ORDER BY time ASC', [$cart->id]);
+			$res_ord = \Legacy\System\Classes\LegacyDB::select('id FROM order_items WHERE order_id = ? ORDER BY time ASC', [$order->id]);
 
-			// if ($newCart->has_errors) {
+			// if ($newOrder->has_errors) {
 			// 	$paypalOrderIds = [];
-			// 	$paypalData = paypal_find_order($cart->id);
+			// 	$paypalData = paypal_find_order($order->id);
 
-			// 	$paypalOrderIds = array_column($paypalData->cart_info->item_details, 'item_code');
+			// 	$paypalOrderIds = array_column($paypalData->order_info->item_details, 'item_code');
 
 			// 	$priceComparison = $paypalData->transaction_info->transaction_amount->value;
 			// }
 
-			foreach ($cart->orders as $order) {
+			foreach ($order->order_items as $orderItem) {
 				$validOrder = true;
 
-				// if ($newCart->has_errors) {
-				// 	if (!in_array($order->id, $paypalOrderIds)) {
+				// if ($newOrder->has_errors) {
+				// 	if (!in_array($orderItem->id, $paypalOrderIds)) {
 				// 		$validOrder = false;
 
-				// 		Order::where('id', $order->id)->delete();
+				// 		OrderItem::where('id', $orderItem->id)->delete();
 				// 	}
 				// }
 
 				if ($validOrder) {
-					if ($order->inventory == 1) $ord_str .= '<span style="color: lightgreen; font-weight: bold;">! IN INVENTARIO ! </span>';
-					if ($order->inventory == 2) $ord_str .= '<span style="color: green; font-weight: bold;">! SIMILE IN INVENTARIO ! </span>';
+					if ($orderItem->inventory == 1) $ord_str .= '<span style="color: lightgreen; font-weight: bold;">! IN INVENTARIO ! </span>';
+					if ($orderItem->inventory == 2) $ord_str .= '<span style="color: green; font-weight: bold;">! SIMILE IN INVENTARIO ! </span>';
 
-					$ord_str .= '<a href="' . $order->product->fullUrl . '" target="_blank">' . $order->design_id . ' - ' . $order->getDescription(true) . '</a><br>';
+					$ord_str .= '<a href="' . $orderItem->product->fullUrl . '" target="_blank">' . $orderItem->design_id . ' - ' . $orderItem->getDescription(true) . '</a><br>';
 				}
 			}
 
-			echo '[' . date('Y-m-d H:i:s', strtotime($row['time'])) . ' - ' . $cart->id . ']' . $name_str . '<br>'
+			echo '[' . date('Y-m-d H:i:s', strtotime($row['time'])) . ' - ' . $order->id . ']' . $name_str . '<br>'
 				. $address
 				. $code_str . '<br><br>'
 				. $ord_str . '<br>'
-				. 'Spedizione: ' . $cart->shippingMethod->shortName . ', ' . $cart->shippingMethod->deliveryDateString . '<br>';
+				. 'Spedizione: ' . $order->shippingMethod->shortName . ', ' . $order->shippingMethod->deliveryDateString . '<br>';
 
-			if (!$newCart->change_request) {
-				echo 'Totale: ' . $cart->priceString . '<br>';
+			if (!$newOrder->change_request) {
+				echo 'Totale: ' . $order->priceString . '<br>';
 			} else {
 				echo "<span style='color: CornflowerBlue; font-weight: bold;'>CAMBIO TAGLIA</span><br>";
 			}

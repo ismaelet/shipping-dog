@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\OrderController;
+use App\Http\Controllers\Ecommerce\OrderItemController;
+use App\Http\Controllers\Ecommerce\PayPal\PayPalOrderController;
 use App\Http\Controllers\LegacyController;
 use App\Http\Middleware\Cart;
 use App\Http\Middleware\EmptyCart;
+use App\Http\Middleware\HasCart;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -13,28 +16,28 @@ use Illuminate\Support\Facades\Route;
 Route::any('/shop', LegacyController::class)->name('shop');
 
 /**
- * * Order
+ * * Order Item
  */
 // Create an order
-Route::resource('/orders', OrderController::class)->only(['store']);
+Route::resource('order-items', OrderItemController::class)->only(['show', 'store']);
 
 /**
  * * Cart
  */
 // General cart routes
 Route::get('/cart', function () {
-	$cartStep = cart()?->stepTag();
+	$orderItemstep = cart()?->step;
 
-	if (!$cartStep) {
+	if (!$orderItemstep) {
 		return redirect()->route('cart.empty');
 	}
 
-	if (in_array($cartStep, ['access'])) {
-		return redirect()->route('cart.' . $cartStep);
+	if (in_array($orderItemstep, ['access'])) {
+		return redirect()->route('cart.' . $orderItemstep);
 	}
 
 	// ! Legacy support
-	return redirect('/cart/' . $cartStep);
+	return redirect('/cart/' . $orderItemstep);
 })->name('cart');
 
 // Empty cart
@@ -56,4 +59,20 @@ Route::prefix('cart')->middleware(Cart::class)->name('cart.')->group(function ()
 
 	// Cart step: Payment
 	Route::any('/payment', LegacyController::class)->name('payment');
+});
+
+/**
+ * * Order
+ */
+Route::resource('orders', OrderController::class)->only(['show']);
+
+/**
+ * * PayPal
+ */
+Route::prefix('paypal')->name('paypal.')->group(function () {
+	Route::resource('order', PayPalOrderController::class)->only(['create']);
+
+	Route::get('/{order}/success', [PayPalOrderController::class, 'success'])->name('order.success');
+
+	Route::get('/{order}/reopen', [PayPalOrderController::class, 'reopen'])->name('order.reopen');
 });

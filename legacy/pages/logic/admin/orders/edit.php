@@ -1,9 +1,9 @@
 <?php
 
-use Legacy\Classes\Ecommerce\Cart;
+use Legacy\Classes\Ecommerce\OrderItem;
 
 global $id;
-global $cart;
+global $order;
 
 $id = $_GET['id'] ?? false;
 $updated = $_GET['updated'] ?? false;
@@ -12,8 +12,8 @@ $added = false;
 /*
 * Setup cart
 */
-$cart = new Cart($id);
-\Legacy\System\Classes\LegacyView::$title = 'Ordine ' . $cart->idCode;
+$order = new Cart($id);
+\Legacy\System\Classes\LegacyView::$title = 'Ordine ' . $order->idCode;
 
 /*
 * Form events
@@ -23,15 +23,15 @@ if (isset($_POST['change-status'])) {
 	$comment = $_POST['comment'] ?? false;
 
 	if ($status == 'received') {
-		$cart->confirm(false);
+		$order->confirm(false);
 	} else {
-		$cart->updateStatus($status, false);
+		$order->updateStatus($status, false);
 	}
 
-	redirect_old('?id=' . $cart->id . '&updated=1');
+	redirect_old('?id=' . $order->id . '&updated=1');
 }
 
 if (isset($_POST['update-tracking'])) {
-	$cart->updateTracking($_POST['tracking']);
-	redirect_old('?id=' . $cart->id . '&updated=1');
+	$order->updateTracking($_POST['tracking']);
+	redirect_old('?id=' . $order->id . '&updated=1');
 }

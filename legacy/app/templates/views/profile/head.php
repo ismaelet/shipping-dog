@@ -1,5 +1,10 @@
 <?php
-$user = user_old();
+
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
+$user = User::find(Auth::id());
+
 ?>
 
 <div id="slider" class="">
@@ -8,14 +13,13 @@ $user = user_old();
 
 <div id="slider-data" class="main-wrap txt-cen">
 
-	<img src="<?= public_asset($user->icon) ?>" id="pic" class="img-fill push-center">
+	<img src="<?= public_asset($user->icon()) ?>" id="pic" class="img-fill push-center">
 
 	<h1 id="username" class="txt-25rem"><?= $user->username ?></h1>
 
 	<p class="mar-t-05">
 		<?= $user->first_name ?>
 		<?= empty($user->last_name) ? '' : ' ' . $user->last_name ?>
-		<span class="txt-c1 txt-bold "><?= empty($user->first_name) && empty($user->last_name) ? $user->rank_str : ' &middot; ' . $user->rank_str ?></span>
 	</p>
 
 </div>

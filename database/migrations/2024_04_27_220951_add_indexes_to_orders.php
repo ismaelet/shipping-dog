@@ -9,7 +9,7 @@ return new class extends Migration {
 	 * Run the migrations.
 	 */
 	public function up(): void {
-		Schema::table('orders', function (Blueprint $table) {
+		Schema::table('order_items', function (Blueprint $table) {
 			$table->index('user_id');
 			$table->index('product_id');
 			$table->index('seller_id');
@@ -28,18 +28,18 @@ return new class extends Migration {
 	 * Reverse the migrations.
 	 */
 	public function down(): void {
-		Schema::table('orders', function (Blueprint $table) {
-			$table->dropIndex('orders_user_id_index');
-			$table->dropIndex('orders_product_id_index');
-			$table->dropIndex('orders_seller_id_index');
-			$table->dropIndex('orders_design_id_index');
-			$table->dropIndex('orders_type_id_index');
-			$table->dropIndex('orders_color_id_index');
-			$table->dropIndex('orders_size_id_index');
-			$table->dropIndex('orders_new_id_index');
-			$table->dropIndex('orders_gender_id_index');
-			$table->dropIndex('orders_position_id_index');
-			$table->dropIndex('orders_logo_id_index');
+		Schema::table('order_items', function (Blueprint $table) {
+			$table->dropIndex('order_items_user_id_index');
+			$table->dropIndex('order_items_product_id_index');
+			$table->dropIndex('order_items_seller_id_index');
+			$table->dropIndex('order_items_design_id_index');
+			$table->dropIndex('order_items_type_id_index');
+			$table->dropIndex('order_items_color_id_index');
+			$table->dropIndex('order_items_size_id_index');
+			$table->dropIndex('order_items_new_id_index');
+			$table->dropIndex('order_items_gender_id_index');
+			$table->dropIndex('order_items_position_id_index');
+			$table->dropIndex('order_items_logo_id_index');
 		});
 	}
 };

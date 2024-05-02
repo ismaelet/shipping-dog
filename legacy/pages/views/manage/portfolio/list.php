@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Ecommerce\Design as EcommerceDesign;
-use App\Models\Ecommerce\Product as EcommerceProduct;
-use Legacy\Classes\Ecommerce\Design;
-use Legacy\Classes\Ecommerce\Product;
+use App\Models\Ecommerce\Design;
+use App\Models\Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Design as LegacyDesign;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 
 ?>
 
@@ -56,7 +56,7 @@ use Legacy\Classes\Ecommerce\Product;
 			<div id="gallery" class="mar-t-2 txt-cen grid gap1 js-sortable">
 
 				<?php while ($row = $designs->fetch_assoc()) {
-					$design = EcommerceDesign::find($row['id']);
+					$design = Design::find($row['id']);
 				?>
 
 					<div class="img-box">
@@ -84,7 +84,7 @@ use Legacy\Classes\Ecommerce\Product;
 				<div class="grid-flow js-sortable" data-spacing="400" data-columns="15rem">
 
 					<?php while ($productRow = $customProducts->fetch_assoc()) {
-						$product = EcommerceProduct::find($productRow['id']);
+						$product = Product::find($productRow['id']);
 					?>
 
 						<div class="img-box grid-flow fa-center" data-spacing="200">

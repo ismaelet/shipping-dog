@@ -16,7 +16,7 @@
 			/*
 			 * Show the apply button
 			 */
-			const searchInput = document.querySelector('[name="start_cart_id"]')
+			const searchInput = document.querySelector('[name="start_order_id"]')
 			const startingCartName = searchInput.value
 
 			searchInput.addEventListener('input', function() {
@@ -30,9 +30,9 @@
 			})
 
 			/*
-			 * Copy all the orders to the clipboard
+			 * Copy all the order_items to the clipboard
 			 */
-			const copyAllButton = document.querySelector('.js-copy-orders')
+			const copyAllButton = document.querySelector('.js-copy-order_items')
 
 			if (copyAllButton) {
 				copyAllButton.addEventListener('click', async function() {
@@ -75,7 +75,7 @@
 		<x-dashboard.typography.main-heading>Log dei prodotti</x-dashboard.typography.main-heading>
 
 		{{-- Recap form --}}
-		<x-dashboard.form.panel :title="($validCarts->count() ? $filteredOrders->count() : 0) . ' Articoli da fare'">
+		<x-dashboard.form.panel :title="($validorders->count() ? $filteredorder_items->count() : 0) . ' Articoli da fare'">
 			<x-inputs.label>Parti dall'ordine:</x-inputs.label>
 
 			<div class="flex w-full items-center gap-4">
@@ -86,8 +86,8 @@
 				>
 					<x-inputs.search-input
 						class="grow"
-						search="carts"
-						stored-name="start_cart_id"
+						search="orders"
+						stored-name="start_order_id"
 						stored-value="{{ $startFromCart ? $startFromCart->id : null }}"
 						shown-value="{{ $startFromCart ? $startFromCart->id . ' - ' . $startFromCart->address->full_name : '' }}"
 						placeholder="Ordine da cui partire"
@@ -106,7 +106,7 @@
 					</div>
 				</form>
 
-				@if ($filteredOrders?->count())
+				@if ($filteredorder_items?->count())
 					<form
 						action=""
 						method="POST"
@@ -125,7 +125,7 @@
 					</form>
 
 					<x-inputs.button
-						class="js-copy-orders"
+						class="js-copy-order_items"
 						size="auto"
 					>
 						<?= embed_icon('copy') ?>Copia tutto
@@ -144,9 +144,9 @@
 				class="log gap-8"
 			>
 
-				@if ($validCarts->count())
+				@if ($validorders->count())
 					@php
-						$sortedBySellers = $filteredOrders->sortBy('seller_id')->unique('seller_id');
+						$sortedBySellers = $filteredorder_items->sortBy('seller_id')->unique('seller_id');
 					@endphp
 
 					@foreach ($sortedBySellers as $sellerOrder)
@@ -155,8 +155,8 @@
 							<h3 class="text-primary js-to-copy">[ {{ strtoupper($sellerOrder->storeName) }} ]</h3>
 
 							@php
-								// Get the orders
-								$sortedByProducts = $filteredOrders
+								// Get the order_items
+								$sortedByProducts = $filteredorder_items
 								    ->where('seller_id', '=', $sellerOrder->seller_id)
 								    ->sortBy('design_id')
 								    ->unique('design_id');
@@ -171,37 +171,37 @@
 										</p>
 
 										@php
-											$mergedOrders = [];
-											// Get the orders
-											$orders = $filteredOrders
+											$mergedorder_items = [];
+											// Get the order_items
+											$order_items = $filteredorder_items
 											    ->where('design_id', '=', $product->design_id)
 											    ->sortBy('size_id')
 											    ->sortBy('color_id')
 											    ->sortBy('type_id');
 										@endphp
 
-										@foreach ($orders as $order)
+										@foreach ($order_items as $orderItem)
 											@php
-												$orderDescription = $order->description();
-												$orderDescription = $order->inventory
-												    ? $orderDescription . ' <strong>(INVENTARIO)</strong>'
-												    : $orderDescription;
+												$orderItemDescription = $orderItem->description();
+												$orderItemDescription = $orderItem->inventory
+												    ? $orderItemDescription . ' <strong>(INVENTARIO)</strong>'
+												    : $orderItemDescription;
 
-												if (isset($mergedOrders[$orderDescription])) {
-												    $mergedOrders[$orderDescription] += $order->quantity;
+												if (isset($mergedorder_items[$orderItemDescription])) {
+												    $mergedorder_items[$orderItemDescription] += $orderItem->quantity;
 												} else {
-												    $mergedOrders[$orderDescription] = 1;
+												    $mergedorder_items[$orderItemDescription] = 1;
 												}
 											@endphp
 										@endforeach
 
-										@foreach ($mergedOrders as $orderDescription => $quantity)
+										@foreach ($mergedorder_items as $orderItemDescription => $quantity)
 											<a
-												href="{{ $order->product->fullUrl($order->color_id, $order->position_id) }}"
+												href="{{ $orderItem->product->fullUrl($orderItem->color_id, $orderItem->position_id) }}"
 												target="_bank"
 												class="js-to-copy"
 											>
-												<p>{!! $quantity . ' x ' . $orderDescription !!}</p>
+												<p>{!! $quantity . ' x ' . $orderItemDescription !!}</p>
 											</a>
 										@endforeach
 									</div>
@@ -221,9 +221,9 @@
 				class="log gap-8"
 			>
 
-				@if ($validCarts->count())
+				@if ($validorders->count())
 					@php
-						$sortedByTypes = $filteredOrders->sortBy('type_id')->unique('type_id');
+						$sortedByTypes = $filteredorder_items->sortBy('type_id')->unique('type_id');
 					@endphp
 
 					@foreach ($sortedByTypes as $typeOrder)
@@ -232,34 +232,36 @@
 							<h3 class="text-primary js-to-copy">[ {{ strtoupper($typeOrder->productTypeName) }} ]</h3>
 
 							@php
-								$mergedOrders = [];
+								$mergedorder_items = [];
 
-								// Get the orders
-								$sortedByData = $filteredOrders
+								// Get the order_items
+								$sortedByData = $filteredorder_items
 								    ->where('inventory', 0)
 								    ->where('type_id', '=', $typeOrder->type_id)
 								    ->sortBy('color_id')
 								    ->sortBy('size_id');
 							@endphp
 
-							@foreach ($sortedByData as $order)
+							@foreach ($sortedByData as $orderItem)
 								{{-- Order --}}
 								@php
-									$orderDescription = [];
-									$orderDescription[] = $order->size && strpos($order->product->type->sizes, ',') ? $order->size->name : null;
-									$orderDescription[] = $order->color && strpos($order->product->type->colors, ',') ? $order->color->name : null;
-									$orderDescription = implode(' ', array_filter($orderDescription)) ?: 'Prodotto standard';
+									$orderItemDescription = [];
+									$orderItemDescription[] =
+									    $orderItem->size && strpos($orderItem->product->type->sizes, ',') ? $orderItem->size->name : null;
+									$orderItemDescription[] =
+									    $orderItem->color && strpos($orderItem->product->type->colors, ',') ? $orderItem->color->name : null;
+									$orderItemDescription = implode(' ', array_filter($orderItemDescription)) ?: 'Prodotto standard';
 
-									if (isset($mergedOrders[$orderDescription])) {
-									    $mergedOrders[$orderDescription] += $order->quantity;
+									if (isset($mergedorder_items[$orderItemDescription])) {
+									    $mergedorder_items[$orderItemDescription] += $orderItem->quantity;
 									} else {
-									    $mergedOrders[$orderDescription] = 1;
+									    $mergedorder_items[$orderItemDescription] = 1;
 									}
 								@endphp
 							@endforeach
 
-							@foreach ($mergedOrders as $orderDescription => $quantity)
-								<p class="js-to-copy">{{ $quantity . ' x ' . $orderDescription }}</p>
+							@foreach ($mergedorder_items as $orderItemDescription => $quantity)
+								<p class="js-to-copy">{{ $quantity . ' x ' . $orderItemDescription }}</p>
 							@endforeach
 						</div>
 					@endforeach

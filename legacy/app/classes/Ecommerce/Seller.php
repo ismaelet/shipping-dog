@@ -69,9 +69,9 @@ class Seller {
 	private function getEarned(): float {
 		$earned = \Legacy\System\Classes\LegacyDB::row(
 			'
-		SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * orders.quantity) as totGain
-		FROM orders INNER JOIN carts ON orders.cart_id = carts.id
-		WHERE seller_id = ? AND carts.status > 0',
+		SUM((' . OrderItem::PRODUCT_GAIN_FIELD . ' - gain_disc) * order_items.quantity) as totGain
+		FROM order_items INNER JOIN orders ON order_items.order_id = orders.id
+		WHERE seller_id = ? AND orders.status > 0',
 			[$this->id]
 		)['totGain'];
 

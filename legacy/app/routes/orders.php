@@ -1,12 +1,5 @@
 <?php
 
-// order completed
-\Legacy\System\Classes\LegacyRoute::add('/order', function () {
-	\Legacy\System\Classes\LegacyView::setPage('order/completed');
-	\Legacy\System\Classes\StyleLoader::add('cart', 'page');
-	\Legacy\System\Classes\LegacyView::show();
-});
-
 // order status
 \Legacy\System\Classes\LegacyRoute::add(['/order/status', '/infos/status'], function () {
 	\Legacy\System\Classes\LegacyView::setPage('order/status');

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Ecommerce\Design as EcommerceDesign;
+use App\Models\Ecommerce\Design;
 
 ?>
 

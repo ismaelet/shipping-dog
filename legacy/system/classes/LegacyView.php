@@ -112,6 +112,8 @@ class LegacyView {
 	* Render the view
 	*/
 	public static function show() {
+		self::__constructStatic();
+
 		// set basic data
 		if (!self::$location) self::$location = self::$name;
 		if (!self::$url) self::$url = SERVER_ROOT . '/pages/views/' . self::$name . '.php';

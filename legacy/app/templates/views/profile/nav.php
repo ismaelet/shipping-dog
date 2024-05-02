@@ -26,7 +26,7 @@
 			</a>
 
 			<a href="<?= client_url('/profile/orders') ?>">
-				<p class="nav-link pad-l-1 <?= $profileLocation == 'orders' ? 'active' : '' ?>">Lista ordini</p>
+				<p class="nav-link pad-l-1 <?= $profileLocation == 'order_items' ? 'active' : '' ?>">Lista ordini</p>
 			</a>
 
 			<?php if (App\Helpers\App::isSeller()) { ?>

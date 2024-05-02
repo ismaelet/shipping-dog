@@ -18,12 +18,12 @@ $queryConfig['index'] = 'user_id';
 $queryConfig['select'] = ['user_id', 'name', 'request', 'stores.credit'];
 $queryConfig['from'] = '
 	stores
-	LEFT JOIN orders ON stores.user_id = orders.seller_id
-	INNER JOIN carts ON orders.cart_id = carts.id
+	LEFT JOIN order_items ON stores.user_id = order_items.seller_id
+	INNER JOIN orders ON order_items.order_id = orders.id
 ';
-$queryConfig['where'] = 'carts.status > 0';
+$queryConfig['where'] = 'orders.status > 0';
 $queryConfig['where-search'] = "name LIKE CONCAT('%',?,'%') OR user_id = ?";
-$queryConfig['group'] = 'orders.seller_id';
+$queryConfig['group'] = 'order_items.seller_id';
 
 //select fields
 $fields = [

@@ -10,7 +10,7 @@
 		2.1.6 Background
 		2.1.7 Surfaces
 		2.1.8 Utility colors
-*	2.2. Borders
+*	2.2. Border_items
 *	2.3. Shadows
 *	2.4. Typography
 		2.4.1 Font family
@@ -26,7 +26,7 @@
 		2.8.2 Neutral colors
 		2.8.3 Background
 		2.8.4 Surfaces
-		2.8.5 Borders
+		2.8.5 Border_items
 		2.8.6 Shadows
 		2.8.7 Typography
 */
@@ -53,7 +53,7 @@
 		/* 2.1.1 Primary */
 		--color-primary-300-hsl: 247deg 70% 78%;
 		--color-primary-400-hsl: 35deg 100% 50%;
-		--color-primary-500-hsl: 30deg 100% 45%;
+		--color-primary-500-hsl: 27deg 100% 45%;
 
 		/* 2.1.2 Secondary */
 		--color-secondary-400-hsl: 241deg 81% 54%;
@@ -95,7 +95,7 @@
 		--color-error-500-hsl: 0deg 100% 40%;
 
 		/*
-		* 2.2. Borders
+		* 2.2. Border_items
 		*/
 		--border-width: 1px;
 		--border-color: var(--color-neutral-200);
@@ -126,8 +126,9 @@
 		--font-size-200: 0.75rem;
 		--font-size-300: 0.875rem;
 		--font-size-400: 1rem;
-		--font-size-700: min(2rem, 6vw);
-		--font-size-800: min(3rem, 10vw);
+		--font-size-600: min(1.5rem, 6vw);
+		--font-size-700: min(2rem, 7vw);
+		--font-size-800: min(3.5rem, 12vw);
 		--font-size-900: min(5rem, 15vw);
 
 		/* 2.4.3 Font weight */
@@ -173,6 +174,10 @@
 		--color-neutral-400-hsl: var(--color-neutral-light-400-hsl);
 		--color-neutral-700-hsl: var(--color-neutral-light-700-hsl);
 		--color-neutral-900-hsl: var(--color-neutral-light-900-hsl);
+
+		--border-color: var(--color-neutral-250);
+
+		--color-surface-200-hsl: var(--color-neutral-light-200-hsl);
 	}
 
 	/*
@@ -204,7 +209,7 @@
 		--color-surface-400-hsl: var(--color-neutral-dark-200-hsl);
 		--color-surface-500-hsl: var(--color-neutral-dark-250-hsl);
 
-		/* 2.8.5 Borders */
+		/* 2.8.5 Border_items */
 		--border-color: var(--color-neutral-250);
 
 		/* 2.8.6 Shadows */
@@ -214,5 +219,39 @@
 		/* 2.8.7 Typography */
 		--font-weight-semibold: 500;
 		--font-weight-bold: 600;
+	}
+}
+
+/*
+* 3. Components
+*/
+@layer components {
+	:where(.surface) {
+		background-color: var(--color-surface-400);
+		border-radius: var(--border-radius-700);
+		box-shadow: var(--shadow-400);
+
+		[data-theme='modern'] & {
+			background-color: transparent;
+			border: var(--border);
+			box-shadow: none;
+		}
+	}
+
+	:where(.surface-2) {
+		background-color: var(--color-surface-500);
+		border-radius: var(--border-radius-700);
+		box-shadow: var(--shadow-400);
+
+		[data-theme='modern'] & {
+			background-color: transparent;
+			border: var(--border-width) solid var(--color-neutral-300);
+			box-shadow: none;
+		}
+	}
+
+	p.font-bold,
+	p .font-bold {
+		color: var(--color-neutral-700);
 	}
 }

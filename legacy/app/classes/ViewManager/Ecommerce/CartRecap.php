@@ -6,8 +6,8 @@ namespace Legacy\Classes\ViewManager\Ecommerce;
 
 class CartRecap {
 
-	public static function render(object $cart = null) {
-		$cart = $cart ?: cart_old();
+	public static function render(object $order = null) {
+		$order = $order ?: cart();
 
 		ob_start();
 ?>
@@ -17,38 +17,38 @@ class CartRecap {
 			<div id="chck_box">
 				<div class="chck_item">
 					<p class="chck_name">Articoli</p>
-					<p class="chck_pric js-cart-products-price"><?= $cart->fullProductPriceString ?></p>
+					<p class="chck_pric js-cart-products-price"><?= $order->grossOrderItemsPriceString() ?></p>
 				</div>
 
 				<div class="chck_item">
 					<p class="chck_name">Spedizione</p>
-					<p id="chck_totShip" class="chck_pric js-cart-shipping-price-string js-recap-shipping-price" data-shipping-method-id="<?= $cart->shippingMethodId ?>"><?= $cart->shippingFeeString ?></p>
+					<p id="chck_totShip" class="chck_pric js-cart-shipping-price-string js-recap-shipping-price" data-shipping-method-id="<?= $order->shippingMethodId ?>"><?= $order->shippingFeeString() ?></p>
 				</div>
 
-				<?php if ($cart->discount) { ?>
+				<?php if ($order->discount()) { ?>
 
 					<div class="chck_item">
 						<p class="chck_name">Sconto</p>
-						<p id="chck_totShip" class="chck_pric js-cart-discount">- <?= $cart->discountString ?></p>
+						<p id="chck_totShip" class="chck_pric js-cart-discount">- <?= $order->discountString() ?></p>
 					</div>
 
 				<?php } ?>
 
-				<?php if ($cart->usedCredit) { ?>
+				<?php if ($order->usedCredit) { ?>
 
 					<div class="chck_item">
 						<p class="chck_name" style="color: #ff0000;">Credito</p>
-						<p id="chck_totShip" class="chck_pric" style="color: #ff0000;">-<?= $cart->usedCreditString ?></p>
+						<p id="chck_totShip" class="chck_pric" style="color: #ff0000;">-<?= $order->usedCreditString ?></p>
 					</div>
 
 				<?php } ?>
 
 				<div id="total" class="chck_item">
 					<p class="chck_name">Totale</p>
-					<p class="chck_pric js-cart-price-string"><?= $cart->priceString ?></p>
+					<p class="chck_pric js-cart-price-string"><?= $order->priceString() ?></p>
 				</div>
 
-				<?php if (!$cart->status) { ?>
+				<?php if (!$order->status) { ?>
 
 					<div id="chck_btn_box" class="grid gap1">
 						<button type="button" id="checkout" class="btn button--full-width" onclick="$('#submit').click();">Prosegui</button>

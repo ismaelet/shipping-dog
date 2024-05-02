@@ -2,11 +2,11 @@
 
 use App\Models\Ecommerce\Product;
 use Legacy\View\Components\Interactions\LikeButton;
-use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
 use Legacy\Classes\Ecommerce\Product\Gender;
-use Legacy\Classes\Ecommerce\Product\Position;
-use Legacy\Classes\Ecommerce\Product\Size;
-use Legacy\Classes\Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product\Position as LegacyProductPosition;
+use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
+use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 ?>
 
@@ -23,7 +23,7 @@ use Legacy\Classes\Ecommerce\Product\Type;
 
 	<?php } ?>
 
-	<form action="<?= route('orders.store') ?>" method="POST" class="content grid gap3 al-top">
+	<form action="<?= route('order-items.store') ?>" method="POST" class="content grid gap3 al-top">
 
 		<input type="hidden" name="product_id" value="<?= $product->id ?>">
 
@@ -219,7 +219,7 @@ use Legacy\Classes\Ecommerce\Product\Type;
 
 							<?php while ($row = $res->fetch_assoc()) {
 
-								$color = new Color($row['id']);
+								$color = new LegacyProductColor($row['id']);
 
 								if ((in_array($color->slug, $legacyProduct->type->availableColorSlugs) || $legacyProduct->isCustom) && in_array($color->slug, $legacyProduct->availableColorSlugs)) { ?>
 
@@ -266,7 +266,7 @@ use Legacy\Classes\Ecommerce\Product\Type;
 
 							<?php while ($row = $res->fetch_assoc()) {
 
-								$sizeM = new Size($row['id']);
+								$sizeM = new LegacyProductSize($row['id']);
 
 								if (in_array($sizeM->slug, $legacyProduct->type->sizes)) { ?>
 
@@ -300,7 +300,7 @@ use Legacy\Classes\Ecommerce\Product\Type;
 
 					$genders = [];
 					$genders[] = $legacyProduct->type->genderId;
-					if ($legacyProduct->type->sibling) $genders[] = (new Type($legacyProduct->type->sibling))->genderId;
+					if ($legacyProduct->type->sibling) $genders[] = (new LegacyProductType($legacyProduct->type->sibling))->genderId;
 
 				?>
 
@@ -352,7 +352,7 @@ use Legacy\Classes\Ecommerce\Product\Type;
 					<div class="data-area">
 
 						<?php foreach ($legacyProduct->availablePositionIds as $key => $position_id) {
-							$position = new Position($position_id);
+							$position = new LegacyProductPosition($position_id);
 						?>
 
 							<label class="data-selector data-selector--position">

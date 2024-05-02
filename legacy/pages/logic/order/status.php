@@ -2,7 +2,7 @@
 
 //setup page
 
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 
 $error = false;
 $title = 'Stato ordine';
@@ -23,15 +23,15 @@ if (isset($_POST['submit'])) {
 
 	$id = (int) trim($_POST['id'], '#');
 	$email = strtolower(trim($_POST['email']));
-	$cart = Cart::join('addresses', 'addresses.cart_id', 'carts.id')
-		->where('carts.id', $id)
+	$order = Order::join('addresses', 'addresses.order_id', 'orders.id')
+		->where('orders.id', $id)
 		->where('email', $email)
 		->where('status', '!=', '0')
-		->select('carts.*', 'addresses.email')
+		->select('orders.*', 'addresses.email')
 		->first();
 
-	if ($cart) {
-		redirect_old('/order?id=' . $cart->id . '&email=' . $email);
+	if ($order) {
+		redirect_old('/order?id=' . $order->id . '&email=' . $email);
 	} else {
 		$error = 'no_match';
 	}

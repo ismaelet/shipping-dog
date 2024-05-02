@@ -3,7 +3,7 @@
 namespace Legacy\Classes\Ecommerce;
 
 use App\Helpers\PreviewHelper;
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Product;
 use Legacy\View\Components\Interactions\LikeButton;
 use Illuminate\Support\Facades\Auth;
@@ -40,9 +40,8 @@ class ViewManager {
 	}
 
 	// order list
-	public static function renderOrderList(object $cart = null) {
-		$cart = $cart ?: cart_old();
-		$cart = Cart::find($cart->id);
+	public static function renderOrderList(object $order = null) {
+		$order = $order ?: cart();
 
 		ob_start();
 	?>
@@ -52,13 +51,13 @@ class ViewManager {
 
 			<div id="items_panel">
 
-				<?php foreach ($cart->orders as $order) { ?>
+				<?php foreach ($order->order_items as $orderItem) { ?>
 
 					<div class="row grid">
 						<!--Image-->
-						<?php if ($order->product) { ?>
-							<a href="<?= $order->product ? $order->product->url() : '' ?>" class="img_cont">
-								<img src="<?= $order->image() ?>" class="img-fill">
+						<?php if ($orderItem->product) { ?>
+							<a href="<?= $orderItem->product ? $orderItem->product->url() : '' ?>" class="img_cont">
+								<img src="<?= $orderItem->image() ?>" class="img-fill">
 							</a>
 						<?php } else { ?>
 							<div>
@@ -68,28 +67,28 @@ class ViewManager {
 
 						<!--Data-->
 						<div class="art_data">
-							<a href="<?= $order->product ? $order->product->url() : null ?>">
-								<h3 class="art_name"><?= $order->name() ?></h3>
+							<a href="<?= $orderItem->product ? $orderItem->product->url() : null ?>">
+								<h3 class="art_name"><?= $orderItem->name() ?></h3>
 							</a>
 
 							<p class="txt-bold">
-								<?= $order->discount() ? '<span class="price-old">' . $order->grossPriceString() . '</span>' : $order->priceString() ?>
+								<?= $orderItem->discount() ? '<span class="price-old">' . $orderItem->grossPriceString() . '</span>' : $orderItem->priceString() ?>
 							</p>
 
-							<?php if ($order->discount()) { ?>
+							<?php if ($orderItem->discount()) { ?>
 
-								<p class="price-promo txt-bold"><?= $order->priceString() ?></p>
+								<p class="price-promo txt-bold"><?= $orderItem->priceString() ?></p>
 
 							<?php } ?>
 
 							<p class="order-list__description">
-								<?= $order->multilineDescription() ?>
+								<?= $orderItem->multilineDescription() ?>
 							</p>
 						</div>
 
-						<?php if (!$cart->status) { ?>
+						<?php if (!$order->status) { ?>
 
-							<button type="submit" name="remove" class="remove icon-box" value="<?= $order->id ?>" formnovalidate="formnovalidate">
+							<button type="submit" name="remove" class="remove icon-box" value="<?= $orderItem->id ?>" formnovalidate="formnovalidate">
 								<?= embed_icon('close') ?>
 							</button>
 
@@ -97,16 +96,16 @@ class ViewManager {
 
 					</div>
 
-					<?php if (!$cart->status && !$cart->coupon && !$order->credit && $order->seller_id == Auth::id() && $order->seller->credit() >= $order->price()) { ?>
+					<?php if (!$order->status && !$order->coupon && !$orderItem->credit && $orderItem->seller_id == Auth::id() && $orderItem->seller->credit() >= $orderItem->price()) { ?>
 
-						<button class="use-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $order->id ?>">
+						<button class="use-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $orderItem->id ?>">
 							<?= embed_icon('dollar') ?>
 							Usa il tuo credito
 						</button>
 
-					<?php } else if (!$cart->status && $order->credit) { ?>
+					<?php } else if (!$order->status && $orderItem->credit) { ?>
 
-						<button class="no-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_no_credit" value="<?= $order->id ?>">
+						<button class="no-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_no_credit" value="<?= $orderItem->id ?>">
 							<?= embed_icon('close') ?>
 							Non usare il credito
 						</button>

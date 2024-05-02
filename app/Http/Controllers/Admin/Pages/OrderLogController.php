@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Pages;
 
 use App\Http\Controllers\Controller;
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 use App\Models\Framework\Configuration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,18 +14,18 @@ class OrderLogController extends Controller {
 	/**
 	 * Display the page
 	 */
-	public function index(Request $request): View {
+	public function index(): View {
 		// fetch date
 		$startFromTime = Configuration::where('name', 'order_log_start_from')->value('value');
 
-		$carts = Cart::where('created_at', '>=', $startFromTime)
+		$orders = Order::where('created_at', '>=', $startFromTime)
 			->where('status', '>', 0)
 			->oldest()
 			->get();
 
 		return view('admin.log-orders.index')->with([
-			'carts' => $carts,
-			'cartsFilter' => $carts->first() ? [['carts.created_at', '>=', $carts->first()->created_at]] : [],
+			'orders' => $orders,
+			'ordersFilter' => $orders->first() ? [['orders.created_at', '>=', $orders->first()->created_at]] : [],
 			'startFromTime' => $startFromTime,
 		]);
 	}
@@ -49,9 +49,9 @@ class OrderLogController extends Controller {
 		/**
 		 * Start from a specific cart
 		 */
-		if ($request->start_cart_id) {
-			$startFromId = (int) $request->start_cart_id;
-			$startFromCart = Cart::find($startFromId);
+		if ($request->start_order_id) {
+			$startFromId = (int) $request->start_order_id;
+			$startFromCart = Order::find($startFromId);
 
 			if ($startFromCart) {
 				$startFromConfig->value = $startFromCart->created_at;

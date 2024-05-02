@@ -221,18 +221,6 @@
 			--icon-size: 1em;
 		}
 	}
-
-	.surface {
-		background-color: var(--color-surface-400);
-		border-radius: var(--border-radius-700);
-		box-shadow: var(--shadow-400);
-
-		[data-theme='modern'] & {
-			background-color: transparent;
-			border: var(--border);
-			box-shadow: none;
-		}
-	}
 }
 
 /*

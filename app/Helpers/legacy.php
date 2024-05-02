@@ -1,17 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Legacy\Classes\Ecommerce\Cart;
-use Legacy\Classes\User;
 use Legacy\System\Classes\Query_Result;
-
-function user_old(): ?User {
-	return new User(Auth::id() ?? 0);
-}
-
-function cart_old(): ?Cart {
-	return new Cart(cart()->id ?? 0);
-}
 
 function client_url(string $parcialUrl = '') {
 	return $parcialUrl;

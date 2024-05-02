@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
@@ -14,13 +14,13 @@ class OrderStatusMail extends Mailable {
 
 	use Queueable, SerializesModels;
 
-	public Cart $cart;
+	public Order $order;
 
 	/**
 	 * Create a new message instance
 	 */
-	public function __construct(Cart $cart) {
-		$this->cart = $cart;
+	public function __construct(Order $order) {
+		$this->order = $order;
 	}
 
 	/**
@@ -42,7 +42,7 @@ class OrderStatusMail extends Mailable {
 		return new Content(
 			view: 'emails.order-status',
 			with: [
-				'cart' => $this->cart,
+				'cart' => $this->order,
 				'title' => $this->subject,
 				'info' => $info,
 			],

@@ -20,7 +20,7 @@
 			/*
 			 * Show the apply button
 			 */
-			const searchInput = document.querySelector('[name="start_cart_id"]')
+			const searchInput = document.querySelector('[name="start_order_id"]')
 			const startingCartName = searchInput.value
 
 			searchInput.addEventListener('input', function() {
@@ -34,16 +34,16 @@
 			})
 
 			/*
-			 * Copy the orders content
+			 * Copy the order_items content
 			 */
-			const copyAllButton = document.querySelector('.js-copy-orders');
+			const copyAllButton = document.querySelector('.js-copy-order_items');
 
 			// Copy from cart set in the header
 			if (copyAllButton) {
 				copyAllButton.addEventListener('click', async function() {
-					cartId = document.querySelector('[name="start_copy_cart_id"]').value
+					cartId = document.querySelector('[name="start_copy_order_id"]').value
 
-					copyOrdersContent(cartId)
+					copyorder_itemsContent(cartId)
 				})
 			}
 
@@ -52,29 +52,29 @@
 				button.addEventListener('click', async function() {
 					cartId = this.getAttribute('data-id')
 
-					copyOrdersContent(cartId)
+					copyorder_itemsContent(cartId)
 				})
 			})
 
-			// Copy the orders content
-			function copyOrdersContent(startingCartId) {
-				let orders = []
+			// Copy the order_items content
+			function copyorder_itemsContent(startingCartId) {
+				let order_items = []
 				let order = document.querySelector(`.js-order[data-id="${startingCartId}"]`);
 
-				orders.push(order);
+				order_items.push(order);
 
 				while (nextOrder = selectNextOrder(order)) {
 					order = nextOrder;
 
 					if (order) {
-						orders.push(order);
+						order_items.push(order);
 					}
 				}
 
 				// Get the HTML content of the entire document
 				let text = '';
 
-				orders.forEach((order) => {
+				order_items.forEach((order) => {
 					order.querySelectorAll('.js-to-copy').forEach((element) => {
 						text += element.innerHTML + '<br>';
 					})
@@ -123,26 +123,26 @@
 		<x-dashboard.typography.main-heading>Log degli ordini</x-dashboard.typography.main-heading>
 
 		{{-- Recap form --}}
-		<x-dashboard.form.panel :title="'Mostrando ' . $carts->count() . ' ordini'">
+		<x-dashboard.form.panel :title="'Mostrando ' . $orders->count() . ' ordini'">
 			<div class="grid gap-8">
 
-				@if ($carts->first())
+				@if ($orders->first())
 					<x-form.group>
 						<x-inputs.label>Copia a partire da:</x-inputs.label>
 						<div class="flex gap-4">
 							<x-inputs.search-input
-								search="carts"
-								stored-name="start_copy_cart_id"
-								stored-value="{{ $carts->first()->id }}"
-								shown-value="{{ $carts->first()->id . ' - ' . $carts->first()->address->full_name }}"
+								search="orders"
+								stored-name="start_copy_order_id"
+								stored-value="{{ $orders->first()->id }}"
+								shown-value="{{ $orders->first()->id . ' - ' . $orders->first()->address->full_name }}"
 								placeholder="Ordine da cui copiare"
-								:where="$cartsFilter"
+								:where="$ordersFilter"
 								required
 								class="grow"
 							/>
 
 							<x-inputs.button
-								class="js-copy-orders"
+								class="js-copy-order_items"
 								size="auto"
 							>
 								{!! embed_icon('copy') !!}
@@ -162,10 +162,10 @@
 							class="contents"
 						>
 							<x-inputs.search-input
-								search="carts"
-								stored-name="start_cart_id"
-								stored-value="{{ $carts->first()->id ?? '' }}"
-								shown-value="{{ $carts->first() ? $carts->first()->id . ' - ' . $carts->first()->address->full_name : '' }}"
+								search="orders"
+								stored-name="start_order_id"
+								stored-value="{{ $orders->first()->id ?? '' }}"
+								shown-value="{{ $orders->first() ? $orders->first()->id . ' - ' . $orders->first()->address->full_name : '' }}"
 								placeholder="Ordine da cui partire"
 								required
 								class="grow"
@@ -183,7 +183,7 @@
 							</div>
 						</form>
 
-						@if ($carts->count())
+						@if ($orders->count())
 							<form
 								action=""
 								method="POST"
@@ -207,41 +207,42 @@
 			</div>
 		</x-dashboard.form.panel>
 
-		{{-- Carts --}}
-		@if ($carts->count())
-			@foreach ($carts as $cart)
+		{{-- orders --}}
+		@if ($orders->count())
+			@foreach ($orders as $order)
 				@php
-					$title = $cart->idCode() . ' ' . ($cart->address->full_name ?? '');
-					$title = $cart->user && $cart->user->isSeller() ? $title . ' - <span class="text-error">Venditore</span>' : $title;
+					$title = $order->idCode() . ' ' . ($order->address->full_name ?? '');
+					$title =
+					    $order->user && $order->user->isSeller() ? $title . ' - <span class="text-error">Venditore</span>' : $title;
 				@endphp
 
 				<x-dashboard.form.panel
 					:title="$title"
-					id="carts"
+					id="orders"
 					class="order log js-order"
-					data-id="{{ $cart->id }}"
+					data-id="{{ $order->id }}"
 				>
 
 					{{-- Order header --}}
-					<p class="js-to-copy">[{{ $cart->id }} - {{ $cart->createdAtString() }}]</p>
+					<p class="js-to-copy">[{{ $order->id }} - {{ $order->createdAtString() }}]</p>
 
 					{{-- Address --}}
-					@if ($cart->address)
+					@if ($order->address)
 						{{-- If found --}}
 						<div>
-							<p class="js-to-copy">{!! $cart->address->fullAddress() !!}</p>
+							<p class="js-to-copy">{!! $order->address->fullAddress() !!}</p>
 							<p>---</p>
-							<p>{{ $cart->address->email }}</p>
-							<p>{{ $cart->address->phone }}</p>
+							<p>{{ $order->address->email }}</p>
+							<p>{{ $order->address->phone }}</p>
 						</div>
 					@else
 						{{-- If error --}}
 						@php
-							$cart->has_errors = 1;
-							$cart->save();
+							$order->has_errors = 1;
+							$order->save();
 
 							// Get the PayPal data
-							/*$paypalData = paypal_find_order($cart->id);
+							/*$paypalData = paypal_find_order($order->id);
 
 							if ($paypalData) {
 							// Create the address
@@ -250,8 +251,8 @@
 							$addressLine1 = implode(' ', $addressLine1);
 
 							Address::create([
-							'cart_id' => $cart->id,
-							'user_id' => $reg ? $cart->user_id : null,
+							'order_id' => $order->id,
+							'user_id' => $reg ? $order->user_id : null,
 							'full_name' => $paypalData->shipping_info->name,
 							'address' => $addressLine1,
 							'number' => $addressNumber,
@@ -268,45 +269,45 @@
 					@endif
 
 					{{-- Coupon --}}
-					@if ($cart->coupon)
-						<p>Sconto: <span class="font-bold">{{ $cart->code }}</span></p>
+					@if ($order->coupon)
+						<p>Sconto: <span class="font-bold">{{ $order->code }}</span></p>
 					@endif
 
-					{{-- Orders --}}
+					{{-- order_items --}}
 					<div class="js-to-copy">
-						@foreach ($cart->orders as $order)
+						@foreach ($order->order_items as $orderItem)
 							<p>
-								@if ($order->inventory == 1)
+								@if ($orderItem->inventory == 1)
 									<span class="text-green font-bold">! IN INVENTARIO !</span>
 								@endif
 
-								@if ($order->inventory == 2)
+								@if ($orderItem->inventory == 2)
 									<span class="text-dark-green font-bold">! SIMILE IN INVENTARIO !</span>
 								@endif
 
 								<a
-									href="{{ $order->product->fullUrl($order->color_id, $order->position_id) }}"
+									href="{{ $orderItem->product->fullUrl($orderItem->color_id, $orderItem->position_id) }}"
 									target="_blank"
 								>
-									{{ $order->fullName() }}
+									{{ $orderItem->fullName() }}
 								</a>
 							</p>
 						@endforeach
 					</div>
 
 					{{-- Shipping --}}
-					<p class="js-to-copy">{!! $cart->shipping_method->name !!}, {!! $cart->shipping_method->deliveryDateString($cart->created_at, $cart->hasLongDelivery()) !!}</p>
+					<p class="js-to-copy">{!! $order->shipping_method->name !!}, {!! $order->shipping_method->deliveryDateString($order->created_at, $order->hasLongDelivery()) !!}</p>
 
 					{{-- Price --}}
-					@if (!$cart->change_request)
-						<p class="js-to-copy">Totale: <strong>{!! $cart->priceString() !!}</strong></p>
+					@if (!$order->change_request)
+						<p class="js-to-copy">Totale: <strong>{!! $order->priceString() !!}</strong></p>
 					@else
 						<p class="text-blue js-to-copy font-bold">CAMBIO TAGLIA</p>
 					@endif
 
 					<x-inputs.button
 						class="js-copy-from-cart"
-						data-id="{{ $cart->id }}"
+						data-id="{{ $order->id }}"
 						size="small"
 						variant="secondary"
 					>

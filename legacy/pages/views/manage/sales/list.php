@@ -4,10 +4,7 @@
 
 	<h1 class="section-heading text-center mb-12">Lista vendite</h1>
 
-	<!-- Request -->
 	<?php
-
-
 
 	if (\Legacy\System\Classes\LegacyDB::find('request FROM stores WHERE user_id = ?', [$oldSeller->id])) { ?>
 

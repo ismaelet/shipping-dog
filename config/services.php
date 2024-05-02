@@ -2,7 +2,7 @@
 
 return [
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Third Party Services
     |--------------------------------------------------------------------------
@@ -14,21 +14,28 @@ return [
     |
     */
 
-    'mailgun' => [
-        'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_SECRET'),
-        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
-        'scheme' => 'https',
-    ],
+	'mailgun' => [
+		'domain' => env('MAILGUN_DOMAIN'),
+		'secret' => env('MAILGUN_SECRET'),
+		'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+		'scheme' => 'https',
+	],
 
-    'postmark' => [
-        'token' => env('POSTMARK_TOKEN'),
-    ],
+	'postmark' => [
+		'token' => env('POSTMARK_TOKEN'),
+	],
 
-    'ses' => [
-        'key' => env('AWS_ACCESS_KEY_ID'),
-        'secret' => env('AWS_SECRET_ACCESS_KEY'),
-        'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
-    ],
+	'ses' => [
+		'key' => env('AWS_ACCESS_KEY_ID'),
+		'secret' => env('AWS_SECRET_ACCESS_KEY'),
+		'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+	],
+
+	'paypal' => [
+		'sandbox' => [
+			'client_id' => 'AcB6CifmIAzH7ASX8AavVjP3-2KQlnU55cGfmjH1IwhoWPYbqwxlZgImZ-vxv0ZLak0rbnMjzrYeir7z',
+			'client_secret' => 'REMOVED_SECRET'
+		]
+	]
 
 ];

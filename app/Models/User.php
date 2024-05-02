@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Seller;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -69,7 +69,7 @@ class User extends Authenticatable {
 	 * Get the user's active cart
 	 */
 	public function cart(): HasOne {
-		return $this->hasOne(Cart::class, 'user_id', 'id')->where('status', 0);
+		return $this->hasOne(Order::class, 'user_id', 'id')->where('status', 0);
 	}
 
 	/**
@@ -84,5 +84,42 @@ class User extends Authenticatable {
 	 */
 	public function isSeller(): bool {
 		return (bool) $this->seller;
+	}
+
+	//! Legacy support
+	public function cover(?int $size = 400) {
+		$sizeConversion = [
+			1024 => '',
+			400 => '_m',
+		];
+
+		$sizeSlug = $sizeConversion[$size] ?? '';
+
+		// Get the HD cover image
+		$cover = 'shops/covers/' . $this->id . $sizeSlug;
+
+		if (file_exists(public_storage($cover . '.webp'))) {
+			return $cover . '.webp';
+		}
+
+		if (file_exists(public_storage($cover . '.jpg'))) {
+			return $cover . '.jpg';
+		}
+
+		return 'shops/covers/0.jpg';
+	}
+
+	public function icon(): string {
+		$icon = 'users/icons/' . $this->id;
+
+		if (file_exists(public_storage($icon . '.webp'))) {
+			return $icon . '.webp';
+		}
+
+		if (file_exists(public_storage($icon . '.jpg'))) {
+			return $icon . '.jpg';
+		}
+
+		return 'users/icons/0.jpg';
 	}
 }

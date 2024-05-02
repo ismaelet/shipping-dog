@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin\Pages;
 
 use App\Http\Controllers\Controller;
-use App\Models\Ecommerce\Cart;
 use App\Models\Ecommerce\Order;
+use App\Models\Ecommerce\OrderItem;
 use App\Models\Framework\Configuration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,30 +19,30 @@ class ProductLogController extends Controller {
 
 		// Get the date from which to start the log
 		$startFromTime = Configuration::where('name', 'product_log_start_from')->value('value');
-		$validCarts = Cart::where('created_at', '>=', $startFromTime)->where('status', '>', 0);
-		$startFromCart = $validCarts->exists() ? $validCarts->oldest()->first() : null;
+		$validorders = Order::where('created_at', '>=', $startFromTime)->where('status', '>', 0);
+		$startFromCart = $validorders->exists() ? $validorders->oldest()->first() : null;
 
-		// Get the carts
+		// Get the orders
 		if ($startFromCart) {
-			$filteredOrders = Order::join('carts', 'orders.cart_id', '=', 'carts.id')
-				->join('addresses', 'addresses.cart_id', '=', 'carts.id')
-				->join('stores', 'stores.user_id', '=', 'orders.seller_id')
-				->join('items', 'items.id', '=', 'orders.product_id')
-				->join('product_types', 'product_types.id', '=', 'orders.type_id')
-				->where('carts.status', '>', 0)
-				->where('carts.created_at', '>=', $startFromTime)
-				->select('carts.id as cart_id', 'carts.created_at as confirmedTime', 'orders.*', 'stores.name as storeName', 'addresses.full_name as customerName', 'items.name as productName', 'product_types.name as productTypeName')
+			$filteredorder_items = OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
+				->join('addresses', 'addresses.order_id', '=', 'orders.id')
+				->join('stores', 'stores.user_id', '=', 'order_items.seller_id')
+				->join('items', 'items.id', '=', 'order_items.product_id')
+				->join('product_types', 'product_types.id', '=', 'order_items.type_id')
+				->where('orders.status', '>', 0)
+				->where('orders.created_at', '>=', $startFromTime)
+				->select('orders.id as order_id', 'orders.created_at as confirmedTime', 'order_items.*', 'stores.name as storeName', 'addresses.full_name as customerName', 'items.name as productName', 'product_types.name as productTypeName')
 				->get();
 
 			// Get the first cart
-			$firstCart = $filteredOrders->sortBy('confirmedTime')->first();
+			$firstCart = $filteredorder_items->sortBy('confirmedTime')->first();
 		}
 
 		return view('admin.log-products.index')->with([
 			'startFromCart' => $startFromCart,
 			'firstCart' => $firstCart ?? null,
-			'validCarts' => $validCarts,
-			'filteredOrders' => $filteredOrders ?? null,
+			'validorders' => $validorders,
+			'filteredorder_items' => $filteredorder_items ?? null,
 		]);
 	}
 
@@ -65,9 +65,9 @@ class ProductLogController extends Controller {
 		/**
 		 * Start from a specific cart
 		 */
-		if ($request->start_cart_id) {
-			$startFromId = (int) $request->start_cart_id;
-			$startFromCart = Cart::find($startFromId);
+		if ($request->start_order_id) {
+			$startFromId = (int) $request->start_order_id;
+			$startFromCart = Order::find($startFromId);
 
 			if ($startFromCart) {
 				$startFromConfig->value = $startFromCart->created_at;

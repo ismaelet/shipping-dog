@@ -3,15 +3,16 @@
 namespace Legacy\Classes\Ecommerce;
 
 use App\Helpers\PreviewHelper;
-use App\Models\Ecommerce\Design as NewDesign;
-use App\Models\Ecommerce\Product as EcommerceProduct;
+use App\Models\Ecommerce\Design;
+use App\Models\Ecommerce\Product as NewProduct;
 use App\Models\Ecommerce\Product\ProductType;
-use Legacy\Classes\Ecommerce\Product\Type;
-use Legacy\Classes\Ecommerce\Product\Color;
-use Legacy\Classes\Ecommerce\Product\Position;
-use Legacy\Classes\Ecommerce\Product\PreviewOld;
-use Legacy\Classes\Ecommerce\Design\Logo;
+use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
+use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
+use Legacy\Classes\Ecommerce\Product\Position as LegacyProductPosition;
+use Legacy\Classes\Ecommerce\Product\PreviewOld as LegacyPreview;
+use Legacy\Classes\Ecommerce\Design\Logo as LegacyLogo;
 use Illuminate\Database\Eloquent\Collection;
+use Legacy\Classes\Ecommerce\Design as LegacyDesign;
 
 /**
  * Class Product
@@ -78,7 +79,7 @@ class Product {
 	}
 
 	private function getDesign() {
-		return new Design($this->design_id);
+		return new LegacyDesign($this->design_id);
 	}
 
 	private function getSellerId() {
@@ -94,7 +95,7 @@ class Product {
 	}
 
 	private function getType() {
-		return new Type($this->type_id);
+		return new LegacyProductType($this->type_id);
 	}
 
 	private function getColorId() {
@@ -102,7 +103,7 @@ class Product {
 	}
 
 	private function getColor() {
-		return new Color($this->color_id);
+		return new LegacyProductColor($this->color_id);
 	}
 
 	private function getGenderId() {
@@ -122,7 +123,7 @@ class Product {
 	}
 
 	private function getPosition() {
-		return new Position($this->position_id);
+		return new LegacyProductPosition($this->position_id);
 	}
 
 	private function getAvailablePositionIds() {
@@ -134,7 +135,7 @@ class Product {
 	}
 
 	private function getLogo() {
-		return new Logo($this->logo_id);
+		return new LegacyLogo($this->logo_id);
 	}
 
 	private function getLogoGroup() {
@@ -200,7 +201,7 @@ class Product {
 	}
 
 	public function getNewProduct() {
-		return EcommerceProduct::find($this->id);
+		return NewProduct::find($this->id);
 	}
 	public function getImage(int $imageSize = null) {
 		return (new PreviewHelper($this->getNewProduct(), $imageSize, $this->color_id, $this->position_id))
@@ -208,7 +209,7 @@ class Product {
 	}
 
 	public function getSpecificImage(int $imageSize = null) {
-		return (new PreviewOld($this, $imageSize))
+		return (new LegacyPreview($this, $imageSize))
 			->filePath;
 	}
 
@@ -221,12 +222,12 @@ class Product {
 	}
 
 	public function getHasImage(int $imageSize = null) {
-		return (new PreviewOld($this, $imageSize))
+		return (new LegacyPreview($this, $imageSize))
 			->hasImage;
 	}
 
 	public function getFullImage() {
-		return (new PreviewHelper($this->getNewProduct(), PreviewOld::BIG_IMAGE_SIZE, $this->color_id, $this->position_id))
+		return (new PreviewHelper($this->getNewProduct(), LegacyPreview::BIG_IMAGE_SIZE, $this->color_id, $this->position_id))
 			->image();
 	}
 
@@ -411,9 +412,9 @@ class Product {
 	* Instance methods
 	*/
 	static function new(int $design_id, int $type_id) {
-		$design = NewDesign::find($design_id);
+		$design = Design::find($design_id);
 		$type = ProductType::find($type_id);
-		$productId = EcommerceProduct::where('design_id', $design_id)->where('type_id', $type_id)->first();
+		$productId = NewProduct::where('design_id', $design_id)->where('type_id', $type_id)->first();
 
 		if (!$productId) {
 			//get colors
@@ -429,7 +430,7 @@ class Product {
 			$availableColorSlugs = implode(',', $availableColorSlugs);
 
 			// Create the item
-			$productId = EcommerceProduct::create([
+			$productId = NewProduct::create([
 				'name' => $design->name,
 				'design_id' => $design->id,
 				'user_id' => $design->user_id,

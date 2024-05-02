@@ -13,7 +13,7 @@ trait ResourceIndexController {
 	 * Index configuration
 	 */
 	protected Builder $query;
-	protected array $orderBy = ['id' => 'desc'];
+	protected array $orderItemBy = ['id' => 'desc'];
 	protected string $orderDirection = 'desc';
 	protected array $columns = [];
 	protected array $buttons = [];
@@ -60,9 +60,9 @@ trait ResourceIndexController {
 	private function records(Request $request): Collection {
 		$records = clone $this->query;
 		$currentPage = $request->page ?: 1;
-		$orderBy = $this->orderBy($request);
+		$orderItemBy = $this->orderBy($request);
 
-		foreach ($orderBy as $field => $direction) {
+		foreach ($orderItemBy as $field => $direction) {
 			$records->orderBy($field, $direction);
 		}
 
@@ -80,10 +80,10 @@ trait ResourceIndexController {
 	 */
 	private function orderBy(Request $request): array {
 		if ($request->order_by) {
-			return $this->orderBy = [$request->order_by => $this->orderDirection($request)];
+			return $this->orderItemBy = [$request->order_by => $this->orderDirection($request)];
 		}
 
-		return $this->orderBy;
+		return $this->orderItemBy;
 	}
 
 	/**
@@ -97,16 +97,16 @@ trait ResourceIndexController {
 			return $request->order_direction;
 		}
 
-		return reset($this->orderBy);
+		return reset($this->orderItemBy);
 	}
 
 	/**
-	 * Returns the first key of the $orderBy array.
+	 * Returns the first key of the $orderItemBy array.
 	 *
-	 * @return string The first key of the $orderBy array.
+	 * @return string The first key of the $orderItemBy array.
 	 */
 	private function mainOrderBy(): string {
-		return array_key_first($this->orderBy);
+		return array_key_first($this->orderItemBy);
 	}
 
 	/**

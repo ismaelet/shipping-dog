@@ -3,17 +3,17 @@
 //setup page
 $id = $_GET['id'] ?? false;
 
-if (!\Legacy\System\Classes\LegacyDB::exists('carts WHERE status>0 AND ID = ?', $id)) redirect_old('/orders/list');
+if (!\Legacy\System\Classes\LegacyDB::exists('orders WHERE status>0 AND ID = ?', $id)) redirect_old('/order_items/list');
 
 $index = 'id';
-$tbl = 'orders';
+$tbl = 'order_items';
 $query['search-bar'] = false;
 $query['addID'] = $id;
 
 $this->title('Articoli dell\'ordine ' . $id);
 
 //handle search
-$query['where'] = 'cart_id=' . $id;
+$query['where'] = 'order_id=' . $id;
 
 //select fields
 $fields = [

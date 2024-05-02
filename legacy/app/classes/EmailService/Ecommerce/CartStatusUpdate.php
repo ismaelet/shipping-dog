@@ -4,11 +4,11 @@ namespace EmailService\Ecommerce;
 
 use Email;
 
-class CartStatusUpdate {
-	public static function send(object $cart = null, string $statusCode = null, bool $forceSend = false, bool $debug = false) {
-		$cart = $cart ?: cart_old();
-		$orderList = '';
-		$statusCode = $statusCode ?: $cart->statusCode;
+class orderstatusUpdate {
+	public static function send(object $order = null, string $statusCode = null, bool $forceSend = false, bool $debug = false) {
+		$order = $order ?: cart_old();
+		$orderItemList = '';
+		$statusCode = $statusCode ?: $order->statusCode;
 		$emailContent = file_get_contents(base_path() . '/public/templates/assets/template-emails/cart-update.html');
 
 		// generate dynamic content
@@ -46,26 +46,26 @@ class CartStatusUpdate {
 		}
 
 		// generate order list
-		foreach ($cart->orders as $order) {
-			$orderList .= '
+		foreach ($order->order_items as $orderItem) {
+			$orderItemList .= '
 			<tr style="border-bottom: 1px solid #f4f4f4">
-				<td><p style="line-height: 3">' . $order->name . '</p></td>
-				<td><p style="text-align: right">' . $order->priceString . '</p></td>
+				<td><p style="line-height: 3">' . $orderItem->name . '</p></td>
+				<td><p style="text-align: right">' . $orderItem->priceString . '</p></td>
 			</tr>';
 		}
 
 		// populate mail body
 		$emailContent = str_replace('{{ title }}', $title, $emailContent);
 		$emailContent = str_replace('{{ info }}', $info, $emailContent);
-		$emailContent = str_replace('{{ cart_id }}', $cart->idCode, $emailContent);
-		$emailContent = str_replace('{{ cart-url }}', $cart->staticUrl, $emailContent);
-		$emailContent = str_replace('{{ contacts }}', $cart->address->email . '<br>' . $cart->address->phone, $emailContent);
-		$emailContent = str_replace('{{ address }}', $cart->address->fullAddress, $emailContent);
-		$emailContent = str_replace('{{ payment }}', $cart->paymentMethod->name ?: '-', $emailContent);
-		$emailContent = str_replace('{{ shipping }}', $cart->shippingMethod->name, $emailContent);
-		$emailContent = str_replace('{{ order-list }}', $orderList, $emailContent);
-		$emailContent = str_replace('{{ shipping-price }}', $cart->shippingFeeString, $emailContent);
-		$emailContent = str_replace('{{ total-price }}', $cart->priceString, $emailContent);
+		$emailContent = str_replace('{{ order_id }}', $order->idCode, $emailContent);
+		$emailContent = str_replace('{{ cart-url }}', $order->staticUrl, $emailContent);
+		$emailContent = str_replace('{{ contacts }}', $order->address->email . '<br>' . $order->address->phone, $emailContent);
+		$emailContent = str_replace('{{ address }}', $order->address->fullAddress, $emailContent);
+		$emailContent = str_replace('{{ payment }}', $order->paymentMethod->name ?: '-', $emailContent);
+		$emailContent = str_replace('{{ shipping }}', $order->shippingMethod->name, $emailContent);
+		$emailContent = str_replace('{{ order-list }}', $orderItemList, $emailContent);
+		$emailContent = str_replace('{{ shipping-price }}', $order->shippingFeeString, $emailContent);
+		$emailContent = str_replace('{{ total-price }}', $order->priceString, $emailContent);
 
 		$emailBody = Email::prepareBody($emailContent);
 
@@ -74,7 +74,7 @@ class CartStatusUpdate {
 			'debug' => $debug,
 			'reply-address' => sys_config('contact-email'),
 			'reply-name' => sys_config('name'),
-			'to' => $cart->address->email,
+			'to' => $order->address->email,
 			'subject' => $subject,
 			'text' => $emailBody,
 		];

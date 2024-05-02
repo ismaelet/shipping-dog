@@ -1,11 +1,11 @@
 @php
 
 	use Legacy\View\Components\Interactions\LikeButton;
-	use Legacy\Classes\Ecommerce\Product\Color;
+	use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
 	use Legacy\Classes\Ecommerce\Product\Gender;
-	use Legacy\Classes\Ecommerce\Product\Position;
-	use Legacy\Classes\Ecommerce\Product\Size;
-	use Legacy\Classes\Ecommerce\Product\Type;
+	use Legacy\Classes\Ecommerce\Product\Position as LegacyProductPosition;
+	use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
+	use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 @endphp
 

@@ -1,14 +1,14 @@
 <?php
 
 use App\Models\Ecommerce\Address;
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 
-$cart = Cart::find($cart_id);
+$order = Order::find($order_id);
 
 // Add the transaction ID
 if (isset($_POST['txn_id'])) {
-	Address::where('cart_id', $cart_id)->update(['txnID' => $_POST['txn_id']]);
+	Address::where('order_id', $order_id)->update(['txnID' => $_POST['txn_id']]);
 }
 
 // Confirm the cart
-$cart->confirm();
+$order->confirm();

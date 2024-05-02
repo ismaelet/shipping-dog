@@ -3,15 +3,18 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
-use App\Models\Ecommerce\Design\Logo;
-use App\Models\Ecommerce\Product\ProductColor;
-use App\Models\Ecommerce\Product\ProductPosition;
-use App\Models\Ecommerce\Product\ProductSize;
+use App\Mail\OrderStatusMail;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
 
 /**
- * Represents an order in the e-commerce system.
+ * Represents a shopping order in the e-commerce system.
  */
 class Order extends Model {
 
@@ -20,220 +23,302 @@ class Order extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['fullProductPrice', 'price_disc', 'productGain', 'gain_disc', 'credit', 'inventory', 'quantity', 'time', 'user_id', 'cart_id', 'product_id', 'seller_id', 'design_id', 'type_id', 'color_id', 'size_id', 'gender_id', 'position_id', 'logo_id'];
+	protected $fillable = ['user_id', 'shipping_method_id', 'payment_method_id', 'code', 'quantity', 'credit_ship', 'shipping', 'status', 'step', 'courier_notes', 'shipping_notes', 'has_errors', 'created_at', 'updated_at', 'token'];
 
 
 	// * Relationships * //
-
 	/**
-	 * Get the cart that the order belongs to.
+	 * Get the order's user.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function cart(): BelongsTo {
-		return $this->belongsTo(Cart::class);
+	public function user(): BelongsTo {
+		return $this->belongsTo(User::class);
 	}
 
 	/**
-	 * Get the order's seller.
+	 * Get the order's shipping method.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function seller(): BelongsTo {
-		return $this->belongsTo(Seller::class);
+	public function shipping_method(): BelongsTo {
+		return $this->belongsTo(ShippingMethod::class);
 	}
 
 	/**
-	 * Get the order's product.
+	 * Get the order's payment method.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function product(): BelongsTo {
-		return $this->belongsTo(Product::class);
+	public function payment_method(): BelongsTo {
+		return $this->belongsTo(PaymentMethod::class);
 	}
 
 	/**
-	 * Get the order's color.
+	 * Get the order's address.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
-	public function color(): BelongsTo {
-		return $this->belongsTo(ProductColor::class);
+	public function address(): HasOne {
+		return $this->hasOne(Address::class);
 	}
 
 	/**
-	 * Get the order's size.
+	 * Get the order's coupon.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
-	public function size(): BelongsTo {
-		return $this->belongsTo(ProductSize::class);
+	public function coupon(): HasOne {
+		return $this->hasOne(Coupon::class, 'code', 'code');
 	}
 
 	/**
-	 * Get the order's position.
+	 * Get the order's change request.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
-	public function position(): BelongsTo {
-		return $this->belongsTo(ProductPosition::class);
+	public function change_request(): HasOne {
+		return $this->hasOne(ChangeRequest::class, 'new_order_id');
 	}
 
 	/**
-	 * Get the order's logo.
+	 * Get the order's order_items.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function logo(): BelongsTo {
-		return $this->belongsTo(Logo::class);
+	public function order_items(): HasMany {
+		return $this->hasMany(OrderItem::class);
 	}
 
 
-	// * Utility methods * //
-
+	// * Attributes * //
 	/**
-	 * Get the name of the order.
+	 * Get the order's code.
 	 *
 	 * @return string
 	 */
-	public function name(): string {
-		$name = $this->quantity > 1 ? [$this->quantity . 'x'] : [];
-		$name[] = $this->product && $this->product->status && !$this->product->deleted ? $this->product->name : 'Articolo rimosso';
-
-		return implode(' ', $name);
+	public function idCode(): string {
+		return '#' . str_pad($this->id, 5, '0', STR_PAD_LEFT);
 	}
 
 	/**
-	 * Get the the name of the order, including the design's name and id.
-	 *
-	 * @return string
-	 */
-	public function fullName(): string {
-		return ($this->design_id ? $this->design_id . ' - ' : '') . $this->name() . ' (' . $this->description() . ')';
-	}
-
-	/**
-	 * Get the description of the order.
-	 *
-	 * @return string
-	 */
-	public function description(): string {
-		$product = $this->product;
-
-		$description = $product?->type->name;
-		$description .= $this->size && strpos($product?->type->sizes, ',') ? ' ' . $this->size->name : '';
-		$description .= $this->color && strpos($product?->type->colors, ',') ? ' ' . $this->color->name : '';
-		$description .= $this->logo ? ' ' . $this->logo->name : '';
-		$description .= $this->position_id && $this->position_id > 1 ? ' ' . $this->position->name : '';
-
-		return $description;
-	}
-
-	/**
-	 * Get the full description of the order.
-	 *
-	 * @return string
-	 */
-	public function multilineDescription(): string {
-		if (!$this->product || !$this->product->status || $this->product->deleted) {
-			return 'Articolo rimosso';
-		}
-
-		$type = $this->product->type->name;
-		$size = $this->size_id ? 'Taglia: ' . $this->size->name : null;
-		$color = $this->color_id ? 'Colore: ' . $this->color->name : null;
-		$position = $this->position_id > 1 ? $this->position->name : null;
-		$logo = $this->logo_id ? $this->logo->name : null;
-
-		return implode('<br>', array_filter([$type, $size, $color, $position, $logo]));
-	}
-
-	/**
-	 * Returns the image of the order.
-	 *
-	 * @return string
-	 */
-	public function image(): string {
-		return $this->product->image(null, $this->color_id, $this->position_id);
-	}
-
-	/**
-	 * Get the creation date of the order as a string.
+	 * Get the order's created at date as a string.
 	 *
 	 * @return string
 	 */
 	public function createdAtString(): string {
-		return date('d/m/Y', strtotime($this->time));
+		return date('d/m/Y', strtotime($this->created_at));
 	}
 
-
-	// ~ Price ~ //
-
 	/**
-	 * Get the gross price of a single product.
+	 * Get the order's recap URL.
 	 *
-	 * @return float
+	 * @return string
 	 */
-	public function grossProductPrice(): float {
-		return $this->fullProductPrice;
+	public function recapUrl(): string {
+		return route('orders.show', ['order' => $this->id, 'token' => $this->token]);
 	}
 
 	/**
-	 * Get the discount of a single product.
+	 * Check if the order has a long delivery time.
 	 *
-	 * @return float
+	 * @return bool
 	 */
-	public function productDiscount(): float {
-		return $this->price_disc;
+	public function hasLongDelivery(): bool {
+		foreach ($this->order_items as $orderItem) {
+			if ($orderItem->product && ($orderItem->product->type?->preorder || $orderItem->color?->preorder)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
-	 * Get the price of a single product.
+	 * Get the order's order_items as a string.
 	 *
-	 * @return float
+	 * @return string
 	 */
-	public function productPrice(): float {
-		return $this->grossProductPrice() - $this->productDiscount();
+	public function order_itemsString(): string {
+		$order_itemsString = '';
+
+		foreach ($this->order_items as $orderItem) {
+			$order_itemsString .= $orderItem->quantity . 'x ' . $orderItem->fullName() . '<br>';
+		}
+
+		return $order_itemsString;
 	}
 
+
+	// ~ Attributes: Steps ~ //
 	/**
-	 * Get the total gross price of the order.
+	 * Get the order's step data.
 	 *
-	 * @return float
+	 * @return array
 	 */
-	public function grossPrice(): float {
-		return $this->grossProductPrice() * $this->quantity;
+	public function stepData(): array {
+		return config('ecommerce.cart.steps')[$this->step];
 	}
 
 	/**
-	 * Get the total discount.
+	 * Get the order's step tag.
 	 *
-	 * @return float
+	 * @return string
 	 */
-	public function discount(): float {
-		return $this->credit ? $this->grossPrice() : $this->productDiscount() * $this->quantity;
+	public function stepTag(): string {
+		return $this->stepData()['tag'];
+	}
+
+
+	// ~ Attributes: Status ~ //
+	/**
+	 * Get the order's status data.
+	 *
+	 * @return string
+	 */
+	public function statusData(): array {
+		return config('ecommerce.cart.statuses')[$this->status];
 	}
 
 	/**
-	 * Get the total price of the order.
+	 * Get the order's status tag.
+	 *
+	 * @return string
+	 */
+	public function statusTag(): string {
+		return $this->statusData()['tag'];
+	}
+
+	/**
+	 * Get the order's status name.
+	 *
+	 * @return string
+	 */
+	public function statusName(): string {
+		return $this->statusData()['label'];
+	}
+
+	/**
+	 * Get the order's status color.
+	 *
+	 * @return string
+	 */
+	public function statusColor(): string {
+		return $this->statusData()['color'];
+	}
+
+	/**
+	 * Get the status icon.
+	 *
+	 * @return string
+	 */
+	public function statusIcon(): string {
+		return $this->statusData()['icon'];
+	}
+
+	/**
+	 * Get the order's status label.
+	 *
+	 * @return string
+	 */
+	public function statusLabel(): string {
+		return '<span class="px-4 py-1 gap-2 text-background rounded whitespace-nowrap" style="--icon-size: 1em; background-color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon()) . ' ' . $this->statusName() . '</span>';
+	}
+
+
+	// ~ Attributes: Price ~ //
+	/**
+	 * Get the order's total price.
 	 *
 	 * @return float
 	 */
 	public function price(): float {
-		return $this->grossPrice() - $this->discount();
+		return $this->updatePrice()->price;
 	}
 
 	/**
-	 * Get the seller's total gain for the order.
+	 * Get the order's order_items net price.
 	 *
 	 * @return float
 	 */
-	public function totalGain(): float {
-		return ($this->productGain - $this->gain_disc) * $this->quantity;
+	public function orderItemsPrice(): float {
+		$orderItemsPrice = 0;
+
+		foreach ($this->order_items as $orderItem) {
+			$orderItemsPrice += $orderItem->price();
+		}
+
+		return $orderItemsPrice;
 	}
 
 	/**
-	 * Get the price of the order as a formatted string.
+	 * Get the order's order_items gross price.
+	 *
+	 * @return float
+	 */
+	public function grossOrderItemsPrice(): float {
+		$grossOrderItemsPrice = 0;
+
+		foreach ($this->order_items as $orderItem) {
+			$grossOrderItemsPrice += $orderItem->grossPrice();
+		}
+
+		return $grossOrderItemsPrice;
+	}
+
+	/**
+	 * Get the order's net shipping fee.
+	 *
+	 * @return float
+	 */
+	public function shippingFee(): float {
+		return $this->credit_ship ? 0 : $this->grossShippingFee();
+	}
+
+	/**
+	 * Get the order's gross shipping fee.
+	 *
+	 * @return float
+	 */
+	public function grossShippingFee(): float {
+		return $this->shipping_method ? $this->shipping_method->price($this->order_items->sum('quantity')) : 0;
+	}
+
+	/**
+	 * Get the order's total discount.
+	 *
+	 * @return float
+	 */
+	public function discount(): float {
+		return $this->orderItemsDiscount() + $this->shippingDiscount();
+	}
+
+	/**
+	 * Get the order's total order_items discount.
+	 *
+	 * @return float
+	 */
+	public function orderItemsDiscount(): float {
+		$orderItemsDiscount = 0;
+
+		foreach ($this->order_items as $orderItem) {
+			$orderItemsDiscount += $orderItem->discount();
+		}
+
+		return $orderItemsDiscount;
+	}
+
+	/**
+	 * Get the order's shipping discount.
+	 *
+	 * @return float
+	 */
+	public function shippingDiscount(): float {
+		return $this->credit_ship ? $this->grossShippingFee() : 0;
+	}
+
+	/**
+	 * Get the order's price formatted as a price string.
 	 *
 	 * @return string
 	 */
@@ -242,39 +327,220 @@ class Order extends Model {
 	}
 
 	/**
-	 * Get the gross price of the order as a formatted string.
+	 * Get the order's gross order_items price formatted as a price string.
 	 *
 	 * @return string
 	 */
-	public function grossPriceString(): string {
-		return EcommerceHelper::formatPrice($this->grossPrice());
+	public function grossOrderItemsPriceString(): string {
+		return EcommerceHelper::formatPrice($this->grossOrderItemsPrice());
 	}
 
 	/**
-	 * Get the seller's total gain for the order as a formatted string.
+	 * Get the order's shipping fee formatted as a price string.
 	 *
 	 * @return string
 	 */
-	public function totalGainString(): string {
-		return EcommerceHelper::formatPrice($this->totalGain(), true);
+	public function shippingFeeString(): string {
+		return EcommerceHelper::formatPrice($this->shippingFee());
+	}
+
+	/**
+	 * Get the order's total discount formatted as a price string.
+	 *
+	 * @return string
+	 */
+	public function discountString(): string {
+		return EcommerceHelper::formatPrice($this->discount());
+	}
+
+	/**
+	 * Get the order's order_items discount formatted as a price string.
+	 *
+	 * @return string
+	 */
+	public function orderItemsDiscountString(): string {
+		return EcommerceHelper::formatPrice($this->orderItemsDiscount());
 	}
 
 
 	// * Actions * //
-
 	/**
-	 * Deletes the order.
+	 * Advance the order to the next step or to a specific step.
 	 *
-	 * @return bool|null
+	 * @param string|null $advanceToStepTag The tag of the step to advance to (optional)
+	 * @return self The updated order instance
 	 */
-	public function delete(): bool|null {
-		$result = parent::delete();
-		$cart = $this->cart;
+	public function advance(?string $advanceToStepTag = null): self {
+		// If no specific step is given, advance to the next step
+		if (!$advanceToStepTag) {
+			// The current order step
+			$currentStep = $this->step;
 
-		if ($cart->orders->isEmpty()) {
-			$cart->delete();
+			// The page step
+			$pageStepTag = explode('.', Route::currentRouteName())[1] ?? null;
+			$pageStep = EcommerceHelper::stepFromTag($pageStepTag);
+
+			// Advance to the next step, if the current order step is equal to the page step
+			if ($currentStep == $pageStep) {
+				$this->step++;
+				$this->save();
+			}
+		} else {
+			// Advance to the given step
+			$advanceToStep = EcommerceHelper::stepFromTag($advanceToStepTag);
+
+			if ($advanceToStep) {
+				$this->step = $advanceToStep;
+				$this->save();
+			}
 		}
 
-		return $result;
+		return $this;
+	}
+
+	/**
+	 * Update the order's quantity and price.
+	 *
+	 * @return self
+	 */
+	public function updateOrderItems(): self {
+		$this->updateQuantity();
+		$this->updatePrice();
+
+		return $this;
+	}
+
+	/**
+	 * Update the order's quantity.
+	 *
+	 * @return self
+	 */
+	public function updateQuantity(): self {
+		$this->quantity = $this->order_items->sum('quantity');
+		$this->save();
+
+		if (!$this->quantity) {
+			$this->delete();
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Update the order's price.
+	 *
+	 * @return self
+	 */
+	public function updatePrice(): self {
+		$orderItemsPrice = $this->orderItemsPrice();
+		$shippingFee = $this->shippingFee();
+
+		$this->price = $orderItemsPrice + $shippingFee;
+		$this->shipping = $shippingFee;
+		$this->save();
+
+		return $this;
+	}
+
+	/**
+	 * Confirm the order.
+	 *
+	 * @param bool $sendNotification
+	 * @return void
+	 */
+	public function confirm(bool $sendNotification = true): void {
+		// Forget the order ID
+		session()->forget('cart_id');
+
+		// Update the order
+		$this->update([
+			'created_at' => date('Y-m-d H:i:s'),
+			'status' => EcommerceHelper::statusFromTag('confirmed'),
+		]);
+
+		// Remove the shipping price from the user's credit, if it was paid with the credit
+		if ($this->credit_ship && $this->user && $this->user->isSeller()) {
+			$this->user->seller->update(['credit' => $this->user->seller->credit - $this->grossShippingFee()]);
+		}
+
+		// Destroy used coupons
+		if ($this->coupon) {
+			if ($this->coupon->one_per_acccount) {
+				UsedCoupon::create(['coupon_id' => $this->coupon->id, 'user_id' => $this->user_id]);
+			}
+
+			if (!$this->coupon->permanent) {
+				$this->coupon->delete();
+			}
+		}
+
+		// Send the confirmation email
+		if ($sendNotification) {
+			Mail::to($this->address->email)->send(new OrderStatusMail($this));
+		}
+
+		// Confirm the individual order_items
+		$this->confirmorder_items();
+	}
+
+	/**
+	 * Confirm the order's order_items.
+	 *
+	 * @return void
+	 */
+	public function confirmorder_items(): void {
+		foreach ($this->order_items as $orderItem) {
+			// Check if the order is in the inventory
+			$inventoryItem = InventoryItem::where('design_id', $orderItem->design_id)
+				->whereIn('type_id', [$orderItem->type_id, $orderItem->type->same_as_type_id ?? 0])
+				->where('color_id', $orderItem->color_id)
+				->where('size_id', $orderItem->size_id)
+				->where('position_id', $orderItem->position_id)
+				->first();
+
+			if ($inventoryItem) {
+				$orderItem->update(['inventory' => 1]);
+				$inventoryItem->delete();
+			}
+
+			// Update the seller's data
+			if ($orderItem->seller) {
+				// Update the amount earned by the seller
+				$orderItem->seller->update(['earned' => $orderItem->seller->earned + $orderItem->totalGain()]);
+
+				// Update the seller's credit
+				if ($orderItem->credit) {
+					// Remove from the seller's credit if they used it to pay for the order
+					$orderItem->seller->update(['credit' => $orderItem->seller->credit - $orderItem->price()]);
+				} else if ($orderItem->seller_id !== $this->user_id) {
+					// Add to the seller's credit if no credit was used to pay for the order and the buyer isn't the seller
+					$orderItem->seller->update(['credit' => $orderItem->seller->credit + ($orderItem->totalGain() * .1)]);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Delete the order.
+	 *
+	 * @return bool
+	 */
+	public function delete(): bool {
+		session()->forget('order_id');
+
+		return parent::delete();
+	}
+
+
+	// * Static methods * //
+	/**
+	 * Get the orders that need a label to be printed.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection
+	 */
+	public static function unlabelled(): Collection {
+		return self::where('status', EcommerceHelper::statusFromTag('confirmed'))
+			->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
+			->get();
 	}
 }

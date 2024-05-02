@@ -1,8 +1,8 @@
 <?php
 
-use Legacy\Classes\Ecommerce\Product;
-use Legacy\Classes\Ecommerce\Product\Color;
-use Legacy\Classes\Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
+use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
+use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 $id = $_GET['id'] ?? null;
 $product = $id ? new Product($id) : null;

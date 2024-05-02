@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 use Illuminate\Support\Facades\Auth;
 
 class EcommerceHelper {
@@ -19,7 +19,7 @@ class EcommerceHelper {
 		}
 
 		// Otherwise, return the ID of the cart stored in the session
-		$sessionCart = Cart::find(session('cart_id'));
+		$sessionCart = Order::find(session('order_id'));
 
 		if ($sessionCart && !$sessionCart->status) {
 			return $sessionCart->id;
@@ -34,13 +34,15 @@ class EcommerceHelper {
 	 *
 	 * @return Cart|null The active cart if it exists, otherwise null
 	 */
-	public static function cart(): ?Cart {
+	public static function cart(): ?Order {
 		if (auth()->check()) {
 			return Auth::user()->cart ?? null;
 		}
 
 		if (session('cart_id')) {
-			return Cart::find(session('cart_id'));
+			return Order::where('id', session('cart_id'))
+				->where('status', EcommerceHelper::statusFromTag('open'))
+				->first();
 		}
 
 		return null;
@@ -50,7 +52,7 @@ class EcommerceHelper {
 	 * Get the number of items in the cart
 	 */
 	public static function cartQuantity(): int {
-		return self::cart() ? self::cart()->orders->count() : 0;
+		return self::cart() ? self::cart()->order_items->count() : 0;
 	}
 
 	/**
@@ -68,9 +70,9 @@ class EcommerceHelper {
 	 * Get the step index based on the given step tag.
 	 *
 	 * @param string $stepTag The step tag to search for.
-	 * @return int|false The step index if found, false otherwise.
+	 * @return int The step index if found, false otherwise.
 	 */
-	public static function stepFromTag(string $stepTag): int|false {
+	public static function stepFromTag(string $stepTag): int {
 		$stepKeyPosition = array_search($stepTag, array_column(config('ecommerce.cart.steps'), 'tag'));
 
 		if ($stepKeyPosition === false) {
@@ -78,5 +80,21 @@ class EcommerceHelper {
 		}
 
 		return array_keys(config('ecommerce.cart.steps'))[$stepKeyPosition];
+	}
+
+	/**
+	 * Get the status index based on the given status tag.
+	 *
+	 * @param string $statusTag The status tag to search for.
+	 * @return int The status index if found, false otherwise.
+	 */
+	public static function statusFromTag(string $statusTag): int {
+		$statusKeyPosition = array_search($statusTag, array_column(config('ecommerce.cart.statuses'), 'tag'));
+
+		if ($statusKeyPosition === false) {
+			return false;
+		}
+
+		return array_keys(config('ecommerce.cart.statuses'))[$statusKeyPosition];
 	}
 }

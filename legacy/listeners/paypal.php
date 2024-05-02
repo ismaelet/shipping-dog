@@ -71,7 +71,7 @@ if ($res == 'VERIFIED') {
 		$custom = isset($_POST['custom']) ? $_POST['custom'] : '';
 		$cust_array = explode('&', $custom);
 
-		$cart_id = $cust_array[0];
+		$order_id = $cust_array[0];
 
 		if (isset($cust_array[1])) {
 			if (strpos($cust_array[1], 'change:') === 0) {

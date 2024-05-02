@@ -1,11 +1,11 @@
 <?php
 
-function send_email($email, $cart_id) {
+function send_email($email, $order_id) {
 
 	//generate email text
-	$user_id = \Legacy\System\Classes\LegacyDB::find('user_id FROM carts WHERE id = ?', [$cart_id]);
+	$user_id = \Legacy\System\Classes\LegacyDB::find('user_id FROM orders WHERE id = ?', [$order_id]);
 
-	$row_addr = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE cart_id = ?', [$cart_id]);
+	$row_addr = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE order_id = ?', [$order_id]);
 
 	$addr_full_name = $row_addr['full_name'];
 	$addr_strt = $row_addr['address'];
@@ -17,14 +17,14 @@ function send_email($email, $cart_id) {
 	$security = $row_addr['security'];
 	$toemail = $row_addr['email'];
 
-	$orders = '';
-	$res_ord = \Legacy\System\Classes\LegacyDB::select('id FROM orders WHERE cart_id = ? ORDER BY id ASC', [$cart_id]);
+	$order_items = '';
+	$res_ord = \Legacy\System\Classes\LegacyDB::select('id FROM order_items WHERE order_id = ? ORDER BY id ASC', [$order_id]);
 
 	while ($row_ord = $res_ord->fetch_assoc()) {
 
-		$order = new Order($row_ord['id']);
+		$orderItem = new Order($row_ord['id']);
 
-		$orders .= $order->desc['normal'] . '<br>';
+		$order_items .= $orderItem->desc['normal'] . '<br>';
 	}
 
 	$address =
@@ -35,11 +35,11 @@ function send_email($email, $cart_id) {
 	$txt = file_get_contents(SERVER_ROOT . '/app/functions/email/order_confirmation.html');
 
 	$txt = str_replace('{{email}}', sys_config('contact-email'), $txt);
-	$txt = str_replace('{{cart_id}}', $cart_id, $txt);
+	$txt = str_replace('{{order_id}}', $order_id, $txt);
 	$txt = str_replace('{{address}}', $address, $txt);
-	$txt = str_replace('{{address_link}}', 'https://shippingdog.com/order/address?id=' . $cart_id . '&key=' . $security, $txt);
-	$txt = str_replace('{{orders}}', $orders, $txt);
-	$txt = str_replace('{{order_link}}', 'https://shippingdog.com/order?id=' . $cart_id . '&user_id=' . $user_id, $txt);
+	$txt = str_replace('{{address_link}}', 'https://shippingdog.com/order/address?id=' . $order_id . '&key=' . $security, $txt);
+	$txt = str_replace('{{order_items}}', $order_items, $txt);
+	$txt = str_replace('{{order_link}}', 'https://shippingdog.com/order?id=' . $order_id . '&user_id=' . $user_id, $txt);
 
 	$email->SMTPDebug = 1;
 	$email->isSMTP();

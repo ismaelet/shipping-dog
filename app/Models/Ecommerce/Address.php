@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Address extends Model {
 
-	protected $fillable = ['cart_id', 'user_id', 'full_name', 'address', 'number', 'city', 'zip', 'region', 'country', 'email', 'phone', 'txnID'];
+	protected $fillable = ['order_id', 'user_id', 'full_name', 'address', 'number', 'city', 'zip', 'region', 'country', 'email', 'phone', 'txnID'];
 
 	/*****************************
 	 * * Relationship instances *
@@ -16,7 +16,7 @@ class Address extends Model {
 	 * Get the address' cart
 	 */
 	public function cart(): BelongsTo {
-		return $this->belongsTo(Cart::class, 'cart_id', 'id');
+		return $this->belongsTo(Order::class, 'order_id', 'id');
 	}
 
 	/**************************

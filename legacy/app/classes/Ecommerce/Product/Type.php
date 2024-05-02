@@ -3,7 +3,7 @@
 namespace Legacy\Classes\Ecommerce\Product;
 
 use LegacyDB;
-use Legacy\Classes\Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 
 class Type {
 

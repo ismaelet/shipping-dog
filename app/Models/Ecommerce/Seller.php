@@ -20,9 +20,7 @@ class Seller extends Model {
 	protected $table = 'stores';
 	protected $fillable = ['credit', 'earned'];
 
-	/***************************
-	 * * Relationship instances *
-	 ***************************/
+	// * Relationships * //
 	/**
 	 * Get the seller's designs
 	 */
@@ -31,10 +29,10 @@ class Seller extends Model {
 	}
 
 	/**
-	 * Get the seller's orders
+	 * Get the seller's order_items
 	 */
-	public function orders(): HasMany {
-		return $this->hasMany(Order::class, 'seller_id', 'user_id');
+	public function order_items(): HasMany {
+		return $this->hasMany(OrderItem::class, 'seller_id', 'user_id');
 	}
 
 	/**
@@ -72,9 +70,7 @@ class Seller extends Model {
 		return $this->hasMany(LogoGroup::class, 'seller_id', 'user_id');
 	}
 
-	/************************
-	 * * Utility methods *
-	 ************************/
+	// * Attributes * //
 	/**
 	 * Get the formatted time string
 	 */
@@ -118,15 +114,13 @@ class Seller extends Model {
 		return public_asset('users/icons/0.jpg');
 	}
 
-	/************************
-	 * * Sellers balance *
-	 ************************/
+	// ~ Attributes: Seller balance ~ //
 	/**
 	 * Get the seller's total sales
 	 */
 	public function earned(): float {
 		// Get the total sales
-		$count = $this->orders()
+		$count = $this->order_items()
 			->where('status', '>', 0)
 			->selectRaw('SUM((productGain - gain_disc) * quantity) as totalGain')
 			->first();
@@ -153,7 +147,7 @@ class Seller extends Model {
 	}
 
 	private function usedOrderCredit(): float {
-		$usedOrderCredit = $this->orders()
+		$usedOrderCredit = $this->order_items()
 			->where('user_id', '=', $this->user_id)
 			->where('credit', '=', 1)
 			->selectRaw('SUM((fullProductPrice - price_disc) * quantity) as usedCredit')
@@ -163,7 +157,7 @@ class Seller extends Model {
 	}
 
 	private function usedShippingCredit(): float {
-		$usedShippingCredit = Cart::whereHas('orders', function ($query) {
+		$usedShippingCredit = Order::whereHas('order_items', function ($query) {
 			$query->where('user_id', '=', $this->user_id);
 		})
 			->where('credit_ship', '=', 1)

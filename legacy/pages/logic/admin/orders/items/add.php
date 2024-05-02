@@ -3,7 +3,7 @@
 global $id;
 
 //setup page
-$tbl = 'orders';
+$tbl = 'order_items';
 $index = 'id';
 $index_show = 'id';
 
@@ -17,7 +17,7 @@ $searchConfig = [
 
 if ($id) {
 
-	$productID = \Legacy\System\Classes\LegacyDB::find('product_id FROM orders WHERE id = ?', $id);
+	$productID = \Legacy\System\Classes\LegacyDB::find('product_id FROM order_items WHERE id = ?', $id);
 
 	$design = \Legacy\System\Classes\LegacyDB::row('ID, name FROM designs WHERE id IN (SELECT design_id FROM items WHERE id = ?)', $productID);
 
@@ -83,8 +83,8 @@ if ($id) $inputs[0]['val'] = $design['id'] ?? 0;
 //add
 function _expand_add($tbl, $inputs) {
 
-	$cart_id = (int) $_GET['filter'];
-	$user_id = \Legacy\System\Classes\LegacyDB::find('user_id FROM carts WHERE id = ?', $cart_id);
+	$order_id = (int) $_GET['filter'];
+	$user_id = \Legacy\System\Classes\LegacyDB::find('user_id FROM orders WHERE id = ?', $order_id);
 
 	$design_id = (int) $_POST['design_id'];
 	$type_id = (int) $_POST['type_id'];
@@ -94,7 +94,7 @@ function _expand_add($tbl, $inputs) {
 
 	$productID = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$design_id, $type_id]);
 
-	\Legacy\System\Classes\LegacyDB::add('orders (cart_id, user_id, product_id, type_id, gender_id, color_id, size_id) VALUES (?, ?, ?, ?, ?, ?, ?)', [$cart_id, $user_id, $productID, $type_id, $gender_id, $color_id, $size_id]);
+	\Legacy\System\Classes\LegacyDB::add('order_items (order_id, user_id, product_id, type_id, gender_id, color_id, size_id) VALUES (?, ?, ?, ?, ?, ?, ?)', [$order_id, $user_id, $productID, $type_id, $gender_id, $color_id, $size_id]);
 
 	if (isset($_POST['add-sale'])) {
 
@@ -112,5 +112,5 @@ function _expand_edit($tbl, $inputs, $index, $id) {
 
 	$productID = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$_POST['design_id'], $_POST['type_id']]);
 
-	\Legacy\System\Classes\LegacyDB::update('orders SET product_id = ?, type_id = ?, gender_id = ?, color_id = ?, size_id = ? WHERE id = ?', [$productID, $_POST['type_id'], $_POST['gender_id'], $_POST['color_id'], $_POST['size_id'], $id]);
+	\Legacy\System\Classes\LegacyDB::update('order_items SET product_id = ?, type_id = ?, gender_id = ?, color_id = ?, size_id = ? WHERE id = ?', [$productID, $_POST['type_id'], $_POST['gender_id'], $_POST['color_id'], $_POST['size_id'], $id]);
 }

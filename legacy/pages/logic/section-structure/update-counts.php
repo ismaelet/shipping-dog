@@ -21,39 +21,39 @@ if (isset($_POST['update'])) {
 	\Legacy\System\Classes\LegacyDB::update('
 		stores
 		INNER JOIN (
-			SELECT seller_id, SUM(orders.quantity) as saleQuantity
-			FROM orders
-			INNER JOIN carts ON carts.id = orders.cart_id
-			WHERE carts.status > 0 AND carts.time > DATE_SUB(NOW(), INTERVAL 1 YEAR)
+			SELECT seller_id, SUM(order_items.quantity) as saleQuantity
+			FROM order_items
+			INNER JOIN orders ON orders.id = order_items.order_id
+			WHERE orders.status > 0 AND orders.time > DATE_SUB(NOW(), INTERVAL 1 YEAR)
 			GROUP BY seller_id
-		) as recentOrders
-		ON stores.user_id = recentOrders.seller_id
+		) as recentorder_items
+		ON stores.user_id = recentorder_items.seller_id
 		SET recent_sales = saleQuantity
 	');
 
 	\Legacy\System\Classes\LegacyDB::update('
 		designs
 		INNER JOIN (
-			SELECT design_id, SUM(orders.quantity) as saleQuantity
-			FROM orders
-			INNER JOIN carts ON carts.id = orders.cart_id
-			WHERE carts.status > 0 AND carts.time > DATE_SUB(NOW(), INTERVAL 1 YEAR)
+			SELECT design_id, SUM(order_items.quantity) as saleQuantity
+			FROM order_items
+			INNER JOIN orders ON orders.id = order_items.order_id
+			WHERE orders.status > 0 AND orders.time > DATE_SUB(NOW(), INTERVAL 1 YEAR)
 			GROUP BY design_id
-		) as recentOrders
-		ON designs.id = recentOrders.design_id
+		) as recentorder_items
+		ON designs.id = recentorder_items.design_id
 		SET recent_sales = saleQuantity
 	');
 
 	\Legacy\System\Classes\LegacyDB::update('
 		items
 		INNER JOIN (
-			SELECT product_id, SUM(orders.quantity) as saleQuantity
-			FROM orders
-			INNER JOIN carts ON carts.id = orders.cart_id
-			WHERE carts.status > 0 AND carts.time > DATE_SUB(NOW(), INTERVAL 1 YEAR)
+			SELECT product_id, SUM(order_items.quantity) as saleQuantity
+			FROM order_items
+			INNER JOIN orders ON orders.id = order_items.order_id
+			WHERE orders.status > 0 AND orders.time > DATE_SUB(NOW(), INTERVAL 1 YEAR)
 			GROUP BY product_id
-		) as recentOrders
-		ON items.id = recentOrders.product_id
+		) as recentorder_items
+		ON items.id = recentorder_items.product_id
 		SET recent_sales = saleQuantity
 	');
 
@@ -63,39 +63,39 @@ if (isset($_POST['update'])) {
 	\Legacy\System\Classes\LegacyDB::update('
 		stores
 		INNER JOIN (
-			SELECT seller_id, SUM(orders.quantity) as saleQuantity
-			FROM orders
-			INNER JOIN carts ON carts.id = orders.cart_id
-			WHERE carts.status > 0
+			SELECT seller_id, SUM(order_items.quantity) as saleQuantity
+			FROM order_items
+			INNER JOIN orders ON orders.id = order_items.order_id
+			WHERE orders.status > 0
 			GROUP BY seller_id
-		) as recentOrders
-		ON stores.user_id = recentOrders.seller_id
+		) as recentorder_items
+		ON stores.user_id = recentorder_items.seller_id
 		SET sales = saleQuantity
 	');
 
 	\Legacy\System\Classes\LegacyDB::update('
 		designs
 		INNER JOIN (
-			SELECT design_id, SUM(orders.quantity) as saleQuantity
-			FROM orders
-			INNER JOIN carts ON carts.id = orders.cart_id
-			WHERE carts.status > 0
+			SELECT design_id, SUM(order_items.quantity) as saleQuantity
+			FROM order_items
+			INNER JOIN orders ON orders.id = order_items.order_id
+			WHERE orders.status > 0
 			GROUP BY design_id
-		) as recentOrders
-		ON designs.id = recentOrders.design_id
+		) as recentorder_items
+		ON designs.id = recentorder_items.design_id
 		SET sales = saleQuantity
 	');
 
 	\Legacy\System\Classes\LegacyDB::update('
 		items
 		INNER JOIN (
-			SELECT product_id, SUM(orders.quantity) as saleQuantity
-			FROM orders
-			INNER JOIN carts ON carts.id = orders.cart_id
-			WHERE carts.status > 0
+			SELECT product_id, SUM(order_items.quantity) as saleQuantity
+			FROM order_items
+			INNER JOIN orders ON orders.id = order_items.order_id
+			WHERE orders.status > 0
 			GROUP BY product_id
-		) as recentOrders
-		ON items.id = recentOrders.product_id
+		) as recentorder_items
+		ON items.id = recentorder_items.product_id
 		SET sales = saleQuantity
 	');
 

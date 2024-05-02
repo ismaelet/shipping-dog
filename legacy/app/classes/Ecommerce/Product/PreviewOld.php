@@ -3,7 +3,7 @@
 namespace Legacy\Classes\Ecommerce\Product;
 
 use LegacyDB;
-use Legacy\Classes\Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 use \Legacy\System\Traits\DynamicProperties;
 
 class PreviewOld {
@@ -73,7 +73,7 @@ class PreviewOld {
 	*/
 	static function put($id, $data) {
 		$result = false;
-		$product = new Product($id);
+		$product = new LegacyProduct($id);
 		$base = \Legacy\System\Classes\LegacyDB::row('* FROM items_mockups WHERE type_id = ? AND position_id = ?', [$product->type->id, $data['position_id']]);
 
 		if ($data['size'] != $base['siz_x_def'] || $data['pos-x'] != $base['pos_x_def'] || $data['pos-y'] != $base['pos_y_def']) {
@@ -197,7 +197,7 @@ class PreviewOld {
 
 	// delete images
 	static function deleteImages($id) {
-		$product = new Product($id);
+		$product = new LegacyProduct($id);
 
 		$files = glob(public_storage('products/' . $product->type->slug . '/' . $product->id . '-*'));
 		array_map('unlink', $files);

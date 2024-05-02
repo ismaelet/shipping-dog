@@ -2,7 +2,7 @@
 
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
-use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
 use Legacy\Classes\Ecommerce\Product\Mockup;
 
 $type_id = $_GET['id'];

@@ -1,6 +1,6 @@
 <?php
 
-use Legacy\Classes\Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 
 $response = [];
 $productId = $_GET['id'];

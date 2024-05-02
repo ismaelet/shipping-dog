@@ -1,11 +1,11 @@
 <?php
 
 use App\Helpers\FileHelper;
-use App\Models\Ecommerce\Design as EcommerceDesign;
+use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Product\ProductType;
-use Legacy\Classes\Ecommerce\Design;
+use Legacy\Classes\Ecommerce\Design as LegacyDesign;
 use Legacy\Classes\Ecommerce\Design\LogoGroup;
-use Legacy\Classes\Ecommerce\Product;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 use Illuminate\Support\Facades\Auth;
 
 global $user;

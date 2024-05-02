@@ -17,8 +17,8 @@ class Cart {
 	public function handle(Request $request, Closure $next): Response|RedirectResponse {
 		$pageStepTag = explode('.', Route::currentRouteName())[1] ?? null;
 		$pageStep = EcommerceHelper::stepFromTag($pageStepTag);
-		$cartStepTag = cart()?->stepTag();
-		$cartStep = cart()?->step;
+		$orderStepTag = cart()?->stepTag();
+		$orderStep = cart()?->step;
 
 		// If the cart is empty, redirect to the empty cart page
 		if (!cart()) {
@@ -26,15 +26,15 @@ class Cart {
 		}
 
 		// If the step isn't valid redirect to the first step
-		if (!$cartStep) {
+		if (!$orderStep) {
 			$firstStep = reset(config('ecommerce.cart.steps'));
 
 			return redirect()->route('cart.' . $firstStep);
 		}
 
 		// If the page step is more advanced than the cart step, redirect to the cart step
-		if ($pageStep > $cartStep) {
-			return redirect()->route('cart.' . $cartStepTag);
+		if ($pageStep > $orderStep) {
+			return redirect()->route('cart.' . $orderStepTag);
 		}
 
 		return $next($request);

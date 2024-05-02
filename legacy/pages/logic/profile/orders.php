@@ -2,4 +2,4 @@
 
 global $user;
 
-$loc = 'orders';
+$loc = 'order_items';

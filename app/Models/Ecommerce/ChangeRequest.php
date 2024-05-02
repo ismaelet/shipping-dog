@@ -9,20 +9,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ChangeRequest extends Model {
 
 	protected $table = 'ecommerce_change_requests';
-	protected $fillable = ['old_cart_id', 'new_cart_id', 'step'];
+	protected $fillable = ['old_order_id', 'new_order_id', 'step'];
 
 	/**
 	 * Get the old cart that owns the change request.
 	 */
 	public function old_cart(): BelongsTo {
-		return $this->belongsTo(Cart::class, 'old_cart_id');
+		return $this->belongsTo(Order::class, 'old_order_id');
 	}
 
 	/**
 	 * Get the new cart generated from the change request.
 	 */
 	public function new_cart(): BelongsTo {
-		return $this->belongsTo(Cart::class, 'new_cart_id');
+		return $this->belongsTo(Order::class, 'new_order_id');
 	}
 
 	/**

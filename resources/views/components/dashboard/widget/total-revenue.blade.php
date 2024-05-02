@@ -1,12 +1,12 @@
 @php
-	use App\Models\Ecommerce\Order;
+	use App\Models\Ecommerce\OrderItem;
 
-	$newRevenue = Order::where('status', '>', 0)
+	$newRevenue = OrderItem::where('status', '>', 0)
 	    ->where('created_at', '>=', now()->subMonth())
 	    ->where('created_at', '<=', now())
 	    ->sum('fullProductPrice');
 
-	$oldRevenue = Order::where('status', '>', 0)
+	$oldRevenue = OrderItem::where('status', '>', 0)
 	    ->where('created_at', '>=', now()->subMonth()->subMonth())
 	    ->where('created_at', '<', now()->subMonth())
 	    ->sum('fullProductPrice');

@@ -1,3 +1,5 @@
+@use('App\Helpers\EcommerceHelper')
+
 @pushOnce('styles')
 	<style>
 		.status-icon {
@@ -66,7 +68,7 @@
 						</div>
 					</div>
 
-					{{-- Orders --}}
+					{{-- order_items --}}
 					<div class="order-list mt-4 grid gap-x-4">
 						<div class="order-row">
 							<p class="font-medium text-neutral-300">Prodotto</p>
@@ -74,23 +76,23 @@
 							<p class="font-medium text-neutral-300">Prezzo</p>
 						</div>
 
-						<!-- Orders list -->
+						<!-- order_items list -->
 
-						@foreach ($record->orders as $order)
+						@foreach ($record->order_items as $orderItem)
 							<div class="order-row order">
 								<img
-									src="{{ $order->product->image() }}"
+									src="{{ $orderItem->product->image() }}"
 									alt=""
 									class="w-24 rounded"
 								>
 
 								<p class="">
-									<a href="{{ $order->product->fullUrl($order->color_id, $order->position_id) }}">
-										{{ $order->fullName() }}
+									<a href="{{ $orderItem->product->fullUrl($orderItem->color_id, $orderItem->position_id) }}">
+										{{ $orderItem->fullName() }}
 									</a>
 								</p>
 
-								<p class="">{{ $order->priceString() }}</p>
+								<p class="">{{ $orderItem->priceString() }}</p>
 							</div>
 						@endforeach
 
@@ -193,25 +195,25 @@
 
 		<div class="flex w-full justify-between gap-4">
 			<div class="flex gap-4">
-				@if ($record->status > 0)
+				@if (!in_array($record->status, [EcommerceHelper::statusFromTag('canceled'), EcommerceHelper::statusFromTag('open')]))
 					<x-inputs.button
 						type="submit"
 						variant="secondary"
 						color="error"
 						name="new_status"
-						value="-1"
+						value="{{ EcommerceHelper::statusFromTag('canceled') }}"
 					>
 						{!! embed_icon('delete') !!}
 						Cancella l'ordine
 					</x-inputs.button>
 				@endif
 
-				@if ($record->status != 0)
+				@if ($record->status != EcommerceHelper::statusFromTag('open'))
 					<x-inputs.button
 						type="submit"
 						variant="secondary"
 						name="new_status"
-						value="0"
+						value="{{ EcommerceHelper::statusFromTag('open') }}"
 					>
 						{!! embed_icon('back') !!}
 						Riapri il carrello
@@ -219,47 +221,56 @@
 				@endif
 			</div>
 
-			@if ($record->status == -1)
+			@if ($record->status == EcommerceHelper::statusFromTag('canceled'))
 				<x-inputs.button
 					type="submit"
 					name="new_status"
-					value="1"
+					value="{{ EcommerceHelper::statusFromTag('received') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Ripristina l'ordine
 				</x-inputs.button>
-			@elseif (!$record->status)
+			@elseif ($record->status == EcommerceHelper::statusFromTag('open'))
 				<x-inputs.button
 					type="submit"
 					name="new_status"
-					value="1"
+					value="{{ EcommerceHelper::statusFromTag('received') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Conferma l'ordine
 				</x-inputs.button>
-			@elseif ($record->status == 1)
+			@elseif ($record->status == EcommerceHelper::statusFromTag('received'))
 				<x-inputs.button
 					type="submit"
 					name="new_status"
-					value="2"
+					value="{{ EcommerceHelper::statusFromTag('confirmed') }}"
+				>
+					{!! embed_icon('money') !!}
+					Conferma il pagamento
+				</x-inputs.button>
+			@elseif ($record->status == EcommerceHelper::statusFromTag('confirmed'))
+				<x-inputs.button
+					type="submit"
+					name="new_status"
+					value="{{ EcommerceHelper::statusFromTag('label-ready') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Etichetta pronta
 				</x-inputs.button>
-			@elseif ($record->status == 2)
+			@elseif ($record->status == EcommerceHelper::statusFromTag('label-ready'))
 				<x-inputs.button
 					type="submit"
 					name="new_status"
-					value="3"
+					value="{{ EcommerceHelper::statusFromTag('shipped') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Spedito
 				</x-inputs.button>
-			@elseif ($record->status == 3)
+			@elseif ($record->status == EcommerceHelper::statusFromTag('shipped'))
 				<x-inputs.button
 					type="submit"
 					name="new_status"
-					value="4"
+					value="{{ EcommerceHelper::statusFromTag('delivered') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Consegnato

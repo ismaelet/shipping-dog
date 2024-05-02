@@ -13,21 +13,21 @@ if (!$changeRequest->processed && $changeRequest->payed) {
 	if ($changeRequest->realChanges->count()) {
 		// Duplicate the old cart
 		$oldCart = $changeRequest->old_cart;
-		$newCart = $oldCart->replicate();
-		$newCart->quantity = $changeRequest->realChanges->count();
-		$newCart->code = '';
-		$newCart->status = 1;
-		$newCart->shipping = 8;
-		$newCart->credit_ship = 0;
-		$newCart->tot = 0;
-		$newCart->touch('time');
-		$newCart->save();
+		$newOrder = $oldCart->replicate();
+		$newOrder->quantity = $changeRequest->realChanges->count();
+		$newOrder->code = '';
+		$newOrder->status = 1;
+		$newOrder->shipping = 8;
+		$newOrder->credit_ship = 0;
+		$newOrder->tot = 0;
+		$newOrder->touch('time');
+		$newOrder->save();
 
-		$changeRequest->new_cart_id = $newCart->id;
+		$changeRequest->new_order_id = $newOrder->id;
 
 		// Duplicate the address
 		$address = $oldCart->address->replicate();
-		$address->cart_id = $newCart->id;
+		$address->order_id = $newOrder->id;
 		$address->save();
 
 		// Process the individual changes
@@ -46,7 +46,7 @@ if (!$changeRequest->processed && $changeRequest->payed) {
 
 			// Duplicate the old order
 			$newOrder = $oldOrder->replicate();
-			$newOrder->cart_id = $newCart->id;
+			$newOrder->order_id = $newOrder->id;
 			$newOrder->size_id = $change->new_size_id;
 			$newOrder->fullProductPrice = 0;
 			$newOrder->price_disc = 0;

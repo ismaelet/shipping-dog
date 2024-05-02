@@ -5,7 +5,7 @@ $ecommerceConfig = [
 	* General settings
 	*/
 	'currency' => 'EUR',
-	'paypal-user' => 'shippingdog.orders@gmail.com',
+	'paypal-user' => 'shippingdog.order_items@gmail.com',
 
 	// General settings
 	'currency' => 'EUR',

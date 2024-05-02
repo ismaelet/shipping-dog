@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\Pages\DashboardController;
 use App\Http\Controllers\Admin\Pages\LabelGeneratorController;
 use App\Http\Controllers\Admin\Pages\OrderLogController;
 use App\Http\Controllers\Admin\Pages\ProductLogController;
-use App\Http\Controllers\Admin\Resources\CartController;
+use App\Http\Controllers\Admin\Resources\OrderController;
 use App\Http\Controllers\Admin\Resources\DesignController;
 use App\Http\Controllers\Admin\Resources\SellerController;
 use App\Http\Controllers\Admin\Resources\UserController;
@@ -34,9 +34,9 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 	// Designs
 	Route::resource('designs', DesignController::class)->only(['index']);
 
-	// Carts
-	Route::resource('carts', CartController::class)->only(['index', 'edit', 'update']);
-	Route::post('/carts/{id}/resend-email', [CartController::class, 'resendEmail'])->name('carts.resend-email');
+	// orders
+	Route::resource('orders', OrderController::class)->only(['index', 'edit', 'update']);
+	Route::post('/orders/{id}/resend-email', [OrderController::class, 'resendEmail'])->name('orders.resend-email');
 
 	/**
 	 * * Custom routes

@@ -120,21 +120,21 @@ const cartQuantitySelector = '.js-cart-quantity'
 const cartDataQuantitySelector = '.js-cart-data-quantity'
 const cartProductPriceSelector = '.js-cart-product-price'
 const cartProductPriceStringSelector = '.js-cart-product-price-string'
-const cartShippingFeeStringSelector = '.js-cart-shipping-price-string'
+const ordershippingFeeStringSelector = '.js-cart-shipping-price-string'
 const cartPriceStringSelector = '.js-cart-price-string'
 
 /*
  * Functions
  */
 // get cart ID
-async function cart_id() {
-	return await call_function('cart_id')
+async function order_id() {
+	return await call_function('order_id')
 }
 
 // update cart
 async function update_cart() {
 	// fatch data
-	const cartData = await get_class_properties('Legacy\\Classes\\Ecommerce\\Cart', ['quantity', 'productPrice', 'productPriceString', 'priceString'], await cart_id(), null, false)
+	const cartData = await get_class_properties('Legacy\\Classes\\Ecommerce\\Cart', ['quantity', 'productPrice', 'productPriceString', 'priceString'], await order_id(), null, false)
 
 	// update cart icon
 	if (parseInt(cartData.quantity)) {
@@ -164,7 +164,7 @@ async function update_cart() {
 
 // update shipping
 function update_shipping() {
-	const shippingElements = document.querySelectorAll(cartShippingFeeStringSelector)
+	const shippingElements = document.querySelectorAll(ordershippingFeeStringSelector)
 
 	shippingElements.forEach(async (element) => {
 		const shippingMethodId = element.dataset.shippingMethodId
@@ -178,17 +178,17 @@ function update_shipping() {
  * events
  */
 document.addEventListener('DOMContentLoaded', async function () {
-	const orderSelector = '.js-cart-order'
+	const order_itemselector = '.js-cart-order'
 	const closeSidebardSelector = '.js-close-cart-sidebar'
-	const addToCartSelector = '.js-add-to-cart'
-	const removeFromCartSelector = '.js-remove-from-cart'
+	const addToorderselector = '.js-add-to-cart'
+	const removeFromorderselector = '.js-remove-from-cart'
 	const addToWishlistSelector = '.js-add-to-wishlist'
 	const orderListSelector = '.js-order-list'
 
 	/*
 	 * Add to cart
 	 */
-	$(addToCartSelector + ':not(:disabled)').on('click', async function () {
+	$(addToorderselector + ':not(:disabled)').on('click', async function () {
 		const self = $(this)
 		const productId = self.data('product-id')
 		const quantity = self.data('quantity')
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 		*/
 
 		// add order
-		await AJAX('ecommerce-orders', parameters, null, false)
+		await AJAX('ecommerce-order_items', parameters, null, false)
 
 		// populate and show the cart dropdown
 		const orderList = await call_class_method('Legacy\\Classes\\Ecommerce\\ViewManager', 'renderOrderList', null, null, null, true)
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 	/*
 	 * Remove from cart
 	 */
-	$(document).on('click', removeFromCartSelector, async function () {
+	$(document).on('click', removeFromorderselector, async function () {
 		const self = $(this)
 		const parameters = {
 			method: 'delete',
@@ -274,12 +274,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 		}
 
 		// delete the order
-		await AJAX('ecommerce-orders', parameters, 'none', true)
+		await AJAX('ecommerce-order_items', parameters, 'none', true)
 
 		// update the price
 		update_cart()
 
-		self.parents(orderSelector).remove()
+		self.parents(order_itemselector).remove()
 	})
 
 	/*

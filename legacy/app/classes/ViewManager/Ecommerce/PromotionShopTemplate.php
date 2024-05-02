@@ -3,7 +3,7 @@
 namespace Legacy\Classes\ViewManager\Ecommerce;
 
 use LegacyDB;
-use Legacy\Classes\Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 use Legacy\Classes\Ecommerce\ViewManager;
 
 class PromotionShopTemplate {

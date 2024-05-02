@@ -56,7 +56,7 @@ class ShippingMethod {
 	}
 
 	private function getAssociatedCart() {
-		return cart_id() ? cart_old() : null;
+		return order_id() ? cart_old() : null;
 	}
 
 	private function getProductQuantity() {
@@ -123,10 +123,10 @@ class ShippingMethod {
 		$daysPassed = 0;
 		$workDaysPassed = 0;
 
-		$cart = $this->associatedCart ?: cart_old();
-		$cartTime = $cart->statusId ? $cart->created_at : date('Y-m-d');
+		$order = $this->associatedCart ?: cart_old();
+		$orderTime = $order->statusId ? $order->created_at : date('Y-m-d');
 
-		$weekDayNumber = date('N', strtotime($cartTime));
+		$weekDayNumber = date('N', strtotime($orderTime));
 
 		$totalRequiredDays = $maximumDate ? $this->maximumRequiredDays : $this->minimumRequiredDays;
 
@@ -138,14 +138,14 @@ class ShippingMethod {
 				$weekDayNumber = 1;
 			}
 
-			$currentDate = date('d-m', strtotime($cartTime . ' +' . $daysPassed . ' days'));
+			$currentDate = date('d-m', strtotime($orderTime . ' +' . $daysPassed . ' days'));
 
 			if (!in_array($weekDayNumber, self::WEEKEND_DAYS) && !in_array($currentDate, self::HOLIDAYS)) {
 				$workDaysPassed++;
 			}
 		}
 
-		return strtotime($cartTime . ' +' . $daysPassed . ' days');
+		return strtotime($orderTime . ' +' . $daysPassed . ' days');
 	}
 
 	private function getDateString($date) {
@@ -185,9 +185,9 @@ class ShippingMethod {
 		return $this;
 	}
 
-	public function setAssociatedCart(object $cart) {
-		$this->data['associatedCart'] = $cart;
-		$this->data['productQuantity'] = $cart->quantity;
+	public function setAssociatedCart(object $order) {
+		$this->data['associatedCart'] = $order;
+		$this->data['productQuantity'] = $order->quantity;
 
 		return $this;
 	}

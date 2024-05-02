@@ -1,6 +1,6 @@
 <?php
 
-use Legacy\Classes\Ecommerce\Design;
+use Legacy\Classes\Ecommerce\Design as LegacyDesign;
 
 ?>
 

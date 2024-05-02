@@ -41,18 +41,6 @@ use Legacy\View\Components\Form\Input;
 						La data di consegna prevista comprende, oltre al tempo di spedizione, <strong>1-5 giorni lavorativi</strong> di elaborazione dell'ordine.
 					</p>
 
-					<select id="count_sel" name="country_id" class="sel" onChange="if ($(this).val() !== '0') {$('#country').click();}">
-						<option value="0" <?php if (!cart_old()->countryId) echo 'selected' ?>>Seleziona:</option>
-
-						<?php while ($country = $countries->fetch_assoc()) { ?>
-
-							<option value="<?= $country['id'] ?>" <?php if (cart_old()->countryId == $country['id']) echo 'selected' ?>><?= $country['name'] ?></option>
-
-						<?php } ?>
-
-					</select>
-
-					<button type="submit" id="country" name="country" class="hidden" formnovalidate></button>
 				</section>
 
 				<!-- Shipping method -->
@@ -63,7 +51,7 @@ use Legacy\View\Components\Form\Input;
 
 							<label class="ship_row interactive">
 								<div class="checkbox">
-									<input type="radio" class="inp_cbx ship_cbx js-shipping-method js-cart-shipping-price-string" name="cbx_ship" value="<?= $shippingMethod->id ?>" <?= cart()->shipping_method_id == $shippingMethod->id ? 'checked' : '' ?> data-shipped="<?= $shippingMethod->isShipped() ? 1 : 0 ?>" data-cart-id="<?= cart()->id ?>" data-shipping-method-id="<?= $shippingMethod->id ?>" required>
+									<input type="radio" class="inp_cbx ship_cbx js-shipping-method js-cart-shipping-price-string" name="shipping_method_id" value="<?= $shippingMethod->id ?>" <?= cart()->shipping_method_id == $shippingMethod->id ? 'checked' : '' ?> data-shipped="<?= $shippingMethod->isShipped() ? 1 : 0 ?>" data-cart-id="<?= cart()->id ?>" data-shipping-method-id="<?= $shippingMethod->id ?>" required>
 
 									<span></span>
 								</div>
@@ -80,7 +68,7 @@ use Legacy\View\Components\Form\Input;
 
 							<?php
 
-							if (cart_old()->shippingMethodId == $shippingMethod->id) {
+							if ($legacyCart->shippingMethodId == $shippingMethod->id) {
 
 								if ($shippingMethod->price(cart()->quantity) && !cart()->coupon && !cart()->credit_ship && Auth::check() && Auth::user()->isSeller() && Auth::user()->seller->credit() >= $shippingMethod->price(cart()->quantity)) { ?>
 
@@ -89,7 +77,7 @@ use Legacy\View\Components\Form\Input;
 										Usa il tuo credito
 									</button>
 
-								<?php } else if (cart_old()->shippingWithCredit) { ?>
+								<?php } else if ($legacyCart->shippingWithCredit) { ?>
 
 									<button class="no-credit-btn credit-btn btn btn--secondary button--full-width mar-b-2" name="ship_no_credit">
 										<?= embed_icon('close') ?>
@@ -135,18 +123,18 @@ use Legacy\View\Components\Form\Input;
 
 			<div id="right_panel" class="panel">
 
-				<!-- Orders -->
+				<!-- order_items -->
 				<?= ViewManager::renderOrderList() ?>
 
-				<?php if (cart_old()->promotion) { ?>
+				<?php if ($legacyCart->promotion) { ?>
 
 					<!-- Promotion -->
 					<section id="promotion" class="">
-						<h3 class="title"><?= cart_old()->promotion_data['name'] ?></h3>
-						<p><?= cart_old()->promotion_data['info'] ?></p>
+						<h3 class="title"><?= $legacyCart->promotion_data['name'] ?></h3>
+						<p><?= $legacyCart->promotion_data['info'] ?></p>
 					</section>
 
-				<?php } else if (!cart_old()->usedProductCredit) { ?>
+				<?php } else if (!$legacyCart->usedProductCredit) { ?>
 
 					<!-- Discount code -->
 					<section id="code" class="">
@@ -154,7 +142,7 @@ use Legacy\View\Components\Form\Input;
 						<div id="code-anch" class="anchor"></div>
 						<div id="code_cont" method="POST" action="#code-anch">
 
-							<?php if (!cart_old()->couponId) { ?>
+							<?php if (!$legacyCart->couponId) { ?>
 
 								<input type="text" id="code-inp" name="code" class="input wide" placeholder="Codice sconto (opzionale)" onFocus="$('.err').hide()">
 								<?php if ($error == 'coupon-invalid') { ?><p class="error mar-t-1">Il codice inserito non esiste</p><?php } ?>
@@ -168,7 +156,7 @@ use Legacy\View\Components\Form\Input;
 							<?php } else { ?>
 
 								<p class="code_txt">
-									Codice usato: <span class="code txt-c1"><?= cart_old()->coupon->code ?></span>
+									Codice usato: <span class="code txt-c1"><?= $legacyCart->coupon->code ?></span>
 								</p>
 								<button type="submit" name="del_code" id="code_remove" formnovalidate>Rimuovi</button>
 
@@ -179,7 +167,7 @@ use Legacy\View\Components\Form\Input;
 
 				<?php } ?>
 
-				<?php if (App\Helpers\App::isSeller() && !cart_old()->couponId && cart_old()->customer->credit) { ?>
+				<?php if (App\Helpers\App::isSeller() && !$legacyCart->couponId && $legacyCart->customer->credit) { ?>
 
 					<!-- Used credit panel -->
 					<section id="credit-section" class="">
@@ -187,10 +175,10 @@ use Legacy\View\Components\Form\Input;
 
 						<p>Per ogni vendita realizzata ottieni un <strong>10% di bonus</strong> sui guadagni, che puoi usare per pagare le spese di spedizione oppure per comprare articoli del tuo negozio.<br><br>Questo credito non può essere usato insieme ad un codice sconto ed è possibile usarlo solo se si ha abbastanza credito da coprire l'intero prezzo del prodotto.</p>
 
-						<p class="mar-t-1 txt-med txt-1rem txt-cen">Hai usato <strong><?= formatc(cart_old()->usedCredit) ?> € / <?= formatc(cart_old()->customer->credit) ?> €</strong></p>
+						<p class="mar-t-1 txt-med txt-1rem txt-cen">Hai usato <strong><?= formatc($legacyCart->usedCredit) ?> € / <?= formatc($legacyCart->customer->credit) ?> €</strong></p>
 
 						<div class="total-credit">
-							<div class="used-credit" style="width: <?= round(cart_old()->usedCredit / cart_old()->customer->credit * 100) ?>%"></div>
+							<div class="used-credit" style="width: <?= round($legacyCart->usedCredit / $legacyCart->customer->credit * 100) ?>%"></div>
 						</div>
 
 

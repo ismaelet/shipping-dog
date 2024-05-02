@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Admin\Resources;
 
 use App\Http\Controllers\Admin\ResourceController;
 use App\Mail\OrderStatusMail;
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
-class CartController extends ResourceController {
+class OrderController extends ResourceController {
 
 	// ~ Index action configuration ~ //
 	/**
@@ -21,7 +21,7 @@ class CartController extends ResourceController {
 	protected array $columns = [
 		['label' => 'ID', 'name' => 'id'],
 		['label' => 'Destinatario', 'name' => 'full_name', 'type' =>  'method', 'method' => 'address.fullAddress'],
-		['label' => 'Articoli', 'type' =>  'method', 'method' => 'ordersString',],
+		['label' => 'Articoli', 'type' =>  'method', 'method' => 'order_itemsString',],
 		// ['label' => 'Spedizione', 'name' => 'shipping_method_name'],
 		['label' => 'Totale', 'name' => 'price', 'type' => 'price',],
 		['label' => 'Registrato', 'name' => 'user_id', 'type' => 'bool'],
@@ -34,7 +34,7 @@ class CartController extends ResourceController {
 	 *
 	 * @var array
 	 */
-	protected array $orderBy = ['created_at' => 'desc'];
+	protected array $orderItemBy = ['created_at' => 'desc'];
 
 
 	// ~ Edit action configuration ~ //
@@ -55,20 +55,20 @@ class CartController extends ResourceController {
 	 */
 	public function index(Request $request): View {
 		// Prepare the query
-		$this->query = Cart::leftJoin('sys_shipping', 'carts.shipping_method_id', '=', 'sys_shipping.id')
-			->leftJoin('addresses', 'carts.id', '=', 'addresses.cart_id')
-			->select('carts.*', 'sys_shipping.name as shipping_method_name');
+		$this->query = Order::leftJoin('sys_shipping', 'orders.shipping_method_id', '=', 'sys_shipping.id')
+			->leftJoin('addresses', 'orders.id', '=', 'addresses.order_id')
+			->select('orders.*', 'sys_shipping.name as shipping_method_name');
 
 		// Add search filter
 		if ($request->search) {
-			$this->query = $this->query->where('carts.id', $request->search)
+			$this->query = $this->query->where('orders.id', $request->search)
 				->orWhere('full_name', 'like', '%' . $request->search . '%')
 				->orWhere('first_name', 'like', '%' . $request->search . '%')
 				->orWhere('last_name', 'like', '%' . $request->search . '%')
 				->orWhere('email', 'like', '%' . $request->search . '%')
 				->orWhere('city', 'like', '%' . $request->search . '%')
 				->orWhere('email', 'like', '%' . $request->search . '%')
-				->orWhereHas('orders', function ($query) use ($request) {
+				->orWhereHas('order_items', function ($query) use ($request) {
 					$query->whereHas('product', function ($query) use ($request) {
 						$query->where('name', 'like', '%' . $request->search . '%');
 					})->orWhereHas('seller', function ($query) use ($request) {
@@ -85,7 +85,7 @@ class CartController extends ResourceController {
 				'label' => 'Reinvia email',
 				'icon' => 'send-email',
 				'color' => 'primary',
-				'route' => 'carts.resend-email',
+				'route' => 'orders.resend-email',
 			],
 			[
 				'type' => 'edit',
@@ -104,7 +104,7 @@ class CartController extends ResourceController {
 	 * @return \Illuminate\View\View The view for editing the resource record.
 	 */
 	public function edit(int $id): View {
-		$this->record = Cart::find($id);
+		$this->record = Order::find($id);
 
 		return $this->_edit();
 	}
@@ -120,7 +120,7 @@ class CartController extends ResourceController {
 	 */
 	public function update(Request $request, int $id) {
 		// Find the record
-		$this->record = Cart::find($id);
+		$this->record = Order::find($id);
 
 		// Update the cart's status
 		if ($request->has('new_status')) {
@@ -144,9 +144,9 @@ class CartController extends ResourceController {
 	 * @return \Illuminate\Http\RedirectResponse The redirect response.
 	 */
 	public function resendEmail(int $id): RedirectResponse {
-		$cart = Cart::find($id);
+		$order = Order::find($id);
 
-		$result = Mail::to($cart->address->email)->send(new OrderStatusMail($cart));
+		$result = Mail::to($order->address->email)->send(new OrderStatusMail($order));
 
 		if ($result) {
 			return redirect()->back()->with('status', 'Email inviata correttamente');

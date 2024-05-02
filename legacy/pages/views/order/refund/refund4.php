@@ -1,7 +1,7 @@
 <?php
 
-use Legacy\Classes\Ecommerce\Order;
-use Legacy\Classes\Ecommerce\Product\Size;
+use Legacy\Classes\Ecommerce\OrderItem as LegacyOrderItem;
+use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 ?>
 

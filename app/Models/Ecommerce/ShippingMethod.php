@@ -85,9 +85,9 @@ class ShippingMethod extends Model {
 		$daysPassed = 0;
 		$workDaysPassed = 0;
 
-		$cartTime = $startingTime ?: date('Y-m-d');
+		$orderTime = $startingTime ?: date('Y-m-d');
 
-		$weekDayNumber = date('N', strtotime($cartTime));
+		$weekDayNumber = date('N', strtotime($orderTime));
 
 		$totalRequiredDays = $maximumDate ? $this->maximumRequiredDays($longDelivery) : $this->minimumRequiredDays($longDelivery);
 
@@ -99,14 +99,14 @@ class ShippingMethod extends Model {
 				$weekDayNumber = 1;
 			}
 
-			$currentDate = date('d-m', strtotime($cartTime . ' +' . $daysPassed . ' days'));
+			$currentDate = date('d-m', strtotime($orderTime . ' +' . $daysPassed . ' days'));
 
 			if (!in_array($weekDayNumber, self::WEEKEND_DAYS) && !in_array($currentDate, self::HOLIDAYS)) {
 				$workDaysPassed++;
 			}
 		}
 
-		return strtotime($cartTime . ' +' . $daysPassed . ' days');
+		return strtotime($orderTime . ' +' . $daysPassed . ' days');
 	}
 
 	public function dateString($date): string {
@@ -114,7 +114,7 @@ class ShippingMethod extends Model {
 		$dayNumber = date('d', $date);
 		$monthNumber = date('m', $date);
 
-		return self::DAY_NAMES[$weekDayNumber - 1] . ' <strong>' . $dayNumber . '</strong> ' . strtolower(substr(self::MONTH_NAMES[$monthNumber - 1], 0, 3)) . '.';
+		return self::DAY_NAMES[$weekDayNumber - 1] . ' <span class="font-bold">' . $dayNumber . '</span> ' . strtolower(substr(self::MONTH_NAMES[$monthNumber - 1], 0, 3)) . '.';
 	}
 
 	public function minimumDeliveryDate(?string $startingTime = null, bool $longDelivery) {
@@ -137,9 +137,7 @@ class ShippingMethod extends Model {
 		return $this->minimumDeliveryDateString($startingTime, $longDelivery) . ' - ' . strtolower($this->maximumDeliveryDateString($startingTime, $longDelivery));
 	}
 
-	/************************
-	 * * Static methods *
-	 ************************/
+	// * Static methods * //
 	/**
 	 * Get the shipping methods that require labels
 	 */

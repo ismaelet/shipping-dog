@@ -1,6 +1,6 @@
 <?php
 
-use Legacy\Classes\ViewManager\Ecommerce\CartList;
+use Legacy\Classes\ViewManager\Ecommerce\OrderList;
 
 ?>
 
@@ -11,7 +11,7 @@ use Legacy\Classes\ViewManager\Ecommerce\CartList;
 	<h1 class="stitle">LISTA ORDINI</h1>
 
 	<div class="form-body pad-b-2">
-		<?= (new CartList())->render() ?>
+		<?= (new OrderList())->render() ?>
 	</div>
 
 </form>

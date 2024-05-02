@@ -1,18 +1,18 @@
 <?php
 
-use App\Models\Ecommerce\Product as EcommerceProduct;
+use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductMockup;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
-use Legacy\Classes\Ecommerce\Design;
-use Legacy\Classes\Ecommerce\Product;
-use Legacy\Classes\Ecommerce\Product\Color;
+use Legacy\Classes\Ecommerce\Design as LegacyDesign;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
+use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
 use Legacy\Classes\Ecommerce\Product\Gender;
-use Legacy\Classes\Ecommerce\Product\Position;
-use Legacy\Classes\Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product\Position as LegacyProductPosition;
+use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
-$oldDesign_id = $_GET['design_id'];
-$oldDesign = new Design($oldDesign_id);
+$oldDesign_id = $_GET['id'];
+$oldDesign = new LegacyDesign($oldDesign_id);
 
 if (!$oldDesign->custom && auth()->id() != 1) {
 	$oldTypes = \Legacy\System\Classes\LegacyDB::select('id FROM product_types WHERE hidden = 0 ORDER BY category ASC, id ASC');
@@ -21,14 +21,14 @@ if (!$oldDesign->custom && auth()->id() != 1) {
 }
 
 while ($oldTypeRow = $oldTypes->fetch_assoc()) {
-	$oldType = new Type($oldTypeRow['id']);
+	$oldType = new LegacyProductType($oldTypeRow['id']);
 	$type = ProductType::find($oldType->id);
 	$gender = new Gender($oldType->genderId);
 
 	$oldProductId = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$oldDesign->id, $oldType->id]);
 
-	$oldProduct = new Product($oldProductId);
-	$product = EcommerceProduct::find($oldProduct->id);
+	$oldProduct = new LegacyProduct($oldProductId);
+	$product = Product::find($oldProduct->id);
 
 	$active = $oldProduct->statusId;
 
@@ -42,7 +42,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 	if (count($oldType->colors) > 1) $tabs[] = ['Colori', 'colors'];
 
 	foreach ($oldType->availablePositionIds as $position_id) {
-		$position = new Position($position_id);
+		$position = new LegacyProductPosition($position_id);
 		if ($position->editable) $tabs[] = [$position->name, 'position', $position_id];
 	}
 
@@ -110,7 +110,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 						<!-- Position tabs -->
 						<?php foreach ($tabs as $key => $tab) {
 							if ($tab[1] == 'position') {
-								$position = new Position($tab[2]);
+								$position = new LegacyProductPosition($tab[2]);
 
 								$enabled = in_array($position->id, $oldProduct->availablePositionIds);
 
@@ -352,7 +352,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 															while ($row = $res_colorA->fetch_assoc()) {
 
-																$color = new Color($row['id']);
+																$color = new LegacyProductColor($row['id']);
 
 																if (in_array($color->slug, $oldType->availableColorSlugs)) { ?>
 
@@ -384,7 +384,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 															while ($row = $res_colorD->fetch_assoc()) {
 
-																$color = new Color($row['id']);
+																$color = new LegacyProductColor($row['id']);
 															?>
 
 																<label class="inlb color-box <?php if (\Legacy\System\Classes\LegacyDB::exists("items WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'active' ?>">

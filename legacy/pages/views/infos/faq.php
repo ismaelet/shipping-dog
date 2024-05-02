@@ -14,7 +14,7 @@
 <!--BODY-->
 <div class="main-wrap">
 
-	<!--INFO: ORDERS-->
+	<!--INFO: order_items-->
 	<div id="section1" class="sections">
 		<div class="title-box">
 			<div class="title_line"></div>

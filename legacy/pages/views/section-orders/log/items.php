@@ -13,8 +13,8 @@ use Legacy\View\Components\Form\SearchInput;
 		<div class="flex gap-4">
 			<form action="" method="POST" class="w-full">
 				<?= SearchInput::render([
-					'search' => 'carts',
-					'storedName' => 'start_cart_id',
+					'search' => 'orders',
+					'storedName' => 'start_order_id',
 					'storedValue' => $startFromCart ? $startFromCart->id : null,
 					'shownValue' => $startFromCart ? $startFromCart->id . ' - ' . $startFromCart->address->full_name : '',
 					'placeholder' => 'Ordine da cui partire',
@@ -28,18 +28,18 @@ use Legacy\View\Components\Form\SearchInput;
 		</div>
 	</div>
 
-	<div class="btn js-copy-orders"><?= embed_icon('copy') ?>Copia tutto</div>
+	<div class="btn js-copy-order_items"><?= embed_icon('copy') ?>Copia tutto</div>
 </div>
 
 <p class="log">
 
-	/// <?= $validCarts->count() ? $filteredOrders->count() : 0 ?> ARTICOLI DA FARE<br>
+	/// <?= $validorders->count() ? $filteredorder_items->count() : 0 ?> ARTICOLI DA FARE<br>
 
 </p>
 
-<div class="orders">
+<div class="order_items">
 
-	<?php if ($validCarts->count()) { ?>
+	<?php if ($validorders->count()) { ?>
 
 		<p class="log">
 			--------------------------- <span class="text-strong">DESIGN</span> ---------------------------
@@ -48,7 +48,7 @@ use Legacy\View\Components\Form\SearchInput;
 		<p class="log">
 			<?php
 
-			$sortedBySellers = $filteredOrders
+			$sortedBySellers = $filteredorder_items
 				->sortBy('seller_id')
 				->unique('seller_id');
 
@@ -57,42 +57,42 @@ use Legacy\View\Components\Form\SearchInput;
 				// Seller name
 				echo '<span style="color: #ff9600;">[ ' . strtoupper($sellerOrder->storeName) . ' ]</span><br>';
 
-				// Get the orders
-				$sortedByProducts = $filteredOrders
+				// Get the order_items
+				$sortedByProducts = $filteredorder_items
 					->where('seller_id', '=', $sellerOrder->seller_id)
 					->sortBy('design_id')
 					->unique('design_id');
 
 				// Designs
 				foreach ($sortedByProducts as $product) {
-					$mergedOrders = [];
+					$mergedorder_items = [];
 
 					// Product name (grouped by design_id)
 					echo '<span class="text-color-highlighted">' . ($product->design_id ?  $product->design_id . ' - ' : '') . $product->productName . '</span><br>';
 
-					// Get the orders
-					$orders = $filteredOrders
+					// Get the order_items
+					$order_items = $filteredorder_items
 						->where('seller_id', '=', $product->user_id)
 						->where('design_id', '=', $product->design_id)
 						->sortBy('size_id')
 						->sortBy('color_id')
 						->sortBy('type_id');
 
-					// Merge orders
-					foreach ($orders as $order) {
-						$orderDescription = $order->description();
-						$orderDescription = $order->inventory ? $orderDescription . ' <strong>(INVENTARIO)</strong>' : $orderDescription;
+					// Merge order_items
+					foreach ($order_items as $orderItem) {
+						$orderItemDescription = $orderItem->description();
+						$orderItemDescription = $orderItem->inventory ? $orderItemDescription . ' <strong>(INVENTARIO)</strong>' : $orderItemDescription;
 
-						if (isset($mergedOrders[$orderDescription])) {
-							$mergedOrders[$orderDescription] += $order->quantity;
+						if (isset($mergedorder_items[$orderItemDescription])) {
+							$mergedorder_items[$orderItemDescription] += $orderItem->quantity;
 						} else {
-							$mergedOrders[$orderDescription] = 1;
+							$mergedorder_items[$orderItemDescription] = 1;
 						}
 					}
 
-					// Print orders
-					foreach ($mergedOrders as $orderDescription => $quantity) {
-						echo $quantity . ' x ' . $orderDescription . '<br>';
+					// Print order_items
+					foreach ($mergedorder_items as $orderItemDescription => $quantity) {
+						echo $quantity . ' x ' . $orderItemDescription . '<br>';
 					}
 
 					echo '<br>';
@@ -111,41 +111,41 @@ use Legacy\View\Components\Form\SearchInput;
 		<p class="log">
 
 			<?php
-			$sortedByTypes = $filteredOrders
+			$sortedByTypes = $filteredorder_items
 				->sortBy('type_id')
 				->unique('type_id');
 
 			foreach ($sortedByTypes as $typeOrder) {
 
-				$mergedOrders = [];
+				$mergedorder_items = [];
 
 				// Seller name
 				echo '<span style="color: #ff9600;">[ ' . strtoupper($typeOrder->productTypeName) . ' ]</span><br>';
 
-				// Get the orders
-				$sortedByData = $filteredOrders
+				// Get the order_items
+				$sortedByData = $filteredorder_items
 					->where('inventory', 0)
 					->where('type_id', '=', $typeOrder->type_id)
 					->sortBy('color_id')
 					->sortBy('size_id');
 
-				// Merge orders
-				foreach ($sortedByData as $order) {
-					$orderDescription = [];
-					$orderDescription[] = $order->size && strpos($order->product->type->sizes, ',') ? $order->size->name : null;
-					$orderDescription[] = $order->color && strpos($order->product->type->colors, ',') ? $order->color->name : null;
-					$orderDescription = implode(' ', array_filter($orderDescription)) ?: 'Prodotto standard';
+				// Merge order_items
+				foreach ($sortedByData as $orderItem) {
+					$orderItemDescription = [];
+					$orderItemDescription[] = $orderItem->size && strpos($orderItem->product->type->sizes, ',') ? $orderItem->size->name : null;
+					$orderItemDescription[] = $orderItem->color && strpos($orderItem->product->type->colors, ',') ? $orderItem->color->name : null;
+					$orderItemDescription = implode(' ', array_filter($orderItemDescription)) ?: 'Prodotto standard';
 
-					if (isset($mergedOrders[$orderDescription])) {
-						$mergedOrders[$orderDescription] += $order->quantity;
+					if (isset($mergedorder_items[$orderItemDescription])) {
+						$mergedorder_items[$orderItemDescription] += $orderItem->quantity;
 					} else {
-						$mergedOrders[$orderDescription] = 1;
+						$mergedorder_items[$orderItemDescription] = 1;
 					}
 				}
 
-				// Print orders
-				foreach ($mergedOrders as $orderDescription => $quantity) {
-					echo $quantity . ' x ' . $orderDescription . '<br>';
+				// Print order_items
+				foreach ($mergedorder_items as $orderItemDescription => $quantity) {
+					echo $quantity . ' x ' . $orderItemDescription . '<br>';
 				}
 
 				echo '<br>';

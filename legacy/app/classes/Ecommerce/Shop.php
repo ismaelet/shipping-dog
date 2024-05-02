@@ -6,7 +6,7 @@ use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
 use Illuminate\Support\Facades\Cache;
-use Legacy\Classes\Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 class Shop {
 
@@ -239,7 +239,7 @@ class Shop {
 
 									while ($row = $res->fetch_assoc()) {
 
-										$type = new Type($row['id']) ?>
+										$type = new LegacyProductType($row['id']) ?>
 
 										<label>
 											<input type="checkbox" class="type-cbx hidden" name="type" value="<?= $type->slug ?>" <?php if ($this->gender == 'm' && $this->type == $type->slug) echo 'checked' ?>>
@@ -272,7 +272,7 @@ class Shop {
 									}
 
 									while ($row = $res->fetch_assoc()) {
-										$type = new Type($row['id']);
+										$type = new LegacyProductType($row['id']);
 									?>
 
 										<label>
@@ -307,7 +307,7 @@ class Shop {
 
 									while ($row = $res->fetch_assoc()) {
 
-										$type = new Type($row['id']) ?>
+										$type = new LegacyProductType($row['id']) ?>
 
 										<label>
 											<input type="checkbox" class="type-cbx hidden" name="type" value="<?= $type->slug ?>" <?php if ($this->type == $type->slug) echo 'checked' ?>>

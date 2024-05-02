@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Ecommerce\Order as EcommerceOrder;
-use Legacy\Classes\Ecommerce\Order;
+use App\Models\Ecommerce\OrderItem;
+use Legacy\Classes\Ecommerce\OrderItem as LegacyOrderItem;
 
-if (!$year) $year = \Legacy\System\Classes\LegacyDB::row('YEAR(time) as year FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) ORDER BY time DESC', [$oldSeller->id])['year'];
+if (!$year) $year = \Legacy\System\Classes\LegacyDB::row('YEAR(time) as year FROM order_items WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) ORDER BY time DESC', [$oldSeller->id])['year'];
 
-$res_months = \Legacy\System\Classes\LegacyDB::select('MONTH(time) as month FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$oldSeller->id, $year]);
+$res_months = \Legacy\System\Classes\LegacyDB::select('MONTH(time) as month FROM order_items WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$oldSeller->id, $year]);
 
 while ($row_months = $res_months->fetch_assoc()) {
 
@@ -16,21 +16,21 @@ while ($row_months = $res_months->fetch_assoc()) {
 
 	$row_month = \Legacy\System\Classes\LegacyDB::row(
 		'
-		SUM((' . Order::PRODUCT_GAIN_FIELD . ' - gain_disc) * orders.quantity) as totGain, COUNT(*) as count
-		FROM orders
-		LEFT JOIN carts ON orders.cart_id = carts.id
+		SUM((' . LegacyOrderItem::PRODUCT_GAIN_FIELD . ' - gain_disc) * order_items.quantity) as totGain, COUNT(*) as count
+		FROM order_items
+		LEFT JOIN orders ON order_items.order_id = orders.id
 		WHERE
-			YEAR(orders.time) = ? AND
-			MONTH(orders.time) = ? AND
+			YEAR(order_items.time) = ? AND
+			MONTH(order_items.time) = ? AND
 			seller_id = ? AND
-			carts.status > 0',
+			orders.status > 0',
 		[$year, $month, $oldSeller->id]
 	);
 
 	$month_tot = $row_month['totGain'];
 	$month_num = $row_month['count'];
 
-	$orders = EcommerceOrder::where('seller_id', $oldSeller->id)
+	$order_items = OrderItem::where('seller_id', $oldSeller->id)
 		->where('status', '>', 0)
 		->whereYear('time', $year)
 		->whereMonth('time', $month)
@@ -58,7 +58,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 					<p class="grid-item">Data</p>
 				</div>
 
-				<?php foreach ($orders as $order) { ?>
+				<?php foreach ($order_items as $orderItem) { ?>
 
 					<!--sale line-->
 					<div class="grid-row <?php if ($row_dark) {
@@ -68,25 +68,25 @@ while ($row_months = $res_months->fetch_assoc()) {
 						<div class="grid-item">
 							<p class="list-inp">
 								<?php
-								if ($order->quantity > 1) echo $order->quantity . " x ";
-								echo $order->product ? $order->product->name : '- design rimosso -';
+								if ($orderItem->quantity > 1) echo $orderItem->quantity . " x ";
+								echo $orderItem->product ? $orderItem->product->name : '- design rimosso -';
 								?>
 							</p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->totalGainString() ?></p>
+							<p class="list-inp"><?= $orderItem->totalGainString() ?></p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->product->type->name ?? '' ?></p>
+							<p class="list-inp"><?= $orderItem->product->type->name ?? '' ?></p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->color->name ?? '' ?></p>
+							<p class="list-inp"><?= $orderItem->color->name ?? '' ?></p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->cart->code ?: '-' ?></p>
+							<p class="list-inp"><?= $orderItem->order->code ?: '-' ?></p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $order->createdAtString() ?></p>
+							<p class="list-inp"><?= $orderItem->createdAtString() ?></p>
 						</div>
 					</div>
 
@@ -100,7 +100,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 
 <?php
 
-$res_year = \Legacy\System\Classes\LegacyDB::select('YEAR(time) as year FROM orders WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND cart_id IN (SELECT id FROM carts WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$oldSeller->id]);
+$res_year = \Legacy\System\Classes\LegacyDB::select('YEAR(time) as year FROM order_items WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$oldSeller->id]);
 
 if ($res_year->num_rows > 1) { ?>
 

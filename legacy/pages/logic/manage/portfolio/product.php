@@ -5,8 +5,8 @@ use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPrice;
 use App\Models\Ecommerce\Product\ProductType;
 use Legacy\Classes\Ecommerce\Product as OldProduct;
-use Legacy\Classes\Ecommerce\Product\Color;
-use Legacy\Classes\Ecommerce\Product\Type;
+use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
+use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 $productId = $_GET['id'] ?? null;
 $oldProduct = $productId ? new OldProduct($productId) : null;

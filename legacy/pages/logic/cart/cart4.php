@@ -1,14 +1,15 @@
 <?php
 
-// setup variables
+$cart = cart();
 $warning = warning_banner();
 
 // setup cart
-if (!cart_old()->price) {
+if (!$cart->price) {
 	$res_payments = \Legacy\System\Classes\LegacyDB::select('* FROM sys_payment WHERE id = 4');
 
-	cart_old()->updatePaymentMethodId(4);
-} else if (cart_old()->localDelivery) {
+	$cart->payment_method_id = 4;
+	$cart->save();
+} else if ($cart->localDelivery) {
 	$res_payments = \Legacy\System\Classes\LegacyDB::select('* FROM sys_payment WHERE id IN (1,3)');
 } else {
 	$res_payments = \Legacy\System\Classes\LegacyDB::select('* FROM sys_payment WHERE active = 1 ORDER BY id ASC');
@@ -18,14 +19,12 @@ if (!cart_old()->price) {
 if (isset($_POST['submit'])) {
 	$paymentMethodId = $_POST['cbx_pay'];
 
-	cart_old()->updatePaymentMethodId($paymentMethodId);
+	$cart->payment_method_id = $paymentMethodId;
+	$cart->save();
 
-	switch ($paymentMethodId) {
-		case 1:
-			redirect_old('/pay/paypal');
-		case 2:
-			redirect_old('/pay/stripe');
-		default:
-			redirect_old('/pay/promotion');
+	if ($paymentMethodId == 1) {
+		redirect_old('/paypal/order/create');
 	}
+
+	redirect_old('/pay/promotion');
 }

@@ -13,7 +13,7 @@ class AdminCategoryController extends ResourceController {
 	/**
 	 * Index action configuration
 	 */
-	protected array $orderBy = ['for_supervisors' => 'asc', 'order' => 'asc', 'name' => 'asc'];
+	protected array $orderItemBy = ['for_supervisors' => 'asc', 'order' => 'asc', 'name' => 'asc'];
 	protected array $columns = [
 		['label' => 'ID', 'name' => 'id'],
 		['label' => 'Nome', 'name' => 'name'],

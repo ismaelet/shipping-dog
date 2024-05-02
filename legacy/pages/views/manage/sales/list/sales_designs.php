@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\Ecommerce\Order as EcommerceOrder;
-use Legacy\Classes\Ecommerce\Design;
-use Legacy\Classes\Ecommerce\Order;
+use App\Models\Ecommerce\OrderItem;
+use Legacy\Classes\Ecommerce\Design as LegacyDesign;
+use Legacy\Classes\Ecommerce\OrderItem as LegacyOrderItem;
 
 
 
@@ -14,9 +14,9 @@ use Legacy\Classes\Ecommerce\Order;
 	<?php
 	$row_dark = true;
 
-	$orders = EcommerceOrder::join('designs', 'orders.design_id', '=', 'designs.id')
-		->where('orders.seller_id', auth()->id())
-		->where('orders.status', '>', 0)
+	$order_items = EcommerceOrderItem::join('designs', 'order_items.design_id', '=', 'designs.id')
+		->where('order_items.seller_id', auth()->id())
+		->where('order_items.status', '>', 0)
 		->where('designs.status', 1)
 		->selectRaw('SUM((productGain - gain_disc) * quantity) as totGain, COUNT(*) as count, designs.name, designs.id, designs.time')
 		->groupBy(['designs.id', 'designs.name', 'designs.time'])
@@ -32,10 +32,10 @@ use Legacy\Classes\Ecommerce\Order;
 		<p class="list-name shr">Aggiunto il</p>
 	</div>
 
-	<?php foreach ($orders as $designData) {
+	<?php foreach ($order_items as $designData) {
 
 		//get last sale
-		$lastOrder = EcommerceOrder::where('design_id', $designData->id)
+		$lastOrder = EcommerceOrderItem::where('design_id', $designData->id)
 			->where('status', '>', 0)
 			->orderByDesc('time')
 			->first();

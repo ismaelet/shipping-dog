@@ -15,9 +15,9 @@
 		<!-- Flow bar -->
 		<?php
 
-		use Legacy\Classes\Ecommerce\Product;
+		use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 
-		cart_flow($cart, $loc) ?>
+		cart_flow($order, $loc) ?>
 
 		<section id="offer-sec" class="mar-b-3">
 			<h1 class="title">Offerte speciali</h1>
@@ -172,7 +172,7 @@
 		<!-- Recap -->
 		<form method="POST">
 
-			<?php cart_recap($cart, true) ?>
+			<?php cart_recap($order, true) ?>
 
 			<button type="submit" name="submit" id="submit" class="hidden"></button>
 

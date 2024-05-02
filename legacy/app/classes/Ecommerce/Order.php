@@ -2,14 +2,10 @@
 
 namespace Legacy\Classes\Ecommerce;
 
-use App\Models\Ecommerce\Cart;
-use App\Models\Ecommerce\Product as EcommerceProduct;
-use DateTime;
-use Legacy\Classes\Ecommerce\Design\Logo;
-use Legacy\Classes\Ecommerce\Product\Color;
-use Legacy\Classes\Ecommerce\Product\Size;
-use Legacy\Classes\Ecommerce\Cart as LegacyCart;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Ecommerce\Order as NewOrder;
+use App\Models\Ecommerce\OrderItem;
+use EmailService\Ecommerce\OrderItemstatusUpdate;
+use Legacy\Classes\Ecommerce\OrderItem as LegacyOrderItem;
 
 class Order {
 
@@ -17,335 +13,651 @@ class Order {
 
 	public const TABLE = 'orders';
 	public const INDEX = 'id';
-	public const CART_INDEX = 'cart_id';
-	public const PRODUCT_INDEX = 'product_id';
-	public const SELLER_INDEX = 'seller_id';
-	public const DESIGN_INDEX = 'design_id';
-	public const COLOR_INDEX = 'color_id';
-	public const SIZE_INDEX = 'size_id';
-	public const POSITION_INDEX = 'position_id';
-	public const LOGO_INDEX = 'logo_id';
-	public const PRODUCT_GAIN_FIELD = 'productGain';
+	public const CUSTOMER_INDEX = 'user_id';
+	public const SHIPPING_METHOD_INDEX = 'shipping_method_id';
+	public const PAYMENT_METHOD_INDEX = 'payment_method_id';
+	public const COUNTRY_INDEX = 'country_id';
+	public const STEP_INDEX = 'step';
+	public const STATUS_INDEX = 'status';
 
-	/*
-	* Get methods
-	*/
 	private function getId() {
 		return $this->databaseEntry[self::INDEX];
 	}
 
-	private function getCartId() {
-		return $this->databaseEntry[self::CART_INDEX];
+	private function getCustomerId() {
+		return $this->databaseEntry[self::CUSTOMER_INDEX];
 	}
 
-	private function getProductId() {
-		return $this->databaseEntry[self::PRODUCT_INDEX];
+	private function getCustomer() {
+		return $this->customerId ? new Customer($this->customerId) : new Customer();
 	}
 
-	private function getColorId() {
-		return $this->databaseEntry[self::COLOR_INDEX];
+	private function getShippingMethodId() {
+		return $this->databaseEntry[self::SHIPPING_METHOD_INDEX] ?: 2;
 	}
 
-	private function getSizeId() {
-		return $this->databaseEntry[self::SIZE_INDEX];
+	private function getShippingWithCredit() {
+		return $this->credit_ship;
 	}
 
-	private function getPositionId() {
-		return $this->databaseEntry[self::POSITION_INDEX];
+	private function getpaymentMethodId() {
+		return $this->databaseEntry[self::PAYMENT_METHOD_INDEX] ?: 1;
 	}
 
-	private function getLogoId() {
-		return $this->databaseEntry[self::LOGO_INDEX];
+	private function getCouponCode() {
+		return $this->code ?: null;
 	}
 
-	private function getFullPrice() {
-		return $this->fullProductPrice * $this->quantity;
+	private function getStepId() {
+		return $this->databaseEntry[self::STEP_INDEX];
 	}
 
-	private function getFixedDiscount() {
-		return $this->price_disc;
+	private function getStatusId() {
+		$statusId = $this->databaseEntry[self::STATUS_INDEX];
+
+		return $statusId;
 	}
 
-	private function getGainReduction() {
-		return $this->gain_disc;
+	private function getIdCode() {
+		return '#' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
 	}
 
-	private function getcreatedAtString() {
-		return (new DateTime($this->time))
-			->format('Y-m-d');
+	private function getAddressId() {
+		$addressId = \Legacy\System\Classes\LegacyDB::find(Address::INDEX . ' FROM ' . Address::TABLE . ' WHERE ' . Address::CART_INDEX . ' = ? ORDER BY ' . Address::INDEX . ' DESC', [$this->id]);
+
+		return $addressId;
 	}
 
-	private function getProduct() {
-		return (new Product($this->productId))
-			->setColorId($this->color_id)
-			->setPositionId($this->position_id);
+	private function getAddress() {
+		return new Address($this->addressId);
 	}
 
-	private function getDesign() {
-		return new Design($this->design_id);
+	private function getCouponId() {
+		return \Legacy\System\Classes\LegacyDB::find('id FROM codes WHERE code=?', [$this->couponCode]);
 	}
 
-	private function getSeller() {
-		return new Seller($this->seller_id);
+	private function getLongDeliveryTime() {
+		$longDeliveryTime = false;
+
+		foreach ($this->order_items as $orderItem) {
+			if ($orderItem->type->preorder || $orderItem->color->preorder) {
+				$longDeliveryTime = true;
+				break;
+			}
+		}
+
+		return $longDeliveryTime;
 	}
 
-	private function getColor() {
-		return new Color($this->color_id);
+	private function getDateString() {
+		return date('d/m/Y', strtotime($this->created_at));
 	}
 
-	private function getCart() {
-		return new LegacyCart($this->cart_id);
+	private function getUrl() {
+		return '/order?id=' . $this->id . '&customerId=' . $this->customerId;
 	}
 
-	private function newCart() {
-		return Cart::find($this->cart_id);
+	private function getClientUrl() {
+		return public_client_url($this->url);
 	}
 
-	private function getSize() {
-		return new Size($this->size_id);
+	private function getStaticUrl() {
+		return CLIENT_URL . $this->url;
 	}
 
-	private function getLogo() {
-		return new Logo($this->logo_id);
+	private function getOpenUrl() {
+		return '/cart?step-id=' . $this->stepId;
 	}
 
-	private function getTypeId() {
-		return $this->product->type->id;
+	private function getClientOpenUrl() {
+		return client_path($this->openUrl);
 	}
 
-	private function getType() {
-		return $this->product->type;
+	private function getstatusTag() {
+		return ecommerce_config('cart-statuses')[$this->statusId][0];
 	}
 
-	private function getDesignId() {
-		return $this->product->design_id;
-	}
-	private function getSellerId() {
-		return $this->product->seller_id;
+	private function getStatusName() {
+		return ecommerce_config('cart-statuses')[$this->statusId][1];
 	}
 
-	private function getPrice() {
-		return $this->productPrice * $this->quantity;
+	private function getAdminStatusName() {
+		return ecommerce_config('cart-admin-statuses')[$this->statusId][1];
 	}
 
-	private function getFormattedPrice() {
-		return format($this->price);
+	private function getStatusColor() {
+		return ecommerce_config('cart-statuses')[$this->statusId][2];
+	}
+
+	private function getStatusIcon() {
+		return ecommerce_config('cart-statuses')[$this->statusId][3];
+	}
+
+	private function getprice() {
+		return $this->calcPrice();
 	}
 
 	private function getPriceString() {
 		return format_price($this->price);
 	}
 
-	private function getFormattedFullPrice() {
-		return format($this->fullPrice);
-	}
-
-	private function getFullPriceString() {
-		return format_price($this->fullPrice);
-	}
-
 	private function getProductPrice() {
-		return $this->fullProductPrice - $this->discount;
+		return $this->calcproductPrice();
 	}
 
-	private function getGain() {
-		return ($this->productGain - $this->gainReduction) * $this->quantity;
+	private function getProductPriceString() {
+		return format_price($this->productPrice);
 	}
 
-	private function getGainString() {
-		return format_price($this->gain);
+	private function getfullProductPrice() {
+		$productPrice = 0;
+
+		foreach ($this->order_items as $orderItem) {
+			$productPrice += $orderItem->fullPrice;
+		}
+
+		return $productPrice;
+	}
+
+	private function getfullProductPriceString() {
+		return format_price($this->fullProductPrice);
 	}
 
 	private function getDiscount() {
-		return $this->payedWithCredit ? $this->fullPrice : $this->fixedDiscount;
+		return $this->calcDiscount();
 	}
 
-	private function getPayedWithCredit() {
-		return (bool) $this->credit;
+	private function getDiscountFrm() {
+		return format($this->discount);
 	}
 
-	private function getName() {
-		$name = $this->quantity > 1 ? $this->quantity . 'x ' : '';
-		$name .= $this->product->statusId ? $this->product->name : 'Articolo rimosso';
-
-		return $name;
+	private function getDiscountString() {
+		return format_price($this->discount);
 	}
 
-	public function getDescription(bool $showDeleted = false): string {
-		$product = $this->product;
+	private function getshippingFee() {
+		return !$this->shippingWithCredit ? $this->fullShippingFee : 0;
+	}
 
-		if ($product->statusId || $showDeleted) {
-			$description = $product->name;
-			$description .= ' (' . $product->type->name;
-			if ($product->type->sibling && !$product->type->unisex) $description .= ' ' . $product->gender->name;
-			if (count($product->type->sizes) > 1) $description .= ' ' . $this->size->name;
-			if (count($product->type->colors) > 1) $description .= ' ' . $product->color->name;
-			if ($this->logo->name) $description .= ' ' . $this->logo->name;
-			if ($product->position->id > 1) $description .= ' ' . $product->position->name;
-			$description .= ')';
-		} else {
-			$description = 'Articolo rimosso';
+	private function getShippingFeeFrm() {
+		return format($this->shippingFee);
+	}
+
+	private function getShippingFeeString() {
+		return format_price($this->shippingFee);
+	}
+
+	private function getCredit() {
+		return $this->customer->credit;
+	}
+
+	private function getUsableCredit() {
+		return $this->customer->credit - $this->usedCredit;
+	}
+
+	private function getGain() {
+		$gain = 0;
+
+		foreach ($this->order_items as $orderItem) {
+			$gain += $orderItem->gain;
 		}
 
-		return $description;
+		return round($gain, 2);
 	}
 
-	private function getFullDescription() {
-		$product = $this->product;
-
-		if ($product->statusId) {
-			$description = $product->type->name;
-			if ($product->type->sibling && !$product->type->unisex) $description .= ' - ' . $product->gender->name;
-			$description .= '<br>';
-			$description .= 'Taglia: ' . $this->size->name . '<br>';
-			if ($product->color->name) $description .= 'Colore: ' . $product->color->name . '<br>';
-			if ($product->position->id > 1) $description .= $product->position->name . '<br>';
-			$description .= $this->logo->name;
-		} else {
-			$description = 'Articolo rimosso';
-		}
-
-		return $description;
+	private function getPromotion() {
+		return false;
 	}
 
-	private function getAdminDescription() {
-		$product = $this->product;
-
-		if ($product->statusId) {
-			$description = $product->name;
-			$description .= ' (' . $product->type->name;
-			if ($product->type->sibling && !$product->type->unisex) $description .= ' ' . $product->gender->name;
-			if (count($product->type->sizes) > 1) $description .= ' ' . $this->size->name;
-			if (count($product->type->colors) > 1) $description .= ' ' . $product->color->name;
-			if ($this->logo->name) $description .= ' ' . $this->logo->name;
-			if ($product->position->id > 1) $description .= ' ' . $product->position->name;
-			$description .= ')';
-		} else {
-			$description = 'Articolo rimosso';
-		}
-
-		return $description;
+	private function getShippingMethod() {
+		return (new ShippingMethod($this->shippingMethodId))
+			->setAssociatedCart($this);
 	}
 
-	/*
-	* Set methods
-	*/
-
-	/*
-	* Update methods
-	*/
-	public function updateDiscount(float $discountAmount) {
-		$discountAmount = round($discountAmount, 2);
-
-		\Legacy\System\Classes\LegacyDB::update('orders SET price_disc=? WHERE id = ?', [$discountAmount, $this->id]);
-
-		$this->data['fixedDiscount'] = $discountAmount;
-		$this->data = [];
-
-		$this->newCart()->updatePrice();
-
-		return $this;
+	private function getPaymentMethod() {
+		return new PaymentMethod($this->paymentMethodId);
 	}
 
-	public function updateGainReduction(float $gainReduction) {
-		$gainReduction = round($gainReduction, 2);
-
-		\Legacy\System\Classes\LegacyDB::update('orders SET gain_disc=? WHERE id = ?', [$gainReduction, $this->id]);
-
-		$this->data['gainReduction'] = $gainReduction;
-		unset($this->data['totalGain']);
-
-		$this->newCart()->updatePrice();
-
-		return $this;
+	private function getCoupon() {
+		return new Coupon($this->couponId);
 	}
 
-	/*
-	* Instance methods
-	*/
-	public static function add($config) {
-		$orderId = null;
-		$productId = $config['product_id'];
-		$color_id = $config['color_id'] ?? 0;
-		$size_id = $config['size_id'] ?? 0;
-		$genderId = $config['genderId'] ?? 0;
-		$logo_id = $config['logo_id'] ?? 0;
-		$position_id = $config['position_id'] ?? 1;
-		$quantity = $config['quantity'] ?? 1;
-
-		if ($productId) {
-			$product = EcommerceProduct::find($productId);
-			$product->color_id = $color_id;
-			$product->position_id = $position_id;
-			$product->size_id = $size_id;
-			$product->logo_id = $logo_id;
-
-			$priceSize = \Legacy\System\Classes\LegacyDB::find('price FROM items_sizes WHERE id = ?', [$size_id]);
-			$price = $product->fullPrice() + $priceSize;
-
-			if (Auth::check()) {
-				$cart = Cart::where('user_id', Auth::id())->where('status', 0)->first();
-
-				if (!$cart) {
-					$cart = Cart::create(['user_id' => Auth::id()]);
-				}
-			} else {
-				if (isset($_SESSION['cart_id'])) {
-					$cart = Cart::find($_SESSION['cart_id']);
-
-					if (!$cart) {
-						$cart = Cart::create();
-						$_SESSION['cart_id'] = $cart->id;
-					}
-				} else {
-					$cart = Cart::create();
-					$_SESSION['cart_id'] = $cart->id;
-				}
-			}
-
-			$LegacyCart = new LegacyCart($cart->id);
-
-			// add order
-			$orderId = \Legacy\System\Classes\LegacyDB::add(
-				'orders (user_id, cart_id, product_id, seller_id, design_id, type_id, color_id, size_id, gender_id, position_id, logo_id, fullProductPrice, price_disc, productGain, quantity)',
-				[Auth::id() ?: null, $cart->id, $product->id, $product->user_id, $product->design_id, $product->type->id, $color_id, $size_id, $genderId, $position_id, $logo_id, $price, $product->customerDiscount(), $product->sellerGain(), $quantity]
-			);
-
-			$cart->updateOrders();
-
-			if ($LegacyCart->couponId) {
-				$couponId = $LegacyCart->couponId;
-				$LegacyCart->removeCoupon();
-				$LegacyCart->addCoupon($couponId);
-			}
-		}
-
-		redirect_old('/cart?step-id=2');
-
-		return new self($orderId);
+	private function getQuantity() {
+		return \Legacy\System\Classes\LegacyDB::count(LegacyOrderItem::TABLE . ' WHERE ' . LegacyOrderItem::CART_INDEX . ' = ?', [$this->id]);
 	}
 
-	public function delete() {
-		\Legacy\System\Classes\LegacyDB::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
-		\Legacy\System\Classes\LegacyDB::update(LegacyCart::TABLE . ' SET quantity = quantity - ? WHERE ' . LegacyCart::INDEX . ' = ?', [$this->quantity, $this->cart->id]);
-
-		$this->newCart()->updateOrders();
-
-		$this->cart->resetDynamicProperties();
+	private function getLocalDelivery() {
+		return $this->shippingMethod->localDelivery;
 	}
 
 	/*
 	* Misc methods
 	*/
-	public function resetDiscount() {
-		$this->updateDiscount($this->product->customerDiscount);
+	private function getStatusIdFromCode(string $statusCode) {
+		$statusId = null;
+
+		foreach (ecommerce_config('cart-statuses') as $key => $status) {
+			if ($status[0] == $statusCode) {
+				$statusId = $key;
+			}
+		}
+
+		return $statusId;
+	}
+
+	/*
+	* Prices
+	*/
+	private function calcPrice() {
+		return $this->data['totalPrice'] = round($this->fullProductPrice - $this->discount + $this->shippingFee, 2);
+	}
+
+	private function calcproductPrice() {
+		$productPrice = 0;
+
+		foreach ($this->order_items as $orderItem) {
+			$productPrice += $orderItem->price;
+		}
+
+		return $productPrice;
+	}
+
+	private function calcDiscount() {
+		$discount = 0;
+
+		foreach ($this->order_items as $orderItem) {
+			$discount += $orderItem->discount;
+		}
+
+		return $discount;
+	}
+
+	private function getFullShippingFee() {
+		return $this->shippingMethod->price;
+	}
+
+	private function getNotFreeShippingFee() {
+		return (new ShippingMethod(ShippingMethod::PRIMARY_SHIPPING_METHOD_ID))
+			->setAssociatedCart($this)
+			->price;
+	}
+
+	private function getUsedProductCredit() {
+		$usedCredit = 0;
+
+		foreach ($this->order_items as $orderItem) {
+			if ($orderItem->payedWithCredit) {
+				$usedCredit += $orderItem->product->price;
+			}
+		}
+
+		return round($usedCredit, 2);
+	}
+
+	private function getUsedShippingCredit() {
+		return $this->shippingWithCredit ? $this->notFreeShippingFee : 0;
+	}
+
+	private function getUsedCredit() {
+		return $this->usedProductCredit + $this->usedShippingCredit;
+	}
+
+	private function getUsedCreditString() {
+		return format_price($this->usedCredit);
+	}
+
+	/*
+	* order_items
+	*/
+	private function getorder_items() {
+		$order_items = [];
+		$order_itemsRes = \Legacy\System\Classes\LegacyDB::select('id FROM order_items WHERE order_id = ? ORDER BY time ASC', [$this->id]);
+
+		while ($orderItem = $order_itemsRes->fetch_assoc()) {
+			$order_items[] = new Order($orderItem['id']);
+		}
+
+		return $order_items;
+	}
+
+
+	// calculate the delivery date
+	public function getDeliveryDate() {
+		return $this->shippingMethod->deliveryDate;
+	}
+
+	// update the database entry for this cart after changes
+	public function update($recalculate = true) {
+		if ($recalculate) {
+			unset($this->quantity);
+		}
+
+		if ($this->quantity)
+			\Legacy\System\Classes\LegacyDB::update(
+				'
+				orders SET tot = ?, credit = ?, shipping_method_id = ?, shipping = ?, credit_ship = ? WHERE id = ?',
+				[$this->price, $this->usedCredit, $this->shipping_method_id, $this->fullShippingFee, $this->shippingWithCredit, $this->id]
+			);
+		else {
+			\Legacy\System\Classes\LegacyDB::delete('orders WHERE id = ?', $this->id);
+		}
+	}
+
+	public function updateTracking($tracking) {
+		$this->data['tracking'] = trim($tracking);
+
+		\Legacy\System\Classes\LegacyDB::update('orders SET tracking=? WHERE id = ?', [$this->tracking, $this->id]);
+		//if ($this->tracking) send_tracking_email($this->id);
+	}
+
+	/**
+	 * Set methods
+	 */
+	public function setShippingMethodId(int $shippingMethodId) {
+		$shippingMethod = new ShippingMethod($shippingMethodId);
+
+		if ($shippingMethod->id) {
+			$this->data['shippingMethodId'] = $shippingMethodId;
+			$this->data['shippingMethod'] = [];
+		}
+
+		$this->newOrder()->updatePrice();
 
 		return $this;
 	}
 
-	public function resetGain() {
-		$this->updateGainReduction(0);
+	public function setPaymentMethodId(int $paymentMethodId) {
+		$paymentMethod = new PaymentMethod($paymentMethodId);
+
+		if ($paymentMethod->id) {
+			$this->data['paymentMethodId'] = $paymentMethodId;
+		}
 
 		return $this;
+	}
+
+	public function setShippingWithCredit(bool $usingCredit) {
+		$this->data['shippingWithCredit'] = $usingCredit;
+
+		return $this;
+	}
+
+	public function setStepId(int $stepId) {
+		$this->data['stepId'] = $stepId;
+
+		return $this;
+	}
+
+	public function setStatusId(int $statusId) {
+		$this->data['statusId'] = $statusId;
+
+		unset($this->data['statusCode']);
+		unset($this->data['statusName']);
+		unset($this->data['adminStatusName']);
+		unset($this->data['statusColor']);
+		unset($this->data['statusIcon']);
+
+		return $this;
+	}
+
+	/**
+	 * Update methods
+	 */
+	public function updateShippingMethodId(int $shippingMethodId) {
+		$shippingMethod = new ShippingMethod($shippingMethodId);
+
+		if ($shippingMethod->id) {
+			\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET ' . self::SHIPPING_METHOD_INDEX . ' = ? WHERE ' . self::INDEX . ' = ?', [$shippingMethod->id, $this->id]);
+
+			$this->setShippingMethodId($shippingMethod->id);
+		}
+
+		$this->newOrder()->updatePrice();
+
+		return $this;
+	}
+
+	public function updateShippingWithCredit(bool $usingCredit) {
+		\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET credit_ship = ? WHERE ' . self::INDEX . ' = ?', [$usingCredit ? 1 : 0, $this->id]);
+
+		$this->setShippingWithCredit($usingCredit);
+
+		$this->newOrder()->updatePrice();
+
+		return $this;
+	}
+
+	public function updatePaymentMethodId(int $paymentMethodId) {
+		$paymentMethod = new PaymentMethod($paymentMethodId);
+
+		if ($paymentMethod->id) {
+			\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET ' . self::PAYMENT_METHOD_INDEX . ' = ? WHERE ' . self::INDEX . ' = ?', [$paymentMethod->id, $this->id]);
+
+			$this->setPaymentMethodId($paymentMethod->id);
+		}
+
+		return $this;
+	}
+
+	public function newOrder(): ?NewOrder {
+		return NewOrder::find($this->id);
+	}
+
+	public function updateStepId(int $stepId) {
+		NewOrder::find($this->id)
+			->update(['step' => $stepId]);
+
+		$this->setStepId($stepId);
+
+		return $this;
+	}
+
+	public function updateStatusId(int $statusId, $sendNotification = true) {
+		\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET ' . self::STATUS_INDEX . ' = ?, ' . self::STEP_INDEX . ' = ? WHERE ' . self::INDEX . ' = ?', [$statusId, count(ecommerce_config('cart-page')['steps']), $this->id]);
+
+		$this->setStatusId($statusId);
+
+		if ($statusId == 1 && $sendNotification) {
+		}
+
+		return $this;
+	}
+
+	public function updateStatus(string $statusCode, bool $sendNotification = true) {
+		$statusId = $this->getStatusIdFromCode($statusCode);
+
+		$this->updateStatusId($statusId, $sendNotification);
+
+		return $this;
+	}
+
+	/*
+	* OLD
+	*/
+	public function removeCoupon() {
+		if ($this->couponId) {
+			\Legacy\System\Classes\LegacyDB::update("orders SET code='' WHERE id = ?", [$this->id]);
+
+			foreach ($this->order_items as $orderItem) {
+				$orderItem->resetDiscount();
+				$orderItem->resetGain();
+			}
+
+			if ($this->coupon->freeShipping) {
+				$this->updateShippingMethodId(ShippingMethod::PRIMARY_SHIPPING_METHOD_ID);
+			}
+
+			$this->data['couponCode'] = null;
+			$this->data = [];
+		}
+
+		$this->newOrder()->updatePrice();
+	}
+
+	/*
+	* Misc methods
+	*/
+	public function advance(int|null $nextStepId = null) {
+		if (!$nextStepId) {
+			$nextStepId = $this->stepId + 1;
+		}
+
+		if (in_array($nextStepId, array_keys(config('ecommerce.cart.steps')))) {
+			$this->updateStepId($nextStepId);
+		}
+
+		return $this;
+	}
+
+	public function advanceAndredirect_old(int|null $nextStepId = null) {
+		$this->advance($nextStepId);
+
+		redirect_old($this->openUrl);
+	}
+
+	public function confirm(bool $sendNotification = true): void {
+		// update cart time
+		\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET time = NOW(), created_at = NOW() WHERE ' . self::INDEX . ' = ?', [$this->id]);
+
+		// update seller's balance
+		\Legacy\System\Classes\LegacyDB::update(Seller::TABLE . ' SET earned = earned + ? WHERE ' . Seller::INDEX . ' = ?', [$this->gain, $this->customerId]);
+
+		if ($this->customer->isSeller) {
+			\Legacy\System\Classes\LegacyDB::update(Seller::TABLE . ' SET credit = credit - ? WHERE ' . Seller::INDEX . ' = ?', [$this->usedCredit, $this->customerId]);
+		}
+
+		// remove used coupons
+		if ($this->couponId) {
+			if ($this->coupon->onePerCustomer) {
+				\Legacy\System\Classes\LegacyDB::add('codes_used (coupon_id, user_id)', [$this->couponId, $this->customerId]);
+			}
+
+			if (!$this->coupon->permanent) {
+				\Legacy\System\Classes\LegacyDB::delete(Coupon::TABLE . ' WHERE ' . Coupon::INDEX . ' = ?', [$this->couponId]);
+			}
+		}
+
+		// process the individual order_items
+		$this->processorder_items();
+
+		// update the cart status and send the confirmation email
+		$this->updateStatus('received', $sendNotification);
+	}
+
+	public function processorder_items(): void {
+		foreach ($this->order_items as $orderItem) {
+			$orderItem = OrderItem::find($orderItem->id);
+
+			$inventoryData = \Legacy\System\Classes\LegacyDB::row(
+				'
+				inventory.id as inventoryId
+				FROM inventory
+				INNER JOIN
+					product_types ON inventory.type_id = product_types.id
+				WHERE
+					design_id = ? AND (type_id = ? OR same_as_type_id = ?) AND color_id = ? AND position_id = ? AND size_id = ?',
+				[$orderItem->design_id, $orderItem->type_id, $orderItem->type_id, $orderItem->color_id, $orderItem->position_id, $orderItem->size_id]
+			);
+
+			if ($inventoryData) {
+				$inventoryId = $inventoryData['inventoryId'];
+
+				\Legacy\System\Classes\LegacyDB::update('order_items SET inventory = 1 WHERE id = ?', [$orderItem->id]);
+				\Legacy\System\Classes\LegacyDB::delete('inventory WHERE id = ?', [$inventoryId]);
+			}
+
+			if ($this->customerId != $orderItem->seller_id) {
+				\Legacy\System\Classes\LegacyDB::update('stores SET credit = credit + ? WHERE user_id = ?', [($orderItem->gain * .1), $orderItem->seller_id]);
+			}
+		}
+	}
+
+	/*
+	* OLD
+	*/
+	public function advanceStep() {
+		$this->updateStepId($this->stepId + 1);
+	}
+
+	public function addCoupon(int $couponId = null) {
+		$error = false;
+		$coupon = new Coupon($couponId);
+
+		if ($coupon->isValid) {
+			// remove shipping cost if the coupon has free shipping
+			if ($coupon->freeShipping) {
+				$this->updateShippingMethodId(ShippingMethod::FREE_SHIPPING_METHOD_ID);
+			}
+
+			foreach ($this->order_items as $orderItem) {
+				$sellerDiscount = 0;
+				$ourDiscount = 0;
+
+				// check if the order matches the coupon requirements
+				$matchesDesign = !$coupon->design_id || $coupon->design_id == $orderItem->design_id;
+				$matchesSeller = !$coupon->seller_id || $coupon->seller_id == $orderItem->seller_id;
+				$matchesType = !$coupon->type_id || $coupon->type_id == $orderItem->type_id;
+				$matchesColor = !$coupon->color_id || $coupon->color_id == $orderItem->color_id;
+
+				// calculate the discount amount
+				if ($matchesDesign && $matchesSeller && $matchesType && $matchesColor) {
+					if (!$coupon->removesGain) {
+						// precentage discount
+						if ($coupon->ourPercentageDiscountMultiple && $this->quantity > 2) {
+							$ourDiscountPercentage = $coupon->ourPercentageDiscountMultiple;
+						} else if ($coupon->ourPercentageDiscountTwo && $this->quantity > 1) {
+							$ourDiscountPercentage = $coupon->ourPercentageDiscountTwo;
+						} else {
+							$ourDiscountPercentage = $coupon->ourPercentageDiscount;
+						}
+
+						if ($coupon->sellerPercentageDiscountMultiple && $this->quantity > 2) {
+							$sellerDiscountPercentage = $coupon->sellerPercentageDiscountMultiple;
+						} else if ($coupon->sellerPercentageDiscountTwo && $this->quantity > 1) {
+							$sellerDiscountPercentage = $coupon->sellerPercentageDiscountTwo;
+						} else {
+							$sellerDiscountPercentage = $coupon->sellerPercentageDiscount;
+						}
+
+						// fixed discount
+						if ($coupon->ourFixedDiscountMultiple && $this->quantity > 1) {
+							$ourDiscountFixed = $coupon->ourFixedDiscountMultiple;
+						} else {
+							$ourDiscountFixed = $coupon->ourFixedDiscount;
+						}
+
+						if ($coupon->sellerFixedDiscountMultiple && $this->quantity > 1) {
+							$sellerDiscountFixed = $coupon->sellerFixedDiscountMultiple;
+						} else {
+							$sellerDiscountFixed = $coupon->sellerFixedDiscount;
+						}
+
+						// total discount
+						$ourDiscount = ($orderItem->fullPrice * $ourDiscountPercentage / 100) + $ourDiscountFixed;
+						$sellerDiscount = ($orderItem->fullPrice * $sellerDiscountPercentage / 100) + $sellerDiscountFixed;
+					} else {
+						$sellerDiscount = $orderItem->gain;
+					}
+
+					// calculate total discount and recuced gain
+					$totalDiscount = $ourDiscount + $sellerDiscount;
+					$gainReduction = $coupon->removesGain ? $orderItem->gain : $sellerDiscount;
+
+					$orderItem->updateDiscount($totalDiscount);
+					$orderItem->updateGainReduction($gainReduction);
+				}
+			}
+
+			\Legacy\System\Classes\LegacyDB::update(self::TABLE . ' SET code = ? WHERE ' . self::INDEX . ' = ?', [$coupon->code, $this->id]);
+
+			$this->data['couponCode'] = $coupon->code;
+			$this->data = [];
+		} else {
+			$error = $coupon->error;
+		}
+
+		$this->newOrder()->updatePrice();
+
+		return $error;
 	}
 }

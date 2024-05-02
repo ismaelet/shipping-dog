@@ -1,19 +1,21 @@
 <?php
 
 use App\Helpers\ArrayHelper;
+use App\Helpers\EcommerceHelper;
 
 \Legacy\System\Classes\LegacyRoute::add('/cart/*', function (string $path) {
-	$cartSteps = config('ecommerce.cart.steps');
+	$orderItemsteps = config('ecommerce.cart.steps');
 	$currentStep = ArrayHelper::explodeLast('/', $path)[1];
-	$currentStepId = array_search($currentStep, array_column($cartSteps, 'tag')) + 1;
-	$cartStep = cart()?->step;
+	$currentStepId = EcommerceHelper::stepFromTag($currentStep);
 
-	if (!$cartStep) {
+	$orderItemstep = cart()?->step;
+
+	if (!$orderItemstep) {
 		redirect_old('/cart/empty');
 	}
 
-	if (!$currentStepId || $currentStepId > $cartStep) {
-		redirect_old('/cart/' . $cartSteps[$cartStep]['tag']);
+	if (!$currentStepId || $currentStepId > $orderItemstep) {
+		redirect_old('/cart/' . $orderItemsteps[$orderItemstep]['tag']);
 	}
 
 	if ($currentStep == 'access' && auth()->check()) {
@@ -29,44 +31,10 @@ use App\Helpers\ArrayHelper;
 		->show();
 });
 
-// pay with paypal
-\Legacy\System\Classes\LegacyRoute::add('/pay/paypal', function () {
-	\Legacy\System\Classes\LegacyView::setPage('cart/paypal')
-		->setTitle('Pagamento')
-		->setTemplate('void')
-		->show();
-});
-
-// pay with stripe
-\Legacy\System\Classes\LegacyRoute::add('/pay/stripe', function () {
-	\Legacy\System\Classes\LegacyView::setPage('cart/stripe')
-		->setTitle('Carrello')
-		->show();
-});
-
 // free promotion
 \Legacy\System\Classes\LegacyRoute::add('/pay/promotion', function () {
 	\Legacy\System\Classes\LegacyView::setPage('cart/promotion')
 		->setTitle('Carrello')
 		->setTemplate('void')
-		->show();
-});
-
-// payment success page
-\Legacy\System\Classes\LegacyRoute::add('/cart/success', function () {
-	\Legacy\System\Classes\LegacyView::setPage('cart/success')
-		->setTitle('Successo')
-		->setTemplate('void')
-		->show();
-});
-
-// empty cart
-\Legacy\System\Classes\LegacyRoute::add('/cart/empty', function () {
-	if (cart_old() && cart_old()->quantity) {
-		redirect_old('/cart');
-	}
-
-	\Legacy\System\Classes\LegacyView::setPage('cart/empty')
-		->setTitle('Carrello Vuoto')
 		->show();
 });

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Design\CustomerPhoto;
 use App\Models\Ecommerce\Product;

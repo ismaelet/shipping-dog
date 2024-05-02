@@ -2,8 +2,8 @@
 
 namespace Legacy\Classes\User;
 
-use App\Models\Ecommerce\Order;
-use Legacy\Classes\Ecommerce\Design;
+use App\Models\Ecommerce\OrderItem;
+use Legacy\Classes\Ecommerce\Design as LegacyDesign;
 use Legacy\Classes\User;
 
 class FeedEntry {
@@ -15,17 +15,17 @@ class FeedEntry {
 	private $type_id;
 	private $event_id;
 	private $subjectId;
-	private $time;
+	private $created_at;
 
 	function __construct($row) {
 		$this->type_id = $row['type'];
 		$this->event_id = $row['event_id'] ?? null;
 		$this->subjectId = $row['srcID'] ?? null;
-		$this->time = $row['time'] ?? null;
+		$this->created_at = $row['created_at'] ?? null;
 	}
 
-	private function getTimeString() {
-		return date('d-m-Y', strtotime($this->time));
+	private function getcreated_atString() {
+		return date('d-m-Y', strtotime($this->created_at));
 	}
 
 	private function gettext() {
@@ -48,8 +48,8 @@ class FeedEntry {
 		return in_array($this->type_id, [3, 4]) ? new User($this->subjectId) : null;
 	}
 
-	private function getOrder() {
-		return $this->type_id == 2 ? Order::find($this->event_id) : null;
+	private function getOrderItem() {
+		return $this->type_id == 2 ? OrderItem::find($this->event_id) : null;
 	}
 
 	private function getseller() {
@@ -67,7 +67,7 @@ class FeedEntry {
 				break;
 
 			case 2:
-				$text = 'Hai venduto <strong>' . $this->order->quantity . ' x</strong> <a class="design" href="' . $this->order->product->url() . '">' . $this->order->product->name . '</a> per <strong>' . $this->order->totalGainString() . '</strong>';
+				$text = 'Hai venduto <strong>' . $this->orderItem->quantity . ' x</strong> <a class="design" href="' . $this->orderItem->product->url() . '">' . $this->orderItem->product->name . '</a> per <strong>' . $this->orderItem->totalGainString() . '</strong>';
 				break;
 
 			case 3:
@@ -86,7 +86,7 @@ class FeedEntry {
 				$text = '';
 		}
 
-		$text = '<strong>' . $this->timeString . ':</strong> ' . $text;
+		$text = '<strong>' . $this->created_atString . ':</strong> ' . $text;
 
 		return $text;
 	}
@@ -97,7 +97,7 @@ class FeedEntry {
 				return public_asset('users/icons/0.jpg');
 			case 2:
 			case 5:
-				return $this->order->image();
+				return $this->orderItem->image();
 			case 3:
 			case 4:
 				return $this->profile->icon();
@@ -109,7 +109,7 @@ class FeedEntry {
 	private function calcDesign() {
 		switch ($this->type_id) {
 			case 2:
-				$design = $this->order->product->design;
+				$design = $this->orderItem->product->design;
 				break;
 			case 3:
 			case 5:

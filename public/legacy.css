@@ -59,7 +59,7 @@
 	--wrap-width: 1200px;
 	--wrap-padding: 2rem;
 
-	/* Borders */
+	/* Border_items */
 	--border-clr-200: var(--clr-neutral-200);
 	--border-clr-400: var(--clr-neutral-300);
 	--border-clr-700: var(--clr-neutral-700);
@@ -245,7 +245,7 @@ html {
 /*
 	1. COLORS
 		- Backgrounds
-		- Borders
+		- Border_items
 		- Fill
 	*/
 
@@ -327,7 +327,7 @@ html {
 }
 
 /*
-	* Colors - borders 
+	* Colors - border_items 
 	*/
 .br-f,
 .br-wht,
@@ -2657,7 +2657,7 @@ select:focus:-webkit-autofill {
 	height: 100%;
 }
 
-/* Borders */
+/* Border_items */
 .br-1 {
 	border-width: 1px;
 	border-style: solid;
@@ -3702,7 +3702,7 @@ p strong {
 	fill: red;
 }
 
-/* Borders */
+/* Border_items */
 .br-f,
 .br-wht,
 .br-f-h:hover,
@@ -3954,7 +3954,7 @@ p strong {
 	*	3.2 Header
 	*	3.3 Body
 	*	3.4 Price
-	* 4. Orders
+	* 4. order_items
 	* 5. Cart Recap
 	* 6. Shipping method
 	* 7. Cart List
@@ -6071,7 +6071,7 @@ main {
 	height: 100%;
 }
 
-/* Borders */
+/* Border_items */
 .br-1 {
 	border-width: 1px;
 	border-style: solid;
@@ -6179,7 +6179,7 @@ main {
 	* 5. Utilities
 	*	5.1. Generic
 	*	5.2. Size
-	*	5.3. Borders
+	*	5.3. Border_items
 	*	5.4. Paddings and margins
 	*	5.5. Placement
 	*	5.6. Animations
@@ -7521,7 +7521,7 @@ p .icon-embed,
 	margin-right: 5rem;
 }
 
-/* 5.4 Borders */
+/* 5.4 Border_items */
 .border {
 	border: var(--border);
 }

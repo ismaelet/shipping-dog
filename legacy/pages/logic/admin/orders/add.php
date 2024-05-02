@@ -3,7 +3,7 @@
 global $id;
 
 //setup page
-$tbl = 'carts';
+$tbl = 'orders';
 
 //inputs
 $inputs = [
@@ -37,12 +37,12 @@ function _expand_add($tbl, $inputs) {
 	$user_id = 'T' . \Legacy\System\Classes\LegacyDB::add('temp_users (ID) VALUES (NULL)');
 
 	//generate cart
-	$cart_id = \Legacy\System\Classes\LegacyDB::add('carts (user_id, shipping_method_id, status) VALUES (?, ?, 1)', [$user_id, $shipping_method_id]);
+	$order_id = \Legacy\System\Classes\LegacyDB::add('orders (user_id, shipping_method_id, status) VALUES (?, ?, 1)', [$user_id, $shipping_method_id]);
 
-	\Legacy\System\Classes\LegacyDB::update('carts SET time=NOW() WHERE id = ?', [$cart_id]);
+	\Legacy\System\Classes\LegacyDB::update('orders SET time=NOW() WHERE id = ?', [$order_id]);
 
 	//generate address
-	$id = \Legacy\System\Classes\LegacyDB::add('addresses (user_id, cart_id) VALUES (?, ?)', [$user_id, $cart_id]);
+	$id = \Legacy\System\Classes\LegacyDB::add('addresses (user_id, order_id) VALUES (?, ?)', [$user_id, $order_id]);
 
 	//Save address
 	$addrRaw = $_POST['address'];

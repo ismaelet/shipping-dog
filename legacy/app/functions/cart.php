@@ -1,32 +1,32 @@
 <?php
 
-use App\Models\Ecommerce\Cart as EcommerceCart;
-use Legacy\Classes\Ecommerce\Cart;
+use App\Models\Ecommerce\Order;
+use Legacy\Classes\Ecommerce\OrderItem;
 
 function cart_setup_old($user_idID, $stepId = false) {
 
 	// setup cart
-	$cart_id = \Legacy\System\Classes\LegacyDB::find('id FROM carts WHERE user_id=? and status=0', [$user_idID]);
+	$order_id = \Legacy\System\Classes\LegacyDB::find('id FROM orders WHERE user_id=? and status=0', [$user_idID]);
 
 	// redirect if the cart doesn't exists
-	if (!$cart_id) redirect_old('/cart/empty');
+	if (!$order_id) redirect_old('/cart/empty');
 
 	// clean and redirect if the cart is empty
 	if (!cart_quantity()) {
 
-		\Legacy\System\Classes\LegacyDB::delete('carts WHERE id = ?', $cart_id);
+		\Legacy\System\Classes\LegacyDB::delete('orders WHERE id = ?', $order_id);
 
 		redirect_old('/cart/empty');
 	}
 
 	// create cart
-	$cart = new Cart($cart_id);
+	$order = new Cart($order_id);
 
 	// redirect if the step is wrong
-	if ($stepId && $cart->step < $stepId) redirect_old('/cart?step=' . $cart->step);
+	if ($stepId && $order->step < $stepId) redirect_old('/cart?step=' . $order->step);
 
 	// clean the code if doesn't exit anymore or is expired
-	$code = $cart->code;
+	$code = $order->code;
 
 	if ($code) {
 
@@ -37,18 +37,18 @@ function cart_setup_old($user_idID, $stepId = false) {
 		if ($row && strtotime($row['time_end']) > strtotime('now') && strtotime($row['time_start']) < strtotime('now')) $valid = true;
 
 		if (!$valid) {
-			$cart->removeCoupon();
+			$order->removeCoupon();
 		}
 	}
 
 	// check for promotions
-	cart_promotions($cart);
+	cart_promotions($order);
 
-	return $cart;
+	return $order;
 }
 
 
-function cart_promotions(&$cart) {
+function cart_promotions(&$order) {
 
 	/* edit from here */
 	$promotion['active'] = false;
@@ -59,20 +59,20 @@ function cart_promotions(&$cart) {
 	$promotion['discount-shop'] = 10;
 	$promotion['trigger'] = [
 		'count',
-		'orders WHERE user_id=? AND product_id IN (SELECT id FROM items WHERE user_id = ?) AND type_id IN (6,7,8,9,10,11)',
-		[$cart->customer, 187],
+		'order_items WHERE user_id=? AND product_id IN (SELECT id FROM items WHERE user_id = ?) AND type_id IN (6,7,8,9,10,11)',
+		[$order->customer, 187],
 		2
 	];
 	/* until here */
 
 	//check for promotions if the cart is active
-	if (!$cart->status) {
+	if (!$order->status) {
 
 		//remove expired promotions
-		if ($cart->promotion && ($cart->promotion != $promotion['code'] || !$promotion['active'])) {
+		if ($order->promotion && ($order->promotion != $promotion['code'] || !$promotion['active'])) {
 
-			\Legacy\System\Classes\LegacyDB::update('carts SET promotion="" WHERE id = ?', [$cart->id]);
-			\Legacy\System\Classes\LegacyDB::update('orders SET price_disc=0, gain_disc=0 WHERE cart_id = ?', [$cart->id]);
+			\Legacy\System\Classes\LegacyDB::update('orders SET promotion="" WHERE id = ?', [$order->id]);
+			\Legacy\System\Classes\LegacyDB::update('order_items SET price_disc=0, gain_disc=0 WHERE order_id = ?', [$order->id]);
 
 			redirect_old();
 		}
@@ -80,42 +80,42 @@ function cart_promotions(&$cart) {
 		//in case of active promotion
 		if ($promotion['active']) {
 
-			$cart->promotion_data = $promotion;
+			$order->promotion_data = $promotion;
 
 			//add the promotion
-			if (!$cart->code) {
+			if (!$order->code) {
 
 				$triggered = \Legacy\System\Classes\LegacyDB::count($promotion['trigger'][1], $promotion['trigger'][2]) >= $promotion['trigger'][3];
 
 				//if triggered
-				if ($triggered && !$cart->promotion) {
+				if ($triggered && !$order->promotion) {
 
 					$promotion['discount'] = ($promotion['discount-sd'] + $promotion['discount-shop']) / 100;
 
 					//add promotion to the cart
-					$cart->promotion = $promotion['code'];
+					$order->promotion = $promotion['code'];
 
-					\Legacy\System\Classes\LegacyDB::update('carts SET promotion=? WHERE id = ?', [$promotion['code'], $cart->id]);
+					\Legacy\System\Classes\LegacyDB::update('orders SET promotion=? WHERE id = ?', [$promotion['code'], $order->id]);
 
-					//add discount to orders
-					$orders = \Legacy\System\Classes\LegacyDB::select('id, price FROM orders WHERE cart_id = ?', [$cart->id]);
+					//add discount to order_items
+					$order_items = \Legacy\System\Classes\LegacyDB::select('id, price FROM order_items WHERE order_id = ?', [$order->id]);
 
-					while ($order = $orders->fetch_assoc()) {
+					while ($orderItem = $order_items->fetch_assoc()) {
 
-						$price_disc = round($order['price'] * $promotion['discount'], 2);
-						$gain_disc = round($order['price'] * $promotion['discount-shop'] / 100, 2);
+						$price_disc = round($orderItem['price'] * $promotion['discount'], 2);
+						$gain_disc = round($orderItem['price'] * $promotion['discount-shop'] / 100, 2);
 
-						\Legacy\System\Classes\LegacyDB::update('orders SET price_disc=?, gain_disc=? WHERE id = ?', [$price_disc, $gain_disc, $order['id']]);
+						\Legacy\System\Classes\LegacyDB::update('order_items SET price_disc=?, gain_disc=? WHERE id = ?', [$price_disc, $gain_disc, $orderItem['id']]);
 					}
 
 					redirect_old();
 				}
 
 				//if not triggered anymore
-				if ($cart->promotion && !$triggered) {
+				if ($order->promotion && !$triggered) {
 
-					\Legacy\System\Classes\LegacyDB::update('carts SET promotion="" WHERE id = ?', [$cart->id]);
-					\Legacy\System\Classes\LegacyDB::update('orders SET price_disc=0, gain_disc=0 WHERE cart_id = ?', [$cart->id]);
+					\Legacy\System\Classes\LegacyDB::update('orders SET promotion="" WHERE id = ?', [$order->id]);
+					\Legacy\System\Classes\LegacyDB::update('order_items SET price_disc=0, gain_disc=0 WHERE order_id = ?', [$order->id]);
 
 					redirect_old();
 				}
@@ -124,7 +124,7 @@ function cart_promotions(&$cart) {
 	}
 }
 
-function cart_flow($cart, $loc) {
+function cart_flow($order, $loc) {
 	$stepIds = ['Accedi', 'Spedizione', 'Offerte', 'Conferma'];
 
 	use_natural_keys($stepIds);
@@ -136,16 +136,16 @@ function cart_flow($cart, $loc) {
 
 			<!-- Line -->
 			<?php if ($key > 1) { ?>
-				<div class="flow-line <?= $key <= $cart->step ? 'active' : '' ?>"></div>
+				<div class="flow-line <?= $key <= $order->step ? 'active' : '' ?>"></div>
 			<?php } ?>
 
 			<!-- Step -->
-			<div class="flow-step <?= $key <= $cart->step ? 'active' : '' ?> <?= $key == $loc ? 'this' : '' ?>">
+			<div class="flow-step <?= $key <= $order->step ? 'active' : '' ?> <?= $key == $loc ? 'this' : '' ?>">
 
 				<!-- Number -->
-				<a <?= $key <= $cart->step && $key > 1 && $loc != $key ? 'href="' . client_url('/cart?step=' . $key) . '"' : '' ?> class="flow-circle center-items">
+				<a <?= $key <= $order->step && $key > 1 && $loc != $key ? 'href="' . client_url('/cart?step=' . $key) . '"' : '' ?> class="flow-circle center-items">
 
-					<?php if ($key < $cart->step) { ?>
+					<?php if ($key < $order->step) { ?>
 
 						<div class="flow-icon icon-box">
 							<?= embed_icon('correct') ?>
@@ -170,8 +170,8 @@ function cart_flow($cart, $loc) {
 
 <?php }
 
-function cart_recap($cart, $active = true) {
-	$cart = EcommerceCart::find($cart->id);
+function cart_recap($order, $active = true) {
+	$order = EcommerceOrder::find($order->id);
 ?>
 
 	<div id="rec-pan">
@@ -182,24 +182,24 @@ function cart_recap($cart, $active = true) {
 
 			<div class="chck_item">
 				<p class="chck_name">Articoli</p>
-				<p class="chck_pric js-cart-products-price"><?= $cart->grossOrdersPriceString() ?></p>
+				<p class="chck_pric js-cart-products-price"><?= $order->grossOrderItemsPriceString() ?></p>
 			</div>
 
 			<div class="chck_item">
 				<p class="chck_name">Spedizione</p>
-				<p id="chck_totShip" class="chck_pric js-cart-shipping-price-string js-recap-shipping-price" data-shipping-method-id="<?= $cart->shipping_method_id ?>"><?= $cart->shippingFeeString() ?></p>
+				<p id="chck_totShip" class="chck_pric js-cart-shipping-price-string js-recap-shipping-price" data-shipping-method-id="<?= $order->shipping_method_id ?>"><?= $order->shippingFeeString() ?></p>
 			</div>
 
-			<?php if ($cart->ordersDiscount()) { ?>
+			<?php if ($order->orderItemsDiscount()) { ?>
 				<div class="chck_item">
 					<p class="chck_name">Sconto</p>
-					<p id="chck_totShip" class="chck_pric js-cart-discount">- <?= $cart->ordersDiscountString() ?></p>
+					<p id="chck_totShip" class="chck_pric js-cart-discount">- <?= $order->orderItemsDiscountString() ?></p>
 				</div>
 			<?php } ?>
 
 			<div id="total" class="chck_item">
 				<p class="chck_name">Totale</p>
-				<p class="chck_pric js-cart-price-string"><?= $cart->priceString() ?></p>
+				<p class="chck_pric js-cart-price-string"><?= $order->priceString() ?></p>
 			</div>
 
 			<?php if ($active) { ?>

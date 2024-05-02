@@ -53,7 +53,7 @@ export default {
 			green: 'lightgreen',
 			'dark-green': 'green',
 		},
-		// Custom borders
+		// Custom border_items
 		borderWidth: {
 			DEFAULT: 'var(--border-width)',
 		},
@@ -118,15 +118,15 @@ export default {
 				'section-heading': [
 					'var(--font-size-800)',
 					{
-						fontWeight: 'var(--font-weight-semibold)',
+						fontWeight: 'var(--font-weight-regular)',
 						letterSpacing: '0.03em',
 						lineHeight: '1',
 					},
 				],
 				'component-heading': [
-					'var(--font-size-700)',
+					'var(--font-size-600)',
 					{
-						fontWeight: 'var(--font-weight-semibold)',
+						fontWeight: 'var(--font-weight-regular)',
 						letterSpacing: '0.03em',
 						lineHeight: '1.2',
 					},

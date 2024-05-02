@@ -156,7 +156,7 @@ class ProductController extends Controller {
 			$config['position_id'] = $legacyProduct->availablePositionIds[0];
 		}
 
-		Order::add($config);
+		OrderItem::add($config);
 
 		redirect_old('/cart');
 	}

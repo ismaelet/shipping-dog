@@ -12,7 +12,7 @@ class Address {
 	public const TABLE = 'addresses';
 	public const INDEX = 'id';
 	public const CUSTOMER_INDEX = 'user_id';
-	public const CART_INDEX = 'cart_id';
+	public const CART_INDEX = 'order_id';
 
 	public $id = null;
 	public $full_name;

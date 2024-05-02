@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-	document.querySelector('.js-copy-orders').addEventListener('click', async function () {
+	document.querySelector('.js-copy-order_items').addEventListener('click', async function () {
 		// Get the HTML content of the entire document
-		const text = document.querySelector('.orders').outerHTML
+		const text = document.querySelector('.order_items').outerHTML
 
 		copyRichTextToClipboard(text)
 	})

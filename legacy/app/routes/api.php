@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\Ecommerce\CartController;
+use App\Http\Controllers\Ecommerce\OrderItemController;
 use App\Http\Controllers\Interactions\FollowerController;
 use App\Http\Controllers\Interactions\LikeController;
 
 /**
- * Carts
+ * orders
  */
-\Legacy\System\Classes\LegacyRoute::add('/api/carts', function () {
-	echo json_encode(CartController::get());
+\Legacy\System\Classes\LegacyRoute::add('/api/orders', function () {
+	echo json_encode(OrderController::get());
 });
 
 

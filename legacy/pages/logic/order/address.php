@@ -2,18 +2,18 @@
 
 //setup page
 
-use Legacy\Classes\Ecommerce\Cart;
+use Legacy\Classes\Ecommerce\OrderItem;
 
 $id = $_GET['id'] ?? false;
-$cart = new Cart($id);
+$order = new Cart($id);
 $security = $_GET['key'] ?? false;
 $done = $_SESSION['form-done'] ?? false;
 unset($_SESSION['form-done']);
 
 //fetch data
-if (!$address = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE cart_id = ? AND security=?', [$id, $security])) redirect_old('/');
+if (!$address = \Legacy\System\Classes\LegacyDB::row('* FROM addresses WHERE order_id = ? AND security=?', [$id, $security])) redirect_old('/');
 
-$status = \Legacy\System\Classes\LegacyDB::find('status FROM carts WHERE id = ?', [$id]);
+$status = \Legacy\System\Classes\LegacyDB::find('status FROM orders WHERE id = ?', [$id]);
 
 if (!$status) redirect_old('/cart');
 
@@ -51,7 +51,7 @@ $inputs = [
 //submit
 if (isset($_POST['submit'])) {
 
-	form_db_update('addresses', $inputs, 'cart_id', $id);
+	form_db_update('addresses', $inputs, 'order_id', $id);
 
 	$_SESSION['form-done'] = true;
 

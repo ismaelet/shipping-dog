@@ -1,5 +1,5 @@
 @php
-	$cartStep = cart()->step;
+	$orderItemstep = cart()->stepTag();
 @endphp
 
 @pushOnce('styles')
@@ -8,50 +8,40 @@
 			color: var(--color-neutral-250);
 		}
 
+		.flow-line {
+			border-color: currentColor;
+
+			&:has(+ [data-active="true"]) {
+				border-color: var(--color-primary-400);
+			}
+		}
+
 		.flow-step {
+			--icon-size: 45%;
 			width: min(2rem, 8vw);
+
+			svg {
+				fill: currentColor;
+			}
+
+			&[data-active="true"] {
+				color: var(--color-primary-400);
+			}
+
+			&[data-current-step="true"] {
+				.flow-circle {
+					background-color: currentColor;
+				}
+
+				.flow-number,
+				svg {
+					color: var(--color-neutral-light-100);
+				}
+			}
 		}
 
-		.flow-text {
-			translate: -50%;
-			left: 50%;
-		}
-
-		.flow-icon {
-			width: 45%;
-			aspect-ratio: 1 / 1;
-		}
-
-		.flow-icon svg {
-			fill: var(--clr-1);
-		}
-
-		.flow-line.active {
-			background-color: var(--clr-1);
-		}
-
-		.flow-step.active .flow-circle {
-			border-color: var(--clr-1);
-		}
-
-		.flow-step.active .flow-num {
-			color: var(--clr-1);
-		}
-
-		.flow-step.active .flow-txt {
-			color: var(--clr-1);
-		}
-
-		.flow-step.this .flow-circle {
-			background-color: var(--clr-1);
-		}
-
-		.flow-step.this .flow-num {
-			color: #fff;
-		}
-
-		.flow-step.this .flow-icon svg {
-			fill: #fff;
+		.flow-circle {
+			border-color: currentColor;
 		}
 
 		.data_tbl {
@@ -180,7 +170,7 @@
 
 		.icon-dot {
 			display: none;
-			background-color: var(--clr-1);
+			background-color: var(--color-primary-400);
 			border-radius: 100%;
 			width: 50%;
 			height: 50%;
@@ -291,58 +281,44 @@
 			}
 		}
 
-		.page-content {
-			grid-template-areas:
-				'guest login'
-				'register login'
-				'shop _';
-		}
-
 		.access-panel {
 			display: grid;
 			gap: 1.5rem;
 			padding: 1.5rem;
-
-			h3 {
-				font-size: 1.5rem;
-			}
 		}
 
-		.guest-panel {
-			grid-area: guest;
-		}
-
-		.login-panel {
-			grid-area: login;
-		}
-
-		.register-panel {
-			grid-area: register;
-		}
-
-		.shop-panel {
-			grid-area: shop;
-		}
-
-		@media (max-width: 1024px) {
+		@media (min-width: 1024px) {
 			.page-content {
 				grid-template-areas:
-					'guest'
-					'login'
-					'register'
-					'shop';
+					'guest login'
+					'register login'
+					'shop _';
+			}
+
+			.guest-panel {
+				grid-area: guest;
+			}
+
+			.login-panel {
+				grid-area: login;
+			}
+
+			.register-panel {
+				grid-area: register;
+			}
+
+			.shop-panel {
+				grid-area: shop;
 			}
 		}
 	</style>
 @endpushOnce
 
-<x-layouts.main theme="modern">
+<x-layouts.main>
 
 	<section class="bg-surface-500 stack-content grid justify-items-center">
 		<x-typography.section-heading class="py-24">
-			<span class="tracking-[.25em]">
-				Car<span class="text-primary">rr</span>ello
-			</span>
+			Ca<span class="text-primary">rr</span>ello
 		</x-typography.section-heading>
 	</section>
 
@@ -351,26 +327,26 @@
 		@foreach (config('ecommerce.cart.steps') as $step => $stepData)
 			{{-- Divisor --}}
 			@if ($step > 1)
-				<div class="grow border-b"></div>
+				<div class="flow-line grow border-b"></div>
 			@endif
 
 			{{-- Step --}}
 			<div
 				class="flow-step relative cursor-default"
-				data-active="{{ $step <= $cartStep ? 'true' : 'false' }}"
+				data-active="{{ $step <= $orderItemstep ? 'true' : 'false' }}"
 				data-current-step="{{ $step == $pageStep ? 'true' : 'false' }}"
 			>
 
 				{{-- Number --}}
 				<a
-					{{ $step <= $cartStep && $step != $pageStep && !($stepData['tag'] == 'access' && Auth::check()) ? 'href="' . route('cart.' . $stepData['tag']) . '"' : '' }}
-					class="flex aspect-square rounded-full border"
+					{!! $step <= $orderItemstep && $step != $pageStep && !($stepData['tag'] == 'access' && Auth::check())
+					    ? 'href="' . route('cart.' . $stepData['tag']) . '"'
+					    : '' !!}
+					class="flow-circle flex aspect-square rounded-full border"
 				>
 
-					@if ($step < $pageStep)
-						<div class="flow-icon icon-box">
-							{{ embed_icon('correct') }}
-						</div>
+					@if ($step < $orderItemstep)
+						{!! embed_icon('correct') !!}
 					@else
 						<p class="flow-number m-auto">{{ $step }}</p>
 					@endif
@@ -378,14 +354,14 @@
 				</a>
 
 				{{-- Text --}}
-				<p class="flow-text absolute mt-2">{{ $stepData['label'] }}</p>
+				<p class="flow-text absolute left-1/2 mt-2 -translate-x-1/2 text-xs sm:text-base">{{ $stepData['label'] }}</p>
 
 			</div>
 		@endforeach
 
 	</section>
 
-	<div class="page-content mb-20 grid items-start gap-16 lg:grid-cols-2">
+	<div class="page-content mb-20 grid items-start gap-8 lg:grid-cols-2 lg:gap-16">
 
 		{{-- Guest --}}
 		<form
