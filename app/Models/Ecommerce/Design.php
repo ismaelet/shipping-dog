@@ -4,7 +4,7 @@ namespace App\Models\Ecommerce;
 
 use App\Models\Ecommerce\Design\CustomerPhoto;
 use App\Models\Ecommerce\Design\LogoGroup;
-use App\Models\Ecommerce\Design\Tag;
+use App\Models\Ecommerce\Design\DesignTag;
 use App\Models\User\Like;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,7 +54,7 @@ class Design extends Model {
 	 * Get the design's tags
 	 */
 	public function tags(): HasOne {
-		return $this->hasOne(Tag::class);
+		return $this->hasOne(DesignTag::class);
 	}
 
 	/**

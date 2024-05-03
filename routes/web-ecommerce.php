@@ -3,11 +3,9 @@
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\OrderController;
 use App\Http\Controllers\Ecommerce\OrderItemController;
-use App\Http\Controllers\Ecommerce\PayPal\PayPalOrderController;
 use App\Http\Controllers\LegacyController;
 use App\Http\Middleware\Cart;
 use App\Http\Middleware\EmptyCart;
-use App\Http\Middleware\HasCart;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -65,14 +63,3 @@ Route::prefix('cart')->middleware(Cart::class)->name('cart.')->group(function ()
  * * Order
  */
 Route::resource('orders', OrderController::class)->only(['show']);
-
-/**
- * * PayPal
- */
-Route::prefix('paypal')->name('paypal.')->group(function () {
-	Route::resource('order', PayPalOrderController::class)->only(['create']);
-
-	Route::get('/{order}/success', [PayPalOrderController::class, 'success'])->name('order.success');
-
-	Route::get('/{order}/reopen', [PayPalOrderController::class, 'reopen'])->name('order.reopen');
-});

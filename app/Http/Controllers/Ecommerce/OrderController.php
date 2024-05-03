@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ecommerce;
 use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Order;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -36,5 +37,26 @@ class OrderController extends Controller {
 				'title' => 'Ordine #' . $order->id,
 				'order' => $order,
 			]);
+	}
+
+	/**
+	 * Reopen an order
+	 *
+	 * @param Order $order The order to reopen
+	 * @return RedirectResponse Redirects to the cart page
+	 */
+	public function reopen(Order $order): RedirectResponse {
+		// If the order is received
+		if ($order->status == EcommerceHelper::statusFromTag('received')) {
+			// Reopen the order
+			$order->update([
+				'status' => EcommerceHelper::statusFromTag('open'),
+			]);
+
+			// Redirect to the cart
+			return to_route('cart');
+		}
+
+		return redirect()->back();
 	}
 }

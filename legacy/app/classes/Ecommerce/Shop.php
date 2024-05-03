@@ -106,7 +106,7 @@ class Shop {
 					->orWhere('stores.name', 'like', '%' . $this->search . '%')
 					->orWhereIn('design_id', function ($query) {
 						$query->select('design_id')
-							->from('designs_tags')
+							->from('design_tags')
 							->where('tags', 'like', '%' . $this->search . '%');
 					});
 			});
@@ -135,7 +135,7 @@ class Shop {
 		if ($this->slug) {
 			$products->whereIn('design_id', function ($query) {
 				$query->select('design_id')
-					->from('designs_tags')
+					->from('design_tags')
 					->where('tags', 'like', '%' . $this->slug . '%');
 			});
 		}

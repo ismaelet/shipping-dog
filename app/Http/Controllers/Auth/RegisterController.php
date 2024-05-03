@@ -18,10 +18,6 @@ class RegisterController extends Controller {
 	public function store(Request $request) {
 		// Validation
 		$this->validate($request, [
-			'username' => [
-				'required',
-				Rule::unique('users', 'username'),
-			],
 			'password' => ['required', 'confirmed'],
 			'email' => [
 				'required',
@@ -32,7 +28,6 @@ class RegisterController extends Controller {
 
 		// Store the user
 		User::create([
-			'username' => $request->username,
 			'password' => Hash::make($request->password),
 			'email' => $request->email,
 		]);

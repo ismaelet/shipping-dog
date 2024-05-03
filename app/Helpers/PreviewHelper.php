@@ -16,39 +16,41 @@ class PreviewHelper {
 	public const ALLOWED_IMAGE_SIZES = [self::SMALL_IMAGE_SIZE, self::BIG_IMAGE_SIZE];
 	public const PLACEHOLDER_IMAGE = 'product_types/mockups/no-image.webp';
 
-	private Product $product;
-	private ProductColor $color;
-	private ProductPosition $position;
+	private ?Product $product;
+	private ?ProductColor $color;
+	private ?ProductPosition $position;
 	private int $imageSize;
 
-	function __construct(Product $product, ?int $imageSize = 400, ?int $color_id = null, ?int $position_id = null) {
+	function __construct(?Product $product, ?int $imageSize = 400, ?int $color_id = null, ?int $position_id = null) {
 		$this->product = $product;
-		$this->color = $color_id ? ProductColor::find($color_id) : $product->default_color;
+		$this->color = $color_id ? ProductColor::find($color_id) : $product?->default_color;
 		$this->imageSize = in_array($imageSize, self::ALLOWED_IMAGE_SIZES) ? $imageSize : self::DEFAULT_IMAGE_SIZE;
 
 		// Set the position
-		$this->position = $position_id && ProductPosition::find($position_id) ? ProductPosition::find($position_id) : $product->defaultPosition();
+		$this->position = $position_id && ProductPosition::find($position_id) ? ProductPosition::find($position_id) : $product?->defaultPosition();
 	}
 
 	/*
 	* Returns the image path
 	*/
 	public function image(): string {
-		$image = public_asset($this->fileStoragePath());
+		if ($this->product && $this->color && $this->position) {
+			$image = public_asset($this->fileStoragePath());
 
-		// Return the image path if it exists
-		if ($this->hasImage()) {
-			return $image;
-		}
+			// Return the image path if it exists
+			if ($this->hasImage()) {
+				return $image;
+			}
 
-		// Otherwise generate the image
-		if ($this->product->id && !$this->product->deleted && !$this->product->isCustom()) {
-			$this->generateImage();
-		}
+			// Otherwise generate the image
+			if ($this->product->id && !$this->product->deleted && !$this->product->isCustom()) {
+				$this->generateImage();
+			}
 
-		// Try again to return the image path
-		if ($this->hasImage()) {
-			return $image;
+			// Try again to return the image path
+			if ($this->hasImage()) {
+				return $image;
+			}
 		}
 
 		// Return the default image path

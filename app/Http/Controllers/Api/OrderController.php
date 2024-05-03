@@ -8,7 +8,7 @@ use App\Models\Ecommerce\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class OrderItemController extends Controller {
+class OrderController extends Controller {
 
 	/**
 	 * Get the specific product data

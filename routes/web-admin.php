@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 /**
  * Admin routes
  */
-Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
 	/**
 	 * * Dashboard
 	 */

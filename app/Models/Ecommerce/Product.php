@@ -15,12 +15,15 @@ use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Seller\SellerPrice;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Product extends Model {
+
+	use HasFactory;
 
 	protected $table = 'items';
 	protected $fillable = ['name', 'design_id', 'user_id', 'type_id', 'color_id', 'colors', 'status', 'positions'];

@@ -1,16 +1,16 @@
 <?php
 
-use App\Models\Ecommerce\Order;
+use App\Helpers\EcommerceHelper;
 
-$_SESSION['payment_type'] = 'buy';
-$_SESSION['payment_order_id'] = $order_id = cart()?->id;
-
-$order = Order::find($order_id);
+$order = cart();
+$token = request()->token;
 
 if ($order) {
-	require_once(base_path() . '/legacy/listeners/shared.php');
+	if ($order->token == $token && $order->payment_method_id == 4 && in_array($order->status, [EcommerceHelper::statusFromTag('received'), EcommerceHelper::statusFromTag('open')])) {
+		$order->confirm();
+	}
 
-	redirect_old($order->recapUrl());
+	redirect_old($order->recapUrlWithToken());
 } else {
-	redirect_old('/cart');
+	redirect_old(route('cart'));
 }

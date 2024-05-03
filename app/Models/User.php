@@ -4,9 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Seller;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -69,7 +71,22 @@ class User extends Authenticatable {
 	 * Get the user's active cart
 	 */
 	public function cart(): HasOne {
-		return $this->hasOne(Order::class, 'user_id', 'id')->where('status', 0);
+		$orders = $this->orders->where('status', EcommerceHelper::statusFromTag('received'));
+
+		if ($orders->count() == 1) {
+			$orders->first()->update([
+				'status' => EcommerceHelper::statusFromTag('open'),
+			]);
+		}
+
+		return $this->hasOne(Order::class, 'user_id', 'id')->where('status', EcommerceHelper::statusFromTag('open'));
+	}
+
+	/**
+	 * Get the user's orders
+	 */
+	public function orders(): HasMany {
+		return $this->hasMany(Order::class);
 	}
 
 	/**

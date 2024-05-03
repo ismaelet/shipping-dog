@@ -820,7 +820,6 @@ main {
 .lbox .close-icon {
 	opacity: 0.8;
 	background-color: #f3f3f3;
-	background-image: url(../svg/icons/close.svg);
 	background-position: center;
 	background-size: 50%;
 	border-radius: 50%;
@@ -961,7 +960,6 @@ main {
 /* Misc */
 .file-load {
 	display: none;
-	background-image: url(../svg/icons/loading/loading.svg);
 	background-position: center;
 	background-size: contain;
 	height: 4rem;
@@ -1015,7 +1013,6 @@ main {
 	width: clamp(1.5rem, 50%, 3rem);
 	height: clamp(1.5rem, 50%, 3rem);
 	margin: auto;
-	background: url('../svg/icons/loading.svg') center / contain no-repeat;
 	filter: invert(1);
 	transition: opacity 0.2s, transform 0.2s;
 }
@@ -4997,7 +4994,6 @@ main {
 .lbox .close-icon {
 	opacity: 0.8;
 	background-color: #f3f3f3;
-	background-image: url(../svg/icons/actions/close.svg);
 	background-position: center;
 	background-size: 50%;
 	border-radius: 50%;
@@ -7067,7 +7063,6 @@ p .icon-embed,
 
 .modal__close {
 	opacity: 1;
-	background-image: url(../svg/icons/close.svg);
 	background-position: center;
 	background-size: contain;
 	width: 1.5rem;
@@ -8042,4 +8037,10 @@ h3 {
 	p {
 		font-size: 0.9rem;
 	}
+}
+
+.order-label {
+	padding-inline: 1rem;
+	padding-block: 0.25rem;
+	border-radius: var(--border-radius-400);
 }

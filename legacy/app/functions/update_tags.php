@@ -19,6 +19,6 @@ function update_tags($slugs, $id, $slugs_old = false) {
 
 	$slugs = implode(',', $slugs);
 
-	if (\Legacy\System\Classes\LegacyDB::exists('designs_tags WHERE design_id = ?', [$id])) \Legacy\System\Classes\LegacyDB::update('designs_tags SET tags=? WHERE design_id = ?', [$slugs, $id]);
-	else \Legacy\System\Classes\LegacyDB::add('designs_tags (design_id, tags) VALUES (?, ?)', [$id, $slugs]);
+	if (\Legacy\System\Classes\LegacyDB::exists('design_tags WHERE design_id = ?', [$id])) \Legacy\System\Classes\LegacyDB::update('design_tags SET tags=? WHERE design_id = ?', [$slugs, $id]);
+	else \Legacy\System\Classes\LegacyDB::add('design_tags (design_id, tags) VALUES (?, ?)', [$id, $slugs]);
 }

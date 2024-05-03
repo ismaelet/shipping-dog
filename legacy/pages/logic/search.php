@@ -16,7 +16,7 @@ if (strlen($search) > 2) {
 
 			name LIKE CONCAT('%',?,'%') OR
 
-			ID IN (SELECT design_id FROM designs_tags WHERE tags LIKE CONCAT('%',?,'%')) OR 
+			ID IN (SELECT design_id FROM design_tags WHERE tags LIKE CONCAT('%',?,'%')) OR 
 
 			user_id IN (SELECT user_id FROM stores WHERE name LIKE CONCAT('%',?,'%'))
 		)

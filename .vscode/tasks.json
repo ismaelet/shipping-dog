@@ -21,7 +21,7 @@
 			"label": "Artisan: Create Model",
 			"type": "shell",
 			"command": "php",
-			"args": ["artisan", "make:model", "${input:modelName}"],
+			"args": ["artisan", "make:model", "${input:name}"],
 			"group": {
 				"kind": "build",
 				"isDefault": false
@@ -31,23 +31,10 @@
 			}
 		},
 		{
-			"label": "Artisan: Create Component",
-			"type": "shell",
-			"command": "php",
-			"args": ["artisan", "make:component", "${input:componentName}"],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"presentation": {
-				"reveal": "always"
-			}
-		},
-		{
 			"label": "Artisan: Create Controller",
 			"type": "shell",
 			"command": "php",
-			"args": ["artisan", "make:controller", "${input:controllerName}Controller"],
+			"args": ["artisan", "make:controller", "${input:name}Controller"],
 			"group": {
 				"kind": "build",
 				"isDefault": true
@@ -60,9 +47,48 @@
 			"label": "Artisan: Create Migration",
 			"type": "shell",
 			"command": "php",
-			"args": ["artisan", "make:migration", "${input:migrationName}"],
+			"args": ["artisan", "make:migration", "${input:name}"],
 			"group": {
 				"kind": "build",
+				"isDefault": false
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "Artisan: Run Tests",
+			"type": "shell",
+			"command": "docker",
+			"args": ["exec", "laravel", "php", "artisan", "test"],
+			"group": {
+				"kind": "test",
+				"isDefault": false
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "Artisan: Create Test",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "make:test", "${input:name}Test"],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "Artisan: Get Route List",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "route:list", "--except-vendor"],
+			"group": {
+				"kind": "test",
 				"isDefault": false
 			},
 			"presentation": {
@@ -72,28 +98,9 @@
 	],
 	"inputs": [
 		{
-			"id": "modelName",
+			"id": "name",
 			"type": "promptString",
-			"default": "Example",
-			"description": "Enter the model name"
-		},
-		{
-			"id": "componentName",
-			"type": "promptString",
-			"default": "ExampleComponent",
-			"description": "Enter the component name"
-		},
-		{
-			"id": "controllerName",
-			"type": "promptString",
-			"default": "ExampleController",
-			"description": "Enter the controller name"
-		},
-		{
-			"id": "migrationName",
-			"type": "promptString",
-			"default": "create_example_table",
-			"description": "Enter the migration name"
+			"description": "Enter the name here"
 		}
 	]
 }

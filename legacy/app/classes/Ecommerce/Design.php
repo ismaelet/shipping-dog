@@ -114,7 +114,7 @@ class Design {
 
 	private function getTags() {
 		if ($this->id) {
-			$tags = \Legacy\System\Classes\LegacyDB::find('tags FROM designs_tags WHERE design_id = ?', [$this->id]);
+			$tags = \Legacy\System\Classes\LegacyDB::find('tags FROM design_tags WHERE design_id = ?', [$this->id]);
 
 			if ($tags) {
 				return explode(',', $tags);
@@ -139,7 +139,7 @@ class Design {
 	public function delete(bool $permanently = false) {
 		if ($permanently) {
 			\Legacy\System\Classes\LegacyDB::delete('designs WHERE id = ?', [$this->id]);
-			\Legacy\System\Classes\LegacyDB::delete('designs_tags WHERE design_id = ?', [$this->id]);
+			\Legacy\System\Classes\LegacyDB::delete('design_tags WHERE design_id = ?', [$this->id]);
 			\Legacy\System\Classes\LegacyDB::delete('likes WHERE design_id = ?', [$this->id]);
 		} else {
 			\Legacy\System\Classes\LegacyDB::update('designs SET status=0 WHERE id = ?', [$this->id]);

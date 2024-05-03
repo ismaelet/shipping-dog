@@ -1,7 +1,3 @@
-@php
-	$orderItemstep = cart()->stepTag();
-@endphp
-
 @pushOnce('styles')
 	<style>
 		.flow-bar {
@@ -333,19 +329,19 @@
 			{{-- Step --}}
 			<div
 				class="flow-step relative cursor-default"
-				data-active="{{ $step <= $orderItemstep ? 'true' : 'false' }}"
+				data-active="{{ $step <= $orderStep ? 'true' : 'false' }}"
 				data-current-step="{{ $step == $pageStep ? 'true' : 'false' }}"
 			>
 
 				{{-- Number --}}
 				<a
-					{!! $step <= $orderItemstep && $step != $pageStep && !($stepData['tag'] == 'access' && Auth::check())
+					{!! $step <= $orderStep && $step != $pageStep && !($stepData['tag'] == 'access' && Auth::check())
 					    ? 'href="' . route('cart.' . $stepData['tag']) . '"'
 					    : '' !!}
 					class="flow-circle flex aspect-square rounded-full border"
 				>
 
-					@if ($step < $orderItemstep)
+					@if ($step < $orderStep)
 						{!! embed_icon('correct') !!}
 					@else
 						<p class="flow-number m-auto">{{ $step }}</p>

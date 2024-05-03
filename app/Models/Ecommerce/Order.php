@@ -25,8 +25,19 @@ class Order extends Model {
 	 */
 	protected $fillable = ['user_id', 'shipping_method_id', 'payment_method_id', 'code', 'quantity', 'credit_ship', 'shipping', 'status', 'step', 'courier_notes', 'shipping_notes', 'has_errors', 'created_at', 'updated_at', 'token'];
 
+	/**
+	 * * Events
+	 */
+	protected static function booted() {
+		static::updated(function ($order) {
+			$order->order_items->each->update(['status' => $order->status]);
+		});
+	}
 
-	// * Relationships * //
+	/**
+	 * * Relationships
+	 */
+
 	/**
 	 * Get the order's user.
 	 *
@@ -91,7 +102,10 @@ class Order extends Model {
 	}
 
 
-	// * Attributes * //
+	/**
+	 * * Attributes
+	 */
+
 	/**
 	 * Get the order's code.
 	 *
@@ -111,11 +125,29 @@ class Order extends Model {
 	}
 
 	/**
+	 * Get the order's payment URL.
+	 *
+	 * @return string
+	 */
+	public function paymentUrl(): string {
+		return route('paypal.orders.create', ['order_id' => $this->id]);
+	}
+
+	/**
 	 * Get the order's recap URL.
 	 *
 	 * @return string
 	 */
 	public function recapUrl(): string {
+		return route('orders.show', ['order' => $this->id]);
+	}
+
+	/**
+	 * Get the order's recap URL with the security token.
+	 *
+	 * @return string
+	 */
+	public function recapUrlWithToken(): string {
 		return route('orders.show', ['order' => $this->id, 'token' => $this->token]);
 	}
 
@@ -222,7 +254,7 @@ class Order extends Model {
 	 * @return string
 	 */
 	public function statusLabel(): string {
-		return '<span class="px-4 py-1 gap-2 text-background rounded whitespace-nowrap" style="--icon-size: 1em; background-color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon()) . ' ' . $this->statusName() . '</span>';
+		return '<span class="order-label px-4 py-1 gap-2 border rounded whitespace-nowrap" style="--icon-size: 1em; border-color: ' . $this->statusColor() . '; color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon()) . ' ' . $this->statusName() . '</span>';
 	}
 
 
@@ -363,7 +395,10 @@ class Order extends Model {
 	}
 
 
-	// * Actions * //
+	/**
+	 * * Actions
+	 */
+
 	/**
 	 * Advance the order to the next step or to a specific step.
 	 *
@@ -532,7 +567,10 @@ class Order extends Model {
 	}
 
 
-	// * Static methods * //
+	/**
+	 * * Static methods
+	 */
+
 	/**
 	 * Get the orders that need a label to be printed.
 	 *

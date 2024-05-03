@@ -26,7 +26,7 @@ class CartController extends Controller {
 			->with([
 				'title' => 'Accedi | Carrello',
 				'pageStep' => EcommerceHelper::stepFromTag('access'),
-				'pageStepTag' => 'access',
+				'orderStep' => cart()->step,
 			]);
 	}
 

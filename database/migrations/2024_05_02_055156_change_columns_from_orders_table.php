@@ -9,16 +9,16 @@ return new class extends Migration {
 	 * Run the migrations.
 	 */
 	public function up(): void {
-		Schema::table('order_items', function (Blueprint $table) {
-			$table->decimal('fullProductPrice')->change();
-			$table->decimal('price_disc')->change();
-			$table->decimal('productGain')->change();
-			$table->decimal('gain_disc')->change();
+		Schema::table('orders', function (Blueprint $table) {
+			$table->decimal('fullProductPrice')->default(0)->change();
+			$table->decimal('price_disc')->default(0)->change();
+			$table->decimal('productGain')->default(0)->change();
+			$table->decimal('gain_disc')->default(0)->change();
 		});
 
-		Schema::table('orders', function (Blueprint $table) {
-			$table->decimal('credit')->change();
-			$table->decimal('shipping')->change();
+		Schema::table('carts', function (Blueprint $table) {
+			$table->decimal('credit')->default(0)->change();
+			$table->decimal('shipping')->default(0)->change();
 		});
 	}
 
@@ -26,7 +26,7 @@ return new class extends Migration {
 	 * Reverse the migrations.
 	 */
 	public function down(): void {
-		Schema::table('order_items', function (Blueprint $table) {
+		Schema::table('orders', function (Blueprint $table) {
 		});
 	}
 };

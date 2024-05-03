@@ -47,19 +47,19 @@ return [
 			'1' => [
 				'tag' => 'received',
 				'label' => 'Ricevuto',
-				'color' => '#92e9ff',
+				'color' => 'hsl(192, 100%, 65%)',
 				'icon' => 'waiting',
 			],
 			'2' => [
 				'tag' => 'confirmed',
 				'label' => 'Confermato',
-				'color' => 'hsl(120, 80%, 50%)',
+				'color' => 'hsl(120, 70%, 50%)',
 				'icon' => 'correct',
 			],
 			'3' => [
 				'tag' => 'label-ready',
 				'label' => 'Pronto',
-				'color' => '#ffc677',
+				'color' => 'hsl(40, 100%, 50%)',
 				'icon' => 'correct',
 			],
 			'4' => [

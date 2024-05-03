@@ -8,13 +8,14 @@ use Legacy\Classes\Collection;
 $id = $_GET['id'] ?? 0;
 
 // get collection data
-$coll = new Collection($id);
 $collection = DesignCollection::find($id);
-$seller = $collection->seller;
+$seller = $collection?->seller;
 
 if (!$collection || !$seller) {
 	redirect_old('/shop');
 }
+
+$coll = new Collection($id);
 
 // redirect if the shop isn't public
 $userIsOwner = auth()->check() && auth()->id() == $seller->id;

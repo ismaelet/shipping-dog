@@ -22,7 +22,7 @@ $design = Design::find($design_id);
 			<?php }
 		} else { ?>
 
-			<a class=" like-button grid stack-content" href="<?= client_url('/login?url=' . $_SERVER['REQUEST_URI']) ?>" data-liked="false" title="Aggiungi ai preferiti">
+			<a class=" like-button grid stack-content" href="<?= client_url('/login?url=' . json_encode(request()->url())) ?>" data-liked="false" title="Aggiungi ai preferiti">
 				<?= embed_icon('love-stroke') ?>
 				<?= embed_icon('love') ?>
 			</a>

@@ -85,7 +85,7 @@ class LoginController extends Controller {
 
 				if ($userCart) {
 					// If the user has a cart, merge the guest cart with the user cart
-					$guestCart->order_items->each(function (OrderItem $orderItemItem) use ($userCart) {
+					$guestCart->order_items->each(function (OrderItem $orderItem) use ($userCart) {
 						$orderItem->order_id = $userCart->id;
 						$orderItem->save();
 					});

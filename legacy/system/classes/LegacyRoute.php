@@ -21,7 +21,7 @@ class LegacyRoute {
 
 	public static function run() {
 		$path_found = false;
-		$path = parse_url($_SERVER['REQUEST_URI'])['path'] ?? null;
+		$path = request()->getPathInfo() ?? null;
 
 		if ($path !== null) {
 			foreach (self::$routes as $route) {

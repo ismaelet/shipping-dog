@@ -30,7 +30,7 @@
 
 		<h1 class="form-title">Carica una grafica</h1>
 
-		<form class="form file-form" method="POST" enctype="multipart/form-data">
+		<form action="<?= route('designs.store') ?>" class="form file-form" method="POST" enctype="multipart/form-data">
 
 			<div class="grid gap1 pad-t-2">
 

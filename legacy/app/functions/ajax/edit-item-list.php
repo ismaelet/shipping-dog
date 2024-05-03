@@ -41,9 +41,10 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 	if (count($oldType->colors) > 1) $tabs[] = ['Colori', 'colors'];
 
-	foreach ($oldType->availablePositionIds as $position_id) {
-		$position = new LegacyProductPosition($position_id);
-		if ($position->editable) $tabs[] = [$position->name, 'position', $position_id];
+	foreach ($type->positions as $position) {
+		if ($position->editable) {
+			$tabs[] = [$position->name, 'position', $position->id];
+		}
 	}
 
 	use_natural_keys($tabs);

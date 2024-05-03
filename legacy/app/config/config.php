@@ -69,15 +69,7 @@ $sysConfig = [
 ];
 
 //local server settings
-if (strpos($_SERVER['REMOTE_ADDR'], '172') === 0) {
-	$sysConfig['hostname'] = env('DB_HOST');
-	$sysConfig['database'] = env('DB_DATABASE');
-	$sysConfig['username'] = env('DB_USERNAME');
-	$sysConfig['password'] = env('DB_PASSWORD');
-} else {
-	// live server settings
-	$sysConfig['hostname'] = 'localhost';
-	$sysConfig['database'] = 'u944138369_shippingdog';
-	$sysConfig['username'] = 'u944138369_shippingdog';
-	$sysConfig['password'] = 'V7*;ca8*';
-}
+$sysConfig['hostname'] = env('DB_HOST');
+$sysConfig['database'] = env('DB_DATABASE');
+$sysConfig['username'] = env('DB_USERNAME');
+$sysConfig['password'] = env('DB_PASSWORD');

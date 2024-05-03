@@ -28,7 +28,6 @@ class Type {
 	public $sibling;
 	public $blank_product_id;
 	public $preorder;
-	public $availablePositionIds;
 
 	function __construct($id) {
 		if ($row = \Legacy\System\Classes\LegacyDB::row('* FROM product_types WHERE id = ?', [$id])) {
@@ -42,7 +41,6 @@ class Type {
 			$this->unisex = $row['unisex'];
 			$this->sibling = $row['sibling'];
 			$this->category = $row['category'];
-			$this->availablePositionIds = explode(',', $row['positions']);
 			$this->custom = $row['custom'];
 			$this->blank_product_id = $row['blank_product_id'];
 			$this->preorder = $row['preorder'];
@@ -59,22 +57,15 @@ class Type {
 					// related classes
 				case 'gender':
 					return $this->data['gender'] = new Gender($this->genderId);
-				case 'blankProduct':
-					return $this->data['blankProduct'] = new Product($this->blank_product_id);
-
 					// other data
 				case 'fullName':
 					return $this->data['fullName'] = $this->genderId != 3 ? $this->name . ' ' . $this->gender->name : $this->name;
-				case 'basicPositionId':
-					return $this->data['basicPositionId'] = $this->availablePositionIds[0];
 				case 'blankImage':
 					return $this->data['blankImage'] = $this->getBlankImage();
 				case 'colors':
 					return $this->data['colors'] = $this->getColors();
 				case 'publicColors':
 					return $this->data['publicColors'] = $this->getColors(false);
-				case 'positions':
-					return $this->data['positions'] = $this->getPositions();
 			}
 		}
 	}
@@ -103,20 +94,6 @@ class Type {
 		}
 
 		return $colors;
-	}
-
-	private function getPositions() {
-		$positions = [];
-
-		foreach ($this->availablePositionIds as $position_id) {
-			$position = new Position($position_id);
-
-			if ($position->id) {
-				$positions[] = $position;
-			}
-		}
-
-		return $positions;
 	}
 
 	public function getImage(int $color_id, $position_id = null) {

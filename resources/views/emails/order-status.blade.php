@@ -17,7 +17,7 @@
 		<tr>
 			<td style="padding-top: 32px">
 				<center>
-					<a href="{{ $order->recapUrl() }}">
+					<a href="{{ $order->recapUrlWithToken() }}">
 						<p
 							style="
 							display: inline-block;

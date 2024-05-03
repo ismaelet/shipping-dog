@@ -16,8 +16,10 @@ class PayPalOrderController extends Controller {
 	/**
 	 * Create action
 	 */
-	public function create(): RedirectResponse {
-		$order = cart();
+	public function create(Request $request): RedirectResponse {
+		$order = Order::where('id', $request->order_id)
+			->whereIn('status', [EcommerceHelper::statusFromTag('open'), EcommerceHelper::statusFromTag('received')])
+			->first();
 
 		if (!$order) {
 			return redirect()->route('cart.empty');
@@ -62,7 +64,7 @@ class PayPalOrderController extends Controller {
 				]
 			);
 
-			if (is_admin()) {
+			if (env('APP_DEBUG')) {
 				dd($responseData);
 			}
 
@@ -210,6 +212,6 @@ class PayPalOrderController extends Controller {
 		}
 
 		// Redirect to the cart
-		return redirect()->route('cart');
+		return to_route('cart');
 	}
 }

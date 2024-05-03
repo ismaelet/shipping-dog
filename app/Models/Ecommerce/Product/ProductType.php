@@ -19,7 +19,9 @@ class ProductType extends Model {
 	protected $fillable = ['tag', 'name', 'name', 'names', 'gender', 'sibling', 'unisex', 'sizes', 'positions', 'category', 'colors', 'hidden'];
 
 
-	// * Relationships * //
+	/**
+	 * * Relationships
+	 */
 
 	/**
 	 * Get the positions associated with the product type.
@@ -30,8 +32,19 @@ class ProductType extends Model {
 		return $this->belongsToMany(ProductPosition::class);
 	}
 
+	/**
+	 * Get the positions associated with the product type.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function sizes(): BelongsToMany {
+		return $this->belongsToMany(ProductSize::class);
+	}
 
-	// * Attributes * //
+
+	/**
+	 * * Attributes
+	 */
 
 	/**
 	 * The list of the type's colors as array
@@ -73,20 +86,6 @@ class ProductType extends Model {
 	}
 
 	/**
-	 * The list of the type's positions as array
-	 */
-	public function positionList(): array {
-		return explode(',', $this->positions);
-	}
-
-	/**
-	 * The list of the type's positions as collection
-	 */
-	public function positionCollection(): Collection {
-		return ProductPosition::whereIn('id', $this->positionList())->get();
-	}
-
-	/**
 	 * Get the type's gender
 	 */
 	public function gender_model(): BelongsTo {
@@ -105,7 +104,7 @@ class ProductType extends Model {
 	 */
 	public function image(?int $color_id = null, ?int $position_id = null, string $suffix = ''): ?string {
 		$color = $color_id ? ProductColor::find($color_id) : $this->colorCollection()->first();
-		$position = $position_id ? ProductPosition::find($position_id) : $this->positionCollection()->first();
+		$position = $position_id ? ProductPosition::find($position_id) : $this->positions->first();
 
 		if (file_exists(public_storage($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.webp'))) {
 			return $file;

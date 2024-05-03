@@ -48,7 +48,7 @@ class CartRecap {
 					<p class="chck_pric js-cart-price-string"><?= $order->priceString() ?></p>
 				</div>
 
-				<?php if (!$order->status) { ?>
+				<?php if (in_array($order->statusTag(), ['open', 'received'])) { ?>
 
 					<div id="chck_btn_box" class="grid gap1">
 						<button type="button" id="checkout" class="btn button--full-width" onclick="$('#submit').click();">Prosegui</button>

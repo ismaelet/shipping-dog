@@ -25,7 +25,7 @@
 
 <x-layouts.main>
 
-	<div class="bg-surface-500 full-width justify-items-center py-20">
+	<div class="bg-surface-500 full-width justify-items-center py-20 text-center">
 		<x-typography.section-heading>
 			Ordine <span class="text-primary"><?= $order->idCode() ?></span>
 		</x-typography.section-heading>
@@ -46,12 +46,20 @@
 		</div>
 
 		@if (in_array($order->status, [EcommerceHelper::statusFromTag('received')]))
-			<p>
-				Siamo in attesa della conferma del pagamento. Se hai già pagato, per favore contattaci a <span
-					class="font-bold text-neutral-700"
-				><a href="{{ config('custom.social_media.email.url') }}">{{ config('custom.social_media.email.label') }}</a></span> e
-				provvederemo a sbloccare l'ordine.
-			</p>
+			<div class="grid justify-items-center gap-6">
+				<p class="text-center">
+					Siamo in attesa della conferma del pagamento. Se hai già pagato, per favore contattaci a <span
+						class="font-bold text-neutral-700"
+					><a href="{{ config('custom.social_media.email.url') }}">{{ config('custom.social_media.email.label') }}</a></span>
+					e
+					provvederemo a sbloccare l'ordine.<br><br>Se invece non hai ancora completato il pagamento, puoi farlo qui:
+				</p>
+
+				<x-inputs.button href="{{ $order->paymentUrl() }}">
+					{!! embed_icon('credit-card') !!}
+					Procedi al pagamento
+				</x-inputs.button>
+			</div>
 		@elseif (in_array($order->status, [
 				EcommerceHelper::statusFromTag('confirmed'),
 				EcommerceHelper::statusFromTag('label-ready'),
@@ -83,7 +91,7 @@
 						Metodo di pagamento
 					</x-typography.component-subheading>
 
-					<x-typography.component-heading>{{ $order->payment_method->name }}</x-typography.component-heading>
+					<x-typography.component-heading>{{ $order->payment_method?->name }}</x-typography.component-heading>
 				</article>
 
 				<article class="page-panel surface">

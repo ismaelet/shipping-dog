@@ -13,7 +13,7 @@
 				<p class="txt-15rem txt-bold mar-b-1 brb2 br-blk">Taglie:</p>
 				<p class="">Se non vedi tutte le taglie scorri verso il basso.</p>
 
-				<img src="<?= client_path('sizes/img.jpg') ?>" alt="" loading="lazy" class="size-table-img mar-t-1">
+				<img src="<?= asset('/pages/assets/item/sizes/img.jpg') ?>" alt="" loading="lazy" class="size-table-img mar-t-1">
 
 				<div class="size-table-grid mar-b-1">
 

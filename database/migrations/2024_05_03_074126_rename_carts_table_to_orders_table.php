@@ -1,20 +1,21 @@
 <?php
 
-use App\Models\Ecommerce\Order;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
 	/**
 	 * Run the migrations.
 	 */
 	public function up(): void {
-		Order::where('status', '>', 0)->increment('status');
+		Schema::rename('carts', 'orders');
 	}
 
 	/**
 	 * Reverse the migrations.
 	 */
 	public function down(): void {
-		Order::where('status', '>', 0)->decrement('status');
+		Schema::rename('orders', 'carts');
 	}
 };

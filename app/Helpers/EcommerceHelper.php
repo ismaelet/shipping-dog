@@ -41,7 +41,7 @@ class EcommerceHelper {
 
 		if (session('cart_id')) {
 			return Order::where('id', session('cart_id'))
-				->where('status', EcommerceHelper::statusFromTag('open'))
+				->whereIn('status', [EcommerceHelper::statusFromTag('open'), EcommerceHelper::statusFromTag('received')])
 				->first();
 		}
 

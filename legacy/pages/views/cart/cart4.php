@@ -45,7 +45,7 @@ use Legacy\Classes\ViewManager\Ecommerce\CartRecap;
 
 						<label class="pay_row">
 							<div class="pay_cbx_box">
-								<input type="radio" class="inp_cbx pay_cbx" name="cbx_pay" value="<?= $row['id'] ?>" <?php if (cart()->payment_method_id == $row['id']) echo 'checked'; ?>>
+								<input type="radio" class="inp_cbx pay_cbx" name="payment_method_id" value="<?= $row['id'] ?>" <?php if (cart()->payment_method_id == $row['id']) echo 'checked'; ?>>
 
 								<div class="icon">
 									<div class="icon-dot"></div>

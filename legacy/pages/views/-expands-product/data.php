@@ -48,7 +48,9 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 						<!-- Loading icon on image change -->
 						<div id="img-load" class="bgr">
-							<div id="load-ico"></div>
+							<div id="load-ico">
+								<?= embed_icon('loading') ?>
+							</div>
 						</div>
 
 						<!-- Zoom icon on mobile -->
@@ -356,7 +358,7 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 						?>
 
 							<label class="data-selector data-selector--position">
-								<input type="checkbox" class="js-change-position" name="position_id" value="<?= $position->id ?>" <?php if (!$key) echo 'checked' ?>>
+								<input type="radio" class="js-change-position" name="position_id" value="<?= $position->id ?>" <?php if (!$key) echo 'checked' ?>>
 								<p class="data-selector__label"><?= $position->name ?></p>
 							</label>
 

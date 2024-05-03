@@ -32,6 +32,9 @@ return [
 	],
 
 	'paypal' => [
+		'client_id' => 'AWW2ARJTiBxj8VLzrfBxc5WrWMYUBFJzG8pBOp6vk5Jl5fTo4bn_J_9GvnEhuWJGnKom3DYWe-yX0AHc',
+		'client_secret' => 'REMOVED_SECRET',
+
 		'sandbox' => [
 			'client_id' => 'AcB6CifmIAzH7ASX8AavVjP3-2KQlnU55cGfmjH1IwhoWPYbqwxlZgImZ-vxv0ZLak0rbnMjzrYeir7z',
 			'client_secret' => 'REMOVED_SECRET'
