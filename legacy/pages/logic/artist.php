@@ -39,7 +39,7 @@ $shop_size = $id == 187 ? 10 : 20;
 // select links
 $row_link = \Legacy\System\Classes\LegacyDB::row('* FROM links WHERE user_id = ?', [$id]);
 
-$hasItems = \Legacy\System\Classes\LegacyDB::exists('items WHERE user_id = ? AND status > 0', [$id]);
+$hasItems = \Legacy\System\Classes\LegacyDB::exists('products WHERE user_id = ? AND status > 0', [$id]);
 $productCount = \Legacy\System\Classes\LegacyDB::count(LegacyProduct::TABLE . ' WHERE ' . LegacyProduct::SELLER_INDEX . ' = ? AND status > 0', [$id]);
 $likeN = \Legacy\System\Classes\LegacyDB::count('likes WHERE design_id IN (SELECT id FROM designs WHERE user_id = ?)', [$id]);
 $follN = \Legacy\System\Classes\LegacyDB::count('followers WHERE follower_id = ?', [$id]);

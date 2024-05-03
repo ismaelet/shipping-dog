@@ -3,9 +3,9 @@
 use App\Models\Ecommerce\OrderItem;
 use Legacy\Classes\Ecommerce\OrderItem as LegacyOrderItem;
 
-if (!$year) $year = \Legacy\System\Classes\LegacyDB::row('YEAR(time) as year FROM order_items WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) ORDER BY time DESC', [$oldSeller->id])['year'];
+if (!$year) $year = \Legacy\System\Classes\LegacyDB::row('YEAR(time) as year FROM order_items WHERE product_id IN (SELECT id FROM products WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) ORDER BY time DESC', [$oldSeller->id])['year'];
 
-$res_months = \Legacy\System\Classes\LegacyDB::select('MONTH(time) as month FROM order_items WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$oldSeller->id, $year]);
+$res_months = \Legacy\System\Classes\LegacyDB::select('MONTH(time) as month FROM order_items WHERE product_id IN (SELECT id FROM products WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) AND YEAR(time)=? GROUP BY MONTH(time) ORDER BY MONTH(time) DESC', [$oldSeller->id, $year]);
 
 while ($row_months = $res_months->fetch_assoc()) {
 
@@ -100,7 +100,7 @@ while ($row_months = $res_months->fetch_assoc()) {
 
 <?php
 
-$res_year = \Legacy\System\Classes\LegacyDB::select('YEAR(time) as year FROM order_items WHERE product_id IN (SELECT id FROM items WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$oldSeller->id]);
+$res_year = \Legacy\System\Classes\LegacyDB::select('YEAR(time) as year FROM order_items WHERE product_id IN (SELECT id FROM products WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) GROUP BY YEAR(time) ORDER BY YEAR(time) DESC', [$oldSeller->id]);
 
 if ($res_year->num_rows > 1) { ?>
 

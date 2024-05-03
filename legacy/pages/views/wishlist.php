@@ -46,7 +46,7 @@ use App\Models\Ecommerce\Design;
 
 			<div id="empty-icon" class="inlb mar-b-2"></div>
 
-			<p id="empty-txt">Nessun articolo preferito. Cerca nel nostro <a href="/shop" class="txt-bold txt-c3 txt-c1-h">negozio</a> un prodotto che possa piacerti.</p>
+			<p id="empty-txt">Nessun articolo preferito. Cerca nel nostro <a href="/shop" class="font-semibold txt-c3 txt-c1-h">negozio</a> un prodotto che possa piacerti.</p>
 
 		</div>
 	</div>

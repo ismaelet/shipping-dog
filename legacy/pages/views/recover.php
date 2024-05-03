@@ -4,7 +4,7 @@
 
 	<p class="confirmation txt-cen mar-t-1">E-email inviata</p>
 
-	<p class="mar-t-1">Abbiamo inviato una e-email con i dati di accesso a: <span class="txt-bold"><?= $_POST['email'] ?></span>.</p>
+	<p class="mar-t-1">Abbiamo inviato una e-email con i dati di accesso a: <span class="font-semibold"><?= $_POST['email'] ?></span>.</p>
 
 <?php } else { ?>
 

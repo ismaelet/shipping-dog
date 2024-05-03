@@ -72,7 +72,7 @@ use Legacy\Classes\Ecommerce\Seller;
 							</p>
 							<p class="">Su t-shirt e altri <strong><?= $design->productCount() ?> articoli</strong></p>
 							<a class="" href="<?= $design->url() ?>">
-								<p class="cta inlb br-b-2 br-c2 br-c1-h mar-t-05 txt-c2 txt-c1-h txt-bold txt-upp">Scopri</p>
+								<p class="cta inlb br-b-2 br-c2 br-c1-h mar-t-05 txt-c2 txt-c1-h font-semibold txt-upp">Scopri</p>
 							</a>
 						</div>
 

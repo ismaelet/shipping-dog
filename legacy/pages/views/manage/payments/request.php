@@ -35,7 +35,7 @@
 
 		<p class="txt-1rem">
 			<?php if ($seller->toPay >= 70) { ?>
-				Il campo della marca da bollo <span class="txt-bold txt-red">è da lasciare vuoto</span>.
+				Il campo della marca da bollo <span class="font-semibold txt-red">è da lasciare vuoto</span>.
 			<?php } ?>
 		</p>
 

@@ -2,7 +2,6 @@
 
 namespace App\Models\Ecommerce\Product;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,7 +15,7 @@ class ProductType extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['tag', 'name', 'name', 'names', 'gender', 'sibling', 'unisex', 'sizes', 'positions', 'category', 'colors', 'hidden'];
+	protected $fillable = ['tag', 'name', 'name', 'names', 'gender_id', 'sibling_id', 'unisex', 'sizes', 'positions', 'category', 'colors', 'hidden'];
 
 
 	/**
@@ -41,6 +40,19 @@ class ProductType extends Model {
 		return $this->belongsToMany(ProductSize::class);
 	}
 
+	/**
+	 * Get the sibling
+	 */
+	public function sibling(): HasOne {
+		return $this->hasOne(self::class, 'id', 'sibling_id');
+	}
+
+	/**
+	 * Get the type's gender
+	 */
+	public function gender(): BelongsTo {
+		return $this->belongsTo(ProductGender::class);
+	}
 
 	/**
 	 * * Attributes
@@ -83,13 +95,6 @@ class ProductType extends Model {
 	 */
 	public function sizeCollection(): Collection {
 		return ProductSize::whereIn('tag', $this->sizeList())->get();
-	}
-
-	/**
-	 * Get the type's gender
-	 */
-	public function gender_model(): BelongsTo {
-		return $this->belongsTo(ProductGender::class, 'gender');
 	}
 
 	/**

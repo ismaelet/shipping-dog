@@ -17,7 +17,7 @@ $query['where'] = 'order_id=' . $id;
 
 //select fields
 $fields = [
-	['title' => 'Design', 'name' => 'product_id', 'type' => 'find', 'find' => 'name FROM designs WHERE id IN (SELECT design_id FROM items WHERE id = ?)', 'size' => 'l'],
+	['title' => 'Design', 'name' => 'product_id', 'type' => 'find', 'find' => 'name FROM designs WHERE id IN (SELECT design_id FROM products WHERE id = ?)', 'size' => 'l'],
 	['title' => 'Tipo', 'name' => 'type_id', 'type' => 'find', 'find' => 'name FROM product_types WHERE id = ?', 'size' => 'm'],
 	['title' => 'Modello', 'name' => 'gender_id', 'type' => 'find', 'find' => 'name FROM items_genders WHERE id = ?', 'size' => 'm'],
 	['title' => 'Colore', 'name' => 'color_id', 'type' => 'find', 'find' => 'name FROM items_colors WHERE id = ?', 'size' => 'm'],

@@ -72,10 +72,10 @@ class PromotionShopTemplate {
 								<div class="gender-ddown">
 									<?php
 									if ($shopData->id) $res = \Legacy\System\Classes\LegacyDB::select("
-										id FROM product_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$shopData->id]);
+										id FROM product_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$shopData->id]);
 
 									else $res = \Legacy\System\Classes\LegacyDB::select("
-										id FROM product_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
+										id FROM product_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY id ASC");
 
 									while ($row = $res->fetch_assoc()) {
 
@@ -105,10 +105,10 @@ class PromotionShopTemplate {
 
 									if ($shopData->id) {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-										id FROM product_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$shopData->id]);
+										id FROM product_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$shopData->id]);
 									} else {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-										id FROM product_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
+										id FROM product_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY id ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {
@@ -139,10 +139,10 @@ class PromotionShopTemplate {
 
 									if ($shopData->id) {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-										id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$shopData->id]);
+										id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$shopData->id]);
 									} else {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-										id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY name ASC");
+										id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY name ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {
@@ -161,7 +161,7 @@ class PromotionShopTemplate {
 
 							<?php if ($shopData->type || $shopData->gender) { ?>
 								<p id="remove-filter-type" class="remove-filter clickable pad-t-1">
-									<span class="txt-bold txt-blk">x</span>
+									<span class="font-semibold txt-blk">x</span>
 									rimuovi filtro
 								</p>
 							<?php } ?>
@@ -184,7 +184,7 @@ class PromotionShopTemplate {
 
 								<?php if ($shopData->slug) { ?>
 									<p id="remove-filter-tag" class="remove-filter clickable pad-t-1">
-										<span class="txt-bold txt-blk">x</span>
+										<span class="font-semibold txt-blk">x</span>
 										rimuovi filtro
 									</p>
 								<?php } ?>

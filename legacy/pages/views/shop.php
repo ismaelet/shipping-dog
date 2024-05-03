@@ -36,7 +36,7 @@
 	<?php } ?>
 
 	<div class="stitle-box mar-t-2">
-		<h2 class="component-heading"><span class="txt-light">I NOSTRI</span> <span class="txt-bold txt-c1">PRODOTTI</span></h2>
+		<h2 class="component-heading"><span class="txt-light">I NOSTRI</span> <span class="font-semibold txt-c1">PRODOTTI</span></h2>
 		<div id="anch1" class="anchor"></div>
 	</div>
 

@@ -5,7 +5,7 @@ function place_text($slug) {
 
 	$content = $textRow['text'];
 
-	if (is_admin()) $content .= ' <a class="txt-bold" href="' . client_url('/admin_old/content/texts/add?id=' . $textRow['id']) . '">Modifica</a>';
+	if (is_admin()) $content .= ' <a class="font-semibold" href="' . client_url('/admin_old/content/texts/add?id=' . $textRow['id']) . '">Modifica</a>';
 
 	return $content;
 }

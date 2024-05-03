@@ -39,7 +39,7 @@ $inputs = [
 			'text' => 'File vettoriale (opzionale)',
 		],
 		[
-			'type' => 'info', 'text' => 'Anche se non è obbligatorio, consigliamo di caricare la grafica anche in formato <span class="txt-bold">PDF</span> o <span class="txt-bold">AI</span> per la <span class="text-primary">massima qualità di stampa</span> possibile.',
+			'type' => 'info', 'text' => 'Anche se non è obbligatorio, consigliamo di caricare la grafica anche in formato <span class="font-semibold">PDF</span> o <span class="font-semibold">AI</span> per la <span class="text-primary">massima qualità di stampa</span> possibile.',
 		],
 		[
 			'type' => 'file',
@@ -56,7 +56,7 @@ $inputs = [
 		[
 			'type' => 'cbx',
 			'name' => 'cbx',
-			'text' => 'Dichiari di aver letto e accettato le <a class="txt-bold" href="' . client_url('/infos/contract') . '">condizioni di invio</a>',
+			'text' => 'Dichiari di aver letto e accettato le <a class="font-semibold" href="' . client_url('/infos/contract') . '">condizioni di invio</a>',
 			'required' => true,
 		],
 	],

@@ -18,14 +18,11 @@ class Type {
 	public $name;
 	public $names;
 	public $availableColorSlugs;
-	public $sizes;
-	public $genderId;
 	public $unisex;
 	public $position_ids;
 	public $category;
 	public $class;
 	public $custom;
-	public $sibling;
 	public $blank_product_id;
 	public $preorder;
 
@@ -36,10 +33,7 @@ class Type {
 			$this->name = $row['name'];
 			$this->names = $row['names'];
 			$this->availableColorSlugs = empty($row['colors']) ? ['emp'] : explode(',', $row['colors']);
-			$this->sizes = explode(',', $row['sizes']);
-			$this->genderId = $row['gender'];
 			$this->unisex = $row['unisex'];
-			$this->sibling = $row['sibling'];
 			$this->category = $row['category'];
 			$this->custom = $row['custom'];
 			$this->blank_product_id = $row['blank_product_id'];

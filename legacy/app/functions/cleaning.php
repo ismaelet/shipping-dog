@@ -30,7 +30,7 @@ function delete_shop($id) {
 
 function delete_design($id, $destroy = false) {
 
-	$res = \Legacy\System\Classes\LegacyDB::select('id FROM items WHERE design_id = ?', [$id]);
+	$res = \Legacy\System\Classes\LegacyDB::select('id FROM products WHERE design_id = ?', [$id]);
 
 	while ($row = $res->fetch_assoc()) delete_item($row['id']);
 
@@ -55,9 +55,9 @@ function delete_item($id, $permanent = false) {
 
 	if ($permanent) {
 
-		\Legacy\System\Classes\LegacyDB::delete('items WHERE id = ?', [$id]);
+		\Legacy\System\Classes\LegacyDB::delete('products WHERE id = ?', [$id]);
 		\Legacy\System\Classes\LegacyDB::delete('items_prices WHERE product_id = ?'[$id]);
-	} else \Legacy\System\Classes\LegacyDB::update('items SET status=0 WHERE id = ?', [$id]);
+	} else \Legacy\System\Classes\LegacyDB::update('products SET status=0 WHERE id = ?', [$id]);
 }
 
 function delete_type($id, $permanent = false) {
@@ -65,12 +65,12 @@ function delete_type($id, $permanent = false) {
 	if ($permanent) {
 
 		\Legacy\System\Classes\LegacyDB::delete('types WHERE id = ?', [$id]);
-		\Legacy\System\Classes\LegacyDB::delete('items WHERE type_id = ?', [$id]);
+		\Legacy\System\Classes\LegacyDB::delete('products WHERE type_id = ?', [$id]);
 		\Legacy\System\Classes\LegacyDB::delete('prices_default WHERE type_id = ?', [$id]);
 	} else {
 
 		\Legacy\System\Classes\LegacyDB::update('types SET status=0 WHERE id = ?', [$id]);
-		\Legacy\System\Classes\LegacyDB::update('items SET status=0 WHERE type_id = ?', [$id]);
+		\Legacy\System\Classes\LegacyDB::update('products SET status=0 WHERE type_id = ?', [$id]);
 	}
 }
 

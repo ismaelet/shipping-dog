@@ -118,7 +118,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 		<div id="store-pan">
 			<div class="main-wrap pad-v-2 mar-t-2">
 				<div class="stitle-box">
-					<p class="stitle txt-bold">Shop <span class="item-num txt-light"><span class="itemN"></span> risultati</span></p>
+					<p class="stitle font-semibold">Shop <span class="item-num txt-light"><span class="itemN"></span> risultati</span></p>
 				</div>
 
 				<?= $shop->render() ?>

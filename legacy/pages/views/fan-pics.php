@@ -26,7 +26,7 @@
 						<div class="title-box">
 
 							<?php if ($customerPhoto->design) { ?>
-								<p class="design-name txt-wht txt-11rem txt-bold txt-line"><?= $customerPhoto->design->name ?></p>
+								<p class="design-name txt-wht txt-11rem font-semibold txt-line"><?= $customerPhoto->design->name ?></p>
 							<?php } ?>
 
 							<p class="client-name txt-wht txt-upp txt-line"><?= $customerPhoto->fullName() ?></p>

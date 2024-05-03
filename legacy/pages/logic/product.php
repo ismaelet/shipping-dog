@@ -25,7 +25,6 @@ $productColorId = $_GET['color_id'] ?? null;
  * * Fetch the record
  */
 $product = $id ? Product::find($id) : null;
-$legacyProduct = $id ? new LegacyProduct($id) : null;
 $seller = $product?->seller;
 
 /**
@@ -45,11 +44,11 @@ if (!$seller->status && !$product->isUserOwner && !is_admin()) {
  * * Set the product position and color
  */
 if ($productColorId) {
-	$legacyProduct->setColorId($productColorId);
+	$product->color_id = $productColorId;
 }
 
 if ($productPositionId) {
-	$legacyProduct->setPositionId($productPositionId);
+	$product->position_id = $productPositionId;
 }
 
 /*
@@ -57,16 +56,16 @@ if ($productPositionId) {
 */
 $relatedGarments = rows_to_objects(
 	LegacyDB::select(
-		"items.id FROM items
-		INNER JOIN product_types ON items.type_id = product_types.id
-		WHERE design_id = ? AND type_id <> ? AND category='c' AND items.status = 1 AND items.deleted = 0
-		ORDER BY type_id ASC, items.sort ASC, product_types.sort ASC, product_types.id ASC",
-		[$legacyProduct->design_id, $legacyProduct->type_id]
+		"products.id FROM products
+		INNER JOIN product_types ON products.type_id = product_types.id
+		WHERE design_id = ? AND type_id <> ? AND category='c' AND products.status = 1 AND products.deleted = 0
+		ORDER BY type_id ASC, products.sort ASC, product_types.sort ASC, product_types.id ASC",
+		[$product->design_id, $product->type_id]
 	),
 	LegacyProduct::class
 );
 
-$relatedAccessories = rows_to_objects(LegacyDB::select("id FROM items WHERE design_id = ? AND type_id <> ? AND type_id IN (SELECT id FROM product_types WHERE category='m') AND status = 1 AND deleted = 0 ORDER BY type_id ASC", [$legacyProduct->design_id, $legacyProduct->type_id]), LegacyProduct::class);
+$relatedAccessories = rows_to_objects(LegacyDB::select("id FROM products WHERE design_id = ? AND type_id <> ? AND type_id IN (SELECT id FROM product_types WHERE category='m') AND status = 1 AND deleted = 0 ORDER BY type_id ASC", [$product->design_id, $product->type_id]), LegacyProduct::class);
 
 $relatedGarmentCount = count($relatedGarments);
 $relatedAccessoryCount = count($relatedAccessories);
@@ -107,31 +106,5 @@ if ($relatedProducts->count() < 8) {
 /**
  * * Set the page meta data
  */
-LegacyView::setThumbnail($legacyProduct->clientFullImage)
-	->setTitle($legacyProduct->name);
-
-/**
- * * Add an order
- */
-if (isset($_POST['submit'])) {
-	$config['product_id'] = $id;
-	$config['quantity'] = $_POST['quantity'];
-
-	if (isset($_POST['cbx-color'])) foreach ($_POST['cbx-color'] as $config['color_id']);
-	if (isset($_POST['cbx-size'])) foreach ($_POST['cbx-size'] as $config['size_id']);
-	if (isset($_POST['cbx-gender'])) foreach ($_POST['cbx-gender'] as $config['genderId']);
-
-	if (isset($_POST['logo-id'])) {
-		$config['logo_id'] = $_POST['logo-id'];
-	}
-
-	if (isset($_POST['cbx-pos'])) {
-		foreach ($_POST['cbx-pos'] as $config['position_id']);
-	} else {
-		$config['position_id'] = $legacyProduct->availablePositionIds[0];
-	}
-
-	LegacyOrderItemItem::add($config);
-
-	redirect_old('/cart');
-}
+LegacyView::setThumbnail($product->image(1024))
+	->setTitle($product->name);

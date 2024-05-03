@@ -37,7 +37,7 @@ if (isset($_POST['submit'])) {
 
 		// update prices
 		\Legacy\System\Classes\LegacyDB::update('prices_stores SET price=?, gain_w=?, gain_c=? WHERE seller_id = ? AND type_id = ?', [$price, $gain_w, $gain_c, auth()->id(), $type->id]);
-		// \Legacy\System\Classes\LegacyDB::update('items_prices SET price=?, gain_w=?, gain_c=? WHERE product_id IN (SELECT id FROM items WHERE user_id = ? AND type_id = ?)', [$price, $gain_w, $gain_c, auth()->id(), $type->id]);
+		// \Legacy\System\Classes\LegacyDB::update('items_prices SET price=?, gain_w=?, gain_c=? WHERE product_id IN (SELECT id FROM products WHERE user_id = ? AND type_id = ?)', [$price, $gain_w, $gain_c, auth()->id(), $type->id]);
 
 	}
 

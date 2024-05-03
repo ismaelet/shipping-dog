@@ -17,7 +17,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 			<div id="art-name-cell">
 
 				<!-- Name and data -->
-				<h1 id="art-name" class="txt-bold"><a href="<?= $product->seller->url() ?>"><?= $product->seller->name ?></a></h1>
+				<h1 id="art-name" class="font-semibold"><a href="<?= $product->seller->url() ?>"><?= $product->seller->name ?></a></h1>
 				<p id="art-date">membro dal <?= $product->seller->createdAtString() ?></p>
 
 				<!-- Follow artist -->
@@ -28,17 +28,20 @@ use Legacy\View\Components\Interactions\FollowButton;
 </section>
 
 <!-- Tags -->
-<?php if ($legacyProduct->design->tags) { ?>
+<?php if ($product->design->tags) { ?>
 
 	<section id="tag-sec" class="">
 		<div id="tag-block" class="main-wrap txt-cen pad-t-3">
 
-			<?php foreach ($legacyProduct->design->tags as $slug) {
-				$slug = str_replace('#', '', $slug);
+			<?php
+			$tags = explode(',', $product->design->tags->tags);
+
+			foreach ($tags as $tag) {
+				$tag = str_replace('#', '', $tag);
 			?>
 
-				<a href="<?= client_url('/search?search=' . $slug) ?>">
-					<p class="tag inlb"><?= $slug ?></p>
+				<a href="<?= client_url('/search?search=' . $tag) ?>">
+					<p class="tag inlb"><?= $tag ?></p>
 				</a>
 
 			<?php } ?>

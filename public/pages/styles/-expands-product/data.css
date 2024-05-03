@@ -184,7 +184,7 @@
 /* Title */
 #title {
 	padding-bottom: 5px;
-	font-weight: bold;
+	font-weight: var(--font-weight-semibold);
 	width: 100%;
 	word-wrap: break-word;
 	font-size: 2.5rem;

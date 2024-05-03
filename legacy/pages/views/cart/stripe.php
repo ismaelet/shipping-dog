@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="form-body">
-				<p class="txt-1rem mar-b-2 mar-t-1">Aggiungi i dati della tua carta qui sotto e poi seleziona <span class="txt-bold txt-c-title">Paga</span class="txt-bold txt-c-title">. Se vuoi cambiare metodo di pagamento puoi usare il pulsante <span class="txt-bold txt-c-title">Indietro</span class="txt-bold txt-c-title">.</p>
+				<p class="txt-1rem mar-b-2 mar-t-1">Aggiungi i dati della tua carta qui sotto e poi seleziona <span class="font-semibold txt-c-title">Paga</span class="font-semibold txt-c-title">. Se vuoi cambiare metodo di pagamento puoi usare il pulsante <span class="font-semibold txt-c-title">Indietro</span class="font-semibold txt-c-title">.</p>
 				<div class="sr-root">
 					<div class="sr-main">
 						<form id="payment-form" class="sr-payment-form">

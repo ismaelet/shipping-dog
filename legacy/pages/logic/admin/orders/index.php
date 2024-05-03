@@ -36,7 +36,7 @@ $queryConfig['where-search'] = "
 	ID IN (
 		SELECT order_id FROM order_items
 		WHERE
-			product_id IN (SELECT id FROM items WHERE name LIKE CONCAT('%',?,'%')) OR
+			product_id IN (SELECT id FROM products WHERE name LIKE CONCAT('%',?,'%')) OR
 			seller_id IN (SELECT user_id FROM stores WHERE name LIKE CONCAT('%',?,'%')) OR
 			design_id IN (SELECT id FROM designs WHERE id = ? OR name LIKE CONCAT('%',?,'%'))
 	) OR

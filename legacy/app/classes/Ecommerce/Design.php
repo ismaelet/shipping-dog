@@ -44,11 +44,11 @@ class Design {
 	}
 
 	private function getProductCount() {
-		return  \Legacy\System\Classes\LegacyDB::count('items WHERE design_id = ? AND status = 1', [$this->id]);
+		return  \Legacy\System\Classes\LegacyDB::count('products WHERE design_id = ? AND status = 1', [$this->id]);
 	}
 
 	private function getMainProduct() {
-		$productId = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND status = 1 ORDER BY type_id ASC', [$this->id]);
+		$productId = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND status = 1 ORDER BY type_id ASC', [$this->id]);
 
 		return  new Product($productId);
 	}

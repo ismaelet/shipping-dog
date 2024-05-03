@@ -1,4 +1,8 @@
-<?php if ($size_table) { ?>
+<?php
+
+use App\Models\Ecommerce\Product\ProductTypeMeasure;
+
+if ($size_table) { ?>
 
 	<div id="size-lbox" class="lbox">
 
@@ -8,9 +12,11 @@
 
 			<div class="lbox-form">
 
-				<div class="close-icon"></div>
+				<div class="close-icon">
+					<?= embed_icon('close') ?>
+				</div>
 
-				<p class="txt-15rem txt-bold mar-b-1 brb2 br-blk">Taglie:</p>
+				<h3 class="txt-15rem txt-semibold mar-b-1 brb2 br-blk">Taglie:</h3>
 				<p class="">Se non vedi tutte le taglie scorri verso il basso.</p>
 
 				<img src="<?= asset('/pages/assets/item/sizes/img.jpg') ?>" alt="" loading="lazy" class="size-table-img mar-t-1">
@@ -19,28 +25,33 @@
 
 					<div class="_empty"></div>
 
-					<p class="txt-bold txt-line">Larghezza:</p>
+					<p class="font-semibold txt-line">Larghezza:</p>
 
-					<p class="txt-bold txt-line">Altezza:</p>
+					<p class="font-semibold txt-line">Altezza:</p>
 
-					<?php foreach ($legacyProduct->type->sizes as $size) {
+					<?php foreach ($product->type->sizes as $size) {
 
-						$measures = \Legacy\System\Classes\LegacyDB::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$legacyProduct->type->id, $size]);
+						$measure = ProductTypeMeasure::where('type_id', $product->type_id)
+							->where('size', $size->tag)
+							->first();
 
+						if ($measure) {
+							$measureValues = explode(',', $measure->val);
 					?>
 
-						<p class="size-table-tag txt-bold"><?= strtoupper($size) ?>:</p>
+							<p class="size-table-tag font-semibold"><?= strtoupper($size->name) ?>:</p>
 
-						<p class=""><?= explode(',', $measures)[0] ?> cm</p>
+							<p class=""><?= $measureValues[0] ?> cm</p>
 
-						<p class=""><?= explode(',', $measures)[1] ?> cm</p>
+							<p class=""><?= $measureValues[1] ?> cm</p>
 
-					<?php } ?>
+					<?php }
+					} ?>
 
 				</div>
 
-				<?php if (\Legacy\System\Classes\LegacyDB::exists('items_types_measures WHERE type_id=? AND size=?', [$legacyProduct->type->id, 'mat'])) { ?>
-					<p class="">Composizione: <?= \Legacy\System\Classes\LegacyDB::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$legacyProduct->type->id, 'mat']) ?></p>
+				<?php if (\Legacy\System\Classes\LegacyDB::exists('items_types_measures WHERE type_id=? AND size=?', [$product->type->id, 'mat'])) { ?>
+					<p class="">Composizione: <?= \Legacy\System\Classes\LegacyDB::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$product->type->id, 'mat']) ?></p>
 				<?php } ?>
 
 			</div>

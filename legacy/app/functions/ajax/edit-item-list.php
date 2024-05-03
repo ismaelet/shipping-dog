@@ -25,7 +25,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 	$type = ProductType::find($oldType->id);
 	$gender = new Gender($oldType->genderId);
 
-	$oldProductId = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$oldDesign->id, $oldType->id]);
+	$oldProductId = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND type_id = ?', [$oldDesign->id, $oldType->id]);
 
 	$oldProduct = new LegacyProduct($oldProductId);
 	$product = Product::find($oldProduct->id);
@@ -190,7 +190,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 										<input type="hidden" name="position_id" value="<?= $position->id ?>">
 
 										<div>
-											<h1 class="txt-15rem sec-title txt-bold mar-b-1 brb2 br-c2">Stampa in posizione <?= strtolower($position->name) ?></h1>
+											<h1 class="txt-15rem sec-title font-semibold mar-b-1 brb2 br-c2">Stampa in posizione <?= strtolower($position->name) ?></h1>
 											<p><?= $position->info ?></p>
 											<p class="mob480 mar-b-2">Se non vedi tutte le impostazioni scorri verso il basso.</p>
 
@@ -336,7 +336,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 											<div class="item-colors-field colors-pan">
 
-												<h3 class="txt-15rem sec-title txt-bold mar-b-1 brb2 br-c2">Seleziona i colori disponibili</h3>
+												<h3 class="txt-15rem sec-title font-semibold mar-b-1 brb2 br-c2">Seleziona i colori disponibili</h3>
 												<p class="">Qui puoi selezionare i vari colori disponibili per questo capo e il colore principale, che verrà mostrato in tutte le anteprime.</p>
 
 												<div class="colors-pan mar-t-2">
@@ -359,7 +359,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 																	<label class="color-box">
 
-																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (\Legacy\System\Classes\LegacyDB::exists("items WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'checked' ?>>
+																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (\Legacy\System\Classes\LegacyDB::exists("products WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'checked' ?>>
 
 																		<div class="color-icon" style="background-color: #<?= $color->hex ?>;"></div>
 
@@ -388,9 +388,9 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 																$color = new LegacyProductColor($row['id']);
 															?>
 
-																<label class="inlb color-box <?php if (\Legacy\System\Classes\LegacyDB::exists("items WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'active' ?>">
+																<label class="inlb color-box <?php if (\Legacy\System\Classes\LegacyDB::exists("products WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'active' ?>">
 
-																	<input type="checkbox" class="cbx hidden colorD-<?= $color->slug ?>" name="colorD" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-color-id="<?= $color->id ?>" data-dark="<?= $color->dark ? 1 : 0 ?>" <?php if ($color->id == \Legacy\System\Classes\LegacyDB::find('color_id FROM items WHERE id = ?', [$oldProduct->id])) echo 'checked' ?>>
+																	<input type="checkbox" class="cbx hidden colorD-<?= $color->slug ?>" name="colorD" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-color-id="<?= $color->id ?>" data-dark="<?= $color->dark ? 1 : 0 ?>" <?php if ($color->id == \Legacy\System\Classes\LegacyDB::find('color_id FROM products WHERE id = ?', [$oldProduct->id])) echo 'checked' ?>>
 
 																	<div class="color-icon" for="item-colorD-<?= $color->slug ?>" style="background-color: #<?= $color->hex ?>;"></div>
 																</label>

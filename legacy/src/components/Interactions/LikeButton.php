@@ -3,7 +3,7 @@
 use App\Models\Ecommerce\Design;
 use Illuminate\Support\Facades\Auth;
 
-$design = Design::find($design_id);
+$design = $design ?? (isset($design_id) ? Design::find($design_id) : null);
 
 ?>
 
@@ -14,7 +14,7 @@ $design = Design::find($design_id);
 			if ($design->seller->user_id != Auth::id()) {
 		?>
 
-				<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; liked ? storeLike(<?= $design_id ?>) : destroyLike(<?= $design->auth_user_like->id ?? null ?>);" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
+				<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; liked ? storeLike(<?= $design->id ?>) : destroyLike(<?= $design->auth_user_like->id ?? null ?>);" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
 					<?= embed_icon('love-stroke') ?>
 					<?= embed_icon('love') ?>
 				</div>

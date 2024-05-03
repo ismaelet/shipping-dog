@@ -37,7 +37,7 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 			<?php while ($row = $res_cloth->fetch_assoc()) {
 
-				$type = new Type($row['id']);
+				$type = new LegacyProductType($row['id']);
 				$gender = new Gender($type->genderId);
 
 				$row_price = \Legacy\System\Classes\LegacyDB::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: \Legacy\System\Classes\LegacyDB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
@@ -81,7 +81,7 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 			<?php while ($row = $res_acc->fetch_assoc()) {
 
-				$type = new Type($row['id']);
+				$type = new LegacyProductType($row['id']);
 
 				$row_price = \Legacy\System\Classes\LegacyDB::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: \Legacy\System\Classes\LegacyDB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
 

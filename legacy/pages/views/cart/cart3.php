@@ -30,14 +30,14 @@
 						</div>
 
 						<div class="offer-data grid-ele">
-							<h1 class="offer-name txt-bold txt-15rem">Aggiungi un articolo a sorpresa</h1>
+							<h1 class="offer-name font-semibold txt-15rem">Aggiungi un articolo a sorpresa</h1>
 
 							<p class="offer-desc mar-t-1">Aggiungi un articolo a sorpresa per un prezzo molto ridotto. Potrai scegliere taglia, modello e quanto vuoi pagare, ma il design e capo sarà a sorpresa e scelto da noi.</p>
 						</div>
 
 						<div class="offer-add grid-ele txt-cen">
 							<div id="offer-add-img" class="inlb clickable"></div>
-							<h1 id="offer-add-price" class="txt-bold">3€ - 8€</h1>
+							<h1 id="offer-add-price" class="font-semibold">3€ - 8€</h1>
 						</div>
 					</form>
 				</div>
@@ -53,7 +53,7 @@
 						<div id="offer-lbox-list" class="mar-t-1">
 							<?php for ($i = 0; $i < 3; $i++) {
 								$off_txt = array(
-									'Selezionando questa opzione riceverai una t-shirt normale o una t-shirt con scollo a V o una canotta. È possibile ottenere la maglietta con scollo a V solo selezionando il modello <span class="txt-bold txt-c-title">donna</span>.',
+									'Selezionando questa opzione riceverai una t-shirt normale o una t-shirt con scollo a V o una canotta. È possibile ottenere la maglietta con scollo a V solo selezionando il modello <span class="font-semibold txt-c-title">donna</span>.',
 									'Selezionando questa opzione riceverai una felpa senza cappuccio,',
 									'Selezionando questa opzione riceverai una felpa con cappuccio con o senza zip, oppure uno zaino.',
 								) ?>
@@ -84,7 +84,7 @@
 
 				<section id="official-products">
 
-					<p class="mar-b-1">Non lasciarti sfuggire i nostri <span class="txt-bold txt-c-title">prodotti invernali</span>, perfetti per le giornate gelide. Ora disponibili ad un prezzo estremamente <span class="txt-bold txt-c-title">scontato</span>. Se non vuoi acquistarne nessuno clicca <span class="txt-bold txt-c-title">PROSEGUI</span> qui in basso.</p>
+					<p class="mar-b-1">Non lasciarti sfuggire i nostri <span class="font-semibold txt-c-title">prodotti invernali</span>, perfetti per le giornate gelide. Ora disponibili ad un prezzo estremamente <span class="font-semibold txt-c-title">scontato</span>. Se non vuoi acquistarne nessuno clicca <span class="font-semibold txt-c-title">PROSEGUI</span> qui in basso.</p>
 
 					<div class="grid4 grid3-1024w grid2-768w gap2">
 

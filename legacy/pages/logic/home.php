@@ -11,13 +11,13 @@ $popularDesignCount = 20;
 $sellerCount = 12;
 $fanPicsCount = 4;
 
-// productss
-$popular = Product::join('stores', 'items.user_id', '=', 'stores.user_id')
-	->where('items.status', 1)
+// products
+$popular = Product::join('stores', 'products.user_id', '=', 'stores.user_id')
+	->where('products.status', 1)
 	->where('stores.status', 1)
-	->orderBy('items.recent_sales', 'desc')
+	->orderBy('products.recent_sales', 'desc')
 	->limit($productN)
-	->get('items.*');
+	->get('products.*');
 
 // designs
 $popularDesigns = Design::join('stores', 'designs.user_id', '=', 'stores.user_id')

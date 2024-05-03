@@ -47,7 +47,7 @@ $inputs = [
 			'type' => 'select',
 			'name' => 'type',
 			'text' => 'Tipo di capo',
-			'query' => 'tag, IF (gender=2, CONCAT(name," donna"), name) as name_full FROM product_types WHERE hidden = 0 ORDER BY id ASC',
+			'query' => 'tag, IF (gender_id=2, CONCAT(name," donna"), name) as name_full FROM product_types WHERE hidden = 0 ORDER BY id ASC',
 			'field-name' => 'tag',
 			'field-show' => 'name_full',
 		],

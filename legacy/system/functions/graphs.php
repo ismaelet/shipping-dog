@@ -97,7 +97,7 @@ function graph_columns($graphData) {
 									<div class="graph-info-row" style="--_subcount: <?= $subKey + 1 ?>;">
 										<div class=" graph-info-icon"></div>
 										<p><?= $subdata['name'] ?></p>
-										<p class="txt-bold"><?= $subdata['valueString'] ?></p>
+										<p class="font-semibold"><?= $subdata['valueString'] ?></p>
 									</div>
 
 								<?php } ?>
@@ -119,7 +119,7 @@ function graph_columns($graphData) {
 								<div class="graph-info-row">
 									<div class="graph-info-icon"></div>
 									<p>Risultato:</p>
-									<p class="txt-bold">
+									<p class="font-semibold">
 										<?= $columnData['valueString'] ?>
 									</p>
 								</div>

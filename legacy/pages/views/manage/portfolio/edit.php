@@ -110,7 +110,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 
 							<div class="txt-cen file-cancel">
 								<div class="des-icon icon img cont inlb text-white"><?= embed_icon('upload') ?></div>
-								<p class="txt-bold mar-t-05">Carica una versione diversa per i capi scuri</p>
+								<p class="font-semibold mar-t-05">Carica una versione diversa per i capi scuri</p>
 							</div>
 
 							<div class="file-load wid-100 cen"></div>
@@ -143,7 +143,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 
 							<p class="data-title inlb al-cen">File vettoriale (opzionale)</p>
 
-							<?= $vector ? '' : info_box("Oltre al file in PNG che hai già caricato, consigliamo di caricare anche il design in formato <span class='txt-bold'>PDF</span> o <span class='txt-bold'>AI</span> per la massima qualità di stampa possibile. Se non hai il design in questo formato non preoccuparti, riusciremo comunque a realizare i tuoi prodotti con stampe di alta qualità.")
+							<?= $vector ? '' : info_box("Oltre al file in PNG che hai già caricato, consigliamo di caricare anche il design in formato <span class='font-semibold'>PDF</span> o <span class='font-semibold'>AI</span> per la massima qualità di stampa possibile. Se non hai il design in questo formato non preoccuparti, riusciremo comunque a realizare i tuoi prodotti con stampe di alta qualità.")
 							?>
 
 						<?php } ?>
@@ -221,7 +221,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 							<div class="inp-box color-grid">
 
 								<?php
-								$defaultColorId = \Legacy\System\Classes\LegacyDB::find('color_id FROM items WHERE design_id = ? AND type_id=1', [$design->id]);
+								$defaultColorId = \Legacy\System\Classes\LegacyDB::find('color_id FROM products WHERE design_id = ? AND type_id=1', [$design->id]);
 								while ($row = $res_colorD->fetch_assoc()) {
 									$color = new LegacyColor($row['id']);
 								?>

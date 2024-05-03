@@ -2,15 +2,11 @@
 
 use App\Models\Ecommerce\Product;
 use Legacy\View\Components\Interactions\LikeButton;
-use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
-use Legacy\Classes\Ecommerce\Product\Gender;
-use Legacy\Classes\Ecommerce\Product\Position as LegacyProductPosition;
 use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
-use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 ?>
 
-<div class="main-wrap pad-t-3 item-type--<?= $legacyProduct->type->slug ?>" id="item" data-id="<?= $legacyProduct->id ?>" data-hroot="<?= CLIENT_ROOT ?>">
+<div class="main-wrap pad-t-3 item-type--<?= $product->type->tag ?>" id="item" data-id="<?= $product->id ?>" data-hroot="<?= CLIENT_ROOT ?>">
 
 	<!-- Warning -->
 	<?php
@@ -37,10 +33,10 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 					<div id="item-img-box">
 
 						<!-- Image -->
-						<img class="img-zoom img-fill js-main-image" id="item-img" src="<?= $legacyProduct->clientFullImage ?>" alt="">
+						<img class="img-zoom img-fill js-main-image" id="item-img" src="<?= $product->image(1024) ?>" alt="">
 
 						<!-- Logos on the image -->
-						<?php if ($legacyProduct->hasLogos && $legacyProduct->logoGroup->preview) { ?>
+						<?php if ($product->logoGroup() && $product->logoGroup()->preview) { ?>
 
 							<img class="logo-field__preview-logo js-logo-image" alt="">
 
@@ -59,7 +55,7 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 						</div>
 
 						<!-- Love button -->
-						<?= LikeButton::render(['design_id' => $legacyProduct->design_id]) ?>
+						<?= LikeButton::render(['design_id' => $product->design_id]) ?>
 
 					</div>
 
@@ -68,14 +64,14 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 				<!-- Zoom on mobile -->
 				<div id="img-zoom-bgr">
 					<div id="img-zoom-box">
-						<img class="js-main-image" id="img-zoom" src="<?= $legacyProduct->clientFullImage ?>">
+						<img class="js-main-image" id="img-zoom" src="<?= $product->image(1024) ?>">
 					</div>
 				</div>
 
 			</section>
 
 			<!-- More products with the same design -->
-			<?php if (!$legacyProduct->isCustom) { ?>
+			<?php if (!$product->isCustom()) { ?>
 
 				<section id="type-sec">
 					<!-- Types -->
@@ -84,13 +80,13 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 							<?php if ($relatedGarmentCount) { ?>
 
-								<h3 class="item-type-title clickable txt-bold inlb marr1 <?php if ($legacyProduct->type->category == 'c' || !$relatedAccessoryCount) echo 'active' ?>" data-tar="#more-clothing">Abbigliamento</h3>
+								<h3 class="item-type-title clickable font-semibold inlb marr1 <?php if ($product->type->category == 'c' || !$relatedAccessoryCount) echo 'active' ?>" data-tar="#more-clothing">Abbigliamento</h3>
 
 							<?php } ?>
 
 							<?php if ($relatedAccessoryCount) { ?>
 
-								<h3 class="item-type-title clickable txt-bold inlb <?php if ($legacyProduct->type->category == 'm') echo 'active' ?>" data-tar="#more-accessories">Accessori</h3>
+								<h3 class="item-type-title clickable font-semibold inlb <?php if ($product->type->category == 'm') echo 'active' ?>" data-tar="#more-accessories">Accessori</h3>
 
 							<?php } ?>
 
@@ -99,7 +95,7 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 						<!-- More clothing -->
 						<?php if ($relatedGarmentCount) { ?>
 
-							<div id="more-clothing" class="type-slide <?php if ($legacyProduct->type->category == 'c' || !$relatedAccessoryCount) echo 'active' ?>">
+							<div id="more-clothing" class="type-slide <?php if ($product->type->category == 'c' || !$relatedAccessoryCount) echo 'active' ?>">
 
 								<div id="type-slideC" data-pos="1" class="carousel mob-fluid">
 
@@ -134,7 +130,7 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 						<!-- More accessories -->
 						<?php if ($relatedAccessoryCount) { ?>
 
-							<div id="more-accessories" class="type-slide <?php if ($legacyProduct->type->category == 'm') echo 'active' ?>">
+							<div id="more-accessories" class="type-slide <?php if ($product->type->category == 'm') echo 'active' ?>">
 
 								<div id="type-slideM" data-pos="1" class="carousel mob-fluid">
 
@@ -204,35 +200,31 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 					<?php } else { ?>
 
 						<!-- Normal price -->
-						<p class="price txt-bold price-def heading-like js-price"><?= $product->customerPriceString() ?></p>
+						<p class="price font-semibold price-def heading-like js-price"><?= $product->customerPriceString() ?></p>
 
 					<?php } ?>
 
 				</div>
 
 				<!-- Colors -->
-				<?php if (!empty($legacyProduct->type->availableColorSlugs)) {
-					$res = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors ORDER BY reorder ASC, name ASC');
-				?>
+				<?php if ($product->colors()) { ?>
 
-					<section id="color" class="field <?php if (count($legacyProduct->availableColorSlugs) < 2) echo 'hide' ?>">
+					<section id="color" class="field <?php if (count($product->colors()) < 2) echo 'hide' ?>">
 						<p class="lbl">Colore</p>
 						<div class="grid">
 
-							<?php while ($row = $res->fetch_assoc()) {
+							<?php foreach ($product->colors() as $color) {
 
-								$color = new LegacyProductColor($row['id']);
+								if ((in_array($color->tag, $product->type->colorList()) || $product->isCustom()) && in_array($color->tag, $product->colors()->pluck('tag')->toArray())) { ?>
 
-								if ((in_array($color->slug, $legacyProduct->type->availableColorSlugs) || $legacyProduct->isCustom) && in_array($color->slug, $legacyProduct->availableColorSlugs)) { ?>
+									<input type="radio" class="cbx" id="cbx-color-<?= $color->tag ?>" name="color_id" value="<?= $color->id ?>" data-color="<?= $color->tag ?>" data-id="<?= $color->id ?>" <?php if ($color->id == $product->color->id) echo 'checked' ?>>
 
-									<input type="radio" class="cbx" id="cbx-color-<?= $color->slug ?>" name="color_id" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-id="<?= $color->id ?>" <?php if ($color->slug == $legacyProduct->color->slug) echo 'checked' ?>>
+									<label for="cbx-color-<?= $color->tag ?>" class="color-box">
 
-									<label for="cbx-color-<?= $color->slug ?>" class="color-box">
-
-										<div class="color-lbl <?= $color->bicolor ? 'bicolor' : false ?>" style="background-color: #<?= $color->hex ?>">
+										<div class="color-lbl <?= $color->bicolor ? 'bicolor' : false ?>" style="background-color: #<?= $color->color ?>">
 											<?php if ($color->bicolor) { ?>
-												<div class="bicolor-fill" style="background-color: #<?= $color->hex ?>"></div>
-												<div class="bicolor-fill" style="background-color: #<?= $color->secondHex ?>"></div>
+												<div class="bicolor-fill" style="background-color: #<?= $color->color ?>"></div>
+												<div class="bicolor-fill" style="background-color: #<?= $color->secondColor ?>"></div>
 											<?php } ?>
 										</div>
 
@@ -249,16 +241,16 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 				<?php } ?>
 
 				<!-- Size -->
-				<?php if (!empty($legacyProduct->type->sizes)) {
+				<?php if (!empty($product->type->sizes)) {
 					$new = true;
-					$size_table = \Legacy\System\Classes\LegacyDB::exists('items_types_measures WHERE type_id=?', [$legacyProduct->type->id]) && $product->type->category == 'c';
+					$size_table = \Legacy\System\Classes\LegacyDB::exists('items_types_measures WHERE type_id=?', [$product->type->id]) && $product->type->category == 'c';
 					$res = \Legacy\System\Classes\LegacyDB::select('id FROM items_sizes');
 				?>
 
 					<section id="size" class="field">
 						<p class="lbl"><?= $product->type->category == 'c' ? 'Taglia' : 'Dimensione' ?>
 
-							<?php if (!$legacyProduct->isCustom && $size_table) { ?>
+							<?php if (!$product->isCustom() && $size_table) { ?>
 								<span class="lbox-open clickable info txt-c1-h" data-tar="#size-lbox">info taglie</span>
 							<?php } ?>
 
@@ -269,8 +261,9 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 							<?php while ($row = $res->fetch_assoc()) {
 
 								$sizeM = new LegacyProductSize($row['id']);
+								$sizes = $product->type->sizes->pluck('tag')->toArray();
 
-								if (in_array($sizeM->slug, $legacyProduct->type->sizes)) { ?>
+								if ($sizes && in_array($sizeM->slug, $sizes)) { ?>
 
 									<div class="size_box">
 										<input type="hidden" value="<?= $sizeM->price ?>">
@@ -297,64 +290,69 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 				<?php } ?>
 
 				<!-- Gender -->
-				<?php if ($legacyProduct->type->genderId) {
+				<?php if ($product->type->gender) {
 					$new = true;
 
 					$genders = [];
-					$genders[] = $legacyProduct->type->genderId;
-					if ($legacyProduct->type->sibling) $genders[] = (new LegacyProductType($legacyProduct->type->sibling))->genderId;
+					$genders[] = $product->type->gender;
+					$sibling = $product->type->sibling;
+
+					if ($sibling) {
+						$genders[] = $sibling->gender;
 
 				?>
 
-					<section id="gender" class="field">
+						<section id="gender" class="field">
 
-						<div class="">
-							<p class="lbl">Modello</p>
+							<div class="">
+								<p class="lbl">Modello</p>
 
-							<?php if ($legacyProduct->type->sibling && $legacyProduct->type->unisex) info_box("Qui puoi scegliere se vedere l'anteprima del prodotto su un modello maschile o femminile, ma ha scopo puramente illustrativo, in quanto tutte le taglie per questo articolo sono unisex.") ?>
-						</div>
+								<?php if ($product->type->unisex) info_box("Qui puoi scegliere se vedere l'anteprima del prodotto su un modello maschile o femminile, ma ha scopo puramente illustrativo, in quanto tutte le taglie per questo articolo sono unisex.") ?>
+							</div>
 
-						<div class="grid">
+							<div class="grid">
 
-							<?php foreach ($genders as $key => $genderId) {
-								$gender = new Gender($genderId);
-								$relatedProduct = null;
+								<?php foreach ($genders as $key => $gender) {
+									$relatedProduct = null;
 
-								if ($key && $product->design_id) {
-									$relatedProduct = Product::where('design_id', $product->design_id)
-										->where('type_id', $product->type->sibling)
-										->first();
-								}
+									if ($key && $product->design_id) {
+										$relatedProduct = Product::where('design_id', $product->design_id)
+											->where('type_id', $sibling->id)
+											->first();
+									}
 
-								if (!$key || $relatedProduct) {
-							?>
+									if (!$key || $relatedProduct) {
+								?>
 
-									<div class="gend_box">
-										<input type="radio" class="cbx" id="cbx-gend_<?= $gender->slug ?>" name="gender_id" value="<?= $gender->id ?>" <?= !$relatedProduct ? 'checked' : '' ?>>
+										<div class="gend_box">
+											<input type="radio" class="cbx" id="cbx-gend_<?= $gender->slug ?>" name="gender_id" value="<?= $gender->id ?>" <?= !$relatedProduct ? 'checked' : '' ?>>
 
-										<a <?= $relatedProduct ? 'href="' . $relatedProduct->url() . '"' : '' ?> class="gend_lbl">
-											<h1 class="gend_txt"><?= $gender->name ?></h1>
-										</a>
-									</div>
+											<a <?= $relatedProduct ? 'href="' . $relatedProduct->url() . '"' : '' ?> class="gend_lbl">
+												<h1 class="gend_txt"><?= $gender->name ?></h1>
+											</a>
+										</div>
 
-							<?php }
-							} ?>
+								<?php }
+								} ?>
 
-						</div>
+							</div>
 
-					</section>
+						</section>
 
-				<?php } ?>
+				<?php }
+				} ?>
 
 				<!-- Position -->
-				<div id="position" class="field <?= count($legacyProduct->availablePositionIds) < 2 || $legacyProduct->isCustom ? 'hidden' : '' ?>">
+				<?php
+				$productPositions = $product->positions();
+				?>
+				<div id="position" class="field <?= count($productPositions) < 2 || $product->isCustom() ? 'hidden' : '' ?>">
 
 					<p class="lbl">Posizione della stampa</p>
 
 					<div class="data-area">
 
-						<?php foreach ($legacyProduct->availablePositionIds as $key => $position_id) {
-							$position = new LegacyProductPosition($position_id);
+						<?php foreach ($productPositions as $key => $position) {
 						?>
 
 							<label class="data-selector data-selector--position">
@@ -368,16 +366,16 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 				</div>
 
 				<!-- Logos -->
-				<?php if ($legacyProduct->hasLogos) { ?>
+				<?php if ($product->logoGroup()) { ?>
 
 					<div class="logo-field field">
-						<p class="lbl"><?= $legacyProduct->logoGroup->name ?></p>
+						<p class="lbl"><?= $product->logoGroup()->name ?></p>
 
 						<div class="grid-flow" data-spacing="400">
 							<div class="logo-field__list">
 
 								<!-- Checkbox for no logo -->
-								<?php if (!$legacyProduct->logoGroup->forced) { ?>
+								<?php if (!$product->logoGroup()->forced) { ?>
 
 									<label class="logo-field__item">
 										<input type="radio" class="js-logo" name="logo_id" value="0" checked>
@@ -390,7 +388,7 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 								<?php foreach ($product->logos() as $logoKey => $logo) { ?>
 
 									<label class="logo-field__item" title="<?= $logo->name ?>">
-										<input type="radio" class="js-logo" name="logo-id" value="<?= $logo->id ?>" <?= $legacyProduct->logoGroup->forced && !$logoKey ? 'checked' : null ?>>
+										<input type="radio" class="js-logo" name="logo_id" value="<?= $logo->id ?>" <?= $product->logoGroup()->forced && !$logoKey ? 'checked' : null ?>>
 										<img class="img-fill" src="<?= $logo->image() ?>" alt="">
 									</label>
 
@@ -398,9 +396,9 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 							</div>
 
-							<div class="logo-field__preview js-logo-image-background" class="<?= $legacyProduct->logoGroup->forced ? 'active' : null ?>">
+							<div class="logo-field__preview js-logo-image-background" class="<?= $product->logoGroup()->forced ? 'active' : null ?>">
 								<div class="logo-field__preview-wrapper grid-flow stack-content">
-									<img class="logo-field__preview-image js-front-image" src="<?= $legacyProduct->clientFullImage ?>">
+									<img class="logo-field__preview-image js-front-image" src="<?= $product->image(1024) ?>">
 									<img class="logo-field__preview-logo js-logo-image" src="" alt="">
 								</div>
 							</div>
@@ -410,7 +408,7 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 				<?php } ?>
 
 				<!-- Pencilcase back -->
-				<?php if (false && $legacyProduct->type->slug == 'cas') { ?>
+				<?php if (false && $product->type->slug == 'cas') { ?>
 
 					<div class="field">
 						<p class="lbl">Retro</p>
@@ -445,7 +443,7 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 				<!-- Add to cart -->
 				<div class="mar-t-4">
 
-					<?php if (($legacyProduct->statusId && !$legacyProduct->deleted) || $owner) { ?>
+					<?php if (($product->status && !$product->deleted) || $owner) { ?>
 
 						<button type="submit" id="submit" class="add-to-cart btn button--full-width">
 							<?= embed_icon('cart') ?>
@@ -454,9 +452,9 @@ use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 					<?php } ?>
 
-					<?php if (!$legacyProduct->isCustom && $product->blankProduct()) { ?>
+					<?php if (!$product->isCustom() && $product->blankProduct()) { ?>
 
-						<p class="mar-t-1">Vuoi acquistare il prodotto senza grafica? <a class="txt-bold txt-c-title" href="<?= $product->blankProduct()->url() ?>">Clicca qui</a>.</p>
+						<p class="mar-t-1">Vuoi acquistare il prodotto senza grafica? <a class="font-semibold txt-c-title" href="<?= $product->blankProduct()->url() ?>">Clicca qui</a>.</p>
 
 					<?php } ?>
 

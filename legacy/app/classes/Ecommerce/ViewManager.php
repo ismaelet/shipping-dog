@@ -3,7 +3,6 @@
 namespace Legacy\Classes\Ecommerce;
 
 use App\Helpers\PreviewHelper;
-use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Product;
 use Legacy\View\Components\Interactions\LikeButton;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +24,7 @@ class ViewManager {
 					<p class="price blu"><?= $product->customerPriceString() ?></p>
 				</a>
 
-				<?= LikeButton::render(['design_id' => $product->design_id]) ?>
+				<?= LikeButton::render(['design' => $product->design]) ?>
 
 			</div>
 
@@ -71,13 +70,13 @@ class ViewManager {
 								<h3 class="art_name"><?= $orderItem->name() ?></h3>
 							</a>
 
-							<p class="txt-bold">
+							<p class="font-semibold">
 								<?= $orderItem->discount() ? '<span class="price-old">' . $orderItem->grossPriceString() . '</span>' : $orderItem->priceString() ?>
 							</p>
 
 							<?php if ($orderItem->discount()) { ?>
 
-								<p class="price-promo txt-bold"><?= $orderItem->priceString() ?></p>
+								<p class="price-promo font-semibold"><?= $orderItem->priceString() ?></p>
 
 							<?php } ?>
 

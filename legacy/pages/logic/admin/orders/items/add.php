@@ -19,7 +19,7 @@ if ($id) {
 
 	$productID = \Legacy\System\Classes\LegacyDB::find('product_id FROM order_items WHERE id = ?', $id);
 
-	$design = \Legacy\System\Classes\LegacyDB::row('ID, name FROM designs WHERE id IN (SELECT design_id FROM items WHERE id = ?)', $productID);
+	$design = \Legacy\System\Classes\LegacyDB::row('ID, name FROM designs WHERE id IN (SELECT design_id FROM products WHERE id = ?)', $productID);
 
 	$searchConfig['value-id'] = $design['id'] ?? 0;
 	$searchConfig['value-show'] = $design['name'] ?? '';
@@ -92,7 +92,7 @@ function _expand_add($tbl, $inputs) {
 	$gender_id = (int) $_POST['gender_id'];
 	$size_id = (int) $_POST['size_id'];
 
-	$productID = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$design_id, $type_id]);
+	$productID = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND type_id = ?', [$design_id, $type_id]);
 
 	\Legacy\System\Classes\LegacyDB::add('order_items (order_id, user_id, product_id, type_id, gender_id, color_id, size_id) VALUES (?, ?, ?, ?, ?, ?, ?)', [$order_id, $user_id, $productID, $type_id, $gender_id, $color_id, $size_id]);
 
@@ -110,7 +110,7 @@ function _expand_add($tbl, $inputs) {
 //edit
 function _expand_edit($tbl, $inputs, $index, $id) {
 
-	$productID = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$_POST['design_id'], $_POST['type_id']]);
+	$productID = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND type_id = ?', [$_POST['design_id'], $_POST['type_id']]);
 
 	\Legacy\System\Classes\LegacyDB::update('order_items SET product_id = ?, type_id = ?, gender_id = ?, color_id = ?, size_id = ? WHERE id = ?', [$productID, $_POST['type_id'], $_POST['gender_id'], $_POST['color_id'], $_POST['size_id'], $id]);
 }

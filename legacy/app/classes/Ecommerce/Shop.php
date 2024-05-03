@@ -61,15 +61,15 @@ class Shop {
 		$start = $this->page ? $this->size * ($this->page - 1) : 1;
 
 		// Start building the query
-		$products = Product::join('stores', 'items.user_id', '=', 'stores.user_id')
-			->leftJoin('designs', 'items.design_id', '=', 'designs.id')
-			->where('items.status', 1)
-			->where('items.deleted', 0);
+		$products = Product::join('stores', 'products.user_id', '=', 'stores.user_id')
+			->leftJoin('designs', 'products.design_id', '=', 'designs.id')
+			->where('products.status', 1)
+			->where('products.deleted', 0);
 
 		if ($this->id) {
 			// Filter for a specific shop
 			$products
-				->where('items.user_id', $this->id);
+				->where('products.user_id', $this->id);
 		} else {
 			// Filter for the general shop
 			$products
@@ -80,20 +80,20 @@ class Shop {
 		// Order the products
 		switch ($this->sort) {
 			case 'new':
-				$products->orderBy('items.time', 'desc')
+				$products->orderBy('products.time', 'desc')
 					->orderBy('design_id', 'desc')
 					->orderBy('type_id', 'asc');
 				break;
 
 			case 'popular':
-				$products->orderBy('items.recent_sales', 'desc')
-					->orderBy('items.sales', 'desc')
+				$products->orderBy('products.recent_sales', 'desc')
+					->orderBy('products.sales', 'desc')
 					->orderBy('design_id', 'desc')
 					->orderBy('type_id', 'asc');
 				break;
 
 			case 'custom':
-				$products->orderBy('items.sort', 'asc')
+				$products->orderBy('products.sort', 'asc')
 					->orderBy('designs.sort', 'asc')
 					->orderBy('type_id', 'asc');
 				break;
@@ -102,7 +102,7 @@ class Shop {
 		// Filter by keyword
 		if ($this->search) {
 			$products->where(function ($query) {
-				$query->where('items.name', 'like', '%' . $this->search . '%')
+				$query->where('products.name', 'like', '%' . $this->search . '%')
 					->orWhere('stores.name', 'like', '%' . $this->search . '%')
 					->orWhereIn('design_id', function ($query) {
 						$query->select('design_id')
@@ -122,7 +122,7 @@ class Shop {
 			$gender = ProductGender::where('tag', $this->gender)->first();
 
 			$products->where(function ($query) use ($gender) {
-				$query->whereIn('type_id', ProductType::whereIn('gender', [$gender->id, 3])->get('id'));
+				$query->whereIn('type_id', ProductType::whereIn('gender_id', [$gender->id, 3])->get('id'));
 			});
 		}
 
@@ -153,11 +153,10 @@ class Shop {
 		});
 
 		// Get the products
-		$products = Cache::remember('shop-' . $cacheKeyParameters, $cacheInterval, function () use ($products, $start) {
-			return $products->limit($this->size)
-				->offset($start)
-				->get('items.*');
-		});
+		$products = $products->limit($this->size)
+			->offset($start)
+			->with('type', 'design', 'design.seller', 'design.logo_group', 'seller', 'color', 'seller_price', 'base_price',)
+			->get('products.*');
 
 		// store the result
 		$this->productCount = $productCount;
@@ -232,10 +231,10 @@ class Shop {
 								<div class="gender-ddown">
 									<?php
 									if ($this->id) $res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM product_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
+											id FROM product_types WHERE category='c' AND (gender_id=1 OR gender_id=3) AND hidden = 0 AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
 
 									else $res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM product_types WHERE category='c' AND (gender=1 OR gender=3) AND hidden = 0 AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
+											id FROM product_types WHERE category='c' AND (gender_id=1 OR gender_id=3) AND hidden = 0 AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY id ASC");
 
 									while ($row = $res->fetch_assoc()) {
 
@@ -265,10 +264,10 @@ class Shop {
 
 									if ($this->id) {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM product_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
+											id FROM product_types WHERE category='c' AND (gender_id=2 OR gender_id=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
 									} else {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM product_types WHERE category='c' AND (gender=2 OR gender=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY id ASC");
+											id FROM product_types WHERE category='c' AND (gender_id=2 OR gender_id=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY id ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {
@@ -299,10 +298,10 @@ class Shop {
 
 									if ($this->id) {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$this->id]);
+											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$this->id]);
 									} else {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM items WHERE status = 1) ORDER BY name ASC");
+											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY name ASC");
 									}
 
 									while ($row = $res->fetch_assoc()) {
@@ -321,7 +320,7 @@ class Shop {
 
 							<?php if ($this->type || $this->gender) { ?>
 								<p id="remove-filter-type" class="remove-filter clickable pad-t-1">
-									<span class="txt-bold txt-blk">x</span>
+									<span class="font-semibold txt-blk">x</span>
 									rimuovi filtro
 								</p>
 							<?php } ?>
@@ -344,7 +343,7 @@ class Shop {
 
 								<?php if ($this->slug) { ?>
 									<p id="remove-filter-tag" class="remove-filter clickable pad-t-1">
-										<span class="txt-bold txt-blk">x</span>
+										<span class="font-semibold txt-blk">x</span>
 										rimuovi filtro
 									</p>
 								<?php } ?>

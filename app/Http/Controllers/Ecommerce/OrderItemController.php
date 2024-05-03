@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
+use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\OrderItem;
@@ -36,7 +37,6 @@ class OrderItemController extends Controller {
 			'color_id' => ['required', 'integer'],
 			'size_id' => ['required', 'integer'],
 			'position_id' => ['integer'],
-			'gender_id' => ['integer'],
 			'logo_id' => ['integer'],
 			'quantity' => ['integer'],
 		]);
@@ -48,6 +48,10 @@ class OrderItemController extends Controller {
 		// Get the cart
 		if (cart()) {
 			$order = cart();
+			if ($order->step > EcommerceHelper::stepFromTag('address')) {
+				$order->step = EcommerceHelper::stepFromTag('address');
+				$order->save();
+			}
 		} else {
 			if (Auth::check()) {
 				// If the user is logged in

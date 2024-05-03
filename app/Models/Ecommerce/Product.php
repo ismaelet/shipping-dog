@@ -25,7 +25,6 @@ class Product extends Model {
 
 	use HasFactory;
 
-	protected $table = 'items';
 	protected $fillable = ['name', 'design_id', 'user_id', 'type_id', 'color_id', 'colors', 'status', 'positions'];
 
 
@@ -85,7 +84,7 @@ class Product extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function seller_price(): HasOne {
-		return $this->hasOne(SellerPrice::class, 'seller_id', 'user_id')->where('type_id', $this->type->id);
+		return $this->hasOne(SellerPrice::class, 'seller_id', 'user_id')->where('type_id', $this->type_id);
 	}
 
 	/**
@@ -169,14 +168,24 @@ class Product extends Model {
 	 * Get the product gain
 	 */
 	public function sellerGain(): float {
-		return $this->userIsOwner() ? 0 : ($this->color()->type == 'w' ? $this->price()->gain_w : $this->price()->gain_c);
+		return $this->userIsOwner() ? 0 : ($this->color->type == 'w' ? $this->price()->gain_w : $this->price()->gain_c);
 	}
 
 	/**
-	 * Get the product's color
+	 * Get the product's defaul color
 	 */
-	public function color(): ProductColor {
-		return ProductColor::find($this->color_id);
+	public function color(): BelongsTo {
+		return $this->belongsTo(ProductColor::class);
+	}
+
+	/**
+	 * Get the product's colors
+	 */
+	public function colors(): ?Collection {
+		return ProductColor::whereIn('tag', explode(',', $this->colors))
+			->orderBy('reorder')
+			->orderBy('id')
+			->get();
 	}
 
 	/**
@@ -195,13 +204,6 @@ class Product extends Model {
 	}
 
 	/**
-	 * Get the default color
-	 */
-	public function default_color(): BelongsTo {
-		return $this->belongsTo(ProductColor::class, 'color_id');
-	}
-
-	/**
 	 * Get the product's preview
 	 */
 	public function preview(?int $imageSize, ?int $color_id, ?int $position_id): PreviewHelper {
@@ -212,11 +214,17 @@ class Product extends Model {
 	 * Get the default position
 	 */
 	public function defaultPositionId(): int {
-		return $this->positions ? explode(',', $this->positions)[0] : 0;
+		return $this->defaultPosition()?->id ?: 0;
 	}
 
 	public function defaultPosition(): ?ProductPosition {
-		return ProductPosition::find($this->defaultPositionId());
+		return $this->positions()->first();
+	}
+
+	public function positions(): ?Collection {
+		return ProductPosition::whereIn('id', explode(',', $this->positions))
+			->orderBy('id')
+			->get();
 	}
 
 	/**
@@ -349,5 +357,25 @@ class Product extends Model {
 			$this->status = 0;
 			$this->save();
 		}
+	}
+
+	public function coverImage(): ?string {
+		switch (true) {
+			case file_exists(public_storage($this->specificCoverImage())):
+				return $this->specificCoverImage();
+
+			case !$this->isCustom() && file_exists(public_storage($file = '/product_types/covers/' . $this->type->tag . '.webp')):
+				return public_asset($file);
+
+			case !$this->isCustom() && file_exists(public_storage($file = '/product_types/covers/' . $this->type->tag . '.jpg')):
+				return public_asset($file);
+
+			default:
+				return null;
+		}
+	}
+
+	public function specificCoverImage(): string {
+		return public_asset('/products/' . $this->id . '-cover.webp');
 	}
 }

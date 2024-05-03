@@ -13,7 +13,7 @@ if (isset($_POST['update'])) {
 
 	\Legacy\System\Classes\LegacyDB::update('stores SET sales=0, recent_sales=0');
 	\Legacy\System\Classes\LegacyDB::update('designs SET sales=0, recent_sales=0');
-	\Legacy\System\Classes\LegacyDB::update('items SET sales=0, recent_sales=0');
+	\Legacy\System\Classes\LegacyDB::update('products SET sales=0, recent_sales=0');
 
 	/*
 	* Recent sales
@@ -53,7 +53,7 @@ if (isset($_POST['update'])) {
 			WHERE orders.status > 0 AND orders.time > DATE_SUB(NOW(), INTERVAL 1 YEAR)
 			GROUP BY product_id
 		) as recentorder_items
-		ON items.id = recentorder_items.product_id
+		ON products.id = recentorder_items.product_id
 		SET recent_sales = saleQuantity
 	');
 
@@ -95,7 +95,7 @@ if (isset($_POST['update'])) {
 			WHERE orders.status > 0
 			GROUP BY product_id
 		) as recentorder_items
-		ON items.id = recentorder_items.product_id
+		ON products.id = recentorder_items.product_id
 		SET sales = saleQuantity
 	');
 

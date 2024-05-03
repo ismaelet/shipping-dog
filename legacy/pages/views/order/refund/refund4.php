@@ -26,7 +26,7 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 						</div>
 
 						<div class="item-cell item-name_cell">
-							<h1 class="txt-1rem txt-bold"><?= $change->old_order->product->name ?></h1>
+							<h1 class="txt-1rem font-semibold"><?= $change->old_order->product->name ?></h1>
 							<p class="item-name"><?= $change->old_order->description() ?></p>
 						</div>
 
@@ -52,12 +52,12 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 	</div>
 
-	<p class="txt-1rem txt-bold"><strong>Istruzioni</strong>:</p>
+	<p class="txt-1rem font-semibold"><strong>Istruzioni</strong>:</p>
 	<p class="txt info">
 		<?= $instructions ?>
 	</p>
 
-	<p class="txt-1rem txt-bold mar-t-1"><strong>Note</strong>:</p>
+	<p class="txt-1rem font-semibold mar-t-1"><strong>Note</strong>:</p>
 	<p class="txt info">
 		<?= $notes ?>
 	</p>

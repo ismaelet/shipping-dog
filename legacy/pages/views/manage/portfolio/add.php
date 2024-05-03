@@ -12,14 +12,14 @@
 					<?= embed_icon('upload') ?>
 				</div>
 
-				<h1 id="upload-title" class="txt-bold txt-2rem pad-h-2">Carica una nuova grafica</h1>
+				<h1 id="upload-title" class="font-semibold txt-2rem pad-h-2">Carica una nuova grafica</h1>
 			</div>
 
 		</div>
 
 		<div id="setup-data" class="mwid-650 mar-h-auto">
-			<p class="error mar-b-2">Il file deve essere in <span class="txt-bold">PNG</span>. Il formato <span class="txt-bold wrong-extension"></span> non è accettato.</p>
-			<h1 id="setup-stitle" class="txt-bold txt-15rem mar-b-1">Requisiti del file</h1>
+			<p class="error mar-b-2">Il file deve essere in <span class="font-semibold">PNG</span>. Il formato <span class="font-semibold wrong-extension"></span> non è accettato.</p>
+			<h1 id="setup-stitle" class="font-semibold txt-15rem mar-b-1">Requisiti del file</h1>
 			<p id="setup-txt" class="mar-h-auto">Il file deve essere un <strong>PNG</strong> con sfondo trasparente dove non vuoi che stampiamo. Raccomandiamo che il lato minore sia di almeno <strong>1000px</strong>.</p>
 		</div>
 

@@ -40,7 +40,7 @@ class Product {
 
 	use \Legacy\System\Traits\DatabaseObject;
 
-	public const TABLE = 'items';
+	public const TABLE = 'products';
 	public const INDEX = 'id';
 	public const DESIGN_INDEX = 'design_id';
 	public const SELLER_INDEX = 'user_id';
@@ -355,7 +355,7 @@ class Product {
 	public function updateColors(array $availableColorSlugs) {
 		$availableColorSlugsString = implode(',', $availableColorSlugs);
 
-		\Legacy\System\Classes\LegacyDB::update('items SET colors=? WHERE id = ?', [$availableColorSlugsString, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update('products SET colors=? WHERE id = ?', [$availableColorSlugsString, $this->id]);
 
 		$this->data['availableColorSlugs'] = $availableColorSlugs;
 
@@ -368,7 +368,7 @@ class Product {
 		$this->setColorId($color_id);
 
 		if ($this->color_id != $oldColorId) {
-			\Legacy\System\Classes\LegacyDB::update('items SET color_id = ? WHERE id = ?', [$color_id, $this->id]);
+			\Legacy\System\Classes\LegacyDB::update('products SET color_id = ? WHERE id = ?', [$color_id, $this->id]);
 		}
 
 		return $this;
@@ -377,7 +377,7 @@ class Product {
 	public function updateStatus(bool $published) {
 		$statusId = $published ? 1 : 0;
 
-		\Legacy\System\Classes\LegacyDB::update('items SET status=? WHERE id = ?', [$statusId, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update('products SET status=? WHERE id = ?', [$statusId, $this->id]);
 
 		$this->setStatusId($published);
 
@@ -389,7 +389,7 @@ class Product {
 			$position_ids = implode(',', $position_ids);
 		}
 
-		\Legacy\System\Classes\LegacyDB::update('items SET positions=? WHERE id = ?', [$position_ids, $this->id]);
+		\Legacy\System\Classes\LegacyDB::update('products SET positions=? WHERE id = ?', [$position_ids, $this->id]);
 
 		$this->data['position_ids'] = $position_ids;
 

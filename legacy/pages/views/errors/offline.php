@@ -3,7 +3,7 @@
 <!-- Body -->
 <div class="page-content pad-h-2 txt-cen">
 	<!-- <img class="logo" src="<?= client_path(LOGO_DIR . 'logo.svg') ?>" alt=""> -->
-	<h1 class="txt-bold txt-upp"><?= ('Sito Offline') ?></h1>
+	<h1 class="font-semibold txt-upp"><?= ('Sito Offline') ?></h1>
 	<p class="mwid-600 txt-12rem">
 		<?= ("Il nostro sito è al momento in offline per un aggiornamento. Torneremo attivi non appena possibile.") ?>
 	</p>

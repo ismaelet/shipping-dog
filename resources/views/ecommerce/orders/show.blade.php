@@ -163,13 +163,13 @@
 									<h3 class="art_name"><?= $orderItem->name() ?></h3>
 								</a>
 
-								<p class="txt-bold">
+								<p class="font-semibold">
 									<?= $orderItem->discount() ? '<span class="price-old">' . $orderItem->grossPriceString() . '</span>' : $orderItem->priceString() ?>
 								</p>
 
 								<?php if ($orderItem->discount()) { ?>
 
-								<p class="price-promo txt-bold"><?= $orderItem->priceString() ?></p>
+								<p class="price-promo font-semibold"><?= $orderItem->priceString() ?></p>
 
 								<?php } ?>
 

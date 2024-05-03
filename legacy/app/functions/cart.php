@@ -59,7 +59,7 @@ function cart_promotions(&$order) {
 	$promotion['discount-shop'] = 10;
 	$promotion['trigger'] = [
 		'count',
-		'order_items WHERE user_id=? AND product_id IN (SELECT id FROM items WHERE user_id = ?) AND type_id IN (6,7,8,9,10,11)',
+		'order_items WHERE user_id=? AND product_id IN (SELECT id FROM products WHERE user_id = ?) AND type_id IN (6,7,8,9,10,11)',
 		[$order->customer, 187],
 		2
 	];

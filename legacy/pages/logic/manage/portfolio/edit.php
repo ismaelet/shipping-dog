@@ -119,7 +119,7 @@ if (isset($_POST['colors-submit'])) {
 
 		$type = new LegacyProductType($row['id']);
 
-		$productID = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$id, $type->id]);
+		$productID = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND type_id = ?', [$id, $type->id]);
 
 		$product = new LegacyProduct($productID);
 
@@ -130,7 +130,7 @@ if (isset($_POST['colors-submit'])) {
 
 			$colors = implode(',', $colors);
 
-			\Legacy\System\Classes\LegacyDB::update('items SET color_id = ?, colors=? WHERE id = ?', [$color->id, $colors, $product->id]);
+			\Legacy\System\Classes\LegacyDB::update('products SET color_id = ?, colors=? WHERE id = ?', [$color->id, $colors, $product->id]);
 		}
 	}
 
@@ -191,7 +191,7 @@ if (isset($_POST['update-position'])) {
 // disable item
 if (isset($_POST['off']) || isset($_POST['on'])) {
 	$type_id = $_POST['type_id'];
-	$productId = \Legacy\System\Classes\LegacyDB::find('id FROM items WHERE design_id = ? AND type_id = ?', [$id, $type_id]);
+	$productId = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND type_id = ?', [$id, $type_id]);
 	$activate = isset($_POST['on']);
 
 	if ($productId) {

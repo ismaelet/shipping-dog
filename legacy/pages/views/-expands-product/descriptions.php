@@ -49,5 +49,5 @@ $dett = $product->type->info ? implode('<br>', array_map(function ($element) {
 	return "&middot; $element";
 }, explode(',', $product->type->info->details))) : null;
 
-$desc = !$desc ? (isset(${'desc_' . $legacyProduct->type->slug . '_' . 'it'}) ? ${'desc_' . $legacyProduct->type->slug . '_' . 'it'} : null) : $desc;
-$dett = !$dett ? (isset(${'dett_' . $legacyProduct->type->slug . '_' . 'it'}) ? ${'dett_' . $legacyProduct->type->slug . '_' . 'it'} : null) : $dett;
+$desc = !$desc ? (isset(${'desc_' . $product->type->tag . '_' . 'it'}) ? ${'desc_' . $product->type->tag . '_' . 'it'} : null) : $desc;
+$dett = !$dett ? (isset(${'dett_' . $product->type->tag . '_' . 'it'}) ? ${'dett_' . $product->type->tag . '_' . 'it'} : null) : $dett;

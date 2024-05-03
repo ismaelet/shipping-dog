@@ -21,7 +21,7 @@ class CartTest extends TestCase {
 			'color_id' => $product->color_id,
 			'size_id' => $sizeId,
 			'position_id' => $positionId,
-			'gender_id' => $product->type->gender,
+			'gender_id' => $product->type->gender_id,
 			'logo_id' => $logoId,
 			'quantity' => 1
 		]);
@@ -33,7 +33,7 @@ class CartTest extends TestCase {
 			'color_id' => $product->color_id,
 			'size_id' => $sizeId,
 			'position_id' => $positionId,
-			'gender_id' => $product->type->gender,
+			'gender_id' => $product->type->gender_id,
 			'logo_id' => $logoId,
 			'quantity' => 1
 		]);
