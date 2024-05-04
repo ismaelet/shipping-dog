@@ -3,6 +3,7 @@
 namespace Legacy\Classes\Ecommerce;
 
 use App\Models\Ecommerce\Order;
+use App\Models\Ecommerce\OrderItem as NewOrderItem;
 use App\Models\Ecommerce\Product;
 use DateTime;
 use Legacy\Classes\Ecommerce\Design\Logo as LegacyLogo;
@@ -100,6 +101,10 @@ class OrderItem {
 
 	private function newOrder() {
 		return Order::find($this->order_id);
+	}
+
+	private function newOrderItem() {
+		return NewOrderItem::find($this->id);
 	}
 
 	private function getSize() {
@@ -228,13 +233,6 @@ class OrderItem {
 		return $description;
 	}
 
-	/*
-	* Set methods
-	*/
-
-	/*
-	* Update methods
-	*/
 	public function updateDiscount(float $discountAmount) {
 		$discountAmount = round($discountAmount, 2);
 
@@ -243,6 +241,7 @@ class OrderItem {
 		$this->data['fixedDiscount'] = $discountAmount;
 		$this->data = [];
 
+		$this->newOrderItem()->updateGain();
 		$this->newOrder()->updatePrice();
 
 		return $this;

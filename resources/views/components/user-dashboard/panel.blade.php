@@ -2,14 +2,7 @@
 
 @pushOnce('styles')
 	<style>
-		.user-panel {
-			padding-inline: var(--content-padding);
-			padding-block: var(--content-padding);
-			border-radius: var(--border-radius-400);
-			box-shadow: var(--shadow-big);
-		}
-
-		.user-panel__title {
+		.dashboard-panel-title {
 			padding-bottom: var(--content-padding);
 			margin-bottom: var(--content-padding);
 			border-bottom: var(--border);
@@ -17,13 +10,15 @@
 	</style>
 @endpushOnce
 
-<section class="user-panel">
+<section class="dashboard-panel surface p-6">
 
 	{{-- Panel header --}}
-	<div class="user-panel__title flex items-center gap-4">
-		<span class="text-secondary-400 aspect-square w-6">
-			{{ import_svg('icons/' . $icon) }}
-		</span>
+	<div class="dashboard-panel-title flex items-center gap-4">
+		@if ($icon)
+			<span class="text-primary aspect-square w-6">
+				{!! embed_icon($icon) !!}
+			</span>
+		@endif
 
 		<x-typography.component-heading>{{ $title }}</x-typography.component-heading>
 	</div>

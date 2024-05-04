@@ -1,51 +1,73 @@
 @php
-    //navigation menu
-    $profileLinks = [['title' => 'Account', 'url' => 'user-dashboard', 'location' => 'recap', 'icon' => 'user'], ['title' => 'I miei corsi', 'url' => 'user-dashboard.courses', 'location' => 'courses', 'icon' => 'courses'], ['title' => 'I miei dati', 'url' => 'user-dashboard.personal-data', 'location' => 'data', 'icon' => 'settings'], ['title' => 'Logout', 'url' => 'logout', 'location' => 'logout', 'icon' => 'logout']];
-
+	$links = [
+	    ['title' => 'Feed', 'url' => '/profile', 'icon' => 'user'],
+	    ['title' => 'Lista ordini', 'url' => route('user-dashboard.orders'), 'icon' => 'cart'],
+	    [
+	        'title' => 'Il mio negozio',
+	        'url' => route('seller', ['id' => auth()->user()->id]),
+	        'icon' => 'shop',
+	        'condition' => auth()->user()->isSeller(),
+	    ],
+	    ['title' => 'I miei dati', 'url' => '/profile/data', 'icon' => 'settings'],
+	    ['title' => 'Logout', 'url' => '/logout', 'icon' => 'logout'],
+	];
 @endphp
 
-@push('styles')
-    <style>
-        .user-dashboard__navigation {
-            position: sticky;
-            top: 2rem;
-        }
+@pushOnce('styles')
+	<style>
+		.user-dashboard-navigation {
+			position: sticky;
+			top: 2rem;
 
-        .user-dashboard__navigation ul {
-            overflow: hidden;
-        }
+			[data-color-scheme="dark"] & {
+				border: none;
+			}
+		}
 
-        @media (max-width: 768px) {
-            .user-dashboard__navigation {
-                grid-template-rows: max-content 0fr;
-                transition: grid-template-rows 0.3s;
+		.user-dashboard-navigation ul {
+			overflow: hidden;
+		}
 
-                &[data-open="true"] {
-                    grid-template-rows: max-content 1fr;
-                }
-            }
-        }
-    </style>
-@endpush
+		@media (max-width: 768px) {
+			.user-dashboard-navigation {
+				grid-template-rows: max-content 0fr;
+				transition: grid-template-rows 0.3s;
 
-<nav class="user-dashboard__navigation grid bg-surface-400 rounded-2xl overflow-clip" x-data="{ open: false }"
-    :data-open="open ? 'true' : 'false'">
-    <!-- Title -->
-    <label class="md:hidden" @click="open = !open">
-        <h3 class="flex items-center gap-4 px-4 py-4 text-xl">
-            <span class="w-5">
-                {{ import_svg('icons/list') }}
-            </span>
-            Profilo
-        </h3>
-    </label>
+				[data-open="true"] & {
+					grid-template-rows: max-content 1fr;
+				}
+			}
+		}
+	</style>
+@endpushOnce
 
-    <!-- Navigation menu -->
-    <ul class="">
+<nav
+	x-data="{ open: false }"
+	:data-open="open ? 'true' : 'false'"
+>
+	<div class="user-dashboard-navigation bg-surface-400 surface grid overflow-clip rounded-lg">
+		{{-- Title --}}
+		<label
+			class="bg-surface-500 md:hidden"
+			@click="open = !open"
+		>
+			<h3 class="flex items-center gap-4 px-4 py-4 text-xl">
+				<span class="w-5">
+					{!! embed_icon('list') !!}
+				</span>
+				Profilo
+			</h3>
+		</label>
 
-        @foreach ($profileLinks as $profileLink)
-            <x-templates.user-dashboard.link :profileLink="$profileLink" :dashboardLocation="$dashboardLocationTag" />
-        @endforeach
+		{{-- Navigation link --}}
+		<ul class="">
 
-    </ul>
+			@foreach ($links as $link)
+				@if (!isset($link['condition']) || $link['condition'])
+					<x-user-dashboard.link :$link />
+				@endif
+			@endforeach
+
+		</ul>
+	</div>
 </nav>

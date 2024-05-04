@@ -28,20 +28,26 @@ class Product extends Model {
 	protected $fillable = ['name', 'design_id', 'user_id', 'type_id', 'color_id', 'colors', 'status', 'positions'];
 
 
-	// * Mutators * //
 	/**
-	 * The size ID attribute mutator.
-	 *
-	 * @return Attribute The size ID attribute.
+	 * * Accessors & Mutators 
 	 */
-	public function size_id(): Attribute {
+
+	/**
+	 * The position ID attribute mutator.
+	 *
+	 * @return Attribute The position ID attribute.
+	 */
+	public function positionId(): Attribute {
 		return Attribute::make(
-			get: fn (?int $value) => $value,
+			get: fn (?int $value) => $value ?: (int) explode(',', $this->positions)[0] ?? null,
 			set: fn (int $value) => $value,
 		);
 	}
 
-	//* Relationships * //
+	/**
+	 * * Relationships 
+	 */
+
 	/**
 	 * Get the product's seller.
 	 *
@@ -97,17 +103,26 @@ class Product extends Model {
 	}
 
 	/**
+	 * Get the position of the product.
+	 */
+	public function position(): BelongsTo {
+		return $this->belongsTo(ProductPosition::class);
+	}
+
+	/**
 	 * Get the size of the product.
-	 *
-	 * @return ProductSize|null The size of the product, or null if no size is set.
 	 */
 	public function size(): BelongsTo {
-		return $this->belongsTo(ProductSize::class, 'size_id');
+		return $this->belongsTo(ProductSize::class);
 	}
 
 
-	// * Attributes * //
-	// ~ Attributes: Prices ~ //
+	/**
+	 * * Attributes 
+	 */
+	/**
+	 * ~ Attributes: Prices 
+	 */
 	// Get the product's price
 	public function price(): ProductPrice|SellerPrice|BasePrice {
 		// Check if the product has a specific price
@@ -206,19 +221,8 @@ class Product extends Model {
 	/**
 	 * Get the product's preview
 	 */
-	public function preview(?int $imageSize, ?int $color_id, ?int $position_id): PreviewHelper {
-		return new PreviewHelper($this, $imageSize, $color_id, $position_id);
-	}
-
-	/**
-	 * Get the default position
-	 */
-	public function defaultPositionId(): int {
-		return $this->defaultPosition()?->id ?: 0;
-	}
-
-	public function defaultPosition(): ?ProductPosition {
-		return $this->positions()->first();
+	public function preview(?int $imageSize = null, ProductColor|int|null $color = null, ProductPosition|int|null $position = null): PreviewHelper {
+		return new PreviewHelper($this, $imageSize, $color, $position);
 	}
 
 	public function positions(): ?Collection {
@@ -271,8 +275,8 @@ class Product extends Model {
 	/**
 	 * Get the product's image
 	 */
-	public function image(?int $imageSize = null, ?int $color_id = null, ?int $position_id = null): string {
-		return $this->preview($imageSize, $color_id, $position_id)->image();
+	public function image(?int $imageSize = null, ProductColor|int|null $color = null, ProductPosition|int|null $position = null): string {
+		return $this->preview($imageSize, $color, $position)->image();
 	}
 
 	/**
@@ -289,7 +293,9 @@ class Product extends Model {
 		return $this->user_id == auth()->id();
 	}
 
-	// ~ Attributes: Logos ~ //
+	/**
+	 * ~ Attributes: Logos 
+	 */
 	/**
 	 * Get the product's logo group.
 	 *

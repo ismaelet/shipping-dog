@@ -25,7 +25,7 @@ while ($typeRow = $typeRows->fetch_assoc()) {
 
 // fetch colors
 $colors = [];
-$colorRows = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors ORDER BY reorder ASC, id ASC');
+$colorRows = \Legacy\System\Classes\LegacyDB::select('id FROM product_colors ORDER BY reorder ASC, id ASC');
 
 while ($colorRow = $colorRows->fetch_assoc()) {
 	$color = new Color($colorRow['id']);
@@ -61,7 +61,7 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 		// upload product images
 		if (!empty($_POST['colors'])) {
 			foreach ($_POST['colors'] as $colorSlug) {
-				$color_id = \Legacy\System\Classes\LegacyDB::find('id FROM items_colors WHERE tag = ?', [$colorSlug]);
+				$color_id = \Legacy\System\Classes\LegacyDB::find('id FROM product_colors WHERE tag = ?', [$colorSlug]);
 
 				if ($_FILES['file-' . $color_id]['name']) {
 					upload_product_image($oldProduct, $color_id);

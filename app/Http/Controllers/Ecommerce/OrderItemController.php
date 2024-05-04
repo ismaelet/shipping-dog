@@ -74,7 +74,8 @@ class OrderItemController extends Controller {
 			'type_id' => $product->type->id,
 			'fullProductPrice' => $product->fullPrice(),
 			'price_disc' => $product->customerDiscount(),
-			'productGain' => $product->sellerGain()
+			'productGain' => $product->sellerGain(),
+			'gain' => $product->sellerGain() * $request->quantity,
 		]);
 
 		// Update the cart data

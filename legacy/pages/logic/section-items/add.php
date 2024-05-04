@@ -34,7 +34,7 @@ while ($typeRow = $typeRows->fetch_assoc()) {
 
 // fetch colors
 $colors = [];
-$colorRows = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors ORDER BY reorder ASC, id ASC');
+$colorRows = \Legacy\System\Classes\LegacyDB::select('id FROM product_colors ORDER BY reorder ASC, id ASC');
 
 while ($colorRow = $colorRows->fetch_assoc()) {
 	$color = new Color($colorRow['id']);

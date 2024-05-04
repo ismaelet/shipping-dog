@@ -21,7 +21,7 @@ $nav_categories = [
 		'category' => 'settings',
 	],
 	[
-		'title' => 'Lavori',
+		'title' => 'Grafiche',
 		'category' => 'portfolio',
 	],
 	[
@@ -44,12 +44,12 @@ $nav_settings = [
 
 $nav_portfolio = [
 	[
-		'title' => 'Lista lavori',
+		'title' => 'Lista grafiche',
 		'file' => 'list',
 		'file_show' => '',
 	],
 	[
-		'title' => 'Carica lavoro',
+		'title' => 'Carica una grafica',
 		'file' => 'add',
 	],
 ];

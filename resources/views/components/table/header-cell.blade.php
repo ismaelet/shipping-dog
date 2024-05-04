@@ -29,6 +29,7 @@
 	'px-4',
 	'text-left',
 	'align-middle',
+	'whitespace-nowrap',
 	'font-medium',
 	'text-center' =>
 		isset($column['type']) && in_array($column['type'], ['bool']),

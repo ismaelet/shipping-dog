@@ -49,7 +49,7 @@ class FeedEntry {
 	}
 
 	private function getOrderItem() {
-		return $this->type_id == 2 ? OrderItem::find($this->event_id) : null;
+		return $this->type_id == 2 ? OrderItem::with('color')->find($this->event_id) : null;
 	}
 
 	private function getseller() {
@@ -113,7 +113,7 @@ class FeedEntry {
 				break;
 			case 3:
 			case 5:
-				$design = new Design($this->event_id);
+				$design = new LegacyDesign($this->event_id);
 				break;
 			default:
 				$design = null;

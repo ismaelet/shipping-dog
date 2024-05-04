@@ -66,26 +66,6 @@ class Seller {
 		return (bool) !strpos($this->userData->cover[0], '/0.jpg');
 	}
 
-	private function getEarned(): float {
-		$earned = \Legacy\System\Classes\LegacyDB::row(
-			'
-		SUM((' . OrderItem::PRODUCT_GAIN_FIELD . ' - gain_disc) * order_items.quantity) as totGain
-		FROM order_items INNER JOIN orders ON order_items.order_id = orders.id
-		WHERE seller_id = ? AND orders.status > 0',
-			[$this->id]
-		)['totGain'];
-
-		if ($earned !== null) {
-			return round($earned, 2);
-		} else {
-			return 0;
-		}
-	}
-
-	private function getEarnedString() {
-		return format_price($this->earned);
-	}
-
 	private function getPayed() {
 		return \Legacy\System\Classes\LegacyDB::sum('value FROM stores_payments WHERE seller_id = ? AND other = 0', [$this->id]);
 	}

@@ -8,7 +8,7 @@ class Color {
 
 	use \Legacy\System\Traits\DatabaseObject;
 
-	public const TABLE = 'items_colors';
+	public const TABLE = 'product_colors';
 	public const INDEX = 'id';
 
 	private function getId() {

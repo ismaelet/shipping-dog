@@ -114,10 +114,10 @@
 					<x-typography.component-heading>Indirizzo</x-typography.component-heading>
 
 					<p>
-						<?= $order->address->fullAddress() ?? '' ?><br>
+						<?= $order->address?->fullAddress() ?? '' ?><br>
 						-<br>
-						<?= $order->address->email ?? '' ?><br>
-						<?= $order->address->phone ?? '' ?>
+						<?= $order->address?->email ?? '' ?><br>
+						<?= $order->address?->phone ?? '' ?>
 					</p>
 
 					@if (in_array($order->status, [EcommerceHelper::statusFromTag('received'), EcommerceHelper::statusFromTag('confirmed')]))

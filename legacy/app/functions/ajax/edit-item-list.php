@@ -25,18 +25,18 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 	$type = ProductType::find($oldType->id);
 	$gender = new Gender($oldType->genderId);
 
-	$oldProductId = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND type_id = ?', [$oldDesign->id, $oldType->id]);
+	$productId = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND type_id = ?', [$oldDesign->id, $oldType->id]);
 
-	$oldProduct = new LegacyProduct($oldProductId);
-	$product = Product::find($oldProduct->id);
+	$oldProduct = new LegacyProduct($productId);
+	$product = Product::find($productId);
 
-	$active = $oldProduct->statusId;
+	$active = $product->status;
 
-	if ($oldProduct->statusId) $oldProductImage = $oldProduct->image;
-	else if (public_storage($oldProduct->image) && !$oldProduct->isCustom) $oldProductImage = $oldProduct->image;
-	else $oldProductImage = $oldProduct->type->blankImage;
+	if ($product->status) $productImage = $oldProduct->image;
+	else if (public_storage($oldProduct->image) && !$product->isCustom()) $productImage = $oldProduct->image;
+	else $productImage = $oldProduct->type->blankImage;
 
-	// tabls
+	// tabs
 	$tabs = [];
 
 	if (count($oldType->colors) > 1) $tabs[] = ['Colori', 'colors'];
@@ -56,7 +56,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 	<div id="item-<?= $oldType->id ?>" class="item <?= $active ? 'active' : '' ?>">
 
 		<div class="item-img item-panel-open pos-rel">
-			<img src="<?= $oldProductImage ?>" alt="" class="img-fill">
+			<img src="<?= $productImage ?>" alt="" class="img-fill">
 			<div class="item-over bgr"></div>
 		</div>
 
@@ -90,7 +90,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 		</form>
 
-		<div class="item-panel" data-id=<?= $oldProduct->id ?>>
+		<div class="item-panel" data-id=<?= $productId ?>>
 
 			<div class="box pos-rel">
 
@@ -116,7 +116,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 								$enabled = in_array($position->id, $oldProduct->availablePositionIds);
 
 								$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $position->id);
-								$productMockup = ProductMockup::where('product_id', $product->id)
+								$productMockup = ProductMockup::where('product_id', $productId)
 									->where('position_id', $position->id)
 									->first();
 
@@ -186,7 +186,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 									<form method="POST" class="data">
 
-										<input type="hidden" name="product_id" value="<?= $oldProduct->id ?>">
+										<input type="hidden" name="product_id" value="<?= $productId ?>">
 										<input type="hidden" name="position_id" value="<?= $position->id ?>">
 
 										<div>
@@ -258,10 +258,10 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 								<!-- Color tab -->
 								<?php } else {
 
-								$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $product->defaultPositionId());
+								$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $product->position_id);
 
-								$productMockup = ProductMockup::where('product_id', $product->id)
-									->where('position_id', $product->defaultPositionId())
+								$productMockup = ProductMockup::where('product_id', $productId)
+									->where('position_id', $product->position_id)
 									->first();
 
 								if ($productTypeMockup || $productMockup) {
@@ -332,7 +332,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 										<form method="POST" class="data">
 
-											<input type="hidden" name="product_id" value="<?= $oldProduct->id ?>">
+											<input type="hidden" name="product_id" value="<?= $productId ?>">
 
 											<div class="item-colors-field colors-pan">
 
@@ -349,7 +349,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 														<div class="inp-box color-grid">
 															<?php
 
-															$res_colorA = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
+															$res_colorA = \Legacy\System\Classes\LegacyDB::select('id FROM product_colors ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
 
 															while ($row = $res_colorA->fetch_assoc()) {
 
@@ -359,7 +359,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 																	<label class="color-box">
 
-																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (\Legacy\System\Classes\LegacyDB::exists("products WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'checked' ?>>
+																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (\Legacy\System\Classes\LegacyDB::exists("products WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$productId, $color->slug])) echo 'checked' ?>>
 
 																		<div class="color-icon" style="background-color: #<?= $color->hex ?>;"></div>
 
@@ -381,16 +381,16 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 															<?php
 
-															$res_colorD = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors ORDER BY id ASC');
+															$res_colorD = \Legacy\System\Classes\LegacyDB::select('id FROM product_colors ORDER BY id ASC');
 
 															while ($row = $res_colorD->fetch_assoc()) {
 
 																$color = new LegacyProductColor($row['id']);
 															?>
 
-																<label class="inlb color-box <?php if (\Legacy\System\Classes\LegacyDB::exists("products WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$oldProduct->id, $color->slug])) echo 'active' ?>">
+																<label class="inlb color-box <?php if (\Legacy\System\Classes\LegacyDB::exists("products WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$productId, $color->slug])) echo 'active' ?>">
 
-																	<input type="checkbox" class="cbx hidden colorD-<?= $color->slug ?>" name="colorD" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-color-id="<?= $color->id ?>" data-dark="<?= $color->dark ? 1 : 0 ?>" <?php if ($color->id == \Legacy\System\Classes\LegacyDB::find('color_id FROM products WHERE id = ?', [$oldProduct->id])) echo 'checked' ?>>
+																	<input type="checkbox" class="cbx hidden colorD-<?= $color->slug ?>" name="colorD" value="<?= $color->id ?>" data-color="<?= $color->slug ?>" data-color-id="<?= $color->id ?>" data-dark="<?= $color->dark ? 1 : 0 ?>" <?php if ($color->id == \Legacy\System\Classes\LegacyDB::find('color_id FROM products WHERE id = ?', [$productId])) echo 'checked' ?>>
 
 																	<div class="color-icon" for="item-colorD-<?= $color->slug ?>" style="background-color: #<?= $color->hex ?>;"></div>
 																</label>

@@ -20,7 +20,9 @@ class Seller extends Model {
 	protected $table = 'stores';
 	protected $fillable = ['credit', 'earned'];
 
-	// * Relationships * //
+	/**
+	 * * Relationships
+	 */
 	/**
 	 * Get the seller's designs
 	 */
@@ -70,7 +72,9 @@ class Seller extends Model {
 		return $this->hasMany(LogoGroup::class, 'seller_id', 'user_id');
 	}
 
-	// * Attributes * //
+	/**
+	 * * Attributes
+	 */
 	/**
 	 * Get the formatted time string
 	 */
@@ -114,27 +118,9 @@ class Seller extends Model {
 		return public_asset('users/icons/0.jpg');
 	}
 
-	// ~ Attributes: Seller balance ~ //
 	/**
-	 * Get the seller's total sales
+	 * ~ Attributes: Seller balance
 	 */
-	public function earned(): float {
-		// Get the total sales
-		$count = $this->order_items()
-			->where('status', '>', 0)
-			->selectRaw('SUM((productGain - gain_disc) * quantity) as totalGain')
-			->first();
-
-		// Round the value to 2 decimals
-		$earned = $count->totalGain;
-
-		if ($earned !== null) {
-			return round($earned, 2);
-		}
-
-		return 0;
-	}
-
 	/**
 	 * Get the seller's credit
 	 */
@@ -143,7 +129,7 @@ class Seller extends Model {
 	}
 
 	private function earnedCredit(): float {
-		return round($this->earned() * .1, 2);
+		return round($this->earned * .1, 2);
 	}
 
 	private function usedOrderCredit(): float {
@@ -187,14 +173,14 @@ class Seller extends Model {
 	 * Get the amount to be payed
 	 */
 	public function toBePayed() {
-		return $this->earned() - $this->payed() + $this->otherTransferAmount();
+		return $this->earned - $this->payed() + $this->otherTransferAmount();
 	}
 
 	/**
 	 * Get the formatted balance
 	 */
 	public function earnedString(): string {
-		return EcommerceHelper::formatPrice($this->earned(), true);
+		return EcommerceHelper::formatPrice($this->earned, true);
 	}
 
 	public function payedString(): string {
@@ -213,9 +199,20 @@ class Seller extends Model {
 		return EcommerceHelper::formatPrice($this->toBePayed(), true);
 	}
 
-	/************************
-	 * * Static methods *
-	 ************************/
+	/**
+	 * * Actions
+	 */
+	public function updateEarned(): self {
+		$this->update([
+			'earned' => $this->order_items->where('status', '>', 1)->sum('gain')
+		]);
+
+		return $this;
+	}
+
+	/**
+	 * * Static methods
+	 */
 	public static function awaitingApproval(): Collection {
 		return self::where('status', 0)
 			->where('user_id', '!=', 2)

@@ -23,7 +23,9 @@ class OrderItem extends Model {
 	protected $fillable = ['fullProductPrice', 'price_disc', 'productGain', 'gain_disc', 'credit', 'inventory', 'quantity', 'time', 'user_id', 'order_id', 'product_id', 'seller_id', 'design_id', 'type_id', 'color_id', 'size_id', 'gender_id', 'position_id', 'logo_id'];
 
 
-	// * Relationships * //
+	/**
+	 * * Relationships 
+	 */
 	/**
 	 * Get the order that the order item belongs to.
 	 *
@@ -88,7 +90,9 @@ class OrderItem extends Model {
 	}
 
 
-	// * Utility methods * //
+	/**
+	 * * Utility methods 
+	 */
 
 	/**
 	 * Get the name of the order.
@@ -153,7 +157,10 @@ class OrderItem extends Model {
 	 * @return string
 	 */
 	public function image(): string {
-		return $this->product->image(null, $this->color_id, $this->position_id);
+		return $this->product->image(
+			color: $this->color,
+			position: $this->position,
+		);
 	}
 
 	/**
@@ -166,8 +173,9 @@ class OrderItem extends Model {
 	}
 
 
-	// ~ Price ~ //
-
+	/**
+	 * ~ Price
+	 */
 	/**
 	 * Get the gross price of a single product.
 	 *
@@ -259,7 +267,14 @@ class OrderItem extends Model {
 	}
 
 
-	// * Actions * //
+	/**
+	 * * Actions 
+	 */
+	public function updateGain(): void {
+		$this->productGain = $this->product->sellerGain();
+		$this->gain = ($this->productGain * $this->quantity) - $this->gain_disc;
+		$this->save();
+	}
 
 	/**
 	 * Deletes the order.

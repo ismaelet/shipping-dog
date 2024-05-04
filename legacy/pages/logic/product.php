@@ -2,7 +2,6 @@
 
 use App\Helpers\ArrayHelper;
 use App\Models\Ecommerce\Product;
-use Legacy\Classes\Ecommerce\OrderItemItem as LegacyOrderItemItem;
 use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 use Legacy\System\Classes\LegacyDB;
 use Legacy\System\Classes\LegacyView;
@@ -24,7 +23,7 @@ $productColorId = $_GET['color_id'] ?? null;
 /**
  * * Fetch the record
  */
-$product = $id ? Product::find($id) : null;
+$product = $id ? Product::with('design', 'seller', 'color')->find($id) : null;
 $seller = $product?->seller;
 
 /**

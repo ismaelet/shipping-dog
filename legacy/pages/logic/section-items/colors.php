@@ -23,7 +23,7 @@ $inputs = [
 			'type' => 'select',
 			'text' => 'Colore',
 			'name' => 'color',
-			'query' => "* FROM items_colors ORDER BY name ASC",
+			'query' => "* FROM product_colors ORDER BY name ASC",
 			'field-name' => 'id',
 			'field-show' => 'name',
 			'value' => $_POST['color'] ?? false,
@@ -61,7 +61,7 @@ if (isset($_POST['add-color'])) {
 	if (isset($_POST['type'])) {
 		$color = new Color($_POST['color']);
 
-		\Legacy\System\Classes\LegacyDB::update('items_colors SET hidden=0 WHERE tag = ?', [$color->slug]);
+		\Legacy\System\Classes\LegacyDB::update('product_colors SET hidden=0 WHERE tag = ?', [$color->slug]);
 
 		foreach ($_POST['type'] as $type_id) {
 			// update type colors
@@ -96,7 +96,7 @@ if (isset($_POST['remove-color'])) {
 if (isset($_POST['remove-color-all'])) {
 	$color = new Color($_POST['color']);
 
-	\Legacy\System\Classes\LegacyDB::update('items_colors SET hidden=1 WHERE id = ?', [$color->id]);
+	\Legacy\System\Classes\LegacyDB::update('product_colors SET hidden=1 WHERE id = ?', [$color->id]);
 	\Legacy\System\Classes\LegacyDB::update("product_types SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ','))");
 	\Legacy\System\Classes\LegacyDB::update("products SET colors = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', colors, ','), '," . $color->slug . ",', ',')) WHERE design_id NOT IN (SELECT id FROM designs WHERE custom=1)");
 

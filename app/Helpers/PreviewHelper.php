@@ -16,18 +16,37 @@ class PreviewHelper {
 	public const ALLOWED_IMAGE_SIZES = [self::SMALL_IMAGE_SIZE, self::BIG_IMAGE_SIZE];
 	public const PLACEHOLDER_IMAGE = 'product_types/mockups/no-image.webp';
 
-	private ?Product $product;
-	private ?ProductColor $color;
-	private ?ProductPosition $position;
 	private int $imageSize;
+	private Product $product;
+	private ProductColor $color;
+	private ProductPosition $position;
 
-	function __construct(?Product $product, ?int $imageSize = 400, ?int $color_id = null, ?int $position_id = null) {
-		$this->product = $product;
-		$this->color = $color_id ? ProductColor::find($color_id) : $product?->color;
-		$this->imageSize = in_array($imageSize, self::ALLOWED_IMAGE_SIZES) ? $imageSize : self::DEFAULT_IMAGE_SIZE;
+	function __construct(?Product $product, ?int $imageSize = 400, ProductColor|int|null $color = null, ProductPosition|int|null $position = null) {
+		if ($product) {
+			// Set the image size
+			$this->imageSize = in_array($imageSize, self::ALLOWED_IMAGE_SIZES) ? $imageSize : self::DEFAULT_IMAGE_SIZE;
 
-		// Set the position
-		$this->position = $position_id && ProductPosition::find($position_id) ? ProductPosition::find($position_id) : $product?->defaultPosition();
+			// Set the product
+			$this->product = $product;
+
+			// Set the color
+			if (is_object($color)) {
+				$this->color = $color;
+			} else if (is_int($color)) {
+				$this->color = ProductColor::find($color);
+			} else {
+				$this->color = $product->color;
+			}
+
+			// Set the position
+			if (is_object($position)) {
+				$this->position = $position;
+			} else if (is_int($position)) {
+				$this->position = ProductPosition::find($position);
+			} else {
+				$this->position = $product->position;
+			}
+		}
 	}
 
 	/*

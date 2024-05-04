@@ -171,14 +171,18 @@ class Order extends Model {
 	 *
 	 * @return string
 	 */
-	public function order_itemsString(): string {
-		$order_itemsString = '';
+	public function orderItemsString(): string {
+		$orderItemsString = '';
 
-		foreach ($this->order_items as $orderItem) {
-			$order_itemsString .= $orderItem->quantity . 'x ' . $orderItem->fullName() . '<br>';
+		if (!$this->order_items->count()) {
+			return 'Nessun prodotto';
 		}
 
-		return $order_itemsString;
+		foreach ($this->order_items as $orderItem) {
+			$orderItemsString .= $orderItem->quantity . 'x ' . $orderItem->fullName() . '<br>';
+		}
+
+		return $orderItemsString;
 	}
 
 
@@ -254,7 +258,7 @@ class Order extends Model {
 	 * @return string
 	 */
 	public function statusLabel(): string {
-		return '<span class="order-label px-4 py-1 gap-2 border rounded whitespace-nowrap" style="--icon-size: 1em; border-color: ' . $this->statusColor() . '; color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon()) . ' ' . $this->statusName() . '</span>';
+		return '<span class="order-label px-4 py-1 gap-2 border rounded whitespace-nowrap" style="--icon-size: 1em; border-color: ' . $this->statusColor() . '; color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon(), ['shrink-0']) . ' ' . $this->statusName() . '</span>';
 	}
 
 
@@ -508,6 +512,13 @@ class Order extends Model {
 				$this->coupon->delete();
 			}
 		}
+
+		// Update the seller's earnings
+		$this->order_items->each(function ($orderItem) {
+			if ($orderItem->seller) {
+				$orderItem->seller->updateEarned();
+			}
+		});
 
 		// Send the confirmation email
 		if ($sendNotification) {

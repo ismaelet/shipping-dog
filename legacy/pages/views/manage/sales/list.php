@@ -63,7 +63,7 @@
 
 				<input type="hidden" name="id" value="<?= $oldSeller->id ?>">
 				<input type="hidden" id="sort-inp" name="sort" value="<?= $sort ?>">
-				<input type="hidden" id="year-inp" name="year" value="<?= $year ?>">
+				<input type="hidden" id="year-inp" name="year" value="<?= $currentYear ?>">
 
 				<h1 class="sort-txt">Visualizza:</h1>
 
@@ -84,7 +84,7 @@
 				<div class="rec_row">
 					<div class="rec_cell">
 						<p class="rec_lbl">Guadagno:</p>
-						<input type="text" class="input wid-100" value="<?= format_price($seller->earned()) ?>" disabled>
+						<input type="text" class="input wid-100" value="<?= ($seller->earnedString()) ?>" disabled>
 					</div>
 
 					<div class="rec_cell">

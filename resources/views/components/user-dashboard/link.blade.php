@@ -1,12 +1,21 @@
-<a href="{{ route($profileLink['url']) }}">
-    <li
-        class="px-4 py-4 md:py-6 transition-colors {{ $dashboardLocation == $profileLink['location'] ? 'bg-primary-400 text-neutral-100' : '' }}">
-        <p class="flex gap-4 items-center font-heading">
-            <span class="w-5 aspect-square">
-                {{ import_svg('icons/' . $profileLink['icon']) }}
-            </span>
+@php
+	$currentLocation = explode('user-dashboard.', request()->route()->getName())[1] ?? null;
+	$dashboardLocation = explode('user-dashboard/', $link['url'])[1] ?? null;
+	$checked = $currentLocation == $dashboardLocation;
+@endphp
 
-            {{ $profileLink['title'] }}
-        </p>
-    </li>
+<a href="{{ $link['url'] }}">
+	<li @class([
+		'px-4 transition-colors py-6',
+		'bg-primary-400 text-neutral-900' => $checked,
+		'transition-colors hover:text-primary' => !$checked,
+	])>
+		<p class="font-heading flex items-center gap-4 text-sm sm:text-base">
+			<span class="aspect-square w-5">
+				{!! embed_icon($link['icon']) !!}
+			</span>
+
+			{{ $link['title'] }}
+		</p>
+	</li>
 </a>

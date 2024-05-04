@@ -5,15 +5,15 @@
 */
 $queryConfig['table'] = 'inventory';
 $queryConfig['index'] = 'id';
-$queryConfig['select'] = ['inventory.id', 'inventory.time', 'inventory.design_id', 'designs.name', 'product_types.name as typeName', 'items_colors.name as colorName', 'items_sizes.name as sizeName', 'product_positions.name as positionName', 'extras.name as logoName', '(design_id IN (SELECT id FROM designs WHERE status = 1) AND designs.user_id IN (SELECT user_id FROM stores)) as inInventory'];
+$queryConfig['select'] = ['inventory.id', 'inventory.time', 'inventory.design_id', 'designs.name', 'product_types.name as typeName', 'product_colors.name as colorName', 'items_sizes.name as sizeName', 'product_positions.name as positionName', 'extras.name as logoName', '(design_id IN (SELECT id FROM designs WHERE status = 1) AND designs.user_id IN (SELECT user_id FROM stores)) as inInventory'];
 $queryConfig['from'] = '
 	inventory
 		INNER JOIN designs
 			ON inventory.design_id = designs.id
 		LEFT JOIN product_types
 			ON inventory.type_id = product_types.id
-		LEFT JOIN items_colors
-			ON inventory.color_id = items_colors.id
+		LEFT JOIN product_colors
+			ON inventory.color_id = product_colors.id
 		LEFT JOIN items_sizes
 			ON inventory.size_id = items_sizes.id
 		LEFT JOIN product_positions
@@ -24,7 +24,7 @@ $queryConfig['from'] = '
 $queryConfig['where-search'] = "
 	designs.name LIKE CONCAT('%',?,'%') OR
 	product_types.name LIKE CONCAT('%',?,'%') OR
-	items_colors.name LIKE CONCAT('%',?,'%') OR
+	product_colors.name LIKE CONCAT('%',?,'%') OR
 	items_sizes.name LIKE CONCAT('%',?,'%') OR
 	product_positions.name LIKE CONCAT('%',?,'%') OR
 	extras.name LIKE CONCAT('%',?,'%')

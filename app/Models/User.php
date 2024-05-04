@@ -71,15 +71,7 @@ class User extends Authenticatable {
 	 * Get the user's active cart
 	 */
 	public function cart(): HasOne {
-		$orders = $this->orders->where('status', EcommerceHelper::statusFromTag('received'));
-
-		if ($orders->count() == 1) {
-			$orders->first()->update([
-				'status' => EcommerceHelper::statusFromTag('open'),
-			]);
-		}
-
-		return $this->hasOne(Order::class, 'user_id', 'id')->where('status', EcommerceHelper::statusFromTag('open'));
+		return $this->hasOne(Order::class, 'user_id', 'id')->whereIn('status', [EcommerceHelper::statusFromTag('open'), EcommerceHelper::statusFromTag('received')]);
 	}
 
 	/**
@@ -104,7 +96,7 @@ class User extends Authenticatable {
 	}
 
 	//! Legacy support
-	public function cover(?int $size = 400) {
+	public function cover(?int $size = 1024) {
 		$sizeConversion = [
 			1024 => '',
 			400 => '_m',
@@ -116,14 +108,14 @@ class User extends Authenticatable {
 		$cover = 'shops/covers/' . $this->id . $sizeSlug;
 
 		if (file_exists(public_storage($cover . '.webp'))) {
-			return $cover . '.webp';
+			return public_asset($cover . '.webp');
 		}
 
 		if (file_exists(public_storage($cover . '.jpg'))) {
-			return $cover . '.jpg';
+			return public_asset($cover . '.jpg');
 		}
 
-		return 'shops/covers/0.jpg';
+		return public_asset('shops/covers/0.jpg');
 	}
 
 	public function icon(): string {

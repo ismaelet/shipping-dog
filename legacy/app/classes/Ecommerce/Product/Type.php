@@ -79,8 +79,8 @@ class Type {
 
 		foreach ($this->availableColorSlugs as $colorSlug) {
 			$color_id = $all ?
-				\Legacy\System\Classes\LegacyDB::find('id FROM items_colors WHERE tag = ?', [$colorSlug]) :
-				\Legacy\System\Classes\LegacyDB::find('id FROM items_colors WHERE tag = ? AND hidden = 0', [$colorSlug]);
+				\Legacy\System\Classes\LegacyDB::find('id FROM product_colors WHERE tag = ?', [$colorSlug]) :
+				\Legacy\System\Classes\LegacyDB::find('id FROM product_colors WHERE tag = ? AND hidden = 0', [$colorSlug]);
 
 			if ($color_id) {
 				$colors[] = new Color($color_id);

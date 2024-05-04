@@ -3,7 +3,7 @@
 /**
  * Query configuration
  */
-$queryConfig['table'] = 'items_colors';
+$queryConfig['table'] = 'product_colors';
 $queryConfig['index-field'] = 'id';
 $queryConfig['title-field'] = 'name';
 

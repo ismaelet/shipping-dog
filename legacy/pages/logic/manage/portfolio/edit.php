@@ -32,7 +32,7 @@ $seller = $design->seller;
 $custom = $design->custom;
 
 // generate data
-$res_colorD = \Legacy\System\Classes\LegacyDB::select('id FROM items_colors WHERE hidden = 0 ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
+$res_colorD = \Legacy\System\Classes\LegacyDB::select('id FROM product_colors WHERE hidden = 0 ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
 
 // reupload design
 if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
