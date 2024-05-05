@@ -37,7 +37,7 @@ Route::resource('/logos', LogoController::class)->only(['show']);
 /**
  * orders
  */
-Route::resource('/orders', OrderController::class)->only(['index']);
+Route::resource('/orders', OrderController::class)->only(['index', 'show', 'update']);
 
 /**
  * Likes

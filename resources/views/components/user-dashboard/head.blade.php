@@ -20,8 +20,7 @@
 			class="border-background -mt-10 h-20 w-20 rounded-full border-[5px]"
 		>
 
-		<x-typography.component-heading
-			class="break-all text-center">{{ !$user->username ?: $user->email }}</x-typography.component-heading>
+		<x-typography.component-heading class="break-all text-center">{{ $user->email }}</x-typography.component-heading>
 
 		<p class="">
 			<?= $user->first_name ?>

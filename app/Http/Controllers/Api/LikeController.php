@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User\Like;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class LikeController extends Controller {
 
@@ -18,20 +19,19 @@ class LikeController extends Controller {
 			'design_id' => $request->design_id,
 		])->exists();
 
-		if (!$exists) {
-			Like::create([
-				'user_id' => $request->user_id,
-				'design_id' => $request->design_id,
-			]);
-
-			return response()->json([
-				'success' => true
-			]);
+		if ($exists) {
+			return response()->json(['error' => 'You have already liked this product.'], Response::HTTP_CONFLICT);
 		}
 
-		return response()->json([
-			'success' => false
+		$like = Like::create([
+			'user_id' => $request->user_id,
+			'design_id' => $request->design_id,
 		]);
+
+		return response()->json([
+			'success' => true,
+			'like' => $like,
+		], Response::HTTP_CREATED);
 	}
 
 	/**

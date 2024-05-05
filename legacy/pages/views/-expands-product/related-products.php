@@ -28,7 +28,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 </section>
 
 <!-- Tags -->
-<?php if ($product->design->tags) { ?>
+<?php if ($product->design?->tags?->tags) { ?>
 
 	<section id="tag-sec" class="">
 		<div id="tag-block" class="main-wrap txt-cen pad-t-3">

@@ -4,7 +4,6 @@
 
 #slider .bgr {
 	opacity: 0.7;
-	background-image: url(../../app/assets/assets/blank.png);
 }
 
 html[data-color-scheme='light'] #slider .bgr {

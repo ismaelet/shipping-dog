@@ -363,7 +363,8 @@ class Shop {
 						<button type="submit" id="hide-items" name="hide-items" class="hidden"></button>
 					<?php } ?>
 
-					<div id="load" class="js-shop-load"></div>
+					<div id="load" class="js-shop-load">
+					</div>
 
 					<div class="grid5 grid4-1440w grid3-1024w grid2-480w col-gap1 row-gap2">
 

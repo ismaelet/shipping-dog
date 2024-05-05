@@ -4640,7 +4640,6 @@ p strong {
 
 #load-ico,
 .load-icon {
-	background: url(../svg/icons/loading.svg) center / contain no-repeat;
 	width: 5rem;
 	height: 5rem;
 	top: 50%;
@@ -5863,7 +5862,6 @@ main {
 
 #load {
 	background-color: var(--bgr);
-	background-image: url(../svg/icons/loading.svg);
 	background-position: 50% 10vh;
 	background-size: 5rem;
 	background-repeat: no-repeat;
@@ -8266,4 +8264,8 @@ h3 {
 	p .font-bold {
 		color: var(--color-neutral-700);
 	}
+}
+
+.items-start {
+	align-items: start;
 }

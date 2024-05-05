@@ -8,13 +8,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 			recapShippingElement.dataset.shippingMethodId = shippingMethodId
 
-			const cartId = await order_id()
+			const orderId = element.dataset.cartId
 
-			console.log(cartId)
-
-			call_class_method('Legacy\\Classes\\Ecommerce\\Cart', 'updateShippingMethodId', [shippingMethodId], cartId, null, true)
-
-			update_cart()
+			update_cart(orderId, { shipping_method_id: shippingMethodId })
 		})
 	})
 })
@@ -23,29 +19,6 @@ document.addEventListener('DOMContentLoaded', async function () {
  * OLD
  */
 $(function () {
-	/*
-	 * Shipping
-	 */
-	$('.js-shipping-method').on('change', function () {
-		const self = $(this)
-		const order_id = parseInt(self.data('cart-id'))
-		const shippingMethodId = parseInt(self.val())
-		const shipped = parseInt(self.data('shipped'))
-		const addressForm = $('.address-form')
-		const addressInputs = $('.delivery-input')
-		const localDeliveryClass = 'address-form--local-delivery'
-
-		if (shipped) {
-			addressInputs.prop('required', true)
-			addressForm.removeClass(localDeliveryClass)
-		} else {
-			addressInputs.prop('required', false)
-			addressForm.addClass(localDeliveryClass)
-		}
-
-		update_cart(order_id, { shippingMethodId: shippingMethodId })
-	})
-
 	/*
 	 * Payments
 	 */

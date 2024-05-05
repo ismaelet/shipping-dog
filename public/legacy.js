@@ -60,23 +60,6 @@ async function get_class_properties(className, propertyNames, objectId = null, s
 	return await AJAX('/old-api/get-class-properties/' + className, parameters, 'json', debug)
 }
 
-async function call_class_method(className, methodName, funParameters = null, objectId = null, setProperties = null, debug = true) {
-	let parameters = {
-		scope: methodName,
-		objectId: objectId,
-	}
-
-	if (funParameters) {
-		parameters.arguments = funParameters
-	}
-
-	if (setProperties) {
-		parameters.setProperties = format_set_request(setProperties)
-	}
-
-	return await AJAX('/old-api/call-class-method/' + className, parameters, 'json', debug)
-}
-
 /*
  * Function
  */
@@ -126,169 +109,50 @@ const cartPriceStringSelector = '.js-cart-price-string'
 /*
  * Functions
  */
-// get cart ID
-async function order_id() {
-	return await call_function('order_id')
-}
-
 // update cart
-async function update_cart() {
-	// fatch data
-	const cartData = await get_class_properties('Legacy\\Classes\\Ecommerce\\Cart', ['quantity', 'productPrice', 'productPriceString', 'priceString'], await order_id(), null, false)
+async function update_cart(orderId, data) {
+	// Update the order
+	await patchOrder(orderId, data)
 
-	// update cart icon
-	if (parseInt(cartData.quantity)) {
-		$('.h-cart-inline').removeClass('empty')
-	} else {
-		$('.h-cart-inline').addClass('empty')
-	}
+	// fetch data
+	getOrder(orderId)
+		.then((response) => {
+			const cartData = response.data
 
-	// update elements content
-	$(cartQuantitySelector).text(cartData.quantity)
-	$(cartDataQuantitySelector).attr('data-quantity', cartData.quantity)
-	$(cartProductPriceSelector).text(cartData.productPrice)
-	$(cartProductPriceStringSelector).text(cartData.productPriceString)
-	$(cartPriceStringSelector).text(cartData.priceString)
+			if (cartData) {
+				// update cart icon
+				if (parseInt(cartData.quantity)) {
+					$('.h-cart-inline').removeClass('empty')
+				} else {
+					$('.h-cart-inline').addClass('empty')
+				}
 
-	if (!parseFloat(cartData.productPrice)) {
-		$(sidebardSelector).removeClass(activeClass)
-	}
+				// update elements content
+				$(cartQuantitySelector).text(cartData.quantity)
+				$(cartDataQuantitySelector).attr('data-quantity', cartData.quantity)
+				$(cartProductPriceSelector).text(cartData.order_items_price)
+				$(cartProductPriceStringSelector).text(cartData.gross_order_items_price_string)
+				$(cartPriceStringSelector).text(cartData.price_string)
 
-	update_shipping()
+				// update shipping fee
+				document.querySelectorAll('.js-cart-shipping-price-string').forEach((element) => {
+					element.innerHTML = cartData.shipping_fee_string
+				})
 
-	// redirect if in a cart page and the cart is empty
-	if (!cartData.quantity && $('[data-cart-page="true"]').length) {
-		window.location.href = 'cart/empty'
-	}
+				if (!parseFloat(cartData.order_items_price)) {
+					$(sidebardSelector).removeClass(activeClass)
+				}
+
+				// redirect if in a cart page and the cart is empty
+				if (!cartData.quantity && $('[data-cart-page="true"]').length) {
+					window.location.href = 'cart/empty'
+				}
+			}
+		})
+		.catch((error) => {
+			console.error(orderId + ': ' + error)
+		})
 }
-
-// update shipping
-function update_shipping() {
-	const shippingElements = document.querySelectorAll(ordershippingFeeStringSelector)
-
-	shippingElements.forEach(async (element) => {
-		const shippingMethodId = element.dataset.shippingMethodId
-		const shippingFee = (await get_class_properties('Legacy\\Classes\\Ecommerce\\ShippingMethod', 'priceString', shippingMethodId)).priceString
-
-		element.textContent = shippingFee
-	})
-}
-
-/*
- * events
- */
-document.addEventListener('DOMContentLoaded', async function () {
-	const order_itemselector = '.js-cart-order'
-	const closeSidebardSelector = '.js-close-cart-sidebar'
-	const addToorderselector = '.js-add-to-cart'
-	const removeFromorderselector = '.js-remove-from-cart'
-	const addToWishlistSelector = '.js-add-to-wishlist'
-	const orderListSelector = '.js-order-list'
-
-	/*
-	 * Add to cart
-	 */
-	$(addToorderselector + ':not(:disabled)').on('click', async function () {
-		const self = $(this)
-		const productId = self.data('product-id')
-		const quantity = self.data('quantity')
-		const fixedPrice = false
-		//const variationInput = self.parents('form').find('[name="variation"]')
-		//const variation = variationInput.length ? variationInput.val() : 0
-
-		const parameters = {
-			method: 'add',
-			productId: productId,
-			quantity: quantity,
-			fixedPrice: fixedPrice,
-			//variation: variation,
-		}
-
-		// vendor parameters
-		/*
-		if (typeof vendorEvents !== 'undefined') {
-			if (typeof vendorEvents.meta.pixel.InitiateCheckout !== 'undefined') {
-				parameters.vendorMetaPixelInitiateCheckoutEventId = vendorEvents.meta.pixel.InitiateCheckout.event_id
-			}
-			if (typeof vendorEvents.meta.pixel.AddToCart !== 'undefined') {
-				parameters.vendorMetaPixelAddToCartEventId = vendorEvents.meta.pixel.AddToCart.event_id
-			}
-		}
-		*/
-
-		// add order
-		await AJAX('ecommerce-order_items', parameters, null, false)
-
-		// populate and show the cart dropdown
-		const orderList = await call_class_method('Legacy\\Classes\\Ecommerce\\ViewManager', 'renderOrderList', null, null, null, true)
-
-		update_cart()
-
-		$(sidebardSelector).find(orderListSelector).html(orderList)
-		$(sidebardSelector).addClass(activeClass)
-
-		// vendor events
-		if (typeof vendor_meta_pixel_initiatecheckout !== 'undefined') {
-			vendor_meta_pixel_initiatecheckout()
-		}
-		if (typeof vendor_meta_pixel_addtocart !== 'undefined') {
-			vendor_meta_pixel_addtocart()
-		}
-	})
-
-	/*
-	 * Add to favorites
-	 */
-	$(addToWishlistSelector).on('click', async function () {
-		const self = $(this)
-		const logged = self.data('logged')
-
-		if (logged) {
-			const module = self.parents('.js-wishlist-module')
-			const product_id = self.data('item-id')
-			const apiClass = 'Wishlist'
-			const willBeAdded = parseInt(self.data('added')) ? 0 : 1
-			const method = willBeAdded ? 'PUT' : 'DELETE'
-
-			const parameters = {
-				product_id: product_id,
-			}
-
-			await API(apiClass, method, parameters, false)
-
-			self.data('added', willBeAdded)
-			module.toggleClass('added')
-		} else {
-			redirect('/login?action=wishlist')
-		}
-	})
-
-	/*
-	 * Remove from cart
-	 */
-	$(document).on('click', removeFromorderselector, async function () {
-		const self = $(this)
-		const parameters = {
-			method: 'delete',
-			orderId: self.data('order-id'),
-		}
-
-		// delete the order
-		await AJAX('ecommerce-order_items', parameters, 'none', true)
-
-		// update the price
-		update_cart()
-
-		self.parents(order_itemselector).remove()
-	})
-
-	/*
-	 * Cart sidebar
-	 */
-	$(closeSidebardSelector).on('click', function () {
-		$(sidebardSelector).removeClass(activeClass)
-	})
-})
 
 $(document).ready(function () {
 	$('.file-inp').on('change', function () {
@@ -416,8 +280,6 @@ $(function () {
 		parent.find('.ajax-search-box').html('')
 
 		api_call(hroot, 'GET', tbl, false, parameters).then((response) => {
-			//console.log(response)
-
 			if (response['res']) {
 				let results = response['res']
 
@@ -499,13 +361,11 @@ $(window).ready(function () {
 
 		if (loved) {
 			api_call(hroot, 'DELETE', 'favorite', false, parameters).then((response) => {
-				//console.log(response);
 				self.removeClass('active')
 				self.data('loved', 0)
 			})
 		} else {
 			api_call(hroot, 'POST', 'favorite', false, parameters).then((response) => {
-				//console.log(response);
 				self.addClass('active')
 				self.data('loved', 1)
 			})
@@ -1021,3 +881,28 @@ $(document).ready(function () {
 		)
 	})
 })
+
+/**
+ * * Axios
+ */
+function getOrder(orderId) {
+	return axios
+		.get(`/api/orders/${orderId}`)
+		.then((response) => {
+			return response.data
+		})
+		.catch((error) => {
+			return error
+		})
+}
+
+function patchOrder(orderId, data) {
+	return axios
+		.patch(`/api/orders/${orderId}`, data)
+		.then((response) => {
+			return response.data
+		})
+		.catch((error) => {
+			return error
+		})
+}

@@ -3,7 +3,7 @@
 <!-- Slider -->
 <div id="slider" class="grid center-content">
 
-	<div id="bgr" class="bgr" <?= background_image(IMG_DIR . 'blank.png') ?>></div>
+	<div id="bgr" class="bgr"></div>
 
 	<h1 id="title" class="txt-wht txt-cen">Conta<span class="txt-c1">tt</span>i</h1>
 

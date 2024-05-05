@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CartResource;
+use App\Http\Resources\OrderResource;
 use App\Models\Ecommerce\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -11,7 +11,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class OrderController extends Controller {
 
 	/**
-	 * Get the specific product data
+	 * Get a list of orders
 	 */
 	public function index(Request $request): AnonymousResourceCollection {
 		$orderItems = Order::join('addresses', 'orders.id', '=', 'addresses.order_id')
@@ -37,6 +37,26 @@ class OrderController extends Controller {
 			->limit(10)
 			->get('orders.*');
 
-		return CartResource::collection($orderItems);
+		return OrderResource::collection($orderItems);
+	}
+
+	/**
+	 * Get a specific order
+	 */
+	public function show(Order $order): OrderResource {
+		return new OrderResource($order);
+	}
+
+	/**
+	 * Update the specified order
+	 */
+	public function update(Request $request, Order $order): OrderResource {
+		$validated = $request->validate([
+			'shipping_method_id' => 'integer',
+		]);
+
+		$order->update($validated);
+
+		return new OrderResource($order);
 	}
 }

@@ -14,7 +14,7 @@ $design = $design ?? (isset($design_id) ? Design::find($design_id) : null);
 			if ($design->seller->user_id != Auth::id()) {
 		?>
 
-				<div class="like-button grid stack-content" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; liked ? storeLike(<?= $design->id ?>) : destroyLike(<?= $design->auth_user_like->id ?? null ?>);" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'">
+				<div class="like-button grid stack-content js-like-button" x-data="{ liked: <?= $design->isLiked() ? 'true' : 'false' ?> }" :data-liked="liked ? 'true' : 'false'" @click="liked = !liked; toggleLike(event.target)" :title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'" data-design-id="<?= $design->id ?>" data-like-id="<?= $design->auth_user_like->id ?? null ?>">
 					<?= embed_icon('love-stroke') ?>
 					<?= embed_icon('love') ?>
 				</div>
@@ -83,6 +83,21 @@ $design = $design ?? (isset($design_id) ? Design::find($design_id) : null);
 </style>
 
 <script>
+	function toggleLike(target) {
+		const button = target.closest('.js-like-button');
+		const designId = parseInt(button.dataset.designId);
+		const likeId = parseInt(button.dataset.likeId);
+
+		if (likeId) {
+			destroyLike(likeId, designId);
+		} else {
+			storeLike(designId);
+		}
+	}
+
+	/**
+	 * Store or destroy a like
+	 */
 	function storeLike(designId) {
 		axios.post('/api/likes', {
 				user_id: <?= Auth::id() ?>,
@@ -90,23 +105,38 @@ $design = $design ?? (isset($design_id) ? Design::find($design_id) : null);
 			})
 			.then(response => {
 
-				<?php if (env('DEBUG')) { ?>
-					console.log(response);
+				<?php if (env('APP_DEBUG')) { ?>
+					console.log(response.data);
 				<?php } ?>
 
+				const buttons = document.querySelectorAll('.js-like-button[data-design-id="' + designId + '"]');
+
+				buttons.forEach(button => {
+					button.dataset.likeId = response.data.like.id;
+					button.dataset.liked = 'true';
+				});
 			})
 			.catch(error => {
 				console.error(error);
 			});
 	}
 
-	function destroyLike(likeId) {
+	/**
+	 * Destroy a like
+	 */
+	function destroyLike(likeId, designId) {
 		axios.delete(`/api/likes/${likeId}`)
 			.then(response => {
 
-				<?php if (env('DEBUG')) { ?>
-					console.log(response);
+				<?php if (env('APP_DEBUG')) { ?>
+					console.log(response.data);
 				<?php } ?>
+
+				const buttons = document.querySelectorAll('.js-like-button[data-design-id="' + designId + '"]');
+				buttons.forEach(button => {
+					button.dataset.likeId = null;
+					button.dataset.liked = 'false';
+				});
 
 			})
 			.catch(error => {
