@@ -203,18 +203,10 @@ class Product {
 	public function getNewProduct() {
 		return NewProduct::find($this->id);
 	}
-	public function getImage(int $imageSize = null) {
-		return (new PreviewHelper($this->getNewProduct(), $imageSize, $this->color_id, $this->position_id))
-			->image();
-	}
 
 	public function getSpecificImage(int $imageSize = null) {
 		return (new LegacyPreview($this, $imageSize))
 			->filePath;
-	}
-
-	public function getClientImage(int $imageSize = null) {
-		return $this->getImage($imageSize);
 	}
 
 	public function getServerSpecificImage(int $imageSize = null) {
@@ -224,11 +216,6 @@ class Product {
 	public function getHasImage(int $imageSize = null) {
 		return (new LegacyPreview($this, $imageSize))
 			->hasImage;
-	}
-
-	public function getFullImage() {
-		return (new PreviewHelper($this->getNewProduct(), LegacyPreview::BIG_IMAGE_SIZE, $this->color_id, $this->position_id))
-			->image();
 	}
 
 	public function getClientFullImage() {

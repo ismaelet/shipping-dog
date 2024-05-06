@@ -89,7 +89,7 @@ class Design extends Model {
 	 * Get the count of products
 	 */
 	public function productCount(): int {
-		return $this->products()->count();
+		return $this->products->count();
 	}
 
 	/**

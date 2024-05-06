@@ -1,10 +1,6 @@
 <?php
 
 use App\Models\Ecommerce\OrderItem;
-use Legacy\Classes\Ecommerce\Design as LegacyDesign;
-use Legacy\Classes\Ecommerce\OrderItem as LegacyOrderItem;
-
-
 
 ?>
 
@@ -14,7 +10,7 @@ use Legacy\Classes\Ecommerce\OrderItem as LegacyOrderItem;
 	<?php
 	$row_dark = true;
 
-	$order_items = EcommerceOrderItem::join('designs', 'order_items.design_id', '=', 'designs.id')
+	$order_items = OrderItem::join('designs', 'order_items.design_id', '=', 'designs.id')
 		->where('order_items.seller_id', auth()->id())
 		->where('order_items.status', '>', 0)
 		->where('designs.status', 1)
@@ -35,7 +31,7 @@ use Legacy\Classes\Ecommerce\OrderItem as LegacyOrderItem;
 	<?php foreach ($order_items as $designData) {
 
 		//get last sale
-		$lastOrder = EcommerceOrderItem::where('design_id', $designData->id)
+		$lastOrder = OrderItem::where('design_id', $designData->id)
 			->where('status', '>', 0)
 			->orderByDesc('time')
 			->first();

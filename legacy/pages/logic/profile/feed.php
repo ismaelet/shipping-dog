@@ -9,7 +9,7 @@ $feedEntries = [];
 $feedEntryRows = \Legacy\System\Classes\LegacyDB::select(
 	'
 	order_items.id as event_id, 2 AS type, orders.created_at
-		FROM order_items INNER JOIN orders ON order_items.order_id = orders.id WHERE seller_id = ? AND orders.status > 0
+		FROM order_items INNER JOIN orders ON order_items.order_id = orders.id WHERE seller_id = ? AND orders.status > 1
 	UNION ALL
 	SELECT id as event_id, 1 AS type, created_at
 		FROM news

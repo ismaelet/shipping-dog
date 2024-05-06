@@ -55,7 +55,7 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 						</div>
 
 						<!-- Love button -->
-						<?= LikeButton::render(['design_id' => $product->design_id]) ?>
+						<?= LikeButton::render(['design' => $product->design]) ?>
 
 					</div>
 
@@ -102,8 +102,8 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 									<?php foreach ($relatedGarments as $relatedProduct) { ?>
 
 										<div class="carousel-box">
-											<a href="<?= $relatedProduct->clientUrl ?>">
-												<img src="<?= $relatedProduct->clientImage ?>" class="img-fill">
+											<a href="<?= $relatedProduct->url() ?>">
+												<img src="<?= $relatedProduct->image() ?>" class="img-fill">
 											</a>
 										</div>
 
@@ -137,8 +137,8 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 									<?php foreach ($relatedAccessories as $relatedProduct) { ?>
 
 										<div class="carousel-box">
-											<a href="<?= $relatedProduct->clientUrl ?>">
-												<img src="<?= $relatedProduct->clientImage ?>" class="img-fill">
+											<a href="<?= $relatedProduct->url() ?>">
+												<img src="<?= $relatedProduct->image() ?>" class="img-fill">
 											</a>
 										</div>
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Ecommerce\Product;
+use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductMockup;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
@@ -11,10 +12,10 @@ use Legacy\Classes\Ecommerce\Product\Gender;
 use Legacy\Classes\Ecommerce\Product\Position as LegacyProductPosition;
 use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
-$oldDesign_id = $_GET['id'];
-$oldDesign = new LegacyDesign($oldDesign_id);
+$design_id = $_GET['id'];
+$legacyDesign = new LegacyDesign($design_id);
 
-if (!$oldDesign->custom && auth()->id() != 1) {
+if (!$legacyDesign->custom && auth()->id() != 1) {
 	$oldTypes = \Legacy\System\Classes\LegacyDB::select('id FROM product_types WHERE hidden = 0 ORDER BY category ASC, id ASC');
 } else {
 	$oldTypes = \Legacy\System\Classes\LegacyDB::select('id FROM product_types ORDER BY hidden ASC, category ASC, id ASC');
@@ -25,16 +26,16 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 	$type = ProductType::find($oldType->id);
 	$gender = new Gender($oldType->genderId);
 
-	$productId = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND type_id = ?', [$oldDesign->id, $oldType->id]);
+	$productId = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND type_id = ?', [$legacyDesign->id, $oldType->id]);
 
-	$oldProduct = new LegacyProduct($productId);
+	$legactProduct = new LegacyProduct($productId);
 	$product = Product::find($productId);
 
 	$active = $product->status;
 
-	if ($product->status) $productImage = $oldProduct->image;
-	else if (public_storage($oldProduct->image) && !$product->isCustom()) $productImage = $oldProduct->image;
-	else $productImage = $oldProduct->type->blankImage;
+	if ($product->status) $productImage = $product->image();
+	else if (public_storage($product->image()) && !$product->isCustom()) $productImage = $product->image();
+	else $productImage = $product->type->blankProduct()->image();
 
 	// tabs
 	$tabs = [];
@@ -49,8 +50,8 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 	use_natural_keys($tabs);
 
-	$oldDesignLight = '/designs/' . $oldDesign->id . '.png';
-	$oldDesignDark = file_exists(public_storage($file = '/designs/' . $oldDesign->id . '_dark.png')) ? $file : $oldDesignLight;
+	$oldDesignLight = '/designs/' . $legacyDesign->id . '.png';
+	$oldDesignDark = file_exists(public_storage($file = '/designs/' . $legacyDesign->id . '_dark.png')) ? $file : $oldDesignLight;
 ?>
 
 	<div id="item-<?= $oldType->id ?>" class="item <?= $active ? 'active' : '' ?>">
@@ -67,7 +68,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 			<input type="hidden" name="type_id" value="<?= $oldType->id ?>">
 
-			<?php if ($oldProduct->status) { ?>
+			<?php if ($legactProduct->status) { ?>
 
 				<button type="submit" name="off" class="btn off-btn switch-btn ">
 					<?= embed_icon('actions/add-bgr') ?>
@@ -113,7 +114,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 							if ($tab[1] == 'position') {
 								$position = new LegacyProductPosition($tab[2]);
 
-								$enabled = in_array($position->id, $oldProduct->availablePositionIds);
+								$enabled = in_array($position->id, $legactProduct->availablePositionIds);
 
 								$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $position->id);
 								$productMockup = ProductMockup::where('product_id', $productId)
@@ -129,9 +130,9 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 								$pX_min = $productTypeMockup->pos_x_min;
 								$pY_min = $productTypeMockup->pos_y_min;
 
-								$orientation = $oldProduct->design->ratio > $sX_max / $sY_max;
+								$orientation = $legactProduct->design->ratio > $sX_max / $sY_max;
 
-								$clothing = $type->image($oldProduct->color_id, $position->imagePositionId);
+								$clothing = $type->image($legactProduct->color_id, $position->imagePositionId);
 						?>
 
 								<section class="section<?= $key ?> section positions <?= $key == 1 ? 'active' : '' ?> <?= $enabled ? '' : 'disabled' ?>" data-enabled="<?= $enabled ? 1 : 0 ?>" data-image-position="<?= $position->imagePositionId ?>">
@@ -143,17 +144,17 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 										<div class="image mar-h-auto pos-rel">
 
-											<?php if ($oldDesign->custom) { ?>
+											<?php if ($legacyDesign->custom) { ?>
 
 												<!-- If it's a custom static image -->
-												<div class="bgr" <?= temp_bg($oldProduct->image) ?>></div>
+												<div class="bgr" <?= temp_bg($legactProduct->image) ?>></div>
 
 											<?php } else { ?>
 
 												<!-- If it's a normal image -->
 												<div class="background bgr" <?= temp_bg('product_types/mockups/bgr/grey.png') ?>></div>
 
-												<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $oldProduct->type_id ?>"></div>
+												<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $legactProduct->type_id ?>"></div>
 
 												<div class="design-box" style="
 											width: <?= $sX_max ?>%;
@@ -161,13 +162,13 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 											top: <?= $pY_min ?>%;
 											left: <?= $pX_min ?>%;">
 
-													<div class="design light <?= $oldProduct->color->dark ? '' : 'active' ?>" style="
+													<div class="design light <?= $legactProduct->color->dark ? '' : 'active' ?>" style="
 												background-image: url(<?= public_asset($oldDesignLight) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
 													</div>
 
-													<div class="design dark <?= $oldProduct->color->dark ? 'active' : '' ?>" style="
+													<div class="design dark <?= $legactProduct->color->dark ? 'active' : '' ?>" style="
 												background-image: url(<?= public_asset($oldDesignDark) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
@@ -207,7 +208,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 											</div>
 
-											<?php if (!$oldDesign->custom) { ?>
+											<?php if (!$legacyDesign->custom) { ?>
 												<!-- Mockup management -->
 												<div class="item-mockup-field mar-t-2 grid gap1">
 
@@ -245,7 +246,7 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 											<?php } ?>
 										</div>
 
-										<?php if (!$oldDesign->custom) { ?>
+										<?php if (!$legacyDesign->custom) { ?>
 											<div class="btn-box txt-cen mar-t-2">
 												<button type="submit" name="update-position" class="pbtn">Applica</button>
 											</div>
@@ -274,30 +275,30 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 									$pX_min = $productTypeMockup->pos_x_min;
 									$pY_min = $productTypeMockup->pos_y_min;
 
-									$orientation = $oldProduct->design->ratio > $sX_max / $sY_max;
+									$orientation = $legactProduct->design->ratio > $sX_max / $sY_max;
 
 									// $clothingImagePosition = $position->base_of ?: $position->id;
-									$clothing = $type->image($oldProduct->color_id, $oldProduct->position_id);
+									$clothing = $type->image($legactProduct->color_id, $legactProduct->position_id);
 								?>
 
-									<section class="section<?= $key ?> section colors <?= $key == 1 ? 'active' : '' ?>" data-image-position="<?= $oldProduct->type->basicPositionId ?>">
+									<section class="section<?= $key ?> section colors <?= $key == 1 ? 'active' : '' ?>" data-image-position="<?= $legactProduct->type->basicPositionId ?>">
 
 										<!-- Preview image -->
 										<div class="image-panel">
 
 											<div class="image mar-h-auto pos-rel">
 
-												<?php if ($oldDesign->custom) { ?>
+												<?php if ($legacyDesign->custom) { ?>
 
 													<!-- If it's a custom static image -->
-													<div class="bgr" <?= temp_bg($oldProduct->image) ?>></div>
+													<div class="bgr" <?= temp_bg($legactProduct->image) ?>></div>
 
 												<?php } else { ?>
 
 													<!-- If it's a normal image -->
 													<div class="background bgr" <?= temp_bg('product_types/mockups/bgr/grey.png') ?>></div>
 
-													<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $oldProduct->type_id ?>"></div>
+													<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $legactProduct->type_id ?>"></div>
 
 													<div class="design-box pos-rel" style="
 											width: <?= $sX_max ?>%;
@@ -305,13 +306,13 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 											top: <?= $pY_min ?>%;
 											left: <?= $pX_min ?>%;">
 
-														<div class="design light <?= $oldProduct->color->dark ? '' : 'active' ?>" style="
+														<div class="design light <?= $legactProduct->color->dark ? '' : 'active' ?>" style="
 												background-image: url(<?= public_asset($oldDesignLight) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
 														</div>
 
-														<div class="design dark <?= $oldProduct->color->dark ? 'active' : '' ?>" style="
+														<div class="design dark <?= $legactProduct->color->dark ? 'active' : '' ?>" style="
 												background-image: url(<?= public_asset($oldDesignDark) ?>);
 												background-position: <?= $pX . '% ' . $pY . '%' ?>;
 												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>">
@@ -353,15 +354,17 @@ while ($oldTypeRow = $oldTypes->fetch_assoc()) {
 
 															while ($row = $res_colorA->fetch_assoc()) {
 
-																$color = new LegacyProductColor($row['id']);
+																$color = ProductColor::find($row['id']);
 
-																if (in_array($color->slug, $oldType->availableColorSlugs)) { ?>
+																if (in_array($color->tag, $oldType->availableColorSlugs)) {
+																	$checked = Product::where('id', $productId)->where('colors', 'LIKE', '%' . $color->tag . '%')->exists();
+															?>
 
 																	<label class="color-box">
 
-																		<input type="checkbox" class="cbx hidden colorA-<?= $color->slug ?>" name="colorA[]" value="<?= $color->slug ?>" data-color="<?= $color->slug ?>" <?php if (\Legacy\System\Classes\LegacyDB::exists("products WHERE id = ? AND colors LIKE CONCAT('%',?,'%')", [$productId, $color->slug])) echo 'checked' ?>>
+																		<input type="checkbox" class="cbx hidden colorA-<?= $color->tag ?>" name="colorA[]" value="<?= $color->tag ?>" data-color="<?= $color->tag ?>" <?= $checked ? 'checked' : '' ?>>
 
-																		<div class="color-icon" style="background-color: #<?= $color->hex ?>;"></div>
+																		<div class="color-icon" style="background-color: #<?= $color->color ?>;"></div>
 
 																	</label>
 

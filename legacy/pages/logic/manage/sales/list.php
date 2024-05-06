@@ -1,10 +1,10 @@
 <?php
 
+use App\Models\Ecommerce\OrderItem;
 use App\Models\Ecommerce\Seller;
-use Legacy\Classes\Ecommerce\Seller as OldSeller;
 
 $seller = Seller::find(auth()->id());
-$oldSeller = new OldSeller(auth()->id());
+$seller->updateEarned();
 
 $from = 0;
 $j = 1;
@@ -16,7 +16,9 @@ $sort = $_GET['sort'] ?? 'time';
 $sort = !in_array($sort, ['time', 'designs']) ? 'time' : $sort;
 $currentYear = request()->year;
 
-$saleN = \Legacy\System\Classes\LegacyDB::count('order_items WHERE product_id IN (SELECT id FROM products WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status > 0)', [auth()->id()]);
+$saleN = OrderItem::where('seller_id', $seller->id)
+	->where('status', '>', 0)
+	->count();
 
 // send payment request
 if (isset($_POST['request-payment'])) {

@@ -155,7 +155,7 @@ class Shop {
 		// Get the products
 		$products = $products->limit($this->size)
 			->offset($start)
-			->with('type', 'design', 'design.seller', 'design.logo_group', 'seller', 'color', 'seller_price', 'base_price',)
+			->with('type', 'design', 'design.seller', 'design.logo_group', 'design.auth_user_like', 'seller', 'color', 'specific_price', 'seller_price', 'base_price', 'position')
 			->get('products.*');
 
 		// store the result

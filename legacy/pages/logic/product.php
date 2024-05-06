@@ -2,8 +2,6 @@
 
 use App\Helpers\ArrayHelper;
 use App\Models\Ecommerce\Product;
-use Legacy\Classes\Ecommerce\Product as LegacyProduct;
-use Legacy\System\Classes\LegacyDB;
 use Legacy\System\Classes\LegacyView;
 
 /**
@@ -23,7 +21,7 @@ $productColorId = $_GET['color_id'] ?? null;
 /**
  * * Fetch the record
  */
-$product = $id ? Product::with('design', 'seller', 'color')->find($id) : null;
+$product = $id ? Product::with('design', 'seller', 'color', 'type', 'position', 'specific_price', 'seller_price', 'base_price')->find($id) : null;
 $seller = $product?->seller;
 
 /**
@@ -53,21 +51,20 @@ if ($productPositionId) {
 /*
 * Related products
 */
-$relatedGarments = rows_to_objects(
-	LegacyDB::select(
-		"products.id FROM products
-		INNER JOIN product_types ON products.type_id = product_types.id
-		WHERE design_id = ? AND type_id <> ? AND category='c' AND products.status = 1 AND products.deleted = 0
-		ORDER BY type_id ASC, products.sort ASC, product_types.sort ASC, product_types.id ASC",
-		[$product->design_id, $product->type_id]
-	),
-	LegacyProduct::class
-);
+$sameDesignProducts = Product::join('product_types', 'products.type_id', '=', 'product_types.id')
+	->where('design_id', $product->design_id)
+	->where('type_id', '<>', $product->type_id)
+	->where('products.status', 1)
+	->where('products.deleted', 0)
+	->orderBy('product_types.sort')
+	->with('design', 'color', 'position', 'type')
+	->get(['products.*', 'product_types.category']);
 
-$relatedAccessories = rows_to_objects(LegacyDB::select("id FROM products WHERE design_id = ? AND type_id <> ? AND type_id IN (SELECT id FROM product_types WHERE category='m') AND status = 1 AND deleted = 0 ORDER BY type_id ASC", [$product->design_id, $product->type_id]), LegacyProduct::class);
+$relatedGarments = $sameDesignProducts->where('category', 'c');
+$relatedAccessories = $sameDesignProducts->where('category', 'm');
 
-$relatedGarmentCount = count($relatedGarments);
-$relatedAccessoryCount = count($relatedAccessories);
+$relatedGarmentCount = $relatedGarments->count();
+$relatedAccessoryCount = $relatedAccessories->count();
 
 /**
  * Related products
@@ -80,6 +77,7 @@ $relatedProducts = Product::where('user_id', $seller->id)
 	->where('status', '>', 0)
 	->where('type_id', $product->type_id)
 	->where('deleted', 0)
+	->with('design', 'type', 'color', 'position', 'type')
 	->orderBy('sales', 'desc')
 	->orderBy('id', 'desc')
 	->limit(8)
@@ -94,6 +92,7 @@ if ($relatedProducts->count() < 8) {
 		->where('status', '>', 0)
 		->where('type_id', '<>', $product->type_id)
 		->where('deleted', 0)
+		->with('design', 'type', 'color', 'position', 'type')
 		->orderBy('sales', 'desc')
 		->orderBy('id', 'desc')
 		->limit(8 - $relatedProducts->count())

@@ -1,13 +1,13 @@
 <?php
 
 use App\Models\Ecommerce\OrderItem;
-use Legacy\Classes\Ecommerce\OrderItem as LegacyOrderItem;
 
-$sales = OrderItem::where('seller_id', $oldSeller->id)
-	->where('status', '>', 0)
-	->orderByDesc('created_at')
-	->select('*')
-	->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
+$sales = OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
+	->where('seller_id', $seller->id)
+	->where('orders.status', '>', 0)
+	->orderByDesc('orders.created_at')
+	->select('order_items.*')
+	->selectRaw('YEAR(orders.created_at) as year, MONTH(orders.created_at) as month')
 	->with('product', 'product.type', 'color', 'order')
 	->get();
 
@@ -100,7 +100,7 @@ for ($month = $lastMonth; $month >= $firstMonth; $month--) {
 
 <?php
 
-$res_year = \Legacy\System\Classes\LegacyDB::select('YEAR(created_at) as year FROM order_items WHERE product_id IN (SELECT id FROM products WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) GROUP BY YEAR(created_at) ORDER BY YEAR(created_at) DESC', [$oldSeller->id]);
+$res_year = \Legacy\System\Classes\LegacyDB::select('YEAR(created_at) as year FROM order_items WHERE product_id IN (SELECT id FROM products WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) GROUP BY YEAR(created_at) ORDER BY YEAR(created_at) DESC', [$seller->id]);
 
 if ($res_year->num_rows > 1) { ?>
 

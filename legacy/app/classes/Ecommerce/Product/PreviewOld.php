@@ -2,9 +2,7 @@
 
 namespace Legacy\Classes\Ecommerce\Product;
 
-use LegacyDB;
 use Legacy\Classes\Ecommerce\Product as LegacyProduct;
-use \Legacy\System\Traits\DynamicProperties;
 
 class PreviewOld {
 

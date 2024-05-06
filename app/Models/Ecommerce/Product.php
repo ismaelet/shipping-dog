@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class Product extends Model {
@@ -197,10 +198,12 @@ class Product extends Model {
 	 * Get the product's colors
 	 */
 	public function colors(): ?Collection {
-		return ProductColor::whereIn('tag', explode(',', $this->colors))
-			->orderBy('reorder')
-			->orderBy('id')
-			->get();
+		return Cache::remember('product_colors_' . $this->id, now()->addMinutes(1), function () {
+			return ProductColor::whereIn('tag', explode(',', $this->colors))
+				->orderBy('reorder')
+				->orderBy('id')
+				->get();
+		});
 	}
 
 	/**
@@ -221,8 +224,36 @@ class Product extends Model {
 	/**
 	 * Get the product's preview
 	 */
-	public function preview(?int $imageSize = null, ProductColor|int|null $color = null, ProductPosition|int|null $position = null): PreviewHelper {
-		return new PreviewHelper($this, $imageSize, $color, $position);
+	public function preview(?int $imageSize = null, ProductColor|int|null $color = null, ProductPosition|int|null $position = null): ?PreviewHelper {
+		// Set the product
+		$product = $this;
+
+		// Set the color
+		if ($color === null) {
+			$color = $this->color;
+		} else if (is_int($color)) {
+			$color = ProductColor::find($color);
+		}
+
+		// Set the position
+		if ($position === null) {
+			$position = $product->position;
+		} else if (is_int($position)) {
+			$position = ProductPosition::find($position);
+		}
+
+		// Return null if any of the required data is missing
+		if (!$product || !$color || !$position) {
+			return null;
+		}
+
+		// Return the preview
+		return new PreviewHelper(
+			product: $this,
+			color: $color,
+			position: $position,
+			imageSize: $imageSize,
+		);
 	}
 
 	public function positions(): ?Collection {
@@ -276,7 +307,9 @@ class Product extends Model {
 	 * Get the product's image
 	 */
 	public function image(?int $imageSize = null, ProductColor|int|null $color = null, ProductPosition|int|null $position = null): string {
-		return $this->preview($imageSize, $color, $position)->image();
+		$preview = $this->preview($imageSize, $color, $position);
+
+		return $preview ? $preview->image() : public_asset(PreviewHelper::PLACEHOLDER_IMAGE);
 	}
 
 	/**
