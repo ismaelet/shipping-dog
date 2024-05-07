@@ -81,7 +81,7 @@
 						@foreach ($record->order_items as $orderItem)
 							<div class="order-row order">
 								<img
-									src="{{ $orderItem->product->image() }}"
+									src="{{ $orderItem->image() }}"
 									alt=""
 									class="w-24 rounded"
 								>

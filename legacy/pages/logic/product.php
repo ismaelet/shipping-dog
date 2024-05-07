@@ -15,13 +15,11 @@ $id = $_GET['id'] ?? null;
 $slug = ArrayHelper::explodeLast('/', request()->url())[1] ?? null;
 $slugId = explode('-', $slug)[0] ?? null;
 $id = $id ?: (int) $slugId;
-$productPositionId = $_GET['position_id'] ?? null;
-$productColorId = $_GET['color_id'] ?? null;
 
 /**
  * * Fetch the record
  */
-$product = $id ? Product::with('design', 'seller', 'color', 'type', 'position', 'specific_price', 'seller_price', 'base_price')->find($id) : null;
+$product = $id ? Product::with('design', 'seller', 'type', 'specific_price', 'seller_price', 'base_price')->find($id) : null;
 $seller = $product?->seller;
 
 /**
@@ -40,12 +38,12 @@ if (!$seller->status && !$product->isUserOwner && !is_admin()) {
 /**
  * * Set the product position and color
  */
-if ($productColorId) {
-	$product->color_id = $productColorId;
+if (request()->color_id) {
+	$product->color_id = request()->color_id;
 }
 
-if ($productPositionId) {
-	$product->position_id = $productPositionId;
+if (request()->position_id) {
+	$product->position_id = request()->position_id;
 }
 
 /*

@@ -233,6 +233,8 @@ class Product extends Model {
 			$color = $this->color;
 		} else if (is_int($color)) {
 			$color = ProductColor::find($color);
+		} else if (!is_object($color)) {
+			$color = null;
 		}
 
 		// Set the position
@@ -240,6 +242,8 @@ class Product extends Model {
 			$position = $product->position;
 		} else if (is_int($position)) {
 			$position = ProductPosition::find($position);
+		} else if (!is_object($position)) {
+			$position = null;
 		}
 
 		// Return null if any of the required data is missing
@@ -249,7 +253,7 @@ class Product extends Model {
 
 		// Return the preview
 		return new PreviewHelper(
-			product: $this,
+			product: $product,
 			color: $color,
 			position: $position,
 			imageSize: $imageSize,

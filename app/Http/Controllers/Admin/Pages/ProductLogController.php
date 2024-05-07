@@ -27,7 +27,7 @@ class ProductLogController extends Controller {
 			$filteredorder_items = OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
 				->join('addresses', 'addresses.order_id', '=', 'orders.id')
 				->join('stores', 'stores.user_id', '=', 'order_items.seller_id')
-				->join('items', 'products.id', '=', 'order_items.product_id')
+				->join('products', 'products.id', '=', 'order_items.product_id')
 				->join('product_types', 'product_types.id', '=', 'order_items.type_id')
 				->where('orders.status', '>', 0)
 				->where('orders.created_at', '>=', $startFromTime)

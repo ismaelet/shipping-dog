@@ -138,24 +138,24 @@
 					@foreach ($order->order_items as $orderItem)
 						<div class="grid grid-cols-2 items-center gap-4 md:grid-cols-4">
 							<!--Image-->
-							<?php if ($orderItem->product) { ?>
-							<a
-								href="<?= $orderItem->product ? $orderItem->product->url() : '' ?>"
-								class="img_cont"
-							>
-								<img
-									src="<?= $orderItem->image() ?>"
-									class="rounded"
+							@if ($orderItem->product)
+								<a
+									href="<?= $orderItem->product ? $orderItem->product->url() : '' ?>"
+									class="img_cont"
 								>
-							</a>
-							<?php } else { ?>
-							<div>
-								<img
-									src="<?= public_asset(PreviewHelper::PLACEHOLDER_IMAGE) ?>"
-									class="rounded"
-								>
-							</div>
-							<?php } ?>
+									<img
+										src="<?= $orderItem->image() ?>"
+										class="rounded"
+									>
+								</a>
+							@else
+								<div>
+									<img
+										src="<?= public_asset(PreviewHelper::PLACEHOLDER_IMAGE) ?>"
+										class="rounded"
+									>
+								</div>
+							@endif
 
 							<!--Data-->
 							<div class="md:col-span-3">
