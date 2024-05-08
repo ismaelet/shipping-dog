@@ -250,8 +250,8 @@
 		}
 	}
 
-	p.font-bold,
-	p .font-bold {
+	p:where(.font-bold),
+	p :where(.font-bold) {
 		color: var(--color-neutral-700);
 	}
 }

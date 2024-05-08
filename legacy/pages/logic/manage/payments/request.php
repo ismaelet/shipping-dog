@@ -1,8 +1,6 @@
 <?php
 
-// setup variables
-
-use Legacy\Classes\Ecommerce\Seller;
+use App\Models\Ecommerce\Seller;
 
 $tbl = 'payment_requests';
 $index = 'seller_id';
@@ -13,30 +11,29 @@ $done = $_GET['edit'] ?? false;
 $documents = [
 	[
 		'template' => 'recipt',
-		'folder' => '/uploads/documents/payments',
+		'folder' => 'documents/payments',
 		'file-name' => 'Ricevuta_' . auth()->id() . '.pdf',
 	],
 	[
 		'template' => 'contract',
-		'folder' => '/uploads/documents/payments',
+		'folder' => 'documents/payments',
 		'file-name' => 'Comunicazione_' . auth()->id() . '.pdf',
 	]
 ];
 
 foreach ($documents as $key => $document) {
-
-	$documents[$key]['server-path'] = SERVER_ROOT . $document['folder'] . '/' . $document['file-name'];
-	$documents[$key]['client-path'] = $document['folder'] . '/' . $document['file-name'];
+	$documents[$key]['server-path'] = public_storage($document['folder'] . '/' . $document['file-name']);
+	$documents[$key]['client-path'] = public_asset($document['folder'] . '/' . $document['file-name']);
 }
 
 // redirect if the user isn't a seller
-$seller = new Seller(auth()->id());
+$seller = Seller::find(auth()->id());
 
-if (!$seller->id || $seller->toPay <= 31.25) {
+if (!$seller || $seller->toBePayed() <= 31.25) {
 	redirect_old('/manage/sales/list');
 }
 
-$waitingDays = ceil($seller->toPay / 100);
+$waitingDays = ceil($seller->toBePayed() / 100);
 
 // fetch the seller data
 $data = \Legacy\System\Classes\LegacyDB::row('* FROM ' . $tbl . ' WHERE ' . $index . '=?', [auth()->id()]);
@@ -44,7 +41,7 @@ $data = \Legacy\System\Classes\LegacyDB::row('* FROM ' . $tbl . ' WHERE ' . $ind
 $inputs = [
 	[
 		['type' => 'lbl', 'text' => 'Nome e cognome'],
-		['type' => 'hidden', 'name' => 'shopID', 'value' => auth()->id(), 'required' => true],
+		['type' => 'hidden', 'name' => 'seller_id', 'value' => auth()->id(), 'required' => true],
 		['text' => 'Nome', 'name' => 'first_name', 'value' => $data['first_name'] ?? false, 'size' => 2, 'maxlength' => 100, 'required' => true],
 		['text' => 'Cognome', 'name' => 'last_name', 'value' => $data['last_name'] ?? false, 'size' => 2, 'maxlength' => 100, 'required' => true],
 	],
@@ -67,7 +64,7 @@ $inputs = [
 	[
 		['type' => 'lbl', 'text' => 'Dati personali'],
 		['text' => 'Codice fiscale', 'name' => 'cf', 'value' => $data['cf'] ?? false, 'custom-class' => 'txt-upp', 'maxlength' => 16, 'required' => true],
-		['text' => 'Numero della carta di identità', 'name' => 'nationalId', 'value' => $data['nationalId'] ?? false, 'maxlength' => 16, 'required' => true],
+		['text' => 'Numero della carta di identità', 'name' => 'national_id', 'value' => $data['national_id'] ?? false, 'maxlength' => 16, 'required' => true],
 	],
 	[
 		['type' => 'lbl', 'text' => 'Account PayPal'],
@@ -79,41 +76,39 @@ $inputs = [
 if (isset($_POST['submit'])) {
 
 	if ($data) {
-
 		form_db_update($tbl, $inputs, $index, auth()->id());
 
-		foreach ($documents as $key => $document)
-			if (file_exists($document['server-path']))
+		foreach ($documents as $key => $document) {
+			if (file_exists($document['server-path'])) {
 				unlink($document['server-path']);
-	} else
+			}
+		}
+	} else {
 		form_db_add($tbl, $inputs);
+	}
 
 	redirect_old('?edit=0');
 }
-
 
 if (isset($_POST['download'])) {
 
 	\Legacy\System\Classes\LegacyDB::update('stores SET request = 1 WHERE user_id = ?', [auth()->id()]);
 
-	if ($data['total'] == $seller->toPay && file_exists($documents[0]['server-path'])) {
-		redirect_old($documents[0]['client-path']);
-	} else {
+	if ($data['total'] != $seller->toBePayed() || !file_exists($documents[0]['server-path'])) {
 		\Legacy\System\Classes\LegacyDB::update('stores SET request = 1 WHERE user_id = ?', [auth()->id()]);
-		\Legacy\System\Classes\LegacyDB::update('payment_requests SET total = ? WHERE seller_id = ?', [$seller->toPay, auth()->id()]);
+		\Legacy\System\Classes\LegacyDB::update('payment_requests SET total = ? WHERE seller_id = ?', [$seller->toBePayed(), auth()->id()]);
 
 		foreach ($documents as $document) {
-
 			if (file_exists($document['server-path'])) {
 				unlink($document['server-path']);
 			}
 
 			$html = file_get_contents(__DIR__ . '/' . $document['template'] . '-template.html');
 
-			$payment['gross'] = format($seller->toPay, 2);
+			$payment['gross'] = format($seller->toBePayed(), 2);
 			$payment['net'] = round($payment['gross'] * .8, 2);
 			$payment['netInt'] = floor($payment['net']);
-			$payment['netCents'] = ($payment['net'] - $payment['netInt']) * 100;
+			$payment['netDecimals'] = ($payment['net'] - $payment['netInt']) * 100;
 			$payment['tax'] = round($payment['gross'] * .2, 2);
 
 			$dateNow = new DateTimeImmutable();
@@ -131,13 +126,13 @@ if (isset($_POST['download'])) {
 			$html = str_replace('{{province}}', strtoupper($data['province']), $html);
 			$html = str_replace('{{zip}}', $data['zip'], $html);
 			$html = str_replace('{{cf}}', strtoupper($data['cf']), $html);
-			$html = str_replace('{{nationalId}}', strtoupper($data['nationalId']), $html);
+			$html = str_replace('{{national_id}}', strtoupper($data['national_id']), $html);
 			$html = str_replace('{{gross}}', formatc($payment['gross']), $html);
 			$html = str_replace('{{net}}', formatc($payment['net']), $html);
 			$html = str_replace('{{netWord}}', numberToWord($payment['netInt']), $html);
-			$html = str_replace('{{netCents}}', str_pad($payment['netCents'], 2, '0', STR_PAD_LEFT), $html);
+			$html = str_replace('{{netDecimals}}', str_pad($payment['netDecimals'], 2, '0', STR_PAD_LEFT), $html);
 			$html = str_replace('{{tax}}', formatc($payment['tax']), $html);
-			$html = str_replace('{{signature}}', 'https:// shippingdog.com/pages/assets/manage/payments/request/signature.jpg', $html);
+			$html = str_replace('{{signature}}', '/pages/assets/manage/payments/request/signature.jpg', $html);
 			$html = str_replace('{{mark}}', ($payment['net'] >= 80 ? "Marca da bollo<br>sull'originale" : ''), $html);
 			$html = str_replace('{{date-start}}', $date['start'], $html);
 			$html = str_replace('{{date-end}}', $date['end'], $html);
@@ -152,14 +147,15 @@ if (isset($_POST['download'])) {
 			$dompdf->render();
 			$output = $dompdf->output();
 
-			if (!file_exists(public_server_directory($document['folder']))) {
-				mkdir(public_server_directory($document['folder']), 0777, true);
+			if (!file_exists(public_storage($document['folder']))) {
+				mkdir(public_storage($document['folder']), 0777, true);
 			}
 
-			$pdfFileName = server_path($document['folder'] . '/' . $document['file-name']);
+			$pdfFileName = public_storage($document['folder'] . '/' . $document['file-name']);
+
 			file_put_contents($pdfFileName, $output);
 		}
-
-		redirect_old($documents[0]['client-path']);
 	}
+
+	redirect_old(route('download', ['filename' => $document['folder'] . '/' . $documents[0]['file-name']]));
 }

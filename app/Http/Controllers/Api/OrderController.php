@@ -44,6 +44,8 @@ class OrderController extends Controller {
 	 * Get a specific order
 	 */
 	public function show(Order $order): OrderResource {
+
+
 		return new OrderResource($order);
 	}
 

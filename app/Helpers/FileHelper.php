@@ -11,6 +11,20 @@ class FileHelper {
 	private const ICONS_PATH = self::SVG_PATH . '/icons';
 
 	/**
+	 * Check if a file exists in the storage
+	 */
+	public static function exists(string $path): bool {
+		return Storage::disk('public')->exists($path);
+	}
+
+	/**
+	 * Delete a file from the storage
+	 */
+	public static function delete(string $path): bool {
+		return Storage::disk('public')->delete($path);
+	}
+
+	/**
 	 * Get the path of a file in the public assets directory
 	 */
 	public static function publicStoragePath(string $path): string {

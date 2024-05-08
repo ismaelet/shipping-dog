@@ -15,27 +15,26 @@
 				Se vuoi riscaricare o rigenerare il <strong>PDF</strong> da compilare, puoi cliccare qui sotto.
 			</p>
 
-			<a class="btn button--auto-width" href="<?= client_url('/manage/payments/request') ?>">Scarica di nuovo il <strong>PDF</strong></a>
-
+			<div class="flex justify-center mar-t-2">
+				<a class="btn button--auto-width" href="<?= route('seller.payment') ?>">Scarica di nuovo il <strong>PDF</strong></a>
+			</div>
 		</div>
 
 	<?php } else if ($seller->toBePayed() >= 31.25) { ?>
 
-		<form class="request" method="POST">
-
+		<div class="request">
 			<p class="text">
 				Se <strong>non hai una partita IVA e risiedi in Italia</strong> puoi usare il bottone qui sotto per richiedere il pagamento di <strong><?= $seller->toBePayedString() ?></strong><br><br>
 				Se invece possiedi una partita IVA oppure non risiedi in Italia, ti preghiamo di contattarci all'indirizzo <a class="txt-sbold txt-c2" href="<?= sys_config('contact-email-link') ?>"><?= sys_config('contact-email') ?></a> per richiedere il pagamento.
 			</p>
 
 			<div class="flex justify-center mar-t-2">
-				<button type="submit" class="btn button--auto-width" name="request-payment">
+				<a href="<?= route('seller.payment') ?>" class="btn button--auto-width" name="request-payment">
 					<?= embed_icon('dollar') ?>
 					Richiedi il pagamento
-				</button>
+				</a>
 			</div>
-
-		</form>
+		</div>
 
 	<?php } else { ?>
 
@@ -89,7 +88,7 @@
 
 					<div class="rec_cell">
 						<p class="rec_lbl inlb">Bonus: </p> <?= info_box("Per ogni capo venduto riceverai un ulteriore <strong>10%</strong> del guadagno come bonus. Puoi usare questo bonus per pagare le spese di spedizione quando acquisti sul nostro sito, oppure per comprare prodotti del tuo negozio senza pagarli.") ?>
-						<input type="text" class="input wid-100" value="<?= format_price($seller->credit()) ?>" disabled>
+						<input type="text" class="input wid-100" value="<?= format_price($seller->credit) ?>" disabled>
 					</div>
 				</div>
 				<div class="rec_row">

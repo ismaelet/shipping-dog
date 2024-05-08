@@ -26,15 +26,6 @@ class Order extends Model {
 	protected $fillable = ['user_id', 'shipping_method_id', 'payment_method_id', 'code', 'quantity', 'credit_ship', 'shipping', 'status', 'step', 'courier_notes', 'shipping_notes', 'has_errors', 'created_at', 'updated_at', 'token'];
 
 	/**
-	 * * Events
-	 */
-	protected static function booted() {
-		static::updated(function ($order) {
-			$order->order_items->each->update(['status' => $order->status]);
-		});
-	}
-
-	/**
 	 * * Relationships
 	 */
 
@@ -498,8 +489,8 @@ class Order extends Model {
 		]);
 
 		// Remove the shipping price from the user's credit, if it was paid with the credit
-		if ($this->credit_ship && $this->user && $this->user->isSeller()) {
-			$this->user->seller->update(['credit' => $this->user->seller->credit - $this->grossShippingFee()]);
+		if ($this->credit_ship) {
+			$this->user->seller->updateCredit();
 		}
 
 		// Destroy used coupons
@@ -513,20 +504,13 @@ class Order extends Model {
 			}
 		}
 
-		// Update the seller's earnings
-		$this->order_items->each(function ($orderItem) {
-			if ($orderItem->seller) {
-				$orderItem->seller->updateEarned();
-			}
-		});
-
 		// Send the confirmation email
 		if ($sendNotification) {
 			Mail::to($this->address->email)->send(new OrderStatusMail($this));
 		}
 
 		// Confirm the individual order_items
-		$this->confirmorder_items();
+		$this->confirmOrderItems();
 	}
 
 	/**
@@ -534,7 +518,7 @@ class Order extends Model {
 	 *
 	 * @return void
 	 */
-	public function confirmorder_items(): void {
+	public function confirmOrderItems(): void {
 		foreach ($this->order_items as $orderItem) {
 			// Check if the order is in the inventory
 			$inventoryItem = InventoryItem::where('design_id', $orderItem->design_id)
@@ -552,18 +536,40 @@ class Order extends Model {
 			// Update the seller's data
 			if ($orderItem->seller) {
 				// Update the amount earned by the seller
-				$orderItem->seller->update(['earned' => $orderItem->seller->earned + $orderItem->totalGain()]);
+				$orderItem->seller->updateEarned();
 
 				// Update the seller's credit
 				if ($orderItem->credit) {
-					// Remove from the seller's credit if they used it to pay for the order
-					$orderItem->seller->update(['credit' => $orderItem->seller->credit - $orderItem->price()]);
-				} else if ($orderItem->seller_id !== $this->user_id) {
-					// Add to the seller's credit if no credit was used to pay for the order and the buyer isn't the seller
-					$orderItem->seller->update(['credit' => $orderItem->seller->credit + ($orderItem->totalGain() * .1)]);
+					$orderItem->seller->updateCredit();
 				}
 			}
 		}
+	}
+
+	/**
+	 * Cancel an order
+	 */
+	public function cancel(bool $sendNotification = false): void {
+
+		// Update the order
+		$this->update([
+			'status' => EcommerceHelper::statusFromTag('canceled'),
+		]);
+
+		// Send the confirmation email
+		if ($sendNotification) {
+			Mail::to($this->address->email)->send(new OrderStatusMail($this));
+		}
+
+		// Update the seller's earnings
+		$this->order_items->each(function ($orderItem) {
+			if ($orderItem->seller) {
+				$orderItem->seller->updateEarned();
+			}
+		});
+
+		// Update the seller's credit
+		$this->user->seller->updateCredit();
 	}
 
 	/**
@@ -572,7 +578,7 @@ class Order extends Model {
 	 * @return bool
 	 */
 	public function delete(): bool {
-		session()->forget('order_id');
+		session()->forget('cart_id');
 
 		return parent::delete();
 	}

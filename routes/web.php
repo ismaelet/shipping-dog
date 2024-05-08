@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\Ecommerce\DesignController;
+use App\Http\Controllers\Ecommerce\PaymentRequestController;
 use App\Http\Controllers\LegacyController;
+use App\Http\Middleware\Seller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,11 +33,23 @@ Route::prefix('/manage')->middleware('auth')->name('seller-dashboard')->group(fu
 	Route::any('/sales/prices', LegacyController::class)->name('.prices');
 });
 
+Route::prefix('seller')->middleware(Seller::class)->name('seller.')->group(function () {
+	Route::get('/payment', [PaymentRequestController::class, 'index'])->name('payment');
+	Route::get('/payment/edit', [PaymentRequestController::class, 'edit'])->name('payment.edit');
+	Route::post('/payment/update', [PaymentRequestController::class, 'update'])->name('payment.update');
+	Route::post('/payment/download', [PaymentRequestController::class, 'download'])->name('payment.download');
+});
+
 /**
  * * Designs
  */
 // Create a design
 Route::resource('designs', DesignController::class)->only(['store', 'show']);
+
+/**
+ * * Downloads
+ */
+Route::get('/download/{filename}', [DownloadController::class, 'download'])->name('download')->where('filename', '.*');
 
 /**
  * * Legacy routes

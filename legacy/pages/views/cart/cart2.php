@@ -70,7 +70,7 @@ use Legacy\View\Components\Form\Input;
 
 							if ($legacyCart->shippingMethodId == $shippingMethod->id) {
 
-								if ($shippingMethod->price(cart()->quantity) && !cart()->coupon && !cart()->credit_ship && Auth::check() && Auth::user()->isSeller() && Auth::user()->seller->credit() >= $shippingMethod->price(cart()->quantity)) { ?>
+								if ($shippingMethod->price(cart()->quantity) && !cart()->coupon && !cart()->credit_ship && Auth::check() && Auth::user()->seller && Auth::user()->seller->credit >= $shippingMethod->price(cart()->quantity)) { ?>
 
 									<button class="use-credit-btn credit-btn btn btn--secondary button--full-width mar-b-2" name="ship_credit">
 										<?= embed_icon('dollar') ?>

@@ -19,7 +19,7 @@ class EcommerceHelper {
 		}
 
 		// Otherwise, return the ID of the cart stored in the session
-		$sessionCart = Order::find(session('order_id'));
+		$sessionCart = Order::find(session('cart_id'));
 
 		if ($sessionCart && !$sessionCart->status) {
 			return $sessionCart->id;

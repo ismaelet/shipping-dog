@@ -22,5 +22,9 @@ RUN docker-php-ext-configure gd --with-webp --with-jpeg \
 RUN apt-get install -y libonig-dev
 RUN docker-php-ext-install mbstring
 
+# Required to conver number to words
+RUN apt-get install -y libicu-dev && \
+    docker-php-ext-install intl
+
 # Enable .htaccess rewrite
 RUN a2enmod rewrite

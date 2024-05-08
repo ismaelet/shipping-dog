@@ -2,7 +2,6 @@
 
 use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Design;
-use Legacy\Classes\Ecommerce\Design as LegacyDesign;
 use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
 use Legacy\Classes\Ecommerce\Product\PreviewOld as LegacyPreview;

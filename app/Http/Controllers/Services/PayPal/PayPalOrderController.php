@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ecommerce\PayPal;
+namespace App\Http\Controllers\Services\PayPal;
 
 use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
@@ -93,15 +93,15 @@ class PayPalOrderController extends Controller {
 				'reference_id' => $order->id,
 				'amount' => [
 					'currency_code' => 'EUR',
-					'value' => $order->price,
+					'value' => number_format($order->price, 2),
 					'breakdown' => [
 						'item_total' => [
 							'currency_code' => 'EUR',
-							'value' => $order->orderItemsPrice(),
+							'value' => number_format($order->orderItemsPrice(), 2),
 						],
 						'shipping' => [
 							'currency_code' => 'EUR',
-							'value' => $order->shippingFee(),
+							'value' => number_format($order->shippingFee(), 2),
 						]
 					]
 				],
@@ -140,7 +140,7 @@ class PayPalOrderController extends Controller {
 				'name' => $orderItem->product->name,
 				'unit_amount' => [
 					'currency_code' => 'EUR',
-					'value' => $orderItem->price(),
+					'value' => number_format($orderItem->price(), 2),
 				],
 				'quantity' => $orderItem->quantity,
 				'category' => 'PHYSICAL_GOODS',

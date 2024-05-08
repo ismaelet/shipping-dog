@@ -2,8 +2,8 @@
 
 namespace Legacy\Classes\Ecommerce;
 
-use App\Models\Ecommerce\Seller as EcommerceSeller;
-use Legacy\Classes\User;
+use App\Models\Ecommerce\Seller as NewSeller;
+use Legacy\Classes\User as LegacyUser;
 
 /**
  * Seller class
@@ -47,7 +47,7 @@ class Seller {
 	}
 
 	private function getUserData() {
-		return new User($this->id);
+		return new LegacyUser($this->id);
 	}
 
 	private function getIcon() {
@@ -91,7 +91,7 @@ class Seller {
 	}
 
 	private function getCredit() {
-		return EcommerceSeller::find($this->id)->credit();
+		return NewSeller::find($this->id)->credit;
 	}
 
 	private function getCreditString() {

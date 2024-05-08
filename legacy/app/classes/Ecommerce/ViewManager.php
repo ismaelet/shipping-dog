@@ -95,7 +95,7 @@ class ViewManager {
 
 					</div>
 
-					<?php if (!$order->status && !$order->coupon && !$orderItem->credit && $orderItem->seller_id == Auth::id() && $orderItem->seller->credit() >= $orderItem->price()) { ?>
+					<?php if (!$order->status && !$order->coupon && !$orderItem->credit && $orderItem->seller_id == Auth::id() && $orderItem->seller->credit >= $orderItem->price()) { ?>
 
 						<button class="use-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $orderItem->id ?>">
 							<?= embed_icon('dollar') ?>

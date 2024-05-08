@@ -5,9 +5,11 @@ namespace App\Models\Ecommerce;
 use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Seller\Follower;
+use App\Models\Ecommerce\Seller\PaymentRequest;
 use App\Models\Ecommerce\Seller\SellerPrice;
 use App\Models\Ecommerce\Shop\Payment;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -17,8 +19,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Seller extends Model {
 
+	use HasFactory;
+
 	protected $table = 'stores';
-	protected $fillable = ['credit', 'earned'];
+	protected $fillable = ['user_id', 'credit', 'earned', 'status', 'request'];
 
 	/**
 	 * * Relationships
@@ -59,17 +63,24 @@ class Seller extends Model {
 	}
 
 	/**
-	 * Get the seller's other transfers
+	 * Get the seller's payments
 	 */
-	public function other_transfers(): HasMany {
-		return $this->hasMany(Payment::class)->where('other', true);
+	public function all_transfers(): HasMany {
+		return $this->hasMany(Payment::class);
+	}
+
+	/**
+	 * Get the seller's payment request
+	 */
+	public function payment_request(): HasOne {
+		return $this->hasOne(PaymentRequest::class);
 	}
 
 	/**
 	 * Get the seller's logo groups
 	 */
 	public function logoGroups(): HasMany {
-		return $this->hasMany(LogoGroup::class, 'seller_id', 'user_id');
+		return $this->hasMany(LogoGroup::class);
 	}
 
 	/**
@@ -121,59 +132,12 @@ class Seller extends Model {
 	/**
 	 * ~ Attributes: Seller balance
 	 */
-	/**
-	 * Get the seller's credit
-	 */
-	public function credit(): float {
-		return round($this->earnedCredit() - $this->usedOrderCredit() - $this->usedShippingCredit(), 2);
-	}
-
-	private function earnedCredit(): float {
-		return round($this->earned * .1, 2);
-	}
-
-	private function usedOrderCredit(): float {
-		$usedOrderCredit = $this->order_items()
-			->where('user_id', '=', $this->user_id)
-			->where('credit', '=', 1)
-			->selectRaw('SUM((fullProductPrice - price_disc) * quantity) as usedCredit')
-			->value('usedCredit');
-
-		return $usedOrderCredit ? round($usedOrderCredit, 2) : 0;
-	}
-
-	private function usedShippingCredit(): float {
-		$usedShippingCredit = Order::whereHas('order_items', function ($query) {
-			$query->where('user_id', '=', $this->user_id);
-		})
-			->where('credit_ship', '=', 1)
-			->selectRaw('
-			SUM(CASE WHEN quantity = 1 THEN 5.9 ELSE 7.4 END) AS usedCredit
-		')
-			->value('usedCredit');
-
-		return $usedShippingCredit ? round($usedShippingCredit, 2) : 0;
-	}
-
-	/**
-	 * Get the payed amount
-	 */
-	public function payed(): float {
-		return round($this->payments()->sum('value'), 2);
-	}
-
-	/**
-	 * Get the other transfers amount
-	 */
-	public function otherTransferAmount(): float {
-		return round($this->other_transfers()->sum('value'), 2);
-	}
 
 	/**
 	 * Get the amount to be payed
 	 */
 	public function toBePayed() {
-		return $this->earned - $this->payed() + $this->otherTransferAmount();
+		return $this->earned - $this->payed + $this->other_transfers;
 	}
 
 	/**
@@ -184,15 +148,15 @@ class Seller extends Model {
 	}
 
 	public function payedString(): string {
-		return EcommerceHelper::formatPrice($this->payed(), true);
+		return EcommerceHelper::formatPrice($this->payed, true);
 	}
 
 	public function otherTransferAmountString(): string {
-		return EcommerceHelper::formatPrice($this->otherTransferAmount(), true);
+		return EcommerceHelper::formatPrice($this->other_transfers, true);
 	}
 
 	public function creditString(): string {
-		return EcommerceHelper::formatPrice($this->credit(), true);
+		return EcommerceHelper::formatPrice($this->credit, true);
 	}
 
 	public function toBePayedString(): string {
@@ -204,10 +168,56 @@ class Seller extends Model {
 	 */
 	public function updateEarned(): self {
 		$this->update([
-			'earned' => $this->order_items->where('status', '>', 1)->sum('gain')
+			'earned' => $this->order_items->where('status', '>=', EcommerceHelper::statusFromTag('confirmed'))->sum('gain')
 		]);
 
 		return $this;
+	}
+
+	public function updatePayed(): float {
+		return round($this->payments()->sum('value'), 2);
+	}
+
+	public function updateOtherTransfers(): float {
+		return round($this->all_transfers->where('other', 1)->sum('value'), 2);
+	}
+
+	/**
+	 * Update the seller's credit
+	 */
+	public function updateCredit(): self {
+		$this->update(['credit' => round($this->earnedCredit() - $this->usedOrderCredit() - $this->usedShippingCredit(), 2)]);
+
+		return $this;
+	}
+
+	private function earnedCredit(): float {
+		return round($this->earned * .1, 2);
+	}
+
+	private function usedOrderCredit(): float {
+		$usedOrderCredit = $this->order_items()
+			->where('user_id', '=', $this->user_id)
+			->where('credit', '=', 1)
+			->where('status', '!=', EcommerceHelper::statusFromTag('canceled'))
+			->selectRaw('SUM((fullProductPrice - price_disc) * quantity) as usedCredit')
+			->value('usedCredit');
+
+		return $usedOrderCredit ? round($usedOrderCredit, 2) : 0;
+	}
+
+	private function usedShippingCredit(): float {
+		$usedShippingCredit = Order::whereHas('order_items', function ($query) {
+			$query->where('user_id', '=', $this->user_id);
+		})
+			->where('credit_ship', '=', 1)
+			->where('status', '!=', EcommerceHelper::statusFromTag('canceled'))
+			->selectRaw('
+			SUM(shipping) AS usedCredit
+		')
+			->value('usedCredit');
+
+		return $usedShippingCredit ? round($usedShippingCredit, 2) : 0;
 	}
 
 	/**

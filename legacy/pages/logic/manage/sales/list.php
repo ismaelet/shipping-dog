@@ -19,8 +19,3 @@ $currentYear = request()->year;
 $saleN = OrderItem::where('seller_id', $seller->id)
 	->where('status', '>', 0)
 	->count();
-
-// send payment request
-if (isset($_POST['request-payment'])) {
-	redirect_old('/manage/payments/request');
-}

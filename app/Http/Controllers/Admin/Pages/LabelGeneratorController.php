@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Pages;
 
 use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Services\Gls\GlsController;
 use App\Models\Ecommerce\Address;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\ShippingMethod;
@@ -44,6 +45,8 @@ class LabelGeneratorController extends Controller {
 	public function generate(Request $request): RedirectResponse|bool {
 		// submit
 		if ($request->submit == 'generate') {
+			// $response = GlsController::addParcel($request);
+
 			$rows = [];
 
 			$firstSelectedCart = Order::find($request->first_order_id);

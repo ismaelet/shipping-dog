@@ -4,8 +4,8 @@ namespace Legacy\Classes\Ecommerce;
 
 use App\Models\Ecommerce\Order as NewOrder;
 use App\Models\Ecommerce\OrderItem;
-use EmailService\Ecommerce\OrderItemstatusUpdate;
 use Legacy\Classes\Ecommerce\OrderItem as LegacyOrderItem;
+use Legacy\Classes\User as LegacyUser;
 
 class Order {
 
@@ -29,7 +29,7 @@ class Order {
 	}
 
 	private function getCustomer() {
-		return $this->customerId ? new Customer($this->customerId) : new Customer();
+		return $this->customerId ? new LegacyUser($this->customerId) : new LegacyUser();
 	}
 
 	private function getShippingMethodId() {
