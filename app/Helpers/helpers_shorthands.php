@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\ArrayHelper;
 use App\Helpers\FileHelper;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,4 +51,11 @@ function embed_svg(string $fileName, array $customClasses = []): ?string {
  */
 function embed_icon(string $fileName, array $customClasses = []): ?string {
 	return FileHelper::embedSvg($fileName, $customClasses, true);
+}
+
+/**
+ * Explode a string by the last occurrence of a separator
+ */
+function explode_last($separator, $string): array {
+	return ArrayHelper::explodeLast($separator, $string);
 }

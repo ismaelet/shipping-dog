@@ -81,6 +81,6 @@ class StyleLoader {
 
 	// get the file name
 	private static function getFileName($fileUrl) {
-		return explode('.css', explode_last('/', $fileUrl))[0];
+		return explode('.css', explode_last_legacy('/', $fileUrl))[0];
 	}
 }

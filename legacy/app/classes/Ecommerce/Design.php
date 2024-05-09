@@ -36,7 +36,7 @@ class Design {
 	}
 
 	private function getUrl() {
-		return $this->mainProduct->url;
+		return $this->main_product->url;
 	}
 
 	private function getClientUrl() {
@@ -47,7 +47,7 @@ class Design {
 		return  \Legacy\System\Classes\LegacyDB::count('products WHERE design_id = ? AND status = 1', [$this->id]);
 	}
 
-	private function getMainProduct() {
+	private function getmain_product() {
 		$productId = \Legacy\System\Classes\LegacyDB::find('id FROM products WHERE design_id = ? AND status = 1 ORDER BY type_id ASC', [$this->id]);
 
 		return  new Product($productId);
@@ -73,7 +73,7 @@ class Design {
 	}
 
 	private function getItem() {
-		return $this->mainProduct;
+		return $this->main_product;
 	}
 
 	private function getItemN() {

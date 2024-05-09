@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::any('/artist', LegacyController::class)->name('seller');
 
 // Seller dashboard
-Route::prefix('/manage')->middleware('auth')->name('seller-dashboard')->group(function () {
+Route::prefix('/manage')->middleware(Seller::class)->name('seller-dashboard')->group(function () {
 	Route::any('', LegacyController::class);
 	Route::any('/portfolio', LegacyController::class)->name('.portfolio');
 	Route::any('/portfolio/add', LegacyController::class)->name('.portfolio.add');
@@ -44,7 +44,11 @@ Route::prefix('seller')->middleware(Seller::class)->name('seller.')->group(funct
  * * Designs
  */
 // Create a design
-Route::resource('designs', DesignController::class)->only(['store', 'show']);
+Route::resource('designs', DesignController::class)->only(['index', 'store', 'edit']);
+Route::post('/designs/{design}/upload-image', [DesignController::class, 'uploadImage'])->name('designs.upload-image');
+Route::post('/designs/{design}/update-tags', [DesignController::class, 'updateTags'])->name('designs.update-tags');
+Route::post('/designs/{design}/update-background-color', [DesignController::class, 'updateBackgroundColor'])->name('designs.update-background-color');
+Route::post('/designs/{design}/update-default-color', [DesignController::class, 'updateDefaultColor'])->name('designs.update-default-color');
 
 /**
  * * Downloads

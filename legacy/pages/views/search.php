@@ -60,7 +60,7 @@ use Legacy\Classes\Ecommerce\Seller;
 
 					<?php while ($row = $res_des->fetch_assoc()) {
 						$design = Design::find($row['id']);
-						$product = $design->mainProduct;
+						$product = $design->main_product;
 					?>
 						<div class="item">
 							<a href="<?= $product->url() ?>">

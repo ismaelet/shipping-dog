@@ -9,7 +9,7 @@ class Controller {
 
 	public static function id(): int|null {
 		if (!isset(static::$id)) {
-			static::$id = explode_last('/', $_SERVER['REQUEST_URI']);
+			static::$id = explode_last_legacy('/', $_SERVER['REQUEST_URI']);
 
 			if (is_numeric(static::$id)) {
 				return static::$id = (int) static::$id;

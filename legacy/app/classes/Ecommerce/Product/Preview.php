@@ -4,7 +4,7 @@ namespace Legacy\Classes\Ecommerce\Product;
 
 use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 
-class PreviewOld {
+class Preview {
 
 	use \Legacy\System\Traits\DynamicProperties;
 

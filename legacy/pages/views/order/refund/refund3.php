@@ -37,7 +37,7 @@
 
 								<select class="" name="<?= $change->id ?>_new_size_id" required>
 
-									<?php $sizes = $change->old_order->product->type->sizeCollection();
+									<?php $sizes = $change->old_order->product->type->sizes;
 
 									$sizes = $sizes->filter(function ($item) use ($change) {
 										return $item->id != $change->old_order->size_id;

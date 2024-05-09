@@ -1,84 +1,8 @@
 <?php
 
-use App\Helpers\FileHelper;
-use App\Models\Ecommerce\Design;
-use Legacy\Classes\Ecommerce\Product as LegacyProduct;
-use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
-use Legacy\Classes\Ecommerce\Product\PreviewOld as LegacyPreview;
-use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
-
-// setup page
-$error = $_SESSION['error'] ?? false;
-$done = $_SESSION['done'] ?? false;
-
-unset($_SESSION['error']);
-unset($_SESSION['done']);
-
-$id = $_GET['id'] ?? false;
-
-$design = Design::where('id', $id)
-	->where('user_id', auth()->id())
-	->first();
-
-if (!$design) {
-	redirect_old('/manage/portfolio');
-}
-
-$seller = $design->seller;
-
-\Legacy\System\Classes\LegacyView::$title = 'Modifica: ' . $design->name;
-
-$custom = $design->custom;
-
-// generate data
-$res_colorD = \Legacy\System\Classes\LegacyDB::select('id FROM product_colors WHERE hidden = 0 ORDER BY hidden ASC, preorder ASC, reorder ASC, name ASC');
 
 // reupload design
 if (isset($_POST['upload-light']) || isset($_POST['upload-dark'])) {
-
-	$dark = isset($_POST['upload-dark']);
-	$type = $dark ? '_dark' : '';
-
-	// upload image
-	$file = 'designs/' . $id . $type . '.png';
-	$file_m = 'designs/' . $id . $type . '_m.png';
-	$file_ori = 'designs_originals/' . $id . $type . '.png';
-
-	// Store the original file
-	$newFile = FileHelper::uploadFile(request(), $file_ori);
-
-	// Store the usable HD file
-	$newFile = FileHelper::uploadImage([
-		'path' => $file,
-		'size' => 1024,
-		'type' => 'png',
-	]);
-
-	// Store the usable LD file
-	$newFile = FileHelper::uploadImage([
-		'path' => $file_m,
-		'size' => 512,
-		'type' => 'png',
-	]);
-
-	$reso = getimagesize($_FILES['file']['tmp_name']);
-	$ratio = round($reso[0] / $reso[1], 2);
-
-	// update ratio
-	\Legacy\System\Classes\LegacyDB::update('designs SET ratio=? WHERE id = ?', [$ratio, $id]);
-
-	if (!$design->custom) {
-		// delete item images
-		$res = \Legacy\System\Classes\LegacyDB::select('id from items WHERE design_id = ?', [$id]);
-		while ($row = $res->fetch_assoc()) LegacyPreview::deleteImages($row['id']);
-	}
-
-	// delete design images
-	if (file_exists($file = public_storage('/designs/previews/' . $id . '.jpg'))) unlink($file);
-	if (file_exists($file = public_storage('/designs/previews/' . $id . '_m.jpg'))) unlink($file);
-
-	if ($dark) redirect_old('#des-dark-anch');
-	else redirect_old('#des-light-anch');
 }
 
 // upload vector

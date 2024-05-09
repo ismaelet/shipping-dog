@@ -247,9 +247,9 @@
 								@php
 									$orderItemDescription = [];
 									$orderItemDescription[] =
-									    $orderItem->size && strpos($orderItem->product->type->sizes, ',') ? $orderItem->size->name : null;
+									    $orderItem->size && $orderItem->product->type->sizes->count() > 1 ? $orderItem->size->name : null;
 									$orderItemDescription[] =
-									    $orderItem->color && strpos($orderItem->product->type->colors, ',') ? $orderItem->color->name : null;
+									    $orderItem->color && $orderItem->product->type->colors->count() > 1 ? $orderItem->color->name : null;
 									$orderItemDescription = implode(' ', array_filter($orderItemDescription)) ?: 'Prodotto standard';
 
 									if (isset($mergedorder_items[$orderItemDescription])) {

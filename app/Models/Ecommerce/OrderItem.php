@@ -124,8 +124,8 @@ class OrderItem extends Model {
 		$product = $this->product;
 
 		$description = $product?->type->name;
-		$description .= $this->size && strpos($product?->type->sizes, ',') ? ' ' . $this->size->name : '';
-		$description .= $this->color && strpos($product?->type->colors, ',') ? ' ' . $this->color->name : '';
+		$description .= $this->size && $product?->type->sizes->count() > 1 ? ' ' . $this->size->name : '';
+		$description .= $this->color && $product?->type->colors->count() > 1 ? ' ' . $this->color->name : '';
 		$description .= $this->logo ? ' ' . $this->logo->name : '';
 		$description .= $this->position_id && $this->position_id > 1 ? ' ' . $this->position->name : '';
 

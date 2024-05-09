@@ -198,12 +198,10 @@ class Product extends Model {
 	 * Get the product's colors
 	 */
 	public function colors(): ?Collection {
-		return Cache::remember('product_colors_' . $this->id, now()->addMinutes(1), function () {
-			return ProductColor::whereIn('tag', explode(',', $this->colors))
-				->orderBy('reorder')
-				->orderBy('id')
-				->get();
-		});
+		return ProductColor::whereIn('tag', explode(',', $this->colors))
+			->orderBy('reorder')
+			->orderBy('id')
+			->get();
 	}
 
 	/**

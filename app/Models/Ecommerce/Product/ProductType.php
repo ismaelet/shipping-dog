@@ -23,6 +23,15 @@ class ProductType extends Model {
 	 */
 
 	/**
+	 * Get the colors associated with the product type.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function colors(): BelongsToMany {
+		return $this->belongsToMany(ProductColor::class);
+	}
+
+	/**
 	 * Get the positions associated with the product type.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -81,20 +90,6 @@ class ProductType extends Model {
 			->orderBy('reorder')
 			->orderBy('id')
 			->get();
-	}
-
-	/**
-	 * The list of the type's sizes as array
-	 */
-	public function sizeList(): array {
-		return explode(',', $this->sizes);
-	}
-
-	/**
-	 * The list of the type's sizes as collection
-	 */
-	public function sizeCollection(): Collection {
-		return ProductSize::whereIn('tag', $this->sizeList())->get();
 	}
 
 	/**

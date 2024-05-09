@@ -151,7 +151,7 @@ class PreviewHelper {
 		imagecopyresampled($out, $srcImage, 0, 0, 0, 0, $x, $y, $src_w, $src_h);
 
 		// Add the clothing image
-		$srcImage =  $clothingImageType == 'webp' ? imagecreatefromwebp($clothingImage) : imagecreatefrompng($clothingImage);
+		$srcImage = $clothingImageType == 'webp' ? imagecreatefromwebp($clothingImage) : imagecreatefrompng($clothingImage);
 		$src_size = getimagesize($clothingImage);
 		$src_w = $src_size[0];
 		$src_h = $src_size[1];
@@ -206,5 +206,20 @@ class PreviewHelper {
 		// Generate the image
 		imagewebp($out, $this->fileServerPath(), $this->imageSize >= 1000 ? 90 : 70);
 		imagedestroy($out);
+	}
+
+	/**
+	 * Delete the images
+	 */
+	public function deleteImages(): void {
+		$files = glob(public_storage('products/' . $this->product->type->tag . '/' . $this->product->id . '-*'));
+
+		array_map(
+			function ($file) {
+				$file = str_replace(public_storage(), '', $file);
+				FileHelper::delete($file);
+			},
+			$files
+		);
 	}
 }

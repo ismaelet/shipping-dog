@@ -24,6 +24,8 @@ export default {
 			'neutral-light-900': 'hsl(var(--color-neutral-light-900-hsl) / <alpha-value>)',
 
 			// Neutral dark
+			'neutral-dark-200': 'hsl(var(--color-neutral-dark-200-hsl) / <alpha-value>)',
+			'neutral-dark-250': 'hsl(var(--color-neutral-dark-250-hsl) / <alpha-value>)',
 			'neutral-dark-900': 'hsl(var(--color-neutral-dark-900-hsl) / <alpha-value>)',
 
 			// Neutral theme
@@ -56,6 +58,8 @@ export default {
 		// Custom border_items
 		borderWidth: {
 			DEFAULT: 'var(--border-width)',
+			lg: '2px',
+			xl: '3px',
 		},
 		// Custom border radius
 		borderRadius: {

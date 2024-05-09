@@ -2,7 +2,7 @@
 
 use Legacy\System\Classes\Query_Result;
 
-function explode_last($separator, $string) {
+function explode_last_legacy($separator, $string) {
 	$array = explode($separator, $string);
 	return end($array);
 }

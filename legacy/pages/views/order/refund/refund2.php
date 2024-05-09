@@ -37,7 +37,7 @@
 				<p class="label">Azione richiesta:</p>
 				<select name="is_change[]">
 
-					<?php if (count($orderItem->product->type->sizeList()) > 1) { ?>
+					<?php if ($orderItem->product->type->sizes->count() > 1) { ?>
 
 						<option value="1">Cambio</option>
 

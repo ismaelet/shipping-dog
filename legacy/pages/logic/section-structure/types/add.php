@@ -123,7 +123,7 @@ $inputs[] = $array;
 
 // Sizes
 $array = [['type' => 'lbl', 'text' => 'Taglie']];
-$typeSizes = $productType ? $productType->sizeCollection()->pluck('tag')->toArray() : [];
+$typeSizes = $productType ? $productType->sizes->pluck('tag')->toArray() : [];
 $sizes = ProductSize::all()->sortBy('id');
 
 foreach ($sizes as $size) {

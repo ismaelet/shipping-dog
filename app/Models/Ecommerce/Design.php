@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Design extends Model {
 
 	protected $table = 'designs';
-	protected $fillable = ['id', 'name', 'user_id', 'status', 'ratio'];
+	protected $fillable = ['id', 'name', 'user_id', 'status', 'ratio', 'color', 'default_color_id', 'logo_group_id'];
 
 	/**
 	 * Get the design's seller
@@ -26,7 +26,7 @@ class Design extends Model {
 	/**
 	 * Get the design's main
 	 */
-	public function mainProduct(): HasOne {
+	public function main_product(): HasOne {
 		return $this->hasOne(Product::class)
 			->where('status', 1)
 			->where('deleted', 0)
@@ -75,7 +75,7 @@ class Design extends Model {
 	 * Ge the desing's url, that is the url of the main product
 	 */
 	public function url(): ?string {
-		return $this->mainProduct ? $this->mainProduct->url() : null;
+		return $this->main_product ? $this->main_product->url() : null;
 	}
 
 	/**

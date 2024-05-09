@@ -9,7 +9,7 @@ use App\Models\Ecommerce\Product\ProductType;
 use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
 use Legacy\Classes\Ecommerce\Product\Position as LegacyProductPosition;
-use Legacy\Classes\Ecommerce\Product\PreviewOld as LegacyPreview;
+use Legacy\Classes\Ecommerce\Product\Preview as LegacyPreview;
 use Legacy\Classes\Ecommerce\Design\Logo as LegacyLogo;
 use Illuminate\Database\Eloquent\Collection;
 use Legacy\Classes\Ecommerce\Design as LegacyDesign;

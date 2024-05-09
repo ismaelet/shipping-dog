@@ -63,7 +63,7 @@ use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 						<input type="hidden" name="id[]" value="<?= $design->id ?>">
 						<input type="hidden" class="pos js-order" name="pos[]" value="<?= $row['sort'] ?>">
 
-						<a class="des-img block sqr" href="<?= route('designs.show', $design) ?>">
+						<a class="des-img block sqr" href="<?= route('designs.edit', $design) ?>">
 							<img class="img-fill" src="<?= $design->image() ?>" loading="lazy">
 						</a>
 

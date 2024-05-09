@@ -12,12 +12,21 @@ use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class DesignController extends Controller {
 
 	/**
-	 * * Create a new design
+	 * * Index action
+	 */
+	public function index() {
+		redirect_old('/manage/portfolio');
+	}
+
+	/**
+	 * * Store action
 	 */
 	public function store(Request $request): RedirectResponse {
 		// Validate the request
@@ -32,6 +41,7 @@ class DesignController extends Controller {
 			}],
 			'file' => ['required', 'image'],
 			'file-vector' => 'mimes:pdf,ai',
+			'tags' => ['nullable', 'string', 'max:255'],
 		]);
 
 		// Create the design
@@ -74,19 +84,234 @@ class DesignController extends Controller {
 		}
 
 		// Add tags
-		$tags = strtolower(str_replace(['#'], '', $request->tags));
+		if ($request->tags) {
+			$this->updateTagsHelper($design, $request->tags);
+		}
+
+		// Upload the image
+		$this->uploadImageHelper($design, $request->file('file'));
+
+		// Upload the vector file
+		if ($request->hasFile('file-vector')) {
+			$this->uploadVectorImage($design, $request->file('file-vector'));
+		}
+
+		// Redirect
+		return to_route('designs.edit', $design);
+	}
+
+	/**
+	 * * Edit action
+	 */
+	public function edit(?Design $design): View {
+		if (!$design || !$design->status || $design->user_id !== Auth::id()) {
+			to_route('designs.index');
+		}
+
+		$title = 'Modifica: ' . $design->name;
+
+		return view('ecommerce.designs.edit', compact('design', 'title'));
+	}
+
+	/**
+	 * * Custom action: upload image
+	 */
+	public function uploadImage(Design $design, Request $request): RedirectResponse {
+		// Validate the request
+		$request->validate([
+			'type' => ['required', 'string', 'in:light,dark,vector'],
+		]);
+
+		if ($request->type == 'vector') {
+			// Validate the file type
+			$request->validate(
+				[
+					'file_vector' => ['required', 'mimes:pdf,ai'],
+				],
+				[
+					'file_vector.mimes' => 'Il file deve essere un PDF o AI',
+				]
+			);
+
+			// Upload the vector image
+			$this->uploadVectorImage($design, $request->file('file_vector'));
+		} else {
+			// Validate the file type
+			$inputName = $request->type == 'light' ? 'file_light' : 'file_dark';
+
+			$request->validate([
+				$inputName => ['required', 'image'],
+			], [
+				$inputName . '.mimes' => 'Il file deve essere un\'immagine',
+			]);
+
+			// Upload the image
+			$this->uploadImageHelper($design, $request->file($inputName), $request->type);
+		}
+
+		return back()->with(['#upload-image-' . $request->type => true]);
+	}
+
+	/**
+	 * * Custom action: update tags
+	 */
+	public function updateTags(Design $design, Request $request): RedirectResponse {
+		$request->validate([
+			'tags' => ['nullable', 'string', 'max:255'],
+		]);
+
+		// Update the tags
+		$this->updateTagsHelper($design, $request->tags);
+
+		return back()->with(['saved-tags' => true, '#tags' => true]);
+	}
+
+	/**
+	 * * Custom action: update background color
+	 */
+	public function updateBackgroundColor(Design $design, Request $request): RedirectResponse {
+		$request->validate([
+			'color' => ['required', 'string', 'size:7'],
+		]);
+
+		$design->update([
+			'color' => $request->color,
+		]);
+
+		return back()->with(['saved-background-color' => true, '#background-color' => true]);
+	}
+
+	/**
+	 * * Custom action: update default color
+	 */
+	public function updateDefaultColor(Design $design, Request $request): RedirectResponse {
+		$request->validate([
+			'default_color_id' => ['required', 'integer', 'exists:product_colors,id'],
+		]);
+
+		$design->update([
+			'default_color_id' => $request->default_color_id,
+		]);
+
+		$design->products->each(function ($product) use ($request) {
+			if ($product->type->colors->contains($request->default_color_id) && $product->colors()->contains($request->default_color_id)) {
+				$product->update([
+					'color_id' => $request->default_color_id,
+				]);
+			}
+		});
+
+		return back()->with(['saved-default-color' => true, '#default-color' => true]);
+	}
+
+	/**
+	 * ~ Helper method: upload image
+	 */
+	private function uploadImageHelper(Design $design, UploadedFile $file, string $variant = 'light'): bool {
+		$fileName = $variant === 'light' ? $design->id : $design->id . '_dark';
+
+		// Save the aspect ratio
+		$imageSize = getimagesize($file->getPathname());
+		$ratio = round($imageSize[0] / $imageSize[1], 2);
+		$design->update(['ratio' => $ratio]);
+
+		// Store the original file
+		if (
+			!FileHelper::uploadFile($file, 'designs_originals/' . $fileName . '.png')
+		) {
+			return false;
+		}
+
+		// Store the resized HD file
+		if (
+			!FileHelper::uploadImage(
+				file: $file,
+				filePath: 'designs/' . $fileName . '.png',
+				size: 1024,
+			)
+		) {
+			return false;
+		}
+
+		// Store the resized LD file
+		if (
+			!FileHelper::uploadImage(
+				file: $file,
+				filePath: 'designs/' . $fileName . '_m.png',
+				size: 512,
+			)
+		) {
+			return false;
+		}
+
+		// Delete the old product images
+		if (!$design->custom) {
+			$design->products->each(function ($product) {
+				$product->preview()->deleteImages();
+			});
+		}
+
+		// Delete old design images
+		FileHelper::delete('designs/previews/' . $fileName . '.jpg');
+		FileHelper::delete('designs/previews/' . $fileName . '_m.jpg');
+
+		// Return true if every upload was successful
+		return true;
+	}
+
+	/**
+	 * ~ Helper method: upload vector image
+	 */
+	private function uploadVectorImage(Design $design, UploadedFile $file): bool {
+		// Get the file extension
+		$extension = $file->getClientOriginalExtension();
+
+		// Store the file
+		return $file->storeAs('designs_vector/' . $design->id . '.' . $extension, 'public');
+	}
+
+	/**
+	 * ~ Helper method: update tags
+	 */
+	private function updateTagsHelper(Design $design, ?string $tags): ?DesignTag {
+		// Remove the previous tags
+		if ($design->tags) {
+			$previousTags = explode(',', $design->tags);
+
+			foreach ($previousTags as $previousTag) {
+				$tag = Tag::where('tag', $previousTag)->first();
+
+				if ($tag && $tag->count > 1) {
+					$tag->decrement('count');
+				} else {
+					$tag?->delete();
+				}
+			}
+		}
+
+		// Add the new tags
+		if (!$tags) {
+			DesignTag::where('design_id', $design->id)->delete();
+
+			return null;
+		}
+
+		// Prepare the tags
+		$tags = strtolower(str_replace(['#'], '', $tags));
 		$tags = explode(',', $tags);
 		$tags = array_map('trim', $tags);
 		$tags = array_filter($tags);
 		$tags = array_unique($tags);
 		$tags = array_slice($tags, 0, 10);
 
+		// Increment the count of existing tags
 		$existingTags = Tag::whereIn('tag', $tags)->get()->pluck('tag')->toArray();
 
 		foreach ($existingTags as $tag) {
 			Tag::where('tag', $tag)->increment('count');
 		}
 
+		// Create new tags
 		foreach ($tags as $tag) {
 			Tag::create([
 				'tag' => $tag,
@@ -94,48 +319,11 @@ class DesignController extends Controller {
 			]);
 		}
 
-		DesignTag::create([
+		// Create the design tags
+		return DesignTag::updateOrCreate([
 			'design_id' => $design->id,
+		], [
 			'tags' => implode(',', $tags),
 		]);
-
-		// Store the original file
-		FileHelper::uploadFile(request(), 'designs_originals/' . $design->id . '.png');
-
-		// Store the usable HD file
-		FileHelper::uploadImage([
-			'path' => 'designs/' . $design->id . '.png',
-			'size' => 1024,
-			'type' => 'png',
-		]);
-
-		// Store the usable LD file
-		FileHelper::uploadImage([
-			'path' => 'designs/' . $design->id . '_m.png',
-			'size' => 512,
-			'type' => 'png',
-		]);
-
-		// Save the aspect ratio
-		$imageSize = getimagesize($request->file('file')->getPathname());
-		$ratio = round($imageSize[0] / $imageSize[1], 2);
-		$design->update(['ratio' => $ratio]);
-
-		// Upload the vector file
-		if ($request->hasFile('file-vector')) {
-			$vectorFile = $request->file('file-vector');
-			$vectorFileExtension = $vectorFile->getClientOriginalExtension();
-			$vectorFile->storeAs('designs_vector/' . $design->id . '.' . $vectorFileExtension, 'public');
-		}
-
-		// Redirect
-		return to_route('designs.show', $design);
-	}
-
-	/**
-	 * Show a design
-	 */
-	public function show(Design $design) {
-		redirect_old('/manage/portfolio/edit?id=' . $design->id);
 	}
 }

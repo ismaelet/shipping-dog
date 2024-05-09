@@ -1,33 +1,5 @@
-const changeNameSelector = '.js-change-name'
-const changeNameConfirmationSelector = '.js-change-name-confirmation'
-
 document.addEventListener('DOMContentLoaded', function () {
-	const changeName = document.querySelector(changeNameSelector)
-	const changeNameConfirmation = document.querySelector(changeNameConfirmationSelector)
-
-	const design_id = document.querySelector('#body').dataset.designId
-
 	var timer
-
-	changeName.addEventListener('keyup', () => {
-		const name = changeName.value
-
-		if (name) {
-			update_design(design_id, { name: name })
-				.then((response) => {
-					console.log(response)
-
-					changeNameConfirmation.classList.add('active')
-
-					setTimeout(function () {
-						changeNameConfirmation.classList.remove('active')
-					}, 1000)
-				})
-				.catch((error) => {
-					console.error(error)
-				})
-		}
-	})
 
 	// hex color
 	$('#color-bgr-box').click(function () {
@@ -250,20 +222,3 @@ document.addEventListener('DOMContentLoaded', function () {
 $(window).on('load', async function () {
 	$('#items-load-bgr').fadeOut()
 })
-
-/**
- * Updates a design with the specified designId using the provided data.
- * @param {number} designId - The ID of the design to update.
- * @param {object} data - The data to update the design with.
- * @returns {Promise} - A promise that resolves to the updated design data or rejects with an error.
- */
-async function update_design(designId, data) {
-	return axios
-		.patch(`/api/designs/${designId}`, data)
-		.then((response) => {
-			return response.data
-		})
-		.catch((error) => {
-			return error
-		})
-}

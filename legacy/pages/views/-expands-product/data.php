@@ -215,7 +215,10 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 							<?php foreach ($product->colors() as $color) {
 
-								if ((in_array($color->tag, $product->type->colorList()) || $product->isCustom()) && in_array($color->tag, $product->colors()->pluck('tag')->toArray())) { ?>
+								if (
+									($product->type->colors->contains($color->id) || $product->isCustom())
+									&& in_array($color->tag, $product->colors()->pluck('tag')->toArray())
+								) { ?>
 
 									<input type="radio" class="cbx" id="cbx-color-<?= $color->tag ?>" name="color_id" value="<?= $color->id ?>" data-color="<?= $color->tag ?>" data-id="<?= $color->id ?>" <?php if ($color->id == $product->color->id) echo 'checked' ?>>
 

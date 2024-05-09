@@ -4,12 +4,11 @@ use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPrice;
 use App\Models\Ecommerce\Product\ProductType;
-use Legacy\Classes\Ecommerce\Product as OldProduct;
-use Legacy\Classes\Ecommerce\Product\Color as LegacyProductColor;
+use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 $productId = $_GET['id'] ?? null;
-$oldProduct = $productId ? new OldProduct($productId) : null;
+$oldProduct = $productId ? new LegacyProduct($productId) : null;
 $product = Product::find($productId);
 $seller = \Legacy\System\Classes\LegacyView::get('seller');
 $saved = $_GET['saved'] ?? false;
@@ -19,7 +18,7 @@ $types = [];
 $typeRows = \Legacy\System\Classes\LegacyDB::select('id FROM product_types WHERE id<>16 ORDER BY category ASC, id ASC');
 
 while ($typeRow = $typeRows->fetch_assoc()) {
-	$type = new Type($typeRow['id']);
+	$type = new LegacyProductType($typeRow['id']);
 	$types[] = $type;
 }
 
@@ -56,7 +55,7 @@ if (isset($_POST['add']) || isset($_POST['edit'])) {
 			'positions' => $position_id,
 		]);
 
-		$oldProduct = new OldProduct($product->id);
+		$oldProduct = new LegacyProduct($product->id);
 
 		// upload product images
 		if (!empty($_POST['colors'])) {

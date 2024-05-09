@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class FileHelper {
@@ -27,7 +27,7 @@ class FileHelper {
 	/**
 	 * Get the path of a file in the public assets directory
 	 */
-	public static function publicStoragePath(string $path): string {
+	public static function publicStoragePath(?string $path = ''): string {
 		return storage_path('app/public/' . $path);
 	}
 
@@ -45,79 +45,37 @@ class FileHelper {
 	/**
 	 * Move a file to the public storage directory
 	 */
-	public static function uploadFile(Request $request, string $newFilePath, string $fileName = 'file', bool $overwrite = true): bool {
-		$request->validate([
-			'file' => ['required', 'file'],
-		]);
+	public static function uploadFile(UploadedFile $file, string $filePath): bool {
+		$fileDirectory = ArrayHelper::explodeLast('/', $filePath)[0];
+		$fileName = ArrayHelper::explodeLast('/', $filePath)[1];
 
-		$fileToUpload = $request->file($fileName);
-		$newFilePath = ArrayHelper::explodeLast('/', $newFilePath);
-		$destinationPath = $newFilePath[0];
-		$newFileName = $newFilePath[1];
-
-		if ($overwrite && Storage::disk('public')->exists($destinationPath . '/' . $newFileName)) {
-			Storage::disk('public')->delete($destinationPath . '/' . $newFileName);
+		if (Storage::disk('public')->exists($filePath)) {
+			Storage::disk('public')->delete($filePath);
 		}
 
-		$newFile = $fileToUpload->storeAs($destinationPath, $newFileName, 'public');
+		$storedFile = $file->storeAs($fileDirectory, $fileName, 'public');
 
-		return (bool) $newFile;
+		return (bool) $storedFile;
 	}
 
 	/**
-	 * Upload an image with cropping, resizing, and quality options
-	 * 
-	 * @param array $fileData 
-	 *		@param string 'path': the path of the file in the storage
-	 * 		@param int 'size': the size of the image, used by "mode"
-	 * 		@param string 'name' = 'file': the name of the file input
-	 * 		@param ?int 'key' = null: the key of the file input, in case of multiple uploads from the same input
-	 * 		@param string 'type' = 'webp': the type of the destination image (webp, jpg, png)
-	 * 		@param string 'mode' = 'min': the re-size method:
-	 * 			'min': the smallest side will be of the set size
-	 * 			'max': the largest side will be of the set size
-	 * 			'crop': crop following the set size
-	 * 		@param int quality = 80: the compression quality, not used for PNG
-	 * 
-	 * @return string|bool
+	 * Upload an image
 	 */
-	public static function uploadImage(array $parameters): string|bool {
-
-		$filePath = $parameters['path'];
+	public static function uploadImage(UploadedFile $file, string $filePath, ?int $size = null, string $mode = 'min', int $quality = 80): bool {
+		$fileDirectory = ArrayHelper::explodeLast('/', $filePath)[0];
 		$fileName = ArrayHelper::explodeLast('/', $filePath)[1];
-		$storageDirectory = public_storage(ArrayHelper::explodeLast('/', $filePath)[0]);
-		$fileStoragePath = $storageDirectory . '/' . $fileName;
-		$size = $parameters['size'];
-		$type = isset($parameters['type']) && in_array($parameters['type'], ['webp', 'jpg', 'png']) ? $parameters['type'] : 'webp';
-		$mode = isset($parameters['mode']) && in_array($parameters['mode'], ['width', 'height', 'min', 'max', 'crop']) ? $parameters['mode'] : 'min';
-		$quality = $parameters['quality'] ?? 80;
+		$type = explode_last('.', $fileName)[1];
 
-		// Get file data
-		if (isset($parameters['key'])) {
-			$srcImg = $_FILES[$parameters['name'] ?? 'file']['tmp_name'][$parameters['key']];
-			$fileConf = $_FILES[$parameters['name'] ?? 'file']['error'][$parameters['key']];
-		} else {
-			$srcImg = $_FILES[$parameters['name'] ?? 'file']['tmp_name'];
-			$fileConf = $_FILES[$parameters['name'] ?? 'file']['error'];
-		}
-
+		// Get image data
+		$srcImg = $file->getPathname();
 		$srcType = exif_imagetype($srcImg);
 		$srcResolution = getimagesize($srcImg);
 		$srcWidth = $srcResolution[0] ?? 0;
 		$srcHeight = $srcResolution[1] ?? 0;
 
-		// Check for errors
-		if (!in_array($srcType, [IMAGETYPE_WEBP, IMAGETYPE_JPEG, IMAGETYPE_PNG])) {
-			return 'wrong-type';
-		}
-
-		if ($fileConf || !$srcWidth || !$srcHeight) {
-			return 'file-error';
-		}
-
 		// Create the storage directory if it doesn't exist
-		if (!file_exists($storageDirectory)) {
-			mkdir($storageDirectory, 0777, true);
+		if (!Storage::directoryExists('public/' . $fileDirectory)) {
+			Storage::makeDirectory('public/' . $fileDirectory);
 		}
 
 		// Calculate the new dimensions based on the mode
@@ -196,13 +154,13 @@ class FileHelper {
 				$trsp = imagecolorallocatealpha($tempImg, 255, 255, 255, 127);
 				imagefilledrectangle($tempImg, 0, 0, $newWidth, $newHeight, $trsp);
 				imagecopyresampled($tempImg, $originalImg, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
-				imagewebp($tempImg, $fileStoragePath, $quality);
+				imagewebp($tempImg, public_storage($filePath), $quality);
 
 				break;
 
 			case 'jpg':
 				imagecopyresampled($tempImg, $originalImg, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
-				imagejpeg($tempImg, $fileStoragePath, $quality);
+				imagejpeg($tempImg, public_storage($filePath), $quality);
 
 				break;
 
@@ -212,7 +170,7 @@ class FileHelper {
 				$trsp = imagecolorallocatealpha($tempImg, 255, 255, 255, 127);
 				imagefilledrectangle($tempImg, 0, 0, $newWidth, $newHeight, $trsp);
 				imagecopyresampled($tempImg, $originalImg, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
-				imagepng($tempImg, $fileStoragePath);
+				imagepng($tempImg, public_storage($filePath));
 
 				break;
 		}
@@ -220,7 +178,8 @@ class FileHelper {
 		imagedestroy($originalImg);
 		imagedestroy($tempImg);
 
-		return file_exists($fileStoragePath);
+		// Return the success of the operation
+		return self::exists($filePath);
 	}
 
 
