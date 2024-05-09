@@ -436,7 +436,7 @@
 }
 
 .sale-history__grid {
-	grid-template-columns: repeat(6, minmax(0, auto));
+	grid-template-columns: repeat(7, minmax(0, auto));
 	min-width: 768px;
 }
 

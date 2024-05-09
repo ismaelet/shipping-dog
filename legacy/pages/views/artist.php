@@ -125,7 +125,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 			</div>
 		</div>
 
-		<?php if ($collN || $vip) { ?>
+		<?php if ($collN || $owner) { ?>
 
 			<!-- Collections -->
 			<section id="collections">
@@ -135,7 +135,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 
 					<div id="collections-grid" class="sortable">
 
-						<?php if ($vip) { ?>
+						<?php if ($owner) { ?>
 
 							<div class="coll-ele add">
 								<div class="collection clickable lbox-open" data-tar="#coll-add-lbox">

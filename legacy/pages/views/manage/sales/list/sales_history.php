@@ -1,13 +1,13 @@
 <?php
 
+use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\OrderItem;
 
-$sales = OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
-	->where('seller_id', $seller->id)
-	->where('orders.status', '>', 0)
-	->orderByDesc('orders.created_at')
-	->select('order_items.*')
-	->selectRaw('YEAR(orders.created_at) as year, MONTH(orders.created_at) as month')
+$sales = OrderItem::where('seller_id', $seller->id)
+	->where('status', '>=', EcommerceHelper::statusFromTag('confirmed'))
+	->orderByDesc('created_at')
+	->select('*')
+	->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
 	->with('product', 'product.type', 'color', 'order')
 	->get();
 
@@ -29,7 +29,7 @@ for ($month = $lastMonth; $month >= $firstMonth; $month--) {
 
 	$monthTotGain = $sales->sum(function ($orderItem) use ($currentYear, $month) {
 		if ($orderItem->year == $currentYear && $orderItem->month == $month) {
-			return $orderItem->totalGain();
+			return $orderItem->gain;
 		}
 	});
 
@@ -50,6 +50,7 @@ for ($month = $lastMonth; $month >= $firstMonth; $month--) {
 			<div class="sale-history__grid grid">
 
 				<div class="grid-row sale-history__head">
+					<p class="grid-item">ID Ordine</p>
 					<p class="grid-item">Design</p>
 					<p class="grid-item">Guadagno</p>
 					<p class="grid-item">Capo</p>
@@ -61,10 +62,10 @@ for ($month = $lastMonth; $month >= $firstMonth; $month--) {
 				<?php foreach ($orderItems as $orderItem) { ?>
 
 					<!--sale line-->
-					<div class="grid-row <?php if ($row_dark) {
-												echo 'row_dark';
-												$row_dark = false;
-											} else $row_dark = 'true' ?>">
+					<div class="grid-row">
+						<div class="grid-item">
+							<p class="list-inp"><?= $orderItem->idCode() ?></p>
+						</div>
 						<div class="grid-item">
 							<p class="list-inp">
 								<?php
@@ -74,7 +75,7 @@ for ($month = $lastMonth; $month >= $firstMonth; $month--) {
 							</p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp"><?= $orderItem->totalGainString() ?></p>
+							<p class="list-inp"><?= $orderItem->gainString() ?></p>
 						</div>
 						<div class="grid-item">
 							<p class="list-inp"><?= $orderItem->product->type->name ?? '' ?></p>

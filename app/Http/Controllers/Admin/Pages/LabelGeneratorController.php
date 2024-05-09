@@ -46,6 +46,7 @@ class LabelGeneratorController extends Controller {
 		// submit
 		if ($request->submit == 'generate') {
 			// $response = GlsController::addParcel($request);
+			// dd($response);
 
 			$rows = [];
 

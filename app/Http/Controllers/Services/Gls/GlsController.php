@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 
 class GlsController extends Controller {
 
-	public static function addParcel(Request $request) {
+	public static function addParcel(Request $request): array {
 		$headquarters = 'TT';
 		$clientId = 200162;
 		$clientPassword = 2001621122;
@@ -71,9 +71,14 @@ class GlsController extends Controller {
 
 			// Get response body
 			$body = $response->getBody()->getContents();
+			print_r($body);
+			exit;
 
 			// Return response
-			return $body;
+			$responseXml = simplexml_load_string($body);
+			$responseJson = json_encode($responseXml);
+
+			return json_decode($responseJson, true);
 		} catch (\Exception $e) {
 			// Handle exception
 			return response()->json(['error' => $e->getMessage()], 500);

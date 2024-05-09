@@ -240,8 +240,6 @@ class OrderItem {
 
 		$this->data['fixedDiscount'] = $discountAmount;
 		$this->data = [];
-
-		$this->newOrderItem()->updateGain();
 		$this->newOrder()->updatePrice();
 
 		return $this;
@@ -255,7 +253,7 @@ class OrderItem {
 		$this->data['gainReduction'] = $gainReduction;
 		unset($this->data['totalGain']);
 
-		$this->newOrder()->updatePrice();
+		$this->newOrderItem()->updateGain();
 
 		return $this;
 	}

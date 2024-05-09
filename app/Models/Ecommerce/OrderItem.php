@@ -20,7 +20,7 @@ class OrderItem extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['fullProductPrice', 'price_disc', 'productGain', 'gain_disc', 'credit', 'inventory', 'quantity', 'time', 'user_id', 'order_id', 'product_id', 'seller_id', 'design_id', 'type_id', 'color_id', 'size_id', 'gender_id', 'position_id', 'logo_id'];
+	protected $fillable = ['fullProductPrice', 'price_disc', 'gain', 'productGain', 'gain_disc', 'credit', 'inventory', 'quantity', 'time', 'user_id', 'order_id', 'product_id', 'seller_id', 'design_id', 'type_id', 'color_id', 'size_id', 'gender_id', 'position_id', 'logo_id'];
 
 
 	/**
@@ -89,10 +89,18 @@ class OrderItem extends Model {
 		return $this->belongsTo(Logo::class);
 	}
 
+	/**
+	 * * Attributes
+	 */
 
 	/**
-	 * * Utility methods 
+	 * Get the order's code.
+	 *
+	 * @return string
 	 */
+	public function idCode(): string {
+		return '#' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+	}
 
 	/**
 	 * Get the name of the order.
@@ -169,7 +177,7 @@ class OrderItem extends Model {
 	 * @return string
 	 */
 	public function createdAtString(): string {
-		return date('d/m/Y', strtotime($this->time));
+		return date('d/m/Y', strtotime($this->created_at));
 	}
 
 
@@ -231,15 +239,6 @@ class OrderItem extends Model {
 	}
 
 	/**
-	 * Get the seller's total gain for the order.
-	 *
-	 * @return float
-	 */
-	public function totalGain(): float {
-		return ($this->productGain - $this->gain_disc) * $this->quantity;
-	}
-
-	/**
 	 * Get the price of the order as a formatted string.
 	 *
 	 * @return string
@@ -262,8 +261,8 @@ class OrderItem extends Model {
 	 *
 	 * @return string
 	 */
-	public function totalGainString(): string {
-		return EcommerceHelper::formatPrice($this->totalGain(), true);
+	public function gainString(): string {
+		return EcommerceHelper::formatPrice($this->gain, true);
 	}
 
 
@@ -271,7 +270,6 @@ class OrderItem extends Model {
 	 * * Actions 
 	 */
 	public function updateGain(): void {
-		$this->productGain = $this->product->sellerGain();
 		$this->gain = ($this->productGain * $this->quantity) - $this->gain_disc;
 		$this->save();
 	}

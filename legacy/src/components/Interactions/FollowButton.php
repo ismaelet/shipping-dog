@@ -9,22 +9,24 @@ $seller = Seller::find($seller_id);
 
 <template>
 
-	<?php if (Auth::check()) {
-		if ($seller_id != Auth::id()) {
-	?>
+	<?php if ($seller) { ?>
+		<?php if (Auth::check()) {
+			if ($seller_id != Auth::id()) {
+		?>
 
-			<div class="follow-button" x-data="{ followed: <?= $seller->isFollowed() ? 'true' : 'false' ?> }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; followed ? storeFollower(<?= $seller_id ?>) : destroyFollower(<?= $seller->auth_follower->id ?? null ?>);">
-				<span>segui</span>
-				<span>seguendo</span>
-				<span>non seguire</span>
-			</div>
+				<div class="follow-button" x-data="{ followed: <?= $seller->isFollowed() ? 'true' : 'false' ?> }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; followed ? storeFollower(<?= $seller_id ?>) : destroyFollower(<?= $seller->auth_follower->id ?? null ?>);">
+					<span>segui</span>
+					<span>seguendo</span>
+					<span>non seguire</span>
+				</div>
+
+			<?php } ?>
+
+		<?php } else { ?>
+
+			<a href="<?= client_url('/login?url=' . $_SERVER['REQUEST_URI']) ?>" class="follow-button">segui</a>
 
 		<?php } ?>
-
-	<?php } else { ?>
-
-		<a href="<?= client_url('/login?url=' . $_SERVER['REQUEST_URI']) ?>" class="follow-button">segui</a>
-
 	<?php } ?>
 
 </template>

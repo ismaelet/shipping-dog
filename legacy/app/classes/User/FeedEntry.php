@@ -67,7 +67,7 @@ class FeedEntry {
 				break;
 
 			case 2:
-				$text = 'Hai venduto <strong>' . $this->orderItem->quantity . ' x</strong> <a class="design" href="' . $this->orderItem->product->url() . '">' . $this->orderItem->product->name . '</a> per <strong>' . $this->orderItem->totalGainString() . '</strong>';
+				$text = 'Hai venduto <strong>' . $this->orderItem->quantity . ' x</strong> <a class="design" href="' . $this->orderItem->product->url() . '">' . $this->orderItem->product->name . '</a> per <strong>' . $this->orderItem->gainString() . '</strong>';
 				break;
 
 			case 3:
