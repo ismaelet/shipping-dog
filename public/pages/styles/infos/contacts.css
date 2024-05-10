@@ -1,6 +1,6 @@
 /* Slider */
 #slider {
-	background-color: var(--text-color-fade);
+	background-color: var(--color-neutral-300);
 	height: 25rem;
 }
 

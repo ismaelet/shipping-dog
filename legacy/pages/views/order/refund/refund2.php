@@ -25,7 +25,7 @@
 
 				<!-- Data -->
 				<div class="pad-l-1">
-					<h1 class="font-semibold txt-1rem mar-b-05"><?= $orderItem->product->name ?></h1>
+					<h1 class="font-semibold  mar-b-05"><?= $orderItem->product->name ?></h1>
 
 					<p class="text-small-paragraph">
 						<?= $orderItem->description() ?>

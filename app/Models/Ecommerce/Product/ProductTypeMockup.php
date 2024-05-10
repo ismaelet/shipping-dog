@@ -13,12 +13,14 @@ class ProductTypeMockup extends Model {
 	/**
 	 * Get mockup by type ID
 	 */
-	public static function firstByTypeId(int $type_id, ?int $position_id = null): self {
+	public static function firstByTypeId(int $type_id, ?int $position_id = null): ?self {
 		if ($position_id) {
 			return self::where('type_id', $type_id)->where('position_id', $position_id)->first();
 		} else {
 			return self::where('type_id', $type_id)->orderBy('position_id')->first();
 		}
+
+		return null;
 	}
 
 	/**

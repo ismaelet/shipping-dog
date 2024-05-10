@@ -11,9 +11,9 @@ use Legacy\Classes\User\FeedEntry;
 	<!-- Title -->
 	<div id="title-box" class="brb1 br-e">
 
-		<h1 id="title" class="txt-cen txt-15rem pad-v-2">Attività recenti</h1>
+		<h1 id="title" class="text-center txt-15rem pad-v-2">Attività recenti</h1>
 
-		<p class="pad-b-1 txt-cen">
+		<p class="pad-b-1 text-center">
 
 			<?php
 

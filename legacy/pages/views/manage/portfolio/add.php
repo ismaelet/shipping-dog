@@ -3,7 +3,7 @@
 <div id="pan" class="<?= $error ? 'error' : '' ?>" data-stage="<?= $error ? 2 : 1 ?>">
 
 	<!-- Step 1: choose an image -->
-	<section id="setup-sec" class="txt-cen pad-v-5 pad-h-2">
+	<section id="setup-sec" class="text-center pad-v-5 pad-h-2">
 
 		<div id="upload-box" class="center-items clickable inlb mar-v-2 mar-h-auto">
 
@@ -34,7 +34,7 @@
 
 			<div class="grid gap1 pad-t-2">
 
-				<div id="preview-box" class="txt-cen mar-b-2 <?php if ($error) echo 'hidden' ?>">
+				<div id="preview-box" class="text-center mar-b-2 <?php if ($error) echo 'hidden' ?>">
 					<div class="inlb">
 						<img id="preview" class="inlb" src="#" alt="">
 

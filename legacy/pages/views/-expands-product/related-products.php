@@ -31,7 +31,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 <?php if ($product->design?->tags?->tags) { ?>
 
 	<section id="tag-sec" class="">
-		<div id="tag-block" class="main-wrap txt-cen pad-t-3">
+		<div id="tag-block" class="main-wrap text-center pad-t-3">
 
 			<?php
 			$tags = explode(',', $product->design->tags->tags);
@@ -56,7 +56,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 
 	<?php if ($relatedProducts->count()) { ?>
 
-		<div class="main-wrap pad-t-3 pad-b-5 txt-cen">
+		<div class="main-wrap pad-t-3 pad-b-5 text-center">
 			<p class="more-title">Altro di questo artista</p>
 
 			<div class="more-line"></div>

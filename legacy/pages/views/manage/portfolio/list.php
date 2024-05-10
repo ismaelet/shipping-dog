@@ -12,11 +12,11 @@ use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 <form method="POST" class="form pad-b-2">
 	<h1 class="stitle br-c1 txt-2rem">Portfolio</h1>
 
-	<div class="mar-t-2 mar-b-3 txt-cen">
+	<div class="mar-t-2 mar-b-3 text-center">
 
 		<?php if (!$totalCount) { ?>
 
-			<p class="txt-c-title txt-med txt-ls05 txt-1rem mar-b-1">Ancora non hai caricato nessuna grafica. Clicca qui sotto per cominciare:</p>
+			<p class="txt-c-title txt-med txt-ls05  mar-b-1">Ancora non hai caricato nessuna grafica. Clicca qui sotto per cominciare:</p>
 
 		<?php } ?>
 
@@ -40,7 +40,7 @@ use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 
 	<?php if ($totalCount) { ?>
 
-		<div id="sort-box" class="txt-cen mar-b-2">
+		<div id="sort-box" class="text-center mar-b-2">
 			<div id="sort-icon" class="icon inlb mar-b-1"><?= embed_icon('move') ?></div>
 
 			<p id="sort-txt" class="mar-h-auto mar-b-1">
@@ -53,7 +53,7 @@ use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 
 		<?php if ($designCount) { ?>
 
-			<div id="gallery" class="mar-t-2 txt-cen grid gap1 js-sortable">
+			<div id="gallery" class="mar-t-2 text-center grid gap1 js-sortable">
 
 				<?php while ($row = $designs->fetch_assoc()) {
 					$design = Design::find($row['id']);

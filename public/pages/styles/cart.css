@@ -29,7 +29,7 @@ html[data-color-scheme='light'] #slider .bgr {
 
 #flow-bar {
 	--_size: min(2rem, 8vw);
-	--_inactive-color: var(--text-color-fade);
+	--_inactive-color: var(--color-neutral-300);
 	display: grid;
 	grid-template-columns: var(--_size) 1fr var(--_size) 1fr var(--_size) 1fr var(--_size);
 	margin-inline: 7%;
@@ -229,7 +229,7 @@ html[data-color-scheme='light'] #slider .bgr {
 
 .inp_cbx:checked + .icon,
 .icon:hover {
-	border-color: var(--text-color-fade);
+	border-color: var(--color-neutral-300);
 }
 
 .icon-dot {

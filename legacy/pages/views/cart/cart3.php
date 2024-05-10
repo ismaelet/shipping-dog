@@ -25,7 +25,7 @@
 			<?php if (false) { ?>
 				<div id="offer-panel" class="br-c4">
 					<form method="POST" id="offer-grid" class="grid">
-						<div class="offer-img-box grid-ele txt-cen pad-v-1">
+						<div class="offer-img-box grid-ele text-center pad-v-1">
 							<div id="offer-img" class="inlb"></div>
 						</div>
 
@@ -35,7 +35,7 @@
 							<p class="offer-desc mar-t-1">Aggiungi un articolo a sorpresa per un prezzo molto ridotto. Potrai scegliere taglia, modello e quanto vuoi pagare, ma il design e capo sarà a sorpresa e scelto da noi.</p>
 						</div>
 
-						<div class="offer-add grid-ele txt-cen">
+						<div class="offer-add grid-ele text-center">
 							<div id="offer-add-img" class="inlb clickable"></div>
 							<h1 id="offer-add-price" class="font-semibold">3€ - 8€</h1>
 						</div>
@@ -106,8 +106,8 @@
 									<div class="grid content">
 
 										<div class="">
-											<h3 class="txt-1rem txt-med txt-line"><?= $product->name . ' - ' . $product->color->name ?></h3>
-											<p class="txt-1rem mar-t-05 txt-sbold"><?= str_replace('.', ',', $product->price) ?>€</p>
+											<h3 class=" txt-med txt-line"><?= $product->name . ' - ' . $product->color->name ?></h3>
+											<p class=" mt-2 txt-sbold"><?= str_replace('.', ',', $product->price) ?>€</p>
 										</div>
 
 										<div class="lbox-open center-items clickable" data-tar="#lbox-<?= $product->id . $product->color->id ?>">
@@ -159,7 +159,7 @@
 
 					</div>
 
-					<a href="<?= $product->clientUrl ?>" class="txt-cen mar-t-2 block hidden">
+					<a href="<?= $product->clientUrl ?>" class="text-center mar-t-2 block hidden">
 						<p class="inlb brb1 br-2 br-c1-h pad-h-1">Vedi tutti i colori disponibili</p>
 					</a>
 

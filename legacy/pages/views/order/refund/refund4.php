@@ -26,7 +26,7 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 						</div>
 
 						<div class="item-cell item-name_cell">
-							<h1 class="txt-1rem font-semibold"><?= $change->old_order->product->name ?></h1>
+							<h1 class=" font-semibold"><?= $change->old_order->product->name ?></h1>
 							<p class="item-name"><?= $change->old_order->description() ?></p>
 						</div>
 
@@ -34,7 +34,7 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 							<?php if ($change->is_change) { ?>
 
-								<h3 class="txt-1rem txt-med">Nuova taglia:</h3>
+								<h3 class=" txt-med">Nuova taglia:</h3>
 								<p class="txt"><?= $change->new_size->name ?></p>
 
 							<?php } else { ?>
@@ -52,12 +52,12 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 	</div>
 
-	<p class="txt-1rem font-semibold"><strong>Istruzioni</strong>:</p>
+	<p class=" font-semibold"><strong>Istruzioni</strong>:</p>
 	<p class="txt info">
 		<?= $instructions ?>
 	</p>
 
-	<p class="txt-1rem font-semibold mar-t-1"><strong>Note</strong>:</p>
+	<p class=" font-semibold mar-t-1"><strong>Note</strong>:</p>
 	<p class="txt info">
 		<?= $notes ?>
 	</p>

@@ -108,7 +108,7 @@ if ($res_year->num_rows > 1) { ?>
 
 <div
 	id="years-box"
-	class="txt-cen pad-t-2 pad-b-5 gallery"
+	class="pad-t-2 pad-b-5 gallery text-center"
 >
 
 	<?php while ($row = $res_year->fetch_assoc()) {

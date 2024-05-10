@@ -42,7 +42,7 @@ use App\Models\Ecommerce\Design;
 <?php } else { ?>
 
 	<div class="main-wrap">
-		<div id="empty-box" class="txt-cen">
+		<div id="empty-box" class="text-center">
 
 			<div id="empty-icon" class="inlb mar-b-2"></div>
 

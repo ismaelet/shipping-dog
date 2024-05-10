@@ -243,7 +243,7 @@ class PromotionShopTemplate {
 
 						if ($i < 1) $i = 1 ?>
 
-						<div id="page-box" class="txt-cen mar-t-3">
+						<div id="page-box" class="text-center mar-t-3">
 
 							<input type="hidden" id="page-inp" name="page" value="<?= $shopData->page ?>">
 

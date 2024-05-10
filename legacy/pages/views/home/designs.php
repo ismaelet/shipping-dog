@@ -8,7 +8,7 @@
 			</a>
 		</div>
 
-		<div class="pos-rel">
+		<div class="relative">
 			<section id="carousel-designs" class="carousel mob-fluid" data-pos="1" data-loop="1">
 
 				<?php foreach ($popularDesigns as $design) { ?>
@@ -21,7 +21,7 @@
 						<h3 class="name mar-t-1 txt-line"><?= $design->name ?></h3>
 
 						<p class="seller txt-line">by <a href="<?= $design->seller->url() ?>" class="txt-c1-h"><?= $design->seller->name ?></a></p>
-						<p class="mar-t-05 txt-sbold txt-c2">
+						<p class="mt-2 txt-sbold txt-c2">
 							<a href="<?= $design->url() ?>">
 								<?= $design->productCount() ?> prodotti
 							</a>

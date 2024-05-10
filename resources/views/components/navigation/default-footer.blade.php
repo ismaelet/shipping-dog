@@ -73,7 +73,7 @@
 		}
 
 		html[data-color-scheme='dark'] .footer-link {
-			color: var(--text-color-fade);
+			color: var(--color-neutral-300);
 		}
 
 		.footer-link.active a:hover {
@@ -101,7 +101,7 @@
 		#footer-notes {
 			border-top: 1px solid var(--surface-secondary);
 			padding-block: 2rem;
-			color: var(--text-color-fade-more);
+			color: var(--color-neutral-300-more);
 		}
 
 		#footer-notes a {

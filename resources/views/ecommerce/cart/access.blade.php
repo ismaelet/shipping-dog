@@ -161,7 +161,7 @@
 
 		.inp_cbx:checked+.icon,
 		.icon:hover {
-			border-color: var(--text-color-fade);
+			border-color: var(--color-neutral-300);
 		}
 
 		.icon-dot {

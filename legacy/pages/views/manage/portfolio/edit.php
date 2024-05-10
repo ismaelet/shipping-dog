@@ -40,7 +40,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 
 				if ($custom) info_box("Questa immagine è usata solo nelle sezioni dove compare la grafica senza un mockup. Essendo questo un prodotto particolare i mockup non vengono creati automaticamente.") ?>
 
-				<div id="des-light" class="des-box pos-rel" onclick="$(this).parent().find('.file-inp').click();">
+				<div id="des-light" class="des-box relative" onclick="$(this).parent().find('.file-inp').click();">
 
 					<img class="design block" style="background-color: <?= $design->color ?>;" src="<?= public_asset('designs/' . $id . '.png') ?>">
 
@@ -83,7 +83,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 					<!-- If dark version exists -->
 					<?php if (file_exists(SERVER_ROOT . '/uploads/designs/' . $id . '_dark.png')) { ?>
 
-						<div class="des-box txt-0 pos-rel" onclick="$(this).parent().find('.file-inp').click();">
+						<div class="des-box txt-0 relative" onclick="$(this).parent().find('.file-inp').click();">
 
 							<img src="<?= public_asset('designs/' . $id . '_dark.png') ?>" class="design bgr-blk block">
 
@@ -112,9 +112,9 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 
 						<div id="dark-empty" class="center-content clickable" onclick="$(this).parent().find('.file-inp').click();">
 
-							<div class="txt-cen file-cancel">
+							<div class="text-center file-cancel">
 								<div class="des-icon icon img cont inlb text-white"><?= embed_icon('upload') ?></div>
-								<p class="font-semibold mar-t-05">Carica una versione diversa per i capi scuri</p>
+								<p class="font-semibold mt-2">Carica una versione diversa per i capi scuri</p>
 							</div>
 
 							<div class="file-load wid-100 cen"></div>
@@ -192,7 +192,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 					<h3 class="sec-title">Colori</h3>
 					<?php if ($done == 'colors') { ?><p class="confirmation">Colori modificati con successo</p><?php } ?>
 
-					<p class="mar-b-1 mar-t-05">
+					<p class="mar-b-1 mt-2">
 						Quando applichi le modifiche qui, tutte le impostazioni riguardanti i colori di ogni articolo con questa grafica verranno <strong>sovrascritte</strong>. Per cambiare i colori solo di un articolo specifico puoi usare la lista dei capi qui in basso.
 					</p>
 
@@ -203,13 +203,13 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 
 						<div class="field">
 
-							<div class="inp-box pos-rel">
+							<div class="inp-box relative">
 
 								<div id="color-bgr" class="inlb va-cen" style="background-color: <?= $design->color ?>">
 									<input type="color" name="color-hex" id="color-bgr-inp" value="<?= $design->color ?>">
 								</div>
 
-								<p id="color-bgr-title" class="inlb va-cen txt-sbold txt-c-title mar-l-1">HEX: <span id="color-bgr-hex" class="txt-upp"><?= $design->color ?></span></p>
+								<p id="color-bgr-title" class="inlb va-cen txt-sbold txt-c-title mar-l-1">HEX: <span id="color-bgr-hex" class="uppercase"><?= $design->color ?></span></p>
 
 								<div id="color-bgr-box" class="bgr clickable"></div>
 
@@ -258,9 +258,9 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 	<section id="items-sec" class="mar-t-2">
 
 		<h2 class="text-component-heading text-center">Prodotti collegati</h2>
-		<p class="txt-cen mar-b-2 mar-t-2">Qui puoi modificare il colore dei capi e la dimensione di stampa nei prodotti con questa grafica.</p>
+		<p class="text-center mar-b-2 mar-t-2">Qui puoi modificare il colore dei capi e la dimensione di stampa nei prodotti con questa grafica.</p>
 
-		<div class="item-list grid4 grid3-1024w grid2-480w gap2 al-top pos-rel">
+		<div class="item-list grid4 grid3-1024w grid2-480w gap2 al-top relative">
 			<div id="items-load-bgr" class="bgr bgr-c-bgr">
 				<div class="load-icon mar-t-4">
 					<?= embed_icon('loading') ?>
@@ -301,16 +301,16 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 
 					<div id="item-<?= $type->id ?>" class="item <?= $active ? 'active' : '' ?>">
 
-						<div class="item-img item-panel-open pos-rel">
+						<div class="item-img item-panel-open relative">
 							<img src="<?= $productImage ?>" alt="" class="img-fill">
 							<div class="item-over bgr"></div>
 						</div>
 
-						<h3 class="type-name txt-1rem txt-med txt-cen mar-t-05">
+						<h3 class="type-name  txt-med text-center mt-2">
 							<?= $type->name ?>
 						</h3>
 
-						<form method="POST" class="img-buttons grid mar-t-05">
+						<form method="POST" class="img-buttons grid mt-2">
 
 							<input type="hidden" name="type_id" value="<?= $type->id ?>">
 
@@ -339,12 +339,12 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 
 						<div class="item-panel" data-id=<?= $productId ?>>
 
-							<div class="box pos-rel">
+							<div class="box relative">
 
 								<div class="tabs">
 
 									<?php foreach ($tabs as $key => $tab) { ?>
-										<h3 class="tab txt-upp <?= $key == 1 ? 'active' : '' ?>" data-id="<?= $key ?>"><?= $tab[0] ?></h3>
+										<h3 class="tab uppercase <?= $key == 1 ? 'active' : '' ?>" data-id="<?= $key ?>"><?= $tab[0] ?></h3>
 									<?php } ?>
 
 								</div>
@@ -388,7 +388,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 													<!-- Preview image -->
 													<div class="image-panel">
 
-														<div class="image mar-h-auto pos-rel">
+														<div class="image mar-h-auto relative">
 
 															<?php if ($design->custom) { ?>
 
@@ -493,7 +493,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 														</div>
 
 														<?php if (!$design->custom) { ?>
-															<div class="btn-box txt-cen mar-t-2">
+															<div class="btn-box text-center mar-t-2">
 																<button type="submit" name="update-position" class="pbtn">Applica</button>
 															</div>
 														<?php } ?>
@@ -532,7 +532,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 														<!-- Preview image -->
 														<div class="image-panel">
 
-															<div class="image mar-h-auto pos-rel">
+															<div class="image mar-h-auto relative">
 
 																<?php if ($design->custom) { ?>
 
@@ -546,7 +546,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 
 																	<div class="clothing bgr" <?= temp_bg($clothing) ?> data-type-id="<?= $product->type_id ?>"></div>
 
-																	<div class="design-box pos-rel" style="
+																	<div class="design-box relative" style="
 											width: <?= $sX_max ?>%;
 											height: <?= $sY_max ?>%;
 											top: <?= $pY_min ?>%;
@@ -653,7 +653,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 																	</div>
 																</div>
 
-																<div class="btn-box txt-cen mar-t-2">
+																<div class="btn-box text-center mar-t-2">
 																	<button type="submit" name="update-colors" class="pbtn">Applica</button>
 																</div>
 

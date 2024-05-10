@@ -30,13 +30,13 @@ use Legacy\View\Components\Interactions\FollowButton;
 				<?= FollowButton::render(['seller_id' => $seller->id]) ?>
 			</div>
 
-			<div id="title-box" class="txt-cen">
+			<div id="title-box" class="text-center">
 
 				<!-- Name -->
 				<h1 id="title" class="mar-t-1 txt-3rem"><?= $seller->name ?></h1>
 
 				<!-- Statistics -->
-				<p id="store-data" class="mar-b-1 mar-t-05">
+				<p id="store-data" class="mar-b-1 mt-2">
 					<?= $productCount ?> Prodotti &middot;
 					<?= $likeN ?> Like &middot;
 					<?= $follN ?> Follower
@@ -141,7 +141,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 								<div class="collection clickable lbox-open" data-tar="#coll-add-lbox">
 									<div class="center-items hei-100">
 
-										<div class="coll-add-box cen txt-cen wid-100">
+										<div class="coll-add-box cen text-center wid-100">
 											<div class="coll-add-ico text-neutral-700">
 												<?= embed_icon('add') ?>
 											</div>
@@ -162,7 +162,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 						<input type="hidden" id="collBlock" value="<?= $collBlock ?>">
 						<input type="hidden" id="collPos" value="<?= $collBlock ?>">
 
-						<div class="txt-cen">
+						<div class="text-center">
 							<button type="button" id="coll-more" class="sbtn txt-low mar-t-2">Scopri di più</button>
 						</div>
 					<?php } ?>
@@ -202,9 +202,9 @@ use Legacy\View\Components\Interactions\FollowButton;
 	<?php } else { ?>
 
 		<!-- If the shop is empty -->
-		<div id="empty" class="txt-cen pad-t-5 pad-b-10 main-wrap">
+		<div id="empty" class="text-center pad-t-5 pad-b-10 main-wrap">
 			<div id="empty-box">
-				<p id="empty-title" class="txt-upp">Ancora nessun lavoro caricato</p>
+				<p id="empty-title" class="uppercase">Ancora nessun lavoro caricato</p>
 				<a href="/manage/portfolio/add?id=<?= $id ?>"><button type="button" class="pbtn btn-full-width mar-t-2">Carica un lavoro</button></a>
 			</div>
 		</div>

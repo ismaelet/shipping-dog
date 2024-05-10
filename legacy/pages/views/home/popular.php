@@ -12,7 +12,7 @@
 
 		</div>
 
-		<section class="pos-rel">
+		<section class="relative">
 
 			<div id="carousel-popular" class="carousel mob-fluid" data-pos="1" data-loop="1">
 

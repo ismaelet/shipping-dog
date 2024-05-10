@@ -6,7 +6,7 @@
 	</div>
 
 	<div class="form-body">
-		<p class="pad-v-2 txt-cen txt-1rem"><?= ('Are you sure you want to leave?') ?></p>
+		<p class="pad-v-2 text-center "><?= ('Are you sure you want to leave?') ?></p>
 	</div>
 
 	<div class="form-footer">

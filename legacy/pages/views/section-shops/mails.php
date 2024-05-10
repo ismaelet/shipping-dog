@@ -10,7 +10,7 @@
 
 			<h2 class="marb1 txt-med">Blocco <?= $i ?></h2>
 
-			<p class="emails txt-1rem mar-t-1" style="word-break: break-all;">
+			<p class="emails  mar-t-1" style="word-break: break-all;">
 
 				<?php $j = 0;
 				while ($j < $block && $shop = $shops->fetch_assoc()) {

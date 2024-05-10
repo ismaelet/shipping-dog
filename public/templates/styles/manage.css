@@ -67,7 +67,7 @@ main {
 }
 
 .nav-ico svg {
-	fill: var(--text-color-fade);
+	fill: var(--color-neutral-300);
 }
 
 .nav-cbx:checked + .nav-block .nav-ico svg {
@@ -86,7 +86,7 @@ main {
 }
 
 .nav-title {
-	color: var(--text-color-fade);
+	color: var(--color-neutral-300);
 	font-weight: 600;
 	line-height: 3;
 	transition: color 0.2s;
@@ -111,7 +111,7 @@ main {
 }
 
 .nav-ddown-ico svg {
-	fill: var(--text-color-fade);
+	fill: var(--color-neutral-300);
 }
 
 .nav-cbx:checked + .nav-block .nav-ddown-ico svg {

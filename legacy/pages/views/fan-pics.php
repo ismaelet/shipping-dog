@@ -6,7 +6,7 @@
 
 <section id="client-pics">
 	<div class="header">
-		<div class="main-wrap txt-cen">
+		<div class="main-wrap text-center">
 			<div class="section-heading-box">
 				<h1 class="section-heading txt-sbold">Le vostre foto</h1>
 			</div>
@@ -22,14 +22,14 @@
 
 				<a href="<?= $customerPhoto->design?->url() ?>" class="client__image image stack-items">
 					<img src="<?= $customerPhoto->image() ?>" alt="" loading="lazy" class="img-fill">
-					<div class="overlay pad-2 grid va-cen txt-cen">
+					<div class="overlay pad-2 grid va-cen text-center">
 						<div class="title-box">
 
 							<?php if ($customerPhoto->design) { ?>
 								<p class="design-name txt-wht txt-11rem font-semibold txt-line"><?= $customerPhoto->design->name ?></p>
 							<?php } ?>
 
-							<p class="client-name txt-wht txt-upp txt-line"><?= $customerPhoto->fullName() ?></p>
+							<p class="client-name txt-wht uppercase txt-line"><?= $customerPhoto->fullName() ?></p>
 						</div>
 					</div>
 				</a>

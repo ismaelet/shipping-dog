@@ -183,7 +183,7 @@ main {
 }
 
 .navigation .link {
-	color: var(--text-color-fade);
+	color: var(--color-neutral-300);
 	line-height: var(--line-height);
 	transition: opacity 0.2s, color 0.2s;
 }

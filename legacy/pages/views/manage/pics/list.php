@@ -6,7 +6,7 @@
 		<h1 class="list-title bgr-c1 txt-wht">Lista foto utenti</h1>
 	</div>
 
-	<a class="block pad-h-2 pad-t-2 txt-cen" href="<?= client_url('/manage/pics/add') ?>">
+	<a class="block pad-h-2 pad-t-2 text-center" href="<?= client_url('/manage/pics/add') ?>">
 
 		<button type="button" class="btn btn--secondary button--auto-width br-c1 mx-auto ">
 			<?= embed_icon('upload') ?>
@@ -73,7 +73,7 @@
 
 		<?php } else { ?>
 
-			<p class="mar-b-2 txt-c-title txt-med txt-cen">
+			<p class="mar-b-2 txt-c-title txt-med text-center">
 
 				<span class="btn-icon inlb icon"><?= embed_icon('info') ?></span>
 

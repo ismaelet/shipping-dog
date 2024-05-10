@@ -17,7 +17,7 @@
 			<div class="">
 				<p class="lbl inlb">Ordina prodotti</p>
 
-				<span class="mar-t-05 inlb">
+				<span class="mt-2 inlb">
 					<?php info_box('Puoi scegliere se ordinare i prodotti dal più poplare o dal più recente al meno, oppure seleziona "ordine personalizzato" per seguire l\'ordine della tua lista dei lavori. Questo campo influenza solo l\'ordine predefinito, i clienti potranno comunque riordinare i prodotti in ordine di popolarità o di data di creazione.') ?>
 				</span>
 
@@ -67,7 +67,7 @@
 	<h1 class="stitle br-c1">Immagini negozio</h1>
 
 	<!-- Profile icon -->
-	<form class="file-form txt-cen" method="POST" enctype="multipart/form-data">
+	<form class="file-form text-center" method="POST" enctype="multipart/form-data">
 
 		<p class="txt-12rem mar-v-2">Immagine di profilo:</p>
 
@@ -93,7 +93,7 @@
 	<!-- Cover image -->
 	<?php $no_cover = strpos($seller->cover[0], '0.jpg') ?>
 
-	<form class="file-form txt-cen pad-b-2" method="POST" enctype="multipart/form-data">
+	<form class="file-form text-center pad-b-2" method="POST" enctype="multipart/form-data">
 
 		<p class="txt-12rem mar-v-2">Immagine di copertina:</p>
 

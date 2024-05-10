@@ -108,7 +108,7 @@
 	--border-color-fade: hsl(var(--theme-h), 0%, 85%);
 	--border-color: #ebebeb;
 	--border-color-strong: #dadada;
-	--text-color-fade: #707070;
+	--color-neutral-300: #707070;
 	--text-color: #505050;
 	--text-color-strong: #202020;
 	--clr-1: #ff9600;
@@ -207,8 +207,8 @@
 	--border-color-fade: hsl(var(--theme-h), 0%, 17%);
 	--border-color: hsl(var(--theme-h), 0%, 21%);
 	--border-color-strong: hsl(var(--theme-h), 0%, 30%);
-	--text-color-fade-more: hsl(var(--theme-h), var(--theme-s), 30%);
-	--text-color-fade: hsl(var(--theme-h), var(--theme-s), 45%);
+	--color-neutral-300-more: hsl(var(--theme-h), var(--theme-s), 30%);
+	--color-neutral-300: hsl(var(--theme-h), var(--theme-s), 45%);
 	--text-color: hsl(var(--theme-h), var(--theme-s), 70%);
 	--text-color-strong: #f3f3f3;
 	--clr-1: #ff9600;
@@ -1999,7 +1999,7 @@ select:focus:-webkit-autofill {
 }
 
 /* Position */
-.pos-rel {
+.relative {
 	position: relative;
 }
 
@@ -2007,7 +2007,7 @@ select:focus:-webkit-autofill {
 .txt-lef {
 	text-align: left;
 }
-.txt-cen {
+.text-center {
 	text-align: center;
 }
 .txt-rig {
@@ -2441,7 +2441,7 @@ select:focus:-webkit-autofill {
 	margin-block: 10rem;
 }
 
-.mar-t-05 {
+.mt-2 {
 	margin-top: 0.5rem;
 }
 .mar-t-1 {
@@ -2768,7 +2768,7 @@ p {
 	line-height: 1.6;
 }
 
-.txt-upp {
+.uppercase {
 	text-transform: uppercase;
 }
 .txt-low {
@@ -2815,7 +2815,7 @@ p {
 .txt-0rem {
 	font-size: 0;
 }
-.txt-1rem {
+. {
 	font-size: 1rem;
 }
 .txt-11rem {
@@ -3499,7 +3499,7 @@ p strong {
 
 .sbtn {
 	--inp-border: 2px;
-	border-color: var(--text-color-fade);
+	border-color: var(--color-neutral-300);
 	color: var(--text-color-strong);
 }
 
@@ -4334,7 +4334,7 @@ p strong {
 }
 
 .item-box .seller {
-	color: var(--text-color-fade);
+	color: var(--color-neutral-300);
 	font-size: 12px;
 	margin-top: 0.25rem;
 	text-overflow: ellipsis;
@@ -5026,7 +5026,7 @@ main {
 }
 
 /* Position */
-.pos-rel {
+.relative {
 	position: relative;
 }
 
@@ -5034,7 +5034,7 @@ main {
 .txt-lef {
 	text-align: left;
 }
-.txt-cen {
+.text-center {
 	text-align: center;
 }
 .txt-rig {
@@ -5518,7 +5518,7 @@ main {
 	margin-block: 5rem;
 }
 
-.mar-t-05 {
+.mt-2 {
 	margin-top: 0.5rem;
 }
 .mar-t-1 {
@@ -7820,7 +7820,7 @@ h3 {
 }
 
 /* Style */
-.txt-upp {
+.uppercase {
 	text-transform: uppercase;
 }
 .txt-low {
@@ -7874,7 +7874,7 @@ h3 {
 .txt-09rem {
 	font-size: 0.9rem;
 }
-.txt-1rem {
+. {
 	font-size: 1rem;
 }
 .txt-11rem {

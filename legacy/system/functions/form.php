@@ -327,7 +327,7 @@ function generate_input($input, $data, $error, $done) {
 		$customClasses = isset($input['custom-classes']) ? implode(' ', $input['custom-classes']) : '';
 	?>
 
-	<div class="ajax-search pos-rel <?= $customClasses ?>" data-endpoint="<?= $input['search'] ?>">
+	<div class="ajax-search relative <?= $customClasses ?>" data-endpoint="<?= $input['search'] ?>">
 
 		<input type="hidden" class="ajax-search-id" name="<?= $input['name'] ?>" value="<?= $input['value'] ?? '' ?>" <?= isset($input['required']) ? 'required' : '' ?>>
 

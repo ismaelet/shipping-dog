@@ -175,7 +175,7 @@ use Legacy\View\Components\Form\Input;
 
 						<p>Per ogni vendita realizzata ottieni un <strong>10% di bonus</strong> sui guadagni, che puoi usare per pagare le spese di spedizione oppure per comprare articoli del tuo negozio.<br><br>Questo credito non può essere usato insieme ad un codice sconto ed è possibile usarlo solo se si ha abbastanza credito da coprire l'intero prezzo del prodotto.</p>
 
-						<p class="mar-t-1 txt-med txt-1rem txt-cen">Hai usato <strong><?= formatc($legacyCart->usedCredit) ?> € / <?= formatc($legacyCart->customer->credit) ?> €</strong></p>
+						<p class="mar-t-1 txt-med  text-center">Hai usato <strong><?= formatc($legacyCart->usedCredit) ?> € / <?= formatc($legacyCart->customer->credit) ?> €</strong></p>
 
 						<div class="total-credit">
 							<div class="used-credit" style="width: <?= round($legacyCart->usedCredit / $legacyCart->customer->credit * 100) ?>%"></div>

@@ -32,7 +32,7 @@
 		/* Type */
 		.item-type-title {
 			border-bottom: 2px solid transparent;
-			color: var(--text-color-fade);
+			color: var(--color-neutral-300);
 			font-size: 1rem;
 			line-height: 1.5rem;
 			transform-origin: left;
@@ -228,7 +228,7 @@
 		.price-old {
 			line-height: 1.7;
 			cursor: default;
-			color: var(--text-color-fade);
+			color: var(--color-neutral-300);
 			font-size: 20px;
 			text-decoration: line-through;
 		}

@@ -44,7 +44,7 @@ use Legacy\Classes\ViewManager\Ecommerce\OrderFlowBar;
 
 				<button type="submit" name="submit" class="btn mar-t-2 button--full-width">Log In</button><br>
 
-				<div class="txt-rig mar-t-05">
+				<div class="txt-rig mt-2">
 					<p class="inlb"><a href="<?= client_url('/login/recover') ?>">Hai dimenticato la password?</a></p>
 				</div>
 			</form>

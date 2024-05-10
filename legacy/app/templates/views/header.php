@@ -39,11 +39,11 @@
 
 						<div class="h-name-box inlb al-mid">
 
-							<h3 class="h-name txt-upp desk1280">
+							<h3 class="h-name uppercase desk1280">
 								<a href="<?= client_url('/') ?>"><?= $header['name'] ?></a>
 							</h3>
 
-							<h3 class="h-name txt-upp mob1280">
+							<h3 class="h-name uppercase mob1280">
 								<a href="<?= client_url('/') ?>"><?= $header['name-mob'] ?></a>
 							</h3>
 
@@ -58,11 +58,11 @@
 
 					<div clas="h-name-box" class="inlb">
 
-						<h3 class="h-name txt-upp desk1280">
+						<h3 class="h-name uppercase desk1280">
 							<a href="<?= client_url('/') ?>"><?= $header['name'] ?></a>
 						</h3>
 
-						<h3 class="h-name txt-upp mob1280">
+						<h3 class="h-name uppercase mob1280">
 							<a href="<?= client_url('/') ?>"><?= $header['name-mob'] ?></a>
 						</h3>
 
@@ -73,7 +73,7 @@
 			</div>
 
 			<!-- Central bar -->
-			<div id="h-nav-cen" class="h-bar inlb txt-cen al-mid"></div>
+			<div id="h-nav-cen" class="h-bar inlb text-center al-mid"></div>
 
 			<!-- Right bar -->
 			<div id="h-nav-rig" class="h-bar flex gap-6 lg:gap-12">
@@ -190,13 +190,13 @@
 						<?php if (auth()->id()) { ?>
 
 							<a href="<?= $header['logged-link'][1] ?>">
-								<p class="h-log-txt br-c1-h txt-upp main"><?= $header['logged-link'][0] ?></p>
+								<p class="h-log-txt br-c1-h uppercase main"><?= $header['logged-link'][0] ?></p>
 							</a>
 
 						<?php } else { ?>
 
 							<a href="<?= $header['login-link'][1] ?>">
-								<p class="h-log-txt br-c1-h txt-upp main"><?= $header['login-link'][0] ?></p>
+								<p class="h-log-txt br-c1-h uppercase main"><?= $header['login-link'][0] ?></p>
 							</a>
 
 						<?php } ?>
@@ -263,7 +263,7 @@
 
 										<a <?php if (!isset($h_link['drop'])) echo 'href="' . $h_link['url'] . '"' ?>>
 
-											<h3 class="h-linkM-txt txt-upp txt-med">
+											<h3 class="h-linkM-txt uppercase txt-med">
 
 												<span class="h-linkM-bgr bgr bgr-c1"></span>
 

@@ -52,18 +52,18 @@ $inputs = [
 	[
 		['type' => 'lbl', 'text' => 'Città e provincia di nascita'],
 		['text' => 'Città', 'name' => 'birthplace', 'value' => $data['birthplace'] ?? false, 'size' => 3, 'maxlength' => 50, 'required' => true],
-		['text' => 'Provincia', 'name' => 'birthprovince', 'value' => $data['birthprovince'] ?? false, 'custom-class' => 'txt-upp', 'size' => 1, 'maxlength' => 2, 'required' => true],
+		['text' => 'Provincia', 'name' => 'birthprovince', 'value' => $data['birthprovince'] ?? false, 'custom-class' => 'uppercase', 'size' => 1, 'maxlength' => 2, 'required' => true],
 	],
 	[
 		['type' => 'lbl', 'text' => 'Indirizzo di residenza'],
 		['text' => 'Indirizzo', 'name' => 'address', 'value' => $data['address'] ?? false, 'maxlength' => 200, 'required' => true],
 		['text' => 'Città', 'name' => 'city', 'value' => $data['city'] ?? false, 'size' => 2, 'maxlength' => 50, 'required' => true],
-		['text' => 'Provincia', 'name' => 'province', 'value' => $data['province'] ?? false, 'custom-class' => 'txt-upp', 'size' => 1, 'maxlength' => 2, 'required' => true],
+		['text' => 'Provincia', 'name' => 'province', 'value' => $data['province'] ?? false, 'custom-class' => 'uppercase', 'size' => 1, 'maxlength' => 2, 'required' => true],
 		['text' => 'CAP', 'name' => 'zip', 'value' => $data['zip'] ?? false, 'size' => 1, 'maxlength' => 5, 'required' => true],
 	],
 	[
 		['type' => 'lbl', 'text' => 'Dati personali'],
-		['text' => 'Codice fiscale', 'name' => 'cf', 'value' => $data['cf'] ?? false, 'custom-class' => 'txt-upp', 'maxlength' => 16, 'required' => true],
+		['text' => 'Codice fiscale', 'name' => 'cf', 'value' => $data['cf'] ?? false, 'custom-class' => 'uppercase', 'maxlength' => 16, 'required' => true],
 		['text' => 'Numero della carta di identità', 'name' => 'national_id', 'value' => $data['national_id'] ?? false, 'maxlength' => 16, 'required' => true],
 	],
 	[

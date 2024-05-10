@@ -30,7 +30,7 @@
 #name {
 	background-color: transparent;
 	border: none;
-	border-bottom: 2px solid var(--text-color-fade);
+	border-bottom: 2px solid var(--color-neutral-300);
 	border-radius: 0;
 	padding: 10px 2rem;
 	width: 100%;
@@ -104,7 +104,7 @@
 
 #dark-empty {
 	background-color: var(--surface);
-	border: 2px dashed var(--text-color-fade);
+	border: 2px dashed var(--color-neutral-300);
 	height: 16rem;
 }
 
@@ -388,7 +388,7 @@ html[data-color-scheme='dark'] .item-panel .wrapper {
 .item-panel .tab {
 	background-color: #ddd;
 	border-radius: 3px 3px 0 0;
-	color: var(--text-color-fade);
+	color: var(--color-neutral-300);
 	font-size: 0.8rem;
 	letter-spacing: 0.2em;
 	line-height: var(--tabs-height);

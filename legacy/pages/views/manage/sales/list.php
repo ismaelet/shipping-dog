@@ -127,7 +127,7 @@
 
 	<?php } else { ?>
 
-		<p class="pad-t-3 txt-cen">Ancora non hai realizzato nessuna vendita</p>
+		<p class="pad-t-3 text-center">Ancora non hai realizzato nessuna vendita</p>
 
 	<?php } ?>
 

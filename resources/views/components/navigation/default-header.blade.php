@@ -685,7 +685,7 @@
 			<!-- Central bar -->
 			<div
 				id="h-nav-cen"
-				class="h-bar inlb txt-cen al-mid"
+				class="h-bar inlb al-mid text-center"
 			></div>
 
 			<!-- Right bar -->
@@ -948,7 +948,7 @@
 										>
 
 										<a <?= !isset($h_link['drop']) ? 'href="' . $h_link['url'] . '"' : '' ?>>
-											<h3 class="h-linkM-txt txt-upp txt-med">
+											<h3 class="h-linkM-txt txt-med uppercase">
 
 												<span class="h-linkM-bgr bgr bgr-c1"></span>
 

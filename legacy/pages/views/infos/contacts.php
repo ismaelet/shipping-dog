@@ -5,7 +5,7 @@
 
 	<div id="bgr" class="bgr"></div>
 
-	<h1 id="title" class="txt-wht txt-cen">Conta<span class="txt-c1">tt</span>i</h1>
+	<h1 id="title" class="txt-wht text-center">Conta<span class="txt-c1">tt</span>i</h1>
 
 </div>
 
@@ -56,7 +56,7 @@
 
 					<div id="form-anch" class="anchor"></div>
 
-					<h2 class="stitle txt-cen">Scrivici</h2>
+					<h2 class="stitle text-center">Scrivici</h2>
 
 					<?php if ($sent) { ?>
 						<p class="confirmation mar-t-2">Messaggio inviato, ti risponderemo al più presto</p>

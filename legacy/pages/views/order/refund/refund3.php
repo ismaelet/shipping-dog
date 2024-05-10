@@ -23,7 +23,7 @@
 						</div>
 
 						<div class="item-cell item-name_cell">
-							<h1 class="txt-1rem font-semibold"><?= $change->old_order->product->name ?></h1>
+							<h1 class=" font-semibold"><?= $change->old_order->product->name ?></h1>
 							<p class="item-name">
 								<?= $change->old_order->description() ?>
 							</p>

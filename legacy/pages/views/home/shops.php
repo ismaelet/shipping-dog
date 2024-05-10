@@ -2,7 +2,7 @@
 	<div class="main-wrap">
 		<h2 class="section-heading">Negozi in evidenza</h2>
 
-		<div class="pos-rel">
+		<div class="relative">
 			<section id="carousel-shops" class="carousel mob-fluid" data-pos="1" data-loop="1" style="--itemN: <?= count($sellers) ?>;">
 
 				<?php foreach ($sellers as $seller) { ?>
@@ -10,7 +10,7 @@
 					<div class="carousel-box">
 						<a href="<?= $seller->clientUrl ?>" class="shop">
 							<img src="<?= public_asset($seller->cover()) ?>" loading="lazy" class="cover img-fill">
-							<div class="content txt-cen pad-h-2 pad-b-2">
+							<div class="content text-center pad-h-2 pad-b-2">
 								<img src="<?= public_asset($seller->icon) ?>" loading="lazy" class="logo">
 
 								<div class="data">

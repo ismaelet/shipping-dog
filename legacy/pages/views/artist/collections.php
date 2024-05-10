@@ -15,7 +15,7 @@ while ($row = $res->fetch_assoc()) {
 
 	<div id="coll-box<?= $i ?>" class="coll-ele al-top coll-box sort-box <?php if ($i > $collBlock) echo 'hidden'; ?>" data-id="<?= $coll->id; ?>">
 
-		<h3 class="coll-name txt-cen txt-low txt-1rem"><?= $coll->name; ?></h3>
+		<h3 class="coll-name text-center txt-low "><?= $coll->name; ?></h3>
 
 		<a class="collection" href="<?= $coll->url; ?>" style="background-color: <?= $coll->color; ?>;">
 

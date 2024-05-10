@@ -105,7 +105,7 @@ $res_year = \Legacy\System\Classes\LegacyDB::select('YEAR(created_at) as year FR
 
 if ($res_year->num_rows > 1) { ?>
 
-	<div id="years-box" class="txt-cen pad-t-2 pad-b-5 gallery">
+	<div id="years-box" class="text-center pad-t-2 pad-b-5 gallery">
 
 		<?php while ($row = $res_year->fetch_assoc()) {
 

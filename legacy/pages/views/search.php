@@ -66,13 +66,13 @@ use Legacy\Classes\Ecommerce\Seller;
 							<a href="<?= $product->url() ?>">
 								<img src="<?= $product->image() ?>" alt="" loading="lazy" class="image">
 							</a>
-							<h3 class="mar-t-1 txt-1rem txt-line txt-med"><?= $product->name ?></h3>
+							<h3 class="mar-t-1  txt-line txt-med"><?= $product->name ?></h3>
 							<p class="mar-b-05 txt-08rem">
 								by <a class="link" href="<?= $design->seller->url() ?>"><?= $design->seller->name ?></a>
 							</p>
 							<p class="">Su t-shirt e altri <strong><?= $design->productCount() ?> articoli</strong></p>
 							<a class="" href="<?= $design->url() ?>">
-								<p class="cta inlb br-b-2 br-c2 br-c1-h mar-t-05 txt-c2 txt-c1-h font-semibold txt-upp">Scopri</p>
+								<p class="cta inlb br-b-2 br-c2 br-c1-h mt-2 txt-c2 txt-c1-h font-semibold uppercase">Scopri</p>
 							</a>
 						</div>
 

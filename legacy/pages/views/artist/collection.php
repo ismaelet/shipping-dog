@@ -135,7 +135,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 				<div class="lbox-body">
 					<p class="txt-09rem">Seleziona i lavori da aggiungere alla collezione:</p>
 
-					<div class="gallery txt-cen mar-v-2">
+					<div class="gallery text-center mar-v-2">
 
 						<?php foreach ($designsToAdd as $design) { ?>
 
@@ -152,7 +152,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 					</div>
 				</div>
 
-				<div class="lbox-footer txt-cen">
+				<div class="lbox-footer text-center">
 					<button type="submit" name="add" class="pbtn btn-full-width">Aggiungi</button>
 					<button type="button" class="sbtn btn-full-width lbox-close">Annulla</button>
 				</div>

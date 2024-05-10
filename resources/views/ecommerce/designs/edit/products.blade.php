@@ -1,579 +1,465 @@
-<div
-	class="async-items"
-	data-design-id="<?= $design->id ?>"
->
-	<?php
+@use('App\Models\Ecommerce\Product')
+@use('App\Models\Ecommerce\Product\ProductType')
 
-				if (!$design->custom) {
-					$types = ProductType::where('hidden', 0)->orderBy('category')->orderBy('id')->get();
+@php
+	$products = [];
+	$productRecords = Product::where('design_id', $design->id)
+	    ->with('color', 'position', 'type')
+	    ->get();
+
+	if (!$design->custom) {
+	    $types = ProductType::where('hidden', 0)->orderBy('category')->orderBy('sort')->orderBy('id')->get();
+
+	    $types->each(function ($type) use (&$products, $productRecords) {
+	        $products[] = $productRecords->where('type_id', $type->id)->first();
+	    });
+	}
+@endphp
+
+@pushOnce('styles')
+	<style>
+		.item-list {
+			min-height: 7rem;
+		}
+
+		.item-img {
+			aspect-ratio: 1;
+			background-color: var(--color-surface-500);
+			border-radius: 0.5rem;
+			filter: saturate(0);
+		}
+
+		.item-img img {
+			border-radius: 0.5rem;
+		}
+
+		.item.active .item-img {
+			filter: none;
+		}
+
+		.item-over {
+			opacity: 0.5;
+			border-radius: 0.5rem;
+			background-color: #eee;
+		}
+
+		.item.active .item-over {
+			display: none;
+		}
+
+		.type-name {
+			letter-spacing: 0.05em;
+		}
+
+		.item .img-buttons {
+			grid-auto-columns: minmax(0, 1fr);
+			grid-auto-flow: column;
+			grid-gap: 5px;
+		}
+
+		.switch-btn {
+			width: 100%;
+			min-width: unset;
+			font-size: 0.7rem;
+			border-radius: 4px;
+			padding-block: 0.5em !important;
+		}
+
+		/* Item panel */
+		.item-panel {
+			--tabs-height: 3rem;
+			display: grid;
+			grid-template-columns: minmax(auto, 1200px);
+			width: 100%;
+			visibility: hidden;
+			opacity: 0;
+			width: 100%;
+			height: 100%;
+			padding: 1rem;
+			position: fixed;
+			top: 0;
+			left: 0;
+			place-content: center;
+			z-index: 100;
+			transition: opacity 0.5s, visibility 0.5s;
+		}
+
+		.item-panel:before {
+			content: '';
+			background: rgba(150, 150, 150, 0.7);
+			backdrop-filter: saturate(0);
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			top: 0;
+			left: 0;
+		}
+
+		html[data-color-scheme='dark'] .item-panel:before {
+			background: rgba(15, 15, 15, 0.9);
+		}
+
+		.item-panel.active {
+			opacity: 1;
+			visibility: visible;
+		}
+
+		.item-panel .wrapper {
+			background-color: var(--bgr);
+			border-radius: 0 3px 3px 3px;
+			padding: 2rem;
+		}
+
+		html[data-color-scheme='dark'] .item-panel .wrapper {
+			background-color: var(--color-surface-400);
+		}
+
+		.item-panel .content {
+			max-height: calc(100vh - 8rem - var(--tabs-height));
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+
+		.item-panel .close-icon {
+			width: 1.2rem;
+			height: 1.2rem;
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+		}
+
+		.item-panel .tabs {
+			display: grid;
+			grid-auto-columns: minmax(auto, 13rem);
+			grid-auto-flow: column;
+			column-gap: 5px;
+		}
+
+		.item-panel .tab {
+			background-color: #ddd;
+			border-radius: 3px 3px 0 0;
+			color: var(--color-neutral-300);
+			font-size: 0.8rem;
+			letter-spacing: 0.2em;
+			line-height: var(--tabs-height);
+			text-align: center;
+			cursor: pointer;
+		}
+
+		html[data-color-scheme='dark'] .item-panel .tab {
+			background-color: var(--color-surface-500);
+		}
+
+		.item-panel .tab.active {
+			background-color: var(--bgr);
+			color: var(--theme-max);
+			cursor: default;
+		}
+
+		html[data-color-scheme='dark'] .item-panel .tab.active {
+			background-color: var(--color-surface-400);
+		}
+
+		.item-panel .section {
+			display: none;
+			grid-gap: 2rem;
+			align-items: center;
+		}
+
+		.item-panel .section.active {
+			display: grid;
+		}
+
+		.item-panel .image {
+			width: 100%;
+			padding-bottom: 100%;
+			border-radius: 3px;
+			overflow: hidden;
+			transition: filter 0.4s;
+		}
+
+		.item-panel .disabled .image {
+			filter: saturate(0);
+		}
+
+		.item-panel .design-box {
+			position: absolute;
+			transition: background 0.5s, outline 0.5s;
+		}
+
+		.item-panel .design-box.active {
+			background-color: rgba(255, 0, 0, 0.2);
+			outline: 1px dashed red;
+			transition: none;
+		}
+
+		.item-panel .design {
+			display: none;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		.item-panel .design.active {
+			display: block;
+		}
+
+		.item-panel .data {
+			display: grid;
+			min-height: 100%;
+			align-items: center;
+		}
+
+		.item-panel .inp {
+			background-color: var(--color-surface-400);
+			border-radius: 5px;
+		}
+
+		html[data-color-scheme='dark'] .item-panel .inp {
+			background-color: var(--color-surface-500);
+		}
+
+		.item-panel .inp p {
+			color: var(--color-neutral-700);
+		}
+
+		.item-panel .inp-box {
+			background-color: var(--color-surface-400);
+		}
+
+		html[data-color-scheme='dark'] .item-panel .inp-box {
+			background-color: var(--color-surface-500);
+		}
+
+		.mockup-inp {
+			grid-template-columns: auto 4rem;
+		}
+
+		.item-panel .tip-icon-txt {
+			right: -2rem;
+		}
+
+		.item-panel .toggler {
+			--circle: 2rem;
+			margin-top: 2rem;
+		}
+
+		.item-panel .toggler__button {
+			display: inline-block;
+			filter: saturate(1);
+			width: 4rem;
+			vertical-align: middle;
+			cursor: pointer;
+			transition: filter 0.4s;
+		}
+
+		.item-panel .disabled .toggler__button {
+			filter: saturate(0);
+		}
+
+		.item-panel .toggler .line {
+			opacity: 0.5;
+			background-color: var(--clr-1);
+			border-radius: 30px;
+			height: 1rem;
+		}
+
+		.item-panel .toggler .circle {
+			background-color: var(--clr-1);
+			border-radius: 50%;
+			width: 1.8rem;
+			aspect-ratio: 1 / 1;
+			position: absolute;
+			top: 50%;
+			left: 100%;
+			transform: translate(-100%, -50%);
+			transition: left 0.4s, transform 0.4s;
+		}
+
+		.item-panel .disabled .toggler .circle {
+			left: 0;
+			transform: translate(0, -50%);
+		}
+
+		.item-panel .toggler p {
+			display: inline-block;
+			margin-left: 10px;
+			vertical-align: middle;
+			font-weight: 600;
+		}
+
+		.item-panel .toggler .off-text {
+			display: none;
+		}
+
+		.item-panel .disabled .toggler .off-text {
+			display: inline-block;
+		}
+
+		.item-panel .disabled .toggler .on-text {
+			display: none;
+		}
+
+		.item-panel .disabled .btn-box {
+			display: none;
+		}
+	</style>
+@endpushOnce
+
+@pushOnce('scripts')
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const panelOpeners = document.querySelectorAll('.item-panel-open')
+			const panelCloser = document.querySelectorAll('.item-panel-close')
+
+			/*
+						panelOpeners.forEach(element => {
+							element.addEventListener('click', function() {
+								const box = element.closest('.item');
+
+								if (box.classList.contains('active')) {
+									document.body.classList.add('fixed');
+									box.querySelector('.item-panel').classList.add('active');
+								}
+							})
+						});*/
+
+			panelCloser.forEach(element => {
+				element.addEventListener('click', function() {
+					document.body.classList.remove('fixed');
+
+					this.closest('.item-panel').classList.remove('active');
+				});
+			});
+
+			/*
+
+			$('body').on('click', '.item-panel .tab', function() {
+				const self = $(this)
+				const id = self.data('id')
+				const panel = self.parents('.item-panel')
+
+				panel.find('.tab').removeClass('active')
+				self.addClass('active')
+
+				panel.find('.section').removeClass('active')
+				panel.find('.section' + id).addClass('active')
+			})
+
+			// mockup position and size
+			$('body').on('change', '.mockup-size', function() {
+				const self = $(this)
+				const product = self.parents('.item')
+				const section = self.parents('.section')
+				const imagePosition = section.data('image-position')
+				const design = product.find('[data-image-position="' + imagePosition + '"] .design')
+				const size = self.val()
+				const land = self.data('land')
+
+				if (land === 1) {
+					design.css('background-size', size + '% ' + 'auto')
+				} else {
+					design.css('background-size', 'auto ' + size + '%')
 				}
 
-				foreach ($types as $type) {
-					$product = Product::where('design_id', $design->id)->where('type_id', $type->id)->first();
-					$gender = $type->gender;
-					$active = $product->status;
-					$productImage = $product->image();
+				self.next().html(size + ' %')
+			})
 
-					// Tabs
-					$tabs = [];
+			$('body').on('change', '.mockup-y', function() {
+				const self = $(this)
+				const product = self.parents('.item')
+				const section = self.parents('.section')
+				const imagePosition = section.data('image-position')
+				const design = product.find('[data-image-position="' + imagePosition + '"] .design')
+				const x = section.find('.mockup-x').val()
+				const y = self.val()
 
-					if (count($type->colors) > 1) {
-						$tabs[] = ['Colori', 'colors'];
-					}
+				design.css('background-position', x + '% ' + y + '%')
 
-					foreach ($type->positions as $position) {
-						if ($position->editable) {
-							$tabs[] = [$position->name, 'position', $position];
+				self.next().html(y + ' %')
+			})
+
+			$('body').on('change', '.mockup-x', function() {
+				const self = $(this)
+				const product = self.parents('.item')
+				const section = self.parents('.section')
+				const imagePosition = section.data('image-position')
+				const design = product.find('[data-image-position="' + imagePosition + '"] .design')
+				const x = self.val()
+				const y = section.find('.mockup-y').val()
+
+				design.css('background-position', x + '% ' + y + '%')
+
+				self.next().html(x + ' %')
+			})
+
+			$('body').on('change', '.mockup-inp input', function() {
+				const designBox = $(this).parents('.item-panel').find('.design-box')
+
+				clearTimeout(timer)
+
+				designBox.addClass('active')
+
+				timer = setTimeout(function() {
+					designBox.removeClass('active')
+				}, 2000)
+			})
+
+			// position toggler
+			$('body').on('click', '.item-panel .toggler__button', async function() {
+				const section = $(this).parents('.section')
+				const sectionColors = section.parent().find('.section.colors')
+				const enabled = section.data('enabled') ? 0 : 1
+				const id = section.parents('.item-panel').data('id')
+
+				var positions = []
+
+				section.data('enabled', enabled)
+				section.find('.js-enabled').data('enabled', enabled)
+				section.toggleClass('disabled')
+
+				if (enabled) {
+					section.find('input').prop('disabled', false)
+				} else {
+					section.find('input').prop('disabled', true)
+				}
+
+				section
+					.parent()
+					.find('.section.positions .js-enabled')
+					.each(function() {
+						const self = $(this)
+						const position = self.data('position')
+						const enabled = self.data('enabled')
+
+						if (enabled) {
+							positions.push(position)
 						}
-					}
-
-					use_natural_keys($tabs);
-
-					$designLight = '/designs/' . $design->id . '.png';
-					$designDark = file_exists(public_storage($file = '/designs/' . $design->id . '_dark.png')) ? $file : $designLight;
-				?>
-
-	<div
-		id="item-<?= $type->id ?>"
-		class="item <?= $active ? 'active' : '' ?>"
-	>
-
-		<div class="item-img item-panel-open pos-rel">
-			<img
-				src="<?= $productImage ?>"
-				alt=""
-				class="img-fill"
-			>
-			<div class="item-over bgr"></div>
-		</div>
-
-		<h3 class="type-name txt-1rem txt-med txt-cen mar-t-05">
-			<?= $type->name ?>
-		</h3>
-
-		<form
-			method="POST"
-			class="img-buttons mar-t-05 grid"
-		>
-
-			<input
-				type="hidden"
-				name="type_id"
-				value="<?= $type->id ?>"
-			>
-
-			<?php if ($product->status) { ?>
-
-			<button
-				type="submit"
-				name="off"
-				class="btn off-btn switch-btn"
-			>
-				<?= embed_icon('actions/add-bgr') ?>
-				Attivo
-			</button>
-
-			<p class="sbtn edit-btn switch-btn item-panel-open">
-				<?= embed_icon('settings') ?>
-				Modifica
-			</p>
-
-			<?php } else { ?>
-
-			<button
-				type="submit"
-				name="on"
-				class="btn btn--secondary on-btn switch-btn"
-			>
-				<?= embed_icon('actions/add-bgr') ?>
-				Disattivato
-			</button>
-
-			<?php } ?>
-
-		</form>
-
-		<div
-			class="item-panel"
-			data-id=<?= $productId ?>
-		>
-
-			<div class="box pos-rel">
-
-				<div class="tabs">
-
-					<?php foreach ($tabs as $key => $tab) { ?>
-					<h3
-						class="tab txt-upp <?= $key == 1 ? 'active' : '' ?>"
-						data-id="<?= $key ?>"
-					><?= $tab[0] ?></h3>
-					<?php } ?>
-
-				</div>
-
-				<div class="wrapper">
-
-					<div class="close-icon item-panel-close icon clickable text-neutral-700"><?= embed_icon('close') ?></div>
-
-					<div class="content">
-
-						<!-- Position tabs -->
-						<?php foreach ($tabs as $key => $tab) {
-											if ($tab[1] == 'position') {
-												$position = $tab[2];
-
-												$enabled = in_array($position->id, $product->availablePositionIds);
-
-												$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $position->id);
-												$productMockup = ProductMockup::where('product_id', $productId)
-													->where('position_id', $position->id)
-													->first();
-
-												$pX = $productMockup->pos_x ?? $productTypeMockup->pos_x_def;
-												$pY = $productMockup->pos_y ?? $productTypeMockup->pos_y_def;
-												$sX = $sY = $productMockup->size ?? $productTypeMockup->siz_x_def;
-
-												$sX_max = $productTypeMockup->siz_x_max;
-												$sY_max = $productTypeMockup->siz_y_max;
-												$pX_min = $productTypeMockup->pos_x_min;
-												$pY_min = $productTypeMockup->pos_y_min;
-
-												$orientation = $product->design->ratio > $sX_max / $sY_max;
-
-												$clothing = $type->image($product->color_id, $position->imagePositionId);
-										?>
-
-						<section
-							class="section<?= $key ?> section positions <?= $key == 1 ? 'active' : '' ?> <?= $enabled ? '' : 'disabled' ?>"
-							data-enabled="<?= $enabled ? 1 : 0 ?>"
-							data-image-position="<?= $position->imagePositionId ?>"
-						>
-
-							<input
-								type="hidden"
-								class="js-enabled"
-								data-position="<?= $position->id ?>"
-								data-enabled="<?= $enabled ? 1 : 0 ?>"
-							>
-
-							<!-- Preview image -->
-							<div class="image-panel">
-
-								<div class="image mar-h-auto pos-rel">
-
-									<?php if ($design->custom) { ?>
-
-									<!-- If it's a custom static image -->
-									<div
-										class="bgr"
-										<?= temp_bg($product->image) ?>
-									></div>
-
-									<?php } else { ?>
-
-									<!-- If it's a normal image -->
-									<div
-										class="background bgr"
-										<?= temp_bg('product_types/mockups/bgr/grey.png') ?>
-									></div>
-
-									<div
-										class="clothing bgr"
-										<?= temp_bg($clothing) ?>
-										data-type-id="<?= $product->type_id ?>"
-									></div>
-
-									<div
-										class="design-box"
-										style="
-											width: <?= $sX_max ?>%;
-											height: <?= $sY_max ?>%;
-											top: <?= $pY_min ?>%;
-											left: <?= $pX_min ?>%;"
-									>
-
-										<div
-											class="design light <?= $product->color->dark ? '' : 'active' ?>"
-											style="
-												background-image: url(<?= public_asset($designLight) ?>);
-												background-position: <?= $pX . '% ' . $pY . '%' ?>;
-												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>"
-										>
-										</div>
-
-										<div
-											class="design <?= $product->color->dark ? 'active' : '' ?> dark"
-											style="
-												background-image: url(<?= public_asset($designDark) ?>);
-												background-position: <?= $pX . '% ' . $pY . '%' ?>;
-												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>"
-										>
-										</div>
-
-									</div>
-
-									<?php if (file_exists(public_storage($file = str_replace('.', '-det.', $clothing)))) { ?>
-									<div
-										class="details bgr"
-										<?= temp_bg($file) ?>
-									></div>
-									<?php }
-															} ?>
-
-								</div>
-
-							</div>
-
-							<form
-								method="POST"
-								class="data"
-							>
-
-								<input
-									type="hidden"
-									name="product_id"
-									value="<?= $productId ?>"
-								>
-								<input
-									type="hidden"
-									name="position_id"
-									value="<?= $position->id ?>"
-								>
-
-								<div>
-									<h1 class="txt-15rem sec-title mar-b-1 brb2 br-c2 font-semibold">Stampa in posizione
-										<?= strtolower($position->name) ?></h1>
-									<p><?= $position->info ?></p>
-									<p class="mob480 mar-b-2">Se non vedi tutte le impostazioni scorri verso il basso.</p>
-
-									<!-- Toggler button -->
-									<div class="toggler">
-
-										<div class="toggler__button">
-											<div class="line"></div>
-											<div class="circle"></div>
-										</div>
-
-										<p class="off-text">Disabilitato</p>
-										<p class="on-text">Abilitato</p>
-
-									</div>
-
-									<?php if (!$design->custom) { ?>
-									<!-- Mockup management -->
-									<div class="item-mockup-field mar-t-2 gap1 grid">
-
-										<!-- Size -->
-										<div class="">
-											<p class="lbl mar-b-05">Dimensione:</p>
-
-											<div class="mockup-inp inp grid">
-												<input
-													type="range"
-													class="mockup-size wid-100 <?= $enabled ? '' : 'disabled' ?>"
-													name="mockup-size"
-													value="<?= $sX ?>"
-													min="25"
-													max="100"
-													step="1"
-													data-land="<?= $orientation ?>"
-													<?= $enabled ? '' : 'disabled' ?>
-												>
-												<p class="txt-med txt-rig padr1"><?= $sX ?> %</p>
-											</div>
-										</div>
-
-										<!-- Vertical position -->
-										<div class="">
-											<p class="lbl mar-b-05">Posizione verticale:</p>
-
-											<div class="mockup-inp inp grid">
-												<input
-													type="range"
-													class="mockup-y <?= $enabled ? '' : 'disabled' ?>"
-													name="mockup-y"
-													value="<?= $pY ?>"
-													min="0"
-													max="100"
-													step="1"
-													<?= $enabled ? '' : 'disabled' ?>
-												>
-												<p class="txt-med txt-rig padr1"><?= $pY ?> %</p>
-											</div>
-										</div>
-
-										<!-- Horizontal position -->
-										<div class="">
-											<p class="lbl mar-b-05">Posizione orizzontale:</p>
-
-											<div class="mockup-inp inp grid">
-												<input
-													type="range"
-													class="mockup-x <?= $enabled ? '' : 'disabled' ?>"
-													name="mockup-x"
-													value="<?= $pX ?>"
-													min="0"
-													max="100"
-													step="1"
-													<?= $enabled ? '' : 'disabled' ?>
-												>
-												<p class="txt-med txt-rig padr1"><?= $pX ?> %</p>
-											</div>
-										</div>
-									</div>
-
-									<?php } ?>
-								</div>
-
-								<?php if (!$design->custom) { ?>
-								<div class="btn-box txt-cen mar-t-2">
-									<button
-										type="submit"
-										name="update-position"
-										class="pbtn"
-									>Applica</button>
-								</div>
-								<?php } ?>
-
-							</form>
-
-						</section>
-
-						<!-- Color tab -->
-						<?php } else {
-
-												$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $product->position_id);
-
-												$productMockup = ProductMockup::where('product_id', $productId)
-													->where('position_id', $product->position_id)
-													->first();
-
-												if ($productTypeMockup || $productMockup) {
-													$pX = $productMockup->pos_x ?? $productTypeMockup->pos_x_def;
-													$pY = $productMockup->pos_y ?? $productTypeMockup->pos_y_def;
-													$sX = $sY = $productMockup->size ?? $productTypeMockup->siz_x_def;
-
-													$sX_max = $productTypeMockup->siz_x_max;
-													$sY_max = $productTypeMockup->siz_y_max;
-													$pX_min = $productTypeMockup->pos_x_min;
-													$pY_min = $productTypeMockup->pos_y_min;
-
-													$orientation = $product->design->ratio > $sX_max / $sY_max;
-
-													// $clothingImagePosition = $position->base_of ?: $position->id;
-													$clothing = $type->image($product->color_id, $product->position_id);
-												?>
-
-						<section
-							class="section<?= $key ?> section colors <?= $key == 1 ? 'active' : '' ?>"
-							data-image-position="<?= $product->type->basicPositionId ?>"
-						>
-
-							<!-- Preview image -->
-							<div class="image-panel">
-
-								<div class="image mar-h-auto pos-rel">
-
-									<?php if ($design->custom) { ?>
-
-									<!-- If it's a custom static image -->
-									<div
-										class="bgr"
-										<?= temp_bg($product->image) ?>
-									></div>
-
-									<?php } else { ?>
-
-									<!-- If it's a normal image -->
-									<div
-										class="background bgr"
-										<?= temp_bg('product_types/mockups/bgr/grey.png') ?>
-									></div>
-
-									<div
-										class="clothing bgr"
-										<?= temp_bg($clothing) ?>
-										data-type-id="<?= $product->type_id ?>"
-									></div>
-
-									<div
-										class="design-box pos-rel"
-										style="
-											width: <?= $sX_max ?>%;
-											height: <?= $sY_max ?>%;
-											top: <?= $pY_min ?>%;
-											left: <?= $pX_min ?>%;"
-									>
-
-										<div
-											class="design light <?= $product->color->dark ? '' : 'active' ?>"
-											style="
-												background-image: url(<?= public_asset($designLight) ?>);
-												background-position: <?= $pX . '% ' . $pY . '%' ?>;
-												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>"
-										>
-										</div>
-
-										<div
-											class="design <?= $product->color->dark ? 'active' : '' ?> dark"
-											style="
-												background-image: url(<?= public_asset($designDark) ?>);
-												background-position: <?= $pX . '% ' . $pY . '%' ?>;
-												background-size: <?= $orientation ? $sX . '% auto' : 'auto ' . $sX . '%' ?>"
-										>
-										</div>
-
-									</div>
-
-									<?php if (file_exists(SERVER_ROOT . $file = str_replace('.', '-det.', $clothing))) { ?>
-
-									<div
-										class="details bgr"
-										<?= temp_bg($file) ?>
-									></div>
-
-									<?php }
-																} ?>
-
-								</div>
-
-							</div>
-
-							<form
-								method="POST"
-								class="data"
-							>
-
-								<input
-									type="hidden"
-									name="product_id"
-									value="<?= $productId ?>"
-								>
-
-								<div class="item-colors-field colors-pan">
-
-									<h3 class="txt-15rem sec-title mar-b-1 brb2 br-c2 font-semibold">Seleziona i colori disponibili</h3>
-									<p class="">Qui puoi selezionare i vari colori disponibili per questo capo e il colore principale,
-										che verrà mostrato in tutte le anteprime.</p>
-
-									<div class="colors-pan mar-t-2">
-
-										<!-- Available colors -->
-										<p class="data-title inlb">Colori attivi</p>
-										<?= info_box("È possibile comprare la tua grafica stampata su capi di questi colori. Attiva quelli che ti piacciono e disattiva quelli che non vuoi che siano disponibili per l'acquisto.") ?>
-
-										<div class="colorsA mar-b-2">
-
-											<div class="inp-box color-grid">
-												<?php
-
-																			$colors = $type->colors->merge($product->colors)
-																				->unique()
-																				->sortBy('hidden')
-																				->sortBy('preorder')
-																				->sortBy('reorder');
-
-																			foreach ($colors as $color) {
-																				$checked = $product->colors->contains('id', $color->id);
-																			?>
-
-												<label class="color-box">
-
-													<input
-														type="checkbox"
-														class="cbx colorA-<?= $color->tag ?> hidden"
-														name="colorA[]"
-														value="<?= $color->tag ?>"
-														data-color="<?= $color->tag ?>"
-														<?= $checked ? 'checked' : '' ?>
-													>
-
-													<div
-														class="color-icon"
-														style="background-color: #<?= $color->color ?>;"
-													></div>
-
-												</label>
-
-												<?php
-																			}
-																			?>
-
-											</div>
-										</div>
-
-										<!-- Default color -->
-										<p class="data-title inlb">Colore predefinito</p>
-										<?= info_box('Qui puoi selezionare il colore del capo che sarà mostrato come prima scelta in tutte le anteprime.') ?>
-
-										<div class="colorsD">
-
-											<div class="inp-box color-grid">
-
-												<?php
-
-																			$colors = $type->colors->merge($product->colors)
-																				->unique()
-																				->sortBy('hidden')
-																				->sortBy('preorder')
-																				->sortBy('reorder');
-
-																			foreach ($colors as $color) {
-																				$checked = $product->colors->contains('id', $color->id);
-																			?>
-
-												<label class="inlb color-box active">
-
-													<input
-														type="checkbox"
-														class="cbx colorD-<?= $color->tag ?> hidden"
-														name="colorD"
-														value="<?= $color->id ?>"
-														data-color="<?= $color->tag ?>"
-														data-color-id="<?= $color->id ?>"
-														data-dark="<?= $color->dark ? 1 : 0 ?>"
-														<?= $checked ? 'checked' : '' ?>
-													>
-
-													<div
-														class="color-icon"
-														for="item-colorD-<?= $color->tag ?>"
-														style="background-color: #<?= $color->hex ?>;"
-													></div>
-												</label>
-
-												<?php } ?>
-
-											</div>
-										</div>
-									</div>
-
-									<div class="btn-box txt-cen mar-t-2">
-										<button
-											type="submit"
-											name="update-colors"
-											class="pbtn"
-										>Applica</button>
-									</div>
-
-								</div>
-
-							</form>
-
-						</section>
-						<?php }
-											}
-										} ?>
-
-					</div>
-
-				</div>
-
-			</div>
-
-		</div>
-
-	</div>
-
-	<?php } ?>
+					})
+
+				if (positions.length) {
+					await call_class_method('Legacy\\Classes\\Ecommerce\\Product', 'updatePositionIds',
+						'[' + positions.join(',') + ']', id, null, true)
+				}
+
+				if (positions == '') {
+					section.parents('.item').removeClass('active')
+					sectionColors.addClass('disabled')
+					sectionColors.find('input').prop('disabled', true)
+				} else {
+					section.parents('.item').addClass('active')
+					sectionColors.removeClass('disabled')
+					sectionColors.find('input').prop('disabled', false)
+				}
+			})*/
+		})
+	</script>
+@endpushOnce
+
+<div class="columns-15rem grid gap-8">
+	@foreach ($products as $product)
+		@include('ecommerce.designs.edit.product', ['product' => $product])
+	@endforeach
 </div>

@@ -15,7 +15,7 @@
 		<!-- Body -->
 		<div id="slider-body" class="grid gap-12 text-center justify-items-center lg:text-left lg:justify-items-start ">
 			<div class="grid gap-8">
-				<h1 class="txt-wht txt-upp">Shipping<br><span class="txt-c1">Dog</span></h1>
+				<h1 class="txt-wht uppercase">Shipping<br><span class="txt-c1">Dog</span></h1>
 				<p class="stitle">T-shirt, abbigliamento e accessori personalizzati</p>
 			</div>
 

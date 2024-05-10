@@ -18,7 +18,7 @@
 
 .info-title {
 	padding-bottom: 5px;
-	color: var(--text-color-fade);
+	color: var(--color-neutral-300);
 	font-size: 1.1rem;
 	font-weight: 500;
 	text-transform: uppercase;

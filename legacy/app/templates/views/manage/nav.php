@@ -5,7 +5,7 @@
 			<input type="checkbox" id="nav-title-cbx" class="hidden">
 			<label id="nav-title-box" class="mob1000" for="nav-title-cbx">
 
-				<h1 id="nav-title" class="txt-11rem txt-cen txt-med txt-upp pad-h-1">
+				<h1 id="nav-title" class="txt-11rem text-center txt-med uppercase pad-h-1">
 					<span class="btn-icon bgr-c-title" <?= embed_icon('list') ?>></span>
 					<span class="btn-txt">Menu Gestione</span>
 				</h1>

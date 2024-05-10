@@ -51,7 +51,7 @@
 
 <?php if ($pagesN > 1) { ?>
 
-	<form method="GET" id="pages" class="txt-cen mar-t-2 padb2">
+	<form method="GET" id="pages" class="text-center mar-t-2 padb2">
 
 		<input type="hidden" id="pageN" name="page">
 		<input type="hidden" name="search" value="<?= $search ?>">

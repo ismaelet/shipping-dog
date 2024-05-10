@@ -3,6 +3,7 @@
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\OrderController;
 use App\Http\Controllers\Ecommerce\OrderItemController;
+use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\LegacyController;
 use App\Http\Middleware\Cart;
 use App\Http\Middleware\EmptyCart;
@@ -18,6 +19,7 @@ Route::any('/shop', LegacyController::class)->name('shop');
  * * Product
  */
 // Route::resource('products', ProductController::class)->only(['show']);
+Route::post('/products/{product}/status', [ProductController::class, 'changeStatus'])->name('products.status');
 
 /**
  * * Order Item

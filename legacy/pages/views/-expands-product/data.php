@@ -276,7 +276,7 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 																																					} ?>>
 
 										<label class="size_lbl" for="cbx-type_<?= $sizeM->slug ?>">
-											<h1 class="size_txt txt-upp"><?= $sizeM->name ?></h1>
+											<h1 class="size_txt uppercase"><?= $sizeM->name ?></h1>
 										</label>
 									</div>
 							<?php }
