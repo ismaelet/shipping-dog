@@ -58,7 +58,7 @@ return [
 			],
 			'3' => [
 				'tag' => 'label-ready',
-				'label' => 'Pronto',
+				'label' => 'In preparazione',
 				'color' => 'hsl(40, 100%, 50%)',
 				'icon' => 'correct',
 			],

@@ -39,6 +39,12 @@ return [
 			'client_id' => 'AcB6CifmIAzH7ASX8AavVjP3-2KQlnU55cGfmjH1IwhoWPYbqwxlZgImZ-vxv0ZLak0rbnMjzrYeir7z',
 			'client_secret' => 'REMOVED_SECRET'
 		]
-	]
+	],
 
+	'gls' => [
+		'client_id' => 200162,
+		'client_password' => 2001621122,
+		'contract_code' => 7841,
+		'headquarters' => 'TT',
+	]
 ];

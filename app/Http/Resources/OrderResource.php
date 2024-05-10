@@ -18,7 +18,7 @@ class OrderResource extends JsonResource {
 			'name' => $this->id . ' - ' . $this->address?->full_name,
 			'price_string' => $this->priceString(),
 			'order_items_price' => $this->orderItemsPrice(),
-			'gross_order_items_price_string' => $this->grossOrderItemsPriceString(),
+			'gross_order_items_price_string' => $this->fullOrderItemsPriceString(),
 			'shipping_fee_string' => $this->shippingFeeString(),
 			'quantity' => $this->quantity,
 			'created_at' => $this->created_at,

@@ -46,20 +46,44 @@
 		</div>
 
 		@if (in_array($order->status, [EcommerceHelper::statusFromTag('received')]))
-			<div class="grid justify-items-center gap-6">
+			<form
+				class="grid justify-items-center gap-6"
+				method="POST"
+				action="{{ route('orders.destroy', [$order, 'token' => $order->token]) }}"
+			>
+
+				@csrf
+				@method('DELETE')
+
 				<p class="text-center">
 					Siamo in attesa della conferma del pagamento. Se hai già pagato, per favore contattaci a <span
 						class="font-bold text-neutral-700"
 					><a href="{{ config('custom.social_media.email.url') }}">{{ config('custom.social_media.email.label') }}</a></span>
 					e
-					provvederemo a sbloccare l'ordine.<br><br>Se invece non hai ancora completato il pagamento, puoi farlo qui:
+					provvederemo a sbloccare l'ordine.<br><br>Se invece non hai ancora completato il pagamento, puoi farlo qui, oppure
+					puoi cancellare l'ordine se hai cambiato idea:
 				</p>
 
-				<x-inputs.button href="{{ $order->paymentUrl() }}">
-					{!! embed_icon('credit-card') !!}
-					Procedi al pagamento
-				</x-inputs.button>
-			</div>
+				<div class="flex flex-wrap justify-center gap-4">
+					<x-inputs.button
+						href="{{ $order->paymentUrl() }}"
+						class="flex-grow sm:flex-grow-0"
+					>
+						{!! embed_icon('credit-card') !!}
+						Procedi al pagamento
+					</x-inputs.button>
+
+					<x-inputs.button
+						type="submit"
+						variant="secondary"
+						color="error"
+						class="flex-grow sm:flex-grow-0"
+					>
+						{!! embed_icon('close') !!}
+						Cancella l'ordine
+					</x-inputs.button>
+				</div>
+			</form>
 		@elseif (in_array($order->status, [
 				EcommerceHelper::statusFromTag('confirmed'),
 				EcommerceHelper::statusFromTag('label-ready'),
@@ -188,7 +212,7 @@
 					<div>
 						<div class="flex justify-between gap-4 py-3">
 							<p class="">Articoli</p>
-							<p class="font-medium text-neutral-700"><?= $order->grossOrderItemsPriceString() ?></p>
+							<p class="font-medium text-neutral-700"><?= $order->fullOrderItemsPriceString() ?></p>
 						</div>
 
 						<div class="flex justify-between gap-4 border-t py-3">

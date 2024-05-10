@@ -177,7 +177,9 @@ class Order extends Model {
 	}
 
 
-	// ~ Attributes: Steps ~ //
+	/**
+	 * ~ Attributes: Steps
+	 */
 	/**
 	 * Get the order's step data.
 	 *
@@ -197,7 +199,9 @@ class Order extends Model {
 	}
 
 
-	// ~ Attributes: Status ~ //
+	/**
+	 * ~ Attributes: Status
+	 */
 	/**
 	 * Get the order's status data.
 	 *
@@ -244,29 +248,18 @@ class Order extends Model {
 	}
 
 	/**
-	 * Get the order's status label.
-	 *
-	 * @return string
+	 * ~ Attribute: Status Label
+	 * 
+	 * A stylized html span element to show the order's status
 	 */
 	public function statusLabel(): string {
 		return '<span class="order-label px-4 py-1 gap-2 border rounded whitespace-nowrap" style="--icon-size: 1em; border-color: ' . $this->statusColor() . '; color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon(), ['shrink-0']) . ' ' . $this->statusName() . '</span>';
 	}
 
-
-	// ~ Attributes: Price ~ //
 	/**
-	 * Get the order's total price.
-	 *
-	 * @return float
-	 */
-	public function price(): float {
-		return $this->updatePrice()->price;
-	}
-
-	/**
-	 * Get the order's order_items net price.
-	 *
-	 * @return float
+	 * ~ Attribute: Order Items Price
+	 * 
+	 * The sum of the order item's prices
 	 */
 	public function orderItemsPrice(): float {
 		$orderItemsPrice = 0;
@@ -279,18 +272,18 @@ class Order extends Model {
 	}
 
 	/**
-	 * Get the order's order_items gross price.
-	 *
-	 * @return float
+	 * ~ Attribute: Full Order Items Price
+	 * 
+	 * The sum of the order item's prices, not including any discount
 	 */
-	public function grossOrderItemsPrice(): float {
-		$grossOrderItemsPrice = 0;
+	public function fullOrderItemsPrice(): float {
+		$fullOrderItemsPrice = 0;
 
 		foreach ($this->order_items as $orderItem) {
-			$grossOrderItemsPrice += $orderItem->grossPrice();
+			$fullOrderItemsPrice += $orderItem->grossPrice();
 		}
 
-		return $grossOrderItemsPrice;
+		return $fullOrderItemsPrice;
 	}
 
 	/**
@@ -336,36 +329,36 @@ class Order extends Model {
 	}
 
 	/**
-	 * Get the order's shipping discount.
+	 * ~ Attribute: Shipping Discount
 	 *
-	 * @return float
+	 * The discount on the shipping fee
 	 */
 	public function shippingDiscount(): float {
 		return $this->credit_ship ? $this->grossShippingFee() : 0;
 	}
 
 	/**
-	 * Get the order's price formatted as a price string.
+	 * ~ Attribute: Price String
 	 *
-	 * @return string
+	 * The order's price formatted as a price string
 	 */
 	public function priceString(): string {
-		return EcommerceHelper::formatPrice($this->price());
+		return EcommerceHelper::formatPrice($this->price);
 	}
 
 	/**
-	 * Get the order's gross order_items price formatted as a price string.
+	 * ~ Attribute: Full Order Items Price String
 	 *
-	 * @return string
+	 * The sum of the order items price, without any discount, formatted as a price string
 	 */
-	public function grossOrderItemsPriceString(): string {
-		return EcommerceHelper::formatPrice($this->grossOrderItemsPrice());
+	public function fullOrderItemsPriceString(): string {
+		return EcommerceHelper::formatPrice($this->fullOrderItemsPrice());
 	}
 
 	/**
-	 * Get the order's shipping fee formatted as a price string.
+	 * ~ Attribute: Shipping Fee String
 	 *
-	 * @return string
+	 * The shipping fee formatted as a price string
 	 */
 	public function shippingFeeString(): string {
 		return EcommerceHelper::formatPrice($this->shippingFee());
@@ -556,7 +549,7 @@ class Order extends Model {
 			'status' => EcommerceHelper::statusFromTag('canceled'),
 		]);
 
-		// Send the confirmation email
+		// Send the status email
 		if ($sendNotification) {
 			Mail::to($this->address->email)->send(new OrderStatusMail($this));
 		}
@@ -596,6 +589,7 @@ class Order extends Model {
 	public static function unlabelled(): Collection {
 		return self::where('status', EcommerceHelper::statusFromTag('confirmed'))
 			->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
+			->oldest()
 			->get();
 	}
 }

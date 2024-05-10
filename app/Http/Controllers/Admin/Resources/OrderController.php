@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Resources;
 
+use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Admin\ResourceController;
 use App\Mail\OrderStatusMail;
 use App\Models\Ecommerce\Order;
@@ -61,19 +62,24 @@ class OrderController extends ResourceController {
 
 		// Add search filter
 		if ($request->search) {
-			$this->query = $this->query->where('orders.id', $request->search)
-				->orWhere('full_name', 'like', '%' . $request->search . '%')
-				->orWhere('first_name', 'like', '%' . $request->search . '%')
-				->orWhere('last_name', 'like', '%' . $request->search . '%')
-				->orWhere('email', 'like', '%' . $request->search . '%')
-				->orWhere('city', 'like', '%' . $request->search . '%')
-				->orWhere('email', 'like', '%' . $request->search . '%')
-				->orWhereHas('order_items', function ($query) use ($request) {
-					$query->whereHas('product', function ($query) use ($request) {
-						$query->where('name', 'like', '%' . $request->search . '%');
-					})->orWhereHas('seller', function ($query) use ($request) {
-						$query->where('name', 'like', '%' . $request->search . '%');
-					});
+			$filter = $request->search;
+
+			$this->query = $this->query->where('orders.id', $filter)
+				->orWhere('full_name', 'like', '%' . $filter . '%')
+				->orWhere('first_name', 'like', '%' . $filter . '%')
+				->orWhere('last_name', 'like', '%' . $filter . '%')
+				->orWhere('email', 'like', '%' . $filter . '%')
+				->orWhere('city', 'like', '%' . $filter . '%')
+				->orWhere('email', 'like', '%' . $filter . '%')
+				->orWhereHas('order_items', function ($query) use ($filter) {
+					$query->where('id', $filter)
+						->orWhere(function ($query) use ($filter) {
+							$query->whereHas('product', function ($query) use ($filter) {
+								$query->where('name', 'like', '%' . $filter . '%');
+							})->orWhereHas('seller', function ($query) use ($filter) {
+								$query->where('name', 'like', '%' . $filter . '%');
+							});
+						});
 				});
 		} else {
 			$this->query = $this->query->where('status', '!=', 0);
@@ -124,8 +130,10 @@ class OrderController extends ResourceController {
 
 		// Update the cart's status
 		if ($request->has('new_status')) {
-			if ($request->new_status == 1) {
+			if ($request->new_status == EcommerceHelper::statusFromTag('confirmed')) {
 				$this->record->confirm();
+			} else if ($request->new_status == EcommerceHelper::statusFromTag('canceled')) {
+				$this->record->cancel();
 			} else {
 				$this->record->status = $request->new_status;
 				$this->record->save();

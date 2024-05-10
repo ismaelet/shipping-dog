@@ -51,5 +51,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 	// Labels
 	Route::get('labels/generate', [LabelGeneratorController::class, 'index'])->name('labels.generate');
-	Route::post('labels/generate', [LabelGeneratorController::class, 'generate']);
+	Route::post('labels/generate', [LabelGeneratorController::class, 'download'])->name('labels.download');
 });

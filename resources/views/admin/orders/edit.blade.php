@@ -130,56 +130,71 @@
 
 			{{-- Sidebar --}}
 			<div class="grid items-start gap-12 lg:col-span-3">
-				{{-- Customer data --}}
-				<x-dashboard.form.panel title="Dati del cliente">
-					<x-form.group>
-						<h3>Nome completo</h3>
-						<p>{{ $record->address->full_name }}</p>
-					</x-form.group>
 
-					<x-form.group>
-						<h3>Contatti</h3>
-						<p>Tel.:
-							<a
-								class="hover:text-primary text-neutral-700 transition-colors"
-								href="tel:{{ $record->address->phone }}"
-							>
-								{{ $record->address->phone }}</a>
-						</p>
-						<p>E-mail:
-							<a
-								class="hover:text-primary text-neutral-700 transition-colors"
-								href="mailto:{{ $record->address->email }}"
-							>{{ $record->address->email }}</a>
-						</p>
-					</x-form.group>
-				</x-dashboard.form.panel>
+				@if ($record->address)
+					{{-- Customer data --}}
+					<x-dashboard.form.panel title="Dati del cliente">
+						<x-form.group>
+							<h3>Nome completo</h3>
+							<p>{{ $record->address->full_name }}</p>
+						</x-form.group>
 
-				{{-- Delivery data --}}
-				<x-dashboard.form.panel title="Destinatario">
-					<p class="">{!! $record->address->fullAddress() !!}</p>
-
-					@if ($record->status > 0)
-						<div class="flex gap-2">
-							<x-inputs.input
-								name="tracking"
-								value="{{ $record->tracking }}"
-								placeholder="Codice di tracking"
-								class="grow"
-							/>
-
-							<span class="hidden">
-								<x-inputs.button
-									type="submit"
-									size="auto"
-									name="update_tracking"
+						<x-form.group>
+							<h3>Contatti</h3>
+							<p>Tel.:
+								<a
+									class="hover:text-primary text-neutral-700 transition-colors"
+									href="tel:{{ $record->address->phone }}"
 								>
-									{!! embed_icon('save') !!}
-									Salva
-								</x-inputs.button>
-							</span>
-						</div>
-					@endif
+									{{ $record->address->phone }}</a>
+							</p>
+							<p>E-mail:
+								<a
+									class="hover:text-primary text-neutral-700 transition-colors"
+									href="mailto:{{ $record->address->email }}"
+								>{{ $record->address->email }}</a>
+							</p>
+						</x-form.group>
+					</x-dashboard.form.panel>
+
+					{{-- Delivery data --}}
+					<x-dashboard.form.panel title="Destinatario">
+						<p class="">{!! $record->address->fullAddress() !!}</p>
+
+						@if ($record->status > 0)
+							<div class="flex gap-2">
+								<x-inputs.input
+									name="tracking"
+									value="{{ $record->tracking }}"
+									placeholder="Codice di tracking"
+									class="grow"
+								/>
+
+								<span class="hidden">
+									<x-inputs.button
+										type="submit"
+										size="auto"
+										name="update_tracking"
+									>
+										{!! embed_icon('save') !!}
+										Salva
+									</x-inputs.button>
+								</span>
+							</div>
+						@endif
+
+						{{-- <div>
+                        <a href="edit-address?id={{ $record->address->id }}"
+                            class="btn button--small btn--secondary button--auto-width">Modifica</a>
+                    </div> --}}
+					</x-dashboard.form.panel>
+				@endif
+
+				{{-- Payment data --}}
+				<x-dashboard.form.panel title="Pagamento">
+					<h3 class="">{!! $record->payment_method->name !!}</h3>
+
+					<p>ID trasferenza: <span class="font-bold">{{ $record->token ?: 'nessuno' }}</span></p>
 
 					{{-- <div>
                         <a href="edit-address?id={{ $record->address->id }}"
@@ -195,7 +210,7 @@
 
 		<div class="flex w-full justify-between gap-4">
 			<div class="flex gap-4">
-				@if (!in_array($record->status, [EcommerceHelper::statusFromTag('canceled'), EcommerceHelper::statusFromTag('open')]))
+				@if ($record->status != EcommerceHelper::statusFromTag('canceled'))
 					<x-inputs.button
 						type="submit"
 						variant="secondary"

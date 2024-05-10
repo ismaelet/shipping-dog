@@ -17,7 +17,7 @@ class CartRecap {
 			<div id="chck_box">
 				<div class="chck_item">
 					<p class="chck_name">Articoli</p>
-					<p class="chck_pric js-cart-products-price"><?= $order->grossOrderItemsPriceString() ?></p>
+					<p class="chck_pric js-cart-products-price"><?= $order->fullOrderItemsPriceString() ?></p>
 				</div>
 
 				<div class="chck_item">

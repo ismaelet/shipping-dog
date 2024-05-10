@@ -1,22 +1,23 @@
 <?php
 
-use App\Http\Controllers\Services\PayPal\PayPalOrderController;
+use App\Http\Controllers\Services\Gls\GlsController;
+use App\Http\Controllers\Services\PayPal\PayPalController;
+use App\Http\Middleware\UnconfirmedOrder;
 use Illuminate\Support\Facades\Route;
 
 /**
  * * PayPal
  */
-Route::prefix('paypal')->name('paypal.')->group(function () {
-	Route::resource('orders', PayPalOrderController::class)->only(['create']);
-
-	Route::get('/orders/{order}/success', [PayPalOrderController::class, 'success'])->name('order.success');
-
-	Route::get('/orders/{order}/reopen', [PayPalOrderController::class, 'reopen'])->name('order.reopen');
+Route::prefix('paypal')->middleware(UnconfirmedOrder::class)->name('paypal.')->group(function () {
+	Route::resource('orders', PayPalController::class)->only(['create']);
+	Route::get('/orders/{order}/capture', [PayPalController::class, 'capture'])->name('order.capture');
+	Route::get('/orders/{order}/cancel', [PayPalController::class, 'cancel'])->name('order.cancel');
 });
 
 /**
  * * GLS
  */
-Route::prefix('gls')->name('gls.')->group(function () {
-	Route::post('/add-shipments', [PayPalOrderController::class, 'addShipments'])->name('add-shipments');
+Route::prefix('gls')->middleware('admin')->name('gls.')->group(function () {
+	Route::post('/parcels/add', [GlsController::class, 'addSingleParcel'])->name('parcels.add');
+	Route::post('/parcels/add/all', [GlsController::class, 'addAllParcels'])->name('parcels.add.all');
 });

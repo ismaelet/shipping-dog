@@ -3,10 +3,10 @@
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\OrderController;
 use App\Http\Controllers\Ecommerce\OrderItemController;
-use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\LegacyController;
 use App\Http\Middleware\Cart;
 use App\Http\Middleware\EmptyCart;
+use App\Http\Middleware\OrderRecap;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -68,4 +68,8 @@ Route::prefix('cart')->middleware(Cart::class)->name('cart.')->group(function ()
 /**
  * * Order
  */
-Route::resource('orders', OrderController::class)->only(['show']);
+// Order resource routes
+Route::resource('orders', OrderController::class)->middleware(OrderRecap::class)->only(['show', 'destroy']);
+
+// Find an order
+Route::get('/orders/find', [OrderController::class, 'find'])->name('orders.find');

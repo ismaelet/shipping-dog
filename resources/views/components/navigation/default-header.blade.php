@@ -85,11 +85,11 @@
 
 	$header['dropdowns']['artist'] = [
 	    ['Il mio negozio', 'seller', ['id' => auth()->id()]],
-	    ['Le mie grafiche', 'seller-dashboard.portfolio'],
-	    ['Carica una grafica', 'seller-dashboard.portfolio.add'],
-	    ['Vendite realizzate', 'seller-dashboard.sales'],
-	    ['Modifica prezzi', 'seller-dashboard.prices'],
-	    ['Gestisci', 'seller-dashboard'],
+	    ['Le mie grafiche', 'old-seller-dashboard.portfolio'],
+	    ['Carica una grafica', 'old-seller-dashboard.portfolio.add'],
+	    ['Vendite realizzate', 'old-seller-dashboard.sales'],
+	    ['Modifica prezzi', 'old-seller-dashboard.prices'],
+	    ['Gestisci', 'old-seller-dashboard'],
 	];
 
 	// login bar

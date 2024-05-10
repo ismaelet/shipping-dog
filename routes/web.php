@@ -3,6 +3,7 @@
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\Ecommerce\DesignController;
 use App\Http\Controllers\Ecommerce\PaymentRequestController;
+use App\Http\Controllers\Ecommerce\SaleController;
 use App\Http\Controllers\LegacyController;
 use App\Http\Middleware\Seller;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 Route::any('/artist', LegacyController::class)->name('seller');
 
 // Seller dashboard
-Route::prefix('/manage')->middleware(Seller::class)->name('seller-dashboard')->group(function () {
+Route::prefix('/manage')->middleware(Seller::class)->name('old-seller-dashboard')->group(function () {
 	Route::any('', LegacyController::class);
 	Route::any('/portfolio', LegacyController::class)->name('.portfolio');
 	Route::any('/portfolio/add', LegacyController::class)->name('.portfolio.add');
@@ -38,6 +39,11 @@ Route::prefix('seller')->middleware(Seller::class)->name('seller.')->group(funct
 	Route::get('/payment/edit', [PaymentRequestController::class, 'edit'])->name('payment.edit');
 	Route::post('/payment/update', [PaymentRequestController::class, 'update'])->name('payment.update');
 	Route::post('/payment/download', [PaymentRequestController::class, 'download'])->name('payment.download');
+});
+
+// !!! Working on
+Route::prefix('/seller-dashboard')->middleware(Seller::class)->name('seller-dashboard')->group(function () {
+	Route::get('/sales', [SaleController::class, 'index'])->name('.sales');
 });
 
 /**

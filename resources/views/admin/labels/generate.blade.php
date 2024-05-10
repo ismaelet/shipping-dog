@@ -1,67 +1,105 @@
 <x-layouts.admin-dashboard>
 	<x-dashboard.typography.main-heading class="mb-12">Genera le etichette</x-dashboard.typography.main-heading>
 
-	<x-dashboard.form.panel title="Etichette da generare">
+	<div class="grid gap-8 lg:grid-cols-7">
 
-		<form
-			class="grid gap-12"
-			method="POST"
-		>
-			@csrf
-			@session('success')
-				<x-form.group>
-					<x-inputs.alert-success>{{ $value }}</x-inputs.alert-success>
-				</x-form.group>
-			@endsession
-
-			<x-form.group>
-				<x-inputs.label>Scarica dall'ordine, all'ordine:</x-inputs.label>
-				<x-inputs.search-input
-					search="orders"
-					stored-name="first_order_id"
-					:stored-value="$firstCart->id ?? ''"
-					:shown-value="$firstCart ? $firstCart->id . ' - ' . $firstCart->address->full_name : ''"
-					placeholder="Scarica dall'ordine numero"
-					:required="true"
-					data-size="2"
-				/>
-
-				<x-inputs.search-input
-					search="orders"
-					stored-name="last_order_id"
-					:stored-value="$lastCart->id ?? ''"
-					:shown-value="$lastCart ? $lastCart->id . ' - ' . $lastCart->address->full_name : ''"
-					placeholder="Scarica dall'ordine numero"
-					:required="true"
-					data-size="2"
-				/>
-
-				@session('error')
-					<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
-				@endsession
-			</x-form.group>
-
-			<div class="flex flex-wrap justify-center gap-4">
-				<x-inputs.button
-					type="submit"
-					name="submit"
-					value="generate"
+		{{-- Add a specific parcel --}}
+		<div class="lg:col-span-3">
+			<x-dashboard.form.panel title="Trasmetti una spedizione">
+				<form
+					class="grid gap-12"
+					method="POST"
+					action="{{ route('gls.parcels.add') }}"
 				>
-					{!! embed_icon('download') !!}
-					Scarica le etichette
-				</x-inputs.button>
+					@csrf
 
-				<x-inputs.button
-					type="submit"
-					name="submit"
-					value="process_all"
-					variant="secondary"
-				>
-					{!! embed_icon('inventory') !!}
-					Elabora gli ordini
-				</x-inputs.button>
-			</div>
-		</form>
+					<x-form.group>
+						<x-inputs.label>Spedizione da trasmettere:</x-inputs.label>
+						<x-inputs.search-input
+							search="orders"
+							stored-name="order_id"
+							stored-value="{{ $defaultOrder?->id }}"
+							shown-value="{{ $defaultOrder ? $defaultOrder->id . ' - ' . $defaultOrder->address->full_name : '' }}"
+							placeholder="Spedizione da trasmettere"
+							:required="true"
+						/>
 
-	</x-dashboard.form.panel>
+						@session('add_single_parcel_success')
+							<x-inputs.alert-success>{{ $value }}</x-inputs.alert-success>
+						@endsession
+
+						@session('add_single_parcel_error')
+							<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
+						@endsession
+					</x-form.group>
+
+					<x-inputs.button
+						type="submit"
+						name="submit"
+						value="generate"
+					>
+						{!! embed_icon('shipping') !!}
+						Trasmetti la spedizione
+					</x-inputs.button>
+				</form>
+			</x-dashboard.form.panel>
+		</div>
+
+		{{-- Generate one label --}}
+		<div class="lg:col-span-4">
+			<x-dashboard.form.panel title="Trasmetti tutte le spedizioni">
+				<div class="grid gap-12">
+
+					@session('add_parcels_success')
+						<x-form.group>
+							<x-inputs.alert-success>{{ $value }}</x-inputs.alert-success>
+						</x-form.group>
+					@endsession
+
+					<x-form.group>
+						<x-inputs.label>{{ $orderCount }} spedizioni da trasmettere</x-inputs.label>
+
+						@session('error')
+							<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
+						@endsession
+					</x-form.group>
+
+					<div class="flex flex-wrap justify-center gap-4">
+						<form
+							method="POST"
+							action="{{ route('gls.parcels.add.all') }}"
+						>
+							@csrf
+							<x-inputs.button type="submit">
+								{!! embed_icon('shipping') !!}
+								Trasmetti tutte le spedizioni
+							</x-inputs.button>
+
+							@session('add_all_parcels_success')
+								<x-inputs.alert-success>{{ $value }}</x-inputs.alert-success>
+							@endsession
+
+							@session('add_all_parcels_error')
+								<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
+							@endsession
+						</form>
+
+						<form
+							method="POST"
+							action="{{ route('admin.labels.download') }}"
+						>
+							@csrf
+							<x-inputs.button
+								type="submit"
+								variant="secondary"
+							>
+								{!! embed_icon('download') !!}
+								Scarica le etichette
+							</x-inputs.button>
+						</form>
+					</div>
+				</div>
+			</x-dashboard.form.panel>
+		</div>
+	</div>
 </x-layouts.admin-dashboard>

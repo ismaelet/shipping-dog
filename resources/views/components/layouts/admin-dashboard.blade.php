@@ -82,8 +82,10 @@
 	$navigationGroups[] = $publicSiteGroup;
 @endphp
 
-<x-dashboard :$navigationGroups>
+<x-layouts.empty>
+	<x-dashboard :$navigationGroups>
 
-	{{ $slot }}
+		{{ $slot }}
 
-</x-dashboard>
+	</x-dashboard>
+</x-layouts.empty>

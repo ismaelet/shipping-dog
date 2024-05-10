@@ -71,7 +71,7 @@ class User extends Authenticatable {
 	 * Get the user's active cart
 	 */
 	public function cart(): HasOne {
-		return $this->hasOne(Order::class, 'user_id', 'id')->whereIn('status', [EcommerceHelper::statusFromTag('open'), EcommerceHelper::statusFromTag('received')]);
+		return $this->hasOne(Order::class, 'user_id', 'id')->where('status', EcommerceHelper::statusFromTag('open'));
 	}
 
 	/**
