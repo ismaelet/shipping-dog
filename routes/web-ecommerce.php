@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProductTypeController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\OrderController;
 use App\Http\Controllers\Ecommerce\OrderItemController;
@@ -18,7 +19,8 @@ Route::any('/shop', LegacyController::class)->name('shop');
 /**
  * * Product
  */
-// Route::resource('products', ProductController::class)->only(['show']);
+Route::resource('products', ProductController::class)->only(['update']);
+
 Route::post('/products/{product}/status', [ProductController::class, 'changeStatus'])->name('products.status');
 
 /**

@@ -10,11 +10,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Design extends Model {
 
+	use SoftDeletes;
+
 	protected $table = 'designs';
 	protected $fillable = ['id', 'name', 'user_id', 'status', 'ratio', 'color', 'default_color_id', 'logo_group_id'];
+
+	/**
+	 * * Expand basic methods
+	 */
+	public function delete() {
+		$this->products()->delete();
+
+		return parent::delete();
+	}
 
 	/**
 	 * Get the design's seller

@@ -8,23 +8,7 @@
 			outline: none;
 			line-height: unset;
 		}
-
-		.loading-products.fade {
-			opacity: 0;
-			pointer-events: none;
-			transition: opacity 0.4s ease-in-out;
-		}
 	</style>
-@endpushOnce
-
-@pushOnce('scripts')
-	<script>
-		window.addEventListener('load', function() {
-			const loading = document.querySelector('[data-loading-products]');
-
-			loading.classList.add('fade');
-		});
-	</script>
 @endpushOnce
 
 <x-layouts.main :$title>
@@ -81,23 +65,9 @@
 					questa grafica.</x-typography.section-subheading>
 			</div>
 
-			<x-inputs.alert-error>Le funzionalità di modifica sono al momento intattive, ma verranno ripristinate al più presto.
-				Ci scusiamo per l'inconveniente.</x-inputs.alert-error>
-
 			<div class="stack-content grid">
-
 				{{-- Products --}}
 				@include('ecommerce.designs.edit.products')
-
-				{{-- Loading --}}
-				<div
-					class="loading-products bg-background grid h-full w-full items-start justify-items-center py-8"
-					data-loading-products
-				>
-					<div class="w-16">
-						{!! embed_icon('loading') !!}
-					</div>
-				</div>
 			</div>
 
 		</section>

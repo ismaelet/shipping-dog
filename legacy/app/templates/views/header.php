@@ -190,13 +190,13 @@
 						<?php if (auth()->id()) { ?>
 
 							<a href="<?= $header['logged-link'][1] ?>">
-								<p class="h-log-txt br-c1-h uppercase main"><?= $header['logged-link'][0] ?></p>
+								<p class="h-log-txt br-c1-h main"><?= $header['logged-link'][0] ?></p>
 							</a>
 
 						<?php } else { ?>
 
 							<a href="<?= $header['login-link'][1] ?>">
-								<p class="h-log-txt br-c1-h uppercase main"><?= $header['login-link'][0] ?></p>
+								<p class="h-log-txt br-c1-h main"><?= $header['login-link'][0] ?></p>
 							</a>
 
 						<?php } ?>

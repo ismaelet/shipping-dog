@@ -61,4 +61,4 @@ $header['dropdowns']['artist'] = [
 
 // login bar
 $header['login-link'] = ['Login', client_url('/login')];
-$header['logged-link'] = [auth()->check() ? auth()->user()->username : '', client_url('/profile')];
+$header['logged-link'] = [auth()->check() ? (auth()->user()->username ?: 'Profilo') : '', client_url('/profile')];

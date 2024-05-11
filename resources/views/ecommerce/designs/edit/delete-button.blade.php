@@ -1,8 +1,11 @@
 <form
 	class="flex justify-center"
 	method="POST"
+	action="{{ route('designs.destroy', $design) }}"
 	x-data
 >
+	@method('DELETE')
+
 	<x-inputs.button
 		type="submit"
 		variant="secondary"

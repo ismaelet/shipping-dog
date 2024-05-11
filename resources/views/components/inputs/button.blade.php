@@ -14,7 +14,6 @@
 	<style>
 		.button {
 			--icon-size: 1em;
-			display: inline-block;
 			min-width: 12rem;
 
 			/* Primary button */
@@ -74,7 +73,7 @@
 			}
 
 			/* If contains icons */
-			&:has(svg) {
+			:where(&:has(svg)) {
 				display: flex;
 				align-items: center;
 				gap: 0.5em;

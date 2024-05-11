@@ -10,36 +10,6 @@ use Legacy\Classes\Ecommerce\Order as LegacyOrder;
 
 $cart = cart();
 
-
-//******************
-
-// $firstOrder = Order::where('status', '>', 0)
-// 	->where('payment_method_id', 1)
-// 	->where('token', '!=', '')
-// 	->oldest()
-// 	->first();
-
-// $lastOrder = Order::find(62985);
-
-// $problemOrders = Order::where('status', '>', 0)
-// 	->where('payment_method_id', 1)
-// 	->where('created_at', '>=', $firstOrder->created_at)
-// 	->where('created_at', '<=', $lastOrder->created_at)
-// 	->oldest()
-// 	->get();
-
-// dd($problemOrders->sum('price'));
-
-// $recap = [];
-
-// $problemOrders->each(function ($order) use (&$recap) {
-// 	$recap[$order->idCode() . ' ' . $order->address->full_name] = $order->price;
-// });
-
-// dd($recap);
-
-//******************
-
 $legacyCart = new LegacyOrder($cart->id);
 
 // setup variables

@@ -4,7 +4,9 @@ use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\Ecommerce\DesignController;
 use App\Http\Controllers\Ecommerce\PaymentRequestController;
 use App\Http\Controllers\Ecommerce\SaleController;
+use App\Http\Controllers\EmergencyEmail;
 use App\Http\Controllers\LegacyController;
+use App\Http\Middleware\Admin;
 use App\Http\Middleware\Seller;
 use Illuminate\Support\Facades\Route;
 
@@ -50,7 +52,7 @@ Route::prefix('/seller-dashboard')->middleware(Seller::class)->name('seller-dash
  * * Designs
  */
 // Create a design
-Route::resource('designs', DesignController::class)->only(['index', 'store', 'edit']);
+Route::resource('designs', DesignController::class)->only(['index', 'store', 'edit', 'destroy']);
 Route::post('/designs/{design}/upload-image', [DesignController::class, 'uploadImage'])->name('designs.upload-image');
 Route::post('/designs/{design}/update-tags', [DesignController::class, 'updateTags'])->name('designs.update-tags');
 Route::post('/designs/{design}/update-background-color', [DesignController::class, 'updateBackgroundColor'])->name('designs.update-background-color');
@@ -60,6 +62,11 @@ Route::post('/designs/{design}/update-default-color', [DesignController::class, 
  * * Downloads
  */
 Route::get('/download/{filename}', [DownloadController::class, 'download'])->name('download')->where('filename', '.*');
+
+/**
+ * * Misc
+ */
+Route::get('/emergency-email', [EmergencyEmail::class, 'sendEmail'])->middleware(Admin::class);
 
 /**
  * * Legacy routes

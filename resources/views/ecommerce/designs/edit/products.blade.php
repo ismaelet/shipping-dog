@@ -11,7 +11,10 @@
 	    $types = ProductType::where('hidden', 0)->orderBy('category')->orderBy('sort')->orderBy('id')->get();
 
 	    $types->each(function ($type) use (&$products, $productRecords) {
-	        $products[] = $productRecords->where('type_id', $type->id)->first();
+	        $products[] = [
+	            'product' => $productRecords->where('type_id', $type->id)->first(),
+	            'type' => $type,
+	        ];
 	    });
 	}
 @endphp
@@ -105,13 +108,11 @@
 		}
 
 		.item-panel .wrapper {
-			background-color: var(--bgr);
-			border-radius: 0 3px 3px 3px;
-			padding: 2rem;
-		}
+			border-top-left-radius: 0;
 
-		html[data-color-scheme='dark'] .item-panel .wrapper {
-			background-color: var(--color-surface-400);
+			@media(max-width: 1025) {
+				border-top-right-radius: 0;
+			}
 		}
 
 		.item-panel .content {
@@ -136,7 +137,7 @@
 		}
 
 		.item-panel .tab {
-			background-color: #ddd;
+			background-color: var(--color-surface-500);
 			border-radius: 3px 3px 0 0;
 			color: var(--color-neutral-300);
 			font-size: 0.8rem;
@@ -144,41 +145,31 @@
 			line-height: var(--tabs-height);
 			text-align: center;
 			cursor: pointer;
+			translate: 0 var(--border-width);
+
+			[data-color-scheme="dark"] & {
+				background-color: var(--color-surface-400);
+			}
 		}
 
-		html[data-color-scheme='dark'] .item-panel .tab {
-			background-color: var(--color-surface-500);
-		}
 
 		.item-panel .tab.active {
-			background-color: var(--bgr);
-			color: var(--theme-max);
+			background-color: var(--color-background);
 			cursor: default;
-		}
-
-		html[data-color-scheme='dark'] .item-panel .tab.active {
-			background-color: var(--color-surface-400);
+			color: var(--color-neutral-700);
+			border-bottom: 0;
 		}
 
 		.item-panel .section {
 			display: none;
 			grid-gap: 2rem;
-			align-items: center;
 		}
 
 		.item-panel .section.active {
 			display: grid;
 		}
 
-		.item-panel .image {
-			width: 100%;
-			padding-bottom: 100%;
-			border-radius: 3px;
-			overflow: hidden;
-			transition: filter 0.4s;
-		}
-
-		.item-panel .disabled .image {
+		[data-position-panel][data-enabled="false"] .image {
 			filter: saturate(0);
 		}
 
@@ -278,11 +269,6 @@
 			transition: left 0.4s, transform 0.4s;
 		}
 
-		.item-panel .disabled .toggler .circle {
-			left: 0;
-			transform: translate(0, -50%);
-		}
-
 		.item-panel .toggler p {
 			display: inline-block;
 			margin-left: 10px;
@@ -291,18 +277,6 @@
 		}
 
 		.item-panel .toggler .off-text {
-			display: none;
-		}
-
-		.item-panel .disabled .toggler .off-text {
-			display: inline-block;
-		}
-
-		.item-panel .disabled .toggler .on-text {
-			display: none;
-		}
-
-		.item-panel .disabled .btn-box {
 			display: none;
 		}
 	</style>
@@ -314,17 +288,15 @@
 			const panelOpeners = document.querySelectorAll('.item-panel-open')
 			const panelCloser = document.querySelectorAll('.item-panel-close')
 
-			/*
-						panelOpeners.forEach(element => {
-							element.addEventListener('click', function() {
-								const box = element.closest('.item');
+			panelOpeners.forEach(element => {
+				element.addEventListener('click', function() {
+					const box = element.closest('.item');
 
-								if (box.classList.contains('active')) {
-									document.body.classList.add('fixed');
-									box.querySelector('.item-panel').classList.add('active');
-								}
-							})
-						});*/
+					if (box.classList.contains('active')) {
+						box.querySelector('.item-panel').classList.add('active');
+					}
+				})
+			});
 
 			panelCloser.forEach(element => {
 				element.addEventListener('click', function() {
@@ -334,132 +306,89 @@
 				});
 			});
 
-			/*
+			document.querySelectorAll('.item-panel .tab').forEach(function(tab) {
+				tab.addEventListener('click', function() {
+					var self = this;
+					var id = self.dataset.id;
+					var panel = self.closest('.item-panel');
 
-			$('body').on('click', '.item-panel .tab', function() {
-				const self = $(this)
-				const id = self.data('id')
-				const panel = self.parents('.item-panel')
+					panel.querySelectorAll('.tab').forEach(function(tab) {
+						tab.classList.remove('active');
+					});
+					self.classList.add('active');
 
-				panel.find('.tab').removeClass('active')
-				self.addClass('active')
+					panel.querySelectorAll('.section').forEach(function(section) {
+						section.classList.remove('active');
+					});
+					panel.querySelector('.section' + id).classList.add('active');
+				});
+			});
 
-				panel.find('.section').removeClass('active')
-				panel.find('.section' + id).addClass('active')
-			})
 
 			// mockup position and size
-			$('body').on('change', '.mockup-size', function() {
-				const self = $(this)
-				const product = self.parents('.item')
-				const section = self.parents('.section')
-				const imagePosition = section.data('image-position')
-				const design = product.find('[data-image-position="' + imagePosition + '"] .design')
-				const size = self.val()
-				const land = self.data('land')
+			document.querySelectorAll('[name="preview_size"]').forEach(function(element) {
+				element.addEventListener('input', function() {
+					const productPanel = this.closest('[data-product-id]');
+					const positionPanel = this.closest('[data-panel]');
+					const imagePosition = positionPanel.dataset.imagePosition;
+					const landscape = this.dataset.landscape;
+					const size = this.value;
 
-				if (land === 1) {
-					design.css('background-size', size + '% ' + 'auto')
-				} else {
-					design.css('background-size', 'auto ' + size + '%')
-				}
+					const designs = productPanel.querySelectorAll('[data-image-position="' +
+						imagePosition + '"] .design');
 
-				self.next().html(size + ' %')
-			})
 
-			$('body').on('change', '.mockup-y', function() {
-				const self = $(this)
-				const product = self.parents('.item')
-				const section = self.parents('.section')
-				const imagePosition = section.data('image-position')
-				const design = product.find('[data-image-position="' + imagePosition + '"] .design')
-				const x = section.find('.mockup-x').val()
-				const y = self.val()
+					designs.forEach(function(design) {
+						if (landscape == 'true') {
+							design.style.backgroundSize = size + '% auto';
+						} else {
+							design.style.backgroundSize = 'auto ' + size + '%';
+						}
+					});
 
-				design.css('background-position', x + '% ' + y + '%')
+					showFrame(positionPanel)
+				});
+			});
 
-				self.next().html(y + ' %')
-			})
+			document.querySelectorAll('[name="preview_position_y"], [name="preview_position_x"]').forEach(function(
+				element) {
+				element.addEventListener('input', function() {
+					const productPanel = this.closest('[data-product-id]');
+					const positionPanel = this.closest('[data-panel]');
+					const imagePosition = positionPanel.dataset.imagePosition;
+					const x = positionPanel.querySelector('[name="preview_position_x"]').value;
+					const y = positionPanel.querySelector('[name="preview_position_y"]').value;
 
-			$('body').on('change', '.mockup-x', function() {
-				const self = $(this)
-				const product = self.parents('.item')
-				const section = self.parents('.section')
-				const imagePosition = section.data('image-position')
-				const design = product.find('[data-image-position="' + imagePosition + '"] .design')
-				const x = self.val()
-				const y = section.find('.mockup-y').val()
+					const designs = productPanel.querySelectorAll('[data-image-position="' +
+						imagePosition + '"] .design');
 
-				design.css('background-position', x + '% ' + y + '%')
+					designs.forEach(function(design) {
+						design.style.backgroundPosition = x + '% ' + y + '%';
+					});
 
-				self.next().html(x + ' %')
-			})
+					showFrame(positionPanel)
+				});
+			});
 
-			$('body').on('change', '.mockup-inp input', function() {
-				const designBox = $(this).parents('.item-panel').find('.design-box')
+			function showFrame(panel) {
+				const designBox = panel.querySelector('.design-box');
+
+				let timer
 
 				clearTimeout(timer)
 
-				designBox.addClass('active')
+				designBox.classList.add('active')
 
 				timer = setTimeout(function() {
-					designBox.removeClass('active')
+					designBox.classList.remove('active')
 				}, 2000)
-			})
-
-			// position toggler
-			$('body').on('click', '.item-panel .toggler__button', async function() {
-				const section = $(this).parents('.section')
-				const sectionColors = section.parent().find('.section.colors')
-				const enabled = section.data('enabled') ? 0 : 1
-				const id = section.parents('.item-panel').data('id')
-
-				var positions = []
-
-				section.data('enabled', enabled)
-				section.find('.js-enabled').data('enabled', enabled)
-				section.toggleClass('disabled')
-
-				if (enabled) {
-					section.find('input').prop('disabled', false)
-				} else {
-					section.find('input').prop('disabled', true)
-				}
-
-				section
-					.parent()
-					.find('.section.positions .js-enabled')
-					.each(function() {
-						const self = $(this)
-						const position = self.data('position')
-						const enabled = self.data('enabled')
-
-						if (enabled) {
-							positions.push(position)
-						}
-					})
-
-				if (positions.length) {
-					await call_class_method('Legacy\\Classes\\Ecommerce\\Product', 'updatePositionIds',
-						'[' + positions.join(',') + ']', id, null, true)
-				}
-
-				if (positions == '') {
-					section.parents('.item').removeClass('active')
-					sectionColors.addClass('disabled')
-					sectionColors.find('input').prop('disabled', true)
-				} else {
-					section.parents('.item').addClass('active')
-					sectionColors.removeClass('disabled')
-					sectionColors.find('input').prop('disabled', false)
-				}
-			})*/
+			}
 		})
 	</script>
 @endpushOnce
 
 <div class="columns-15rem grid gap-8">
-	@foreach ($products as $product)
-		@include('ecommerce.designs.edit.product', ['product' => $product])
+	@foreach ($products as $productData)
+		@include('ecommerce.designs.edit.product', ['productData' => $productData])
 	@endforeach
 </div>

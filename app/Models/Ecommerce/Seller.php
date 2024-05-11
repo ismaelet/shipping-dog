@@ -13,16 +13,30 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Seller class
  */
 class Seller extends Model {
 
-	use HasFactory;
+	use HasFactory, SoftDeletes;
 
 	protected $table = 'stores';
 	protected $fillable = ['user_id', 'credit', 'earned', 'status', 'request'];
+
+	/**
+	 * * Expand basic methods
+	 */
+	public function delete() {
+		$this->designs()->delete();
+		$this->followers()->delete();
+		$this->prices()->delete();
+		$this->payment_request()->delete();
+		$this->logoGroups()->delete();
+
+		return parent::delete();
+	}
 
 	/**
 	 * * Relationships

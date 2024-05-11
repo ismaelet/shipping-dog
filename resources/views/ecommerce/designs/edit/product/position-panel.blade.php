@@ -2,6 +2,7 @@
 @use('App\Models\Ecommerce\Product\ProductTypeMockup')
 
 @php
+	$function = 'saveMockup';
 	$key = $key + 1;
 	$position = $tab[2];
 
@@ -25,15 +26,71 @@
 		$pX_min = $productTypeMockup->pos_x_min;
 		$pY_min = $productTypeMockup->pos_y_min;
 
-		$orientation = $product->design->ratio > $sX_max / $sY_max;
-
-		$clothing = $product->type->image($product->color_id, $position->imagePositionId);
+		$orientation = $design->ratio > $sX_max / $sY_max;
 	@endphp
 
+	@pushOnce('scripts')
+		<script>
+			function saveMockup(button) {
+				const positionPanel = button.closest('[data-panel]');
+				const productPanel = button.closest('[data-product-id]')
+				const productId = productPanel.dataset.productId;
+				const positionId = positionPanel.dataset.imagePosition;
+				const mockupId = positionPanel.dataset.mockupId;
+
+				const size = positionPanel.querySelector('[name="preview_size"]').value;
+				const posX = positionPanel.querySelector('[name="preview_position_x"]').value;
+				const posY = positionPanel.querySelector('[name="preview_position_y"]').value;
+
+				return response = mockupId ? updateMockup(mockupId, productId, positionId, size, posX, posY) : storeMockup(
+					productId,
+					positionId, size, posX, posY, positionPanel)
+			}
+
+			function storeMockup(productId, positionId, size, posX, posY, positionPanel) {
+				return axios.post(`/api/products/mockups`, {
+						product_id: productId,
+						position_id: positionId,
+						size: size,
+						pos_x: posX,
+						pos_y: posY,
+					})
+					.then(response => {
+						mockupId = response.data.id
+						positionPanel.dataset.mockupId = mockupId
+						refreshPreviewImage(productId)
+						return true
+					})
+					.catch(error => {
+						console.error(error)
+						return false
+					});
+			}
+
+			function updateMockup(mockupId, productId, positionId, size, posX, posY) {
+				return axios.patch(`/api/products/mockups/${mockupId}`, {
+						size: size,
+						pos_x: posX,
+						pos_y: posY,
+					})
+					.then(response => {
+						refreshPreviewImage(productId)
+						return true
+					})
+					.catch(error => {
+						console.error(error)
+						return false
+					});
+			}
+		</script>
+	@endpushOnce
+
 	<section
-		class="section<?= $key ?> section positions <?= $key == 1 ? 'active' : '' ?> <?= $enabled ? '' : 'disabled' ?>"
-		data-enabled="<?= $enabled ? 1 : 0 ?>"
-		data-image-position="<?= $position->imagePositionId ?>"
+		class="section<?= $key ?> section positions <?= $key == 1 ? 'active' : '' ?> grid grid-cols-1 items-center lg:grid-cols-2"
+		data-mockup-id="{{ $productMockup?->id }}"
+		data-enabled="<?= $enabled ? 'true' : 'false' ?>"
+		data-image-position="<?= $position->basicPositionId() ?>"
+		data-panel
 	>
 
 		<input
@@ -46,118 +103,70 @@
 		<!-- Preview image -->
 		@include('ecommerce.designs.edit.product.preview')
 
-		<form
-			method="POST"
-			class="data"
+		<input
+			type="hidden"
+			name="product_id"
+			value="<?= $product->id ?>"
+		>
+		<input
+			type="hidden"
+			name="position_id"
+			value="<?= $position->id ?>"
 		>
 
-			<input
-				type="hidden"
-				name="product_id"
-				value="<?= $product->id ?>"
-			>
-			<input
-				type="hidden"
-				name="position_id"
-				value="<?= $position->id ?>"
-			>
+		<div class="grid gap-8 py-10">
+			<div class="grid gap-2">
+				<x-typography.component-heading class="text-center">Stampa in posizione
+					<?= strtolower($position->name) ?></x-typography.component-heading>
 
-			<div>
-				<h1 class="txt-15rem sec-title mar-b-1 brb2 br-c2 font-semibold">Stampa in posizione
-					<?= strtolower($position->name) ?></h1>
 				<p><?= $position->info ?></p>
-				<p class="mob480 mar-b-2">Se non vedi tutte le impostazioni scorri verso il basso.</p>
 
-				<!-- Toggler button -->
-				<div class="toggler">
+				<p>Puoi anche abilitare o disabilitare la possibilità di acquistare questa versione del prodotto usando il bottone
+					qui sotto.</p>
 
-					<div class="toggler__button">
-						<div class="line"></div>
-						<div class="circle"></div>
-					</div>
-
-					<p class="off-text">Disabilitato</p>
-					<p class="on-text">Abilitato</p>
-
-				</div>
-
-				<?php if (!$design->custom) { ?>
-				<!-- Mockup management -->
-				<div class="item-mockup-field mar-t-2 gap1 grid">
-
-					<!-- Size -->
-					<div class="">
-						<p class="lbl mar-b-05">Dimensione:</p>
-
-						<div class="mockup-inp inp grid">
-							<input
-								type="range"
-								class="mockup-size wid-100 <?= $enabled ? '' : 'disabled' ?>"
-								name="mockup-size"
-								value="<?= $sX ?>"
-								min="25"
-								max="100"
-								step="1"
-								data-land="<?= $orientation ?>"
-								<?= $enabled ? '' : 'disabled' ?>
-							>
-							<p class="txt-med txt-rig padr1"><?= $sX ?> %</p>
-						</div>
-					</div>
-
-					<!-- Vertical position -->
-					<div class="">
-						<p class="lbl mar-b-05">Posizione verticale:</p>
-
-						<div class="mockup-inp inp grid">
-							<input
-								type="range"
-								class="mockup-y <?= $enabled ? '' : 'disabled' ?>"
-								name="mockup-y"
-								value="<?= $pY ?>"
-								min="0"
-								max="100"
-								step="1"
-								<?= $enabled ? '' : 'disabled' ?>
-							>
-							<p class="txt-med txt-rig padr1"><?= $pY ?> %</p>
-						</div>
-					</div>
-
-					<!-- Horizontal position -->
-					<div class="">
-						<p class="lbl mar-b-05">Posizione orizzontale:</p>
-
-						<div class="mockup-inp inp grid">
-							<input
-								type="range"
-								class="mockup-x <?= $enabled ? '' : 'disabled' ?>"
-								name="mockup-x"
-								value="<?= $pX ?>"
-								min="0"
-								max="100"
-								step="1"
-								<?= $enabled ? '' : 'disabled' ?>
-							>
-							<p class="txt-med txt-rig padr1"><?= $pX ?> %</p>
-						</div>
-					</div>
-				</div>
-
-				<?php } ?>
+				<p class="lg:hidden">Se non vedi tutte le impostazioni scorri verso il basso.</p>
 			</div>
 
-			<?php if (!$design->custom) { ?>
-			<div class="btn-box mar-t-2 text-center">
-				<button
-					type="submit"
-					name="update-position"
-					class="pbtn"
-				>Applica</button>
+
+			<!-- Toggler button -->
+			@include('ecommerce.designs.edit.product.toggler')
+
+			<!-- Mockup management -->
+			<div class="item-mockup-field grid gap-4">
+
+				<!-- Size -->
+				@include('ecommerce.designs.edit.product.position-range', [
+					'name' => 'preview_size',
+					'label' => 'Dimensione',
+					'value' => $sX,
+					'min' => 25,
+					'max' => 100,
+					'step' => 1,
+				])
+
+				<!-- Vertical position -->
+				@include('ecommerce.designs.edit.product.position-range', [
+					'name' => 'preview_position_y',
+					'label' => 'Posizione verticale',
+					'value' => $pY,
+					'min' => 0,
+					'max' => 100,
+					'step' => 5,
+				])
+
+				<!-- Horizontal position -->
+				@include('ecommerce.designs.edit.product.position-range', [
+					'name' => 'preview_position_x',
+					'label' => 'Posizione orizzontale',
+					'value' => $pX,
+					'min' => 0,
+					'max' => 100,
+					'step' => 5,
+				])
+
 			</div>
-			<?php } ?>
 
-		</form>
-
+			@include('ecommerce.designs.edit.product.save-button')
+		</div>
 	</section>
 @endif

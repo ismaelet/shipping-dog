@@ -94,7 +94,7 @@
 
 	// login bar
 	$header['login-link'] = ['Login', '/login'];
-	$header['logged-link'] = [auth()->user() ? auth()->user()->username : '', '/profile'];
+	$header['logged-link'] = [auth()->user() ? (auth()->user()->username ?: 'Profilo') : '', '/profile'];
 
 @endphp
 

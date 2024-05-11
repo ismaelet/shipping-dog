@@ -204,19 +204,25 @@ async function get_logo(logoId) {
  * @returns {Promise<Object>} - A promise that resolves to the product data.
  */
 async function get_product(productId, color_id, positionId, logoId) {
+	let parameters = {
+		color_id: color_id,
+		position_id: positionId,
+		image_size: 1024,
+	}
+
+	if (logoId) {
+		parameters.logo_id = logoId
+	}
+
 	return axios
 		.get(`/api/products/${productId}`, {
-			params: {
-				color_id: color_id,
-				position_id: positionId,
-				logo_id: logoId,
-				image_size: 1024,
-			},
+			params: parameters,
 		})
 		.then((response) => {
 			return response.data
 		})
 		.catch((error) => {
+			console.log(error)
 			return error
 		})
 }

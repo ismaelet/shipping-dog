@@ -55,13 +55,11 @@ use Legacy\Classes\Ecommerce\Product as LegacyProduct;
 
 			<div id="gallery" class="mar-t-2 text-center grid gap1 js-sortable">
 
-				<?php while ($row = $designs->fetch_assoc()) {
-					$design = Design::find($row['id']);
-				?>
+				<?php foreach ($designs as $design) { ?>
 
 					<div class="img-box">
 						<input type="hidden" name="id[]" value="<?= $design->id ?>">
-						<input type="hidden" class="pos js-order" name="pos[]" value="<?= $row['sort'] ?>">
+						<input type="hidden" class="pos js-order" name="pos[]" value="<?= $design->sort ?>">
 
 						<a class="des-img block sqr" href="<?= route('designs.edit', $design) ?>">
 							<img class="img-fill" src="<?= $design->image() ?>" loading="lazy">

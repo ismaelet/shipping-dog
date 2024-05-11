@@ -8,6 +8,7 @@ use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductDescription;
+use App\Models\Ecommerce\Product\ProductMockup;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductPrice;
 use App\Models\Ecommerce\Product\ProductSize;
@@ -18,21 +19,30 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Product extends Model {
 
-	use HasFactory;
+	use HasFactory, SoftDeletes;
 
 	protected $fillable = ['name', 'design_id', 'user_id', 'type_id', 'color_id', 'colors', 'status', 'positions'];
+
+	/**
+	 * * Expand basic methods
+	 */
+	public function delete() {
+		$this->specific_price()->delete();
+
+		return parent::delete();
+	}
 
 
 	/**
 	 * * Accessors & Mutators 
 	 */
-
 	/**
 	 * The position ID attribute mutator.
 	 *
@@ -220,9 +230,16 @@ class Product extends Model {
 	}
 
 	/**
+	 * Get the product's description
+	 */
+	public function mockup(): HasMany {
+		return $this->hasMany(ProductMockup::class);
+	}
+
+	/**
 	 * Get the product's preview
 	 */
-	public function preview(?int $imageSize = null, ProductColor|int|null $color = null, ProductPosition|int|null $position = null): ?PreviewHelper {
+	public function previewImage(?int $imageSize = null, ProductColor|int|null $color = null, ProductPosition|int|null $position = null): ?PreviewHelper {
 		// Set the product
 		$product = $this;
 
@@ -309,7 +326,7 @@ class Product extends Model {
 	 * Get the product's image
 	 */
 	public function image(?int $imageSize = null, ProductColor|int|null $color = null, ProductPosition|int|null $position = null): string {
-		$preview = $this->preview($imageSize, $color, $position);
+		$preview = $this->previewImage($imageSize, $color, $position);
 
 		return $preview ? $preview->image() : public_asset(PreviewHelper::PLACEHOLDER_IMAGE);
 	}

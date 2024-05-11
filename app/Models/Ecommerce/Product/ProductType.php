@@ -21,7 +21,6 @@ class ProductType extends Model {
 	/**
 	 * * Relationships
 	 */
-
 	/**
 	 * Get the colors associated with the product type.
 	 *
@@ -106,15 +105,15 @@ class ProductType extends Model {
 		$color = $color_id ? ProductColor::find($color_id) : $this->colorCollection()->first();
 		$position = $position_id ? ProductPosition::find($position_id) : $this->positions->first();
 
-		if (file_exists(public_storage($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.webp'))) {
+		if (file_exists(public_storage($file = 'product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.webp'))) {
 			return $file;
 		}
 
-		if (file_exists(public_storage($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.png'))) {
+		if (file_exists(public_storage($file = 'product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.png'))) {
 			return $file;
 		}
 
-		if (file_exists(public_storage($file = '/product_types/mockups/' . $this->tag . '/' . $color->tag . $suffix . '.png'))) {
+		if (file_exists(public_storage($file = 'product_types/mockups/' . $this->tag . '/' . $color->tag . $suffix . '.png'))) {
 			return $file;
 		}
 

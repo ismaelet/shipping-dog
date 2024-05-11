@@ -52,11 +52,11 @@ class PreviewHelper {
 	*/
 	public function image(): string {
 		if ($this->product && $this->color && $this->position) {
-			$image = public_asset($this->fileStoragePath());
+			$image = $this->fileStoragePath();
 
 			// Return the image path if it exists
 			if ($this->hasImage()) {
-				return $image;
+				return public_asset($image);
 			}
 
 			// Otherwise generate the image
@@ -66,7 +66,7 @@ class PreviewHelper {
 
 			// Try again to return the image path
 			if ($this->hasImage()) {
-				return $image;
+				return public_asset($image);
 			}
 		}
 
@@ -212,7 +212,14 @@ class PreviewHelper {
 	 * Delete the images
 	 */
 	public function deleteImages(): void {
-		$files = glob(public_storage('products/' . $this->product->type->tag . '/' . $this->product->id . '-*'));
+		self::deleteProductPreview($this->product);
+	}
+
+	/**
+	 * Static method to delete all the images
+	 */
+	public static function deleteProductPreview(Product $product): void {
+		$files = glob(public_storage('products/' . $product->type->tag . '/' . $product->id . '-*'));
 
 		array_map(
 			function ($file) {

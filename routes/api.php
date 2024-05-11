@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\FollowerController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\LogoController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProductMockupController;
+use App\Http\Controllers\Api\ProductTypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,22 +22,32 @@ use Illuminate\Support\Facades\Route;
 */
 
 /**
- * Designs
+ * * Designs
  */
 Route::resource('/designs', DesignController::class)->only(['update']);
 
 /**
- * Products
+ * * Products
  */
-Route::resource('/products', ProductController::class)->only(['show']);
+Route::resource('/products', ProductController::class)->only(['show', 'update']);
 
 /**
- * Logos
+ * * Product Types
+ */
+Route::get('/products/types/{type}/image', [ProductTypeController::class, 'getImage']);
+
+/**
+ * * Product Mockup
+ */
+Route::resource('products/mockups', ProductMockupController::class)->only(['store', 'update']);
+
+/**
+ * * Logos
  */
 Route::resource('/logos', LogoController::class)->only(['show']);
 
 /**
- * orders
+ * * Orders
  */
 Route::resource('/orders', OrderController::class)->only(['index', 'show', 'update']);
 

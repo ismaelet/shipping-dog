@@ -483,7 +483,7 @@ class Order extends Model {
 
 		// Remove the shipping price from the user's credit, if it was paid with the credit
 		if ($this->credit_ship) {
-			$this->user->seller->updateCredit();
+			$this->user->seller?->updateCredit();
 		}
 
 		// Destroy used coupons
@@ -558,11 +558,9 @@ class Order extends Model {
 		$this->order_items->each(function ($orderItem) {
 			if ($orderItem->seller) {
 				$orderItem->seller->updateEarned();
+				$orderItem->seller->updateCredit();
 			}
 		});
-
-		// Update the seller's credit
-		$this->user->seller->updateCredit();
 	}
 
 	/**

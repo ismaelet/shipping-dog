@@ -340,7 +340,6 @@ html[data-color-scheme='dark'] .theme-switch .dark-icon {
 	border-style: solid;
 	border-radius: 10em;
 	font-weight: 600;
-	text-transform: lowercase;
 	line-height: calc(3rem - 2px);
 	transition: color 0.2s, background 0.2s, border 0.2s;
 }

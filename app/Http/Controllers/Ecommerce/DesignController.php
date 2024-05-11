@@ -39,8 +39,8 @@ class DesignController extends Controller {
 					$fail('Hai già una grafica con questo nome.');
 				}
 			}],
-			'file' => ['required', 'image'],
-			'file-vector' => 'mimes:pdf,ai',
+			'file' => ['required', 'mimes:jpeg,png,gif,webp'],
+			'file-vector' => ['mimes:pdf,ai'],
 			'tags' => ['nullable', 'string', 'max:255'],
 		]);
 
@@ -64,8 +64,8 @@ class DesignController extends Controller {
 		$types = ProductType::where('hidden', 0)->get();
 
 		foreach ($types as $type) {
-			$colorIds = $type->publicColors()->pluck('id');
-			$colorTags = $type->publicColors()->pluck('tag');
+			$colorIds = $type->colors->pluck('id');
+			$colorTags = $type->colors->pluck('tag');
 			$positions = implode(',', $type->positions->pluck('id')->toArray());
 
 			$color_id = $colorIds->first();
@@ -111,6 +111,15 @@ class DesignController extends Controller {
 		$title = 'Modifica: ' . $design->name;
 
 		return view('ecommerce.designs.edit', compact('design', 'title'));
+	}
+
+	/**
+	 * * Action: Destroy
+	 */
+	public function destroy(Design $design): RedirectResponse {
+		$design->delete();
+
+		return to_route('old-seller-dashboard.portfolio');
 	}
 
 	/**
@@ -247,7 +256,7 @@ class DesignController extends Controller {
 		// Delete the old product images
 		if (!$design->custom) {
 			$design->products->each(function ($product) {
-				$product->preview()->deleteImages();
+				$product->previewImage()?->deleteImages();
 			});
 		}
 

@@ -20,6 +20,12 @@
 					translate: calc(-50%) 0;
 				}
 			}
+
+			.info[data-direction="mobile-right"] {
+				.info-text {
+					translate: calc(100% - 2.5rem) 0;
+				}
+			}
 		}
 	</style>
 @endpushOnce

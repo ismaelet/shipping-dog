@@ -4,6 +4,7 @@
 			src="<?= $product->image() ?>"
 			alt=""
 			class="img-fill"
+			data-preview-image
 		>
 		<div class="item-over bgr"></div>
 	</div>

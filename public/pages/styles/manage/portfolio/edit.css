@@ -366,8 +366,7 @@ html[data-color-scheme='dark'] .item-panel .wrapper {
 
 .item-panel .content {
 	max-height: calc(100vh - 8rem - var(--tabs-height));
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: auto;
 }
 
 .item-panel .close-icon {

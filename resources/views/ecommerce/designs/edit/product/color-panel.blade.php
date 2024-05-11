@@ -2,6 +2,7 @@
 @use('App\Models\Ecommerce\Product\ProductTypeMockup')
 
 @php
+	$function = 'saveColorChange';
 	$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $product->position_id);
 
 	$productMockup = ProductMockup::where('product_id', $product->id)
@@ -27,18 +28,75 @@
 		$clothing = $product->type->image($product->color_id, $product->position_id);
 	@endphp
 
+	@pushOnce('scripts')
+		<script>
+			function saveColorChange(button) {
+				const colorPanel = button.closest('[data-panel]');
+				const productId = button.closest('[data-product-id]').dataset.productId;
+				const activeColors = colorPanel.querySelectorAll('[data-active-color]:checked');
+				const defaultColor = colorPanel.querySelector('[data-default-color]:checked');
+				const colors = Array.from(activeColors).map(activeColor => activeColor.value);
+				const colorId = defaultColor.value ?? 1;
+				const colorTag = defaultColor.dataset.defaultColorTag;
+
+				return updateProduct(productId, colorId, colors, colorTag)
+			}
+
+			function updateProduct(productId, colorId, colors, colorTag) {
+				return axios.patch(`/api/products/${productId}`, {
+						color_id: colorId,
+						colors: colors
+					})
+					.then(response => {
+						refreshPreviewImage(productId)
+
+						const productPanel = document.querySelector(`[data-product-id="${productId}"]`);
+						const colothingImages = productPanel.querySelectorAll('.clothing, .clothing-details');
+
+						colothingImages.forEach(clothingImage => {
+							const positionId = clothingImage.dataset.position;
+							const typeId = clothingImage.dataset.type;
+							const suffix = clothingImage.dataset.suffix;
+
+							updateProductType(typeId, colorId, positionId, suffix, clothingImage)
+						});
+
+						return true
+					})
+					.catch(error => {
+						return false
+					});
+			}
+
+			function updateProductType(typeId, colorId, positionId, suffix, element) {
+				return axios.get(`/api/products/types/${typeId}/image`, {
+						params: {
+							color_id: colorId,
+							position_id: positionId,
+							suffix: suffix,
+						}
+					})
+					.then(response => {
+						const image = response.data.image;
+						element.src = image;
+					})
+					.catch(error => {
+						console.error(error)
+					});
+			}
+		</script>
+	@endpushOnce
+
 	<section
 		class="section<?= $key + 1 ?> section colors <?= $key == 0 ? 'active' : '' ?> grid grid-cols-1 lg:grid-cols-2"
-		data-image-position="<?= $product->type->basicPositionId ?>"
+		data-image-position="<?= $product->position->basicPositionId() ?>"
+		data-panel
 	>
 
 		<!-- Preview image -->
-		@include('ecommerce.designs.edit.product.preview')
+		@include('ecommerce.designs.edit.product.static-preview')
 
-		<form
-			method="POST"
-			class="data"
-		>
+		<div class="data">
 
 			<input
 				type="hidden"
@@ -46,106 +104,24 @@
 				value="<?= $product->id ?>"
 			>
 
-			<div class="item-colors-field colors-pan">
-				<x-typography.component-heading>Seleziona i colori disponibili</x-typography.component-heading>
+			<div class="item-colors-field colors-pan grid gap-8">
+				<x-typography.component-heading class="text-center">Seleziona i colori disponibili</x-typography.component-heading>
 
 				<p class="">Qui puoi selezionare i vari colori disponibili per questo capo e il colore principale,
 					che verrà mostrato in tutte le anteprime.</p>
 
-				<div class="colors-pan mar-t-2">
+				<div class="colors-pan grid gap-8">
 
-					<!-- Available colors -->
-					<p class="data-title inlb">Colori attivi</p>
-
-					<x-help.info>È possibile comprare la tua grafica stampata su capi di questi colori. Attiva quelli che ti
-						piacciono e disattiva quelli che non vuoi che siano disponibili per l'acquisto.</x-help.info>
-
-					<div class="colorsA mar-b-2">
-
-						<div class="inp-box color-grid">
-							@php
-								$colors = $product->type->colors->sortBy('hidden')->sortBy('preorder')->sortBy('reorder');
-							@endphp
-
-							@foreach ($colors as $color)
-								@php
-									$checked = $product->colors()->contains('id', $color->id);
-								@endphp
-
-								<label class="color-box">
-
-									<input
-										type="checkbox"
-										class="cbx colorA-<?= $color->tag ?> hidden"
-										name="colorA[]"
-										value="<?= $color->tag ?>"
-										data-color="<?= $color->tag ?>"
-										<?= $checked ? 'checked' : '' ?>
-									>
-
-									<div
-										class="color-icon"
-										style="background-color: #<?= $color->color ?>;"
-									></div>
-
-								</label>
-							@endforeach
-
-						</div>
-					</div>
+					{{-- Active colors --}}
+					@include('ecommerce.designs.edit.product.active-colors')
 
 					<!-- Default color -->
-					<p class="data-title inlb">Colore predefinito</p>
-					<x-help.info>Qui puoi selezionare il colore del capo che sarà mostrato come prima scelta in tutte le
-						anteprime.</x-help.info>
-
-					<div class="colorsD">
-
-						<div class="inp-box color-grid">
-
-							@php
-								$colors = $product->type->colors->sortBy('hidden')->sortBy('preorder')->sortBy('reorder');
-							@endphp
-
-							@foreach ($colors as $color)
-								@php
-									$checked = $product->colors()->contains('id', $color->id);
-								@endphp
-
-								<label class="inlb color-box active">
-
-									<input
-										type="checkbox"
-										class="cbx colorD-<?= $color->tag ?> hidden"
-										name="colorD"
-										value="<?= $color->id ?>"
-										data-color="<?= $color->tag ?>"
-										data-color-id="<?= $color->id ?>"
-										data-dark="<?= $color->dark ? 1 : 0 ?>"
-										<?= $checked ? 'checked' : '' ?>
-									>
-
-									<div
-										class="color-icon"
-										for="item-colorD-<?= $color->tag ?>"
-										style="background-color: #<?= $color->hex ?>;"
-									></div>
-								</label>
-							@endforeach
-
-						</div>
-					</div>
+					@include('ecommerce.designs.edit.product.default-color')
 				</div>
 
-				<div class="btn-box mar-t-2 text-center">
-					<button
-						type="submit"
-						name="update-colors"
-						class="pbtn"
-					>Applica</button>
-				</div>
+				@include('ecommerce.designs.edit.product.save-button')
 			</div>
-		</form>
+		</div>
 
 	</section>
 @endif

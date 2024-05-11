@@ -10,14 +10,14 @@ use Illuminate\Http\Request;
 class ProductController extends Controller {
 
 	/**
-	 * * Show a specific product
+	 * * Action: show
 	 */
 	public function show(Product $product): RedirectResponse {
 		redirect_old('/products/' . $product->slug());
 	}
 
 	/**
-	 * * Change the status
+	 * * Custom action: Change the status
 	 */
 	public function changeStatus(Product $product, Request $request): RedirectResponse {
 		$request->validate([

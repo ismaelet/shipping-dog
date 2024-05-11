@@ -10,10 +10,15 @@ use Illuminate\Http\Request;
 class ProductController extends Controller {
 
 	/**
-	 * Get the specific product data
+	 * * Action: Show
 	 */
-	public function show(Request $request, int $id): JsonResponse {
-		$product = Product::findOrFail($id);
+	public function show(Product $product, Request $request): JsonResponse {
+		$request->validate([
+			'image_size' => ['nullable', 'integer', 'in:480,1024'],
+			'color_id' => ['nullable', 'integer', 'exists:product_colors,id'],
+			'logo_id' => ['nullable', 'integer', 'exists:logos,id'],
+			'position_id' => ['nullable', 'integer', 'exists:product_positions,id'],
+		]);
 
 		// Set the color
 		if ($request->has('color_id')) {
@@ -40,5 +45,34 @@ class ProductController extends Controller {
 			'customerPriceString' => $product->fullPriceString(),
 			'image' => $product->image($request->image_size, $request->color_id, $request->position_id),
 		]);
+	}
+
+	/**
+	 * * Action: Update
+	 */
+	public function update(Product $product, Request $request): JsonResponse {
+		$changes = [];
+
+		$request->validate([
+			'colors' => ['nullable', 'array'],
+			'color_id' => ['nullable', 'integer', 'exists:product_colors,id'],
+			'positions' => ['nullable', 'array'],
+		]);
+
+		if ($request->color_id) {
+			$changes['color_id'] = $request->color_id;
+		}
+
+		if ($request->colors) {
+			$changes['colors'] = implode(',', $request->colors);
+		}
+
+		if ($request->positions) {
+			$changes['positions'] = implode(',', $request->positions);
+		}
+
+		$product->update($changes);
+
+		return response()->json($product);
 	}
 }
