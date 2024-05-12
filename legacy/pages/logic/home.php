@@ -14,7 +14,7 @@ $fanPicsCount = 4;
 $popular = Product::join('stores', 'products.user_id', '=', 'stores.user_id')
 	->where('products.status', 1)
 	->where('stores.status', 1)
-	->with('design', 'design.seller', 'design.auth_user_like', 'seller', 'design.logo_group', 'color', 'type', 'position', 'specific_price', 'seller_price', 'base_price')
+	->with('design', 'design.seller', 'design.auth_user_like', 'seller', 'seller.prices', 'design.logo_group', 'color', 'type', 'position', 'specific_price', 'base_price')
 	->orderBy('products.recent_sales', 'desc')
 	->limit($productN)
 	->get('products.*');

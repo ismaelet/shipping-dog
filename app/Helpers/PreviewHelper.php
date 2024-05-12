@@ -7,6 +7,8 @@ use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductMockup;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class PreviewHelper {
 
@@ -151,7 +153,13 @@ class PreviewHelper {
 		imagecopyresampled($out, $srcImage, 0, 0, 0, 0, $x, $y, $src_w, $src_h);
 
 		// Add the clothing image
-		$srcImage = $clothingImageType == 'webp' ? imagecreatefromwebp($clothingImage) : imagecreatefrompng($clothingImage);
+		try {
+			$srcImage = $clothingImageType == 'webp' ? imagecreatefromwebp($clothingImage) : imagecreatefrompng($clothingImage);
+		} catch (Exception $e) {
+			Log::error('Error creating image from webp: ' . $clothingImage, 'Color: ' . $this->color->name, 'Position: ' . $this->position->name, 'Product: ' . $this->product->name);
+			return;
+		}
+
 		$src_size = getimagesize($clothingImage);
 		$src_w = $src_size[0];
 		$src_h = $src_size[1];

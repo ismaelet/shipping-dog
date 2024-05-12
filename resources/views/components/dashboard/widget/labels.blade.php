@@ -8,8 +8,8 @@
 @endphp
 
 <x-dashboard.widget
-	title="Etichette da Stampare"
-	:subtitle="$firstCartDate ? 'a partire dal ' . $firstCartDate : 'nessuna etichetta da stampare'"
+	title="Spedizioni da Trasmettere"
+	:subtitle="$firstCartDate ? 'a partire dal ' . $firstCartDate : 'nessuna spedizione da trasmettere'"
 	icon="shipping"
 >
 

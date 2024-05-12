@@ -93,9 +93,8 @@ class Shop {
 				break;
 
 			case 'custom':
-				$products->orderBy('products.sort', 'asc')
-					->orderBy('designs.sort', 'asc')
-					->orderBy('type_id', 'asc');
+				$products->orderBy('type_id', 'asc')
+					->orderBy('designs.sort', 'asc');
 				break;
 		}
 
@@ -155,7 +154,7 @@ class Shop {
 		// Get the products
 		$products = $products->limit($this->size)
 			->offset($start)
-			->with('type', 'design', 'design.seller', 'design.logo_group', 'design.auth_user_like', 'seller', 'color', 'specific_price', 'seller_price', 'base_price', 'position')
+			->with('type', 'design', 'design.seller', 'design.logo_group', 'design.auth_user_like', 'seller', 'seller.prices', 'color', 'specific_price', 'base_price', 'position')
 			->get('products.*');
 
 		// store the result

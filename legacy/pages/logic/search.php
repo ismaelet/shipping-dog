@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Ecommerce\Design;
+
 $search = $_GET['search'] ?? '';
 
 $searchN = 0;
@@ -10,27 +12,21 @@ if (strlen($search) > 2) {
 	$search = trim(strtolower($search));
 
 	//get design results
-	$res_des = \Legacy\System\Classes\LegacyDB::select(
+	$designs = Design::where('name', 'like', "%$search%")
+		->orWhereHas('tags', function ($query) use ($search) {
+			$query->where('tags', 'like', "%$search%");
+		})
+		->orWhereHas('seller', function ($query) use ($search) {
+			$query->where('name', 'like', "%$search%")
+				->where('status', 1);
+		})
+		->where('status', '>', 0)
+		->orderBy('sales', 'desc')
+		->orderBy('id', 'desc')
+		->limit($max)
+		->get();
 
-		"id FROM designs WHERE (
-
-			name LIKE CONCAT('%',?,'%') OR
-
-			ID IN (SELECT design_id FROM design_tags WHERE tags LIKE CONCAT('%',?,'%')) OR 
-
-			user_id IN (SELECT user_id FROM stores WHERE name LIKE CONCAT('%',?,'%'))
-		)
-		
-		AND status>0
-
-		AND user_id IN (SELECT user_id FROM stores WHERE status = 1)
-
-		ORDER BY sales DESC, user_id ASC, id DESC LIMIT " . $max,
-
-		[$search, $search, $search]
-	);
-
-	$desN = $res_des->num_rows;
+	$desN = $designs->count();
 
 	//get seller results
 	$res_sell = \Legacy\System\Classes\LegacyDB::select("user_id FROM stores WHERE name LIKE CONCAT('%',?,'%') AND status = 1 ORDER BY user_id DESC LIMIT " . $max, [$search]);

@@ -70,9 +70,7 @@
 
 // manage - edit a design
 \Legacy\System\Classes\LegacyRoute::add('/manage/portfolio/edit', function () {
-	\Legacy\System\Classes\LegacyView::setPage('manage/portfolio/edit');
-	\Legacy\System\Classes\LegacyView::$location = 'artist';
-	\Legacy\System\Classes\LegacyView::show();
+	redirect_old('/manage/portfolio/list');
 });
 
 // manage - customers pics list

@@ -18,7 +18,7 @@ if (isset($_POST['submit'])) {
 
 	while ($row = $res->fetch_assoc()) {
 
-		$type = new Type($row['id']);
+		$type = new LegacyProductType($row['id']);
 
 		$price = $_POST['price_' . $type->slug];
 

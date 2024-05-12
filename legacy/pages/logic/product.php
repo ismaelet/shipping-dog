@@ -19,7 +19,7 @@ $id = $id ?: (int) $slugId;
 /**
  * * Fetch the record
  */
-$product = $id ? Product::with('design', 'seller', 'type', 'specific_price', 'seller_price', 'base_price')->find($id) : null;
+$product = $id ? Product::with('design', 'seller', 'seller.prices', 'type', 'specific_price', 'base_price')->find($id) : null;
 $seller = $product?->seller;
 
 /**

@@ -96,15 +96,6 @@ class Product extends Model {
 	}
 
 	/**
-	 * Get the seller price.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
-	 */
-	public function seller_price(): HasOne {
-		return $this->hasOne(SellerPrice::class, 'seller_id', 'user_id')->where('type_id', $this->type_id);
-	}
-
-	/**
 	 * Get the platform price.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -137,10 +128,14 @@ class Product extends Model {
 	// Get the product's price
 	public function price(): ProductPrice|SellerPrice|BasePrice {
 		// Check if the product has a specific price
-		if ($this->specific_price) return $this->specific_price;
+		if ($this->specific_price) {
+			return $this->specific_price;
+		}
 
 		// Check if the product has a seller price
-		if ($this->seller_price) return $this->seller_price;
+		if ($priceModel = $this->seller->prices?->where('type_id', $this->type_id)->first()) {
+			return $priceModel;
+		}
 
 		// If not, return the base price
 		return $this->base_price;

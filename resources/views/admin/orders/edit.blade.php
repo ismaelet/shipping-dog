@@ -9,7 +9,7 @@
 		}
 
 		.order-list {
-			grid-template-columns: max-content 1fr max-content;
+			grid-template-columns: max-content max-content 1fr max-content;
 		}
 
 		.order-row {
@@ -72,6 +72,7 @@
 					<div class="order-list mt-4 grid gap-x-4">
 						<div class="order-row">
 							<p class="font-medium text-neutral-300">Prodotto</p>
+							<p class="font-medium text-neutral-300">ID</p>
 							<p class="font-medium text-neutral-300">Dettagli</p>
 							<p class="font-medium text-neutral-300">Prezzo</p>
 						</div>
@@ -80,11 +81,13 @@
 
 						@foreach ($record->order_items as $orderItem)
 							<div class="order-row order">
+
 								<img
 									src="{{ $orderItem->image() }}"
 									alt=""
-									class="w-24 rounded"
+									class="bg-surface-400 aspect-square w-24 rounded"
 								>
+								<p class="">{{ $orderItem->idCode() }}</p>
 
 								<p class="">
 									<a href="{{ $orderItem->product->fullUrl($orderItem->color_id, $orderItem->position_id) }}">
