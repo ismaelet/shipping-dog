@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Pages;
 
+use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Order;
 use App\Models\Framework\Configuration;
@@ -19,7 +20,8 @@ class OrderLogController extends Controller {
 		$startFromTime = Configuration::where('name', 'order_log_start_from')->value('value');
 
 		$orders = Order::where('created_at', '>=', $startFromTime)
-			->where('status', '>', 0)
+			->where('status', '>', EcommerceHelper::statusFromTag('received'))
+			->with('user', 'user.seller', 'address', 'shipping_method', 'coupon', 'change_request', 'order_items', 'order_items.product', 'order_items.product.type', 'order_items.product.type.sizes', 'order_items.product.type.colors', 'order_items.color', 'order_items.size', 'order_items.position', 'order_items.logo')
 			->oldest()
 			->get();
 

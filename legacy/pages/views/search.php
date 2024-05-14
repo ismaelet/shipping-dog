@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Ecommerce\Design;
-use Legacy\Classes\Ecommerce\Seller;
-
 ?>
 
 {% block main %}
@@ -26,21 +23,19 @@ use Legacy\Classes\Ecommerce\Seller;
 <div class="main-wrap pad-t-4 pad-b-5">
 	<h2 id="title" class="mar-b-3">Cerca: <span class="word txt-reg"><?= $search ?></span></h2>
 
-	<?php if ($searchN) { ?>
+	<?php if ($resultCount) { ?>
 
-		<?php if ($sellN) { ?>
+		<?php if ($sellerCount) { ?>
 
 			<section id="shops" class="mar-b-4">
 				<h3 class="section-heading">Negozi:</h3>
 				<div class="gallery">
 
-					<?php while ($row = $res_sell->fetch_assoc()) {
+					<?php foreach ($sellers as $seller) { ?>
 
-						$seller = new Seller($row['user_id'], 'name') ?>
-
-						<a href="<?= $seller->clientUrl ?>" class="shop stack-items">
-							<img src="<?= public_asset($seller->cover()) ?>" alt="" loading="lazy" class="cover img-fill">
-							<img src="<?= public_asset($seller->icon) ?>" alt="" loading="lazy" class="icon">
+						<a href="<?= $seller->url() ?>" class="shop stack-items">
+							<img src="<?= $seller->cover() ?>" alt="" loading="lazy" class="cover img-fill">
+							<img src="<?= $seller->icon() ?>" alt="" loading="lazy" class="icon">
 							<p class="name txt-line"><?= $seller->name ?></p>
 						</a>
 
@@ -52,7 +47,7 @@ use Legacy\Classes\Ecommerce\Seller;
 		<?php } ?>
 
 
-		<?php if ($desN) { ?>
+		<?php if ($designCount) { ?>
 
 			<section id="items">
 				<h3 class="section-heading">Prodotti:</h3>

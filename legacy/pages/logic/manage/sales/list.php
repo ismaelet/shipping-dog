@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Ecommerce\OrderItem;
-use App\Models\Ecommerce\Seller;
+use Illuminate\Support\Facades\Auth;
 
-$seller = Seller::find(auth()->id());
+$seller = Auth::user()->seller;
 $seller->updateEarned();
 
 $from = 0;

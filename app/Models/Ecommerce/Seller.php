@@ -8,6 +8,7 @@ use App\Models\Ecommerce\Seller\Follower;
 use App\Models\Ecommerce\Seller\PaymentRequest;
 use App\Models\Ecommerce\Seller\SellerPrice;
 use App\Models\Ecommerce\Shop\Payment;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +42,13 @@ class Seller extends Model {
 	/**
 	 * * Relationships
 	 */
+	/**
+	 * Get the seller's user
+	 */
+	public function user(): HasOne {
+		return $this->hasOne(User::class, 'id', 'user_id');
+	}
+
 	/**
 	 * Get the seller's designs
 	 */
@@ -141,6 +149,10 @@ class Seller extends Model {
 		}
 
 		return public_asset('users/icons/0.jpg');
+	}
+
+	public function cover(int $size = 1024): string {
+		return $this->user->cover($size);
 	}
 
 	/**

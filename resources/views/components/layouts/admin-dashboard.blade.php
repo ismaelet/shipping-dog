@@ -29,8 +29,13 @@
 
 	// Fetch the categories
 	$categories = is_supervisor()
-	    ? AdminCategory::orderBy('for_supervisors')->orderBy('order')->orderBy('name')->get()
-	    : AdminCategory::where('for_supervisors', 0)->orderBy('for_supervisors')->orderBy('order')->orderBy('name')->get();
+	    ? AdminCategory::orderBy('for_supervisors')->orderBy('order')->orderBy('name')->with('sections')->get()
+	    : AdminCategory::where('for_supervisors', false)
+	        ->orderBy('for_supervisors')
+	        ->orderBy('order')
+	        ->orderBy('name')
+	        ->with('sections')
+	        ->get();
 
 	foreach ($categories as $categoryRecord) {
 	    $category = [];
@@ -39,21 +44,19 @@
 	    $category['slug'] = $categoryRecord->slug;
 
 	    $sections = is_supervisor()
-	        ? AdminSection::where('category_id', $categoryRecord->id)
-	            ->where('hidden', 0)
-	            ->orderBy('order')
-	            ->orderBy('resource', 'desc')
-	            ->orderBy('action')
-	            ->orderBy('name')
-	            ->get()
-	        : AdminSection::where('category_id', $categoryRecord->id)
-	            ->where('for_supervisors', 0)
-	            ->where('hidden', 0)
-	            ->orderBy('order')
-	            ->orderBy('resource', 'desc')
-	            ->orderBy('action')
-	            ->orderBy('name')
-	            ->get();
+	        ? $categoryRecord->sections
+	            ->where('hidden', false)
+	            ->sortBy('order')
+	            ->sortByDesc('resource')
+	            ->sortBy('action')
+	            ->sortBy('name')
+	        : $categoryRecord->sections
+	            ->where('for_supervisors', false)
+	            ->where('hidden', false)
+	            ->sortBy('order')
+	            ->sortByDesc('resource')
+	            ->sortBy('action')
+	            ->sortBy('name');
 
 	    foreach ($sections as $sectionRecord) {
 	        $section = [];

@@ -13,11 +13,8 @@ use Illuminate\View\View;
 
 class OrderController extends ResourceController {
 
-	// ~ Index action configuration ~ //
 	/**
-	 * The columns array for the resource.
-	 *
-	 * @var array
+	 * ~ Action Configuration: Index
 	 */
 	protected array $columns = [
 		['label' => 'ID', 'name' => 'id'],
@@ -25,40 +22,28 @@ class OrderController extends ResourceController {
 		['label' => 'Articoli', 'type' =>  'method', 'method' => 'orderItemsString',],
 		// ['label' => 'Spedizione', 'name' => 'shipping_method_name'],
 		['label' => 'Totale', 'name' => 'price', 'type' => 'price',],
-		['label' => 'Registrato', 'name' => 'user_id', 'type' => 'bool'],
+		['label' => 'Account', 'name' => 'user_id', 'type' => 'bool'],
 		['label' => 'Stato', 'name' => 'status', 'type' => 'method', 'method' => 'statusLabel',],
 		['label' => 'Data', 'name' => 'created_at', 'type' => 'date'],
 	];
 
-	/**
-	 * The default order by array for the resource.
-	 *
-	 * @var array
-	 */
 	protected array $orderItemBy = ['created_at' => 'desc'];
 
-
-	// ~ Edit action configuration ~ //
 	/**
-	 * The field used as the title for the resource.
-	 *
-	 * @var string
+	 * ~ Action Configuration: Edit
 	 */
+	protected string $recordClass = Order::class;
 	protected string $titleField = 'id';
 
-
-	// * Index action * //
 	/**
-	 * Display a listing of the resource.
-	 *
-	 * @param \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Contracts\View\View
+	 * * Action: Index
 	 */
 	public function index(Request $request): View {
 		// Prepare the query
 		$this->query = Order::leftJoin('sys_shipping', 'orders.shipping_method_id', '=', 'sys_shipping.id')
 			->leftJoin('addresses', 'orders.id', '=', 'addresses.order_id')
-			->select('orders.*', 'sys_shipping.name as shipping_method_name');
+			->select('orders.*', 'sys_shipping.name as shipping_method_name')
+			->with('order_items.color', 'order_items.size', 'order_items.position', 'order_items.logo', 'order_items.product', 'order_items.product.type', 'order_items.product.type.colors', 'order_items.product.type.sizes', 'address');
 
 		// Add search filter
 		if ($request->search) {
@@ -82,7 +67,7 @@ class OrderController extends ResourceController {
 						});
 				});
 		} else {
-			$this->query = $this->query->where('status', '!=', 0);
+			$this->query = $this->query->where('status', '!=', EcommerceHelper::statusFromTag('open'));
 		}
 
 		// Add the buttons
@@ -91,68 +76,53 @@ class OrderController extends ResourceController {
 				'label' => 'Reinvia email',
 				'icon' => 'send-email',
 				'color' => 'primary',
-				'route' => 'orders.resend-email',
+				'route' => 'admin.orders.resend-email',
+				'method' => 'POST',
 			],
 			[
 				'type' => 'edit',
 			],
 		];
 
-		return $this->_index($request);
+		return parent::index($request);
 	}
 
-
-	// * Edit action * //
 	/**
-	 * Edit a resource record.
-	 *
-	 * @param int $id The ID of the resource record to edit.
-	 * @return \Illuminate\View\View The view for editing the resource record.
+	 * * Action: Edit
 	 */
-	public function edit(int $id): View {
-		$this->record = Order::find($id);
+	public function edit(int $orderId): View {
+		Order::findOrFail($orderId);
 
-		return $this->_edit();
+		return parent::edit($orderId);
 	}
 
-
-	// * Update action * //
 	/**
-	 * Update the resource.
-	 *
-	 * @param \Illuminate\Http\Request $request
-	 * @param int $id
-	 * @return \Illuminate\Http\RedirectResponse
+	 * * Action: Update
 	 */
-	public function update(Request $request, int $id) {
+	public function update(int $orderId, Request $request): RedirectResponse {
 		// Find the record
-		$this->record = Order::find($id);
+		$order = Order::findOrFail($orderId);
 
 		// Update the cart's status
 		if ($request->has('new_status')) {
 			if ($request->new_status == EcommerceHelper::statusFromTag('confirmed')) {
-				$this->record->confirm();
+				$order->confirm();
 			} else if ($request->new_status == EcommerceHelper::statusFromTag('canceled')) {
-				$this->record->cancel();
+				$order->cancel();
 			} else {
-				$this->record->status = $request->new_status;
-				$this->record->save();
+				$order->status = $request->new_status;
+				$order->save();
 			}
 		}
 
 		return redirect()->back();
 	}
 
-
-	// * Custom actions * //
 	/**
-	 * Resend the email for a specific cart.
-	 *
-	 * @param int $id The ID of the cart.
-	 * @return \Illuminate\Http\RedirectResponse The redirect response.
+	 * * Custom Action: Resend Email
 	 */
 	public function resendEmail(int $id): RedirectResponse {
-		$order = Order::find($id);
+		$order = Order::findOrFail($id);
 
 		$result = Mail::to($order->address->email)->send(new OrderStatusMail($order));
 

@@ -10,7 +10,7 @@ use Illuminate\View\View;
 class SellerController extends ResourceController {
 
 	/**
-	 * - Index action configuration
+	 * ~ Action Configuration: Index
 	 */
 	protected array $columns = [
 		['label' => 'ID', 'name' => 'id'],
@@ -24,12 +24,7 @@ class SellerController extends ResourceController {
 	];
 
 	/**
-	 * - Edit action configuration
-	 */
-	// protected string $titleField = 'name';
-
-	/**
-	 * * Index action
+	 * * Action: Index
 	 */
 	public function index(Request $request): View {
 		// Prepare the query
@@ -55,32 +50,6 @@ class SellerController extends ResourceController {
 			],
 		];
 
-		return $this->_index($request);
+		return parent::index($request);
 	}
-
-	/**
-	 * * Edit action
-	 */
-	// public function edit(int $id): View {
-	// 	$this->record = User::find($id);
-
-	// 	return $this->_edit();
-	// }
-
-	/**
-	 * * Update action
-	 */
-	// public function update(Request $request, int $id) {
-	// 	// Find the record
-	// 	$this->record = User::find($id);
-
-	// 	// Validate the request
-	// 	$request->validate([
-	// 		'email' => ['required', 'email'],
-	// 	]);
-
-	// 	$this->record->update($request->only(['email', 'first_name', 'last_name']));
-
-	// 	return $this->_update($request);
-	// }
 }

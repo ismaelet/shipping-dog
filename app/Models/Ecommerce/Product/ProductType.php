@@ -63,6 +63,13 @@ class ProductType extends Model {
 	}
 
 	/**
+	 * Get measures
+	 */
+	public function measures(): HasOne {
+		return $this->hasOne(ProductTypeMeasure::class, 'type_id', 'id');
+	}
+
+	/**
 	 * * Attributes
 	 */
 

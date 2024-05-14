@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Pages;
 
+use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\OrderItem;
@@ -19,30 +20,38 @@ class ProductLogController extends Controller {
 
 		// Get the date from which to start the log
 		$startFromTime = Configuration::where('name', 'product_log_start_from')->value('value');
-		$validorders = Order::where('created_at', '>=', $startFromTime)->where('status', '>', 0);
+		$validorders = Order::where('created_at', '>=', $startFromTime)->where('status', '>', EcommerceHelper::statusFromTag('received'));
 		$startFromCart = $validorders->exists() ? $validorders->oldest()->first() : null;
 
 		// Get the orders
 		if ($startFromCart) {
-			$filteredorder_items = OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
+			$filteredOrderItems = OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
 				->join('addresses', 'addresses.order_id', '=', 'orders.id')
 				->join('stores', 'stores.user_id', '=', 'order_items.seller_id')
 				->join('products', 'products.id', '=', 'order_items.product_id')
 				->join('product_types', 'product_types.id', '=', 'order_items.type_id')
-				->where('orders.status', '>', 0)
+				->where('orders.status', '>', EcommerceHelper::statusFromTag('received'))
 				->where('orders.created_at', '>=', $startFromTime)
 				->select('orders.id as order_id', 'orders.created_at as confirmedTime', 'order_items.*', 'stores.name as storeName', 'addresses.full_name as customerName', 'products.name as productName', 'product_types.name as productTypeName')
+				->with('color', 'size', 'position', 'logo', 'product', 'product.type', 'product.type.colors', 'product.type.sizes')
 				->get();
 
 			// Get the first cart
-			$firstCart = $filteredorder_items->sortBy('confirmedTime')->first();
+			$firstCart = $filteredOrderItems
+				->sortBy('confirmedTime')
+				->first();
 		}
+
+		$validordersCount = $validorders->count();
+		$orderItemsCount = $filteredOrderItems?->count() ?? 0;
 
 		return view('admin.log-products.index')->with([
 			'startFromCart' => $startFromCart,
 			'firstCart' => $firstCart ?? null,
 			'validorders' => $validorders,
-			'filteredorder_items' => $filteredorder_items ?? null,
+			'filteredOrderItems' => $filteredOrderItems ?? null,
+			'validordersCount' => $validordersCount,
+			'orderItemsCount' => $orderItemsCount,
 		]);
 	}
 

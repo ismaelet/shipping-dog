@@ -207,17 +207,17 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 				</div>
 
 				<!-- Colors -->
-				<?php if ($product->colors()) { ?>
+				<?php if ($productColors) { ?>
 
-					<section id="color" class="field <?php if (count($product->colors()) < 2) echo 'hide' ?>">
+					<section id="color" class="field <?php if ($productColorCount < 2) echo 'hide' ?>">
 						<p class="lbl">Colore</p>
 						<div class="grid">
 
-							<?php foreach ($product->colors() as $color) {
+							<?php foreach ($productColors as $color) {
 
 								if (
 									($product->type->colors->contains($color->id) || $product->isCustom())
-									&& in_array($color->tag, $product->colors()->pluck('tag')->toArray())
+									&& in_array($color->tag, $productColors->pluck('tag')->toArray())
 								) { ?>
 
 									<input type="radio" class="cbx" id="cbx-color-<?= $color->tag ?>" name="color_id" value="<?= $color->id ?>" data-color="<?= $color->tag ?>" data-id="<?= $color->id ?>" <?php if ($color->id == $product->color->id) echo 'checked' ?>>

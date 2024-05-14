@@ -58,7 +58,7 @@ class AdminCategoryController extends ResourceController {
 			],
 		];
 
-		return $this->_index($request);
+		return parent::index($request);
 	}
 
 	/**
@@ -67,6 +67,6 @@ class AdminCategoryController extends ResourceController {
 	public function edit(int $id): View {
 		$this->record = AdminCategory::find($id);
 
-		return $this->_edit();
+		return parent::edit();
 	}
 }

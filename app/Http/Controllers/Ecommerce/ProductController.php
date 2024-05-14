@@ -13,7 +13,7 @@ class ProductController extends Controller {
 	 * * Action: show
 	 */
 	public function show(Product $product): RedirectResponse {
-		redirect_old('/products/' . $product->slug());
+		redirect_old('/shop/products/' . $product->slug());
 	}
 
 	/**

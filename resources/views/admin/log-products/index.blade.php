@@ -75,7 +75,7 @@
 		<x-dashboard.typography.main-heading>Log dei prodotti</x-dashboard.typography.main-heading>
 
 		{{-- Recap form --}}
-		<x-dashboard.form.panel :title="($validorders->count() ? $filteredorder_items->count() : 0) . ' Articoli da fare'">
+		<x-dashboard.form.panel title="{{ ($validordersCount ? $orderItemsCount : 0) . ' Articoli da fare' }}">
 			<x-inputs.label>Parti dall'ordine:</x-inputs.label>
 
 			<div class="flex w-full items-center gap-4">
@@ -106,7 +106,7 @@
 					</div>
 				</form>
 
-				@if ($filteredorder_items?->count())
+				@if ($orderItemsCount)
 					<form
 						action=""
 						method="POST"
@@ -144,9 +144,9 @@
 				class="log gap-8"
 			>
 
-				@if ($validorders->count())
+				@if ($validordersCount)
 					@php
-						$sortedBySellers = $filteredorder_items->sortBy('seller_id')->unique('seller_id');
+						$sortedBySellers = $filteredOrderItems->sortBy('seller_id')->unique('seller_id');
 					@endphp
 
 					@foreach ($sortedBySellers as $sellerOrder)
@@ -156,7 +156,7 @@
 
 							@php
 								// Get the order_items
-								$sortedByProducts = $filteredorder_items
+								$sortedByProducts = $filteredOrderItems
 								    ->where('seller_id', '=', $sellerOrder->seller_id)
 								    ->sortBy('design_id')
 								    ->unique('design_id');
@@ -173,7 +173,7 @@
 										@php
 											$mergedorder_items = [];
 											// Get the order_items
-											$order_items = $filteredorder_items
+											$order_items = $filteredOrderItems
 											    ->where('design_id', '=', $product->design_id)
 											    ->sortBy('size_id')
 											    ->sortBy('color_id')
@@ -221,9 +221,9 @@
 				class="log gap-8"
 			>
 
-				@if ($validorders->count())
+				@if ($validordersCount)
 					@php
-						$sortedByTypes = $filteredorder_items->sortBy('type_id')->unique('type_id');
+						$sortedByTypes = $filteredOrderItems->sortBy('type_id')->unique('type_id');
 					@endphp
 
 					@foreach ($sortedByTypes as $typeOrder)
@@ -235,7 +235,7 @@
 								$mergedorder_items = [];
 
 								// Get the order_items
-								$sortedByData = $filteredorder_items
+								$sortedByData = $filteredOrderItems
 								    ->where('inventory', 0)
 								    ->where('type_id', '=', $typeOrder->type_id)
 								    ->sortBy('color_id')

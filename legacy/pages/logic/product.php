@@ -19,7 +19,7 @@ $id = $id ?: (int) $slugId;
 /**
  * * Fetch the record
  */
-$product = $id ? Product::with('design', 'seller', 'seller.prices', 'type', 'specific_price', 'base_price')->find($id) : null;
+$product = $id ? Product::with('design', 'seller', 'seller.prices', 'type', 'type.colors', 'type.sizes', 'type.measures', 'specific_price', 'base_price')->find($id) : null;
 $seller = $product?->seller;
 
 /**
@@ -104,3 +104,9 @@ if ($relatedProducts->count() < 8) {
  */
 LegacyView::setThumbnail($product->image(1024))
 	->setTitle($product->name);
+
+/**
+ * * Product data
+ */
+$productColors = $product->colors();
+$productColorCount = $productColors->count();

@@ -9,7 +9,7 @@
 });
 
 // item
-\Legacy\System\Classes\LegacyRoute::add(['/shop/item', '/item', '/products/*'], function () {
+\Legacy\System\Classes\LegacyRoute::add(['/shop/item', '/item', '/shop/products/*'], function () {
 	\Legacy\System\Classes\LegacyView::setPage('product');
 	\Legacy\System\Classes\LegacyView::$location = 'shop';
 	\Legacy\System\Classes\LegacyView::show();

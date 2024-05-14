@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin\Resources;
 
 use App\Http\Controllers\Admin\ResourceController;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UserController extends ResourceController {
 
 	/**
-	 * - Index action configuration
+	 * ~ Action Configuration: Index
 	 */
 	protected array $columns = [
 		['label' => 'ID', 'name' => 'id'],
@@ -22,12 +23,13 @@ class UserController extends ResourceController {
 	];
 
 	/**
-	 * - Edit action configuration
+	 * ~ Action Configuration: Edit
 	 */
+	protected string $recordClass = User::class;
 	protected string $titleField = 'username';
 
 	/**
-	 * * Index action
+	 * * Action: Index
 	 */
 	public function index(Request $request): View {
 		// Prepare the query
@@ -49,7 +51,7 @@ class UserController extends ResourceController {
 				'label' => 'Login',
 				'icon' => 'login',
 				'color' => 'green',
-				'route' => 'users.login',
+				'route' => 'admin.users.login',
 			],
 			[
 				'type' => 'edit',
@@ -59,39 +61,41 @@ class UserController extends ResourceController {
 			],
 		];
 
-		return $this->_index($request);
+		return parent::index($request);
 	}
 
 	/**
-	 * * Edit action
+	 * * Action: Edit
 	 */
-	public function edit(int $id): View {
-		$this->record = User::find($id);
+	public function edit(int $userId): View {
+		User::findOrFail($userId);
 
-		return $this->_edit();
+		return parent::edit($userId);
 	}
 
 	/**
-	 * * Update action
+	 * * Action: Update
 	 */
-	public function update(Request $request, int $id) {
+	public function update(int $userId, Request $request): RedirectResponse {
 		// Find the record
-		$this->record = User::find($id);
+		$user = User::findOrFail($userId);
 
 		// Validate the request
 		$request->validate([
+			'first_name' => ['string', 'max:255'],
+			'last_name' => ['string', 'max:255'],
 			'email' => ['required', 'email'],
 		]);
 
-		$this->record->update($request->only(['email', 'first_name', 'last_name']));
+		$user->update($request->only(['email', 'first_name', 'last_name']));
 
-		return $this->_update($request);
+		return parent::update($userId, $request);
 	}
 
 	/**
-	 * * Login action
+	 * * Custom Action: Login
 	 */
-	public function login(int $id) {
+	public function login(int $id): RedirectResponse {
 		$user = User::findOrFail($id);
 
 		auth()->login($user);

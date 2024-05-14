@@ -54,6 +54,15 @@ class OrderItem extends Model {
 	}
 
 	/**
+	 * Get the order's product including trashed products.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function product_with_trashed(): BelongsTo {
+		return $this->belongsTo(Product::class)->withTrashed();
+	}
+
+	/**
 	 * Get the order's color.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -1,10 +1,11 @@
 <?php
 
 use App\Models\Ecommerce\Design;
+use App\Models\Ecommerce\Seller;
 
 $search = $_GET['search'] ?? '';
 
-$searchN = 0;
+$resultCount = 0;
 $max = 20;
 
 if (strlen($search) > 2) {
@@ -12,27 +13,32 @@ if (strlen($search) > 2) {
 	$search = trim(strtolower($search));
 
 	//get design results
-	$designs = Design::where('name', 'like', "%$search%")
+	$designs = Design::join('stores', 'designs.user_id', '=', 'stores.user_id')
+		->where('stores.status', true)
+		->where('designs.name', 'like', "%$search%")
+		->orWhere('stores.name', 'like', "%$search%")
 		->orWhereHas('tags', function ($query) use ($search) {
 			$query->where('tags', 'like', "%$search%");
 		})
-		->orWhereHas('seller', function ($query) use ($search) {
-			$query->where('name', 'like', "%$search%")
-				->where('status', 1);
-		})
-		->where('status', '>', 0)
-		->orderBy('sales', 'desc')
-		->orderBy('id', 'desc')
+		->orderByDesc('designs.sales')
+		->orderByDesc('stores.sales')
+		->orderByDesc('designs.id')
+		->limit($max)
+		->with('main_product', 'products', 'main_product.color', 'main_product.position', 'main_product.type', 'seller')
+		->get();
+
+	$designCount = $designs->count();
+
+	//get seller results
+	$sellers = Seller::where('status', true)
+		->where('name', 'like', "%$search%")
+		->orderByDesc('sales')
+		->orderByDesc('id')
 		->limit($max)
 		->get();
 
-	$desN = $designs->count();
-
-	//get seller results
-	$res_sell = \Legacy\System\Classes\LegacyDB::select("user_id FROM stores WHERE name LIKE CONCAT('%',?,'%') AND status = 1 ORDER BY user_id DESC LIMIT " . $max, [$search]);
-
-	$sellN = $res_sell->num_rows;
+	$sellerCount = $sellers->count();
 
 	//get total number of results		
-	$searchN = $desN + $sellN;
+	$resultCount = $designCount + $sellerCount;
 }

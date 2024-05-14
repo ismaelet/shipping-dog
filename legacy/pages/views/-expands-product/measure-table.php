@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Ecommerce\Product\ProductTypeMeasure;
+$measures = $product->type->measures->get();
 
 if ($size_table) { ?>
 
@@ -31,8 +31,7 @@ if ($size_table) { ?>
 
 					<?php foreach ($product->type->sizes as $size) {
 
-						$measure = ProductTypeMeasure::where('type_id', $product->type_id)
-							->where('size', $size->tag)
+						$measure = $measures->where('size', $size->tag)
 							->first();
 
 						if ($measure) {

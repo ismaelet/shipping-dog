@@ -10,7 +10,7 @@ use Illuminate\View\View;
 class DesignController extends ResourceController {
 
 	/**
-	 * - Index action configuration
+	 * ~ Action Configuration: Index
 	 */
 	protected array $columns = [
 		['label' => 'ID', 'name' => 'id'],
@@ -21,11 +21,6 @@ class DesignController extends ResourceController {
 		['label' => 'Attivo', 'name' => 'status', 'type' => 'bool'],
 		['label' => 'Aggiunto il', 'name' => 'created_at', 'type' => 'date'],
 	];
-
-	/**
-	 * - Edit action configuration
-	 */
-	// protected string $titleField = 'name';
 
 	/**
 	 * * Index action
@@ -59,40 +54,8 @@ class DesignController extends ResourceController {
 				'type' => 'download',
 				'model_method' => 'originalDarkImage',
 			],
-			// [
-			// 	'type' => 'edit',
-			// ],
-			// [
-			// 	'type' => 'delete',
-			// ],
 		];
 
-		return $this->_index($request);
+		return parent::index($request);
 	}
-
-	/**
-	 * * Edit action
-	 */
-	// public function edit(int $id): View {
-	// 	$this->record = User::find($id);
-
-	// 	return $this->_edit();
-	// }
-
-	/**
-	 * * Update action
-	 */
-	// public function update(Request $request, int $id) {
-	// 	// Find the record
-	// 	$this->record = User::find($id);
-
-	// 	// Validate the request
-	// 	$request->validate([
-	// 		'email' => ['required', 'email'],
-	// 	]);
-
-	// 	$this->record->update($request->only(['email', 'first_name', 'last_name']));
-
-	// 	return $this->_update($request);
-	// }
 }

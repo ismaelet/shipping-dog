@@ -207,7 +207,7 @@
 			</div>
 		</x-dashboard.form.panel>
 
-		{{-- orders --}}
+		{{-- Orders --}}
 		@if ($orders->count())
 			@foreach ($orders as $order)
 				@php
@@ -240,29 +240,6 @@
 						@php
 							$order->has_errors = 1;
 							$order->save();
-
-							// Get the PayPal data
-							/*$paypalData = paypal_find_order($order->id);
-
-							if ($paypalData) {
-							// Create the address
-							$addressLine1 = explode(' ', $paypalData->shipping_info->address->line1);
-							$addressNumber = array_pop($addressLine1);
-							$addressLine1 = implode(' ', $addressLine1);
-
-							Address::create([
-							'order_id' => $order->id,
-							'user_id' => $reg ? $order->user_id : null,
-							'full_name' => $paypalData->shipping_info->name,
-							'address' => $addressLine1,
-							'number' => $addressNumber,
-							'city' => $paypalData->shipping_info->address->city,
-							'zip' => $paypalData->shipping_info->address->postal_code,
-							'country' => $paypalData->shipping_info->address->country_code,
-							'email' => $paypalData->payer_info->email_address,
-							'phone' => $paypalData->payer_info->phone_number->national_number,
-							]);*/
-
 						@endphp
 
 						<p class="text-error">!!! Errore nell'indirizzo !!!</p>
@@ -273,7 +250,7 @@
 						<p>Sconto: <span class="font-bold">{{ $order->code }}</span></p>
 					@endif
 
-					{{-- order_items --}}
+					{{-- Order Items --}}
 					<div class="js-to-copy">
 						@foreach ($order->order_items as $orderItem)
 							<p>

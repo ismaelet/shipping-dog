@@ -40,8 +40,7 @@ class Design extends Model {
 	 */
 	public function main_product(): HasOne {
 		return $this->hasOne(Product::class)
-			->where('status', 1)
-			->where('deleted', 0)
+			->where('status', true)
 			->orderBy('type_id');
 	}
 
@@ -50,9 +49,8 @@ class Design extends Model {
 	 */
 	public function products(): HasMany {
 		return $this->hasMany(Product::class)
-			->where('status', 1)
-			->where('deleted', 0)
-			->orderBy('type_id', 'asc');
+			->where('status', true)
+			->orderBy('type_id');
 	}
 
 	/**
@@ -87,7 +85,7 @@ class Design extends Model {
 	 * Ge the desing's url, that is the url of the main product
 	 */
 	public function url(): ?string {
-		return $this->main_product ? $this->main_product->url() : null;
+		return $this->main_product?->url();
 	}
 
 	/**

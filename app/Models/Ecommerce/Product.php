@@ -287,7 +287,7 @@ class Product extends Model {
 	 * Get the product's url
 	 */
 	public function url(): string {
-		return '/products/' . $this->slug();
+		return route('products.show', $this);
 	}
 
 	public function fullUrl(?int $color_id = null, ?int $position_id = null): string {

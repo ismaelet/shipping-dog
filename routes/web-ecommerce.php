@@ -19,7 +19,7 @@ Route::any('/shop', LegacyController::class)->name('shop');
 /**
  * * Product
  */
-Route::resource('products', ProductController::class)->only(['update']);
+Route::resource('products', ProductController::class)->only(['show', 'update']);
 
 Route::post('/products/{product}/status', [ProductController::class, 'changeStatus'])->name('products.status');
 
