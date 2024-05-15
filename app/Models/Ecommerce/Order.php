@@ -5,6 +5,7 @@ namespace App\Models\Ecommerce;
 use App\Helpers\EcommerceHelper;
 use App\Mail\OrderStatusMail;
 use App\Models\User;
+use App\Services\GlsService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,7 +24,7 @@ class Order extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['user_id', 'shipping_method_id', 'payment_method_id', 'code', 'quantity', 'credit_ship', 'shipping', 'status', 'step', 'courier_notes', 'shipping_notes', 'has_errors', 'created_at', 'updated_at', 'token'];
+	protected $fillable = ['user_id', 'shipping_method_id', 'payment_method_id', 'code', 'quantity', 'credit_ship', 'shipping', 'status', 'step', 'courier_notes', 'shipping_notes', 'has_errors', 'created_at', 'updated_at', 'token', 'tracking'];
 
 	/**
 	 * * Relationships
@@ -497,13 +498,19 @@ class Order extends Model {
 			}
 		}
 
+		// Confirm the individual order_items
+		$this->confirmOrderItems();
+
 		// Send the confirmation email
 		if ($sendNotification) {
 			Mail::to($this->address->email)->send(new OrderStatusMail($this));
 		}
 
-		// Confirm the individual order_items
-		$this->confirmOrderItems();
+		// Transmit the order to the GLS service
+		if (in_array($this->shipping_method_id, ShippingMethod::shippingMethodsWithLabels())) {
+			$glsService = new GlsService();
+			$glsService->addParcel($this);
+		}
 	}
 
 	/**

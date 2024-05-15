@@ -156,7 +156,7 @@ class PreviewHelper {
 		try {
 			$srcImage = $clothingImageType == 'webp' ? imagecreatefromwebp($clothingImage) : imagecreatefrompng($clothingImage);
 		} catch (Exception $e) {
-			Log::error('Error creating image from webp: ' . $clothingImage, 'Color: ' . $this->color->name, 'Position: ' . $this->position->name, 'Product: ' . $this->product->name);
+			Log::error('Error creating image from webp', ['Image' => $clothingImage, 'Color' => $this->color->name, 'Position' => $this->position->name, 'Tipo' => $this->product->type->name]);
 			return;
 		}
 
