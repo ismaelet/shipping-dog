@@ -18,6 +18,5 @@ Route::prefix('paypal')->middleware(UnconfirmedOrder::class)->name('paypal.')->g
  * * GLS
  */
 Route::prefix('gls')->middleware('admin')->name('gls.')->group(function () {
-	Route::post('/parcels/add', [GlsController::class, 'addSingleParcel'])->name('parcels.add');
-	Route::post('/parcels/add/all', [GlsController::class, 'addAllParcels'])->name('parcels.add.all');
+	Route::post('/transmit', [GlsController::class, 'transmitParcels'])->name('transmit');
 });

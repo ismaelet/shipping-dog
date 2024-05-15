@@ -1,105 +1,106 @@
+@pushOnce('styles')
+	<style>
+		.table-cell {
+			cursor: pointer;
+		}
+	</style>
+@endpushOnce
+
+@pushOnce('scripts')
+	<script defer>
+		document.addEventListener('DOMContentLoaded', () => {
+			const submitButton = document.querySelector('[data-submit-parcels]')
+			document.querySelectorAll('.table-cell').forEach(element => {
+				element.addEventListener('click', () => {
+					const row = element.closest('tr');
+					const checkbox = row.querySelector('input[type="checkbox"]');
+
+					checkbox.checked = !checkbox.checked;
+				});
+			});
+
+			submitButton.addEventListener('click', () => {
+				const form = submitButton.closest('form');
+				const checkboxes = document.querySelectorAll('.table-cell input[type="checkbox"]:checked');
+
+				if (checkboxes.length === 0) {
+					alert('Seleziona almeno una spedizione da trasmettere');
+					return;
+				}
+
+				checkboxes.forEach(checkbox => {
+					if (checkbox.checked) {
+						const input = document.createElement('input');
+
+						input.type = 'hidden';
+						input.name = 'orders[]';
+						input.value = checkbox.value;
+
+						form.appendChild(input);
+					}
+				});
+
+				form.submit();
+
+			});
+		});
+	</script>
+@endpushOnce
+
 <x-layouts.admin-dashboard>
 	<x-dashboard.typography.main-heading class="mb-12">Genera le etichette</x-dashboard.typography.main-heading>
 
-	<div class="grid gap-8 lg:grid-cols-7">
-
-		{{-- Add a specific parcel --}}
-		<div class="lg:col-span-3">
-			<x-dashboard.form.panel title="Trasmetti una spedizione">
-				<form
-					class="grid gap-12"
-					method="POST"
-					action="{{ route('gls.parcels.add') }}"
-				>
-					@csrf
-
-					<x-form.group>
-						<x-inputs.label>Spedizione da trasmettere:</x-inputs.label>
-						<x-inputs.search-input
-							search="orders"
-							stored-name="order_id"
-							stored-value="{{ $defaultOrder?->id }}"
-							shown-value="{{ $defaultOrder ? $defaultOrder->id . ' - ' . $defaultOrder->address->full_name : '' }}"
-							placeholder="Spedizione da trasmettere"
-							:required="true"
-						/>
-
-						@session('add_single_parcel_success')
-							<x-inputs.alert-success>{{ $value }}</x-inputs.alert-success>
-						@endsession
-
-						@session('add_single_parcel_error')
-							<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
-						@endsession
-					</x-form.group>
-
-					<x-inputs.button
-						type="submit"
-						name="submit"
-						value="generate"
-					>
-						{!! embed_icon('shipping') !!}
-						Trasmetti la spedizione
-					</x-inputs.button>
-				</form>
-			</x-dashboard.form.panel>
-		</div>
+	<div class="grid gap-8">
 
 		{{-- Generate one label --}}
-		<div class="lg:col-span-4">
-			<x-dashboard.form.panel title="Trasmetti tutte le spedizioni">
-				<div class="grid gap-12">
+		<x-dashboard.form.panel title="Trasmetti tutte le spedizioni">
+			<div class="grid gap-12">
 
-					@session('add_parcels_success')
-						<x-form.group>
-							<x-inputs.alert-success>{{ $value }}</x-inputs.alert-success>
-						</x-form.group>
+				@session('add_parcels_success')
+					<x-form.group>
+						<x-inputs.alert-success>{{ $value }}</x-inputs.alert-success>
+					</x-form.group>
+				@endsession
+
+				<x-form.group>
+					<x-inputs.label>{{ $orderCount }} spedizioni da trasmettere</x-inputs.label>
+
+					@session('parcels_success')
+						<x-inputs.alert-success>{{ $value }}</x-inputs.alert-success>
 					@endsession
 
-					<x-form.group>
-						<x-inputs.label>{{ $orderCount }} spedizioni da trasmettere</x-inputs.label>
+					@session('parcels_error')
+						<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
+					@endsession
 
-						@session('error')
-							<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
-						@endsession
-					</x-form.group>
+					<x-table
+						:columns="$columns"
+						:records="$orders"
+						:record-count="$orderCount"
+						:search-bar="false"
+					/>
 
-					<div class="flex flex-wrap justify-center gap-4">
-						<form
-							method="POST"
-							action="{{ route('gls.parcels.add.all') }}"
+					@session('error')
+						<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
+					@endsession
+				</x-form.group>
+
+				<div class="flex flex-wrap justify-center gap-4">
+					<form
+						method="POST"
+						action="{{ route('gls.transmit') }}"
+					>
+						@csrf
+						<x-inputs.button
+							type="button"
+							data-submit-parcels
 						>
-							@csrf
-							<x-inputs.button type="submit">
-								{!! embed_icon('shipping') !!}
-								Trasmetti tutte le spedizioni
-							</x-inputs.button>
-
-							@session('add_all_parcels_success')
-								<x-inputs.alert-success>{{ $value }}</x-inputs.alert-success>
-							@endsession
-
-							@session('add_all_parcels_error')
-								<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
-							@endsession
-						</form>
-
-						<form
-							method="POST"
-							action="{{ route('admin.labels.download') }}"
-						>
-							@csrf
-							<x-inputs.button
-								type="submit"
-								variant="secondary"
-							>
-								{!! embed_icon('download') !!}
-								Scarica le etichette
-							</x-inputs.button>
-						</form>
-					</div>
+							{!! embed_icon('shipping') !!}
+							Trasmetti tutte le spedizioni
+						</x-inputs.button>
+					</form>
 				</div>
-			</x-dashboard.form.panel>
-		</div>
+			</div>
+		</x-dashboard.form.panel>
 	</div>
 </x-layouts.admin-dashboard>

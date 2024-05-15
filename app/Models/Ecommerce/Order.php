@@ -592,9 +592,11 @@ class Order extends Model {
 	 * @return \Illuminate\Database\Eloquent\Collection
 	 */
 	public static function unlabelled(): Collection {
-		return self::where('status', EcommerceHelper::statusFromTag('confirmed'))
+		return self::join('addresses', 'orders.id', '=', 'addresses.order_id')
+			->where('status', EcommerceHelper::statusFromTag('confirmed'))
 			->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
 			->oldest()
+			->select('orders.*', 'addresses.full_name')
 			->get();
 	}
 }

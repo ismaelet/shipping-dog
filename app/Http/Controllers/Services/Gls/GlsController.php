@@ -10,29 +10,17 @@ use Illuminate\Http\Request;
 
 class GlsController extends Controller {
 
-	public function addSingleParcel(Request $request, GlsService $glsService): RedirectResponse {
-		$order = Order::find($request->order_id);
+	public function transmitParcels(Request $request, GlsService $glsService): RedirectResponse {
 
-		$response = $glsService->addParcel($order);
-
-		if (!$response) {
-			return back()->with('add_single_parcel_error', 'Errore durante la trasmissione dell\'ordine ' . $order->id);
-		}
-
-		return back()->with('add_single_parcel_success', 'Spedizione trasmessa correttamente');
-	}
-
-	public function addAllParcels(GlsService $glsService): RedirectResponse {
-		$orders = Order::unlabelled();
-
+		$orders = Order::whereIn('id', $request->orders)->get();
 		$orders->each(function ($order) use ($glsService) {
-			$response = $glsService->addParcel($order, true);
+			$response = $glsService->transmitParcel($order);
 
 			if (!$response) {
-				return back()->with('add_all_parcels_error', 'Errore durante la trasmissione dell\'ordine ' . $order->id);
+				return back()->with('parcels_error', 'Errore durante la trasmissione dell\'ordine ' . $order->id);
 			}
 		});
 
-		return back()->with('add_all_parcels_success', 'Spedizione trasmessa correttamente');
+		return back()->with('parcels_success', 'Spedizioni trasmesse correttamente');
 	}
 }

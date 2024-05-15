@@ -23,6 +23,14 @@
 		</span>
 	@break
 
+	@case('checkbox')
+		<x-inputs.checkbox
+			name="{{ $column['name'] }}[]"
+			checked="{{ !empty($column['checked']) }}"
+			:value="$record->{$column['name']}"
+		/>
+	@break
+
 	@case('method')
 		@php
 			$methods = explode('.', $column['method']);

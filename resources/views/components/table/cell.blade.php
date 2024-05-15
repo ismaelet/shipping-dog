@@ -4,20 +4,23 @@
 
 @php
 	$modelName = Str::singular($record->getTable());
+	$editRoute = null;
+	$currentRoute = request()->route()->getName();
 
 	if ($rowUrl) {
 	    $editRoute = str_replace('id', $record->id, $column['url']);
 	} elseif ($rowMethodUrl) {
 	    $editRoute = $record->{$rowMethodUrl}();
-	} else {
-	    $editRoute = str_replace('index', 'edit', request()->route()->getName());
+	} elseif (strpos(request()->route()->getName(), '.index') !== false) {
+	    $editRoute = str_replace('index', 'edit', $currentRoute);
+
 	    $editRoute = Route::has($editRoute)
 	        ? route($editRoute, [$modelName => $record->id, 'index_parameters' => json_encode(request()->all())])
 	        : null;
 	}
 @endphp
 
-<td class="align-middle">
+<td class="table-cell align-middle">
 
 	@if (isset($column['label']))
 		@if ($editRoute)
