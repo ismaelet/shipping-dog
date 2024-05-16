@@ -90,7 +90,7 @@
 								<p class="">{{ $orderItem->idCode() }}</p>
 
 								<p class="">
-									<a href="{{ $orderItem->product->fullUrl($orderItem->color_id, $orderItem->position_id) }}">
+									<a href="{{ $orderItem->product_with_trashed->fullUrl($orderItem->color_id, $orderItem->position_id) }}">
 										{{ $orderItem->fullName() }}
 									</a>
 								</p>

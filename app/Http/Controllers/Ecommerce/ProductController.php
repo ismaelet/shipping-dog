@@ -12,8 +12,14 @@ class ProductController extends Controller {
 	/**
 	 * * Action: show
 	 */
-	public function show(Product $product): RedirectResponse {
-		redirect_old('/shop/products/' . $product->slug());
+	public function show(Product $product, Request $request): RedirectResponse {
+		if ($product->trashed() && !is_admin()) {
+			return redirect()->route('shop');
+		}
+
+		$parameters = http_build_query($request->all());
+
+		redirect_old('/shop/products/' . $product->slug() . '?' . $parameters);
 	}
 
 	/**

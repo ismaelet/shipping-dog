@@ -62,7 +62,7 @@ class PreviewHelper {
 			}
 
 			// Otherwise generate the image
-			if ($this->product->id && !$this->product->deleted && !$this->product->isCustom()) {
+			if ($this->product->id && !$this->product->isCustom()) {
 				$this->generateImage();
 			}
 
@@ -100,6 +100,8 @@ class PreviewHelper {
 	 * Generate the image
 	 */
 	private function generateImage(): void {
+		$design = $this->product->design_with_trashed;
+
 		// Fetch mockup type data
 		$mockupFrameworkData = ProductTypeMockup::where('type_id', $this->product->type_id)->where('position_id', $this->position->id)->first();
 
@@ -116,8 +118,8 @@ class PreviewHelper {
 		$details = file_exists($file = str_replace('.' . $clothingImageType, '-det.' . $clothingImageType, $clothingImage)) ? $file : false;
 
 		// Design image
-		$designImage = $this->color->dark && file_exists($file = public_storage('/designs/' . $this->product->design->id . '_dark.png')) ?
-			$file : public_storage('/designs/' . $this->product->design->id . '.png');
+		$designImage = $this->color->dark && file_exists($file = public_storage('/designs/' . $design->id . '_dark.png')) ?
+			$file : public_storage('/designs/' . $design->id . '.png');
 
 		// Check if every required image exists
 		if (!file_exists($clothingImage)) {

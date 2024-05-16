@@ -19,14 +19,20 @@ $id = $id ?: (int) $slugId;
 /**
  * * Fetch the record
  */
-$product = $id ? Product::with('design', 'seller', 'seller.prices', 'type', 'type.colors', 'type.sizes', 'type.measures', 'specific_price', 'base_price')->find($id) : null;
+$product = Product::with('design', 'seller', 'seller.prices', 'type', 'type.colors', 'type.sizes', 'type.measures', 'specific_price', 'base_price');
+
+if (is_admin()) {
+	$product = $product->withTrashed();
+}
+
+$product = $product->find($id);
 $seller = $product?->seller;
 
 /**
  * * Redirect to the shop when the product should not be displayed
  */
 // Redirect to the shop it the product or seller was not found
-if (!$product || !$seller || !$product->status || $product->deleted) {
+if (!$product || !$seller) {
 	redirect_old('/shop');
 }
 

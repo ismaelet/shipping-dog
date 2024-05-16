@@ -3,6 +3,7 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
+use App\Helpers\PreviewHelper;
 use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPosition;
@@ -59,7 +60,7 @@ class OrderItem extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function product_with_trashed(): BelongsTo {
-		return $this->belongsTo(Product::class)->withTrashed();
+		return $this->product()->withTrashed();
 	}
 
 	/**
@@ -118,9 +119,10 @@ class OrderItem extends Model {
 	 */
 	public function name(): string {
 		$name = $this->quantity > 1 ? [$this->quantity . 'x'] : [];
-		$name[] = $this->product && $this->product->status && !$this->product->deleted ? $this->product->name : 'Articolo rimosso';
+		$name[] = $this->product_with_trashed->name;
+		$name[] = $this->product ? null : '-articolo rimosso-';
 
-		return implode(' ', $name);
+		return implode(' ', array_filter($name));
 	}
 
 	/**
@@ -138,7 +140,7 @@ class OrderItem extends Model {
 	 * @return string
 	 */
 	public function description(): string {
-		$product = $this->product;
+		$product = $this->product_with_trashed;
 
 		$description = $product?->type->name;
 		$description .= $this->size && $product?->type->sizes->count() > 1 ? ' ' . $this->size->name : '';
@@ -174,10 +176,10 @@ class OrderItem extends Model {
 	 * @return string
 	 */
 	public function image(): string {
-		return $this->product->image(
+		return $this->product_with_trashed ? $this->product_with_trashed->image(
 			color: $this->color,
 			position: $this->position,
-		);
+		) : public_asset(PreviewHelper::PLACEHOLDER_IMAGE);
 	}
 
 	/**

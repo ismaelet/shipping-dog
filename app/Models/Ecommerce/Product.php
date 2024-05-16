@@ -78,6 +78,15 @@ class Product extends Model {
 	}
 
 	/**
+	 * Get the product's design including trashed designs.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function design_with_trashed(): BelongsTo {
+		return $this->design()->withTrashed();
+	}
+
+	/**
 	 * Get the product's type.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -330,7 +339,7 @@ class Product extends Model {
 	 * Check if the product is a custom product
 	 */
 	public function isCustom(): bool {
-		return $this->design ? $this->design->custom : true;
+		return $this->design_with_trashed ? $this->design_with_trashed->custom : true;
 	}
 
 	/**
