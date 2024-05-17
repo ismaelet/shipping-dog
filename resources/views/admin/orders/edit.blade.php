@@ -213,13 +213,13 @@
 
 		<div class="flex w-full justify-between gap-4">
 			<div class="flex gap-4">
-				@if ($record->status != EcommerceHelper::statusFromTag('canceled'))
+				@if ($record->status != EcommerceHelper::statusFromTag('cancelled'))
 					<x-inputs.button
 						type="submit"
 						variant="secondary"
 						color="error"
 						name="new_status"
-						value="{{ EcommerceHelper::statusFromTag('canceled') }}"
+						value="{{ EcommerceHelper::statusFromTag('cancelled') }}"
 					>
 						{!! embed_icon('delete') !!}
 						Cancella l'ordine
@@ -239,7 +239,7 @@
 				@endif
 			</div>
 
-			@if ($record->status == EcommerceHelper::statusFromTag('canceled'))
+			@if ($record->status == EcommerceHelper::statusFromTag('cancelled'))
 				<x-inputs.button
 					type="submit"
 					name="new_status"

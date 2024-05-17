@@ -75,12 +75,19 @@
 	@default
 		<form
 			action="{{ route($button['route'], $record) }}"
-			method="{{ $button['method'] ?? 'GET' }}"
+			method="{{ isset($button['method']) && $button['method'] == 'GET' ? 'GET' : 'POST' }}"
 		>
 			@csrf
+
+			@isset($button['method'])
+				@method($button['method'])
+			@endisset
+
 			<button
 				type="submit"
 				title="{{ $button['label'] }}"
+				name="{{ $button['name'] ?? '' }}"
+				value="{{ $button['value'] ?? '' }}"
 				@class($classes)
 			>
 				{!! embed_icon($button['icon']) !!}

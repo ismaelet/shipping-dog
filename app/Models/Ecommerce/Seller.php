@@ -225,7 +225,7 @@ class Seller extends Model {
 		$usedOrderCredit = $this->order_items()
 			->where('user_id', '=', $this->user_id)
 			->where('credit', '=', 1)
-			->where('status', '!=', EcommerceHelper::statusFromTag('canceled'))
+			->where('status', '!=', EcommerceHelper::statusFromTag('cancelled'))
 			->selectRaw('SUM((fullProductPrice - price_disc) * quantity) as usedCredit')
 			->value('usedCredit');
 
@@ -237,7 +237,7 @@ class Seller extends Model {
 			$query->where('user_id', '=', $this->user_id);
 		})
 			->where('credit_ship', '=', 1)
-			->where('status', '!=', EcommerceHelper::statusFromTag('canceled'))
+			->where('status', '!=', EcommerceHelper::statusFromTag('cancelled'))
 			->selectRaw('
 			SUM(shipping) AS usedCredit
 		')

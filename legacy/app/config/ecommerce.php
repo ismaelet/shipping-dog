@@ -44,7 +44,7 @@ $ecommerceConfig = [
 	],*/
 
 	'cart-statuses' => [
-		'-1' => ['canceled', 'Cancellato', '#ff6f6f', 'close'],
+		'-1' => ['cancelled', 'Cancellato', '#ff6f6f', 'close'],
 		'0' => ['open', 'Non completato', '#ccc', 'pause'],
 		'1' => ['waiting-payment', 'Elaborazione', '#92e9ff', 'waiting'],
 		'2' => ['confirmed', 'Pronto', '#ffc677', 'correct'],
@@ -54,7 +54,7 @@ $ecommerceConfig = [
 	],
 
 	'cart-admin-statuses' => [
-		'-1' => ['canceled', 'Cancellato', '#ff6f6f', 'close'],
+		'-1' => ['cancelled', 'Cancellato', '#ff6f6f', 'close'],
 		'0' => ['open', 'Non completato', '#ccc', 'pause'],
 		'1' => ['waiting-payment', 'Etichetta da fare', '#92e9ff', 'waiting'],
 		'2' => ['confirmed', 'Etichetta pronta', '#ffc677', 'correct'],

@@ -39,7 +39,7 @@ class orderstatusUpdate {
 				$info = 'Abbiamo aggiornato lo stato dell\'ordine. Il nuovo stato è:<br><span style="display: block; font-size: 25px; font-weight: bold; letter-spacing: .05em; text-align: center;">CONSEGNATO</span>';
 				break;
 
-			case 'canceled':
+			case 'cancelled':
 				$subject = $title = 'Ordine cancellato';
 				$info = '<span style="text-align: center;">Il suo ordine è stato cancellato.</span>';
 				break;

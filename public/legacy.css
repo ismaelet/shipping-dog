@@ -117,7 +117,7 @@
 	--secondary: hsl(var(--theme-h), var(--theme-s), 70%);
 	--wrap-outer-width: calc(var(--wrap-width) + var(--wrap-padding) * 2);
 
-	--status-color--canceled: #c94040;
+	--status-color--cancelled: #c94040;
 	--status-color--open: #ccc;
 	--status-color--waiting-payment: #80c6f5;
 	--status-color--confirmed-payment: #f7a128;
@@ -3932,8 +3932,8 @@ p strong {
 	* 1. General settings
 	*/
 
-.status-color--canceled {
-	--_color: var(--status-color--canceled);
+.status-color--cancelled {
+	--_color: var(--status-color--cancelled);
 }
 .status-color--open {
 	--_color: var(--status-color--open);
@@ -3953,8 +3953,8 @@ p strong {
 	--_color: var(--status-color--delivered);
 }
 
-.background-status-color--canceled {
-	background-color: var(--status-color--canceled);
+.background-status-color--cancelled {
+	background-color: var(--status-color--cancelled);
 }
 .background-status-color--open {
 	background-color: var(--status-color--open);

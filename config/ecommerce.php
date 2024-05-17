@@ -33,7 +33,7 @@ return [
 		],
 		'statuses' => [
 			'-1' => [
-				'tag' => 'canceled',
+				'tag' => 'cancelled',
 				'label' => 'Cancellato',
 				'color' => '#ff6f6f',
 				'icon' => 'close',

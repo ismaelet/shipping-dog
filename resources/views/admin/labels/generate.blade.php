@@ -78,6 +78,7 @@
 						:records="$orders"
 						:record-count="$orderCount"
 						:search-bar="false"
+						:buttons="$buttons"
 					/>
 
 					@session('error')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
+use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Order;
 use Illuminate\Http\RedirectResponse;
@@ -19,6 +20,30 @@ class OrderController extends Controller {
 				'title' => 'Ordine #' . $order->id,
 				'order' => $order,
 			]);
+	}
+
+	/**
+	 * * Action: Update
+	 */
+	public function update(Order $order, Request $request): RedirectResponse {
+		$request->validate([
+			'status' => 'integer',
+		]);
+
+		if ($request->has('status')) {
+			if ($request->status == EcommerceHelper::statusFromTag('cancelled')) {
+				$order->cancel();
+			} else if ($request->status == EcommerceHelper::statusFromTag('confirmed')) {
+				$order->confirm(false);
+			} else {
+				$order->update($request->only('status'));
+			}
+
+			$order->status = $request->status;
+			$order->save();
+		}
+
+		return redirect()->back();
 	}
 
 	/**

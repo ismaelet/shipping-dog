@@ -553,7 +553,7 @@ class Order extends Model {
 
 		// Update the order
 		$this->update([
-			'status' => EcommerceHelper::statusFromTag('canceled'),
+			'status' => EcommerceHelper::statusFromTag('cancelled'),
 		]);
 
 		// Send the status email

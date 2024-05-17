@@ -52,7 +52,7 @@ class OrderController extends Controller {
 	/**
 	 * Update the specified order
 	 */
-	public function update(Request $request, Order $order): OrderResource {
+	public function update(Order $order, Request $request): OrderResource {
 		$validated = $request->validate([
 			'shipping_method_id' => 'integer',
 		]);

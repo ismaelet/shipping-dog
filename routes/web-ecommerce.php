@@ -73,7 +73,7 @@ Route::prefix('cart')->middleware(Cart::class)->name('cart.')->group(function ()
  * * Order
  */
 // Order resource routes
-Route::resource('orders', OrderController::class)->middleware(OrderRecap::class)->only(['show', 'destroy']);
+Route::resource('orders', OrderController::class)->middleware(OrderRecap::class)->only(['show', 'update', 'destroy']);
 
 // Find an order
 Route::get('/orders/find', [OrderController::class, 'find'])->name('orders.find');
