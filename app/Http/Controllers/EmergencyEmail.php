@@ -9,15 +9,16 @@ use Illuminate\Support\Facades\Mail;
 class EmergencyEmail extends Controller {
 	public function sendEmail() {
 
-		$orders = Order::whereIn('id', [62998, 62990]);
+		$orders = Order::whereIn('id', [62765]);
 
 		$orders->each(function ($order) {
 			$subject = 'Pagamento ordine #0' . $order->id;
 			$full_name = $order->address->full_name;
 			$name = explode(' ', $full_name)[0] ?? '';
 
-			$content = 'Buongiorno ' . $name . ',<br>ricordiamo che il pagamento dell\'ordine #0' . $order->id . ' non è stato ancora effettuato.<br>Per favore, se intendi confermare l\'ordine provvedi al pagamento entro venerdì 17, altrimenti verrà cancellato. Puoi effettuare il pagamento direttamente dal tuo account o usando il link qui sotto.<br><br>
+			$content = 'Buongiorno ' . $name . ',<br>abbiamo visto che hai provato a completare il pagamento, ma non è andato a buon fine, putroppo l\'errore è collegato al fatto che il proprietario del negozio <strong>NEAPOLITAN FRESH MEMES</strong> ha rimosso uno dei prodotti che stavi cercando di acquistare. Abbiamo però risolto il problema ed ora è possibile acquistare anche prodotti rimossi, se già aggiunti al carrello, quindi se vuoi completare l\'acquisto puoi farlo tramite il link qui sotto:<br><br>
 				<a href="' . $order->recapUrlWithToken() . '">Riepilogo ordine</a><br><br>
+				Ci scusiamo nuovamente per i molteplici problemi riscontrati e auguriamo una buona giornata.<br><br>
 				<br><br>Grazie,<br>Lo staff di <strong>Shipping Dog</strong>';
 
 			$email = $order->address->email;

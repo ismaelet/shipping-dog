@@ -472,13 +472,18 @@ class Order extends Model {
 	 * @param bool $sendNotification
 	 * @return void
 	 */
-	public function confirm(bool $sendNotification = true): void {
+	public function confirm(bool $sendNotification = true, bool $updateDate = true): void {
 		// Forget the order ID
 		session()->forget('cart_id');
 
 		// Update the order
+		if ($updateDate) {
+			$this->update([
+				'created_at' => date('Y-m-d H:i:s'),
+			]);
+		}
+
 		$this->update([
-			'created_at' => date('Y-m-d H:i:s'),
 			'status' => EcommerceHelper::statusFromTag('confirmed'),
 		]);
 
@@ -504,12 +509,6 @@ class Order extends Model {
 		// Send the confirmation email
 		if ($sendNotification) {
 			Mail::to($this->address->email)->send(new OrderStatusMail($this));
-		}
-
-		// Transmit the order to the GLS service
-		if (in_array($this->shipping_method_id, ShippingMethod::shippingMethodsWithLabels())) {
-			$glsService = new GlsService();
-			$glsService->addParcel($this);
 		}
 	}
 

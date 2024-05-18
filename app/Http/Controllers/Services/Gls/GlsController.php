@@ -14,10 +14,16 @@ class GlsController extends Controller {
 
 		$orders = Order::whereIn('id', $request->orders)->get();
 		$orders->each(function ($order) use ($glsService) {
-			$response = $glsService->transmitParcel($order);
+			$response = $glsService->addParcel($order);
 
 			if (!$response) {
 				return back()->with('parcels_error', 'Errore durante la trasmissione dell\'ordine ' . $order->id);
+			}
+
+			$response = $glsService->transmitParcel($order);
+
+			if (!$response) {
+				return back()->with('parcels_error', 'Errore durante la conferma di trasmissione dell\'ordine ' . $order->id);
 			}
 		});
 

@@ -6,10 +6,15 @@ use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use stdClass;
 
 class GlsService {
+
+	private string $addParcelEndpoint = 'https://labelservice.gls-italy.com/ilswebservice.asmx/AddParcel';
+	private string $closeWorkDayByShipmentNumberEndpoint = 'https://labelservice.gls-italy.com/ilsWebService.asmx/CloseWorkDayByShipmentNumber';
+	private string $trackParcelEndpoint = 'https://infoweb.gls-italy.com/XML/get_xml_track.php';
 
 	/**
 	 * * Add Parcel
@@ -41,7 +46,6 @@ class GlsService {
 		$clientId = config('services.gls.client_id');
 		$clientPassword = config('services.gls.client_password');
 		$contractCode = config('services.gls.contract_code');
-		$endpoint = 'https://labelservice.gls-italy.com/ilsWebService.asmx/CloseWorkDayByShipmentNumber';
 
 		$shippingNumber = $order->tracking;
 		$address = $order->address;
@@ -91,7 +95,7 @@ class GlsService {
 		try {
 			$client = new Client();
 
-			$response = $client->request('POST', $endpoint, [
+			$response = $client->request('POST', $this->closeWorkDayByShipmentNumberEndpoint, [
 				'headers' => $headers,
 				'form_params' => $body
 			]);
@@ -113,6 +117,28 @@ class GlsService {
 	}
 
 	/**
+	 * * Track parcel
+	 */
+	public function trackParcel(Order $order): bool {
+		$headquarters = config('services.gls.headquarters');
+		$contractCode = config('services.gls.contract_code');
+
+		$response = Http::get($this->trackParcelEndpoint, [
+			'locpartenza' => $headquarters,
+			'NumSped' => $order->tracking,
+			'CodCli' => $contractCode,
+		]);
+
+		if ($response->successful()) {
+			$response->body();
+			dd($response->body());
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * ~ Helper: Send Request
 	 */
 	private function sendRequest(Order $order): stdClass|false {
@@ -120,7 +146,6 @@ class GlsService {
 		$clientId = config('services.gls.client_id');
 		$clientPassword = config('services.gls.client_password');
 		$contractCode = config('services.gls.contract_code');
-		$endpoint = 'https://labelservice.gls-italy.com/ilswebservice.asmx/AddParcel';
 
 		$address = $order->address;
 		$ragioneSociale = $address->full_name;
@@ -168,7 +193,7 @@ class GlsService {
 		try {
 			$client = new Client();
 
-			$response = $client->request('POST', $endpoint, [
+			$response = $client->request('POST', $this->addParcelEndpoint, [
 				'headers' => $headers,
 				'form_params' => $body
 			]);

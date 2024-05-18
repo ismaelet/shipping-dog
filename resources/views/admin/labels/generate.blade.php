@@ -43,6 +43,14 @@
 				form.submit();
 
 			});
+
+			document.querySelector('[data-select-all]').addEventListener('change', event => {
+				const checkboxes = document.querySelectorAll('.table-cell input[type="checkbox"]');
+
+				checkboxes.forEach(checkbox => {
+					checkbox.checked = event.target.checked;
+				});
+			});
 		});
 	</script>
 @endpushOnce
@@ -62,7 +70,7 @@
 					</x-form.group>
 				@endsession
 
-				<x-form.group>
+				<div class="grid grid-cols-1 gap-4">
 					<x-inputs.label>{{ $orderCount }} spedizioni da trasmettere</x-inputs.label>
 
 					@session('parcels_success')
@@ -72,6 +80,12 @@
 					@session('parcels_error')
 						<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
 					@endsession
+
+					<x-inputs.checkbox
+						text="Seleziona tutti"
+						checked
+						data-select-all
+					/>
 
 					<x-table
 						:columns="$columns"
@@ -84,7 +98,7 @@
 					@session('error')
 						<x-inputs.alert-error>{{ $value }}</x-inputs.alert-error>
 					@endsession
-				</x-form.group>
+				</div>
 
 				<div class="flex flex-wrap justify-center gap-4">
 					<form

@@ -199,10 +199,19 @@
 
 					<p>ID trasferenza: <span class="font-bold">{{ $record->token ?: 'nessuno' }}</span></p>
 
-					{{-- <div>
-                        <a href="edit-address?id={{ $record->address->id }}"
-                            class="btn button--small btn--secondary button--auto-width">Modifica</a>
-                    </div> --}}
+					<h3 class="">Link del pagamento</h3>
+					@if (EcommerceHelper::statusFromTag('received'))
+						<p
+							class="flex justify-between gap-4"
+							x-data
+							@click="navigator.clipboard.writeText('{{ $record->recapUrlWithToken() }}'); $dispatch('flash', {type: 'success', message: 'Link copiato negli appunti'});"
+						>
+							{{ $record->recapUrlWithToken() }}
+							<span class="hover:text-primary w-4 cursor-pointer transition-colors">
+								{!! embed_icon('copy') !!}
+							</span>
+						</p>
+					@endif
 				</x-dashboard.form.panel>
 			</div>
 		</div>
@@ -235,6 +244,18 @@
 					>
 						{!! embed_icon('back') !!}
 						Riapri il carrello
+					</x-inputs.button>
+				@endif
+
+				@if ($record->status >= EcommerceHelper::statusFromTag('label-ready'))
+					<x-inputs.button
+						type="submit"
+						variant="secondary"
+						name="new_status"
+						value="{{ EcommerceHelper::statusFromTag('confirmed') }}"
+					>
+						{!! embed_icon('back') !!}
+						Da trasmettere
 					</x-inputs.button>
 				@endif
 			</div>
@@ -273,7 +294,7 @@
 					value="{{ EcommerceHelper::statusFromTag('label-ready') }}"
 				>
 					{!! embed_icon('correct') !!}
-					Etichetta pronta
+					Etichetta trasmessa
 				</x-inputs.button>
 			@elseif ($record->status == EcommerceHelper::statusFromTag('label-ready'))
 				<x-inputs.button

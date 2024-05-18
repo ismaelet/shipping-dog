@@ -7,14 +7,25 @@
     'buttons',
 ])
 
+@php
+	$displayPagination = $recordCount > $records->count();
+@endphp
+
 @pushOnce('styles')
 	<style>
 		.table-container {
-			grid-template-areas:
+			grid-template-areas: @if ($searchBar)
 				"search-bar"
+			@endif
+			@if ($displayPagination)
 				"top-pagination"
-				"table"
-				"bottom-pagination";
+			@endif
+			"table"
+
+			@if ($displayPagination)
+				"bottom-pagination"
+			@endif
+			;
 
 			>form {
 				display: contents;
@@ -61,11 +72,13 @@
 			<x-table.search-bar />
 		@endif
 
-		{{-- Top pagination --}}
-		<x-pagination :$recordCount />
+		@if ($displayPagination)
+			{{-- Top pagination --}}
+			<x-pagination :$recordCount />
 
-		{{-- Bottom pagination --}}
-		<x-pagination :$recordCount />
+			{{-- Bottom pagination --}}
+			<x-pagination :$recordCount />
+		@endif
 	</form>
 
 	{{-- Table --}}
