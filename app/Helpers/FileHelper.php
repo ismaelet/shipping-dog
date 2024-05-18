@@ -115,9 +115,8 @@ class FileHelper {
 				break;
 
 			case 'crop':
-				list($newWidth, $newHeight) = $size;
-
-				$new_ratio = $newWidth / $newHeight;
+				$newWidth = $newHeight = $size;
+				$new_ratio = 1;
 
 				if ($ratio > $new_ratio) {
 					$srcWidth = $srcHeight * $new_ratio;
