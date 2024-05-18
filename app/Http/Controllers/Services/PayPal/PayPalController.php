@@ -291,7 +291,7 @@ class PayPalController extends Controller {
 
 		foreach ($order->order_items as $orderItem) {
 			$items[] = [
-				'name' => $orderItem->product->name,
+				'name' => $orderItem->product_with_trashed->name,
 				'unit_amount' => [
 					'currency_code' => 'EUR',
 					'value' => number_format($orderItem->price(), 2),

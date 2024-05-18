@@ -119,8 +119,8 @@ class OrderItem extends Model {
 	 */
 	public function name(): string {
 		$name = $this->quantity > 1 ? [$this->quantity . 'x'] : [];
-		$name[] = $this->product_with_trashed->name;
-		$name[] = $this->product ? null : '-articolo rimosso-';
+		$name[] = $this->product_with_trashed->name ?? '';
+		$name[] = !$this->product_with_trashed || $this->product_with_trashed->trashed() ? '-articolo rimosso-' :  null;
 
 		return implode(' ', array_filter($name));
 	}
@@ -157,11 +157,11 @@ class OrderItem extends Model {
 	 * @return string
 	 */
 	public function multilineDescription(): string {
-		if (!$this->product || !$this->product->status || $this->product->deleted) {
+		if (!$this->product_with_trashed) {
 			return 'Articolo rimosso';
 		}
 
-		$type = $this->product->type->name;
+		$type = $this->product_with_trashed->type->name;
 		$size = $this->size_id ? 'Taglia: ' . $this->size->name : null;
 		$color = $this->color_id ? 'Colore: ' . $this->color->name : null;
 		$position = $this->position_id > 1 ? $this->position->name : null;

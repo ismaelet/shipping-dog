@@ -64,6 +64,12 @@
 					puoi cancellare l'ordine se hai cambiato idea:
 				</p>
 
+				@session('error')
+					<x-inputs.alert-error>
+						{{ session('error') }}
+					</x-inputs.alert-error>
+				@endsession
+
 				<div class="flex flex-wrap justify-center gap-4">
 					<x-inputs.button
 						href="{{ $order->paymentUrl() }}"
@@ -162,7 +168,7 @@
 					@foreach ($order->order_items as $orderItem)
 						<div class="grid grid-cols-2 items-center gap-4 md:grid-cols-4">
 							<!--Image-->
-							@if ($orderItem->product)
+							@if ($orderItem->product_with_trashed)
 								<a
 									href="<?= $orderItem->product ? $orderItem->product->url() : '' ?>"
 									class="img_cont"
