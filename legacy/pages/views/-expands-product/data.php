@@ -446,14 +446,10 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 				<!-- Add to cart -->
 				<div class="mar-t-4">
 
-					<?php if (($product->status && !$product->deleted) || $owner) { ?>
-
-						<button type="submit" id="submit" class="add-to-cart btn button--full-width">
-							<?= embed_icon('cart') ?>
-							Aggiungi al carrello
-						</button>
-
-					<?php } ?>
+					<button type="submit" id="submit" class="add-to-cart btn button--full-width">
+						<?= embed_icon('cart') ?>
+						Aggiungi al carrello
+					</button>
 
 					<?php if (!$product->isCustom() && $product->blankProduct()) { ?>
 
