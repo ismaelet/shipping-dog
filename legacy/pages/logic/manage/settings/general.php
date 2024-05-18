@@ -3,7 +3,8 @@
 use Legacy\Classes\Ecommerce\Seller;
 
 $saved = $_GET['saved'] ?? false;
-$seller = new Seller(auth()->id());
+$seller = auth()->user()->seller;
+$legacySeller = new Seller(auth()->id());
 
 // get socials data
 $row_link = \Legacy\System\Classes\LegacyDB::row('* FROM links WHERE user_id = ?', [auth()->id()]);
@@ -16,49 +17,13 @@ if (isset($_POST['edit'])) {
 	$desc = trim($_POST['desc']);
 	echo $sort = $_POST['sort'];
 
-	if (empty($name)) $name = $seller->name;
+	if (empty($name)) $name = $legacySeller->name;
 
 	\Legacy\System\Classes\LegacyDB::update(Seller::TABLE . ' SET name = ?, description = ?, sort = ? WHERE ' . Seller::INDEX . ' = ?', [$name, $desc, $sort, auth()->id()]);
 
 	redirect_old();
 }
 
-// edit profile icon
-if (isset($_POST['edit-icon'])) {
-	$fileData = [
-		'url' => public_server_path('/uploads/users/icons/' . auth()->id()),
-		'size' => [200, 200],
-		'mode' => 'crop',
-	];
-
-	upload_img($fileData);
-
-	redirect_old();
-}
-
-// edit cover
-if (isset($_POST['edit-cover'])) {
-	// upload HD
-	$fileData = [
-		'url' => public_server_path('/uploads/shops/covers/' . auth()->id()),
-		'size' => 1920,
-		'mode' => 'width',
-	];
-
-	upload_img($fileData);
-
-	// upload LD
-	$fileData = [
-		'url' => public_server_path('/uploads/shops/covers/' . auth()->id() . '_m'),
-		'size' => 400,
-		'mode' => 'width',
-		'quality' => 80
-	];
-
-	upload_img($fileData);
-
-	redirect_old();
-}
 
 // edit socials
 if (isset($_POST['edit-socials'])) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Ecommerce\PaymentRequestController;
 use App\Http\Controllers\Ecommerce\SaleController;
 use App\Http\Controllers\EmergencyEmail;
 use App\Http\Controllers\LegacyController;
+use App\Http\Controllers\SellerDashboard\SellerDashboardController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Seller;
 use Illuminate\Support\Facades\Route;
@@ -43,8 +44,10 @@ Route::prefix('seller')->middleware(Seller::class)->name('seller.')->group(funct
 	Route::post('/payment/download', [PaymentRequestController::class, 'download'])->name('payment.download');
 });
 
-// !!! Working on
 Route::prefix('/seller-dashboard')->middleware(Seller::class)->name('seller-dashboard')->group(function () {
+	Route::post('{seller}/icon', [SellerDashboardController::class, 'uploadSellerIcon'])->name('.icon');
+	Route::post('{seller}/cover', [SellerDashboardController::class, 'uploadSellerCover'])->name('.cover');
+
 	Route::get('/sales', [SaleController::class, 'index'])->name('.sales');
 });
 

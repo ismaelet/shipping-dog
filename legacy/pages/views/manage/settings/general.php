@@ -8,10 +8,10 @@
 
 			<div class="grid gap1 pad-t-2">
 				<p class="lbl">Nome:</p>
-				<input type="text" class="input" name="name" placeholder="Nome del negozio" value="<?= $seller->name ?>" maxlength="50" required>
+				<input type="text" class="input" name="name" placeholder="Nome del negozio" value="<?= $legacySeller->name ?>" maxlength="50" required>
 
 				<p class="lbl">Descrizione (opzionale):</p>
-				<textarea class="textarea" name="desc" placeholder="Descrizione del negozio"><?= $seller->description ?></textarea>
+				<textarea class="textarea" name="desc" placeholder="Descrizione del negozio"><?= $legacySeller->description ?></textarea>
 			</div>
 
 			<div class="">
@@ -24,9 +24,9 @@
 				<p class="lbl inlb">:</p><br>
 
 				<select class="sel" name="sort">
-					<option value="1" <?php if ($seller->sort == 1) echo 'selected' ?>>Dal più venduto al meno</option>
-					<option value="2" <?php if ($seller->sort == 2) echo 'selected' ?>>Dal più recente al meno</option>
-					<option value="3" <?php if ($seller->sort == 3) echo 'selected' ?>>Ordine personalizzato</option>
+					<option value="1" <?php if ($legacySeller->sort == 1) echo 'selected' ?>>Dal più venduto al meno</option>
+					<option value="2" <?php if ($legacySeller->sort == 2) echo 'selected' ?>>Dal più recente al meno</option>
+					<option value="3" <?php if ($legacySeller->sort == 3) echo 'selected' ?>>Ordine personalizzato</option>
 				</select>
 			</div>
 		</div>
@@ -67,12 +67,12 @@
 	<h1 class="stitle br-c1">Immagini negozio</h1>
 
 	<!-- Profile icon -->
-	<form class="file-form text-center" method="POST" enctype="multipart/form-data">
+	<form class="file-form text-center" method="POST" enctype="multipart/form-data" action="<?= route('seller-dashboard.icon', $seller) ?>">
 
 		<p class="txt-12rem mar-v-2">Immagine di profilo:</p>
 
 		<div id="edit-icon" class="mar-h-auto">
-			<div class="bgr" <?= temp_bg($seller->icon) ?>></div>
+			<div class="bgr" <?= temp_bg($legacySeller->icon) ?>></div>
 		</div>
 
 		<p class="mar-t-1 img-txt mar-h-auto">L'immagine di profilo deve avere il lato minore di almeno <strong>150px x 150px</strong>. Questa immagine appare nella pagina del tuo negozio e nelle pagine dei tuoi articoli.</p>
@@ -84,23 +84,23 @@
 
 		<div class="file-load"></div>
 
-		<input type="file" name="file" class="hidden file-inp">
+		<input type="file" name="icon" class="hidden file-inp">
 		<button type="submit" name="edit-icon" class="hidden file-submit"></button>
 	</form>
 
 	<div class="line br-c1 mar-t-2"></div>
 
 	<!-- Cover image -->
-	<?php $no_cover = strpos($seller->cover[0], '0.jpg') ?>
+	<?php $no_cover = strpos($legacySeller->cover[0], '0.jpg') ?>
 
-	<form class="file-form text-center pad-b-2" method="POST" enctype="multipart/form-data">
+	<form class="file-form text-center pad-b-2" method="POST" enctype="multipart/form-data" action="<?= route('seller-dashboard.cover', $seller) ?>">
 
 		<p class="txt-12rem mar-v-2">Immagine di copertina:</p>
 
 		<?php if (!$no_cover) { ?>
 
 			<div id="edit-cover" class="bgr-c1">
-				<div id="edit-cover-img" class="bgr" <?= temp_bg($seller->cover(1024)) ?>></div>
+				<div id="edit-cover-img" class="bgr" <?= temp_bg($legacySeller->cover(1024)) ?>></div>
 				<div class="loading-icon bgr"></div>
 			</div>
 
@@ -115,7 +115,7 @@
 
 		<div class="file-load"></div>
 
-		<input type="file" name="file" class="hidden file-inp">
+		<input type="file" name="cover" class="hidden file-inp">
 		<button type="submit" name="edit-cover" class="hidden file-submit"></button>
 	</form>
 </div>
