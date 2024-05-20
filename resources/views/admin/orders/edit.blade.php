@@ -199,8 +199,8 @@
 
 					<p>ID trasferenza: <span class="font-bold">{{ $record->token ?: 'nessuno' }}</span></p>
 
-					<h3 class="">Link del pagamento</h3>
-					@if (EcommerceHelper::statusFromTag('received'))
+					@if ($record->status == EcommerceHelper::statusFromTag('received'))
+						<h3 class="">Link del pagamento</h3>
 						<p
 							class="flex justify-between gap-4"
 							x-data
@@ -220,8 +220,8 @@
 	{{-- Footer --}}
 	<x-slot name="footer">
 
-		<div class="flex w-full justify-between gap-4">
-			<div class="flex gap-4">
+		<div class="flex w-full flex-wrap justify-between gap-4">
+			<div class="flex flex-wrap gap-4">
 				@if ($record->status != EcommerceHelper::statusFromTag('cancelled'))
 					<x-inputs.button
 						type="submit"
@@ -235,15 +235,15 @@
 					</x-inputs.button>
 				@endif
 
-				@if ($record->status != EcommerceHelper::statusFromTag('open'))
+				@if (!in_array($record->status, [EcommerceHelper::statusFromTag('open'), EcommerceHelper::statusFromTag('received')]))
 					<x-inputs.button
 						type="submit"
 						variant="secondary"
 						name="new_status"
-						value="{{ EcommerceHelper::statusFromTag('open') }}"
+						value="{{ EcommerceHelper::statusFromTag('received') }}"
 					>
 						{!! embed_icon('back') !!}
-						Riapri il carrello
+						Imposta come ricevuto
 					</x-inputs.button>
 				@endif
 
