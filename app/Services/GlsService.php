@@ -6,6 +6,7 @@ use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use stdClass;
@@ -19,21 +20,27 @@ class GlsService {
 	/**
 	 * * Add Parcel
 	 */
-	public function addParcel(Order $order): bool {
-		$response = $this->sendRequest($order);
-		$shippingNumber = $response?->Parcel?->NumeroSpedizione;
+	public function addParcels(Collection $orders): bool {
+		// Set headers
+		$headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
 
-		if (!$shippingNumber) {
-			Log::error('Error adding a GLS parcel', ['Order' => $order->id, 'Response' => $response]);
+		// Set the body
+		$body = [
+			'XMLInfoParcel' => "<Info>
+				" . $this->payloadHeader() . "
+				" . $this->addParcelsData($orders) . "
+			</Info>"
+		];
 
+		// Send the request
+		$response = $this->sendRequest($this->addParcelEndpoint, $headers, $body);
+
+		if (!$response) {
 			return false;
 		}
 
-		$order->update([
-			'tracking' => $shippingNumber
-		]);
-
-		return true;
+		// Update the orders
+		return $this->updateOrdersAfterAdd($orders, $response);
 	}
 
 	/**
@@ -41,77 +48,27 @@ class GlsService {
 	 *	
 	 * CloseWorkDayByShipmentNumber in the GLS API
 	 */
-	public function transmitParcel(Order $order): bool {
-		$headquarters = config('services.gls.headquarters');
-		$clientId = config('services.gls.client_id');
-		$clientPassword = config('services.gls.client_password');
-		$contractCode = config('services.gls.contract_code');
-
-		$shippingNumber = $order->tracking;
-		$address = $order->address;
-		$ragioneSociale = $address->full_name;
-		$indirizzo = $address->address . ', ' . $address->number;
-		$localita = $address->city;
-		$zipCode = $address->zip;
-		$provincia = $address->region;
-		$email = $address->email;
-		$serviziAccessori = $address->exchange ? 24 : '';
-		$cellulare1 = $address->phone;
-
-		// XML payload to send to the API
-		$xmlPayload = "
-		<Info>
-            <SedeGls>$headquarters</SedeGls>
-            <CodiceClienteGls>$clientId</CodiceClienteGls>
-            <PasswordClienteGls>$clientPassword</PasswordClienteGls>
-            <Parcel>
-				<NumeroDiSpedizioneGLSDaConfermare>$shippingNumber</NumeroDiSpedizioneGLSDaConfermare>
-				<CodiceContrattoGls>$contractCode</CodiceContrattoGls>
-				<RagioneSociale>$ragioneSociale</RagioneSociale>
-				<Indirizzo>$indirizzo</Indirizzo>
-				<Localita>$localita</Localita>
-				<Zipcode>$zipCode</Zipcode>
-				<Provincia>$provincia</Provincia>
-				<Bda>0000000001</Bda>
-				<Colli>1</Colli>
-				<PesoReale>1</PesoReale>
-				<TipoCollo>0</TipoCollo>
-				<Email>$email</Email>
-				<Cellulare1>$cellulare1</Cellulare1>
-				<ServiziAccessori>$serviziAccessori</ServiziAccessori>
-			</Parcel>
-        </Info>
-		";
-
+	public function transmitParcels(Collection $orders): bool {
 		// Set headers
 		$headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
 
 		// Set body
 		$body = [
-			'_xmlRequest' => $xmlPayload
+			'_xmlRequest' => "<Info>
+			" . $this->payloadHeader() . "
+			" . $this->transmitParcelsData($orders) . "
+		</Info>"
 		];
 
 		// Send the request
-		try {
-			$client = new Client();
+		$response = $this->sendRequest($this->closeWorkDayByShipmentNumberEndpoint, $headers, $body);
 
-			$response = $client->request('POST', $this->closeWorkDayByShipmentNumberEndpoint, [
-				'headers' => $headers,
-				'form_params' => $body
-			]);
-
-			// Get response body
-			$response = simplexml_load_string($response->getBody()->getContents());
-			$response = json_encode($response);
-		} catch (Exception $e) {
-			Log::error('Error confirming a GLS shippment ', ['Order' => $order->id, 'Exception' => $e]);
-
+		if (!$response) {
 			return false;
 		}
 
-		$order->update([
-			'status' => EcommerceHelper::statusFromTag('label-ready'),
-		]);
+		// Update the orders
+		return $this->updateOrdersAfterTransmit($orders, $response);
 
 		return true;
 	}
@@ -141,28 +98,62 @@ class GlsService {
 	/**
 	 * ~ Helper: Send Request
 	 */
-	private function sendRequest(Order $order): stdClass|false {
+	private function sendRequest(string $endpoint, array $headers, array $body): stdClass|false {
+		try {
+			$client = new Client();
+
+			$response = $client->request('POST', $endpoint, [
+				'headers' => $headers,
+				'form_params' => $body
+			]);
+
+			// Get response body
+			$response = simplexml_load_string($response->getBody()->getContents());
+			$response = json_encode($response);
+
+			return json_decode($response);
+		} catch (Exception $e) {
+			Log::error('Error sending a request to GLS ', ['Exception' => $e]);
+
+			return false;
+		}
+	}
+
+	/**
+	 * ~ Helper: Payload Header 
+	 */
+	private function payloadHeader(): string {
 		$headquarters = config('services.gls.headquarters');
 		$clientId = config('services.gls.client_id');
 		$clientPassword = config('services.gls.client_password');
+
+		return "<SedeGls>$headquarters</SedeGls>
+		<CodiceClienteGls>$clientId</CodiceClienteGls>
+		<PasswordClienteGls>$clientPassword</PasswordClienteGls>";
+	}
+
+	/**
+	 * ~ Add Parcel Helper: Add Parcels Data
+	 */
+	private function addParcelsData(Collection $orders): string {
+
 		$contractCode = config('services.gls.contract_code');
 
-		$address = $order->address;
-		$ragioneSociale = $address->full_name;
-		$indirizzo = $address->address . ', ' . $address->number;
-		$localita = $address->city;
-		$zipCode = $address->zip;
-		$provincia = $address->region;
-		$email = $address->email;
-		$serviziAccessori = $address->exchange ? 24 : '';
-		$cellulare1 = $address->phone;
+		$parcelsXml = '';
 
-		// XML payload to send to the API
-		$xmlPayload = "
-        <Info>
-            <SedeGls>$headquarters</SedeGls>
-            <CodiceClienteGls>$clientId</CodiceClienteGls>
-            <PasswordClienteGls>$clientPassword</PasswordClienteGls>
+		$orders->each(function ($order) use (&$parcelsXml, $contractCode) {
+			$address = $order->address;
+			$ragioneSociale = $address->full_name;
+			$indirizzo = $address->address . ', ' . $address->number;
+			$localita = $address->city;
+			$zipCode = $address->zip;
+			$provincia = $address->region;
+			$email = $address->email;
+			$serviziAccessori = $address->exchange ? 24 : '';
+			$cellulare1 = $address->phone;
+
+			// XML payload to send to the API
+			$parcelsXml .= "
             <Parcel>
 				<CodiceContrattoGls>$contractCode</CodiceContrattoGls>
 				<RagioneSociale>$ragioneSociale</RagioneSociale>
@@ -178,35 +169,88 @@ class GlsService {
 				<Cellulare1>$cellulare1</Cellulare1>
 				<ServiziAccessori>$serviziAccessori</ServiziAccessori>
 			</Parcel>
-        </Info>
         ";
+		});
 
-		// Set headers
-		$headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
+		return $parcelsXml;
+	}
 
-		// Set body
-		$body = [
-			'XMLInfoParcel' => $xmlPayload
-		];
+	/**
+	 * ~ Add Parcel Helper: Update Order
+	 */
+	private function updateOrdersAfterAdd(Collection $orders, stdClass $response): bool {
+		foreach ($response->Parcel as $parcelKey => $parcel) {
+			$order = $orders[$parcelKey];
+			$shippingNumber = $parcel->NumeroSpedizione ?? null;
 
-		// Send the request
-		try {
-			$client = new Client();
+			if (!$shippingNumber) {
+				Log::error('Error adding a GLS parcel', ['Order' => $order->id, 'Response' => $response]);
 
-			$response = $client->request('POST', $this->addParcelEndpoint, [
-				'headers' => $headers,
-				'form_params' => $body
+				return false;
+			}
+
+			$order->update([
+				'tracking' => $shippingNumber
 			]);
-
-			// Get response body
-			$response = simplexml_load_string($response->getBody()->getContents());
-			$response = json_encode($response);
-		} catch (Exception $e) {
-			Log::error('Error sending a request to GLS ', ['Order' => $order->id, 'Exception' => $e]);
-
-			return false;
 		}
 
-		return json_decode($response);
+		return true;
+	}
+
+	/**
+	 * ~ Transmit Parcel Helper: Transmit Parcels Data
+	 */
+	private function transmitParcelsData(Collection $orders): string {
+		$contractCode = config('services.gls.contract_code');
+
+		$parcelsXml = '';
+
+		$orders->each(function ($order) use (&$parcelsXml, $contractCode) {
+			$shippingNumber = $order->tracking;
+			$address = $order->address;
+			$ragioneSociale = $address->full_name;
+			$indirizzo = $address->address . ', ' . $address->number;
+			$localita = $address->city;
+			$zipCode = $address->zip;
+			$provincia = $address->region;
+			$email = $address->email;
+			$serviziAccessori = $address->exchange ? 24 : '';
+			$cellulare1 = $address->phone;
+
+			// XML payload to send to the API
+			$parcelsXml .= "<Parcel>
+				<NumeroDiSpedizioneGLSDaConfermare>$shippingNumber</NumeroDiSpedizioneGLSDaConfermare>
+				<CodiceContrattoGls>$contractCode</CodiceContrattoGls>
+				<RagioneSociale>$ragioneSociale</RagioneSociale>
+				<Indirizzo>$indirizzo</Indirizzo>
+				<Localita>$localita</Localita>
+				<Zipcode>$zipCode</Zipcode>
+				<Provincia>$provincia</Provincia>
+				<Bda>0000000001</Bda>
+				<Colli>1</Colli>
+				<PesoReale>1</PesoReale>
+				<TipoCollo>0</TipoCollo>
+				<Email>$email</Email>
+				<Cellulare1>$cellulare1</Cellulare1>
+				<ServiziAccessori>$serviziAccessori</ServiziAccessori>
+			</Parcel>";
+		});
+
+		return $parcelsXml;
+	}
+
+	/**
+	 * ~ Transmit Parcel Helper: Update Orders
+	 */
+	private function updateOrdersAfterTransmit(Collection $orders, stdClass $response): bool {
+		foreach ($response->Parcel as $parcelKey => $parcel) {
+			$order = $orders[$parcelKey];
+
+			$order->update([
+				'status' => EcommerceHelper::statusFromTag('label-ready'),
+			]);
+		}
+
+		return true;
 	}
 }

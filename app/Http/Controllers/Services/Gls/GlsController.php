@@ -13,19 +13,17 @@ class GlsController extends Controller {
 	public function transmitParcels(Request $request, GlsService $glsService): RedirectResponse {
 
 		$orders = Order::whereIn('id', $request->orders)->get();
-		$orders->each(function ($order) use ($glsService) {
-			$response = $glsService->addParcel($order);
+		$response = $glsService->addParcels($orders);
 
-			if (!$response) {
-				return back()->with('parcels_error', 'Errore durante la trasmissione dell\'ordine ' . $order->id);
-			}
+		if (!$response) {
+			return back()->with('parcels_error', 'Errore durante la trasmissione degli ordini');
+		}
 
-			$response = $glsService->transmitParcel($order);
+		$response = $glsService->transmitParcels($orders);
 
-			if (!$response) {
-				return back()->with('parcels_error', 'Errore durante la conferma di trasmissione dell\'ordine ' . $order->id);
-			}
-		});
+		if (!$response) {
+			return back()->with('parcels_error', 'Errore durante la conferma di trasmissione degli ordini');
+		}
 
 		return back()->with('parcels_success', 'Spedizioni trasmesse correttamente');
 	}
