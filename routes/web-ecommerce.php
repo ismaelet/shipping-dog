@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\ProductTypeController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\OrderController;
 use App\Http\Controllers\Ecommerce\OrderItemController;
@@ -72,9 +71,9 @@ Route::prefix('cart')->middleware(Cart::class)->name('cart.')->group(function ()
 /**
  * * Order
  */
+// Find an order
+Route::get('orders/find', [OrderController::class, 'find'])->name('orders.find');
+
 // Order resource routes
 Route::resource('orders', OrderController::class)->middleware(OrderRecap::class)->only(['show', 'destroy']);
 Route::resource('orders', OrderController::class)->only(['update']);
-
-// Find an order
-Route::get('/orders/find', [OrderController::class, 'find'])->name('orders.find');

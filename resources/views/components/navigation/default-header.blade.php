@@ -79,7 +79,7 @@
 	$header['dropdowns']['info'] = [
 	    ['Contatti', 'contacts'],
 	    ['Cambio taglia o reso', 'refund'],
-	    ['Stato ordine', 'order_items.status'],
+	    ['Stato ordine', 'orders.find'],
 	    ['Domande frequenti', 'infos.faq'],
 	];
 

@@ -46,7 +46,7 @@ $header['dropdowns']['shop'] = [
 $header['dropdowns']['info'] = [
 	['Contatti', client_url('/contacts')],
 	['Cambio taglia o reso', client_url('/refund')],
-	['Stato ordine', client_url('/order/status')],
+	['Stato ordine', route('orders.find')],
 	['Domande frequenti', client_url('/infos/faq')],
 ];
 

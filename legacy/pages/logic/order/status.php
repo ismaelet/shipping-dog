@@ -2,6 +2,7 @@
 
 //setup page
 
+use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
 
 $error = false;
@@ -26,12 +27,12 @@ if (isset($_POST['submit'])) {
 	$order = Order::join('addresses', 'addresses.order_id', 'orders.id')
 		->where('orders.id', $id)
 		->where('email', $email)
-		->where('status', '!=', '0')
+		->where('status', '!=', EcommerceHelper::statusFromTag('open'))
 		->select('orders.*', 'addresses.email')
 		->first();
 
 	if ($order) {
-		redirect_old('/order?id=' . $order->id . '&email=' . $email);
+		redirect_old($order->recapUrlWithToken());
 	} else {
 		$error = 'no_match';
 	}
