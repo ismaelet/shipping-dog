@@ -76,23 +76,12 @@ class GlsService {
 	/**
 	 * * Track parcel
 	 */
-	public function trackParcel(Order $order): bool {
-		$headquarters = config('services.gls.headquarters');
-		$contractCode = config('services.gls.contract_code');
+	public function trackParcels(): void {
+		$orders = $this->trackParcelOrders();
 
-		$response = Http::get($this->trackParcelEndpoint, [
-			'locpartenza' => $headquarters,
-			'NumSped' => $order->tracking,
-			'CodCli' => $contractCode,
-		]);
-
-		if ($response->successful()) {
-			$response->body();
-			dd($response->body());
-			return true;
-		}
-
-		return false;
+		$orders->each(function ($order) {
+			$this->trackParcel($order);
+		});
 	}
 
 	/**
@@ -252,5 +241,66 @@ class GlsService {
 		}
 
 		return true;
+	}
+
+	/**
+	 * ~ Track Parcel Helper: Orders
+	 */
+	private function trackParcelOrders(): Collection {
+		return Order::whereIn('status', [EcommerceHelper::statusFromTag('label-ready'), EcommerceHelper::statusFromTag('shipped')])
+			->whereNotNull('tracking')
+			->get();
+	}
+
+	/**
+	 * ~ Track Parcel Helper: Track Parcel
+	 */
+	private function trackParcel(Order $order): bool {
+		$headquarters = config('services.gls.headquarters');
+		$contractCode = config('services.gls.contract_code');
+
+		$response = Http::get($this->trackParcelEndpoint, [
+			'locpartenza' => $headquarters,
+			'NumSped' => $order->tracking,
+			'CodCli' => $contractCode,
+		]);
+
+		if ($response->successful()) {
+			$response = $response->getBody()->getContents();
+
+			// If the order hasn't been shipped yet, stop here
+			if (strpos($response, 'Spedizione non trovata') !== false) {
+				return false;
+			}
+
+			// Get the status
+			$status = explode('<StatoSpedizione><![CDATA[', $response)[1] ?? '';
+			$status = explode(']]></StatoSpedizione>', $status)[0] ?? null;
+
+			// Handle errors
+			if (!$status) {
+				Log::error('Error tracking a GLS parcel', ['Order' => $order->id, 'Response' => $response]);
+
+				return false;
+			}
+
+			// Update the order status
+			switch ($status) {
+				case 'Non consegnato':
+					$order->update([
+						'status' => EcommerceHelper::statusFromTag('shipped'),
+					]);
+					break;
+				default:
+					Log::error('GLS parcel status not recognized', ['Order' => $order->id, 'Status' => $status]);
+					break;
+			}
+
+			return true;
+		}
+
+		Log::error('Error while sending a tracking request to GLS', ['Order' => $order->id, 'Response' => $response]);
+
+		return false;
 	}
 }
