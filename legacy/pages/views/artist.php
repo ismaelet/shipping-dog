@@ -50,7 +50,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 						<?php if (!empty($row_link['site'])) { ?>
 
 							<a href="<?= $row_link['site'] ?>" class="social icon-box fill-c1-h">
-								<?= embed_icon('contacts/website') ?>
+								<?= embed_icon('website') ?>
 							</a>
 
 						<?php } ?>
@@ -58,7 +58,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 						<?php if (!empty($row_link['instagram'])) { ?>
 
 							<a href="https://www.instagram.com/<?= $row_link['instagram'] ?>" class="social icon-box fill-c1-h">
-								<?= embed_icon('contacts/instagram') ?>
+								<?= embed_icon('instagram') ?>
 							</a>
 
 						<?php } ?>
@@ -66,7 +66,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 						<?php if (!empty($row_link['facebook'])) { ?>
 
 							<a href="https://www.facebook.com/<?= $row_link['facebook'] ?>" class="social icon-box fill-c1-h">
-								<?= embed_icon('contacts/facebook') ?>
+								<?= embed_icon('facebook') ?>
 							</a>
 
 						<?php } ?>
@@ -74,7 +74,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 						<?php if (!empty($row_link['twitter'])) { ?>
 
 							<a href="https://www.twitter.com/<?= $row_link['twitter'] ?>" class="social icon-box fill-c1-h">
-								<?= embed_icon('contacts/twitter') ?>
+								<?= embed_icon('twitter') ?>
 							</a>
 
 						<?php } ?>
@@ -82,7 +82,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 						<?php if (!empty($row_link['youtube'])) { ?>
 
 							<a href="https://www.youtube.com/<?= $row_link['youtube'] ?>" class="social icon-box fill-c1-h">
-								<?= embed_icon('contacts/youtube-full') ?>
+								<?= embed_icon('youtube-full') ?>
 							</a>
 
 						<?php } ?>

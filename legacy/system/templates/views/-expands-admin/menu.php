@@ -122,7 +122,7 @@ $navigationLogo = embed_icon(LOGO_DIR . 'logo', ['menu__logo']);
 
 			<!-- Mobile open menu icon -->
 			<div class="menu__open js-toggle-menu">
-				<?= embed_icon('navigation/arrow1-right') ?>
+				<?= embed_icon('arrow1-right') ?>
 			</div>
 		</div>
 	</div>

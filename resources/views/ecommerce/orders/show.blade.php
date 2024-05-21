@@ -22,7 +22,6 @@
 	</style>
 @endpushOnce
 
-
 <x-layouts.main>
 
 	<div class="bg-surface-500 full-width justify-items-center py-20 text-center">
@@ -58,7 +57,7 @@
 				<p class="text-center">
 					Siamo in attesa della conferma del pagamento. Se hai già pagato, per favore contattaci a <span
 						class="font-bold text-neutral-700"
-					><a href="{{ config('custom.social_media.email.url') }}">{{ config('custom.social_media.email.label') }}</a></span>
+					><a href="{{ config('custom.contacts.email.url') }}">{{ config('custom.contacts.email.label') }}</a></span>
 					e
 					provvederemo a sbloccare l'ordine.<br><br>Se invece non hai ancora completato il pagamento, puoi farlo qui, oppure
 					puoi cancellare l'ordine se hai cambiato idea:
@@ -97,13 +96,14 @@
 				EcommerceHelper::statusFromTag('shipped'),
 			]))
 			<p>
-				Il tuo ordine verrà spedito entro <span class="font-bold text-neutral-700">1-5 giorni lavorativi</span> dal momento
-				del pagamento.
+				Il tuo ordine verrà spedito entro <span
+					class="font-bold text-neutral-700">{{ $order->shipping_method->minimumWorkingDays($order->hasLongDelivery()) . '-' . $order->shipping_method->maximumWorkingDays($order->hasLongDelivery()) }}
+					giorni lavorativi</span> dal momento della conferma.
 				Riceverai una
 				email dal <span class="font-bold text-neutral-700">corriere GLS</span> con codice e istruzioni di <span
 					class="font-bold text-neutral-700"
 				>tracciamento</span> intorno alle
-				<span class="font-bold text-neutral-700">20:00</span> del giorno di spedizione. Abbiamo mandato una email di
+				<span class="font-bold text-neutral-700">20:00</span> del giorno di spedizione.<br><br>Abbiamo mandato una email di
 				conferma
 				al tuo indirizzo
 				email. Nel

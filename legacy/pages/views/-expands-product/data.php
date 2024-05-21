@@ -114,11 +114,11 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 								<?php if ($relatedGarmentCount > 3) { ?>
 
 									<div class="carousel-arrow left disabled" data-direction="left" data-tar="#type-slideC" style="--icon-size: 50%; color: #202020;">
-										<?= embed_icon('navigation/arrow-simple-left') ?>
+										<?= embed_icon('arrow-simple-left') ?>
 									</div>
 
 									<div class="carousel-arrow right" data-direction="right" data-tar="#type-slideC" style="--icon-size: 50%; color: #202020;">
-										<?= embed_icon('navigation/arrow-simple-right') ?>
+										<?= embed_icon('arrow-simple-right') ?>
 									</div>
 
 								<?php } ?>

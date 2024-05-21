@@ -508,7 +508,7 @@ class Order extends Model {
 
 		// Send the confirmation email
 		if ($sendNotification) {
-			Mail::to($this->address->email)->send(new OrderStatusMail($this));
+			$this->sendStatusEmail();
 		}
 	}
 
@@ -557,7 +557,7 @@ class Order extends Model {
 
 		// Send the status email
 		if ($sendNotification) {
-			Mail::to($this->address->email)->send(new OrderStatusMail($this));
+			$this->sendStatusEmail();
 		}
 
 		// Update the seller's earnings
@@ -567,6 +567,13 @@ class Order extends Model {
 				$orderItem->seller->updateCredit();
 			}
 		});
+	}
+
+	/**
+	 * Send the order's status email.
+	 */
+	public function sendStatusEmail(): void {
+		Mail::to($this->address->email)->queue(new OrderStatusMail($this));
 	}
 
 	/**

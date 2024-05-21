@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class FileHelper {
@@ -185,7 +186,26 @@ class FileHelper {
 	/**
 	 * Import an icon and embed it in the HTML
 	 */
-	public static function embedSvg(string $fileName, array $customClasses = [], bool $isIcon = false): ?string {
+	public static function embedSvg(string $fileName, array $customClasses = [], bool $isIcon = false): string {
+		$iconDefault = [
+			'rounded', 'filled', '400', 'icon'
+		];
+
+		// Replace dots with slashes
+		$fileName = str_replace('.', '/', $fileName);
+
+		// Add the default icon directories
+		if ($isIcon) {
+			$fileName = explode('/', $fileName);
+			$toFill = count($iconDefault) - count($fileName);
+
+			for ($i = 0; $i < $toFill; $i++) {
+				array_unshift($fileName, $iconDefault[$toFill - $i - 1]);
+			}
+
+			$fileName = implode('/', $fileName);
+		}
+
 		// Add the default class and any custom classes
 		$classes = implode(' ', ['icon-embed', ...$customClasses]);
 
@@ -193,13 +213,20 @@ class FileHelper {
 		$fileDirectory = $isIcon ? self::ICONS_PATH : self::SVG_PATH;
 		$filePath = base_path() . $fileDirectory . '/' . $fileName . '.svg';
 
-		// If the icon doesn't exist, return null
-		if (!file_exists($filePath)) return null;
-
 		// Get the icon content
-		$file = file_get_contents($filePath);
+		try {
+			$file = file_get_contents($filePath);
 
-		// Add the classes to the icon and return it
-		return str_replace('<svg', '<svg class="' . $classes . '"', $file);
+			// Add the classes to the icon and return it
+			return str_replace('<svg', '<svg class="' . $classes . '"', $file);
+		} catch (\Exception $e) {
+			if (env('APP_DEBUG')) {
+				dd('Icon not found: ' . $fileName . ')');
+			}
+
+			Log::error('Icon not found: ' . $fileName . ')');
+		}
+
+		return '';
 	}
 }

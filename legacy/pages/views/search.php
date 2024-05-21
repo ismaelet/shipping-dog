@@ -14,7 +14,7 @@
 
 		<div id="srch-btn-cell" class="">
 			<button type="submit" id="srch-btn" class="center-content">
-				<span class="icon txt-wht"><?= embed_icon('actions/search') ?></span>
+				<span class="icon txt-wht"><?= embed_icon('search') ?></span>
 			</button>
 		</div>
 	</form>

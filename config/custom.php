@@ -42,26 +42,26 @@ return [
 		],
 		'Contatti' => [
 			// ['label' => 'Contattaci', 'url' => 'contacts'],
-			['social_media' => 'email',],
-			['social_media' => 'phone',],
+			['contacts' => 'email',],
+			['contacts' => 'phone',],
 
 		],
 		'Seguici' => [
-			['social_media' => 'instagram', 'icon' => true],
-			['social_media' => 'facebook', 'icon' => true],
-			['social_media' => 'whatsapp', 'icon' => true],
+			['contacts' => 'instagram', 'icon' => true],
+			['contacts' => 'facebook', 'icon' => true],
+			['contacts' => 'whatsapp', 'icon' => true],
 		],
 	],
 
 	/*
     |--------------------------------------------------------------------------
-    | Social media
+    | Contacts
     |--------------------------------------------------------------------------
     |
     |
     */
 
-	'social_media' => [
+	'contacts' => [
 		'instagram' => ['url' => 'https://www.instagram.com/shipping.dog/', 'label' => '@shipping.dog',],
 		'facebook' => ['url' => 'https://www.facebook.com/shippingdog/', 'label' => '@shippingdog',],
 		'email' => ['url' => 'mailto:giebapromotion@gmail.com', 'label' => 'giebapromotion@gmail.com',],

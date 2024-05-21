@@ -1,5 +1,5 @@
 <x-pagination.page :$page>
-    <span class="h-1/3 aspect-square">
-        {!! embed_icon('navigation/skip-foreward', ['fill-none']) !!}
-    </span>
+	<span class="aspect-square h-1/3">
+		{!! embed_icon('skip-foreward', ['fill-none']) !!}
+	</span>
 </x-pagination.page>

@@ -27,7 +27,7 @@ function snippet_breadcrumbs($breadcrumbs) {
 	}
 
 	$snippet = '<p class="breadcrumbs">';
-	$snippet .= implode('<span class="breadcrumbs_arrow icon-box">' . embed_icon('navigation/arrow1-right') . '</span>', $snippetParts);
+	$snippet .= implode('<span class="breadcrumbs_arrow icon-box">' . embed_icon('arrow1-right') . '</span>', $snippetParts);
 	$snippet .= '</p>';
 
 	return $snippet;

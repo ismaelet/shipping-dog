@@ -317,7 +317,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 							<?php if ($product->status) { ?>
 
 								<button type="submit" name="off" class="btn off-btn switch-btn ">
-									<?= embed_icon('actions/add-bgr') ?>
+									<?= embed_icon('add-bgr') ?>
 									Attivo
 								</button>
 
@@ -329,7 +329,7 @@ use Legacy\Classes\Ecommerce\Product\Color as LegacyColor;
 							<?php } else { ?>
 
 								<button type="submit" name="on" class="btn btn--secondary on-btn switch-btn">
-									<?= embed_icon('actions/add-bgr') ?>
+									<?= embed_icon('add-bgr') ?>
 									Disattivato
 								</button>
 

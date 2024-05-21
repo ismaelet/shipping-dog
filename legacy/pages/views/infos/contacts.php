@@ -26,13 +26,13 @@
 
 				<section id="contacts" class="flex gap1 mar-t-1">
 					<a href="<?= sys_config('contact-whatsapp-link') ?>" class="soc-icon block icon-box fill-c1-h">
-						<?= embed_icon('contacts/whatsapp') ?>
+						<?= embed_icon('whatsapp') ?>
 					</a>
 					<a href="<?= sys_config('contact-instagram-link') ?>" class="soc-icon block icon-box fill-c1-h">
-						<?= embed_icon('contacts/instagram') ?>
+						<?= embed_icon('instagram') ?>
 					</a>
 					<a href="<?= sys_config('contact-facebook') ?>" class="soc-icon block icon-box fill-c1-h">
-						<?= embed_icon('contacts/facebook') ?>
+						<?= embed_icon('facebook') ?>
 					</a>
 				</section>
 

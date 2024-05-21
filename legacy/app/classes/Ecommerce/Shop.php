@@ -196,7 +196,7 @@ class Shop {
 
 				<p id="filter-text" onclick="$(this).toggleClass('open'); $(this).next().toggleClass('open');">
 					Filtra la ricerca
-					<span class="search-ddown-ico icon "><?= embed_icon('navigation/arrow-simple-down') ?></span>
+					<span class="search-ddown-ico icon "><?= embed_icon('arrow-simple-down') ?></span>
 				</p>
 
 				<div id="search-sec">
@@ -207,7 +207,7 @@ class Shop {
 
 								<input type="text" id="search-inp" class="" name="search" value="<?= $this->search ?>" placeholder="Cerca un prodotto" maxlength="30" onfocus="$(this).parent().addClass('focus');" onblur="$(this).parent().removeClass('focus');" autocomplete="off">
 
-								<button type="submit" id="search-ico" class="clickable icon"><?= embed_icon('actions/search') ?></button>
+								<button type="submit" id="search-ico" class="clickable icon"><?= embed_icon('search') ?></button>
 
 							</div>
 
@@ -222,7 +222,7 @@ class Shop {
 
 								<label class="gender-title-box" for="gender-cbx-m">
 									<p class="gender-title">
-										<span class="gender-ico icon"><?= embed_icon('navigation/arrow-simple-down') ?></span>
+										<span class="gender-ico icon"><?= embed_icon('arrow-simple-down') ?></span>
 										<span class="">Uomo</span>
 									</p>
 								</label>
@@ -253,7 +253,7 @@ class Shop {
 
 								<label class="gender-title-box" for="gender-cbx-f">
 									<p class="gender-title">
-										<span class="gender-ico icon "><?= embed_icon('navigation/arrow-simple-down') ?></span>
+										<span class="gender-ico icon "><?= embed_icon('arrow-simple-down') ?></span>
 										<span class="">Donna</span>
 									</p>
 								</label>
@@ -287,7 +287,7 @@ class Shop {
 
 								<label class="gender-title-box" for="gender-cbx-u">
 									<p class="gender-title">
-										<span class="gender-ico icon "><?= embed_icon('navigation/arrow-simple-down') ?></span>
+										<span class="gender-ico icon "><?= embed_icon('arrow-simple-down') ?></span>
 										<span class="">Accessori</span>
 									</p>
 								</label>

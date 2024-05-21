@@ -3,24 +3,27 @@
 @props(['title'])
 
 @php
-    $backRouteName = ArrayHelper::explodeLast('.', request()->route()->getName())[0] . '.index';
-    $backRouteParameters = request()->index_parameters ? json_decode(request()->index_parameters, true) : null;
-    $backRoute = Route::has($backRouteName)
-        ? ($backRouteParameters
-            ? route($backRouteName, $backRouteParameters)
-            : route($backRouteName))
-        : null;
-    $title = str_replace('Modifica:', '<span class=\'font-light\'>Modifica:</span> ', $title);
+	$backRouteName = ArrayHelper::explodeLast('.', request()->route()->getName())[0] . '.index';
+	$backRouteParameters = request()->index_parameters ? json_decode(request()->index_parameters, true) : null;
+	$backRoute = Route::has($backRouteName)
+	    ? ($backRouteParameters
+	        ? route($backRouteName, $backRouteParameters)
+	        : route($backRouteName))
+	    : null;
+	$title = str_replace('Modifica:', '<span class=\'font-light\'>Modifica:</span> ', $title);
 @endphp
 
-<div class="flex gap-4 items-center">
+<div class="flex items-center gap-4">
 
-    @if (Route::has($backRouteName))
-        <a class="border rounded w-10 aspect-square hover:text-neutral-700 transition-colors" href="{{ $backRoute }}">
-            {!! embed_icon('navigation/previous', ['fill-none', 'h-1/3']) !!}
-        </a>
-    @endif
+	@if (Route::has($backRouteName))
+		<a
+			class="aspect-square w-10 rounded border transition-colors hover:text-neutral-700"
+			href="{{ $backRoute }}"
+		>
+			{!! embed_icon('previous', ['fill-none', 'h-1/3']) !!}
+		</a>
+	@endif
 
-    <x-dashboard.typography.main-heading>{!! $title !!}</x-dashboard.typography.main-heading>
+	<x-dashboard.typography.main-heading>{!! $title !!}</x-dashboard.typography.main-heading>
 
 </div>

@@ -10,7 +10,7 @@
 
 				<div class="flex center-content">
 					<a href="<?= sys_config('contact-instagram-link') ?>" class="btn button--auto-width mar-t-2">
-						<?= embed_icon('contacts/instagram') ?>
+						<?= embed_icon('instagram') ?>
 						Seguici su Instagram
 					</a>
 				</div>

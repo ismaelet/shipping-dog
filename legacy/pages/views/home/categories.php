@@ -8,7 +8,7 @@
 
 				<div class="feature grid va-cen">
 					<div class="icon-box">
-						<?= embed_icon('home-categories/feature-' . ($key + 1)) ?>
+						<?= embed_icon('home_feature_' . ($key + 1)) ?>
 					</div>
 					<div class="body">
 						<p class="title"><?= $feature[0] ?></p>

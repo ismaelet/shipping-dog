@@ -7,7 +7,7 @@
 	<!-- Title -->
 	<div class="page-title flex gap05">
 		<a href="list" class="title-arrow icon-box center-items">
-			<?= embed_icon('navigation/arrow1-left') ?>
+			<?= embed_icon('arrow1-left') ?>
 		</a>
 		<h1 class="add_title"><?= $view->title ?></h1>
 	</div>

@@ -163,13 +163,13 @@
 
 				<ul class="flex flex-wrap">
 
-					@foreach (config('custom.social_media') as $socialMediaTag => $socialMedia)
+					@foreach (config('custom.contacts') as $socialMediaTag => $socialMedia)
 						<li>
 							<a
 								href="{{ $socialMedia['url'] }}"
 								class="footer-soc-icon surface-2 hover:bg-primary center-items hover:border-primary transition-colors hover:text-neutral-700"
 							>
-								<?= embed_icon('contacts/' . $socialMediaTag) ?>
+								<?= embed_icon('' . $socialMediaTag) ?>
 							</a>
 						</li>
 					@endforeach

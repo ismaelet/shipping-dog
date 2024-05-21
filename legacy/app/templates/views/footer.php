@@ -47,7 +47,7 @@
 						<?php if (in_array('instagram', $footer['contacts'])) { ?>
 							<a href="<?= sys_config('contact-instagram-link') ?>" class="footer-soc-icon bgr-c1-h center-items">
 								<div class="icon-box">
-									<?= embed_icon('contacts/instagram') ?>
+									<?= embed_icon('instagram') ?>
 								</div>
 							</a>
 						<?php } ?>
@@ -55,7 +55,7 @@
 						<?php if (in_array('facebook', $footer['contacts'])) { ?>
 							<a href="<?= sys_config('contact-facebook-link') ?>" class="footer-soc-icon bgr-c1-h center-items">
 								<div class="icon-box">
-									<?= embed_icon('contacts/facebook') ?>
+									<?= embed_icon('facebook') ?>
 								</div>
 							</a>
 						<?php } ?>
@@ -63,7 +63,7 @@
 						<?php if (in_array('email', $footer['contacts'])) { ?>
 							<a href="<?= sys_config('contact-email-link') ?>" class="footer-soc-icon bgr-c1-h center-items">
 								<div class="icon-box">
-									<?= embed_icon('contacts/email') ?>
+									<?= embed_icon('email') ?>
 								</div>
 							</a>
 						<?php } ?>

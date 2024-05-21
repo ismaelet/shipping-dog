@@ -78,7 +78,6 @@ class GlsService {
 	 */
 	public function trackParcels(): void {
 		$orders = $this->trackParcelOrders();
-
 		$orders->each(function ($order) {
 			$this->trackParcel($order);
 		});
@@ -290,13 +289,20 @@ class GlsService {
 					$order->update([
 						'status' => EcommerceHelper::statusFromTag('shipped'),
 					]);
-					break;
+					$order->sendStatusEmail();
+					return true;
+
+				case 'Consegnato':
+					$order->update([
+						'status' => EcommerceHelper::statusFromTag('delivered'),
+					]);
+					$order->sendStatusEmail();
+					return true;
+
 				default:
 					Log::error('GLS parcel status not recognized', ['Order' => $order->id, 'Status' => $status]);
-					break;
+					return false;
 			}
-
-			return true;
 		}
 
 		Log::error('Error while sending a tracking request to GLS', ['Order' => $order->id, 'Response' => $response]);
