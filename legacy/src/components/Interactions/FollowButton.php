@@ -12,9 +12,10 @@ $seller = Seller::find($seller_id);
 	<?php if ($seller) { ?>
 		<?php if (Auth::check()) {
 			if ($seller_id != Auth::id()) {
+				$followId = $seller->auth_follower?->id;
 		?>
 
-				<div class="follow-button" x-data="{ followed: <?= $seller->isFollowed() ? 'true' : 'false' ?> }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; followed ? storeFollower(<?= $seller_id ?>) : destroyFollower(<?= $seller->auth_follower->id ?? null ?>);">
+				<div class="follow-button" x-data="{ followed: <?= $followId ? 'true' : 'false' ?> }" :data-followed="followed ? 'true' : 'false'" @click="followed = !followed; followed ? storeFollower($event.target) : destroyFollow($event.target);" data-seller-id="<?= $seller_id ?>" data-follow-id="<?= $followId ?>">
 					<span>segui</span>
 					<span>seguendo</span>
 					<span>non seguire</span>
@@ -76,34 +77,47 @@ $seller = Seller::find($seller_id);
 </style>
 
 <script>
-	function storeFollower(sellerId) {
+	function storeFollower(target) {
+		const button = target.closest('[data-seller-id]');
+		const sellerId = button.dataset.sellerId;
+
 		axios.post('/api/followers', {
 				user_id: sellerId,
 				follower_id: <?= Auth::id() ?>
 			})
 			.then(response => {
 
-				<?php if (env('DEBUG')) { ?>
+				<?php if (env('APP_DEBUG')) { ?>
 					console.log(response.data);
 				<?php } ?>
 
+				const followId = response.data.follower.id;
+				button.dataset.followId = followId;
+
 			})
 			.catch(error => {
-				console.error(error);
+				<?php if (env('APP_DEBUG')) { ?>
+					console.error(error);
+				<?php } ?>
 			});
 	}
 
-	function destroyFollower(followerId) {
-		axios.delete(`/api/followers/${followerId}`)
+	function destroyFollow(target) {
+		const button = target.closest('[data-follow-id]');
+		const followId = button.dataset.followId;
+
+		axios.delete(`/api/followers/${followId}`)
 			.then(response => {
 
-				<?php if (env('DEBUG')) { ?>
+				<?php if (env('APP_DEBUG')) { ?>
 					console.log(response.data);
 				<?php } ?>
 
 			})
 			.catch(error => {
-				console.error(error);
+				<?php if (env('APP_DEBUG')) { ?>
+					console.error(error);
+				<?php } ?>
 			});
 	}
 </script>

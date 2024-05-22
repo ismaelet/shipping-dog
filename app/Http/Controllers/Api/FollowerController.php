@@ -19,13 +19,14 @@ class FollowerController extends Controller {
 		])->exists();
 
 		if (!$exists) {
-			Follower::create([
+			$follower = Follower::create([
 				'follower_id' => $request->follower_id,
 				'user_id' => $request->user_id,
 			]);
 
 			return response()->json([
-				'success' => true
+				'success' => true,
+				'follower' => $follower->toArray(),
 			]);
 		}
 
