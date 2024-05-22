@@ -197,7 +197,7 @@
 
 										@foreach ($mergedorder_items as $orderItemDescription => $quantity)
 											<a
-												href="{{ $orderItem->product->fullUrl($orderItem->color_id, $orderItem->position_id) }}"
+												href="{{ $orderItem->product_with_trashed->fullUrl($orderItem->color_id, $orderItem->position_id) }}"
 												target="_bank"
 												class="js-to-copy"
 											>
@@ -247,9 +247,13 @@
 								@php
 									$orderItemDescription = [];
 									$orderItemDescription[] =
-									    $orderItem->size && $orderItem->product->type->sizes->count() > 1 ? $orderItem->size->name : null;
+									    $orderItem->size && $orderItem->product_with_trashed->type->sizes->count() > 1
+									        ? $orderItem->size->name
+									        : null;
 									$orderItemDescription[] =
-									    $orderItem->color && $orderItem->product->type->colors->count() > 1 ? $orderItem->color->name : null;
+									    $orderItem->color && $orderItem->product_with_trashed->type->colors->count() > 1
+									        ? $orderItem->color->name
+									        : null;
 									$orderItemDescription = implode(' ', array_filter($orderItemDescription)) ?: 'Prodotto standard';
 
 									if (isset($mergedorder_items[$orderItemDescription])) {

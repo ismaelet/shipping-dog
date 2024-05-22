@@ -33,7 +33,7 @@ class ProductLogController extends Controller {
 				->where('orders.status', '>', EcommerceHelper::statusFromTag('received'))
 				->where('orders.created_at', '>=', $startFromTime)
 				->select('orders.id as order_id', 'orders.created_at as confirmedTime', 'order_items.*', 'stores.name as storeName', 'addresses.full_name as customerName', 'products.name as productName', 'product_types.name as productTypeName')
-				->with('color', 'size', 'position', 'logo', 'product', 'product.type', 'product.type.colors', 'product.type.sizes')
+				->with('color', 'size', 'position', 'logo', 'product_with_trashed', 'product_with_trashed.type', 'product_with_trashed.type.colors', 'product_with_trashed.type.sizes')
 				->get();
 
 			// Get the first cart
