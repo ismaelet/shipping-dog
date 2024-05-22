@@ -2,10 +2,14 @@
 
 use Legacy\View\View;
 
+$colorScheme = (isset($_COOKIE['color-scheme']) && in_array($_COOKIE['color-scheme'], ['light', 'dark'])
+	? $_COOKIE['color-scheme']
+	: config('custom.meta_data.default_color_scheme'));
+
 ?>
 
 <!doctype html>
-<html class="legacy-website" data-color-scheme="<?= $_SESSION['color-scheme'] ?>" data-theme-fluid="<?= empty(sys_config('theme-fluid')) ? 0 : 1 ?>" data-client-root="<?= CLIENT_ROOT ?>">
+<html class="legacy-website" data-color-scheme="<?= $colorScheme ?>" data-theme-fluid="<?= empty(sys_config('theme-fluid')) ? 0 : 1 ?>" data-client-root="/legacy">
 
 <head>
 	<meta charset="utf-8">

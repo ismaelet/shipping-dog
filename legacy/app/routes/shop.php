@@ -9,10 +9,14 @@
 });
 
 // item
-\Legacy\System\Classes\LegacyRoute::add(['/shop/item', '/item', '/shop/products/*'], function () {
-	\Legacy\System\Classes\LegacyView::setPage('product');
-	\Legacy\System\Classes\LegacyView::$location = 'shop';
-	\Legacy\System\Classes\LegacyView::show();
+\Legacy\System\Classes\LegacyRoute::add(['/shop/item', '/item'], function () {
+	$id = request()->id;
+
+	if ($id) {
+		redirect_old(route('products.show', $id));
+	}
+
+	redirect_old(route('shop'));
 });
 
 // promotions

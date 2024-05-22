@@ -4,12 +4,6 @@
  * Urls
  */
 
-function client_path(string $file = '') {
-	$url = asset('' . file_time(generate_base_url($file)));
-
-	return $url;
-}
-
 function public_client_path(string $file = '') {
 	if (defined('PUBLIC_CLIENT_ROOT')) {
 		$url = PUBLIC_CLIENT_ROOT . file_time(generate_base_url($file));
@@ -28,20 +22,6 @@ function public_server_directory(string $path = '') {
 	}
 
 	return $url;
-}
-
-/*
-* Links
-*/
-function new_url(string $parcialUrl = '') {
-	return $parcialUrl;
-}
-
-// avoid cache if the chached file is not up to date
-function file_time($file) {
-	if (!strpos($file, '?=') && file_exists($url = SERVER_ROOT . $file)) $file .= '?=' . filemtime($url);
-
-	return $file;
 }
 
 // put the image as background image
@@ -141,13 +121,6 @@ function scans($path, $ext = '*') {
 	foreach (glob(SERVER_ROOT . $path . '/*', GLOB_ONLYDIR) as $dir) array_push($files, ...scan($dir, $ext));
 
 	return $files;
-}
-
-// inlcude a file if it exits
-function try_include(string $filePath) {
-	if (file_exists($filePath)) {
-		include($filePath);
-	}
 }
 
 // get the server root

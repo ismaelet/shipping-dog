@@ -300,8 +300,6 @@ class Product extends Model {
 	}
 
 	public function fullUrl(?int $color_id = null, ?int $position_id = null): string {
-		$parameters = ['id' => $this->id];
-
 		if ($color_id) {
 			$parameters['color_id'] = $color_id;
 		}
@@ -310,8 +308,7 @@ class Product extends Model {
 			$parameters['position_id'] = $position_id;
 		}
 
-		return env('APP_ENV') == 'local' ? $this->url() . '?' . http_build_query($parameters)
-			: '/shop/item?' . http_build_query($parameters);;
+		return route('products.show', [$this, ...$parameters]);
 	}
 
 	/**

@@ -6,6 +6,38 @@ function client_url(string $parcialUrl = '') {
 	return $parcialUrl;
 }
 
+function client_path(string $file = '') {
+	$url = asset('' . file_time(generate_base_url($file)));
+	return $url;
+}
+
+function file_time($file) {
+	if (!strpos($file, '?=') && file_exists($url = base_path() . '/legacy' . $file)) $file .= '?=' . filemtime($url);
+
+	return $file;
+}
+
+function try_include(string $filePath) {
+	if (file_exists($filePath)) {
+		include($filePath);
+	}
+}
+
+function sort_subvalue(&$array, $key) {
+	usort($array, function ($a, $b) use ($key) {
+		return $a[$key] <=> $b[$key];
+	});
+}
+
+function new_url(string $parcialUrl = '') {
+	return $parcialUrl;
+}
+
+function explode_last_legacy($separator, $string) {
+	$array = explode($separator, $string);
+	return end($array);
+}
+
 function redirect_old($path = false) {
 	if (empty($path)) {
 		$url = $_SERVER['REQUEST_URI'];

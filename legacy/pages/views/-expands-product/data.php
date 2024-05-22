@@ -6,7 +6,7 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 ?>
 
-<div class="main-wrap pad-t-3 item-type--<?= $product->type->tag ?>" id="item" data-id="<?= $product->id ?>" data-hroot="<?= CLIENT_ROOT ?>">
+<div class="main-wrap pad-t-3 item-type--<?= $product->type->tag ?>" id="item" data-id="<?= $product->id ?>" data-hroot="/legacy">
 
 	<!-- Warning -->
 	<?php

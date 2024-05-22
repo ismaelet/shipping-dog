@@ -1,56 +1,12 @@
 <?php
 
-use App\Helpers\ArrayHelper;
 use App\Models\Ecommerce\Product;
-use Legacy\System\Classes\LegacyView;
-
-/**
- * ? Legacy support
- */
-$id = $_GET['id'] ?? null;
-
-/**
- * * Request data
- */
-$slug = ArrayHelper::explodeLast('/', request()->url())[1] ?? null;
-$slugId = explode('-', $slug)[0] ?? null;
-$id = $id ?: (int) $slugId;
 
 /**
  * * Fetch the record
  */
-$product = Product::with('design', 'seller', 'seller.prices', 'type', 'type.colors', 'type.sizes', 'type.measures', 'specific_price', 'base_price');
-
-if (is_admin()) {
-	$product = $product->withTrashed();
-}
-
-$product = $product->find($id);
-$seller = $product?->seller;
-
-/**
- * * Redirect to the shop when the product should not be displayed
- */
-// Redirect to the shop it the product or seller was not found
-if (!$product || !$seller) {
-	redirect_old('/shop');
-}
-
-// Redirect to the shop if the seller is not active and the user is not the seller or an admin
-if (!$seller->status && !$product->isUserOwner && !is_admin()) {
-	redirect_old('/shop');
-}
-
-/**
- * * Set the product position and color
- */
-if (request()->color_id) {
-	$product->color_id = request()->color_id;
-}
-
-if (request()->position_id) {
-	$product->position_id = request()->position_id;
-}
+$product = request()->product;
+$seller = $product->seller;
 
 /*
 * Related products
@@ -104,12 +60,6 @@ if ($relatedProducts->count() < 8) {
 
 	$relatedProducts = $relatedProducts->merge($moreRelatedProducts);
 }
-
-/**
- * * Set the page meta data
- */
-LegacyView::setThumbnail($product->image(1024))
-	->setTitle($product->name);
 
 /**
  * * Product data

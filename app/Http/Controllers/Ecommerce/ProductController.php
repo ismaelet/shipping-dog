@@ -12,14 +12,33 @@ class ProductController extends Controller {
 	/**
 	 * * Action: show
 	 */
-	public function show(Product $product, Request $request): RedirectResponse {
-		if ($product->trashed() && !is_admin()) {
+	public function show(Product $product, Request $request) {
+		if (
+			!$product?->id ||
+			!$product?->seller ||
+			($product->trashed() && !is_admin()) ||
+			($product->status == 0 && !$product->userIsOwner() && !is_admin())
+		) {
 			return redirect()->route('shop');
 		}
 
-		$parameters = http_build_query($request->all());
+		if ($request->color_id) {
+			$product->color_id = $request->color_id;
+		}
 
-		redirect_old('/shop/products/' . $product->slug() . '?' . $parameters);
+		if ($request->position_id) {
+			$product->position_id = $request->position_id;
+		}
+
+		$request->merge([
+			'product' => $product,
+		]);
+
+		\Legacy\System\Classes\LegacyView::setPage('product')
+			->setLocation('shop')
+			->setThumbnail($product->image(1024))
+			->setTitle($product->name)
+			->show();
 	}
 
 	/**

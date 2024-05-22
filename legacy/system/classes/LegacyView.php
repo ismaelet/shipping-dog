@@ -116,7 +116,7 @@ class LegacyView {
 
 		// set basic data
 		if (!self::$location) self::$location = self::$name;
-		if (!self::$url) self::$url = SERVER_ROOT . '/pages/views/' . self::$name . '.php';
+		if (!self::$url) self::$url = base_path() . '/legacy/pages/views/' . self::$name . '.php';
 
 		// load the middlewares
 		MiddlewareLoader::__constructStatic();

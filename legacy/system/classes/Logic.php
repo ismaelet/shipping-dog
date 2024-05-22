@@ -27,12 +27,12 @@ class Logic {
 
 		switch ($type) {
 			case 'template':
-				if (file_exists($fetchingFile = SERVER_ROOT . '/app/templates/logic/' . $fileName . '.php')) $file = $fetchingFile;
-				else if (file_exists($fetchingFile = SERVER_ROOT . '/system/templates/logic/' . $fileName . '.php')) $file = $fetchingFile;
+				if (file_exists($fetchingFile = base_path() . '/legacy/app/templates/logic/' . $fileName . '.php')) $file = $fetchingFile;
+				else if (file_exists($fetchingFile = base_path() . '/legacy/system/templates/logic/' . $fileName . '.php')) $file = $fetchingFile;
 				if (!$priority) $priority = self::$priorities[$fileName] ?? 50;
 				break;
 			case 'page':
-				if (file_exists($fetchingFile = SERVER_ROOT . '/pages/logic/' . $fileName . '.php')) $file = $fetchingFile;
+				if (file_exists($fetchingFile = base_path() . '/legacy/pages/logic/' . $fileName . '.php')) $file = $fetchingFile;
 				if (!$priority) $priority = 150;
 				break;
 			case 'static':
