@@ -17,11 +17,6 @@
 	gap: 1rem;
 }
 
-.address-form--local-delivery .field:has(.delivery-input),
-.address-form--local-delivery .delivery-input {
-	display: none;
-}
-
 /*CODE SECTION*/
 #code_cont {
 	margin-top: 10px;

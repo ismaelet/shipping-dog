@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function () {
 	const recapShippingElement = document.querySelector('.js-recap-shipping-price')
 	const shippingCheckboxes = document.querySelectorAll('.js-shipping-method')
+	const shippingFields = document.querySelectorAll('[data-shipping-field]')
 
 	shippingCheckboxes.forEach((element) => {
 		element.addEventListener('change', async () => {
@@ -11,6 +12,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 			const orderId = element.dataset.cartId
 
 			update_cart(orderId, { shipping_method_id: shippingMethodId })
+
+			if (shippingMethodId == '11') {
+				shippingFields.forEach((field) => {
+					field.classList.add('hidden')
+					field.querySelector('input').required = false
+				})
+			} else {
+				shippingFields.forEach((field) => {
+					field.classList.remove('hidden')
+					field.querySelector('input').required = true
+				})
+			}
 		})
 	})
 })

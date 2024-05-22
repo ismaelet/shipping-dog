@@ -96,19 +96,27 @@ use Legacy\View\Components\Form\Input;
 				<section id="address" class="address-form <?= cart()->shipping_method->isLocalDelivery() ? 'address-form--local-delivery' : '' ?>">
 					<h3 class="title">Indirizzo</h3>
 
+					<?php if ($error == 'address') { ?>
+						<p class="text-error">* tutti campi sono necessari</p>
+					<?php } ?>
+
 					<div class="grid gap1">
 
 						<?= Input::render(['name' => 'full_name', 'placeholder' => 'Nominativo di spedizione', 'value' => $address->full_name ?? '', 'required' => true, 'trim' => true]) ?>
 
-						<div class="field">
+						<div class="field <?= cart()->shipping_method->isLocalDelivery() ? 'hidden' : '' ?>" data-shipping-field>
 							<input type="text" id="inp_addr" class="input delivery-input" name="address" placeholder="Indirizzo" value="<?= $address->address ?? '' ?>" maxlength="30" autocomplete="address-line1" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
+
 							<input type="text" id="inp_num" class="input delivery-input" name="number" placeholder="Numero civico" value="<?= $address->number ?? '' ?>" maxlength="10" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
 						</div>
 
-						<input type="text" class="input delivery-input" name="city" placeholder="Città" value="<?= $address->city ?? '' ?>" maxlength="30" autocomplete="address-level2" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
+						<div data-shipping-field class="<?= cart()->shipping_method->isLocalDelivery() ? 'hidden' : '' ?>">
+							<input type="text" class="input delivery-input" name="city" placeholder="Città" value="<?= $address->city ?? '' ?>" maxlength="30" autocomplete="address-level2" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
+						</div>
 
-						<div class="field">
+						<div class="field <?= cart()->shipping_method->isLocalDelivery() ? 'hidden' : '' ?>" data-shipping-field>
 							<input type="text" class="input delivery-input" name="zip" placeholder="Codice postale" value="<?= trim($address->zip ?? '') ?>" maxlength="5" autocomplete="postal-code" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
+
 							<input type="text" class="input delivery-input" name="region" placeholder="Provincia" value="<?= $address->region ?? '' ?>" maxlength="2" autocomplete="address-level1" <?= !cart()->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
 						</div>
 

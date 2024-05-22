@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\Services\PayPal\PayPalController;
 use App\Models\Ecommerce\Address;
-use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\OrderItem;
 use App\Models\Ecommerce\ShippingMethod;
 use Legacy\Classes\Ecommerce\Coupon;
@@ -53,6 +51,13 @@ if (!empty($_POST)) {
 	$email = strtolower(trim($_POST['email']));
 	$phone = trim($_POST['phone']);
 	$security = random_string();
+
+	if (
+		!$full_name || !$email || !$phone ||
+		($cart->shipping_method_id != 11 && (!$addr || !$num || !$zip || !$city || !$reg))
+	) {
+		redirect_old('?error=address');
+	}
 
 	Address::updateOrCreate([
 		'order_id' => $cart->id,
