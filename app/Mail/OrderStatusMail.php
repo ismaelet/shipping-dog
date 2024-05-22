@@ -16,8 +16,8 @@ class OrderStatusMail extends Mailable {
 
 	use Queueable, SerializesModels;
 
+	public $subject;
 	public Order $order;
-	public string $subject;
 
 	/**
 	 * Create a new message instance
