@@ -52,11 +52,11 @@ Route::resource('/logos', LogoController::class)->only(['show']);
 Route::resource('/orders', OrderController::class)->only(['index', 'show', 'update']);
 
 /**
- * Likes
+ * * Likes
  */
 Route::resource('/likes', LikeController::class)->only(['store', 'destroy']);
 
 /**
- * Followers
+ * * Followers
  */
 Route::resource('/followers', FollowerController::class)->only(['store', 'destroy']);
