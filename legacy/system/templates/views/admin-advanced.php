@@ -7,7 +7,7 @@
 	<!-- Title -->
 	<div class="page-title flex-group" data-spacing="200">
 		<a href="list" class="title-arrow border border-radius">
-			<?= embed_icon('arrow1-left') ?>
+			<?= embed_icon('arrow-simple-left') ?>
 		</a>
 		<h1 class="add_title"><?= \Legacy\System\Classes\LegacyView::$title ?></h1>
 	</div>

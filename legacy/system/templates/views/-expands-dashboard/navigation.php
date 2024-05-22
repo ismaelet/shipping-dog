@@ -75,7 +75,7 @@
 
 		<!-- Mobile open menu icon -->
 		<div id="open-menu" class="icon-box">
-			<?= embed_icon('arrow1-right') ?>
+			<?= embed_icon('arrow-simple-right') ?>
 		</div>
 	</div>
 </section>

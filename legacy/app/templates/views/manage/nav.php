@@ -42,7 +42,7 @@
 									<p class="nav-title no-trans"><?= $category['title'] ?></p>
 
 									<span class="nav-ddown-ico icon-box no-trans">
-										<?= embed_icon('arrow1-down') ?>
+										<?= embed_icon('arrow-simple-down') ?>
 									</span>
 
 								</div>

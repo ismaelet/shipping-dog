@@ -1069,10 +1069,10 @@ main {
 }
 
 .carousel-arrow.left .icon {
-	background-image: url(../svg/icons/navigation/arrow1-left.svg);
+	background-image: url(../svg/icons/navigation/arrow-simple-left.svg);
 }
 .carousel-arrow.right .icon {
-	background-image: url(../svg/icons/navigation/arrow1-right.svg);
+	background-image: url(../svg/icons/navigation/arrow-simple-right.svg);
 }
 
 .carousel-dots {
@@ -3110,10 +3110,10 @@ p {
 }
 
 .carousel-arrow.left .icon {
-	background-image: url(../svg/icons/navigation/arrow1-left.svg);
+	background-image: url(../svg/icons/navigation/arrow-simple-left.svg);
 }
 .carousel-arrow.right .icon {
-	background-image: url(../svg/icons/navigation/arrow1-right.svg);
+	background-image: url(../svg/icons/navigation/arrow-simple-right.svg);
 }
 
 .carousel-dots {
