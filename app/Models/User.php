@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Seller;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -15,9 +16,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
- * @method mixed isAdmin()
+ * User class
  */
-class User extends Authenticatable {
+class User extends Authenticatable implements FilamentUser, HasAvatar {
 
 	use HasApiTokens, HasFactory, Notifiable;
 
@@ -93,6 +94,14 @@ class User extends Authenticatable {
 	 */
 	public function isSeller(): bool {
 		return (bool) $this->seller;
+	}
+
+	public function canAccessPanel(Panel $panel): bool {
+		return $this->isAdmin();
+	}
+
+	public function getFilamentAvatarUrl(): ?string {
+		return public_asset($this->icon());
 	}
 
 	//! Legacy support

@@ -1,4 +1,4 @@
-<x-templates.empty>
+<x-layouts.empty>
 	<div
 		class="stack-content grid"
 		data-local-color-scheme="dark"
@@ -19,4 +19,4 @@
 			</x-inputs.button>
 		</div>
 	</div>
-</x-templates.empty>
+</x-layouts.empty>

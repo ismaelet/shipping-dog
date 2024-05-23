@@ -1,0 +1,63 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+@import '../../base.css';
+@import '../../custom.css';
+
+@config 'tailwind.config.js';
+
+:root {
+	--border-radius-900: 1rem;
+}
+
+/* Color: Background */
+.dark\:bg-gray-900 {
+	background-color: var(--color-background) !important;
+}
+
+.dark\:bg-gray-950 {
+	background-color: var(--color-background) !important;
+}
+
+/* Font: Size */
+.fi-sidebar-item-label {
+	font-size: var(--font-size-400);
+}
+
+/* Font: Weight */
+.fi-sidebar-group-label,
+.fi-sidebar-item-label {
+	font-weight: var(--font-weight-regular);
+}
+
+.fi-logo,
+.fi-header-heading {
+	font-weight: var(--font-weight-medium);
+}
+
+/* Icons */
+.fi-sidebar-item-icon {
+	width: 1.125rem;
+	height: 1.125rem;
+}
+
+/* Navigation Items */
+.fi-sidebar-nav,
+.fi-sidebar-header {
+	padding-inline: 2.5rem;
+}
+
+.fi-sidebar-item-button {
+	width: fit-content;
+}
+
+.fi-sidebar-item-button.dark\:hover\:bg-white\/5:is(.dark *) {
+	color: var(--color-neutral-400);
+	background-color: transparent !important;
+
+	* {
+		color: inherit;
+	}
+
+	&:hover {
+		color: var(--color-neutral-700);
+	}
+}

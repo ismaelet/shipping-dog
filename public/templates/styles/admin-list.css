@@ -48,8 +48,8 @@
 	--icon-size: 1.25rem;
 }
 
-.search-bar .icon-embed:hover,
-.search-bar.active .search-bar__icon--search .icon-embed {
+.search-bar .svg-icon:hover,
+.search-bar.active .search-bar__icon--search .svg-icon {
 	fill: var(--color-primary-400);
 }
 

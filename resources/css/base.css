@@ -207,7 +207,7 @@
 * 4. Components
 */
 @layer components {
-	.icon-embed {
+	.svg-icon {
 		width: var(--icon-size, 100%);
 		height: var(--icon-size, 100%);
 

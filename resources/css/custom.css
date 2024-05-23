@@ -183,6 +183,7 @@
 	/*
 	* 2.8. Dark mode
 	*/
+	html.dark,
 	[data-color-scheme='dark'],
 	[data-local-color-scheme='dark'] {
 		/* 2.8.1 Theme colors */

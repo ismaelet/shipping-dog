@@ -1,46 +1,55 @@
-<x-templates.form :title="$title">
+<x-layouts.form :title="$title">
 
-    <x-slot name="body">
+	<x-slot name="body">
 
-        @if (!session('submitted') || session('not_found'))
+		@if (!session('submitted') || session('not_found'))
 
-            {{-- Show instructions to recover the account --}}
-            <p class="text-justify">
-                Inserisci l'indirizzo email associato al tuo account e ti manderemo un'email con le istruzioni per
-                resettare la password.
-            </p>
+			{{-- Show instructions to recover the account --}}
+			<p class="text-justify">
+				Inserisci l'indirizzo email associato al tuo account e ti manderemo un'email con le istruzioni per
+				resettare la password.
+			</p>
 
-            {{-- Email input --}}
-            <x-form.input type="email" name="email" placeholder="Indirizzo email" :value="session('email') ?: ''" required />
+			{{-- Email input --}}
+			<x-form.input
+				type="email"
+				name="email"
+				placeholder="Indirizzo email"
+				:value="session('email') ?: ''"
+				required
+			/>
 
-            {{-- If the form hasn't been submitted or the email is not found --}}
-            @session('not_found')
-                {{-- Show error message if email is not found --}}
-                <x-form.input-warning>
-                    Non abbiamo trovato nessun account associato all'indirizzo email indicato
-                </x-form.input-warning>
-            @endsession
-        @else
-            {{-- If the email is found --}}
-            <p class="text-justify">Abbiamo mandato un'email con le istruzioni per resettare la password
-                all'indirizzo qui sotto. Se non dovessi ricevere l'email entro qualche minuto, controlla la cartella di
-                spam.
-            </p>
+			{{-- If the form hasn't been submitted or the email is not found --}}
+			@session('not_found')
+				{{-- Show error message if email is not found --}}
+				<x-form.input-warning>
+					Non abbiamo trovato nessun account associato all'indirizzo email indicato
+				</x-form.input-warning>
+			@endsession
+		@else
+			{{-- If the email is found --}}
+			<p class="text-justify">Abbiamo mandato un'email con le istruzioni per resettare la password
+				all'indirizzo qui sotto. Se non dovessi ricevere l'email entro qualche minuto, controlla la cartella di
+				spam.
+			</p>
 
-            <p class="text-center font-bold text-lg text-neutral-700">{{ session('email') }}</p>
-        @endif
+			<p class="text-center text-lg font-bold text-neutral-700">{{ session('email') }}</p>
+		@endif
 
-    </x-slot>
+	</x-slot>
 
-    <x-slot name="footer">
+	<x-slot name="footer">
 
-        @if (!session('submitted') || session('not_found'))
-            {{-- If the form hasn't been submitted or the email is not found --}}
-            <x-inputs.button type="submit">Recupera i dati</x-inputs.button>
-        @endif
+		@if (!session('submitted') || session('not_found'))
+			{{-- If the form hasn't been submitted or the email is not found --}}
+			<x-inputs.button type="submit">Recupera i dati</x-inputs.button>
+		@endif
 
-        <x-inputs.button variant="secondary" :href="route('login')">{{ __('Back') }}</x-inputs.button>
+		<x-inputs.button
+			variant="secondary"
+			:href="route('login')"
+		>{{ __('Back') }}</x-inputs.button>
 
-    </x-slot>
+	</x-slot>
 
-</x-templates.form>
+</x-layouts.form>

@@ -7,6 +7,12 @@
 	// Add the link to the public site
 	$publicSiteGroup = [
 	    [
+	        'name' => 'Dashboard Nuova',
+	        'icon' => 'link',
+	        'checked' => false,
+	        'url' => '/admin',
+	    ],
+	    [
 	        'name' => 'Sito pubblico',
 	        'icon' => 'link',
 	        'checked' => false,

@@ -4,7 +4,7 @@
 	</style>
 @endpush
 
-<x-templates.auth
+<x-layouts.auth
 	:$title
 	welcome-image="auth/register-background.webp"
 	welcome-title="<span class='font-light'>Registrati su</span><br>Shipping Dog"
@@ -70,4 +70,4 @@
 			variant="secondary"
 		>{{ __('Back') }}</x-inputs.button>
 	</x-slot>
-</x-templates.auth>
+</x-layouts.auth>

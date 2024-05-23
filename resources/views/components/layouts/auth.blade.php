@@ -1,65 +1,64 @@
 @push('styles')
-    <style>
-        .page__content {
-            @media (min-width: 769px) {
-                grid-template-areas: "welcome form";
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
+	<style>
+		.page-content {
+			.main-heading {
+				font-size: min(4rem, 7vw);
+			}
 
-        .welcome {
+			.button {
+				min-width: min(100%, 18rem);
+			}
 
-            @media (max-width: 768px) {
-                display: grid;
-                grid-column: full-width;
-            }
+			@media (max-width: 480px) {
+				.welcome-section {
+					display: none;
+				}
+			}
 
-            @media (min-width: 769px) {
-                grid-area: welcome;
-            }
-        }
-
-        .welcome__image {
-            background-position: 100% 100%;
-            background-size: cover;
-
-            @media (max-width: 768px) {
-                min-height: 25rem;
-            }
-        }
-
-        .page__form {
-            @media (min-width: 769px) {
-                grid-area: form;
-            }
-        }
-    </style>
+			@media (min-width: 1024px) {
+				grid-template-columns: minmax(0, 3fr) minmax(20rem, 2fr);
+			}
+		}
+	</style>
 @endpush
 
-<x-layouts.main :header-config="['floating' => true]">
-    <div class="page__content full-width grid">
-        <section class="welcome grid">
-            {{ $welcome }}
-        </section>
+<x-layouts.main>
+	<div class="page-content fill-width grid">
+		<!-- Welcome panel -->
+		<section
+			class="welcome-section stack-content grid items-center justify-items-center"
+			data-local-color-scheme="dark"
+		>
+			<div
+				class="background-fill"
+				style="background-image: url({{ Vite::image($welcomeImage) }}"
+			>
+			</div>
 
-        <form method="POST" class="page__form grid content-center justify-items-center md:px-8 py-16 text-center">
-            <div class="w-full max-w-md grid gap-16">
-                <div data-on-enter-view data-enter-animation="direction: bottom">
-                    <x-typography.main-heading>
-                        {{ $title }}
-                    </x-typography.main-heading>
-                </div>
+			<div class="grid max-w-2xl gap-8 px-8 py-16">
+				<x-typography.main-heading>{!! $welcomeTitle !!}</x-typography.main-heading>
+				<x-typography.paragraph class="text-neutral-700">{!! $welcomeDescription !!}</x-typography.paragraph>
+			</div>
+		</section>
 
-                <div class="grid gap-4">
-                    @csrf
+		<!-- Form -->
+		<form
+			class="grid items-center justify-items-center"
+			method="POST"
+		>
+			@csrf
 
-                    {{ $body }}
-                </div>
+			<div class="grid w-full max-w-xl grid-cols-1 gap-12 px-8 py-16">
+				<x-typography.section-heading class="text-center">{{ $title }}</x-typography.section-heading>
 
-                <div class="grid gap-4">
-                    {{ $footer }}
-                </div>
-            </div>
-        </form>
-    </div>
+				<div class="grid gap-4">
+					{{ $formBody }}
+				</div>
+
+				<div class="grid justify-items-center gap-2">
+					{{ $formFooter }}
+				</div>
+			</div>
+		</form>
+	</div>
 </x-layouts.main>

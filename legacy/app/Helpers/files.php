@@ -62,7 +62,7 @@ function icon_url($file) {
 
 // get an embedded icon
 function icon_embed(string $file, array $customClasses = []) {
-	$classes = implode(' ', ['icon-embed', ...$customClasses]);
+	$classes = implode(' ', ['svg-icon', ...$customClasses]);
 
 	$url = SERVER_ROOT . icon_url_raw($file);
 	$icon = file_get_contents($url);

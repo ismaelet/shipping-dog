@@ -6673,7 +6673,7 @@ input[type='number']:not(.number-input-with-arrows) {
 	border-color: var(--inp-clr-accent);
 }
 
-.special-input .icon-embed {
+.special-input .svg-icon {
 	--icon-size: 1.25rem;
 	position: absolute;
 	inset: 0 0.5rem 0 auto;
@@ -6681,7 +6681,7 @@ input[type='number']:not(.number-input-with-arrows) {
 	color: var(--border-clr-700);
 }
 
-.special-input:has(:focus) .icon-embed {
+.special-input:has(:focus) .svg-icon {
 	color: var(--inp-clr-accent);
 }
 
@@ -6958,12 +6958,12 @@ input[type='number']:not(.number-input-with-arrows) {
 	background-color: hsl(0, 0%, 100%, 1);
 }
 
-.playable-video__play-button .icon-embed {
+.playable-video__play-button .svg-icon {
 	translate: 0.2rem 0;
 }
 
 /* 4.7 Icons */
-.icon-embed {
+.svg-icon {
 	width: var(--icon-size, 100%);
 	max-width: 100%;
 	max-height: 100%;
@@ -6972,29 +6972,29 @@ input[type='number']:not(.number-input-with-arrows) {
 	fill: currentColor;
 }
 
-:where(:has(> .icon-embed)) {
+:where(:has(> .svg-icon)) {
 	display: flex;
 }
 
-:where(h1:has(.icon-embed)),
-:where(h2:has(.icon-embed)),
-:where(h3:has(.icon-embed)),
-:where(p:has(.icon-embed)) {
+:where(h1:has(.svg-icon)),
+:where(h2:has(.svg-icon)),
+:where(h3:has(.svg-icon)),
+:where(p:has(.svg-icon)) {
 	gap: 0.5em;
 }
 
-.btn:has(.icon-embed) {
+.btn:has(.svg-icon) {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 0.5em;
 }
 
-h1 .icon-embed,
-h2 .icon-embed,
-h3 .icon-embed,
-p .icon-embed,
-.btn .icon-embed {
+h1 .svg-icon,
+h2 .svg-icon,
+h3 .svg-icon,
+p .svg-icon,
+.btn .svg-icon {
 	width: var(--icon-size, 1em);
 	margin: unset;
 	transition: unset;
@@ -7067,14 +7067,14 @@ p .icon-embed,
 	color: var(--color-primary-400);
 }
 
-.text-link:has(.icon-embed) {
+.text-link:has(.svg-icon) {
 	--icon-size: 1em;
 	display: flex;
 	align-items: center;
 	gap: 0.5em;
 }
 
-.text-link .icon-embed {
+.text-link .svg-icon {
 	transition: unset;
 }
 

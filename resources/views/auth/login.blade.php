@@ -7,7 +7,7 @@
     </style>
 @endpushOnce
 
-<x-templates.auth :$title welcome-title="<span class='font-light'>Benvenuto su</span><br>Shipping Dog"
+<x-layouts.auth :$title welcome-title="<span class='font-light'>Benvenuto su</span><br>Shipping Dog"
     welcome-image="auth/login-background.webp"
     welcome-description="Entrando nella nostra piattaforma potrai monitorare lo stato dei tuoi ordini, seguire gli artisti
 	che ti piacciono e molto altro. Sei un disegnatore? Qui
@@ -35,4 +35,4 @@
         <x-inputs.button type="submit">Log In</x-inputs.button>
         <x-inputs.button :href="route('register')" variant="secondary">Registrati</x-inputs.button>
     </x-slot>
-</x-templates.auth>
+</x-layouts.auth>

@@ -2,80 +2,36 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Artisan Migrate",
+			"label": "Artisan Docker Command",
 			"type": "shell",
 			"command": "docker",
-			"args": ["exec", "laravel", "php", "artisan", "migrate"],
+			"args": ["exec", "laravel", "php", "artisan", "${input:command}"],
 			"group": "build",
 			"problemMatcher": []
 		},
 		{
-			"label": "Artisan Rollback",
+			"label": "Artisan: Migrate",
 			"type": "shell",
 			"command": "docker",
-			"args": ["exec", "laravel", "php", "artisan", "migrate:rollback"],
+			"args": ["exec", "shippingdog-laravel", "php", "artisan", "migrate"],
 			"group": "build",
 			"problemMatcher": []
 		},
 		{
-			"label": "Artisan: Create Model",
+			"label": "Artisan: Rollback",
 			"type": "shell",
-			"command": "php",
-			"args": ["artisan", "make:model", "${input:name}"],
-			"group": {
-				"kind": "build",
-				"isDefault": false
-			},
-			"presentation": {
-				"reveal": "always"
-			}
-		},
-		{
-			"label": "Artisan: Create Controller",
-			"type": "shell",
-			"command": "php",
-			"args": ["artisan", "make:controller", "${input:name}Controller"],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"presentation": {
-				"reveal": "always"
-			}
-		},
-		{
-			"label": "Artisan: Create Migration",
-			"type": "shell",
-			"command": "php",
-			"args": ["artisan", "make:migration", "${input:name}"],
-			"group": {
-				"kind": "build",
-				"isDefault": false
-			},
-			"presentation": {
-				"reveal": "always"
-			}
+			"command": "docker",
+			"args": ["exec", "shippingdog-laravel", "php", "artisan", "migrate:rollback"],
+			"group": "build",
+			"problemMatcher": []
 		},
 		{
 			"label": "Artisan: Run Tests",
 			"type": "shell",
 			"command": "docker",
-			"args": ["exec", "laravel", "php", "artisan", "test"],
+			"args": ["exec", "shippingdog-laravel", "php", "artisan", "test"],
 			"group": {
 				"kind": "test",
-				"isDefault": false
-			},
-			"presentation": {
-				"reveal": "always"
-			}
-		},
-		{
-			"label": "Artisan: Create Test",
-			"type": "shell",
-			"command": "php",
-			"args": ["artisan", "make:test", "${input:name}Test"],
-			"group": {
-				"kind": "build",
 				"isDefault": false
 			},
 			"presentation": {
@@ -94,6 +50,84 @@
 			"presentation": {
 				"reveal": "always"
 			}
+		},
+		{
+			"label": "Artisan: Make Controller",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "make:controller", "${input:name}Controller"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "Artisan: Make Migration",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "make:migration", "${input:name}"],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "Artisan: Make Model",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "make:model", "${input:name}"],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "Artisan: Make Test",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "make:test", "${input:name}Test"],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "Artisan: Make View",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "make:view", "${input:name}"],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"presentation": {
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "Artisan: Make Filament Resource",
+			"type": "shell",
+			"command": "php",
+			"args": ["artisan", "make:filament-resource", "${input:name}"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "always"
+			}
 		}
 	],
 	"inputs": [
@@ -101,6 +135,11 @@
 			"id": "name",
 			"type": "promptString",
 			"description": "Enter the name here"
+		},
+		{
+			"id": "command",
+			"type": "promptString",
+			"description": "Enter the artisan command here"
 		}
 	]
 }

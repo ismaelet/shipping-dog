@@ -212,11 +212,11 @@ main {
 	background-color: var(--clr-surface-500);
 }
 
-.menu__open .icon-embed {
+.menu__open .svg-icon {
 	transition: transform 0.1s;
 }
 
-.menu.open .menu__open .icon-embed {
+.menu.open .menu__open .svg-icon {
 	transform: rotate(-180deg);
 }
 
