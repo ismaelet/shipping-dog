@@ -15,5 +15,4 @@ use Illuminate\Support\Facades\Schedule;
 
 Schedule::call('gls:track-parcels')
 	->dailyAt('19:00')
-	->environments(['staging', 'production'])
-	->sentryMonitor();
+	->environments(['staging', 'production']);
