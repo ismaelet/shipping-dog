@@ -114,7 +114,7 @@
 			z-index: 100;
 		}
 
-		[data-color-scheme='dark'] header {
+		.dark header {
 			--h-bgr-color: var(--color-surface-400);
 		}
 
@@ -146,7 +146,7 @@
 			backdrop-filter: blur(7px);
 		}
 
-		[data-color-scheme='dark'] .floating #h-bgr {
+		.dark .floating #h-bgr {
 			background-color: rgba(0, 0, 0, 0.3);
 		}
 
@@ -283,7 +283,7 @@
 			translate: 70% -100%;
 		}
 
-		[data-color-scheme='dark'] .h-link-txt {
+		.dark .h-link-txt {
 			font-weight: 500;
 		}
 
@@ -412,12 +412,18 @@
 			width: 75%;
 		}
 
-		html[data-color-scheme='light'] .theme-switch .light-icon {
+		.theme-switch [data-color-scheme="light"] {
 			display: none;
 		}
 
-		html[data-color-scheme='dark'] .theme-switch .dark-icon {
-			display: none;
+		.dark .theme-switch {
+			& [data-color-scheme="dark"] {
+				display: none;
+			}
+
+			& [data-color-scheme="light"] {
+				display: block;
+			}
 		}
 
 		/* Login & profile */

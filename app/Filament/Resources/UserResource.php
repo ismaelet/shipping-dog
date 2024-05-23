@@ -110,7 +110,8 @@ class UserResource extends Resource {
 				Tables\Columns\TextColumn::make('email')
 					->label('E-mail')
 					->sortable(),
-				Tables\Columns\ToggleColumn::make('admin')
+				Tables\Columns\IconColumn::make('admin')
+					->boolean()
 					->label('Amministratore')
 					->sortable()
 					->hidden(fn () => !auth()->user()->isSupervisor()),
@@ -143,11 +144,7 @@ class UserResource extends Resource {
 				Tables\Actions\EditAction::make()->icon('icon-edit'),
 				Tables\Actions\DeleteAction::make()->icon('icon-delete'),
 			])
-			->bulkActions([
-				Tables\Actions\BulkActionGroup::make([
-					Tables\Actions\DeleteBulkAction::make(),
-				]),
-			]);
+			->bulkActions([]);
 	}
 
 	public static function getRelations(): array {

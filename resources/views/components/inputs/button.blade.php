@@ -36,8 +36,7 @@
 				color: var(--color-neutral-700);
 
 				/* Secondary button: Dark color scheme */
-				[data-color-scheme="dark"] &,
-				[data-local-color-scheme="dark"] & {
+				.dark & {
 					border-color: var(--color-neutral-400);
 				}
 

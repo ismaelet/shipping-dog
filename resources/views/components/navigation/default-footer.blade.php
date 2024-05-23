@@ -41,10 +41,6 @@
 			background-color: var(--color-surface-200);
 		}
 
-		html[data-color-scheme='light'] footer {
-			color: var(--text-color-strong);
-		}
-
 		/* Links */
 		#footer-body {
 			display: flex;
@@ -72,7 +68,7 @@
 			transition: color 0.2s;
 		}
 
-		html[data-color-scheme='dark'] .footer-link {
+		.dark .footer-link {
 			color: var(--color-neutral-300);
 		}
 

@@ -19,7 +19,7 @@
 			position: sticky;
 			top: 2rem;
 
-			[data-color-scheme="dark"] & {
+			.dark & {
 				border: none;
 			}
 		}

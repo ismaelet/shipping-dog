@@ -1,76 +1,15 @@
 export default {
-	content: ['./app/Models/**/*.php', './resources/**/*.blade.php', './resources/**/*.js', './resources/**/*.vue', './legacy/**/*.php'],
+	content: [
+		'./app/Models/**/*.php',
+		'./resources/**/*.blade.php',
+		'./resources/**/*.js',
+		'./resources/**/*.vue',
+		'./legacy/**/*.php',
+		'./app/Filament/**/*.php',
+		'./resources/views/filament/**/*.blade.php',
+		'./vendor/filament/**/*.blade.php',
+	],
 	theme: {
-		// Custom colors
-		colors: {
-			// Primary
-			primary: 'hsl(var(--color-primary-400-hsl) / <alpha-value>)',
-			'primary-200': 'hsl(var(--color-primary-200-hsl) / <alpha-value>)',
-			'primary-300': 'hsl(var(--color-primary-300-hsl) / <alpha-value>)',
-			'primary-400': 'hsl(var(--color-primary-400-hsl) / <alpha-value>)',
-			'primary-500': 'hsl(var(--color-primary-500-hsl) / <alpha-value>)',
-			'primary-700': 'hsl(var(--color-primary-700-hsl) / <alpha-value>)',
-
-			// Secondary
-			secondary: 'hsl(var(--color-secondary-400-hsl) / <alpha-value>)',
-			'secondary-400': 'hsl(var(--color-secondary-400-hsl) / <alpha-value>)',
-
-			// Neutral light
-			'neutral-light-100': 'hsl(var(--color-neutral-light-100-hsl) / <alpha-value>)',
-			'neutral-light-200': 'hsl(var(--color-neutral-light-200-hsl) / <alpha-value>)',
-			'neutral-light-300': 'hsl(var(--color-neutral-light-300-hsl) / <alpha-value>)',
-			'neutral-light-400': 'hsl(var(--color-neutral-light-400-hsl) / <alpha-value>)',
-			'neutral-light-700': 'hsl(var(--color-neutral-light-700-hsl) / <alpha-value>)',
-			'neutral-light-900': 'hsl(var(--color-neutral-light-900-hsl) / <alpha-value>)',
-
-			// Neutral dark
-			'neutral-dark-200': 'hsl(var(--color-neutral-dark-200-hsl) / <alpha-value>)',
-			'neutral-dark-250': 'hsl(var(--color-neutral-dark-250-hsl) / <alpha-value>)',
-			'neutral-dark-900': 'hsl(var(--color-neutral-dark-900-hsl) / <alpha-value>)',
-
-			// Neutral theme
-			'neutral-100': 'hsl(var(--color-neutral-100-hsl) / <alpha-value>)',
-			'neutral-200': 'hsl(var(--color-neutral-200-hsl) / <alpha-value>)',
-			'neutral-300': 'hsl(var(--color-neutral-300-hsl) / <alpha-value>)',
-			'neutral-350': 'hsl(var(--color-neutral-350-hsl) / <alpha-value>)',
-			'neutral-400': 'hsl(var(--color-neutral-400-hsl) / <alpha-value>)',
-			'neutral-700': 'hsl(var(--color-neutral-700-hsl) / <alpha-value>)',
-			'neutral-900': 'hsl(var(--color-neutral-900-hsl) / <alpha-value>)',
-
-			// Background
-			background: 'var(--color-background)',
-
-			// Surfaces
-			'surface-400': 'hsl(var(--color-surface-400-hsl) / <alpha-value>)',
-			'surface-500': 'hsl(var(--color-surface-500-hsl) / <alpha-value>)',
-			'surface-700': 'hsl(var(--color-surface-700-hsl) / <alpha-value>)',
-
-			// Utility colors
-			success: 'hsl(var(--color-success-400-hsl) / <alpha-value>)',
-			error: 'hsl(var(--color-error-400-hsl) / <alpha-value>)',
-
-			// Basic colors
-			white: 'white',
-			blue: 'lightblue',
-			green: 'lightgreen',
-			'dark-green': 'green',
-		},
-		// Custom border_items
-		borderWidth: {
-			DEFAULT: 'var(--border-width)',
-			lg: '2px',
-			xl: '3px',
-		},
-		// Custom border radius
-		borderRadius: {
-			none: '0',
-			xs: 'var(--border-radius-100)',
-			sm: 'var(--border-radius-200)',
-			DEFAULT: 'var(--border-radius-400)',
-			lg: 'var(--border-radius-700)',
-			xl: 'var(--border-radius-900)',
-			full: '100vw',
-		},
 		// Custom font families
 		fontFamily: {
 			sans: 'var(--font-family-paragraph)',
@@ -91,6 +30,81 @@ export default {
 		},
 		// Extended config
 		extend: {
+			// Custom colors
+			colors: {
+				// Primary
+				primary: 'hsl(var(--color-primary-400-hsl) / <alpha-value>)',
+				'primary-200': 'hsl(var(--color-primary-200-hsl) / <alpha-value>)',
+				'primary-300': 'hsl(var(--color-primary-300-hsl) / <alpha-value>)',
+				'primary-400': 'hsl(var(--color-primary-400-hsl) / <alpha-value>)',
+				'primary-500': 'hsl(var(--color-primary-500-hsl) / <alpha-value>)',
+				'primary-700': 'hsl(var(--color-primary-700-hsl) / <alpha-value>)',
+
+				// Secondary
+				secondary: 'hsl(var(--color-secondary-400-hsl) / <alpha-value>)',
+				'secondary-400': 'hsl(var(--color-secondary-400-hsl) / <alpha-value>)',
+
+				// Filament
+				'custom-50': 'rgb(var(--c-50))',
+				'custom-400': 'rgb(var(--c-400))',
+				'custom-600': 'rgb(var(--c-600))',
+
+				// Neutral light
+				'neutral-light-100': 'hsl(var(--color-neutral-light-100-hsl) / <alpha-value>)',
+				'neutral-light-200': 'hsl(var(--color-neutral-light-200-hsl) / <alpha-value>)',
+				'neutral-light-300': 'hsl(var(--color-neutral-light-300-hsl) / <alpha-value>)',
+				'neutral-light-400': 'hsl(var(--color-neutral-light-400-hsl) / <alpha-value>)',
+				'neutral-light-700': 'hsl(var(--color-neutral-light-700-hsl) / <alpha-value>)',
+				'neutral-light-900': 'hsl(var(--color-neutral-light-900-hsl) / <alpha-value>)',
+
+				// Neutral dark
+				'neutral-dark-200': 'hsl(var(--color-neutral-dark-200-hsl) / <alpha-value>)',
+				'neutral-dark-250': 'hsl(var(--color-neutral-dark-250-hsl) / <alpha-value>)',
+				'neutral-dark-900': 'hsl(var(--color-neutral-dark-900-hsl) / <alpha-value>)',
+
+				// Neutral theme
+				'neutral-100': 'hsl(var(--color-neutral-100-hsl) / <alpha-value>)',
+				'neutral-200': 'hsl(var(--color-neutral-200-hsl) / <alpha-value>)',
+				'neutral-300': 'hsl(var(--color-neutral-300-hsl) / <alpha-value>)',
+				'neutral-350': 'hsl(var(--color-neutral-350-hsl) / <alpha-value>)',
+				'neutral-400': 'hsl(var(--color-neutral-400-hsl) / <alpha-value>)',
+				'neutral-700': 'hsl(var(--color-neutral-700-hsl) / <alpha-value>)',
+				'neutral-900': 'hsl(var(--color-neutral-900-hsl) / <alpha-value>)',
+
+				// Background
+				background: 'var(--color-background)',
+
+				// Surfaces
+				'surface-400': 'hsl(var(--color-surface-400-hsl) / <alpha-value>)',
+				'surface-500': 'hsl(var(--color-surface-500-hsl) / <alpha-value>)',
+				'surface-700': 'hsl(var(--color-surface-700-hsl) / <alpha-value>)',
+
+				// Utility colors
+				success: 'hsl(var(--color-success-400-hsl) / <alpha-value>)',
+				error: 'hsl(var(--color-error-400-hsl) / <alpha-value>)',
+
+				// Basic colors
+				white: 'white',
+				blue: 'lightblue',
+				green: 'lightgreen',
+				'dark-green': 'green',
+			},
+			// Custom border_items
+			borderWidth: {
+				DEFAULT: 'var(--border-width)',
+				lg: '2px',
+				xl: '3px',
+			},
+			// Custom border radius
+			borderRadius: {
+				none: '0',
+				xs: 'var(--border-radius-100)',
+				sm: 'var(--border-radius-200)',
+				DEFAULT: 'var(--border-radius-400)',
+				lg: 'var(--border-radius-700)',
+				xl: 'var(--border-radius-900)',
+				full: '100vw',
+			},
 			// New widths
 			width: {
 				'1em': '1em',

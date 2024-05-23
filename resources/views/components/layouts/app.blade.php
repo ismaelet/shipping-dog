@@ -15,8 +15,8 @@
 
 <!DOCTYPE html>
 <html
+	class="{{ $colorScheme }}"
 	lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-	data-color-scheme="{{ $colorScheme }}"
 	data-theme="{{ $theme }}"
 >
 

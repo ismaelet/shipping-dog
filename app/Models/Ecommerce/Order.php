@@ -6,6 +6,7 @@ use App\Helpers\EcommerceHelper;
 use App\Mail\OrderStatusMail;
 use App\Models\User;
 use App\Services\GlsService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -604,5 +605,13 @@ class Order extends Model {
 			->oldest()
 			->select('orders.*', 'addresses.full_name')
 			->get();
+	}
+
+
+	public static function unlabelledQuery(): Builder {
+		return self::join('addresses', 'orders.id', '=', 'addresses.order_id')
+			->where('status', EcommerceHelper::statusFromTag('confirmed'))
+			->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
+			->oldest('orders.created_at');
 	}
 }

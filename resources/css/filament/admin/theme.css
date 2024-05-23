@@ -1,18 +1,41 @@
+/* Imports */
 @import '/vendor/filament/filament/resources/css/theme.css';
 @import '../../custom.css';
+@config '../../../../tailwind.config.ts';
 
-@config 'tailwind.config.js';
-
+/* Font family */
 :root {
-	--border-radius-900: 1rem;
+	--font-family-paragraph: 'Poppins', sans-serif;
 }
 
-body {
-	color: var(--color-neutral-400);
-	background-color: var(--color-background);
+/* Light mode */
+html:not(.dark) {
+	& .dark\:text-white {
+		color: var(--color-neutral-400);
+	}
+
+	& .dark\:text-gray-200 {
+		color: var(--color-neutral-700);
+	}
+
+	& .dark\:ring-white\/10 {
+		--tw-ring-color: var(--border-color);
+	}
+
+	& .dark\:border-white\/10 {
+		border-color: var(--border-color);
+	}
+
+	& .dark\:divide-white\/5 > :not([hidden]) ~ :not([hidden]) {
+		border-color: var(--border-color);
+	}
+
+	& .dark\:text-gray-400 {
+		color: var(--color-neutral-400);
+	}
 }
 
-/* Color: Background */
+/* Background */
 .dark\:bg-gray-900 {
 	background-color: var(--color-background) !important;
 }
@@ -21,177 +44,178 @@ body {
 	background-color: var(--color-background) !important;
 }
 
-/* Font: Size */
-.fi-sidebar-item-label {
-	font-size: var(--font-size-400);
-}
-
-/* Font: Weight */
-.fi-sidebar-group-label,
-.fi-sidebar-item-label {
-	font-weight: var(--font-weight-regular);
-}
-
+/* Top bar */
 .fi-logo,
 .fi-header-heading {
 	font-weight: var(--font-weight-medium);
 }
 
-/* Icons */
+.fi-dropdown-list-item-icon {
+	width: 1rem;
+	height: 1rem;
+	fill: currentColor;
+}
+
+/* Side bar */
+.fi-sidebar-nav,
+.fi-sidebar-header {
+	padding-inline: 2.5rem;
+}
+
+.fi-sidebar-nav {
+	* {
+		font-weight: var(--font-weight-regular);
+	}
+}
+
+.fi-sidebar-item-label {
+	font-size: var(--font-size-400);
+}
+
 .fi-sidebar-item-icon {
 	width: 1.125rem;
 	height: 1.125rem;
 	fill: currentColor;
 }
 
-.fi-link-icon {
-	flex-shrink: 0;
-}
-
-.fi-ta-icon-item,
-.fi-no-notification-icon {
-	fill: unset;
-}
-
-/* Navigation Items */
-.fi-sidebar-nav,
-.fi-sidebar-header {
-	padding-inline: 2.5rem;
-}
-
 .fi-sidebar-item-button {
-	width: fit-content;
-}
-
-.fi-sidebar-item-button {
-	color: var(--color-neutral-400);
 	background-color: transparent !important;
+	border: var(--border-width) solid transparent;
+	transition: border-color 0.2s;
 
-	* {
-		color: inherit !important;
+	&:hover,
+	&:has(.text-primary-600) {
+		color: rgb(var(--primary-500));
+		border-color: var(--border-color);
+
+		& > * {
+			color: rgb(var(--primary-500)) !important;
+			transition: color 0.2s;
+		}
 	}
 
-	&:hover {
-		color: var(--color-neutral-700) !important;
+	&:has(.text-primary-600) {
+		border-color: rgb(var(--primary-500));
 	}
 }
 
 /* Inputs */
 div.fi-input-wrp {
-	box-shadow: none !important;
-	border: none !important;
-	outline: none !important;
-	border-radius: 0 !important;
+	--tw-ring-color: var(--border-color);
 	background-color: transparent !important;
-	overflow: unset;
-}
 
-input.fi-input {
-	--input-background: var(--color-surface-400);
-	padding-inline: 0.75em;
-	background-color: var(--input-background);
-	border-radius: var(--input-border-radius);
-	outline: var(--border) !important;
-	border: none !important;
-	color: var(--color-neutral-700);
-	line-height: 2.8;
-	transition: outline-color 0.2s ease-in-out;
-
-	/* Focus state */
-	&:focus {
-		outline-color: var(--color-primary-400) !important;
-		box-shadow: none;
-		outline-width: 2px !important;
-		outline-offset: 0;
+	&:focus-within {
+		--tw-ring-color: rgb(var(--primary-500)) !important;
 	}
 }
 
-/* Select */
+input.fi-input,
 select.fi-select-input {
-	--input-background: var(--color-surface-400);
-	background-color: var(--input-background);
-	border-radius: var(--input-border-radius);
+	font-size: var(--font-size-400);
+	line-height: 2;
+
+	&:focus {
+		outline: none;
+	}
+}
+
+select:not(.choices) {
+	background-image: none;
 }
 
 /* Checkboxes */
-input.fi-checkbox-input {
-	width: 1.25rem;
-	height: 1.25rem;
-	border-radius: 50%;
+.fi-fo-field-wrp-label:has([type='checkbox']),
+.fi-ta-cell .flex:has([type='checkbox']) {
+	align-items: center;
+	position: relative;
+	cursor: pointer;
 
-	&:focus {
-		--tw-ring-color: hsl(var(--color-primary-400-hsl) / 0.5) !important;
+	input {
+		display: none;
 	}
 
-	&:checked {
-		--tw-ring-color: hsl(var(--color-primary-400-hsl) / 1) !important;
-		--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-		background-color: transparent !important;
-		background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='orange' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+	&::before {
+		content: '';
+		width: calc(1.25rem + 2px);
+		aspect-ratio: 1;
+		border: var(--border-width) solid var(--border-color);
+		border-radius: 50%;
+		transition: border-color 0.2s;
+	}
+
+	&:has(input:checked) {
+		&::before {
+			border-color: rgb(var(--primary-500));
+		}
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		left: 7px;
+		width: 8px;
+		aspect-ratio: 1;
+		margin: auto;
+		opacity: 0;
+		background-color: rgb(var(--primary-400));
+		border-radius: 50%;
+		transition: opacity 0.2s;
+	}
+
+	&:hover::after,
+	&:has(input:checked)::after {
+		opacity: 1;
 	}
 }
 
 /* Buttons */
 .fi-btn {
-	--icon-size: 1em;
-	border-radius: var(--border-radius-1000);
-	min-width: 12rem;
+	padding-inline: 2em;
+	padding-block: 1em;
+	line-height: 1;
 	font-size: var(--font-size-400);
 	font-weight: var(--font-weight-regular);
 
-	/* Primary button */
 	&.fi-btn-color-primary {
-		padding-block: 1em;
-		background-color: var(--color-primary-400) !important;
-		box-shadow: 0px 1rem 4rem -1rem hsl(var(--color-primary-400-hsl) / 0.4);
-		color: #fff;
-		transition: background-color 0.2s;
-
-		/* Primary button: Hover state */
-		&:hover {
-			background-color: var(--color-primary-500) !important;
-		}
+		box-shadow: 0px 1rem 2rem -1rem rgb(var(--primary-500), 0.2);
 	}
 
-	/* Secondary button */
 	&.fi-btn-color-gray,
 	&.fi-btn-color-danger {
-		padding-block: calc(1em - var(--border-width));
-		background-color: transparent !important;
-		border: var(--border);
-		box-shadow: none !important;
-		transition: border-color cubic-bezier(0.4, 0, 0.2, 1) 0.15s !important;
+		background-color: transparent;
 	}
 
 	&.fi-btn-color-gray {
-		color: var(--color-neutral-700);
-
-		/* Secondary button: Hover state */
 		&:hover {
-			border-color: var(--color-neutral-400) !important;
+			background-color: transparent;
+			--tw-ring-color: var(--color-neutral-400);
+		}
+
+		html:not(.dark) & {
+			--tw-ring-color: var(--color-neutral-250);
+
+			&:hover {
+				--tw-ring-color: var(--color-neutral-400);
+			}
 		}
 	}
 
 	&.fi-btn-color-danger {
-		border-color: currentColor;
-		color: var(--color-error-400);
+		border: var(--border-width) solid currentColor;
+		color: rgb(var(--c-500));
 
-		/* Secondary button: Hover state */
 		&:hover {
-			color: var(--color-error-500) !important;
+			background-color: transparent;
+			color: rgb(var(--c-400));
 		}
 	}
 }
 
-/* Switches */
-.fi-ta-toggle span {
-	position: relative;
-	top: 2px;
-}
-
-/* Table */
+/* Table: Toolbar */
 .fi-ta-header-toolbar {
-	padding-inline: 0 !important;
+	.flex:not(:has(*)) {
+		display: none;
+	}
 }
 
 .fi-ta-search-field {
@@ -202,27 +226,24 @@ input.fi-checkbox-input {
 	}
 }
 
+/* Table: Actions */
 .fi-ta-actions {
 	span {
 		display: none;
 	}
 
 	svg {
-		width: 1rem;
-		height: 1rem;
-		overflow: unset;
 		fill: currentColor;
 
 		&:not(:hover) {
-			color: var(--color-neutral-400) !important;
+			color: var(--color-neutral-400);
 		}
 	}
 }
 
 .fi-ta-ctn:has(table) {
-	padding: 1rem 2rem;
-
 	.fi-ta-content {
+		padding: 1rem 2rem;
 		border-top: var(--border);
 
 		@media (min-width: 1024px) {
@@ -248,9 +269,16 @@ input.fi-checkbox-input {
 .fi-pagination-items {
 	background-color: transparent !important;
 	border-radius: var(--border-radius-400);
+	box-shadow: none;
+	border: var(--border);
+
+	li {
+		border-left: none;
+		border-top: none;
+		border-bottom: none;
+	}
 
 	li:first-child {
-		border-left: none;
 		border-top-left-radius: inherit;
 		border-bottom-left-radius: inherit;
 

@@ -7,12 +7,10 @@ use App\Http\Middleware\Admin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\NavigationItem;
-use Filament\Pages;
+use Filament\Navigation\MenuItem;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -32,19 +30,13 @@ class AdminPanelProvider extends PanelProvider {
 
 			// Style
 			->colors([
-				'primary' => [
-					300 => '179, 153, 243',
-					400 => '255, 149, 0',
-					500 => '230, 103, 0',
-					600 => '230, 103, 0',
-				],
-				'danger' => [
-					400 => '255, 0, 0',
-					500 => '204, 0, 0',
-					600 => '204, 0, 0',
-				],
+				'danger' => Color::Red,
+				'gray' => Color::Zinc,
+				'info' => Color::Blue,
+				'primary' => Color::Amber,
+				'success' => Color::Green,
+				'warning' => Color::Orange,
 			])
-			->font('Poppins')
 			->viteTheme('resources/css/filament/admin/theme.css')
 			->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
 			->collapsibleNavigationGroups(false)
@@ -56,17 +48,16 @@ class AdminPanelProvider extends PanelProvider {
 				Dashboard::class,
 			])
 			->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-			->widgets([
-				Widgets\AccountWidget::class,
-				Widgets\FilamentInfoWidget::class,
-			])
-			->navigationItems([
-				NavigationItem::make('Sito Pubblico')
-					->url('/', shouldOpenInNewTab: true)
-					->icon('icon-link'),
-				NavigationItem::make('Dashboard Vecchia')
-					->url('/legacy-admin/dashboard', shouldOpenInNewTab: false)
-					->icon('icon-link')
+			->userMenuItems([
+				MenuItem::make()
+					->label('Sito Pubblico')
+					->url('/')
+					->icon('icon-home'),
+				MenuItem::make()
+					->label('Pannello Vecchio')
+					->url('/legacy-admin/dashboard')
+					->icon('icon-dashboard'),
+				'logout' => MenuItem::make()->icon('icon-exit'),
 			])
 
 			// Middlewares
