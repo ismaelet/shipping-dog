@@ -25,7 +25,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	/**
 	 * The attributes that are mass assignable
 	 */
-	protected $fillable = ['username', 'first_name', 'last_name', 'email', 'password', 'is_admin'];
+	protected $fillable = ['username', 'first_name', 'last_name', 'email', 'password', 'is_admin', 'admin'];
 
 	/**
 	 * The attributes that should be hidden for serialization

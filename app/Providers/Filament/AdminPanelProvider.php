@@ -32,7 +32,17 @@ class AdminPanelProvider extends PanelProvider {
 
 			// Style
 			->colors([
-				'primary' => Color::Amber,
+				'primary' => [
+					300 => '179, 153, 243',
+					400 => '255, 149, 0',
+					500 => '230, 103, 0',
+					600 => '230, 103, 0',
+				],
+				'danger' => [
+					400 => '255, 0, 0',
+					500 => '204, 0, 0',
+					600 => '204, 0, 0',
+				],
 			])
 			->font('Poppins')
 			->viteTheme('resources/css/filament/admin/theme.css')

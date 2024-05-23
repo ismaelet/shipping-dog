@@ -62,44 +62,6 @@
 	/*
 	* 2.1. Color parsing
 	*/
-	:root {
-		--color-primary-100: hsl(var(--color-primary-100-hsl));
-		--color-primary-200: hsl(var(--color-primary-200-hsl));
-		--color-primary-300: hsl(var(--color-primary-300-hsl));
-		--color-primary-400: hsl(var(--color-primary-400-hsl));
-		--color-primary-500: hsl(var(--color-primary-500-hsl));
-		--color-secondary-400: hsl(var(--color-secondary-400-hsl));
-		--color-secondary-500: hsl(var(--color-secondary-500-hsl));
-		--color-neutral-light-100: hsl(var(--color-neutral-light-100-hsl));
-		--color-neutral-light-200: hsl(var(--color-neutral-light-200-hsl));
-		--color-neutral-light-300: hsl(var(--color-neutral-light-300-hsl));
-		--color-neutral-light-400: hsl(var(--color-neutral-light-400-hsl));
-		--color-neutral-light-700: hsl(var(--color-neutral-light-700-hsl));
-		--color-neutral-light-900: hsl(var(--color-neutral-light-900-hsl));
-		--color-neutral-dark-100: hsl(var(--color-neutral-dark-100-hsl));
-		--color-neutral-dark-150: hsl(var(--color-neutral-dark-150-hsl));
-		--color-neutral-dark-200: hsl(var(--color-neutral-dark-200-hsl));
-		--color-neutral-dark-250: hsl(var(--color-neutral-dark-250-hsl));
-		--color-neutral-dark-400: hsl(var(--color-neutral-dark-400-hsl));
-		--color-neutral-dark-900: hsl(var(--color-neutral-dark-900-hsl));
-		--color-neutral-100: hsl(var(--color-neutral-100-hsl));
-		--color-neutral-200: hsl(var(--color-neutral-200-hsl));
-		--color-neutral-250: hsl(var(--color-neutral-250-hsl));
-		--color-neutral-300: hsl(var(--color-neutral-300-hsl));
-		--color-neutral-350: hsl(var(--color-neutral-350-hsl));
-		--color-neutral-400: hsl(var(--color-neutral-400-hsl));
-		--color-neutral-700: hsl(var(--color-neutral-700-hsl));
-		--color-neutral-900: hsl(var(--color-neutral-900-hsl));
-		--color-background: hsl(var(--color-background-hsl));
-		--color-surface-200: hsl(var(--color-surface-200-hsl));
-		--color-surface-400: hsl(var(--color-surface-400-hsl));
-		--color-surface-500: hsl(var(--color-surface-500-hsl));
-		--color-surface-700: hsl(var(--color-surface-700-hsl));
-		--color-success-400: hsl(var(--color-success-400-hsl));
-		--color-error-400: hsl(var(--color-error-400-hsl));
-		--color-success-500: hsl(var(--color-success-500-hsl));
-		--color-error-500: hsl(var(--color-error-500-hsl));
-	}
 }
 
 /*
