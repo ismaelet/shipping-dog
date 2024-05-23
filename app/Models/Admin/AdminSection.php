@@ -27,7 +27,7 @@ class AdminSection extends Model {
 	 * Get the url
 	 */
 	public function routeName(): string {
-		return implode('.', ['admin', $this->resource, $this->action]);
+		return implode('.', ['legacy-admin', $this->resource, $this->action]);
 	}
 
 	/**
@@ -40,7 +40,7 @@ class AdminSection extends Model {
 			return route($routeName);
 		}
 
-		return '/admin/' . $this->resource . '/' . $this->action;
+		return '/legacy-admin/' . $this->resource . '/' . $this->action;
 	}
 
 	/**

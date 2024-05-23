@@ -39,6 +39,6 @@ class LabelGeneratorController extends Controller {
 		// Get the order count
 		$orderCount = $orders->count();
 
-		return view('admin.labels.generate', compact('orders', 'orderCount', 'columns', 'buttons'));
+		return view('legacy-admin.labels.generate', compact('orders', 'orderCount', 'columns', 'buttons'));
 	}
 }

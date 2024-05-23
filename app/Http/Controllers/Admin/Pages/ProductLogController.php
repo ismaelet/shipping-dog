@@ -45,7 +45,7 @@ class ProductLogController extends Controller {
 		$validordersCount = $validorders->count();
 		$orderItemsCount = $filteredOrderItems?->count() ?? 0;
 
-		return view('admin.log-products.index')->with([
+		return view('legacy-admin.log-products.index')->with([
 			'startFromCart' => $startFromCart,
 			'firstCart' => $firstCart ?? null,
 			'validorders' => $validorders,

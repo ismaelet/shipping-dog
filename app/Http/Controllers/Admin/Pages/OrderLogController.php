@@ -25,7 +25,7 @@ class OrderLogController extends Controller {
 			->oldest()
 			->get();
 
-		return view('admin.log-orders.index')->with([
+		return view('legacy-admin.log-orders.index')->with([
 			'orders' => $orders,
 			'ordersFilter' => $orders->first() ? [['orders.created_at', '>=', $orders->first()->created_at]] : [],
 			'startFromTime' => $startFromTime,

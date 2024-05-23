@@ -76,7 +76,7 @@ class OrderController extends ResourceController {
 				'label' => 'Reinvia email',
 				'icon' => 'send-email',
 				'color' => 'primary',
-				'route' => 'admin.orders.resend-email',
+				'route' => 'legacy-admin.orders.resend-email',
 				'method' => 'POST',
 			],
 			[

@@ -16,7 +16,7 @@ class AdminTest extends TestCase {
 		$user->admin = true;
 
 		$response = $this->actingAs($user)
-			->get(route('admin.log-products'));
+			->get(route('legacy-admin.log-products'));
 
 		$response->assertStatus(200);
 	}

@@ -22,7 +22,7 @@
 	    'name' => 'Dashboard',
 	    'icon' => 'dashboard',
 	    'checked' => false,
-	    'url' => route('admin.dashboard'),
+	    'url' => route('legacy-admin.dashboard'),
 	];
 
 	$mainGroup[] = $dashboardHome;

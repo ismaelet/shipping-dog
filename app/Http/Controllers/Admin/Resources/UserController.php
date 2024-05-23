@@ -51,7 +51,7 @@ class UserController extends ResourceController {
 				'label' => 'Login',
 				'icon' => 'login',
 				'color' => 'green',
-				'route' => 'admin.users.login',
+				'route' => 'legacy-admin.users.login',
 			],
 			[
 				'type' => 'edit',

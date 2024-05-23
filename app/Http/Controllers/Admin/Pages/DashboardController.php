@@ -12,7 +12,7 @@ class DashboardController extends Controller {
 	 * Display the admin dashboard
 	 */
 	public function index() {
-		return view('admin.home');
+		return view('legacy-admin.home');
 	}
 
 	/**
