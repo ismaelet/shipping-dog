@@ -143,7 +143,7 @@ class DesignController extends Controller {
 			);
 
 			// Upload the vector image
-			$this->uploadVectorImage($design, $request->file('file_vector'));
+			$response = $this->uploadVectorImage($design, $request->file('file_vector'));
 		} else {
 			// Validate the file type
 			$inputName = $request->type == 'light' ? 'file_light' : 'file_dark';
@@ -276,7 +276,7 @@ class DesignController extends Controller {
 		$extension = $file->getClientOriginalExtension();
 
 		// Store the file
-		return $file->storeAs('designs_vector/' . $design->id . '.' . $extension, 'public');
+		return $file->storeAs('designs_vector',  $design->id . '.' . $extension, 'public');
 	}
 
 	/**

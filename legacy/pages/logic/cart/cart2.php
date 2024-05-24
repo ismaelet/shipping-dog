@@ -52,13 +52,6 @@ if (!empty($_POST)) {
 	$phone = trim($_POST['phone']);
 	$security = random_string();
 
-	if (
-		!$full_name || !$email || !$phone ||
-		($cart->shipping_method_id != 11 && (!$addr || !$num || !$zip || !$city || !$reg))
-	) {
-		redirect_old('?error=address');
-	}
-
 	Address::updateOrCreate([
 		'order_id' => $cart->id,
 	], [
@@ -73,6 +66,13 @@ if (!empty($_POST)) {
 		'phone' => $phone,
 		'security' => $security
 	]);
+
+	if (isset($_POST['submit']) && (
+		!$full_name || !$email || !$phone ||
+		($cart->shipping_method_id != 11 && (!$addr || !$num || !$zip || !$city || !$reg))
+	)) {
+		redirect_old('?error=address');
+	}
 }
 
 // remove item
