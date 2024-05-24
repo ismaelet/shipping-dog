@@ -13,7 +13,7 @@
 			"label": "Artisan: Migrate",
 			"type": "shell",
 			"command": "docker",
-			"args": ["exec", "shippingdog-laravel", "php", "artisan", "migrate"],
+			"args": ["exec", "shipping-dog-laravel", "php", "artisan", "migrate"],
 			"group": "build",
 			"problemMatcher": []
 		},
@@ -21,7 +21,7 @@
 			"label": "Artisan: Rollback",
 			"type": "shell",
 			"command": "docker",
-			"args": ["exec", "shippingdog-laravel", "php", "artisan", "migrate:rollback"],
+			"args": ["exec", "shipping-dog-laravel", "php", "artisan", "migrate:rollback"],
 			"group": "build",
 			"problemMatcher": []
 		},
@@ -29,7 +29,7 @@
 			"label": "Artisan: Run Tests",
 			"type": "shell",
 			"command": "docker",
-			"args": ["exec", "shippingdog-laravel", "php", "artisan", "test"],
+			"args": ["exec", "shipping-dog-laravel", "php", "artisan", "test"],
 			"group": {
 				"kind": "test",
 				"isDefault": false

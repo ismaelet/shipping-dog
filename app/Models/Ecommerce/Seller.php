@@ -9,6 +9,7 @@ use App\Models\Ecommerce\Seller\PaymentRequest;
 use App\Models\Ecommerce\Seller\SellerPrice;
 use App\Models\Ecommerce\Shop\Payment;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -244,6 +245,19 @@ class Seller extends Model {
 			->value('usedCredit');
 
 		return $usedShippingCredit ? round($usedShippingCredit, 2) : 0;
+	}
+
+	/**
+	 * * Query builders
+	 */
+	public static function isAwaiting(): Builder {
+		return self::where('status', 0)
+			->where('user_id', '!=', 2)
+			->whereIn('user_id', function ($query) {
+				$query->select('user_id')
+					->from('designs')
+					->where('status', 1);
+			});
 	}
 
 	/**

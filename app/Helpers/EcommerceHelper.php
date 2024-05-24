@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Ecommerce\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Number;
 
 class EcommerceHelper {
 
@@ -58,9 +59,9 @@ class EcommerceHelper {
 	/**
 	 * Format a price
 	 */
-	public static function formatPrice(float $price, bool $forceNumber = false): string {
+	public static function formatPrice(float $price, bool $forceNumber = true): string {
 		if ($price || $forceNumber) {
-			return StringHelper::formatWithComma($price) . ' €';
+			return Number::currency($price, 'EUR', config('app.locale'));
 		} else {
 			return __('Gratis');
 		}

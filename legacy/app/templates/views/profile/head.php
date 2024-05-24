@@ -15,7 +15,7 @@ $user = User::find(Auth::id());
 
 	<img src="<?= public_asset($user->icon()) ?>" id="pic" class="img-fill push-center">
 
-	<h1 id="username" class="txt-25rem"><?= $user->username ?></h1>
+	<h1 id="username" class="txt-25rem"><?= $user->name ?></h1>
 
 	<p class="mt-2">
 		<?= $user->first_name ?>

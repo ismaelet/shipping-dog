@@ -87,23 +87,6 @@ function ecommerce_config($paramenter) {
 	return $ecommerceConfig[$paramenter];
 }
 
-function format_price($price, $alwaysNumber = true) {
-	if ($price || $alwaysNumber) {
-		switch (ecommerce_config('currency')) {
-			case 'BRL':
-				$priceString = 'R$ ' . formatc($price);
-				break;
-			case 'EUR':
-			default:
-				$priceString = formatc($price) . ' €';
-		}
-	} else {
-		$priceString = ('Free');
-	}
-
-	return $priceString;
-}
-
 function rows_to_objects(Query_Result $rows = null, string $className) {
 	$objects = [];
 

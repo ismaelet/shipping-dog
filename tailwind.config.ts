@@ -47,6 +47,7 @@ export default {
 				// Filament
 				'custom-50': 'rgb(var(--c-50))',
 				'custom-400': 'rgb(var(--c-400))',
+				'custom-500': 'rgb(var(--c-500))',
 				'custom-600': 'rgb(var(--c-600))',
 
 				// Neutral light

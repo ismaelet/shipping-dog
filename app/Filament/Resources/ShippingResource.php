@@ -21,14 +21,12 @@ class ShippingResource extends Resource {
 
 	protected static ?string $navigationIcon = 'icon-shipping';
 
-
-
 	public static function getNavigationBadge(): ?string {
-		return static::getModel()::unlabelledQuery()->count();
+		return static::getModel()::hasNoLabel()->count();
 	}
 
 	public static function getNavigationBadgeColor(): ?string {
-		return static::getModel()::count() > 0 ? 'color-primary' : 'color-neutral';
+		return static::getModel()::count() > 0 ? 'primary' : 'neutral';
 	}
 
 	public static function form(Form $form): Form {
@@ -40,7 +38,7 @@ class ShippingResource extends Resource {
 
 	public static function table(Table $table): Table {
 		return $table
-			->query(Order::unlabelledQuery())
+			->query(Order::hasNoLabel())
 			->columns([
 				//
 			])

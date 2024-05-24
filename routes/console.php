@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Schedule;
 Schedule::call('gls:track-parcels')
 	->dailyAt('19:00')
 	->environments(['staging', 'production']);
+
+Schedule::call('update:sale-count')
+	->dailyAt('02:00')
+	->environments(['staging', 'production']);

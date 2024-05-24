@@ -8,6 +8,7 @@ use App\Models\Ecommerce\Seller;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -42,6 +43,19 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 		'email_verified_at' => 'datetime',
 		'password' => 'hashed',
 	];
+
+	/**
+	 * * Accessors
+	 */
+	public function name(): Attribute {
+		return Attribute::make(
+			get: fn () => $this->username ?: $this->email,
+		);
+	}
+
+	/**
+	 * * Attributes
+	 */
 
 	/**
 	 * Get the user's full name

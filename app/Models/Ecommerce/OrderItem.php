@@ -8,6 +8,8 @@ use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductSize;
+use App\Models\Ecommerce\Product\ProductType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -61,6 +63,15 @@ class OrderItem extends Model {
 	 */
 	public function product_with_trashed(): BelongsTo {
 		return $this->product()->withTrashed();
+	}
+
+	/**
+	 * Get the order's type.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function type(): BelongsTo {
+		return $this->belongsTo(ProductType::class, 'type_id');
 	}
 
 	/**
@@ -299,5 +310,13 @@ class OrderItem extends Model {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * * Query builders
+	 */
+
+	public static function hasBeenPaid(): Builder {
+		return self::where('status', '>=', EcommerceHelper::statusFromTag('confirmed'));
 	}
 }
