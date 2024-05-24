@@ -69,7 +69,7 @@ class OrderItemController extends Controller {
 			...$request->all(),
 			'user_id' => Auth::id(),
 			'order_id' => $order->id,
-			'seller_id' => $product->user_id,
+			'seller_id' => $product->seller->id,
 			'design_id' => $product->design_id,
 			'type_id' => $product->type->id,
 			'fullProductPrice' => $product->fullPrice(),

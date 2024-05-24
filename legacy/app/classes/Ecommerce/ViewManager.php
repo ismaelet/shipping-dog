@@ -95,14 +95,24 @@ class ViewManager {
 
 					</div>
 
-					<?php if (!$order->status && !$order->coupon && !$orderItem->credit && $orderItem->seller_id == Auth::id() && $orderItem->seller->credit >= $orderItem->price()) { ?>
+					<?php
+
+					$userSeller = Auth::user()?->seller;
+
+					if (
+						$userSeller &&
+						$userSeller->id == $orderItem->seller_id &&
+						$userSeller->credit >= $orderItem->price() &&
+						!$order->coupon &&
+						!$orderItem->credit
+					) { ?>
 
 						<button class="use-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $orderItem->id ?>">
 							<?= embed_icon('dollar') ?>
 							Usa il tuo credito
 						</button>
 
-					<?php } else if (!$order->status && $orderItem->credit) { ?>
+					<?php } else if ($orderItem->credit) { ?>
 
 						<button class="no-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_no_credit" value="<?= $orderItem->id ?>">
 							<?= embed_icon('close') ?>
