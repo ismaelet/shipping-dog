@@ -109,6 +109,7 @@ class UserResource extends Resource {
 					->sortable(),
 				Tables\Columns\TextColumn::make('email')
 					->label('E-mail')
+					->searchable()
 					->sortable(),
 				Tables\Columns\IconColumn::make('admin')
 					->boolean()
