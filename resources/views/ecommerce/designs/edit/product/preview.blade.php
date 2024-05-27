@@ -1,3 +1,5 @@
+@use ('App\Helpers\PreviewHelper');
+
 @php
 	$clothing = $product->type->image($product->color_id, $position->basicPositionId());
 
@@ -15,6 +17,12 @@
 				class="h-full w-full bg-cover bg-center"
 				style="background-image: url({{ public_asset($design->image(1024)) }});"
 			></div>
+		@elseif (!$clothing)
+			<img
+				src="{{ asset('storage/' . PreviewHelper::PLACEHOLDER_IMAGE) }}"
+				alt=""
+				class="w-full"
+			>
 		@else
 			<!-- If it's a normal image -->
 			<div
