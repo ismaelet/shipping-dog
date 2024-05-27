@@ -188,20 +188,23 @@
 												    : $orderItemDescription;
 
 												if (isset($mergedorder_items[$orderItemDescription])) {
-												    $mergedorder_items[$orderItemDescription] += $orderItem->quantity;
+												    $mergedorder_items[$orderItemDescription]['quantity'] += $orderItem->quantity;
 												} else {
-												    $mergedorder_items[$orderItemDescription] = 1;
+												    $mergedorder_items[$orderItemDescription] = [
+												        'url' => $orderItem->product_with_trashed->fullUrl($orderItem->color_id, $orderItem->position_id),
+												        'quantity' => 1,
+												    ];
 												}
 											@endphp
 										@endforeach
 
-										@foreach ($mergedorder_items as $orderItemDescription => $quantity)
+										@foreach ($mergedorder_items as $orderItemDescription => $productData)
 											<a
-												href="{{ $orderItem->product_with_trashed->fullUrl($orderItem->color_id, $orderItem->position_id) }}"
+												href="{{ $productData['url'] }}"
 												target="_bank"
 												class="js-to-copy"
 											>
-												<p>{!! $quantity . ' x ' . $orderItemDescription !!}</p>
+												<p>{!! $productData['quantity'] . ' x ' . $orderItemDescription !!}</p>
 											</a>
 										@endforeach
 									</div>

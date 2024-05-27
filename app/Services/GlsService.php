@@ -13,14 +13,27 @@ use stdClass;
 
 class GlsService {
 
+	/**
+	 * Endpoints
+	 * 
+	 * @var string
+	 */
 	private string $addParcelEndpoint = 'https://labelservice.gls-italy.com/ilswebservice.asmx/AddParcel';
 	private string $closeWorkDayByShipmentNumberEndpoint = 'https://labelservice.gls-italy.com/ilsWebService.asmx/CloseWorkDayByShipmentNumber';
 	private string $trackParcelEndpoint = 'https://infoweb.gls-italy.com/XML/get_xml_track.php';
 
 	/**
 	 * * Add Parcel
+	 * 
+	 * @param Collection|Order $orders
+	 * @return bool
 	 */
-	public function addParcels(Collection $orders): bool {
+	public function addParcels(Collection|Order $orders): bool {
+		// If a single order is passed, convert it to a collection
+		if ($orders instanceof Order) {
+			$orders = new Collection([$orders]);
+		}
+
 		// Set headers
 		$headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
 
@@ -47,8 +60,15 @@ class GlsService {
 	 * * Transmit Parcel
 	 *	
 	 * CloseWorkDayByShipmentNumber in the GLS API
+	 * 
+	 * @return bool
 	 */
-	public function transmitParcels(Collection $orders): bool {
+	public function transmitParcels(Collection|Order $orders): bool {
+		// If a single order is passed, convert it to a collection
+		if ($orders instanceof Order) {
+			$orders = collect([$orders]);
+		}
+
 		// Set headers
 		$headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
 
@@ -75,6 +95,8 @@ class GlsService {
 
 	/**
 	 * * Track parcel
+	 * 
+	 * @return void
 	 */
 	public function trackParcels(): void {
 		$orders = $this->trackParcelOrders();
@@ -85,6 +107,11 @@ class GlsService {
 
 	/**
 	 * ~ Helper: Send Request
+	 * 
+	 * @param string $endpoint
+	 * @param array $headers
+	 * @param array $body
+	 * @return stdClass|false
 	 */
 	private function sendRequest(string $endpoint, array $headers, array $body): stdClass|false {
 		try {
@@ -109,6 +136,8 @@ class GlsService {
 
 	/**
 	 * ~ Helper: Payload Header 
+	 * 
+	 * @return string
 	 */
 	private function payloadHeader(): string {
 		$headquarters = config('services.gls.headquarters');
@@ -122,6 +151,9 @@ class GlsService {
 
 	/**
 	 * ~ Add Parcel Helper: Add Parcels Data
+	 * 
+	 * @param Collection $orders
+	 * @return string
 	 */
 	private function addParcelsData(Collection $orders): string {
 
@@ -165,9 +197,19 @@ class GlsService {
 
 	/**
 	 * ~ Add Parcel Helper: Update Order
+	 * 
+	 * @param Collection $orders
+	 * @param stdClass $response
+	 * @return bool
 	 */
 	private function updateOrdersAfterAdd(Collection $orders, stdClass $response): bool {
-		foreach ($response->Parcel as $parcelKey => $parcel) {
+		$parcels = $response->Parcel;
+
+		if (!is_array($parcels)) {
+			$parcels = [$parcels];
+		}
+
+		foreach ($parcels as $parcelKey => $parcel) {
 			$order = $orders[$parcelKey];
 			$shippingNumber = $parcel->NumeroSpedizione ?? null;
 
@@ -187,6 +229,9 @@ class GlsService {
 
 	/**
 	 * ~ Transmit Parcel Helper: Transmit Parcels Data
+	 * 
+	 * @param Collection $orders
+	 * @return string
 	 */
 	private function transmitParcelsData(Collection $orders): string {
 		$contractCode = config('services.gls.contract_code');
@@ -229,6 +274,10 @@ class GlsService {
 
 	/**
 	 * ~ Transmit Parcel Helper: Update Orders
+	 * 
+	 * @param Collection $orders
+	 * @param stdClass $response
+	 * @return bool
 	 */
 	private function updateOrdersAfterTransmit(Collection $orders, stdClass $response): bool {
 		foreach ($response->Parcel as $parcelKey => $parcel) {
@@ -244,6 +293,8 @@ class GlsService {
 
 	/**
 	 * ~ Track Parcel Helper: Orders
+	 * 
+	 * @return Collection
 	 */
 	private function trackParcelOrders(): Collection {
 		return Order::whereIn('status', [EcommerceHelper::statusFromTag('label-ready'), EcommerceHelper::statusFromTag('shipped')])
@@ -253,6 +304,9 @@ class GlsService {
 
 	/**
 	 * ~ Track Parcel Helper: Track Parcel
+	 * 
+	 * @param Order $order
+	 * @return bool
 	 */
 	private function trackParcel(Order $order): bool {
 		$headquarters = config('services.gls.headquarters');

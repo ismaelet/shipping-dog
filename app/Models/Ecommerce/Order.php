@@ -599,7 +599,8 @@ class Order extends Model {
 		return self::join('addresses', 'orders.id', '=', 'addresses.order_id')
 			->where('status', EcommerceHelper::statusFromTag('confirmed'))
 			->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
-			->oldest('orders.created_at');
+			->oldest('orders.created_at')
+			->select('orders.*', 'addresses.full_name');
 	}
 
 

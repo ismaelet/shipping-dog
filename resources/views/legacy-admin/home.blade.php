@@ -5,9 +5,6 @@
 	<div class="mt-8 grid gap-4">
 		{{-- Row 1 --}}
 		<div class="grid">
-
-			{{-- Labels --}}
-			<x-dashboard.widget.labels />
 		</div>
 
 		{{-- Row 2 --}}

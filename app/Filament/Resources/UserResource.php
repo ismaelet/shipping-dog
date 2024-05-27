@@ -86,7 +86,6 @@ class UserResource extends Resource {
 		return $table
 			->columns([
 				Tables\Columns\TextColumn::make('id')
-					->numeric()
 					->searchable()
 					->label('ID')
 					->sortable(),
