@@ -91,7 +91,7 @@ class PayPalController extends Controller {
 
 		// Error handling
 		if (!$token || !$checkoutUrl) {
-			return $this->error($response);
+			return $this->error($response, $order);
 		}
 
 		// Store the order token
@@ -127,7 +127,7 @@ class PayPalController extends Controller {
 
 		// Error handling
 		if ($paymentStatus != 'COMPLETED') {
-			return $this->error($response);
+			return $this->error($response, $order);
 		}
 
 		// Confirm the order
@@ -179,12 +179,18 @@ class PayPalController extends Controller {
 	/**
 	 * ~ Helper: Error handling
 	 */
-	private function error($response): RedirectResponse {
+	private function error($response, Order $order = null): RedirectResponse {
 		if (env('APP_DEBUG')) {
 			dd($response);
 		}
 
-		Log::error(['PayPal error' => ['response' => $response]]);
+		Log::error(['PayPal error' => [
+			array_filter([
+				'order' => $order,
+				'address' => $order?->address,
+				'response' => $response
+			])
+		]]);
 
 		return back()->with('error', 'Errore durante il pagamento. Non è stato prevelato nessun importo.');
 	}
