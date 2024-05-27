@@ -24,7 +24,24 @@ class Order extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['user_id', 'shipping_method_id', 'payment_method_id', 'code', 'quantity', 'credit_ship', 'shipping', 'status', 'step', 'courier_notes', 'shipping_notes', 'has_errors', 'created_at', 'updated_at', 'token', 'tracking'];
+	protected $fillable = [
+		'user_id',
+		'shipping_method_id',
+		'payment_method_id',
+		'code',
+		'quantity',
+		'credit_ship',
+		'shipping',
+		'status',
+		'step',
+		'courier_notes',
+		'shipping_notes',
+		'has_errors',
+		'created_at',
+		'updated_at',
+		'token',
+		'tracking'
+	];
 
 	/**
 	 * * Relationships

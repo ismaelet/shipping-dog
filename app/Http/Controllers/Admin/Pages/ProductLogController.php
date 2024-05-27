@@ -27,7 +27,7 @@ class ProductLogController extends Controller {
 		if ($startFromCart) {
 			$filteredOrderItems = OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
 				->join('addresses', 'addresses.order_id', '=', 'orders.id')
-				->join('stores', 'stores.user_id', '=', 'order_items.seller_id')
+				->join('stores', 'stores.id', '=', 'order_items.seller_id')
 				->join('products', 'products.id', '=', 'order_items.product_id')
 				->join('product_types', 'product_types.id', '=', 'order_items.type_id')
 				->where('orders.status', '>', EcommerceHelper::statusFromTag('received'))

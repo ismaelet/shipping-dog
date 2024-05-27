@@ -183,7 +183,7 @@ class ShippingResource extends Resource {
 			->headerActions([])
 			->bulkActions([
 				BulkAction::make('transmit')
-					->label('Trasmetti tutte')
+					->label('Trasmetti selezionate')
 					->requiresConfirmation()
 					->icon('icon-shipping')
 					->button()
@@ -215,7 +215,7 @@ class ShippingResource extends Resource {
 						if ($response) {
 							Notification::make()
 								->title('Trasmesse')
-								->body('Tutte le spedizioni sono state trasmesse correttamente')
+								->body('Tutte le spedizioni selezionate sono state trasmesse correttamente')
 								->success()
 								->send();
 

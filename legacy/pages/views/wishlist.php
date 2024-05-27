@@ -1,24 +1,17 @@
-<?php
-
-use App\Models\Ecommerce\Design;
-
-?>
-
 {% block main %}
 
 <section id="page-header" class="py-16 text-center">
 	<h1 class="text-main-heading uppercase tracking-widest"><span class="txt-c1">Wish</span>list</h1>
 </section>
 
-<?php if ($selN) { ?>
+<?php if ($likes->count()) { ?>
 
 	<div class="main-wrap pad-t-4 pad-b-5">
 
 		<div id="products" class="">
 
-			<?php while ($row = $res_sel->fetch_assoc()) {
-
-				$design = EcommerceDesign::find($row['design_id']);
+			<?php foreach ($likes as $like) {
+				$design = $like->design;
 			?>
 
 				<div class="product">

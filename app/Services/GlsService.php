@@ -66,7 +66,7 @@ class GlsService {
 	public function transmitParcels(Collection|Order $orders): bool {
 		// If a single order is passed, convert it to a collection
 		if ($orders instanceof Order) {
-			$orders = collect([$orders]);
+			$orders = new Collection([$orders]);
 		}
 
 		// Set headers
