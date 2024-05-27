@@ -27,10 +27,6 @@ Route::prefix('legacy-admin')->name('legacy-admin.')->group(function () {
 	/**
 	 * * Resources
 	 */
-	// Users
-	Route::resource('users', UserController::class)->only(['index', 'edit', 'update', 'destroy']);
-	Route::post('/users/{id}/login', [UserController::class, 'login'])->name('users.login');
-
 	// Sellers
 	Route::resource('sellers', SellerController::class)->only(['index']);
 	Route::resource('seller-balances', SellerBalanceController::class)->only(['index']);
@@ -53,8 +49,4 @@ Route::prefix('legacy-admin')->name('legacy-admin.')->group(function () {
 	Route::post('log-orders', [OrderLogController::class, 'update']);
 	Route::get('log-products', [ProductLogController::class, 'index'])->name('log-products');
 	Route::post('log-products', [ProductLogController::class, 'update']);
-
-	// Labels
-	Route::get('labels/generate', [LabelGeneratorController::class, 'index'])->name('labels.generate');
-	Route::post('labels/generate', [LabelGeneratorController::class, 'download'])->name('labels.download');
 });
