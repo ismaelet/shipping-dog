@@ -44,7 +44,7 @@ class ProductController extends ResourceController {
 		$this->buttons = [
 			[
 				'label' => 'Visualizza',
-				'icon' => 'link',
+				'icon' => 'external_link',
 				'color' => 'green',
 				'route' => 'products.show',
 				'method' => 'GET',

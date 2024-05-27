@@ -8,13 +8,13 @@
 	$publicSiteGroup = [
 	    [
 	        'name' => 'Dashboard Nuova',
-	        'icon' => 'link',
+	        'icon' => 'external_link',
 	        'checked' => false,
 	        'url' => '/admin',
 	    ],
 	    [
 	        'name' => 'Sito pubblico',
-	        'icon' => 'link',
+	        'icon' => 'external_link',
 	        'checked' => false,
 	        'url' => route('home'),
 	    ],

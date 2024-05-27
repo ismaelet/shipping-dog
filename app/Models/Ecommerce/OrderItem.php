@@ -23,12 +23,34 @@ class OrderItem extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['fullProductPrice', 'price_disc', 'gain', 'productGain', 'gain_disc', 'credit', 'inventory', 'quantity', 'time', 'user_id', 'order_id', 'product_id', 'seller_id', 'design_id', 'type_id', 'color_id', 'size_id', 'gender_id', 'position_id', 'logo_id'];
-
+	protected $fillable = [
+		'fullProductPrice',
+		'price_disc',
+		'gain',
+		'productGain',
+		'gain_disc',
+		'credit',
+		'inventory',
+		'quantity',
+		'user_id',
+		'order_id',
+		'product_id',
+		'seller_id',
+		'design_id',
+		'type_id',
+		'color_id',
+		'size_id',
+		'gender_id',
+		'position_id',
+		'logo_id',
+		'status',
+		'created_at',
+	];
 
 	/**
 	 * * Relationships 
 	 */
+
 	/**
 	 * Get the order that the order item belongs to.
 	 *

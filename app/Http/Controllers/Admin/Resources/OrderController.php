@@ -8,6 +8,7 @@ use App\Mail\OrderStatusMail;
 use App\Models\Ecommerce\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
@@ -110,9 +111,20 @@ class OrderController extends ResourceController {
 			} else if ($request->new_status == EcommerceHelper::statusFromTag('cancelled')) {
 				$order->cancel();
 			} else {
-				$order->status = $request->new_status;
-				$order->save();
+				$order->update([
+					'status' => $request->new_status
+				]);
 			}
+		}
+
+		if ($request->has('attach_to_current_user')) {
+			Auth::user()->cart?->update(['status' => EcommerceHelper::statusFromTag('received')]);
+
+			$order->update(['user_id' => Auth::id()]);
+		}
+
+		if ($request->has('detach_from_current_user')) {
+			$order->update(['user_id' => null]);
 		}
 
 		return redirect()->back();

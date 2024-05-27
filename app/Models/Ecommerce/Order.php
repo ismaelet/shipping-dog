@@ -44,6 +44,35 @@ class Order extends Model {
 	];
 
 	/**
+	 * * Events
+	 */
+
+	/**
+	 * Update the order's order_items status when the order is updated.
+	 * 
+	 * @param array $attributes
+	 * @param array $options
+	 * @return bool
+	 */
+	public function update(array $attributes = [], array $options = []): bool {
+		// Synchronize the order_items status with the order status
+		if (isset($attributes['status'])) {
+			$this->order_items->each->update([
+				'status' => $attributes['status'],
+			]);
+		}
+
+		// Synchronize the order_items created_at with the order created_at
+		if (isset($attributes['created_at'])) {
+			$this->order_items->each->update([
+				'created_at' => $attributes['created_at'],
+			]);
+		}
+
+		return parent::update($attributes, $options);
+	}
+
+	/**
 	 * * Relationships
 	 */
 

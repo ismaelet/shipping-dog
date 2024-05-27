@@ -258,6 +258,30 @@
 						Da trasmettere
 					</x-inputs.button>
 				@endif
+
+				@if (!$record->user_id && $record->status == EcommerceHelper::statusFromTag('open'))
+					<x-inputs.button
+						type="submit"
+						variant="secondary"
+						name="attach_to_current_user"
+						value="{{ EcommerceHelper::statusFromTag('confirmed') }}"
+					>
+						{!! embed_icon('link') !!}
+						Associa a me
+					</x-inputs.button>
+				@endif
+
+				@if ($record->user_id == auth()->id() && $record->status == EcommerceHelper::statusFromTag('open'))
+					<x-inputs.button
+						type="submit"
+						variant="secondary"
+						name="detach_from_current_user"
+						value="{{ EcommerceHelper::statusFromTag('confirmed') }}"
+					>
+						{!! embed_icon('link_off') !!}
+						Dissocia da me
+					</x-inputs.button>
+				@endif
 			</div>
 
 			@if ($record->status == EcommerceHelper::statusFromTag('cancelled'))
