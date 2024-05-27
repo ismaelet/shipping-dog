@@ -57,7 +57,7 @@ return [
 				'icon' => 'correct',
 			],
 			'3' => [
-				'tag' => 'label-ready',
+				'tag' => 'awaiting-shipping',
 				'label' => 'In preparazione',
 				'color' => 'hsl(95, 70%, 50%)',
 				'icon' => 'stroked.400.deployed_code_history',

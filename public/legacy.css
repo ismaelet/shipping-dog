@@ -3943,7 +3943,7 @@ p strong {
 	--_color: var(--status-color--waiting-payment);
 }
 .status-color--confirmed-payment,
-.status-color--label-ready {
+.status-color--awaiting-shipping {
 	--_color: var(--status-color--confirmed-payment);
 }
 .status-color--shipped {
@@ -3964,7 +3964,7 @@ p strong {
 	background-color: var(--status-color--waiting-payment);
 }
 .background-status-color--confirmed-payment,
-.background-status-color--label-ready {
+.background-status-color--awaiting-shipping {
 	background-color: var(--status-color--confirmed-payment);
 }
 .background-status-color--shipped {

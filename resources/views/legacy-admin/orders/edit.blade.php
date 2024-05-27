@@ -247,7 +247,7 @@
 					</x-inputs.button>
 				@endif
 
-				@if ($record->status >= EcommerceHelper::statusFromTag('label-ready'))
+				@if ($record->status >= EcommerceHelper::statusFromTag('awaiting-shipping'))
 					<x-inputs.button
 						type="submit"
 						variant="secondary"
@@ -291,12 +291,12 @@
 				<x-inputs.button
 					type="submit"
 					name="new_status"
-					value="{{ EcommerceHelper::statusFromTag('label-ready') }}"
+					value="{{ EcommerceHelper::statusFromTag('awaiting-shipping') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Etichetta trasmessa
 				</x-inputs.button>
-			@elseif ($record->status == EcommerceHelper::statusFromTag('label-ready'))
+			@elseif ($record->status == EcommerceHelper::statusFromTag('awaiting-shipping'))
 				<x-inputs.button
 					type="submit"
 					name="new_status"

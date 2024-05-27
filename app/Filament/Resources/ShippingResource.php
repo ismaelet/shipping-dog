@@ -156,7 +156,7 @@ class ShippingResource extends Resource {
 					->color('danger')
 					->action(function (Order $record): bool {
 						$response = $record->update([
-							'status' => EcommerceHelper::statusFromTag('label-ready'),
+							'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),
 						]);
 
 						// Success

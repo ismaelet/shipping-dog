@@ -284,7 +284,7 @@ class GlsService {
 			$order = $orders[$parcelKey];
 
 			$order->update([
-				'status' => EcommerceHelper::statusFromTag('label-ready'),
+				'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),
 			]);
 		}
 
@@ -297,7 +297,7 @@ class GlsService {
 	 * @return Collection
 	 */
 	private function trackParcelOrders(): Collection {
-		return Order::whereIn('status', [EcommerceHelper::statusFromTag('label-ready'), EcommerceHelper::statusFromTag('shipped')])
+		return Order::whereIn('status', [EcommerceHelper::statusFromTag('awaiting-shipping'), EcommerceHelper::statusFromTag('shipped')])
 			->whereNotNull('tracking')
 			->get();
 	}

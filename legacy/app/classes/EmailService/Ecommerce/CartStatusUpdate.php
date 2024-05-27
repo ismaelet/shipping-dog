@@ -24,7 +24,7 @@ class orderstatusUpdate {
 				$info = 'Abbiamo aggiornato lo stato dell\'ordine. Il nuovo stato è:<br><span style="display: block; font-size: 25px; font-weight: bold; letter-spacing: .05em; text-align: center;">CONFERMATO</span>';
 				break;
 
-			case 'label-ready':
+			case 'awaiting-shipping':
 				$subject = $title = 'Ordine pronto';
 				$info = 'Abbiamo aggiornato lo stato dell\'ordine. Il nuovo stato è:<br><span style="display: block; font-size: 25px; font-weight: bold; letter-spacing: .05em; text-align: center;">PRONTO</span>';
 				break;

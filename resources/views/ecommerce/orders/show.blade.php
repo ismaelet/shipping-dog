@@ -91,7 +91,7 @@
 			</form>
 		@elseif (in_array($order->status, [
 				EcommerceHelper::statusFromTag('confirmed'),
-				EcommerceHelper::statusFromTag('label-ready'),
+				EcommerceHelper::statusFromTag('awaiting-shipping'),
 				EcommerceHelper::statusFromTag('confirmed'),
 				EcommerceHelper::statusFromTag('shipped'),
 			]))
