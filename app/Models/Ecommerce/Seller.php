@@ -107,7 +107,7 @@ class Seller extends Model {
 	}
 
 	/**
-	 * * Attributes
+	 * * Get methods
 	 */
 	/**
 	 * Get the formatted time string

@@ -26,7 +26,15 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	/**
 	 * The attributes that are mass assignable
 	 */
-	protected $fillable = ['username', 'first_name', 'last_name', 'email', 'password', 'is_admin', 'admin'];
+	protected $fillable = [
+		'username',
+		'first_name',
+		'last_name',
+		'email',
+		'password',
+		'is_admin',
+		'admin'
+	];
 
 	/**
 	 * The attributes that should be hidden for serialization
@@ -47,14 +55,42 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	/**
 	 * * Accessors
 	 */
+
+	/**
+	 * Get the username
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
+	 */
 	public function name(): Attribute {
 		return Attribute::make(
-			get: fn () => $this->username ?: $this->email,
+			get: fn (): string => $this->name ?: $this->email,
 		);
 	}
 
 	/**
-	 * * Attributes
+	 * Get whether the user is an admin
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
+	 */
+	public function is_admin(): Attribute {
+		return Attribute::make(
+			get: fn (): bool => $this->admin_level,
+		);
+	}
+
+	/**
+	 * Get whether the user is a superadmin
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
+	 */
+	public function is_superadmin(): Attribute {
+		return Attribute::make(
+			get: fn (): bool => $this->admin_level == 2,
+		);
+	}
+
+	/**
+	 * * Get methods
 	 */
 
 	/**
@@ -66,20 +102,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 		$fullName[] = $this->last_name;
 
 		return implode(' ', $fullName);
-	}
-
-	/**
-	 * Check if the user is an admin
-	 */
-	public function isAdmin(): bool {
-		return (bool) $this->admin;
-	}
-
-	/**
-	 * Check if the user is an admin
-	 */
-	public function isSupervisor(): bool {
-		return (bool) $this->admin == 2;
 	}
 
 	/**
@@ -111,7 +133,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	}
 
 	public function canAccessPanel(Panel $panel): bool {
-		return $this->isAdmin();
+		return $this->is_admin;
 	}
 
 	public function getFilamentAvatarUrl(): ?string {

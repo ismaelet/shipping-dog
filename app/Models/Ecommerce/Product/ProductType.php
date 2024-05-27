@@ -70,7 +70,7 @@ class ProductType extends Model {
 	}
 
 	/**
-	 * * Attributes
+	 * * Get methods
 	 */
 
 	/**

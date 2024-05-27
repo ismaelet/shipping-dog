@@ -15,14 +15,14 @@ function dd_array(array $array): void {
  * Check if the user is an admin
  */
 function is_admin(): bool {
-	return Auth::check() && Auth::user()->isAdmin();
+	return Auth::check() && Auth::user()->is_admin;
 }
 
 /**
  * Check if the user is a supervisor
  */
 function is_supervisor(): bool {
-	return Auth::check() && Auth::user()->isSupervisor();
+	return Auth::check() && Auth::user()->is_superadmin;
 }
 
 /**

@@ -133,7 +133,7 @@ class OrderItem extends Model {
 	}
 
 	/**
-	 * * Attributes
+	 * * Get methods
 	 */
 
 	/**

@@ -114,7 +114,7 @@ class UserResource extends Resource {
 					->boolean()
 					->label('Amministratore')
 					->sortable()
-					->hidden(fn () => !auth()->user()->isSupervisor()),
+					->hidden(fn () => !auth()->user()->is_superadmin),
 				Tables\Columns\TextColumn::make('created_at')
 					->dateTime('d-m-Y')
 					->label('Creato il')

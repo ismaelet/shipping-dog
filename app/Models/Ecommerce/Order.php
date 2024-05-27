@@ -141,7 +141,7 @@ class Order extends Model {
 
 
 	/**
-	 * * Attributes
+	 * * Get methods
 	 */
 
 	/**
