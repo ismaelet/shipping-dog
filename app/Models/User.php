@@ -72,7 +72,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	 * 
 	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
 	 */
-	public function is_admin(): Attribute {
+	public function isAdmin(): Attribute {
 		return Attribute::make(
 			get: fn (): bool => $this->admin_level,
 		);
@@ -83,7 +83,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	 * 
 	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
 	 */
-	public function is_superadmin(): Attribute {
+	public function isSuperadmin(): Attribute {
 		return Attribute::make(
 			get: fn (): bool => $this->admin_level == 2,
 		);
