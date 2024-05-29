@@ -63,7 +63,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	 */
 	public function name(): Attribute {
 		return Attribute::make(
-			get: fn (): string => $this->name ?: $this->email,
+			get: fn (?string $value): string => $value ?: $this->email,
 		);
 	}
 

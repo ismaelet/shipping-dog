@@ -107,7 +107,7 @@ class OrderController extends ResourceController {
 		// Update the cart's status
 		if ($request->has('new_status')) {
 			if ($request->new_status == EcommerceHelper::statusFromTag('confirmed')) {
-				$order->confirm(false, false);
+				$order->confirm(false, true);
 			} else if ($request->new_status == EcommerceHelper::statusFromTag('cancelled')) {
 				$order->cancel();
 			} else {

@@ -44,6 +44,7 @@ $inputs = [
 		[
 			'type' => 'file',
 			'name' => 'file-vector',
+			'accept' => '.pdf,.ai',
 		],
 	],
 	[

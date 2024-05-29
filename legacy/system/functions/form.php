@@ -192,7 +192,7 @@ function generate_input($input, $data, $error, $done) {
 
 			case 'file': ?>
 
-				<input type="file" class="input file" name="<?= $name ?>" <?= isset($input['multiple']) ? 'multiple' : '' ?> <?= isset($input['required']) ? 'required' : '' ?>>
+				<input type="file" class="input file" name="<?= $name ?>" <?= isset($input['multiple']) ? 'multiple' : '' ?> <?= isset($input['required']) ? 'required' : '' ?> <?= isset($input['accept']) ? 'accept="' . $input['accept'] . '"' : '' ?>>
 
 			<?php break;
 

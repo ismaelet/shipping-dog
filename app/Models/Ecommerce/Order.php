@@ -525,7 +525,7 @@ class Order extends Model {
 		// Update the order
 		if ($updateDate) {
 			$this->update([
-				'created_at' => date('Y-m-d H:i:s'),
+				'created_at' => now(),
 			]);
 		}
 
