@@ -19,7 +19,7 @@ class OrderController extends ResourceController {
 	 */
 	protected array $columns = [
 		['label' => 'ID', 'name' => 'id'],
-		['label' => 'Destinatario', 'name' => 'full_name', 'type' =>  'method', 'method' => 'address.fullAddress'],
+		['label' => 'Destinatario', 'name' => 'full_name'],
 		['label' => 'Articoli', 'type' =>  'method', 'method' => 'orderItemsString',],
 		// ['label' => 'Spedizione', 'name' => 'shipping_method_name'],
 		['label' => 'Totale', 'name' => 'price', 'type' => 'price',],

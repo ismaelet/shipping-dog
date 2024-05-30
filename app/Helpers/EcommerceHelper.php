@@ -90,12 +90,12 @@ class EcommerceHelper {
 	 * @return int The status index if found, false otherwise.
 	 */
 	public static function statusFromTag(string $statusTag): int {
-		$statusKeyPosition = array_search($statusTag, array_column(config('ecommerce.cart.statuses'), 'tag'));
+		$statusKeyPosition = array_search($statusTag, array_column(config('ecommerce.order.statuses'), 'tag'));
 
 		if ($statusKeyPosition === false) {
 			return false;
 		}
 
-		return array_keys(config('ecommerce.cart.statuses'))[$statusKeyPosition];
+		return array_keys(config('ecommerce.order.statuses'))[$statusKeyPosition];
 	}
 }

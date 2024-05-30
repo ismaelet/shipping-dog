@@ -126,6 +126,8 @@
 		--font-size-200: 0.75rem;
 		--font-size-300: 0.875rem;
 		--font-size-400: 1rem;
+		--font-size-450: 1.125rem;
+		--font-size-500: 1.25rem;
 		--font-size-600: min(1.5rem, 6vw);
 		--font-size-700: min(2rem, 7vw);
 		--font-size-800: min(3.5rem, 12vw);

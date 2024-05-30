@@ -2,245 +2,134 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ShippingResource\Pages;
-use App\Helpers\EcommerceHelper;
+use App\Filament\Resources\ShippingResource\Actions\AddParcel;
+use App\Filament\Resources\ShippingResource\Actions\BulkTransmitParcels;
+use App\Filament\Resources\ShippingResource\Actions\RemoveLabeling;
+use App\Filament\Resources\ShippingResource\Actions\TransmitParcel;
+use App\Filament\Resources\ShippingResource\Pages\ListShippings;
 use App\Models\Ecommerce\Order;
-use App\Services\GlsService;
-use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 
 class ShippingResource extends Resource {
 
+	/**
+	 * The model the resource corresponds to.
+	 * 
+	 * @var string
+	 */
 	protected static ?string $model = Order::class;
 
+	/**
+	 * The icon of the resource.
+	 * 
+	 * @var string
+	 */
 	protected static ?string $navigationGroup = 'Gestione Vendite';
 
+	/**
+	 * The label of a singular resource.
+	 * 
+	 * @var string
+	 */
 	protected static ?string $label = 'Spedizione';
 
+	/**
+	 * The label of a plural resource.
+	 * 
+	 * @var string
+	 */
 	protected static ?string $pluralLabel = 'Spedizioni';
 
+	/**
+	 * The icon of the resource.
+	 * 
+	 * @var string
+	 */
 	protected static ?string $navigationIcon = 'icon-shipping';
 
+
+	/**
+	 * Get the query for the resource.
+	 */
+	public static function getEloquentQuery(): Builder {
+		return self::getModel()::hasNoLabel();
+	}
+
+	/**
+	 * Get the badge value for the resource.
+	 * 
+	 * @return string|null
+	 */
 	public static function getNavigationBadge(): ?string {
-		return static::getModel()::hasNoLabel()->count();
+		return static::getEloquentQuery()->count();
 	}
 
+	/**
+	 * Get the badge color for the resource.
+	 * 
+	 * @return string|null
+	 */
 	public static function getNavigationBadgeColor(): ?string {
-		return static::getModel()::count() > 0 ? 'primary' : 'neutral';
+		return static::getNavigationBadge() > 0 ? 'primary' : 'neutral';
 	}
 
+	/**
+	 * Determine whether the resource can be created.
+	 * 
+	 * @return bool
+	 */
 	public static function canCreate(): bool {
 		return false;
 	}
 
-	public static function form(Form $form): Form {
-		return $form
-			->schema([
-				//
-			]);
-	}
-
+	/**
+	 * Get the table schema for the resource.
+	 * 
+	 * @param \Filament\Tables\Table $table
+	 * @return \Filament\Tables\Table
+	 */
 	public static function table(Table $table): Table {
 		return $table
-			->query(Order::hasNoLabel())
+
+			// The columns displayed in the table
 			->columns([
-				Tables\Columns\TextColumn::make('id')
+				TextColumn::make('id')
 					->searchable()
 					->label('ID')
 					->sortable(),
-				Tables\Columns\TextColumn::make('full_name')
+				TextColumn::make('full_name')
 					->label('Destinatario')
 					->placeholder('-')
 					->searchable()
 					->sortable(),
-				Tables\Columns\TextColumn::make('created_at')
+				TextColumn::make('created_at')
 					->dateTime('d-m-Y')
 					->label('Ricevuto il')
 					->sortable(),
 			])
-			->filters([])
+
+			// The actions that can be performed on the records
 			->actions([
-				Action::make('add-parcel')
-					->label('Aggiungi la spedizione')
-					->requiresConfirmation()
-					->icon('icon-shipping')
-					->action(function (Order $record): bool {
-						// Add the parcel
-						$request = function () use ($record) {
-							$glsService = new GlsService();
-
-							// Add the parcel
-							$response = $glsService->addParcels($record);
-
-							if (!$response) {
-								return false;
-							}
-
-							return true;
-						};
-
-						$response = $request();
-
-						// Success
-						if ($response) {
-							Notification::make()
-								->title('Trasmesso')
-								->body('Ordine di ' . $record->full_name . ' trasmesso correttamente')
-								->success()
-								->send();
-
-							return true;
-						}
-
-						// Error
-						Notification::make()
-							->title('Errore')
-							->body('Errore durante la trasmissione dell\'ordine')
-							->danger()
-							->send();
-
-						return false;
-					}),
-				Action::make('transmit-parcel')
-					->label('Conferma la spedizione')
-					->requiresConfirmation()
-					->icon('icon-correct')
-					->color('success')
-					->action(function (Order $record): bool {
-						// Transmit the parcel
-						$request = function () use ($record) {
-							$glsService = new GlsService();
-
-							// Transmit the parcel
-							$response = $glsService->transmitParcels($record);
-
-							if (!$response) {
-								return false;
-							}
-
-							return true;
-						};
-
-						$response = $request();
-
-						// Success
-						if ($response) {
-							Notification::make()
-								->title('Confermato')
-								->body('Ordine di ' . $record->full_name . ' confermato correttamente')
-								->success()
-								->send();
-
-							return true;
-						}
-
-						// Error
-						Notification::make()
-							->title('Errore')
-							->body('Errore durante la conferma dell\'ordine')
-							->danger()
-							->send();
-
-						return false;
-					}),
-				Action::make('already-shipped')
-					->label('Cancella la spedizione')
-					->requiresConfirmation()
-					->icon('icon-delete')
-					->color('danger')
-					->action(function (Order $record): bool {
-						$response = $record->update([
-							'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),
-						]);
-
-						// Success
-						if ($response) {
-							Notification::make()
-								->title('Eliminata')
-								->body('Spedizione eliminata correttamente')
-								->success()
-								->send();
-
-							return true;
-						}
-
-						// Error
-						Notification::make()
-							->title('Errore')
-							->body('Errore durante l\'eliminazione della spedizione')
-							->danger()
-							->send();
-
-						return false;
-					})
+				AddParcel::make(),
+				TransmitParcel::make(),
+				RemoveLabeling::make(),
 			])
-			->headerActions([])
-			->bulkActions([
-				BulkAction::make('transmit')
-					->label('Trasmetti selezionate')
-					->requiresConfirmation()
-					->icon('icon-shipping')
-					->button()
-					->action(function (Collection $records): bool {
-						// Add the parcels
-						$request = function () use ($records) {
-							$glsService = new GlsService();
 
-							// Add the parcels
-							$response = $glsService->addParcels($records);
-
-							if (!$response) {
-								return false;
-							}
-
-							// Transmit the parcels
-							$response = $glsService->transmitParcels($records);
-
-							if (!$response) {
-								return false;
-							}
-
-							return true;
-						};
-
-						$response = $request();
-
-						// Success
-						if ($response) {
-							Notification::make()
-								->title('Trasmesse')
-								->body('Tutte le spedizioni selezionate sono state trasmesse correttamente')
-								->success()
-								->send();
-
-							return true;
-						}
-
-						// Error
-						Notification::make()
-							->title('Errore')
-							->body('Errore durante la trasmissione degli ordini')
-							->danger()
-							->send();
-
-						return false;
-					})
-			]);
+			// The bulk actions that can be performed on the selected records
+			->bulkActions([BulkTransmitParcels::make()]);
 	}
 
-	public static function getRelations(): array {
-		return [];
-	}
-
+	/**
+	 * Get the pages for the resource.
+	 * 
+	 * @return array
+	 */
 	public static function getPages(): array {
 		return [
-			'index' => Pages\ListShippings::route('/'),
+			'index' => ListShippings::route('/'),
 		];
 	}
 }

@@ -17,11 +17,14 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Number;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider {
 
 	public function panel(Panel $panel): Panel {
+		Number::useLocale(config('app.locale'));
+
 		return $panel
 			// General settings
 			->default()
@@ -37,6 +40,15 @@ class AdminPanelProvider extends PanelProvider {
 				'success' => Color::Green,
 				'warning' => Color::Orange,
 				'neutral' => Color::Slate,
+
+				// Order status colors
+				'status-cancelled' => Color::Red,
+				'status-open' => Color::Gray,
+				'status-received' => Color::Blue,
+				'status-confirmed' => Color::Green,
+				'status-awaiting-shipping' => Color::Lime,
+				'status-shipped' => Color::Yellow,
+				'status-delivered' => Color::Orange,
 			])
 			->viteTheme('resources/css/filament/admin/theme.css')
 			->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

@@ -17,14 +17,15 @@ if (strlen($search) > 2) {
 		->where('stores.status', true)
 		->where('designs.name', 'like', "%$search%")
 		->orWhere('stores.name', 'like', "%$search%")
-		->orWhereHas('tags', function ($query) use ($search) {
-			$query->where('tags', 'like', "%$search%");
-		})
+		// ->orWhereHas('tags', function ($query) use ($search) {
+		// $query->where('tags', 'like', "%$search%");
+		// })
 		->orderByDesc('designs.sales')
 		->orderByDesc('stores.sales')
 		->orderByDesc('designs.id')
 		->limit($max)
 		->with('main_product', 'products', 'main_product.color', 'main_product.position', 'main_product.type', 'seller')
+		->select('designs.*')
 		->get();
 
 	$designCount = $designs->count();

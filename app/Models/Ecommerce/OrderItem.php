@@ -10,6 +10,7 @@ use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductSize;
 use App\Models\Ecommerce\Product\ProductType;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -46,6 +47,21 @@ class OrderItem extends Model {
 		'status',
 		'created_at',
 	];
+
+	/**
+	 * * Accessors
+	 */
+
+	/**
+	 * Get the the name of the order, including the design's name and id.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
+	 */
+	protected function fullName(): Attribute {
+		return Attribute::make(
+			get: fn (): string => $this->quantity . 'x ' . ($this->design_id ? $this->design_id . ' - ' : '') . $this->product_with_trashed?->name . ' (' . $this->description() . ')'
+		);
+	}
 
 	/**
 	 * * Relationships 
@@ -159,27 +175,16 @@ class OrderItem extends Model {
 	}
 
 	/**
-	 * Get the the name of the order, including the design's name and id.
-	 *
-	 * @return string
-	 */
-	public function fullName(): string {
-		return ($this->design_id ? $this->design_id . ' - ' : '') . $this->name() . ' (' . $this->description() . ')';
-	}
-
-	/**
 	 * Get the description of the order.
 	 *
 	 * @return string
 	 */
 	public function description(): string {
-		$product = $this->product_with_trashed;
-
-		$description = $product?->type->name;
-		$description .= $this->size && $product?->type->sizes->count() > 1 ? ' ' . $this->size->name : '';
-		$description .= $this->color && $product?->type->colors->count() > 1 ? ' ' . $this->color->name : '';
-		$description .= $this->logo ? ' ' . $this->logo->name : '';
-		$description .= $this->position_id && $this->position_id > 1 ? ' ' . $this->position->name : '';
+		$description = $this->type?->name;
+		$description .= $this->size && $this->type->sizes->count() > 1 ? ' ' . $this->size?->name : '';
+		$description .= $this->color && $this->type->colors->count() > 1 ? ' ' . $this->color?->name : '';
+		$description .= $this->logo ? ' ' . $this->logo?->name : '';
+		$description .= $this->position_id && $this->position_id > 1 ? ' ' . $this->position?->name : '';
 
 		return $description;
 	}

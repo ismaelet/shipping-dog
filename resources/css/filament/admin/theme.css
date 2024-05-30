@@ -3,9 +3,13 @@
 @import '../../custom.css';
 @config '../../../../tailwind.config.ts';
 
-/* Font family */
+/* Resets */
 :root {
 	--font-family-paragraph: 'Poppins', sans-serif;
+}
+
+svg:not([fill='none']) {
+	fill: currentColor;
 }
 
 /* General colors */
@@ -180,6 +184,33 @@ select:not(.choices) {
 	}
 }
 
+/* Choice inputs */
+.choices__input {
+	padding-inline: 0.5em !important;
+}
+
+.choices__list--multiple .choices__item[data-value='-1'] {
+	--primary-400: var(--status-cancelled-400);
+}
+.choices__list--multiple .choices__item[data-value='0'] {
+	--primary-400: var(--status-open-400);
+}
+.choices__list--multiple .choices__item[data-value='1'] {
+	--primary-400: var(--status-received-400);
+}
+.choices__list--multiple .choices__item[data-value='2'] {
+	--primary-400: var(--status-confirmed-400);
+}
+.choices__list--multiple .choices__item[data-value='3'] {
+	--primary-400: var(--status-awaiting-shipping-400);
+}
+.choices__list--multiple .choices__item[data-value='4'] {
+	--primary-400: var(--status-shipped-400);
+}
+.choices__list--multiple .choices__item[data-value='5'] {
+	--primary-400: var(--status-delivered-400);
+}
+
 /* Buttons */
 .fi-btn {
 	padding-inline: 2em;
@@ -350,5 +381,52 @@ select:not(.choices) {
 		[x-ref='backgroundColorElement'] {
 			color: var(--color-neutral-1000) !important;
 		}
+	}
+}
+
+/* Forms */
+.fi-fo-field-wrp-label > span {
+	color: var(--color-neutral-400);
+}
+
+fieldset legend {
+	font-size: var(--font-size-500) !important;
+}
+
+.fi-input-wrp:has([wire\:model='data.status']) {
+	color: var(--status-color) !important;
+
+	select {
+		color: inherit;
+	}
+
+	&:focus-within {
+		--tw-ring-color: var(--status-color) !important;
+	}
+
+	option {
+		color: var(--color-neutral-400);
+	}
+
+	&:has([value='-1']:checked) {
+		--status-color: rgb(var(--status-cancelled-400));
+	}
+	&:has([value='0']:checked) {
+		--status-color: rgb(var(--status-open-400));
+	}
+	&:has([value='1']:checked) {
+		--status-color: rgb(var(--status-received-400));
+	}
+	&:has([value='2']:checked) {
+		--status-color: rgb(var(--status-confirmed-400));
+	}
+	&:has([value='3']:checked) {
+		--status-color: rgb(var(--status-awaiting-shipping-400));
+	}
+	&:has([value='4']:checked) {
+		--status-color: rgb(var(--status-shipped-400));
+	}
+	&:has([value='5']:checked) {
+		--status-color: rgb(var(--status-delivered-400));
 	}
 }

@@ -230,7 +230,7 @@
 					@if ($order->address)
 						{{-- If found --}}
 						<div>
-							<p class="js-to-copy">{!! $order->address->fullAddress() !!}</p>
+							<p class="js-to-copy">{!! implode('<br>', $order->address->full_address) !!}</p>
 							<p>---</p>
 							<p>{{ $order->address->email }}</p>
 							<p>{{ $order->address->phone }}</p>
@@ -266,7 +266,7 @@
 									href="{{ $orderItem->product_with_trashed->fullUrl($orderItem->color_id, $orderItem->position_id) }}"
 									target="_blank"
 								>
-									{{ $orderItem->fullName() }}
+									{{ $orderItem->full_name }}
 								</a>
 							</p>
 						@endforeach

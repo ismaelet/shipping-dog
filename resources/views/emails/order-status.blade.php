@@ -68,7 +68,7 @@
 								style="padding-right: 32px; vertical-align: top"
 							>
 								<p style="font-weight: 600; margin-bottom: 8px">Indirizzo di spedizione</p>
-								<p>{!! $order->address->fullAddress() !!}</p>
+								<p>{!! implode('<br>', $order->address->full_address) !!}</p>
 							</td>
 							<td style="padding-left: 32px; vertical-align: top">
 								<p style="font-weight: 600; margin-bottom: 8px">Tipo di spedizione</p>

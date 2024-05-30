@@ -31,6 +31,9 @@ return [
 				'label' => 'Pagamento',
 			],
 		],
+	],
+
+	'order' => [
 		'statuses' => [
 			'-1' => [
 				'tag' => 'cancelled',
@@ -73,12 +76,6 @@ return [
 				'label' => 'Consegnato',
 				'color' => 'hsl(30, 100%, 50%)',
 				'icon' => 'delivered',
-			],
-			'6' => [
-				'tag' => 'change',
-				'label' => 'Cambio',
-				'color' => '#44c544',
-				'icon' => 'change',
 			],
 		],
 	],

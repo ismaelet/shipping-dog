@@ -217,7 +217,7 @@ class Order extends Model {
 		}
 
 		foreach ($this->order_items as $orderItem) {
-			$orderItemsString .= $orderItem->quantity . 'x ' . $orderItem->fullName() . '<br>';
+			$orderItemsString .= $orderItem->full_name . '<br>';
 		}
 
 		return $orderItemsString;
@@ -255,7 +255,7 @@ class Order extends Model {
 	 * @return string
 	 */
 	public function statusData(): array {
-		return config('ecommerce.cart.statuses')[$this->status];
+		return config('ecommerce.order.statuses')[$this->status];
 	}
 
 	/**

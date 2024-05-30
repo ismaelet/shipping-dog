@@ -144,7 +144,7 @@
 					<x-typography.component-heading>Indirizzo</x-typography.component-heading>
 
 					<p>
-						<?= $order->address?->fullAddress() ?? '' ?><br>
+						<?= implode('<br>', $order->address?->full_address) ?><br>
 						-<br>
 						<?= $order->address?->email ?? '' ?><br>
 						<?= $order->address?->phone ?? '' ?>

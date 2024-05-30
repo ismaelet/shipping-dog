@@ -16,17 +16,38 @@ class Design extends Model {
 
 	use SoftDeletes;
 
-	protected $table = 'designs';
-	protected $fillable = ['id', 'name', 'user_id', 'status', 'ratio', 'color', 'default_color_id', 'logo_group_id'];
+	/**
+	 * The attributes that are mass assignable.
+	 * 
+	 * @var array
+	 */
+	protected $fillable = [
+		'id',
+		'name',
+		'user_id',
+		'status',
+		'ratio',
+		'color',
+		'default_color_id',
+		'logo_group_id'
+	];
 
 	/**
-	 * * Expand basic methods
+	 * * Events
+	 */
+
+	/**
+	 * Delete the design and the related products
 	 */
 	public function delete() {
 		$this->products()->delete();
 
 		return parent::delete();
 	}
+
+	/**
+	 * * Relationships
+	 */
 
 	/**
 	 * Get the design's seller

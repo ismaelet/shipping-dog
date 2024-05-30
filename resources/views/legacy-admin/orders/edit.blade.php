@@ -91,7 +91,7 @@
 
 								<p class="">
 									<a href="{{ $orderItem->product_with_trashed->fullUrl($orderItem->color_id, $orderItem->position_id) }}">
-										{{ $orderItem->fullName() }}
+										{{ $orderItem->full_name }}
 									</a>
 								</p>
 
@@ -162,7 +162,7 @@
 
 					{{-- Delivery data --}}
 					<x-dashboard.form.panel title="Destinatario">
-						<p class="">{!! $record->address->fullAddress() !!}</p>
+						<p class="">{!! implode('<br>', $record->address->full_address) !!}</p>
 
 						@if ($record->status > 0)
 							<div class="flex gap-2">
