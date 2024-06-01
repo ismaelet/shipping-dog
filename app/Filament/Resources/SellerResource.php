@@ -8,9 +8,11 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
+use Illuminate\Http\RedirectResponse;
 
 class SellerResource extends Resource {
 
@@ -128,14 +130,19 @@ class SellerResource extends Resource {
 
 			// Actions
 			->actions([
+				Action::make('view')
+					->label('Visualizza')
+					->icon('icon-visibility')
+					->url(fn (Seller $record): string => route('seller.show', $record))
+					->openUrlInNewTab(true),
 				DeleteAction::make()
 					->icon('icon-delete'),
 				Action::make('login')
 					->icon('icon-login')
 					->color('info')
 					->visible(fn () => is_superadmin())
-					->action(function (Seller $record) {
-						auth()->login($record->user->id);
+					->action(function (Seller $record): RedirectResponse {
+						auth()->login($record->user);
 
 						return to_route('user-dashboard');
 					}),

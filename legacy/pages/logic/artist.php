@@ -5,7 +5,7 @@ use Legacy\Classes\Ecommerce\Seller;
 use Legacy\Classes\Ecommerce\Shop;
 
 // get variabiles
-$id = isset($_GET['id']) ? (int) $_GET['id'] : false;
+$id = request()->seller ?: request()->id;
 
 // redirect to user's shop if no ID is specified
 if (!$id && App\Helpers\App::isSeller()) redirect_old('?id=' . auth()->id());

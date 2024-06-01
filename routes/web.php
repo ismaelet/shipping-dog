@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
  * * Sellers
  */
 // Seller shop
+Route::get('/artist/{seller}', LegacyController::class)->name('seller.show');
 Route::any('/artist', LegacyController::class)->name('seller');
 
 // Seller dashboard
