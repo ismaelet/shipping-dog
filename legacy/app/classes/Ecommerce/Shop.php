@@ -5,12 +5,14 @@ namespace Legacy\Classes\Ecommerce;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
+use App\Models\Ecommerce\Seller;
 use Illuminate\Support\Facades\Cache;
 use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 class Shop {
 
-	public $id = 0;
+	public ?int $id;
+	public ?Seller $seller;
 	public $seed = 0;
 	public $productCount = 0;
 	public $size = 40;
@@ -30,7 +32,8 @@ class Shop {
 
 		$this->theme = $theme;
 
-		if (isset($_GET['id'])) $this->id = (int) $_GET['id'];
+		$this->id = request()->seller ?: request()->id;
+		$this->seller = Seller::find($this->id);
 		if (isset($_GET['search'])) $this->search = $_GET['search'];
 		if (isset($_GET['type'])) $this->type = $_GET['type'];
 		if (isset($_GET['gender'])) $this->gender = $_GET['gender'];
@@ -42,8 +45,8 @@ class Shop {
 		// Set sorting
 		if (isset($_GET['sort']) && in_array($_GET['sort'], ['new', 'popular', 'custom'])) {
 			$this->sort = $_GET['sort'];
-		} else if ($this->id) {
-			switch (\Legacy\System\Classes\LegacyDB::find('sort FROM stores WHERE user_id = ?', $this->id)) {
+		} else if ($this->seller) {
+			switch (\Legacy\System\Classes\LegacyDB::find('sort FROM stores WHERE user_id = ?', $this->seller->user_id)) {
 				case 3:
 					$this->sort = 'custom';
 					break;
@@ -66,10 +69,10 @@ class Shop {
 			->where('products.status', 1)
 			->where('products.deleted', 0);
 
-		if ($this->id) {
+		if ($this->seller) {
 			// Filter for a specific shop
 			$products
-				->where('products.user_id', $this->id);
+				->where('products.user_id', $this->seller->user_id);
 		} else {
 			// Filter for the general shop
 			$products
@@ -144,10 +147,10 @@ class Shop {
 		 */
 		// Setup the cache
 		$cacheKeyParameters = md5(http_build_query(request()->all()));
-		$cacheInterval = $this->id ? 10 : 60 * 60;
+		$cacheInterval = $this->seller ? 10 : 60 * 60;
 
 		// Get the product count
-		$productCount = Cache::remember('shop-count-' . $cacheKeyParameters, $this->id ? $cacheInterval : $cacheInterval * 24, function () use ($products) {
+		$productCount = Cache::remember('shop-count-' . $cacheKeyParameters, $this->seller ? $cacheInterval : $cacheInterval * 24, function () use ($products) {
 			return $products->count();
 		});
 
@@ -166,8 +169,8 @@ class Shop {
 
 		<form action="#store" method="GET" autocomplete="off" id="store" class="theme-<?= $this->theme ?>">
 
-			<?php if ($this->id) { ?>
-				<input type="hidden" name="id" value="<?= $this->id ?>">
+			<?php if ($this->seller) { ?>
+				<input type="hidden" name="id" value="<?= $this->seller->id ?>">
 			<?php } ?>
 
 			<input type="hidden" id="js-itemN" value="<?= $this->productCount ?>">
@@ -229,8 +232,8 @@ class Shop {
 
 								<div class="gender-ddown">
 									<?php
-									if ($this->id) $res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM product_types WHERE category='c' AND (gender_id=1 OR gender_id=3) AND hidden = 0 AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
+									if ($this->seller) $res = \Legacy\System\Classes\LegacyDB::select("
+											id FROM product_types WHERE category='c' AND (gender_id=1 OR gender_id=3) AND hidden = 0 AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->seller->user_id]);
 
 									else $res = \Legacy\System\Classes\LegacyDB::select("
 											id FROM product_types WHERE category='c' AND (gender_id=1 OR gender_id=3) AND hidden = 0 AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY id ASC");
@@ -261,9 +264,9 @@ class Shop {
 								<div class="gender-ddown">
 									<?php
 
-									if ($this->id) {
+									if ($this->seller) {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM product_types WHERE category='c' AND (gender_id=2 OR gender_id=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->id]);
+											id FROM product_types WHERE category='c' AND (gender_id=2 OR gender_id=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$this->seller->user_id]);
 									} else {
 										$res = \Legacy\System\Classes\LegacyDB::select("
 											id FROM product_types WHERE category='c' AND (gender_id=2 OR gender_id=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY id ASC");
@@ -295,9 +298,9 @@ class Shop {
 								<div class="gender-ddown">
 									<?php
 
-									if ($this->id) {
+									if ($this->seller) {
 										$res = \Legacy\System\Classes\LegacyDB::select("
-											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$this->id]);
+											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$this->seller->user_id]);
 									} else {
 										$res = \Legacy\System\Classes\LegacyDB::select("
 											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY name ASC");
@@ -326,7 +329,7 @@ class Shop {
 						</div>
 
 						<!-- Tags -->
-						<?php if (!$this->id) {
+						<?php if (!$this->seller) {
 							$res_tags = \Legacy\System\Classes\LegacyDB::select('tag FROM sys_tags WHERE hide=0 ORDER BY count DESC LIMIT 20') ?>
 
 							<div class="srch-box gallery">

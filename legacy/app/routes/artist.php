@@ -7,17 +7,17 @@
 	\Legacy\System\Classes\LegacyView::show();
 });
 
-\Legacy\System\Classes\LegacyRoute::add('/artist/*', function () {
-	\Legacy\System\Classes\LegacyView::setPage('artist')
-		->setLocation('artist')
-		->show();
-});
-
 // collection
 \Legacy\System\Classes\LegacyRoute::add('/artist/collection', function () {
 	\Legacy\System\Classes\LegacyView::setPage('artist/collection');
 	\Legacy\System\Classes\LegacyView::$location = 'artist';
 	\Legacy\System\Classes\LegacyView::show();
+});
+
+\Legacy\System\Classes\LegacyRoute::add('/artist/*', function () {
+	\Legacy\System\Classes\LegacyView::setPage('artist')
+		->setLocation('artist')
+		->show();
 });
 
 // start selling
