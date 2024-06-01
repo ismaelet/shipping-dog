@@ -21,9 +21,9 @@ class AddParcel {
 	 */
 	public static function make(): Action {
 		return Action::make('add-parcel')
-			->label('Aggiungi la spedizione')
+			->label('Trasmetti')
 			->requiresConfirmation()
-			->icon('icon-shipping')
+			->icon('icon-send')
 			->action(function (Order $record): bool {
 				// Add the parcel
 				$request = function () use ($record) {

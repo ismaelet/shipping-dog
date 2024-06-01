@@ -269,38 +269,11 @@ select:not(.choices) {
 	}
 }
 
-/* Table: Actions */
-.fi-ta-header-ctn .fi-ta-actions {
-	svg {
-		fill: currentColor;
-		color: #fff;
-	}
-}
-
-.fi-ta-row .fi-ta-actions {
-	span {
-		display: none;
-	}
-
-	svg {
-		width: 1.25rem;
-		height: 1.25rem;
-		fill: currentColor;
-
-		&:not(:hover) {
-			color: var(--color-neutral-400);
-		}
-	}
-}
-
+/* Table */
 .fi-ta-ctn:has(table) {
 	.fi-ta-content {
 		padding: 1rem 2rem;
 		border-top: var(--border);
-
-		@media (min-width: 1024px) {
-			overflow-x: visible;
-		}
 
 		.fi-wi-widget & {
 			padding: 0;

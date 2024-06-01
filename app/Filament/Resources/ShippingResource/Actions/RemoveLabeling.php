@@ -21,7 +21,7 @@ class RemoveLabeling {
 	 */
 	public static function make(): Action {
 		return Action::make('already-shipped')
-			->label('Cancella la spedizione')
+			->label('Cancella')
 			->requiresConfirmation()
 			->icon('icon-delete')
 			->color('danger')

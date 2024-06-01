@@ -10,7 +10,7 @@ $currentRoute = explode('/', $currentRoute);
 
 // fetch categories
 $menu['categories'] = [];
-$queryManager = is_supervisor() ? '' : 'for_supervisors=0';
+$queryManager = is_superadmin() ? '' : 'for_supervisors=0';
 
 $categories = $queryManager ?
 	AdminCategory::where($queryManager)->orderBy('for_supervisors')->orderBy('order')->orderBy('name')->get() :

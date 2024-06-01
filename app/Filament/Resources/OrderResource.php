@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\OrderResource\Filters\StatusFilter;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Mail\OrderStatusMail;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\PaymentMethod;
 use App\Models\Ecommerce\ShippingMethod;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action as FormAction;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -18,7 +19,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
@@ -93,6 +94,35 @@ class OrderResource extends Resource {
 	public static function form(Form $form): Form {
 		return $form
 			->schema([
+				Actions::make([
+					FormAction::make('send-email')
+						->label('Reinvia e-mail')
+						->icon('icon-send')
+						->color('info')
+						->requiresConfirmation()
+						->action(function (Order $record): bool {
+							Mail::to($record->address->email)->queue(new OrderStatusMail($record));
+
+							if (true) {
+								Notification::make()
+									->title('E-mail inviata')
+									->body('A ' . $record->address->email . ' correttamente')
+									->success()
+									->send();
+
+								return true;
+							}
+
+							Notification::make()
+								->title('Trasmesso')
+								->body('Errore durante l\'invio dell\'email')
+								->danger()
+								->send();
+
+							return false;
+						})
+				]),
+
 				// Split the form into two columns
 				Split::make([
 
@@ -215,11 +245,14 @@ class OrderResource extends Resource {
 											PaymentMethod::all()->pluck('name', 'id')
 										)
 										->required()
-								])->columns(1),
+								])
+								->columns(1),
 						])
 						->grow(false),
-				])->from('lg')
-			])->columns(1);
+				])
+					->from('lg')
+			])
+			->columns(1);
 	}
 
 	/**
@@ -271,6 +304,8 @@ class OrderResource extends Resource {
 					->label('Articoli')
 					->listWithLineBreaks()
 					->wrap()
+					->toggleable()
+					->toggledHiddenByDefault()
 					->searchable(query: function (Builder $query, $search) {
 						$query->whereHas('order_items', function (Builder $query) use ($search) {
 							$query
@@ -335,32 +370,9 @@ class OrderResource extends Resource {
 
 			// The actions that should be available for the resources.
 			->actions([
-				Action::make('Invia email con stato ordine')
-					->icon('icon-send')
-					->color('info')
-					->requiresConfirmation()
-					->action(function (Order $record): bool {
-						Mail::to($record->address->email)->queue(new OrderStatusMail($record));
-
-						if (true) {
-							Notification::make()
-								->title('E-mail inviata')
-								->body('A ' . $record->address->email . ' correttamente')
-								->success()
-								->send();
-
-							return true;
-						}
-
-						Notification::make()
-							->title('Trasmesso')
-							->body('Errore durante l\'invio dell\'email')
-							->danger()
-							->send();
-
-						return false;
-					}),
-				Tables\Actions\EditAction::make(),
+				ViewAction::make()
+					->color('neutral'),
+				Tables\Actions\EditAction::make()
 			])
 
 			// The bulk actions that should be available for the table.

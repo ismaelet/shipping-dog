@@ -21,7 +21,7 @@ function is_admin(): bool {
 /**
  * Check if the user is a supervisor
  */
-function is_supervisor(): bool {
+function is_superadmin(): bool {
 	return Auth::check() && Auth::user()->is_superadmin;
 }
 

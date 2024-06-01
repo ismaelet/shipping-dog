@@ -1,18 +1,7 @@
 <x-layouts.admin-dashboard>
 
-	<x-dashboard.typography.main-heading>Dashboard</x-dashboard.typography.main-heading>
-
-	<div class="mt-8 grid gap-4">
-		{{-- Row 1 --}}
-		<div class="grid">
-		</div>
-
-		{{-- Row 2 --}}
-		<div class="grid">
-
-			{{-- Awaiting sellers --}}
-			<x-dashboard.widget.awaiting-sellers />
-
-		</div>
+	<div class="h-svh grid items-center">
+		<x-inputs.button href="/admin">Dashboard nuova</x-inputs.button>
 	</div>
+
 </x-layouts.admin-dashboard>

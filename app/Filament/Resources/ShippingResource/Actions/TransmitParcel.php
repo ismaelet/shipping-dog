@@ -20,8 +20,8 @@ class TransmitParcel {
 	 * @return Action
 	 */
 	public static function make(): Action {
-		return Action::make('transmit-parcel')
-			->label('Conferma la spedizione')
+		return Action::make('confirm-parcel')
+			->label('Conferma')
 			->requiresConfirmation()
 			->icon('icon-correct')
 			->color('success')

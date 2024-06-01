@@ -18,6 +18,7 @@ use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -144,6 +145,7 @@ class UserResource extends Resource {
 				TextColumn::make('id')
 					->searchable()
 					->label('ID')
+					->numeric()
 					->sortable(),
 
 				// First name
@@ -160,13 +162,6 @@ class UserResource extends Resource {
 					->label('Cognome')
 					->searchable()
 					->toggleable()
-					->sortable(),
-
-				// Seller account
-				TextColumn::make('seller.name')
-					->placeholder('-')
-					->label('Negozio')
-					->searchable()
 					->sortable(),
 
 				// E-mail
@@ -204,16 +199,18 @@ class UserResource extends Resource {
 
 			// The actions that can be performed on the records
 			->actions([
+				ViewAction::make()->icon('icon-visibility'),
+				EditAction::make()->icon('icon-edit'),
+				DeleteAction::make()->icon('icon-delete'),
 				Action::make('login')
 					->icon('icon-login')
-					->color('success')
+					->color('info')
+					->visible(fn () => is_superadmin())
 					->action(function (User $record) {
 						auth()->login($record);
 
 						return to_route('user-dashboard');
 					}),
-				EditAction::make()->icon('icon-edit'),
-				DeleteAction::make()->icon('icon-delete'),
 			]);
 	}
 
