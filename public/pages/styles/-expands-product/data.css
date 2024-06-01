@@ -1,3 +1,36 @@
+body:has([data-seller-id='7083']) {
+	&::before {
+		content: '';
+		opacity: 0.3;
+		position: absolute;
+		inset: 0;
+		background-image: url('/images/shop-7083-background-light.webp');
+		background-repeat: repeat;
+	}
+
+	[data-color-scheme='dark'] &::before {
+		background-image: url('/images/shop-7083-background-dark.webp');
+	}
+
+	#right-panel {
+		background-color: #fff;
+		padding: 1rem;
+		border-radius: var(--border-radius-400);
+
+		[data-color-scheme='dark'] & {
+			background-color: var(--color-surface-400);
+		}
+	}
+}
+
+@media (max-width: 479px) {
+	body:has([data-seller-id='7083']) {
+		&::before {
+			background-size: 20vw;
+		}
+	}
+}
+
 /* Containers */
 #item {
 	margin-bottom: 4rem;
@@ -5,6 +38,7 @@
 
 #item .content {
 	grid-template-columns: 55fr 45fr;
+	align-items: flex-start;
 }
 
 #left-panel {

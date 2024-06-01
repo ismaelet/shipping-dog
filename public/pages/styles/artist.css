@@ -3,6 +3,44 @@
 	max-width: 1500px;
 }
 
+body:has([data-seller-id='7083']) {
+	&::before {
+		content: '';
+		opacity: 0.3;
+		position: absolute;
+		inset: 0;
+		background-image: url('/images/shop-7083-background-light.webp');
+		background-repeat: repeat;
+	}
+
+	[data-color-scheme='dark'] &::before {
+		background-image: url('/images/shop-7083-background-dark.webp');
+	}
+
+	.item-box {
+		background-color: #fff;
+
+		[data-color-scheme='dark'] & {
+			background-color: var(--color-surface-400);
+		}
+	}
+
+	.item-box-body {
+		padding: 0.5rem;
+		padding-top: 0.5rem;
+		border-bottom-left-radius: var(--border-radius-400);
+		border-bottom-right-radius: var(--border-radius-400);
+	}
+}
+
+@media (max-width: 479px) {
+	body:has([data-seller-id='7083']) {
+		&::before {
+			background-size: 20vw;
+		}
+	}
+}
+
 /* Head panel */
 #head {
 	padding-top: 1rem;

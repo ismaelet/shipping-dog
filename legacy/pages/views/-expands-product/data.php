@@ -6,7 +6,7 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 ?>
 
-<div class="main-wrap pad-t-3 item-type--<?= $product->type->tag ?>" id="item" data-id="<?= $product->id ?>" data-hroot="/legacy">
+<div class="main-wrap pad-t-3 item-type--<?= $product->type->tag ?>" id="item" data-id="<?= $product->id ?>" data-hroot="/legacy" data-seller-id="<?= $product->seller->id ?>">
 
 	<!-- Warning -->
 	<?php
@@ -15,7 +15,7 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 	if ($warningBanner) { ?>
 
-		<p id="news" class="mar-b-1 <?= $warningBanner['color'] ?>"><?= $warningBanner['text'] ?></p>
+		<p id=" news" class="mar-b-1 <?= $warningBanner['color'] ?>"><?= $warningBanner['text'] ?></p>
 
 	<?php } ?>
 

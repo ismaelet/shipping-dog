@@ -1,11 +1,12 @@
 <?php
 
 use Legacy\View\Components\Interactions\FollowButton;
+
 ?>
 
 {% block main %}
 
-<section id="head" class="main-wrap">
+<section id="head" class="main-wrap" data-seller-id="<?= $seller->id ?>">
 
 	<!-- Cover -->
 	<div id="cover" class="<?= !$seller->hasCover ? 'empty' : '' ?>" <?= temp_bg($seller->cover(1024)) ?>></div>
