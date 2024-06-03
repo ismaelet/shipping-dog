@@ -3,6 +3,7 @@
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Design\DesignCollection;
 use App\Models\Ecommerce\Product;
+use Illuminate\Support\Facades\Auth;
 use Legacy\Classes\Collection;
 
 $id = $_GET['id'] ?? 0;
@@ -118,5 +119,5 @@ if (isset($_POST['delete'])) {
 	\Legacy\System\Classes\LegacyDB::update('designs SET collection=0 WHERE collection=?', [$id]);
 	\Legacy\System\Classes\LegacyDB::delete('collections WHERE id = ?', [$id]);
 
-	redirect_old('/artist?id=' . $seller->id);
+	redirect_old(route('seller.show', $seller));
 }

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Legacy\Classes\Ecommerce\Seller;
 
 if (!App\Helpers\App::isSeller()) {
@@ -9,7 +10,7 @@ if (!App\Helpers\App::isSeller()) {
 $seller = new Seller(auth()->id());
 
 if ($seller->status) {
-	redirect_old('/artist?id=' . auth()->id());
+	redirect_old(route('seller.show', Auth::user()->seller));
 }
 
 \Legacy\System\Classes\LegacyView::$title = $seller->name;

@@ -30,12 +30,16 @@ class Seller {
 		return $this->custom;
 	}
 
+	public function newSeller() {
+		return NewSeller::find($this->id);
+	}
+
 	private function getcreatedAtString() {
 		return date('m/Y', strtotime($this->time));
 	}
 
 	private function getUrl() {
-		return '/artist?id=' . $this->id;
+		return route('seller.show', $this->newSeller());
 	}
 
 	private function getClientUrl() {

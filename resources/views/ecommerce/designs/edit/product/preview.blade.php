@@ -1,8 +1,7 @@
-@use ('App\Helpers\PreviewHelper');
+@use ('App\Helpers\PreviewHelper')
 
 @php
 	$clothing = $product->type->image($product->color_id, $position->basicPositionId());
-
 	$details = $product->type->image($product->color_id, $position->basicPositionId(), '-det');
 @endphp
 

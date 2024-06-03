@@ -96,22 +96,22 @@
 		<input
 			type="hidden"
 			class="js-enabled"
-			data-position="<?= $position->id ?>"
-			data-enabled="<?= $enabled ? 1 : 0 ?>"
+			data-position="{{ $position->id }}"
+			data-enabled="{{ $enabled ? 1 : 0 }}"
 		>
 
-		<!-- Preview image -->
+		{{-- Preview image --}}
 		@include('ecommerce.designs.edit.product.preview')
 
 		<input
 			type="hidden"
 			name="product_id"
-			value="<?= $product->id ?>"
+			value="{{ $product->id }}"
 		>
 		<input
 			type="hidden"
 			name="position_id"
-			value="<?= $position->id ?>"
+			value="{{ $position->id }}"
 		>
 
 		<div class="grid gap-8 py-10">

@@ -93,7 +93,7 @@
 		data-panel
 	>
 
-		<!-- Preview image -->
+		{{-- Preview image --}}
 		@include('ecommerce.designs.edit.product.static-preview')
 
 		<div class="data">

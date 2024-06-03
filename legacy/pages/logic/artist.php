@@ -8,13 +8,14 @@ use Legacy\Classes\Ecommerce\Shop;
 // get variabiles
 $id = request()->seller ?: request()->id;
 $seller = Seller::find($id);
-$legacySeller = new LegacySeller($id ?: 0);
-$sellerUserId = $seller->user_id;
+$sellerUserId = $seller?->user_id;
 
 // redirect to user's shop if no ID is specified
 if (!$seller) {
-	redirect_old('?id=' . auth()->id());
+	redirect_old('/shop');
 }
+
+$legacySeller = new LegacySeller($id ?: 0);
 
 if ($seller->hasCover) \Legacy\System\Classes\LegacyView::$thumbnail = $seller->cover[0];
 if ($seller->description) \Legacy\System\Classes\LegacyView::$description = $seller->description;

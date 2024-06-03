@@ -1,6 +1,9 @@
 <?php
 
 // elements
+
+use Illuminate\Support\Facades\Auth;
+
 $header = [];
 
 $header['logo'] = false;
@@ -26,7 +29,7 @@ $header['links'] = [];
 $header['links'][] = ['title' => 'Home', 'loc' => 'home', 'url' => client_url('/')];
 $header['links'][] = ['title' => 'Carrello (' . cart_quantity() . ')', 'loc' => 'cart', 'url' => client_url('/cart'), 'cart' => true, 'mob' => true];
 $header['links'][] = ['title' => 'Login', 'loc' => 'login', 'url' => client_url('/login'), 'logged' => false, 'mob' => true];
-$header['links'][] = ['title' => 'Mio negozio', 'loc' => 'artist', 'url' => client_url('/artist?id=' . auth()->id()), 'drop' => 'artist', 'seller' => true];
+$header['links'][] = ['title' => 'Mio negozio', 'loc' => 'artist', 'url' => route('seller.show', Auth::user()?->seller), 'drop' => 'artist', 'seller' => true];
 $header['links'][] = ['title' => 'Profilo', 'loc' => 'profile', 'url' => client_url('/profile'), 'logged' => true, 'mob' => true];
 $header['links'][] = ['title' => 'Prodotti', 'loc' => 'shop', 'url' => client_url('/shop'), 'drop' => 'shop'];
 // $header['links'][] = ['title' => 'Promozioni', 'loc' => 'promotions', 'url' => client_url('/promotions'), 'new' => true];
@@ -40,7 +43,7 @@ $header['dropdowns']['shop'] = [
 	['Abbigliamento Donna', client_url('/shop?gender=f')],
 	['Abbigliamento Uomo', client_url('/shop?gender=m')],
 	['Accessori', client_url('/shop?group=m')],
-	['Ufficiali', client_url('/artist?id=1')],
+	['Ufficiali', route('seller.show', 1)],
 ];
 
 $header['dropdowns']['info'] = [
@@ -51,7 +54,7 @@ $header['dropdowns']['info'] = [
 ];
 
 $header['dropdowns']['artist'] = [
-	['Il mio negozio', client_url('/artist?id=' . auth()->id())],
+	['Il mio negozio', route('seller.show', Auth::user()?->seller)],
 	['Le mie grafiche', client_url('/manage/portfolio')],
 	['Carica una grafica', client_url('/manage/portfolio/add')],
 	['Vendite realizzate', client_url('/manage/sales/list')],

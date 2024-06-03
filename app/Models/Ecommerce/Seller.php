@@ -120,7 +120,7 @@ class Seller extends Model {
 	 * Get the seller's URL
 	 */
 	public function url(): string {
-		return '/artist?id=' . $this->user_id;
+		return route('seller.show', [$this]);
 	}
 
 	/**

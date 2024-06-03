@@ -141,7 +141,7 @@ class SellerResource extends Resource {
 					->icon('icon-login')
 					->color('info')
 					->visible(fn () => is_superadmin())
-					->action(function (Seller $record): RedirectResponse {
+					->action(function (Seller $record) {
 						auth()->login($record->user);
 
 						return to_route('user-dashboard');

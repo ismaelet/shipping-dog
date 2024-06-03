@@ -150,9 +150,7 @@ class Shop {
 		$cacheInterval = $this->seller ? 10 : 60 * 60;
 
 		// Get the product count
-		$productCount = Cache::remember('shop-count-' . $cacheKeyParameters, $this->seller ? $cacheInterval : $cacheInterval * 24, function () use ($products) {
-			return $products->count();
-		});
+		$productCount = $products->count();
 
 		// Get the products
 		$products = $products->limit($this->size)
