@@ -6,7 +6,7 @@ use Legacy\Classes\Ecommerce\Seller as LegacySeller;
 use Legacy\Classes\Ecommerce\Shop;
 
 // get variabiles
-$id = request()->seller ?: request()->id;
+$id = request()->seller ? (int) request()->seller : (int) request()->id;
 $seller = Seller::find($id);
 $sellerUserId = $seller?->user_id;
 
@@ -15,7 +15,7 @@ if (!$seller) {
 	redirect_old('/shop');
 }
 
-$legacySeller = new LegacySeller($id ?: 0);
+$legacySeller = new LegacySeller($seller->user_id);
 
 if ($seller->hasCover) \Legacy\System\Classes\LegacyView::$thumbnail = $seller->cover[0];
 if ($seller->description) \Legacy\System\Classes\LegacyView::$description = $seller->description;

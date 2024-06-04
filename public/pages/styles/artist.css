@@ -108,7 +108,6 @@ body:has([data-seller-id='7083']) {
 
 /* Shop */
 .stitle {
-	margin-bottom: -2rem;
 	color: var(--text-color-strong);
 	font-size: 1.7rem;
 }

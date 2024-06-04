@@ -40,14 +40,15 @@
 	    'logged' => false,
 	    'mob' => true,
 	];
-	$header['links'][] = [
-	    'title' => 'Mio negozio',
-	    'loc' => 'artist',
-	    'url' => '/artist',
-	    ['id' => auth()->id()],
-	    'drop' => 'artist',
-	    'seller' => true,
-	];
+	if (Auth::user()?->seller) {
+	    $header['links'][] = [
+	        'title' => 'Mio negozio',
+	        'loc' => 'artist',
+	        'url' => route('seller.show', Auth::user()->seller),
+	        'drop' => 'artist',
+	        'seller' => true,
+	    ];
+	}
 	$header['links'][] = [
 	    'title' => 'Profilo',
 	    'loc' => 'profile',
@@ -83,14 +84,16 @@
 	    ['Domande frequenti', 'infos.faq'],
 	];
 
-	$header['dropdowns']['artist'] = [
-	    ['Il mio negozio', 'seller', ['id' => auth()->id()]],
-	    ['Le mie grafiche', 'old-seller-dashboard.portfolio'],
-	    ['Carica una grafica', 'old-seller-dashboard.portfolio.add'],
-	    ['Vendite realizzate', 'old-seller-dashboard.sales'],
-	    ['Modifica prezzi', 'old-seller-dashboard.prices'],
-	    ['Gestisci', 'old-seller-dashboard'],
-	];
+	if (Auth::user()?->seller) {
+	    $header['dropdowns']['artist'] = [
+	        ['Il mio negozio', 'seller.show', Auth::user()->seller],
+	        ['Le mie grafiche', 'old-seller-dashboard.portfolio'],
+	        ['Carica una grafica', 'old-seller-dashboard.portfolio.add'],
+	        ['Vendite realizzate', 'old-seller-dashboard.sales'],
+	        ['Modifica prezzi', 'old-seller-dashboard.prices'],
+	        ['Gestisci', 'old-seller-dashboard'],
+	    ];
+	}
 
 	// login bar
 	$header['login-link'] = ['Login', '/login'];

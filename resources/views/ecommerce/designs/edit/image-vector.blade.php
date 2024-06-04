@@ -16,16 +16,25 @@
 	@csrf
 
 	<div>
-		<x-typography.component-heading>Grafica vettoriale</x-typography.component-heading>
+		<x-typography.component-heading class="flex gap-2">
+			Grafica vettoriale
+
+			@if ($hasVector)
+				<span class="text-success w-[1em]">
+					<x-icon-correct />
+				</span>
+			@endif
+		</x-typography.component-heading>
 
 		<div class="flex gap-2">
 			@if ($hasVector)
-				<p>Ricarica il file vettoriale</p>
+				<div class="grid grid-cols-1 gap-2">
+					<p class="text-success">Hai già caricato il file vettoriale</p>
 
-				<x-help.info direction="mobile-left">
-					Hai già caricato il file vettoriale, ma se per qualche motivo vuoi sostituirlo, puoi ricaricarlo
-					usando il bottone qui sotto.
-				</x-help.info>
+					<p>
+						Grazie per aver caricato il vettoriale. Se avessi bisogno di cambiarlo puoi usare il campo qui sotto.
+					</p>
+				</div>
 			@else
 				<p class="data-title inlb al-cen">(opzionale) file vettoriale in formato <span class="font-bold">PDF</span> o <span
 						class="font-bold"

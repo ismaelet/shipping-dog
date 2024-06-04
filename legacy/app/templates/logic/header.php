@@ -29,7 +29,11 @@ $header['links'] = [];
 $header['links'][] = ['title' => 'Home', 'loc' => 'home', 'url' => client_url('/')];
 $header['links'][] = ['title' => 'Carrello (' . cart_quantity() . ')', 'loc' => 'cart', 'url' => client_url('/cart'), 'cart' => true, 'mob' => true];
 $header['links'][] = ['title' => 'Login', 'loc' => 'login', 'url' => client_url('/login'), 'logged' => false, 'mob' => true];
-$header['links'][] = ['title' => 'Mio negozio', 'loc' => 'artist', 'url' => route('seller.show', Auth::user()?->seller), 'drop' => 'artist', 'seller' => true];
+
+if (Auth::user()?->seller) {
+	$header['links'][] = ['title' => 'Mio negozio', 'loc' => 'artist', 'url' => route('seller.show', Auth::user()->seller), 'drop' => 'artist', 'seller' => true];
+}
+
 $header['links'][] = ['title' => 'Profilo', 'loc' => 'profile', 'url' => client_url('/profile'), 'logged' => true, 'mob' => true];
 $header['links'][] = ['title' => 'Prodotti', 'loc' => 'shop', 'url' => client_url('/shop'), 'drop' => 'shop'];
 // $header['links'][] = ['title' => 'Promozioni', 'loc' => 'promotions', 'url' => client_url('/promotions'), 'new' => true];
@@ -53,14 +57,16 @@ $header['dropdowns']['info'] = [
 	['Domande frequenti', client_url('/infos/faq')],
 ];
 
-$header['dropdowns']['artist'] = [
-	['Il mio negozio', route('seller.show', Auth::user()?->seller)],
-	['Le mie grafiche', client_url('/manage/portfolio')],
-	['Carica una grafica', client_url('/manage/portfolio/add')],
-	['Vendite realizzate', client_url('/manage/sales/list')],
-	['Modifica prezzi', client_url('/manage/sales/prices')],
-	['Gestisci', client_url('/manage')],
-];
+if (Auth::user()?->seller) {
+	$header['dropdowns']['artist'] = [
+		['Il mio negozio', route('seller.show', Auth::user()?->seller)],
+		['Le mie grafiche', client_url('/manage/portfolio')],
+		['Carica una grafica', client_url('/manage/portfolio/add')],
+		['Vendite realizzate', client_url('/manage/sales/list')],
+		['Modifica prezzi', client_url('/manage/sales/prices')],
+		['Gestisci', client_url('/manage')],
+	];
+}
 
 // login bar
 $header['login-link'] = ['Login', client_url('/login')];

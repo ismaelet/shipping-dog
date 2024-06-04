@@ -98,7 +98,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 
 				<?php } ?>
 
-				<?php if (!$legacySeller->status) { ?>
+				<?php if (!$seller->status) { ?>
 
 					<p id="wip" class="mar-v-2">Il negozio ancora non è pubblico. A breve verrà valutato ed eventualmente pubblicato.</p>
 
