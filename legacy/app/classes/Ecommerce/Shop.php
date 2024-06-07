@@ -32,7 +32,7 @@ class Shop {
 
 		$this->theme = $theme;
 
-		$this->id = request()->seller ?: request()->id;
+		$this->id = request()->seller ? (int) request()->seller : (int) request()->id;
 		$this->seller = Seller::find($this->id);
 		if (isset($_GET['search'])) $this->search = $_GET['search'];
 		if (isset($_GET['type'])) $this->type = $_GET['type'];
