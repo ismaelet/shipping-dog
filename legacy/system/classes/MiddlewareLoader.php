@@ -2,6 +2,8 @@
 
 namespace Legacy\System\Classes;
 
+use App\Models\Framework\Configuration;
+
 class MiddlewareLoader {
 
 	private static $middlewares = [];
@@ -9,17 +11,12 @@ class MiddlewareLoader {
 	public static function __constructStatic() {
 		$defaultMiddlewareLoader = [
 			'public' => function () {
-				$public = sys_config('static') ?: \Legacy\System\Classes\LegacyDB::find('value FROM config WHERE name = ?', ['public']);
-				if (!$public && !is_admin()) redirect_old('/offline');
 			},
 
 			'not-public' => function () {
-				$public = sys_config('static') ?: \Legacy\System\Classes\LegacyDB::find('value FROM config WHERE name = ?', ['public']);
-				if ($public) redirect_old('/');
 			},
 
 			'wip' => function () {
-				redirect_old('/wip');
 			},
 
 			'logged' => function () {
