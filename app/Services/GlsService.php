@@ -126,6 +126,8 @@ class GlsService {
 			$response = simplexml_load_string($response->getBody()->getContents());
 			$response = json_encode($response);
 
+			Log::log('GLS API add parcel response', ['Response' => $response]);
+
 			return json_decode($response);
 		} catch (Exception $e) {
 			Log::error('Error sending a request to GLS ', ['Exception' => $e]);
@@ -282,6 +284,8 @@ class GlsService {
 	private function updateOrdersAfterTransmit(Collection $orders, stdClass $response): bool {
 		foreach ($response->Parcel as $parcelKey => $parcel) {
 			$order = $orders[$parcelKey];
+
+			Log::log('GLS API transmit parcel response', ['Response' => $parcel]);
 
 			$order->update([
 				'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),

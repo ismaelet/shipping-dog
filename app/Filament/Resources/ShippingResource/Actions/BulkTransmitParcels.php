@@ -31,13 +31,6 @@ class BulkTransmitParcels {
 				$request = function () use ($records) {
 					$glsService = new GlsService();
 
-					// Add the parcels
-					$response = $glsService->addParcels($records);
-
-					if (!$response) {
-						return false;
-					}
-
 					// Transmit the parcels
 					$response = $glsService->transmitParcels($records);
 

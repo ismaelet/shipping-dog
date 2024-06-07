@@ -5,6 +5,7 @@ namespace App\Models\Ecommerce;
 use App\Helpers\EcommerceHelper;
 use App\Mail\OrderStatusMail;
 use App\Models\User;
+use App\Services\GlsService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -556,6 +557,10 @@ class Order extends Model {
 		if ($sendNotification) {
 			$this->sendStatusEmail();
 		}
+
+		// Send the shipping data
+		$glsService = new GlsService();
+		$glsService->addParcels($this);
 	}
 
 	/**
