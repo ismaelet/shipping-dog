@@ -43,7 +43,7 @@ main .pbtn {
 
 main .pbtn::before {
 	content: '';
-	background: linear-gradient(to right, var(--clr-1), var(--clr-1-variant));
+	background: linear-gradient(to right, var(--color-primary-400), var(--clr-1-variant));
 	border-radius: inherit;
 	width: 100%;
 	height: 100%;

@@ -1,6 +1,6 @@
 /* Structure */
 header {
-	--h-bgr-color: var(--bgr);
+	--h-bgr-color: var(--color-background);
 	--h-text-color: var(--text-color-strong);
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 	width: 100%;
@@ -151,7 +151,7 @@ header.floating {
 }
 
 #h-srch-cbx:checked ~ #h-srch-ico-box {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 #h-srch-cbx:checked ~ #h-srch-ico-box .background {
 	opacity: 1;
@@ -199,7 +199,7 @@ header.floating {
 
 .h-link-txt:hover a,
 .h-link-txt.active a {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }
 
 .h-drop-ico {
@@ -209,7 +209,7 @@ header.floating {
 
 /* Desktop dropdown menu */
 .h-drop {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 	width: 230px;
 	max-height: 0;
 	position: absolute;
@@ -264,7 +264,7 @@ header:has(#h-srch-cbx:checked) .h-icon {
 
 #h-cart:hover svg,
 #h-wish:hover svg {
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 }
 
 #h-cart-num {
@@ -302,7 +302,7 @@ header:has(#h-srch-cbx:checked) .h-icon {
 }
 
 .theme-switch .icon-box:hover svg {
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 }
 
 .theme-switch .dark-icon svg {
@@ -347,7 +347,7 @@ html[data-color-scheme='dark'] .theme-switch .dark-icon {
 .h-log-txt.main:hover {
 	background-color: var(--text-color-strong);
 	border-color: var(--text-color-strong);
-	color: var(--bgr);
+	color: var(--color-background);
 }
 
 [data-color-scheme='dark'] .h-log-txt.main {

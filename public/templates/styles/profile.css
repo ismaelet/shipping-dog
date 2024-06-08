@@ -5,7 +5,7 @@
 
 #pic {
 	background-color: #ddd;
-	border: 5px solid var(--bgr);
+	border: 5px solid var(--color-background);
 	border-radius: 100%;
 	width: 5rem;
 	height: 5rem;

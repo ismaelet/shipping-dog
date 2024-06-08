@@ -547,20 +547,20 @@ html {
 	*/
 .bgr-c1,
 .bgr-c1-h:hover {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 .br-c1,
 .br-c1-h:hover {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 .txt-c1,
 .txt-c1-h:hover,
 .txt-c1-h:active {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }
 .fill-c1 svg,
 .fill-c1-h:hover svg {
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 }
 
 .bgr-c2,
@@ -1217,7 +1217,7 @@ textarea {
 	--inp-border-radius: var(--border-radius);
 	--inp-clr-bgr: var(--surface);
 	--inp-color: var(--text-color-strong);
-	--inp-accent: var(--clr-1);
+	--inp-accent: var(--color-primary-400);
 	--inp-font-size: 0.9rem;
 }
 
@@ -1332,7 +1332,7 @@ select:focus:-webkit-autofill {
 }
 
 .fancy-input .input {
-	--inp-clr-bgr: var(--bgr);
+	--inp-clr-bgr: var(--color-background);
 }
 
 .fancy-input-lbl {
@@ -1344,7 +1344,7 @@ select:focus:-webkit-autofill {
 	width: max-content;
 	padding-inline: 0.4em;
 	margin-left: 0.6rem;
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	font-size: 1rem;
 	line-height: 1;
 	pointer-events: none;
@@ -1400,7 +1400,7 @@ select:focus:-webkit-autofill {
 .cbx .icon::after {
 	content: '';
 	opacity: 0;
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 	border-radius: inherit;
 	width: 50%;
 	aspect-ratio: 1;
@@ -1508,7 +1508,7 @@ select:focus:-webkit-autofill {
 .pbtn {
 	--text-color: #fff;
 	--_btn-border: 0px;
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 
 .pbtn:hover {
@@ -1533,13 +1533,13 @@ select:focus:-webkit-autofill {
 }
 
 .sbtn:hover {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 
 .sbtn--ok {
 	--clr-1: #11903f;
-	color: var(--clr-1);
-	border-color: var(--clr-1);
+	color: var(--color-primary-400);
+	border-color: var(--color-primary-400);
 }
 
 .sbtn.sbtn--bad {
@@ -1569,7 +1569,7 @@ select:focus:-webkit-autofill {
 	z-index: -1;
 	transform: scaleX(0);
 	transform-origin: left;
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 	transition: transform 0.3s ease-out;
 }
 
@@ -3182,7 +3182,7 @@ p {
 }
 
 body {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	color: var(--text-color);
 }
 
@@ -3232,7 +3232,7 @@ p.error {
 
 /* Forms */
 #form-background {
-	background-color: var(--bgr) !important;
+	background-color: var(--color-background) !important;
 }
 
 #form-template {
@@ -3336,7 +3336,7 @@ p.error {
 	display: grid;
 	border-radius: 50%;
 	border: 1px solid var(--border-color);
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 	width: 1.5rem;
 	aspect-ratio: 1;
 	margin-left: 5px;
@@ -3392,12 +3392,12 @@ p.error {
 
 .lbox-form,
 .lbox .form {
-	background: linear-gradient(120deg, var(--surface), var(--bgr));
+	background: linear-gradient(120deg, var(--surface), var(--color-background));
 }
 
 .lbox-form {
 	display: grid;
-	background: linear-gradient(120deg, var(--surface), var(--bgr));
+	background: linear-gradient(120deg, var(--surface), var(--color-background));
 	max-height: 90vh;
 	border-radius: 0.5rem;
 	box-shadow: 0 30px 40px rgba(0, 0, 0, 0.7);
@@ -3422,7 +3422,7 @@ p.error {
 }
 
 .carousel-arrow {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 }
 
 [data-color-scheme='dark'] .carousel-arrow {
@@ -3431,7 +3431,7 @@ p.error {
 
 [data-color-scheme='light'] .carousel-arrow:hover,
 [data-color-scheme='dark'] .carousel-arrow:hover {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 
 [data-color-scheme='light'] .carousel-arrow.disabled:hover {
@@ -3450,7 +3450,7 @@ p strong {
 
 /* Lists */
 .list {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	border: 1px solid var(--border-color);
 }
 
@@ -3808,7 +3808,7 @@ p strong {
 	background-color: var(--text-color-strong);
 }
 .bgr-c-bgr {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 }
 .bgr-c-title {
 	background-color: var(--text-color-strong);
@@ -3820,20 +3820,20 @@ p strong {
 
 .bgr-c1,
 .bgr-c1-h:hover {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 .br-c1,
 .br-c1-h:hover {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 .txt-c1,
 .txt-c1-h:hover,
 .txt-c1-h:active {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }
 .fill-c1 svg,
 .fill-c1-h:hover svg {
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 }
 
 .bgr-c2,
@@ -5692,12 +5692,12 @@ main {
 }
 
 .sort_txt:hover:not(.select) {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }
 
 .sort-cbx:checked + .sort_txt {
-	border-bottom: 2px solid var(--clr-1);
-	color: var(--clr-1);
+	border-bottom: 2px solid var(--color-primary-400);
+	color: var(--color-primary-400);
 }
 
 /* Search panel */
@@ -5769,7 +5769,7 @@ main {
 
 .gender-title {
 	background-color: var(--surface);
-	border: 1px solid var(--bgr);
+	border: 1px solid var(--color-background);
 	margin-top: -1px;
 	color: var(--text-color-strong);
 	font-weight: 500;
@@ -5818,8 +5818,8 @@ main {
 }
 
 .gender-cbx:checked ~ .gender-title-box .gender-title {
-	background-color: var(--clr-1);
-	border-color: var(--clr-1);
+	background-color: var(--color-primary-400);
+	border-color: var(--color-primary-400);
 	color: #fff;
 }
 
@@ -5844,8 +5844,8 @@ main {
 
 .tag-cbx:checked + .tag,
 .tag:hover {
-	background-color: var(--clr-1);
-	border-color: var(--clr-1);
+	background-color: var(--color-primary-400);
+	border-color: var(--color-primary-400);
 	color: #fff;
 }
 
@@ -5859,7 +5859,7 @@ main {
 }
 
 #load {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	background-position: 50% 10vh;
 	background-size: 5rem;
 	background-repeat: no-repeat;
@@ -5901,11 +5901,11 @@ main {
 }
 
 .page_txt:hover:not(.select):not(.disabled) {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }
 
 .page_txt.selected {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 	color: #fff;
 }
 
@@ -5938,7 +5938,7 @@ main {
 	}
 
 	#search-inp-box {
-		background-color: var(--bgr);
+		background-color: var(--color-background);
 		box-shadow: 0 15px 10px -0.5rem rgba(0, 0, 0, 0.1), 0 7px 16px rgba(0, 0, 0, 0.1);
 	}
 

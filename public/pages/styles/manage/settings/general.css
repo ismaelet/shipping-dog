@@ -30,7 +30,7 @@
 }
 
 .sett-slid-focus.focus1 {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 .sett-slid-focus.focus2 {
 	background-color: var(--c3);
@@ -76,5 +76,5 @@
 }
 
 .form .upload:hover svg {
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 }

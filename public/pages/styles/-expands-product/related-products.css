@@ -115,7 +115,7 @@
 }
 
 .tag:hover {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 
 /* Related products */
@@ -137,7 +137,7 @@
 
 .more-line {
 	display: inline-block;
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 	width: 40px;
 	max-width: 8%;
 	height: 2px;

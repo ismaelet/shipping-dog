@@ -48,16 +48,11 @@ body:has([data-seller-id='7083']) {
 }
 
 #cover {
-	background-color: var(--clr-1);
-	background-size: cover;
-	background-position: center;
+	background-color: var(--color-primary-400);
 	border-radius: 10px;
-	height: 30rem;
-	overflow: hidden;
-}
-
-#cover.empty {
-	height: 10rem;
+	max-height: 30rem;
+	width: 100%;
+	object-fit: cover;
 }
 
 .follow-btn {
@@ -70,7 +65,7 @@ body:has([data-seller-id='7083']) {
 }
 
 .follow-btn:hover {
-	background-color: var(--clr-1) !important;
+	background-color: var(--color-primary-400) !important;
 }
 
 #icon-box {
@@ -79,11 +74,8 @@ body:has([data-seller-id='7083']) {
 }
 
 #icon {
-	padding-bottom: calc(100% - 0.8rem);
-	background-color: var(--surface-secondary);
-	background-size: cover;
-	background-position: center;
-	border: 0.4rem solid var(--bgr);
+	aspect-ratio: 1;
+	border: 0.4rem solid var(--color-background);
 	border-radius: 100%;
 	overflow: hidden;
 }
@@ -160,7 +152,7 @@ body:has([data-seller-id='7083']) {
 
 .collection {
 	display: block;
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 	background-position: center;
 	background-size: contain;
 	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
@@ -214,7 +206,7 @@ body:has([data-seller-id='7083']) {
 }
 
 .img_col:hover .col_name {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }
 
 .coll-add-ico {
@@ -301,7 +293,7 @@ body:has([data-seller-id='7083']) {
 }
 
 #edit:hover {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 
 /* Empty page */

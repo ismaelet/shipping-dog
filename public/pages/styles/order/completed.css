@@ -42,5 +42,5 @@
 }
 
 .edit-address:hover {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }

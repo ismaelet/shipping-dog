@@ -183,7 +183,7 @@ textarea[name='info'] {
 }
 
 .item-img-upload:hover svg {
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 }
 
 .item-img-delete:hover svg {

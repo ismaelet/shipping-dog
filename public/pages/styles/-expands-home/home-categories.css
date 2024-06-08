@@ -194,13 +194,13 @@
 }
 
 html[data-color-scheme='dark'] #features .icon-box {
-	background-image: linear-gradient(135deg, var(--surface-secondary), var(--bgr));
+	background-image: linear-gradient(135deg, var(--surface-secondary), var(--color-background));
 }
 
 #features .icon-box svg {
 	width: 60%;
 	height: 60%;
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 }
 
 html[data-color-scheme='dark'] #features .icon-box svg {

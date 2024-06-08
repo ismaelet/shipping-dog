@@ -6,7 +6,7 @@
 
 /* Header */
 #client-pics .header {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	padding-top: 4rem;
 	padding-bottom: 4rem;
 }

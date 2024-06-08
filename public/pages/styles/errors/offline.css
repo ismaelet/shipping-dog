@@ -31,7 +31,7 @@ h1 {
 * Login bar
 */
 .login-btn {
-	--_fill: var(--clr-1);
+	--_fill: var(--color-primary-400);
 	background: none;
 	border: none;
 }

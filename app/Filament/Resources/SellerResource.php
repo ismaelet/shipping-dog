@@ -7,6 +7,7 @@ use App\Models\Ecommerce\Seller;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -179,22 +180,30 @@ class SellerResource extends Resource {
 
 			// Actions
 			->actions([
-				Action::make('view')
-					->label('Visualizza')
-					->icon('icon-visibility')
-					->url(fn (Seller $record): string => route('seller.show', $record))
-					->openUrlInNewTab(true),
-				DeleteAction::make()
-					->icon('icon-delete'),
-				Action::make('login')
-					->icon('icon-login')
-					->color('info')
-					->visible(fn () => is_superadmin())
-					->action(function (Seller $record) {
-						auth()->login($record->user);
+				ActionGroup::make([
+					Action::make('view')
+						->label('Visualizza')
+						->icon('icon-visibility')
+						->url(fn (Seller $record): string => route('seller.show', $record))
+						->openUrlInNewTab(true),
+					Action::make('login')
+						->icon('icon-login')
+						->color('info')
+						->visible(fn () => is_superadmin())
+						->action(function (Seller $record) {
+							auth()->login($record->user);
 
-						return to_route('user-dashboard');
-					}),
+							return to_route('user-dashboard');
+						}),
+					Action::make('remove-request')
+						->label('Rimuovi richiesta')
+						->icon('icon-close')
+						->color('warning')
+						->visible(fn (Seller $record) => $record->request)
+						->action(fn (Seller $record) => $record->update(['request' => false])),
+					DeleteAction::make()
+						->icon('icon-delete'),
+				])
 			])
 
 			// Bulk actions

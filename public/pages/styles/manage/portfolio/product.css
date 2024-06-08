@@ -33,7 +33,7 @@
 }
 
 .color__checkbox:checked + .color__icon {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 
 .color__upload {

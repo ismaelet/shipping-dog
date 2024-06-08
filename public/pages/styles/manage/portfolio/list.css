@@ -18,7 +18,7 @@ main .title-bar .sbtn svg {
 }
 
 main .title-bar .sbtn:hover svg {
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 }
 
 /* Sorting */

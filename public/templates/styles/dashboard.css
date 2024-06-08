@@ -1,6 +1,6 @@
 /* Layout */
 main {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	display: table;
 	table-layout: fixed;
 	width: 100%;

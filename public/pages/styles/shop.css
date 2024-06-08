@@ -28,7 +28,7 @@
 	font-size: min(7rem, 20vw);
 	font-variant: normal;
 	letter-spacing: 0.3em;
-	text-shadow: 0.07em 0.04em 0 var(--clr-1);
+	text-shadow: 0.07em 0.04em 0 var(--color-primary-400);
 }
 
 .page-search {
@@ -95,7 +95,7 @@
 	background-color: var(--surface);
 	background-size: cover;
 	background-position: center;
-	border: 0.25rem solid var(--bgr);
+	border: 0.25rem solid var(--color-background);
 	border-radius: 5px;
 	width: 3rem;
 	height: 3rem;
@@ -111,7 +111,7 @@
 }
 
 #cred-txt a:hover {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }
 
 /*  Title  */

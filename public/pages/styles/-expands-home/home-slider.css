@@ -89,7 +89,7 @@
 
 #slider-credits img {
 	opacity: 0;
-	border: 0.25rem solid var(--bgr);
+	border: 0.25rem solid var(--color-background);
 	background-color: #eee;
 	border-radius: 50%;
 	transition: opacity 0.4s;
@@ -146,7 +146,7 @@
 
 @media (max-width: 480px) {
 	header {
-		--h-c-bgr: var(--bgr) !important;
+		--h-c-bgr: var(--color-background) !important;
 	}
 
 	#slider {

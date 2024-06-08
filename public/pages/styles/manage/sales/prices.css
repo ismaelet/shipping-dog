@@ -83,7 +83,7 @@
 }
 
 .price_inp.price_edit:focus {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 
 /*

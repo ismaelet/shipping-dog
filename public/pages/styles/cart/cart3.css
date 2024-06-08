@@ -23,8 +23,8 @@
 }
 
 #official-products .lbox-open:hover {
-	background-color: var(--clr-1);
-	border-color: var(--clr-1);
+	background-color: var(--color-primary-400);
+	border-color: var(--color-primary-400);
 }
 
 #official-products .lbox-open .icon-box {
@@ -67,7 +67,7 @@
 
 .lbox .pbtn {
 	border-radius: 5px;
-	border: 2px solid var(--clr-1);
+	border: 2px solid var(--color-primary-400);
 }
 
 /* Responsive */

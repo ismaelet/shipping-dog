@@ -9,7 +9,7 @@
 }
 
 #upload-box {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.4);
 	width: 30rem;
 	max-width: 100%;
@@ -18,7 +18,7 @@
 }
 
 #upload-box:hover {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 
 #upload-icon {

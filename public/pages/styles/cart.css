@@ -72,25 +72,25 @@ html[data-color-scheme='light'] #slider .bgr {
 }
 
 .flow-icon svg {
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 }
 
 .flow-line.active {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 
 .flow-step.active .flow-circle {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 .flow-step.active .flow-num {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }
 .flow-step.active .flow-txt {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }
 
 .flow-step.this .flow-circle {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 .flow-step.this .flow-num {
 	color: #fff;
@@ -234,7 +234,7 @@ html[data-color-scheme='light'] #slider .bgr {
 
 .icon-dot {
 	display: none;
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 	border-radius: 100%;
 	width: 50%;
 	height: 50%;

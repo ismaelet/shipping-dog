@@ -25,7 +25,7 @@
 
 /* Recap */
 #recap {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	border: 1px solid var(--border-color);
 	border-radius: 0.5rem;
 	padding: 1rem 1.5rem;
@@ -130,8 +130,8 @@
 
 .month-box .month-btn:hover {
 	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
-	border-color: var(--clr-1);
-	color: var(--clr-1);
+	border-color: var(--color-primary-400);
+	color: var(--color-primary-400);
 }
 
 .month-btn-text {
@@ -142,7 +142,7 @@
 
 /*Year selection*/
 .year {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
 	padding: 0.5rem 1rem;
 	padding-left: 1.1rem;
@@ -194,7 +194,7 @@
 }
 
 .list-title {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	border: 1px solid var(--border-color);
 	border-radius: 0.5rem;
 	font-size: 2rem;
@@ -205,7 +205,7 @@
 
 .list-tbl-head {
 	display: table-row;
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 }
 
 .list-name {
@@ -268,7 +268,7 @@
 }
 
 .list-tbl {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	display: table;
 	table-layout: fixed;
 	border: 1px solid var(--border-color);

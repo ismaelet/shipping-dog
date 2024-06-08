@@ -21,7 +21,7 @@
 }
 
 #title .icon-add:hover {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 
 #title .icon-add svg {
@@ -44,7 +44,7 @@
 }
 
 #search-bar.active svg {
-	fill: var(--clr-1);
+	fill: var(--color-primary-400);
 }
 
 #search-bar .inp {
@@ -199,8 +199,8 @@
 }
 
 #list .btn.c1 {
-	border-color: var(--clr-1);
-	color: var(--clr-1);
+	border-color: var(--color-primary-400);
+	color: var(--color-primary-400);
 }
 #list .btn.gre {
 	border-color: green;
@@ -236,7 +236,7 @@
 }
 
 .page.active {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 	border-radius: 100%;
 	color: #fff;
 }

@@ -25,7 +25,7 @@
 	background-color: var(--surface-secondary);
 	background-size: cover;
 	background-position: center;
-	border: 0.4rem solid var(--bgr);
+	border: 0.4rem solid var(--color-background);
 	border-radius: 10px;
 	aspect-ratio: 1 / 1;
 }

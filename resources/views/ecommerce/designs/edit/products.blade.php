@@ -252,13 +252,13 @@
 
 		.item-panel .toggler .line {
 			opacity: 0.5;
-			background-color: var(--clr-1);
+			background-color: var(--color-primary-400);
 			border-radius: 30px;
 			height: 1rem;
 		}
 
 		.item-panel .toggler .circle {
-			background-color: var(--clr-1);
+			background-color: var(--color-primary-400);
 			border-radius: 50%;
 			width: 1.8rem;
 			aspect-ratio: 1 / 1;

@@ -62,7 +62,7 @@
 }
 
 .focus .form-lbl {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 	transform: translateY(0.5rem) scale(1);
 }
 

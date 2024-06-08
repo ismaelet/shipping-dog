@@ -58,7 +58,7 @@
 #credit-section .used-credit {
 	height: 100%;
 	border-radius: inherit;
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 
 /* Credit button */
@@ -70,7 +70,7 @@
 }
 
 .use-credit-btn {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 
 .use-credit-btn:hover {

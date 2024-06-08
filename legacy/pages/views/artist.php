@@ -6,35 +6,37 @@ use Legacy\View\Components\Interactions\FollowButton;
 
 {% block main %}
 
-<section id="head" class="main-wrap" data-seller-id="<?= $legacySeller->id ?>">
+<section id="head" class="main-wrap" data-seller-id="<?= $seller->id ?>">
 
 	<!-- Cover -->
-	<div id="cover" class="<?= !$legacySeller->hasCover ? 'empty' : '' ?>" <?= temp_bg($legacySeller->cover(1024)) ?>></div>
+	<img id="cover" src="<?= $seller->cover() ?>" />
 
 	<form id="head-sec" method="POST" enctype="multipart/form-data">
 		<div id="head-cont">
 
 			<!-- Profile icon -->
 			<div id="icon-box">
-				<div id="icon" <?= temp_bg($legacySeller->icon) ?>></div>
+				<img id="icon" src="<?= $seller->icon() ?>" />
 			</div>
 
 			<!-- Edit button -->
 			<?php if ($vip) { ?>
+
 				<a href="<?= client_url('/manage?id=' . $id) ?>">
 					<p id="edit" class="bgr-c1-h">modifica</p>
 				</a>
+
 			<?php } ?>
 
 			<!-- Follow button -->
 			<div class="flex justify-center mt-8 mb-4">
-				<?= FollowButton::render(['seller_id' => $legacySeller->id]) ?>
+				<?= FollowButton::render(['seller_id' => $seller->id]) ?>
 			</div>
 
 			<div id="title-box" class="text-center">
 
 				<!-- Name -->
-				<h1 id="title" class="mar-t-1 txt-3rem"><?= $legacySeller->name ?></h1>
+				<h1 id="title" class="mar-t-1 txt-3rem"><?= $seller->name ?></h1>
 
 				<!-- Statistics -->
 				<p id="store-data" class="mar-b-1 mt-2">

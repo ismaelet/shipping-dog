@@ -43,7 +43,7 @@
 }
 
 #name:focus {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 
 #name-over {
@@ -163,7 +163,7 @@
 }
 
 .cbx:checked + .color-icon {
-	border: 3px solid var(--clr-1);
+	border: 3px solid var(--color-primary-400);
 	padding-bottom: calc(100% - 6px);
 	box-shadow: 3px 4px 5px -3px rgba(0, 0, 0, 0.5);
 }
@@ -355,7 +355,7 @@ html[data-color-scheme='dark'] .item-panel:before {
 }
 
 .item-panel .wrapper {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	border-radius: 0 3px 3px 3px;
 	padding: 2rem;
 }
@@ -400,7 +400,7 @@ html[data-color-scheme='dark'] .item-panel .tab {
 }
 
 .item-panel .tab.active {
-	background-color: var(--bgr);
+	background-color: var(--color-background);
 	color: var(--theme-max);
 	cursor: default;
 }
@@ -511,13 +511,13 @@ html[data-color-scheme='dark'] .item-panel .inp-box {
 
 .item-panel .toggler .line {
 	opacity: 0.5;
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 	border-radius: 30px;
 	height: 1rem;
 }
 
 .item-panel .toggler .circle {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 	border-radius: 50%;
 	width: 1.8rem;
 	aspect-ratio: 1 / 1;

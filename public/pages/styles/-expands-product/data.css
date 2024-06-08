@@ -294,7 +294,7 @@ body:has([data-seller-id='7083']) {
 }
 
 .cbx:checked + .color-box {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 
 /* Size and gender */
@@ -367,13 +367,13 @@ input:checked + .data-selector__label {
 input:checked + .size_lbl,
 input:checked + .gend_lbl,
 input:checked + .pos_txt_lbl {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 
 input:checked + .size_lbl *,
 input:checked + .gend_lbl *,
 input:checked + .pos_txt_lbl {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 }
 
 /* Switch preview */
@@ -408,11 +408,11 @@ input:checked + .pos_txt_lbl {
 }
 
 .cbx:checked + .prev-lbl {
-	border-color: var(--clr-1);
+	border-color: var(--color-primary-400);
 }
 
 .cbx:checked + .prev-lbl .prev-txt {
-	color: var(--clr-1);
+	color: var(--color-primary-400);
 	font-weight: bold;
 }
 
@@ -595,7 +595,7 @@ input:checked + .pos_txt_lbl {
 }
 
 #cbx_back_1 + .back_lbl {
-	background-color: var(--clr-1);
+	background-color: var(--color-primary-400);
 }
 
 .cbx:checked + .back_lbl {

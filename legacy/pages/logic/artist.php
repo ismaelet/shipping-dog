@@ -2,7 +2,6 @@
 
 use App\Models\Ecommerce\Seller;
 use Legacy\Classes\Ecommerce\Product as LegacyProduct;
-use Legacy\Classes\Ecommerce\Seller as LegacySeller;
 use Legacy\Classes\Ecommerce\Shop;
 
 // get variabiles
@@ -14,8 +13,6 @@ $sellerUserId = $seller?->user_id;
 if (!$seller) {
 	redirect_old('/shop');
 }
-
-$legacySeller = new LegacySeller($seller->user_id);
 
 if ($seller->hasCover) \Legacy\System\Classes\LegacyView::$thumbnail = $seller->cover[0];
 if ($seller->description) \Legacy\System\Classes\LegacyView::$description = $seller->description;
