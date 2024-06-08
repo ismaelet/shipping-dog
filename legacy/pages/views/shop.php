@@ -31,10 +31,6 @@
 
 <div id="body" class="main-wrap">
 
-	<?php if ($warning) { ?>
-		<p id="news" class="<?= $warning['color'] ?>"><?= $warning['text'] ?></p>
-	<?php } ?>
-
 	<div class="stitle-box mar-t-2">
 		<h2 class="component-heading"><span class="txt-light">I NOSTRI</span> <span class="font-semibold txt-c1">PRODOTTI</span></h2>
 		<div id="anch1" class="anchor"></div>

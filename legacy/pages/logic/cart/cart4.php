@@ -3,7 +3,6 @@
 use Illuminate\Support\Str;
 
 $cart = cart();
-$warning = warning_banner();
 
 // setup cart
 if ($cart->price == 0) {

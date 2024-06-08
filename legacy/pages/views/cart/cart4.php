@@ -22,12 +22,6 @@ use Legacy\Classes\ViewManager\Ecommerce\CartRecap;
 
 		<div class="grid-flow" data-spacing="700">
 
-			<?php if ($warning) { ?>
-
-				<p id="news" class="<?= $warning['color'] ?>"><?= $warning['text'] ?></p>
-
-			<?php } ?>
-
 			<?php if (cart()->shipping_method_id == ShippingMethod::NO_DELIVERY_SHIPPING_METHOD_ID) { ?>
 
 				<p class="center-content input-warning">Hai scelto di ritirare il capo in sede, quindi l'ordine NON verrà spedito, ma dovrai ritirarlo nella nostra sede in Piazza Scopoli, 9, 38033 Cavalese (TN)</p>

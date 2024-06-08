@@ -6,9 +6,6 @@ use Legacy\Classes\Ecommerce\Shop;
 // get slider image data
 $slid_des = Design::find(1612);
 
-// warnings
-$warning = warning_banner();
-
 // setup shop
 $shop = new Shop();
 

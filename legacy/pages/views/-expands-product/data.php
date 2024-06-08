@@ -8,17 +8,6 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 <div class="main-wrap pad-t-3 item-type--<?= $product->type->tag ?>" id="item" data-id="<?= $product->id ?>" data-hroot="/legacy" data-seller-id="<?= $product->seller->id ?>">
 
-	<!-- Warning -->
-	<?php
-
-	$warningBanner = warning_banner();
-
-	if ($warningBanner) { ?>
-
-		<p id=" news" class="mar-b-1 <?= $warningBanner['color'] ?>"><?= $warningBanner['text'] ?></p>
-
-	<?php } ?>
-
 	<form action="<?= route('order-items.store') ?>" method="POST" class="content grid gap3 al-top">
 
 		<input type="hidden" name="product_id" value="<?= $product->id ?>">

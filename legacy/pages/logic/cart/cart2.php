@@ -21,9 +21,6 @@ if (!$address && auth()->check()) {
 	$address = Address::where('user_id', auth()->id())->latest()->first();
 }
 
-// setup warnings
-$warning = warning_banner();
-
 /*
 * Shipping methods
 */

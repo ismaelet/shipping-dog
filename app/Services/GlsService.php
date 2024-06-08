@@ -126,7 +126,7 @@ class GlsService {
 			$response = simplexml_load_string($response->getBody()->getContents());
 			$response = json_encode($response);
 
-			Log::log('GLS API add parcel response', ['Response' => $response]);
+			Log::debug('GLS API add parcel response', ['Response' => $response]);
 
 			return json_decode($response);
 		} catch (Exception $e) {

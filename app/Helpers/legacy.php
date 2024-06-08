@@ -97,18 +97,6 @@ function rows_to_objects(Query_Result $rows = null, string $className) {
 	return $objects;
 }
 
-function warning_banner() {
-
-	$warning['text'] = \Legacy\System\Classes\LegacyDB::find('value FROM config WHERE name = ?', ['warning']);
-	$warning['color'] = \Legacy\System\Classes\LegacyDB::find('value FROM config WHERE name = ?', ['warning_color']);
-	$warning['start'] = \Legacy\System\Classes\LegacyDB::find('value FROM config WHERE name = ?', ['warning_start']);
-	$warning['end'] = \Legacy\System\Classes\LegacyDB::find('value FROM config WHERE name = ?', ['warning_end']);
-
-	if (empty($warning['text']) || strtotime($warning['start']) > strtotime('now') || strtotime($warning['end'] . '+1 day') < strtotime('now')) $warning = false;
-
-	return $warning;
-}
-
 function extract_markup(string $markup, string $content): string|null {
 	if (strpos($content, '<' . $markup . '>') !== false) {
 		return explode('</' . $markup . '>', explode('<' . $markup . '>', $content, 2)[1], 2)[0];
