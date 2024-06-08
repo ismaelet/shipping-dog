@@ -8,11 +8,11 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Builder;
 
 class SellerResource extends Resource {
 
@@ -90,6 +90,17 @@ class SellerResource extends Resource {
 	}
 
 	/**
+	 * Get the query for the resource.
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Builder
+	 */
+	public static function getEloquentQuery(): Builder {
+		return self::$model::query()
+			->select('stores.*')
+			->selectRaw('earned - payed + other_transfers as to_be_paid');
+	}
+
+	/**
 	 * The table for listing records.
 	 * 
 	 * @param \Filament\Tables\Table $table
@@ -111,6 +122,44 @@ class SellerResource extends Resource {
 					->placeholder('-')
 					->label('Nome')
 					->searchable()
+					->sortable(),
+
+				// Earned
+				TextColumn::make('earned')
+					->label('Guadagnato')
+					->sortable()
+					->toggleable()
+					->toggledHiddenByDefault()
+					->money(currency: 'EUR'),
+
+				// Paid
+				TextColumn::make('payed')
+					->label('Pagato')
+					->sortable()
+					->toggleable()
+					->toggledHiddenByDefault()
+					->money(currency: 'EUR'),
+
+				// Other transactions
+				TextColumn::make('other_transfers')
+					->label('Altro')
+					->sortable()
+					->toggleable()
+					->toggledHiddenByDefault()
+					->money(currency: 'EUR'),
+
+				// To be paid
+				TextColumn::make('to_be_paid')
+					->label('Da pagare')
+					->sortable()
+					->money(currency: 'EUR'),
+
+				// Request
+				IconColumn::make('request')
+					->label('Richiesta di pagamento')
+					->boolean()
+					->toggleable()
+					->toggledHiddenByDefault()
 					->sortable(),
 
 				// Status

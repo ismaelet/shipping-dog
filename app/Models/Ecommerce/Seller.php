@@ -5,9 +5,9 @@ namespace App\Models\Ecommerce;
 use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Seller\Follower;
+use App\Models\Ecommerce\Seller\Payment;
 use App\Models\Ecommerce\Seller\PaymentRequest;
 use App\Models\Ecommerce\Seller\SellerPrice;
-use App\Models\Ecommerce\Shop\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,11 +24,33 @@ class Seller extends Model {
 
 	use HasFactory, SoftDeletes;
 
+	/**
+	 * The table associated with the model.
+	 * 
+	 * @var string
+	 */
 	protected $table = 'stores';
-	protected $fillable = ['user_id', 'credit', 'earned', 'status', 'request'];
 
 	/**
-	 * * Expand basic methods
+	 * The attributes that are mass assignable.
+	 * 
+	 * @var array
+	 */
+	protected $fillable = [
+		'user_id',
+		'credit',
+		'earned',
+		'payed',
+		'status',
+		'request'
+	];
+
+	/**
+	 * * Lifecycle hooks
+	 */
+
+	/**
+	 * Delete the seller's related data
 	 */
 	public function delete() {
 		$this->designs()->delete();
@@ -43,8 +65,11 @@ class Seller extends Model {
 	/**
 	 * * Relationships
 	 */
+
 	/**
 	 * Get the seller's user
+	 * 
+	 * @return HasOne
 	 */
 	public function user(): HasOne {
 		return $this->hasOne(User::class, 'id', 'user_id');
@@ -52,6 +77,8 @@ class Seller extends Model {
 
 	/**
 	 * Get the seller's designs
+	 * 
+	 * @return HasMany
 	 */
 	public function designs(): HasMany {
 		return $this->hasMany(Design::class, 'user_id', 'user_id');
@@ -201,8 +228,17 @@ class Seller extends Model {
 		return $this;
 	}
 
-	public function updatePayed(): float {
-		return round($this->payments()->sum('value'), 2);
+	/**
+	 * Update the seller's paid amount
+	 * 
+	 * @return Seller
+	 */
+	public function updatePaid(): static {
+		$this->update([
+			'payed' => round($this->payments()->sum('value'), 2)
+		]);
+
+		return $this;
 	}
 
 	public function updateOtherTransfers(): float {

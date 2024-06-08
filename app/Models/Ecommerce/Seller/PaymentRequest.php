@@ -10,7 +10,23 @@ class PaymentRequest extends Model {
 
 	use HasFactory;
 
-	protected $fillable = ['first_name', 'last_name', 'birthdate', 'birthplace', 'birthprovince', 'cf', 'national_id', 'address', 'city', 'province', 'zip', 'seller_id', 'paypal', 'total', 'status'];
+	protected $fillable = [
+		'first_name',
+		'last_name',
+		'birthdate',
+		'birthplace',
+		'birthprovince',
+		'cf',
+		'national_id',
+		'address',
+		'city',
+		'province',
+		'zip',
+		'seller_id',
+		'paypal',
+		'total',
+		'status'
+	];
 
 	/**
 	 * * Accessors and Mutators

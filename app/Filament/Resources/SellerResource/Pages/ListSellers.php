@@ -32,6 +32,12 @@ class ListSellers extends ListRecords {
 				})
 				->badge(Seller::awaitingApproval()->count())
 				->badgeColor(fn () => Seller::awaitingApproval()->count() > 0 ? 'primary' : 'gray'),
+			'awaiting-payment' => Tab::make('Da Pagare')
+				->modifyQueryUsing(function ($query) {
+					$query->where('request', true);
+				})
+				->badge(Seller::where('request', true)->count())
+				->badgeColor(fn () => Seller::where('request', true)->count() > 0 ? 'primary' : 'gray'),
 		];
 	}
 }

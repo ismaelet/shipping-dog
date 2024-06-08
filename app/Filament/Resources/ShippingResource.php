@@ -50,9 +50,10 @@ class ShippingResource extends Resource {
 	 */
 	protected static ?string $navigationIcon = 'icon-shipping';
 
-
 	/**
 	 * Get the query for the resource.
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public static function getEloquentQuery(): Builder {
 		return self::getModel()::hasNoLabel();
