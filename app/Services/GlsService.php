@@ -285,8 +285,6 @@ class GlsService {
 		foreach ($response->Parcel as $parcelKey => $parcel) {
 			$order = $orders[$parcelKey];
 
-			Log::log('GLS API transmit parcel response', ['Response' => $parcel]);
-
 			$order->update([
 				'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),
 			]);

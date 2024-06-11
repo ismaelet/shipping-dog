@@ -17,7 +17,7 @@ $sameDesignProducts = Product::join('product_types', 'products.type_id', '=', 'p
 	->where('products.status', 1)
 	->where('products.deleted', 0)
 	->orderBy('product_types.sort')
-	->with('design', 'color', 'position', 'type')
+	->with('design', 'design_with_trashed', 'color', 'position', 'type')
 	->get(['products.*', 'product_types.category']);
 
 $relatedGarments = $sameDesignProducts->where('category', 'c');
@@ -37,7 +37,7 @@ $relatedProducts = Product::where('user_id', $seller->id)
 	->where('status', '>', 0)
 	->where('type_id', $product->type_id)
 	->where('deleted', 0)
-	->with('design', 'type', 'color', 'position', 'type')
+	->with('design', 'design_with_trashed', 'type', 'color', 'position', 'type')
 	->orderBy('sales', 'desc')
 	->orderBy('id', 'desc')
 	->limit(8)
@@ -52,7 +52,7 @@ if ($relatedProducts->count() < 8) {
 		->where('status', '>', 0)
 		->where('type_id', '<>', $product->type_id)
 		->where('deleted', 0)
-		->with('design', 'type', 'color', 'position', 'type')
+		->with('design', 'design_with_trashed', 'type', 'color', 'position', 'type')
 		->orderBy('sales', 'desc')
 		->orderBy('id', 'desc')
 		->limit(8 - $relatedProducts->count())

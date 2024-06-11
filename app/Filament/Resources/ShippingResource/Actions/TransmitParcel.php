@@ -21,10 +21,10 @@ class TransmitParcel {
 	 */
 	public static function make(): Action {
 		return Action::make('confirm-parcel')
-			->label('Conferma')
+			->label('Trasmetti')
 			->requiresConfirmation()
-			->icon('icon-correct')
-			->color('success')
+			->icon('icon-send')
+			->color('primary')
 			->action(function (Order $record): bool {
 				// Transmit the parcel
 				$request = function () use ($record) {
@@ -46,7 +46,7 @@ class TransmitParcel {
 				if ($response) {
 					Notification::make()
 						->title('Confermato')
-						->body('Ordine di ' . $record->full_name . ' confermato correttamente')
+						->body('Spedizione di ' . $record->full_name . ' trasmessa correttamente')
 						->success()
 						->send();
 
@@ -56,7 +56,7 @@ class TransmitParcel {
 				// Error
 				Notification::make()
 					->title('Errore')
-					->body('Errore durante la conferma dell\'ordine')
+					->body('Errore durante la trasmissione della spedizione')
 					->danger()
 					->send();
 

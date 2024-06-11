@@ -21,9 +21,10 @@ class AddParcel {
 	 */
 	public static function make(): Action {
 		return Action::make('add-parcel')
-			->label('Trasmetti')
+			->label('Crea')
+			->color('info')
 			->requiresConfirmation()
-			->icon('icon-send')
+			->icon('icon-add')
 			->action(function (Order $record): bool {
 				// Add the parcel
 				$request = function () use ($record) {
@@ -45,7 +46,7 @@ class AddParcel {
 				if ($response) {
 					Notification::make()
 						->title('Trasmesso')
-						->body('Ordine di ' . $record->full_name . ' trasmesso correttamente')
+						->body('Spedizione di ' . $record->full_name . ' creata correttamente')
 						->success()
 						->send();
 
@@ -55,7 +56,7 @@ class AddParcel {
 				// Error
 				Notification::make()
 					->title('Errore')
-					->body('Errore durante la trasmissione dell\'ordine')
+					->body('Errore durante la creazione della spedizione')
 					->danger()
 					->send();
 

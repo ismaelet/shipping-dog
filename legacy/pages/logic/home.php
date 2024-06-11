@@ -3,7 +3,7 @@
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Design\CustomerPhoto;
 use App\Models\Ecommerce\Product;
-use Legacy\Classes\Ecommerce\Seller;
+use App\Models\Ecommerce\Seller;
 
 $productN = 20;
 $popularDesignCount = 20;
@@ -12,28 +12,34 @@ $fanPicsCount = 4;
 
 // products
 $popular = Product::join('stores', 'products.user_id', '=', 'stores.user_id')
-	->where('products.status', 1)
-	->where('stores.status', 1)
-	->with('design', 'design.seller', 'design.auth_user_like', 'seller', 'seller.prices', 'design.logo_group', 'color', 'type', 'position', 'specific_price', 'base_price')
+	->where('products.status', true)
+	->where('stores.status', true)
+	->with('design', 'design_with_trashed', 'design.seller', 'design.auth_user_like', 'seller', 'seller.prices', 'design.logo_group', 'color', 'type', 'position', 'specific_price', 'base_price')
 	->orderBy('products.recent_sales', 'desc')
 	->limit($productN)
 	->get('products.*');
 
 // designs
 $popularDesigns = Design::join('stores', 'designs.user_id', '=', 'stores.user_id')
-	->where('designs.status', 1)
-	->where('stores.status', 1)
+	->where('designs.status', true)
+	->where('stores.status', true)
+	->with('main_product', 'products', 'seller')
 	->orderBy('designs.recent_sales', 'desc')
 	->limit($popularDesignCount)
 	->get('designs.*');
 
 // sellers
-$sellers = rows_to_objects(\Legacy\System\Classes\LegacyDB::select(Seller::INDEX . ' FROM ' . Seller::TABLE . ' WHERE status = 1 ORDER BY recent_sales DESC, user_id ASC LIMIT ?', [$sellerCount]), Seller::class);
+$sellers = Seller::where('status', true)
+	->orderByDesc('recent_sales', 'desc')
+	->orderBy('user_id')
+	->with('user')
+	->limit($sellerCount)
+	->get();
 
 // customer pics
 $customerPhotos = CustomerPhoto::inRandomOrder()
 	->limit($fanPicsCount)
-	->with('design')
+	->with('design', 'design.main_product')
 	->get();
 
 // categories

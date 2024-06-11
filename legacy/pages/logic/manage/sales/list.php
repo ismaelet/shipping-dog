@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 
 $seller = Auth::user()->seller;
 $seller->updateEarned();
+$seller->updateCredit();
 
 $from = 0;
 $j = 1;
