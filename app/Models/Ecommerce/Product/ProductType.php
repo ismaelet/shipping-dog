@@ -21,6 +21,7 @@ class ProductType extends Model {
 	/**
 	 * * Relationships
 	 */
+
 	/**
 	 * Get the colors associated with the product type.
 	 *

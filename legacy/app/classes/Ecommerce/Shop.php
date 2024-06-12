@@ -145,17 +145,13 @@ class Shop {
 		/**
 		 * * Fetch the products
 		 */
-		// Setup the cache
-		$cacheKeyParameters = md5(http_build_query(request()->all()));
-		$cacheInterval = $this->seller ? 10 : 60 * 60;
-
 		// Get the product count
 		$productCount = $products->count();
 
 		// Get the products
 		$products = $products->limit($this->size)
 			->offset($start)
-			->with('type', 'design', 'design.seller', 'design.logo_group', 'design.auth_user_like', 'seller', 'seller.prices', 'color', 'specific_price', 'base_price', 'position')
+			->with('type', 'design', 'design_with_trashed', 'design.seller', 'design.logo_group', 'design.auth_user_like', 'seller', 'seller.prices', 'color', 'specific_price', 'base_price', 'position')
 			->get('products.*');
 
 		// store the result

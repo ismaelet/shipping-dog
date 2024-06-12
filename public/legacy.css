@@ -8267,3 +8267,7 @@ h3 {
 .items-start {
 	align-items: start;
 }
+
+.px-2 {
+	padding-inline: 0.5rem;
+}

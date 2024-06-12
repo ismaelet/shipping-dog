@@ -479,8 +479,7 @@ class Order {
 			\Legacy\System\Classes\LegacyDB::update("orders SET code='' WHERE id = ?", [$this->id]);
 
 			foreach ($this->order_items as $orderItem) {
-				$orderItem->resetDiscount();
-				$orderItem->resetGain();
+				// ! reset discount and gain	
 			}
 
 			if ($this->coupon->freeShipping) {
