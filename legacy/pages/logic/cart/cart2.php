@@ -7,6 +7,16 @@ use Legacy\Classes\Ecommerce\Coupon;
 use Legacy\Classes\Ecommerce\Order as LegacyOrder;
 
 $cart = cart();
+$cart->load(
+	'order_items.color',
+	'order_items.position',
+	'order_items.size',
+	'order_items.product',
+	'order_items.product.type',
+	'order_items.product_with_trashed',
+	'order_items.product_with_trashed.design_with_trashed',
+	'order_items.product_with_trashed.type',
+);
 
 $legacyCart = new LegacyOrder($cart->id);
 

@@ -348,6 +348,15 @@ class OrderResource extends Resource {
 					})
 					->sortable(),
 
+				// Tracking
+				TextColumn::make('tracking')
+					->placeholder('senza tracking')
+					->label('Tracking')
+					->toggleable()
+					->toggledHiddenByDefault()
+					->searchable()
+					->sortable(),
+
 				// Created at
 				TextColumn::make('created_at')
 					->label('Creato il')

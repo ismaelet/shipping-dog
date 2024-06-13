@@ -283,6 +283,11 @@ class GlsService {
 	 */
 	private function updateOrdersAfterTransmit(Collection $orders, stdClass $response): bool {
 		foreach ($response->Parcel as $parcelKey => $parcel) {
+			if (!isset($orders[$parcelKey])) {
+				Log::error('Error transmitting a GLS parcel', ['Response' => $response]);
+				return false;
+			}
+
 			$order = $orders[$parcelKey];
 
 			$order->update([

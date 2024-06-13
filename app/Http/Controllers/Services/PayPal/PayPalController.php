@@ -107,6 +107,8 @@ class PayPalController extends Controller {
 	 * * Action: Capture
 	 */
 	public function capture(Order $order): RedirectResponse {
+		$order->load('order_items.type');
+
 		// Set the headers
 		$headers = [
 			'Content-Type' => 'application/json',
@@ -293,6 +295,8 @@ class PayPalController extends Controller {
 	 * ~ Helper: Get the items
 	 */
 	private function items(Order $order): array {
+		$order->load('order_items.product_with_trashed');
+
 		$items = [];
 
 		foreach ($order->order_items as $orderItem) {

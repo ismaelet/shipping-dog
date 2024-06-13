@@ -15,6 +15,18 @@ class OrderController extends Controller {
 	 * * Action: Show
 	 */
 	public function show(Order $order, Request $request): View {
+		$order->load(
+			'order_items',
+			'order_items.color',
+			'order_items.position',
+			'order_items.product',
+			'order_items.size',
+			'order_items.product.type',
+			'order_items.product_with_trashed',
+			'order_items.product_with_trashed.design_with_trashed',
+			'order_items.product_with_trashed.type',
+		);
+
 		return view('ecommerce.orders.show')
 			->with([
 				'title' => 'Ordine #' . $order->id,
@@ -50,6 +62,12 @@ class OrderController extends Controller {
 	 * * Action: Destroy
 	 */
 	public function destroy(Order $order): RedirectResponse {
+		$order->load(
+			'order_items',
+			'order_items.seller',
+			'order_items.seller.order_items',
+		);
+
 		$order->cancel();
 
 		return redirect()->back();

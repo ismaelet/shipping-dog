@@ -13,12 +13,16 @@
 	    ->where('status', '!=', EcommerceHelper::statusFromTag('open'))
 	    ->with(
 	        'order_items',
+	        'order_items.type',
+	        'order_items.type.sizes',
+	        'order_items.type.colors',
 	        'order_items.color',
 	        'order_items.size',
 	        'order_items.position',
 	        'order_items.logo',
 	        'order_items.product',
 	        'order_items.product.type',
+	        'order_items.product_with_trashed',
 	    );
 	$confirmedOrders =
 	    $orderDirection == 'asc' ? $confirmedOrders->orderBy($orderBy) : $confirmedOrders->orderByDesc($orderBy);
