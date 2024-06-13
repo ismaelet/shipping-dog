@@ -126,8 +126,6 @@ class GlsService {
 			$response = simplexml_load_string($response->getBody()->getContents());
 			$response = json_encode($response);
 
-			Log::debug('GLS API add parcel response', ['Response' => $response]);
-
 			return json_decode($response);
 		} catch (Exception $e) {
 			Log::error('Error sending a request to GLS ', ['Exception' => $e]);
@@ -315,7 +313,7 @@ class GlsService {
 	 * @param Order $order
 	 * @return bool
 	 */
-	private function trackParcel(Order $order): bool {
+	public function trackParcel(Order $order): bool {
 		$headquarters = config('services.gls.headquarters');
 		$contractCode = config('services.gls.contract_code');
 
