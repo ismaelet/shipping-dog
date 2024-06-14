@@ -20,9 +20,10 @@ class ShippingMethod extends Model {
 	protected $table = 'sys_shipping';
 	protected $fillable = [];
 
-	/************************
-	 * * Utility methods *
-	 ************************/
+	/**
+	 * * Attributes
+	 */
+
 	/**
 	 * Get the shipping price
 	 */

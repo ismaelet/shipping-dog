@@ -6,7 +6,7 @@ $order = cart();
 $token = request()->token;
 
 if ($order) {
-	if ($order->token == $token && $order->payment_method_id == 4 && in_array($order->status, [EcommerceHelper::statusFromTag('received'), EcommerceHelper::statusFromTag('open')])) {
+	if ($order->token == $token && ($order->payment_method_id == 4 || $order->shipping_method->isLocalDelivery()) && in_array($order->status, [EcommerceHelper::statusFromTag('received'), EcommerceHelper::statusFromTag('open')])) {
 		$order->confirm();
 	}
 

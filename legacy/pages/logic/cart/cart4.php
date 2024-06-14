@@ -10,7 +10,7 @@ if ($cart->price == 0) {
 
 	$cart->payment_method_id = 4;
 	$cart->save();
-} else if ($cart->localDelivery) {
+} else if ($cart->shipping_method->isLocalDelivery()) {
 	$res_payments = \Legacy\System\Classes\LegacyDB::select('* FROM sys_payment WHERE id IN (1,3)');
 
 	if (!in_array($cart->payment_method_id, [1, 3])) {
