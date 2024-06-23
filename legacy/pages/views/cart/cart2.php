@@ -20,10 +20,6 @@ use Legacy\View\Components\Form\Input;
 
 		<?= CartFlowBar::render() ?>
 
-		<p class="error-warning mb-4">
-			Da lunedì 10 giugno a domenica 16 giugno il nostro magazzino sarà chiuso per lavori di espansione.<br>Gli ordini effettuati in questo periodo verranno spediti a partire da lunedì 17 giugno.<br>La data di consegna stimata qui sotto potrebbe non essere accurata per gli ordini effettuati dal 10 al 16.<br>Ci scusiamo per il disagio.
-		</p>
-
 		<div id="content" class="grid">
 			<div method="POST" id="left_panel" class="panel">
 

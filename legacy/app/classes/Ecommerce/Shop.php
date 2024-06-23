@@ -6,7 +6,6 @@ use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Seller;
-use Illuminate\Support\Facades\Cache;
 use Legacy\Classes\Ecommerce\Product\Type as LegacyProductType;
 
 class Shop {

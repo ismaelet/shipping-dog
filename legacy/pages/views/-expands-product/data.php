@@ -169,10 +169,6 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 					</a>
 				</p>
 
-				<p class="error-warning mb-4 mt-4 px-2">
-					Da lunedì 10 giugno a domenica 16 giugno il nostro magazzino sarà chiuso per lavori di espansione.<br>Gli ordini effettuati in questo periodo verranno spediti a partire da lunedì 17 giugno.<br>La data di consegna stimata qui sotto potrebbe non essere accurata per gli ordini effettuati dal 10 al 16.<br>Ci scusiamo per il disagio.
-				</p>
-
 				<!-- Price -->
 				<div class="price-block">
 
@@ -215,9 +211,9 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 									<input type="radio" class="cbx" id="cbx-color-<?= $color->tag ?>" name="color_id" value="<?= $color->id ?>" data-color="<?= $color->tag ?>" data-id="<?= $color->id ?>" <?php if ($color->id == $product->color->id) echo 'checked' ?>>
 
-									<label for="cbx-color-<?= $color->tag ?>" class="color-box">
+									<label for="cbx-color-<?= $color->tag ?>" class="color-box" title="<?= $color->name ?>">
 
-										<div class="color-lbl <?= $color->bicolor ? 'bicolor' : false ?>" style="background-color: #<?= $color->color ?>">
+										<div class=" color-lbl <?= $color->bicolor ? 'bicolor' : false ?>" style="background-color: #<?= $color->color ?>">
 											<?php if ($color->bicolor) { ?>
 												<div class="bicolor-fill" style="background-color: #<?= $color->color ?>"></div>
 												<div class="bicolor-fill" style="background-color: #<?= $color->secondColor ?>"></div>

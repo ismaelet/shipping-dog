@@ -15,8 +15,20 @@ class ProductType extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['tag', 'name', 'name', 'names', 'gender_id', 'sibling_id', 'unisex', 'sizes', 'positions', 'category', 'colors', 'hidden'];
-
+	protected $fillable = [
+		'tag',
+		'name',
+		'name',
+		'names',
+		'gender_id',
+		'sibling_id',
+		'unisex',
+		'sizes',
+		'positions',
+		'category',
+		'colors',
+		'hidden'
+	];
 
 	/**
 	 * * Relationships
