@@ -10,6 +10,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,8 +36,25 @@ class ColorsRelationManager extends RelationManager {
 		return $table
 			->recordTitleAttribute('name')
 			->columns([
+				Tables\Columns\TextColumn::make('id')
+					->searchable()
+					->sortable()
+					->numeric(),
 				Tables\Columns\TextColumn::make('name')
-					->searchable(),
+					->label('Nome')
+					->searchable()
+					->sortable(),
+				Tables\Columns\TextColumn::make('tag')
+					->searchable()
+					->sortable(),
+				Tables\Columns\TextColumn::make('reorder')
+					->label('Ordine')
+					->sortable()
+					->numeric(),
+				IconColumn::make('dark')
+					->label('È scuro')
+					->boolean()
+					->sortable(),
 			])
 			->paginated(false)
 			->filters([

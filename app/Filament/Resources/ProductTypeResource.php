@@ -52,6 +52,13 @@ class ProductTypeResource extends Resource {
 	protected static ?string $pluralLabel = 'Categorie';
 
 	/**
+	 * The group in which the resource's navigation item will be displayed.
+	 * 
+	 * @var string
+	 */
+	protected static ?string $navigationGroup = 'Gestione Prodotti';
+
+	/**
 	 * Get the query for the resource.
 	 * 
 	 * @return \Illuminate\Database\Eloquent\Builder
@@ -59,13 +66,6 @@ class ProductTypeResource extends Resource {
 	public static function getEloquentQuery(): Builder {
 		return self::getModel()::query()->with('gender', 'colors');
 	}
-
-	/**
-	 * The group in which the resource's navigation item will be displayed.
-	 * 
-	 * @var string
-	 */
-	protected static ?string $navigationGroup = 'Gestione Prodotti';
 
 	public static function form(Form $form): Form {
 		return $form
