@@ -8,11 +8,20 @@ use App\Filament\Resources\ProductTypeResource\RelationManagers\ColorsRelationMa
 use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
 use BladeUI\Icons\Components\Icon;
+use ColorRepeater;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
@@ -20,6 +29,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\HtmlString;
+use MockupUploader;
 
 class ProductTypeResource extends Resource {
 
@@ -70,22 +81,89 @@ class ProductTypeResource extends Resource {
 	public static function form(Form $form): Form {
 		return $form
 			->schema([
-				Fieldset::make('Impostazioni')
-					->schema([
-						TextInput::make('name')
-							->label('Nome singolare')
-							->placeholder('Nome singolare')
-							->maxLength(255),
-						TextInput::make('names')
-							->label('Nome plurale')
-							->placeholder('Nome plurale')
-							->maxLength(255),
-						Select::make('gender_id')
-							->label('Genere')
-							->placeholder('Seleziona un genere')
-							->relationship('gender', 'name')
-					])->grow(true),
-			]);
+				Tabs::make('Tabs')
+					->tabs([
+						Tabs\Tab::make('Impostazioni')
+							->schema([
+								Fieldset::make('Impostazioni')
+									->schema([
+										TextInput::make('name')
+											->label('Nome singolare')
+											->placeholder('Nome singolare')
+											->maxLength(255),
+										TextInput::make('names')
+											->label('Nome plurale')
+											->placeholder('Nome plurale')
+											->maxLength(255),
+										Select::make('gender_id')
+											->label('Genere')
+											->placeholder('Seleziona un genere')
+											->relationship('gender', 'name')
+									])
+							]),
+						Tabs\Tab::make('Mockup')
+							->schema([
+								Repeater::make('colors')
+									->label('')
+									->relationship()
+									->schema(function ($record) {
+										$type = $record;
+
+										return [
+											Grid::make()
+												->schema(
+													function ($record) use ($type) {
+														$uploaders = [];
+
+														foreach ($type->positions->where('base_of', 0) as $position) {
+															$uploaders[] = FileUpload::make('product-mockup_' . $type->tag . '-' . $record->tag . '-' . $position->id)
+																->label($position->name . ' - Base')
+																->image()
+																->imageResizeMode('cover')
+																->imageCropAspectRatio('1:1')
+																->imageResizeTargetWidth('1024')
+																->imageResizeTargetHeight('1024')
+																->panelAspectRatio('1:1')
+																->disk('public')
+																->directory('product_types/mockups/' . $type->tag)
+																->getUploadedFileNameForStorageUsing(
+																	fn ($record): string => $record->tag . '-' . $position->id . '.webp',
+																);
+
+															$uploaders[] = FileUpload::make('product-mockup_' . $type->tag . '-' . $record->tag . '-' . $position->id . '-det')
+																->label($position->name . ' - Sovrapponi')
+																->image()
+																->imageResizeMode('cover')
+																->imageCropAspectRatio('1:1')
+																->imageResizeTargetWidth('1024')
+																->imageResizeTargetHeight('1024')
+																->panelAspectRatio('1:1')
+																->disk('public')
+																->directory('product_types/mockups/' . $type->tag)
+																->getUploadedFileNameForStorageUsing(
+																	fn ($record): string => $record->tag . '-' . $position->id . '-det.webp',
+																);
+														}
+
+														return $uploaders;
+													}
+												)
+										];
+									})
+									->grid([
+										'default' => 1,
+										'lg' => 2
+									])
+									->addable(false)
+									->deletable(false)
+									->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
+									->collapsed(),
+
+							])
+
+					])
+					->contained(false)
+			])->columns(1);
 	}
 
 	public static function table(Table $table): Table {

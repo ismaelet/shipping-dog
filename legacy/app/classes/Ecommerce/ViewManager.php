@@ -52,7 +52,7 @@ class ViewManager {
 
 			<div id="items_panel">
 
-				<?php foreach ($order->order_items as $orderItem) { ?>
+				<?php foreach ($order->order_items->load('logo') as $orderItem) { ?>
 
 					<div class="row grid">
 						<!--Image-->

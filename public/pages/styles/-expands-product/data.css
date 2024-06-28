@@ -568,6 +568,11 @@ input:checked + .pos_txt_lbl {
 	}
 }
 
+.logo-field__preview:has(.logo-field__static-preview) {
+	aspect-ratio: unset;
+	height: auto;
+}
+
 /* Position */
 .data-area {
 	display: flex;

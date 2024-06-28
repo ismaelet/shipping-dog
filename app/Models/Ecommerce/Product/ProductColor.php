@@ -19,7 +19,9 @@ class ProductColor extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = [];
+	protected $fillable = [
+		'image'
+	];
 
 	/**
 	 * Get the colors associated with the product type.

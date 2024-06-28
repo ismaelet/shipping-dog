@@ -268,8 +268,10 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 											<h1 class="size_txt uppercase"><?= $sizeM->name ?></h1>
 										</label>
 									</div>
+
 							<?php }
 							} ?>
+
 						</div>
 
 						<!-- Size table -->
@@ -388,11 +390,23 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 							</div>
 
-							<div class="logo-field__preview js-logo-image-background" class="<?= $product->logoGroup()->forced ? 'active' : null ?>">
-								<div class="logo-field__preview-wrapper grid-flow stack-content">
-									<img class="logo-field__preview-image js-front-image" src="<?= $product->image(1024) ?>">
-									<img class="logo-field__preview-logo js-logo-image" src="" alt="">
-								</div>
+							<div class="logo-field__preview js-logo-image-background <?= $product->logoGroup()->forced ? 'active' : null ?>">
+
+								<?php if ($product->logoGroup()->logos?->first()?->customPreview($product->type_id)) { ?>
+
+									<img class="logo-field__static-preview" src="<?= $product->logoGroup()->logos?->first()?->customPreview($product->type_id) ?>" alt="">
+
+								<?php } else { ?>
+
+									<div class="logo-field__preview-wrapper grid-flow stack-content">
+
+										<img class="logo-field__preview-image js-front-image" src="<?= $product->image(1024) ?>">
+
+										<img class="logo-field__preview-logo js-logo-image" src="" alt="">
+
+									</div>
+
+								<?php } ?>
 							</div>
 						</div>
 					</div>

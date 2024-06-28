@@ -36,6 +36,7 @@ if (strlen($search) > 2) {
 		->orderByDesc('sales')
 		->orderByDesc('id')
 		->limit($max)
+		->with('user')
 		->get();
 
 	$sellerCount = $sellers->count();
