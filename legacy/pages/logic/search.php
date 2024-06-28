@@ -24,7 +24,7 @@ if (strlen($search) > 2) {
 		->orderByDesc('stores.sales')
 		->orderByDesc('designs.id')
 		->limit($max)
-		->with('main_product', 'products', 'main_product.color', 'main_product.position', 'main_product.type', 'seller')
+		->with('main_product', 'products', 'main_product.design_with_trashed', 'main_product.color', 'main_product.position', 'main_product.type', 'seller')
 		->select('designs.*')
 		->get();
 

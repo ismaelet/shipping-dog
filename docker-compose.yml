@@ -26,19 +26,6 @@ services:
             - 'mysql:/var/lib/mysql'
         networks:
             - internal
-    phpmyadmin:
-        container_name: phpmyadmin
-        image: phpmyadmin
-        ports:
-            - 8080:80
-        environment:
-            PMA_HOST: ${DB_HOST}
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-            UPLOAD_LIMIT: 100000000
-        networks:
-            - internal
-        depends_on:
-            - ${DB_HOST}
 networks:
     internal:
         driver: bridge

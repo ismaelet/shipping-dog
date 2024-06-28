@@ -17,7 +17,7 @@
         "phpmailer/phpmailer": "^6.9",
         "sentry/sentry-laravel": "^4.5",
         "shuchkin/simplexlsxgen": "*",
-        "symfony/filesystem": "^7.0"
+        "symfony/filesystem": "^7.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",
