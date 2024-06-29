@@ -20,7 +20,14 @@ class ProductColor extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-		'image'
+		'tag',
+		'primary_color_hex',
+		'secondary_color_hex',
+		'name',
+		'type',
+		'dark',
+		'reorder',
+		'image',
 	];
 
 	/**

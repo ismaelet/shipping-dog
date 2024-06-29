@@ -6,6 +6,8 @@ use App\Filament\Resources\ProductColorResource\Pages;
 use App\Filament\Resources\ProductColorResource\RelationManagers;
 use App\Models\Ecommerce\Product\ProductColor;
 use Filament\Forms;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -60,7 +62,30 @@ class ProductColorResource extends Resource {
 	public static function form(Form $form): Form {
 		return $form
 			->schema([
-				//
+				Fieldset::make('Impostazioni')
+					->schema([
+						Forms\Components\TextInput::make('name')
+							->label('Nome')
+							->placeholder('Nome del colore')
+							->required(),
+						Forms\Components\TextInput::make('tag')
+							->label('Tag')
+							->placeholder('Tag del colore')
+							->required(),
+						ColorPicker::make('primary_color_hex')
+							->label('Colore primario')
+							->placeholder('Colore primario')
+							->required(),
+						ColorPicker::make('secondary_color_hex')
+							->label('Colore secondario')
+							->placeholder('Colore secondario (per colori doppi)'),
+						Forms\Components\TextInput::make('reorder')
+							->label('Ordine')
+							->default(0)
+							->placeholder('Ordine del colore'),
+						Forms\Components\Checkbox::make('dark')
+							->label('È scuro'),
+					])
 			]);
 	}
 

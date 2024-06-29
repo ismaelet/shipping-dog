@@ -213,13 +213,13 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 									<label for="cbx-color-<?= $color->tag ?>" class="color-box" title="<?= $color->name ?>">
 
-										<div class=" color-lbl <?= $color->bicolor ? 'bicolor' : false ?>" style="background-color: #<?= $color->color ?>">
-											<?php if ($color->bicolor) { ?>
-												<div class="bicolor-fill" style="background-color: #<?= $color->color ?>"></div>
-												<div class="bicolor-fill" style="background-color: #<?= $color->secondColor ?>"></div>
-											<?php } ?>
-										</div>
+										<div class="color-lbl" style="background-color: <?= $color->primary_color_hex ?>">
 
+											<?php if ($color->secondary_color_hex) { ?>
+												<span class="secondary-color" style="background-color: <?= $color->secondary_color_hex ?>"></span>
+											<?php } ?>
+
+										</div>
 									</label>
 
 								<?php } ?>

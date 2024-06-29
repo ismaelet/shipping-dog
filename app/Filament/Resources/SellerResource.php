@@ -189,7 +189,6 @@ class SellerResource extends Resource {
 					Action::make('login')
 						->icon('icon-login')
 						->color('info')
-						->visible(fn () => is_superadmin())
 						->action(function (Seller $record) {
 							auth()->login($record->user);
 

@@ -37,7 +37,6 @@ class ColorsRelationManager extends RelationManager {
 			->recordTitleAttribute('name')
 			->columns([
 				Tables\Columns\TextColumn::make('id')
-					->searchable()
 					->sortable()
 					->numeric(),
 				Tables\Columns\TextColumn::make('name')

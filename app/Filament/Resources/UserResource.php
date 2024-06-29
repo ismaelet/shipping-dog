@@ -205,7 +205,6 @@ class UserResource extends Resource {
 				Action::make('login')
 					->icon('icon-login')
 					->color('info')
-					->visible(fn () => is_superadmin())
 					->action(function (User $record) {
 						auth()->login($record);
 

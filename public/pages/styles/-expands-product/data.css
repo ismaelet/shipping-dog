@@ -282,7 +282,20 @@ body:has([data-seller-id='7083']) {
 }
 
 .color-lbl {
-	padding-bottom: 100%;
+	aspect-ratio: 1;
+	border-radius: inherit;
+	position: relative;
+
+	&:has(.secondary-color) {
+		rotate: 135deg;
+	}
+}
+
+.color-lbl .secondary-color {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
 	border-radius: inherit;
 }
 

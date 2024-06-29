@@ -4,7 +4,7 @@
 @php
 	$products = [];
 	$productRecords = Product::where('design_id', $design->id)
-	    ->with('color', 'position', 'type')
+	    ->with('design', 'design_with_trashed', 'color', 'position', 'type', 'type.colors', 'type.positions')
 	    ->get();
 
 	if (!$design->custom) {

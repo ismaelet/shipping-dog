@@ -69,7 +69,7 @@
 					<div class="color js-color">
 						<label class="">
 							<input type="radio" class="color__checkbox js-default-color" name="default-color-id" value="<?= $color->id ?>" <?= $oldProduct && $oldProduct->color_id == $color->id ? 'checked' : '' ?> required>
-							<div class="color__icon" style="--_color1: #<?= $color->hex ?>; --_color2: #<?= $color->secondHex ?: $color->hex ?>"></div>
+							<div class="color__icon" style="--_color1: <?= $color->primary_color_hex ?>; --_color2: <?= $color->secondary_color_hex ?: $color->primary_color_hex ?>"></div>
 						</label>
 
 						<p class="color__label js-default-color-label">
@@ -95,7 +95,7 @@
 					<div class="color js-color">
 						<label class="">
 							<input type="checkbox" class="color__checkbox js-active-color" name="colors[]" value="<?= $color->slug ?>" <?= $oldProduct && in_array($color->slug, $oldProduct->availableColorSlugs) ? 'checked' : '' ?>>
-							<div class="color__icon" style="--_color1: #<?= $color->hex ?>; --_color2: #<?= $color->secondHex ?: $color->hex ?>"></div>
+							<div class="color__icon" style="--_color1: <?= $color->primary_color_hex ?>; --_color2: <?= $color->secondary_color_hex ?: $color->primary_color_hex ?>"></div>
 						</label>
 
 						<div class="color__content">
