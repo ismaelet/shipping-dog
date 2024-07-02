@@ -43,6 +43,7 @@ class ViewManager {
 	// order list
 	public static function renderOrderList(object $order = null) {
 		$order = $order ?: cart();
+		$orderItems = $order->order_items->load('logo', 'product', 'product_with_trashed.type', 'product_with_trashed', 'product_with_trashed.design_with_trashed', 'color', 'position', 'size');
 
 		ob_start();
 	?>
@@ -52,7 +53,7 @@ class ViewManager {
 
 			<div id="items_panel">
 
-				<?php foreach ($order->order_items->load('logo') as $orderItem) { ?>
+				<?php foreach ($orderItems as $orderItem) { ?>
 
 					<div class="row grid">
 						<!--Image-->

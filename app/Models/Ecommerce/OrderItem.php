@@ -334,6 +334,8 @@ class OrderItem extends Model {
 
 		if ($order->order_items->isEmpty()) {
 			$order->delete();
+		} else {
+			$order->updateOrderItems();
 		}
 
 		return $result;
