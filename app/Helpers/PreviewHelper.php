@@ -76,6 +76,10 @@ class PreviewHelper {
 		return public_asset(self::PLACEHOLDER_IMAGE);
 	}
 
+	public function exists(): bool {
+		return $this->hasImage();
+	}
+
 	private function fileName(): string {
 		return $this->product->id . '-' . $this->color->tag . '-' . $this->position->id . '-' . $this->imageSize . '.webp';
 	}

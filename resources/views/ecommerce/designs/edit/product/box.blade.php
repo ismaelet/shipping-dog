@@ -1,4 +1,4 @@
-<div>
+<div id="product-{{ $product->id }}">
 	<div class="item-img item-panel-open relative">
 		<img
 			src="<?= $product->image() ?>"
@@ -16,7 +16,7 @@
 	<form
 		method="POST"
 		class="img-buttons mt-2 grid"
-		action="{{ route('products.status', $product) }}"
+		action="{{ route('products.status', $product) . '#product-' . $product->id }}"
 	>
 
 		<input

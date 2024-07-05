@@ -7,16 +7,14 @@
 	    ->with('design', 'design_with_trashed', 'color', 'position', 'type', 'type.colors', 'type.positions')
 	    ->get();
 
-	if (!$design->custom) {
-	    $types = ProductType::where('hidden', 0)->orderBy('category')->orderBy('sort')->orderBy('id')->get();
+	$types = ProductType::where('hidden', 0)->orderBy('category')->orderBy('sort')->orderBy('id')->get();
 
-	    $types->each(function ($type) use (&$products, $productRecords) {
-	        $products[] = [
-	            'product' => $productRecords->where('type_id', $type->id)->first(),
-	            'type' => $type,
-	        ];
-	    });
-	}
+	$types->each(function ($type) use (&$products, $productRecords) {
+	    $products[] = [
+	        'product' => $productRecords->where('type_id', $type->id)->first(),
+	        'type' => $type,
+	    ];
+	});
 @endphp
 
 @pushOnce('styles')

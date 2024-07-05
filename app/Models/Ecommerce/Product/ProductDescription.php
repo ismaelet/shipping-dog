@@ -8,5 +8,8 @@ class ProductDescription extends Model {
 
 	protected $primaryKey = 'product_id';
 	protected $table = 'items_info';
-	protected $fillable = [];
+	protected $fillable = [
+		'product_id',
+		'description',
+	];
 }
