@@ -3,11 +3,23 @@
 namespace App\Models\Ecommerce\Product;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ProductPosition extends Model {
 
 
 	protected $fillable = [];
+
+	/**
+	 * * Relationships
+	 */
+
+	/**
+	 * Get the product types for the position.
+	 */
+	public function types(): BelongsToMany {
+		return $this->belongsToMany(ProductType::class);
+	}
 
 	/**
 	 * Check if the position has a specific mockup

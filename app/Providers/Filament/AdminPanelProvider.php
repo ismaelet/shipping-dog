@@ -8,6 +8,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -70,6 +71,11 @@ class AdminPanelProvider extends PanelProvider {
 					->url('/legacy-admin/dashboard')
 					->icon('icon-dashboard'),
 				'logout' => MenuItem::make()->icon('icon-exit'),
+			])
+			->navigationGroups([
+				NavigationGroup::make('Gestione Vendite'),
+				NavigationGroup::make('Gestione Prodotti'),
+				NavigationGroup::make('Gestione Utenti'),
 			])
 
 			// Middlewares
