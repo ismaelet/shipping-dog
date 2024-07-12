@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
+use App\Filament\Resources\OrderResource\RelationManagers\OrderItemsRelationManager;
 use App\Mail\OrderStatusMail;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\PaymentMethod;
@@ -129,8 +130,8 @@ class OrderResource extends Resource {
 					// First column
 					Grid::make()
 						->schema([
-							// Order items
-							Fieldset::make('Articoli')
+							// Price
+							Fieldset::make('Prezzo')
 								->schema([
 									View::make('filament.forms.orders.order-items-recap'),
 								])
@@ -209,18 +210,6 @@ class OrderResource extends Resource {
 										)
 										->required()
 										->columnSpanFull(),
-
-									TextInput::make('token')
-										->label('Codice della transazione')
-										->placeholder('Codice della transazione')
-										->readOnly()
-										->columnSpanFull(),
-
-									TextInput::make('tracking')
-										->label('Numero di tracking')
-										->placeholder('Numero di tracking')
-										->readOnly()
-										->columnSpanFull(),
 								])
 								->columns(1)
 								->grow(true),
@@ -233,7 +222,13 @@ class OrderResource extends Resource {
 										->options(
 											ShippingMethod::all()->pluck('name', 'id')
 										)
-										->required()
+										->required(),
+
+									TextInput::make('tracking')
+										->label('Numero di tracking')
+										->placeholder('Numero di tracking')
+										->readOnly()
+										->columnSpanFull(),
 								])->columns(1),
 
 							// Payment
@@ -244,7 +239,13 @@ class OrderResource extends Resource {
 										->options(
 											PaymentMethod::all()->pluck('name', 'id')
 										)
-										->required()
+										->required(),
+
+									TextInput::make('token')
+										->label('Codice della transazione')
+										->placeholder('Codice della transazione')
+										->readOnly()
+										->columnSpanFull(),
 								])
 								->columns(1),
 						])
@@ -399,6 +400,17 @@ class OrderResource extends Resource {
 		return [
 			'index' => Pages\ListOrders::route('/'),
 			'edit' => Pages\EditOrder::route('/{record}/edit'),
+		];
+	}
+
+	/**
+	 * Get the relations available to the resource.
+	 * 
+	 * @return array
+	 */
+	public static function getRelations(): array {
+		return [
+			OrderItemsRelationManager::class,
 		];
 	}
 }

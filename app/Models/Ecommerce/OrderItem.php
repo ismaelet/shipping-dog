@@ -86,6 +86,15 @@ class OrderItem extends Model {
 	}
 
 	/**
+	 * Get the order's design.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function design(): BelongsTo {
+		return $this->belongsTo(Design::class);
+	}
+
+	/**
 	 * Get the order's product.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
