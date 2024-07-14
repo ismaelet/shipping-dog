@@ -50,7 +50,7 @@ class SellerResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationGroup = 'Gestione Utenti';
+	protected static ?string $navigationGroup = 'Gestione Negozi';
 
 	/**
 	 * The sort order of the resource's navigation item.

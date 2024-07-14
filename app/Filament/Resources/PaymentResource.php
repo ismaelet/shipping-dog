@@ -49,7 +49,7 @@ class PaymentResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationGroup = 'Gestione Vendite';
+	protected static ?string $navigationGroup = 'Gestione Negozi';
 
 	/**
 	 * The sort order of the resource's navigation item.

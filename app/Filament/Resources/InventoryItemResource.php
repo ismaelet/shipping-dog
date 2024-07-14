@@ -30,7 +30,7 @@ class InventoryItemResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $label = 'Inventario';
+	protected static ?string $label = 'Articolo in inventario';
 
 	/**
 	 * The label of a plural resource.
@@ -97,22 +97,28 @@ class InventoryItemResource extends Resource {
 			->columns([
 				TextColumn::make('id')
 					->label('ID')
+					->numeric()
 					->sortable(),
+
 				TextColumn::make('design.name')
 					->label('Design')
 					->searchable()
 					->sortable(),
+
 				TextColumn::make('type.name')
 					->label('Tipo')
 					->searchable()
 					->sortable(),
+
 				TextColumn::make('color.name')
 					->label('Colore')
 					->searchable()
 					->sortable(),
+
 				TextColumn::make('size.name')
 					->label('Taglia')
 					->sortable(),
+
 				TextColumn::make('position.name')
 					->label('Stampa')
 					->sortable(),

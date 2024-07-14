@@ -120,7 +120,10 @@ class ShippingResource extends Resource {
 			])
 
 			// The bulk actions that can be performed on the selected records
-			->bulkActions([BulkTransmitParcels::make()]);
+			->bulkActions([BulkTransmitParcels::make()])
+
+			// Remove pagination
+			->paginated(false);
 	}
 
 	/**

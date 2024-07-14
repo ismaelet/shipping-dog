@@ -75,6 +75,7 @@ class AdminPanelProvider extends PanelProvider {
 			->navigationGroups([
 				NavigationGroup::make('Gestione Vendite'),
 				NavigationGroup::make('Gestione Prodotti'),
+				NavigationGroup::make('Gestione Negozi'),
 				NavigationGroup::make('Gestione Utenti'),
 			])
 
