@@ -117,6 +117,10 @@ use Legacy\View\Components\Form\Input;
 						<input type="email" class="input" name="email" placeholder="Indirizzo e-mail" value="<?= $address->email ?? '' ?>" maxlength="50" required autocomplete="email">
 						<input type="text" class="input js-input-no-space" name="phone" placeholder="Numero di telefono" value="<?= $address->phone ?? '' ?>" maxlength="30" autocomplete="tel" required>
 
+						<div class="<?= $cart->shipping_method->isLocalDelivery() ? 'hidden' : '' ?>" data-shipping-field>
+							<textarea class="input" name="courier_notes" placeholder="Note per il corriere (opzionale)" maxlength="250"><?= $cart->courier_notes ?? '' ?></textarea>
+						</div>
+
 					</div>
 
 					<button type="submit" id="submit" name="submit" class="hidden"></button>

@@ -20,7 +20,7 @@ class Address extends Model {
 		'country',
 		'email',
 		'phone',
-		'txnID'
+		'txnID',
 	];
 
 	/**

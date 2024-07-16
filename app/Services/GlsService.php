@@ -249,6 +249,8 @@ class GlsService {
 			$email = $address->email;
 			$serviziAccessori = $address->exchange ? 24 : '';
 			$cellulare1 = $address->phone;
+			$noteSpedizione = $cellulare1;
+			$noteAggiuntive = $order->courier_notes;
 
 			// XML payload to send to the API
 			$parcelsXml .= "<Parcel>
@@ -265,6 +267,8 @@ class GlsService {
 				<TipoCollo>0</TipoCollo>
 				<Email>$email</Email>
 				<Cellulare1>$cellulare1</Cellulare1>
+				<NoteSpedizione>$noteSpedizione</NoteSpedizione>
+				<NoteAggiuntive>$noteAggiuntive</NoteAggiuntive>
 				<ServiziAccessori>$serviziAccessori</ServiziAccessori>
 			</Parcel>";
 		});

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\Cart;
 use App\Models\Ecommerce\Address;
 use App\Models\Ecommerce\OrderItem;
 use App\Models\Ecommerce\ShippingMethod;
@@ -58,6 +59,7 @@ if (!empty($_POST)) {
 	$email = strtolower(trim($_POST['email']));
 	$phone = trim($_POST['phone']);
 	$security = random_string();
+	$courierNotes = $_POST['courier_notes'] ?? '';
 
 	Address::updateOrCreate([
 		'order_id' => $cart->id,
@@ -72,6 +74,10 @@ if (!empty($_POST)) {
 		'email' => $email,
 		'phone' => $phone,
 		'security' => $security
+	]);
+
+	$cart->update([
+		'courier_notes' => $courierNotes
 	]);
 
 	if (isset($_POST['submit']) && (
