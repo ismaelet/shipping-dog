@@ -7,10 +7,10 @@ services:
         volumes:
             - '.:/var/www/html'
         ports:
-            - '80:80'
+            - '8000:8000'
         depends_on:
             - ${DB_HOST}
-        command: php artisan serve --host=0.0.0.0 --port=80
+        command: php artisan serve --host=0.0.0.0 --port=8000
         networks:
             - internal
     database:

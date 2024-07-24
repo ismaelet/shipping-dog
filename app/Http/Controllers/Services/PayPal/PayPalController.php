@@ -188,8 +188,8 @@ class PayPalController extends Controller {
 
 		Log::error(['PayPal error' => [
 			array_filter([
-				'order' => $order,
-				'address' => $order?->address,
+				'order' => $order->id,
+				'address' => $order?->address->fullAddress(),
 				'response' => $response
 			])
 		]]);
@@ -271,7 +271,7 @@ class PayPalController extends Controller {
 					'name' => [
 						'full_name' => $address->full_name,
 					],
-					'address' => $this->address($address),
+					$order->shipping_method->isLocalDelivery() ? null : 'address' => $this->address($address),
 				],
 				'items' => $this->items($order),
 			]
@@ -322,7 +322,7 @@ class PayPalController extends Controller {
 			'payment_method_preference' => 'IMMEDIATE_PAYMENT_REQUIRED',
 			'brand_name' => config('app.name'),
 			'locale' => config('app.locale'),
-			'shipping_preference' => 'SET_PROVIDED_ADDRESS',
+			'shipping_preference' => $order->shipping_method->isLocalDelivery() ? 'NO_SHIPPING' : 'SET_PROVIDED_ADDRESS',
 			'user_action' => 'PAY_NOW',
 			'return_url' => route('paypal.order.capture', ['order' => $order]),
 			'cancel_url' => route('paypal.order.cancel', ['order' => $order]),

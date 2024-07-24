@@ -143,7 +143,7 @@ class FileHelper {
 				$originalImg = imagecreatefromjpeg($srcImg);
 				break;
 			default:
-				imagecreatefromstring(file_get_contents($srcImg));
+				$originalImg = imagecreatefromstring(file_get_contents($srcImg));
 		}
 
 		// Save the new image

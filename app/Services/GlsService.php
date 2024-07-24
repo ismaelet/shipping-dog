@@ -69,6 +69,8 @@ class GlsService {
 			$orders = new Collection([$orders]);
 		}
 
+		$orders = $orders->load('address');
+
 		// Set headers
 		$headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
 
@@ -88,7 +90,7 @@ class GlsService {
 		}
 
 		// Update the orders
-		return $this->updateOrdersAfterTransmit($orders, $response);
+		return $this->updateOrdersAfterTransmit($response);
 
 		return true;
 	}
@@ -247,7 +249,7 @@ class GlsService {
 			$zipCode = $address->zip;
 			$provincia = $address->region;
 			$email = $address->email;
-			$serviziAccessori = $address->exchange ? 24 : '';
+			$serviziAccessori = $order->exchange ? 24 : '';
 			$cellulare1 = $address->phone;
 			$noteSpedizione = $cellulare1;
 			$noteAggiuntive = $order->courier_notes;
@@ -283,18 +285,24 @@ class GlsService {
 	 * @param stdClass $response
 	 * @return bool
 	 */
-	private function updateOrdersAfterTransmit(Collection $orders, stdClass $response): bool {
-		foreach ($response->Parcel as $parcelKey => $parcel) {
-			if (!isset($orders[$parcelKey])) {
+	private function updateOrdersAfterTransmit(stdClass $response): bool {
+		$parcels = $response?->Parcel;
+
+		if ($parcels && !is_array($parcels)) {
+			$parcels = [$parcels];
+		}
+
+		foreach ($parcels as $parcel) {
+			if (!$parcel || !isset($parcel->NumeroDiSpedizioneGLSDaConfermare)) {
 				Log::error('Error transmitting a GLS parcel', ['Response' => $response]);
 				return false;
 			}
 
-			$order = $orders[$parcelKey];
-
-			$order->update([
-				'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),
-			]);
+			Order::where('tracking', $parcel->NumeroDiSpedizioneGLSDaConfermare)
+				->first()
+				->update([
+					'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),
+				]);
 		}
 
 		return true;

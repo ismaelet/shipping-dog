@@ -15,6 +15,7 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\View;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -22,6 +23,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
@@ -151,30 +153,25 @@ class OrderResource extends Resource {
 									TextInput::make('address')
 										->label('Indirizzo')
 										->placeholder('Indirizzo')
-										->required()
 										->columnSpan(['lg' => 3]),
 
 									TextInput::make('number')
 										->label('Numero')
-										->placeholder('Numero')
-										->required(),
+										->placeholder('Numero'),
 
 									TextInput::make('city')
 										->label('Città')
 										->placeholder('Città')
-										->required()
 										->columnSpan(['lg' => 2]),
 
 									TextInput::make('zip')
 										->label('CAP')
 										->placeholder('CAP')
-										->required()
 										->length(5),
 
 									TextInput::make('region')
 										->label('Regione')
 										->placeholder('Regione')
-										->required()
 										->maxLength(2),
 
 									TextInput::make('email')
@@ -228,6 +225,10 @@ class OrderResource extends Resource {
 										->label('Numero di tracking')
 										->placeholder('Numero di tracking')
 										->readOnly()
+										->columnSpanFull(),
+
+									Toggle::make('exchange')
+										->label('Exchange')
 										->columnSpanFull(),
 								])->columns(1),
 
@@ -327,18 +328,28 @@ class OrderResource extends Resource {
 					->sortable(),
 
 				// Status
-				TextColumn::make('status')
+				SelectColumn::make('status')
 					->label('Stato')
 					->sortable()
-					->badge()
-					->color(function (int $state): string {
-						$tag = config('ecommerce.order.statuses')[$state]['tag'];
+					->label('Stato')
+					->options(
+						array_combine(
+							array_keys(config('ecommerce.order.statuses')),
+							array_column(config('ecommerce.order.statuses'), 'label')
+						)
+					),
+				// TextColumn::make('status')
+				// 	->label('Stato')
+				// 	->sortable()
+				// 	->badge()
+				// 	->color(function (int $state): string {
+				// 		$tag = config('ecommerce.order.statuses')[$state]['tag'];
 
-						return 'status-' . $tag;
-					})
-					->formatStateUsing(function (int $state): string {
-						return config('ecommerce.order.statuses')[$state]['label'];
-					}),
+				// 		return 'status-' . $tag;
+				// 	})
+				// 	->formatStateUsing(function (int $state): string {
+				// 		return config('ecommerce.order.statuses')[$state]['label'];
+				// 	}),
 
 				// Whether the customer is registered
 				IconColumn::make('user_id')

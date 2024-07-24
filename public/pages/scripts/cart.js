@@ -16,12 +16,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 			if (shippingMethodId == '11') {
 				shippingFields.forEach((field) => {
 					field.classList.add('hidden')
-					field.querySelector('input').required = false
+					field.querySelector('input, textarea').required = false
 				})
 			} else {
 				shippingFields.forEach((field) => {
 					field.classList.remove('hidden')
-					field.querySelector('input').required = true
+					field.querySelector('input, textarea').required = true
 				})
 			}
 		})

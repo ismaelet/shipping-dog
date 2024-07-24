@@ -21,7 +21,8 @@ class OrderLogController extends Controller {
 
 		$orders = Order::where('created_at', '>=', $startFromTime)
 			->where('status', '>', EcommerceHelper::statusFromTag('received'))
-			->with('user', 'user.seller', 'address', 'shipping_method', 'coupon', 'change_request', 'order_items', 'order_items.product', 'order_items.product.type', 'order_items.product.type.sizes', 'order_items.product.type.colors', 'order_items.color', 'order_items.size', 'order_items.position', 'order_items.logo')
+			->where('status', '<', EcommerceHelper::statusFromTag('awaiting-shipping'))
+			->with('user', 'user.seller', 'address', 'shipping_method', 'coupon', 'change_request', 'order_items', 'order_items.type', 'order_items.type.sizes', 'order_items.type.colors', 'order_items.product', 'order_items.product_with_trashed', 'order_items.product.type', 'order_items.product.type.sizes', 'order_items.product.type.colors', 'order_items.color', 'order_items.size', 'order_items.position', 'order_items.logo')
 			->oldest()
 			->get();
 

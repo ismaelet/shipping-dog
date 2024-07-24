@@ -102,7 +102,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 
 				<?php if (!$seller->status) { ?>
 
-					<p id="wip" class="mar-v-2">Il negozio ancora non è pubblico. A breve verrà valutato ed eventualmente pubblicato.</p>
+					<p id="wip" class="mar-v-2">Il negozio ancora non è pubblico. Ti senti pronto? Il tuo negozio può essere reso pubblico? Faccelo sapere scrivendoci a <a href="<?= config('custom.contacts.email.url') ?>" class="font-bold hover:text-primary transition-colors"><?= config('custom.contacts.email.label') ?></a> o su WhatsApp a <a href="<?= config('custom.contacts.whatsapp.url') ?>" class="font-bold hover:text-primary transition-colors"><?= config('custom.contacts.whatsapp.label') ?></a>.</p>
 
 				<?php } ?>
 

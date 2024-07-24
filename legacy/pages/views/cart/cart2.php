@@ -99,13 +99,13 @@ use Legacy\View\Components\Form\Input;
 						<?= Input::render(['name' => 'full_name', 'placeholder' => 'Nominativo di spedizione', 'value' => $address->full_name ?? '', 'required' => true, 'trim' => true]) ?>
 
 						<div class="field <?= $cart->shipping_method->isLocalDelivery() ? 'hidden' : '' ?>" data-shipping-field>
-							<input type="text" id="inp_addr" class="input delivery-input" name="address" placeholder="Indirizzo" value="<?= $address->address ?? '' ?>" maxlength="30" autocomplete="address-line1" <?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
+							<input type="text" id="inp_addr" class="input delivery-input" name="address" placeholder="Indirizzo" value="<?= $address->address ?? '' ?>" maxlength="255" autocomplete="address-line1" <?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
 
 							<input type="text" id="inp_num" class="input delivery-input" name="number" placeholder="Numero civico" value="<?= $address->number ?? '' ?>" maxlength="10" <?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
 						</div>
 
 						<div data-shipping-field class="<?= $cart->shipping_method->isLocalDelivery() ? 'hidden' : '' ?>">
-							<input type="text" class="input delivery-input" name="city" placeholder="Città" value="<?= $address->city ?? '' ?>" maxlength="30" autocomplete="address-level2" <?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
+							<input type="text" class="input delivery-input" name="city" placeholder="Città" value="<?= $address->city ?? '' ?>" maxlength="255" autocomplete="address-level2" <?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
 						</div>
 
 						<div class="field <?= $cart->shipping_method->isLocalDelivery() ? 'hidden' : '' ?>" data-shipping-field>

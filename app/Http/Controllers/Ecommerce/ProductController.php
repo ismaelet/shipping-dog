@@ -16,7 +16,7 @@ class ProductController extends Controller {
 		if (
 			!$product?->id ||
 			!$product?->seller ||
-			($product->trashed() && !is_admin()) ||
+			$product->trashed() ||
 			($product->status == 0 && !$product->userIsOwner() && !is_admin())
 		) {
 			return redirect()->route('shop');
