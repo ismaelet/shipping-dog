@@ -21,6 +21,11 @@ $cart->load(
 
 $legacyCart = new LegacyOrder($cart->id);
 
+// if ($cart->code) {
+// 	$coupon = Coupon::generateFromCode($cart->code);
+// 	$legacyCart->addCoupon($coupon->id);
+// }
+
 // setup variables
 $loc = \Legacy\System\Classes\LegacyView::get('step');
 $error = $_GET['error'] ?? false;

@@ -63,7 +63,7 @@ class GlsService {
 	 * 
 	 * @return bool
 	 */
-	public function transmitParcels(Collection|Order $orders): bool {
+	public function transmitParcels(Collection|Order $orders): array {
 		// If a single order is passed, convert it to a collection
 		if ($orders instanceof Order) {
 			$orders = new Collection([$orders]);
@@ -86,13 +86,14 @@ class GlsService {
 		$response = $this->sendRequest($this->closeWorkDayByShipmentNumberEndpoint, $headers, $body);
 
 		if (!$response) {
-			return false;
+			return [
+				'success' => false,
+				'error' => 'Errore nella trasmissione'
+			];
 		}
 
 		// Update the orders
 		return $this->updateOrdersAfterTransmit($response);
-
-		return true;
 	}
 
 	/**
@@ -285,8 +286,17 @@ class GlsService {
 	 * @param stdClass $response
 	 * @return bool
 	 */
-	private function updateOrdersAfterTransmit(stdClass $response): bool {
-		$parcels = $response?->Parcel;
+	private function updateOrdersAfterTransmit(stdClass $response): array {
+		$parcels = $response->Parcel ?? null;
+
+		if (!$parcels) {
+			Log::error('Error transmitting bulk GLS parcel', ['Response' => $response]);
+
+			return [
+				'success' => false,
+				'error' => 'Errore di trasmissione non specificato'
+			];
+		}
 
 		if ($parcels && !is_array($parcels)) {
 			$parcels = [$parcels];
@@ -295,7 +305,11 @@ class GlsService {
 		foreach ($parcels as $parcel) {
 			if (!$parcel || !isset($parcel->NumeroDiSpedizioneGLSDaConfermare)) {
 				Log::error('Error transmitting a GLS parcel', ['Response' => $response]);
-				return false;
+
+				return [
+					'success' => false,
+					'error' => 'Errore di trasmissione non specificato'
+				];
 			}
 
 			Order::where('tracking', $parcel->NumeroDiSpedizioneGLSDaConfermare)
@@ -305,7 +319,10 @@ class GlsService {
 				]);
 		}
 
-		return true;
+		return [
+			'success' => true,
+			'error' => false
+		];
 	}
 
 	/**

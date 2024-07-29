@@ -588,7 +588,9 @@ class Order {
 				$this->updateShippingMethodId(ShippingMethod::FREE_SHIPPING_METHOD_ID);
 			}
 
-			foreach ($this->order_items as $orderItem) {
+			$order_items = $this->newOrder()->order_items;
+
+			foreach ($order_items as $orderItem) {
 				$sellerDiscount = 0;
 				$ourDiscount = 0;
 
@@ -618,6 +620,7 @@ class Order {
 							$sellerDiscountPercentage = $coupon->sellerPercentageDiscount;
 						}
 
+
 						// fixed discount
 						if ($coupon->ourFixedDiscountMultiple && $this->quantity > 1) {
 							$ourDiscountFixed = $coupon->ourFixedDiscountMultiple;
@@ -632,8 +635,8 @@ class Order {
 						}
 
 						// total discount
-						$ourDiscount = ($orderItem->fullPrice * $ourDiscountPercentage / 100) + $ourDiscountFixed;
-						$sellerDiscount = ($orderItem->fullPrice * $sellerDiscountPercentage / 100) + $sellerDiscountFixed;
+						$ourDiscount = ($orderItem->grossProductPrice() * $ourDiscountPercentage / 100) + $ourDiscountFixed;
+						$sellerDiscount = ($orderItem->grossProductPrice() * $sellerDiscountPercentage / 100) + $sellerDiscountFixed;
 					} else {
 						$sellerDiscount = $orderItem->gain;
 					}
@@ -642,8 +645,9 @@ class Order {
 					$totalDiscount = $ourDiscount + $sellerDiscount;
 					$gainReduction = $coupon->removesGain ? $orderItem->gain : $sellerDiscount;
 
-					$orderItem->updateDiscount($totalDiscount);
-					$orderItem->updateGainReduction($gainReduction);
+					$legacyOrderItem = new LegacyOrderItem($orderItem->id);
+					$legacyOrderItem->updateDiscount($totalDiscount);
+					$legacyOrderItem->updateGainReduction($gainReduction);
 				}
 			}
 

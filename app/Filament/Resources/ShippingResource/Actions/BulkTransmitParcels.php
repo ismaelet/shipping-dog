@@ -32,19 +32,13 @@ class BulkTransmitParcels {
 					$glsService = new GlsService();
 
 					// Transmit the parcels
-					$response = $glsService->transmitParcels($records);
-
-					if (!$response) {
-						return false;
-					}
-
-					return true;
+					return $glsService->transmitParcels($records);
 				};
 
 				$response = $request();
 
 				// Success
-				if ($response) {
+				if ($response['success']) {
 					Notification::make()
 						->title('Trasmesse')
 						->body('Tutte le spedizioni selezionate sono state trasmesse correttamente')
@@ -57,7 +51,7 @@ class BulkTransmitParcels {
 				// Error
 				Notification::make()
 					->title('Errore')
-					->body('Errore durante la trasmissione degli ordini')
+					->body($response['error'])
 					->danger()
 					->send();
 

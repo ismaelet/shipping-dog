@@ -31,19 +31,13 @@ class TransmitParcel {
 					$glsService = new GlsService();
 
 					// Transmit the parcel
-					$response = $glsService->transmitParcels($record);
-
-					if (!$response) {
-						return false;
-					}
-
-					return true;
+					return $glsService->transmitParcels($record);
 				};
 
 				$response = $request();
 
 				// Success
-				if ($response) {
+				if ($response['success']) {
 					Notification::make()
 						->title('Confermato')
 						->body('Spedizione di ' . $record->full_name . ' trasmessa correttamente')
@@ -56,7 +50,7 @@ class TransmitParcel {
 				// Error
 				Notification::make()
 					->title('Errore')
-					->body('Errore durante la trasmissione della spedizione')
+					->body('Errore durante la trasmissione della spedizione di ' . $record->full_name)
 					->danger()
 					->send();
 
