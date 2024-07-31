@@ -53,11 +53,11 @@ class Seller extends Model {
 	 * Delete the seller's related data
 	 */
 	public function delete() {
-		$this->designs()->delete();
-		$this->followers()->delete();
-		$this->prices()->delete();
-		$this->payment_request()->delete();
-		$this->logoGroups()->delete();
+		$this->designs?->delete();
+		$this->followers?->delete();
+		$this->prices?->delete();
+		$this->payment_request?->delete();
+		$this->logoGroups?->delete();
 
 		return parent::delete();
 	}

@@ -53,6 +53,19 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	];
 
 	/**
+	 * * Lifecycle hooks
+	 */
+
+	/**
+	 * Delete the user's related data
+	 */
+	public function delete() {
+		$this->seller?->delete();
+
+		return parent::delete();
+	}
+
+	/**
 	 * * Accessors
 	 */
 
