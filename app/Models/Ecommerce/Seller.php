@@ -88,7 +88,7 @@ class Seller extends Model {
 	 * Get the seller's order_items
 	 */
 	public function order_items(): HasMany {
-		return $this->hasMany(OrderItem::class, 'seller_id', 'user_id');
+		return $this->hasMany(OrderItem::class);
 	}
 
 	/**
