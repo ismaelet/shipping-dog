@@ -378,7 +378,7 @@ class OrderResource extends Resource {
 			])
 
 			// The default sort column and direction.
-			->defaultSort('order_id', 'desc')
+			->defaultSort('created_at', 'desc')
 
 			// The filters that should be available for the table.
 			->filters([
