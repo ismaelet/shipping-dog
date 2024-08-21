@@ -59,7 +59,7 @@ class OrderItem extends Model {
 	 */
 	protected function fullName(): Attribute {
 		return Attribute::make(
-			get: fn (): string => $this->quantity . 'x ' . ($this->design_id ? $this->design_id . ' - ' : '') . $this->product_with_trashed?->name . ' (' . $this->description() . ')'
+			get: fn(): string => $this->quantity . 'x ' . ($this->design_id ? $this->design_id . ' - ' : '') . $this->product_with_trashed?->name . ' (' . $this->description() . ')'
 		);
 	}
 
@@ -190,8 +190,8 @@ class OrderItem extends Model {
 	 */
 	public function description(): string {
 		$description = $this->type?->name;
-		$description .= $this->size && $this->type->sizes->count() > 1 ? ' ' . $this->size?->name : '';
-		$description .= $this->color && $this->type->colors->count() > 1 ? ' ' . $this->color?->name : '';
+		$description .= $this->size && $this->type?->sizes->count() > 1 ? ' ' . $this->size?->name : '';
+		$description .= $this->color && $this->type?->colors->count() > 1 ? ' ' . $this->color?->name : '';
 		$description .= $this->logo ? ' ' . $this->logo?->name : '';
 		$description .= $this->position_id && $this->position_id > 1 ? ' ' . $this->position?->name : '';
 
