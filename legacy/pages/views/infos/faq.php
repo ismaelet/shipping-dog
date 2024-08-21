@@ -185,8 +185,8 @@
 			</label>
 
 			<p class="info_txt">
-				Appena creato il negozio sarà già possibile cambiare tutti i dettagli a piacimento, come immagine di copertina, nome, descrizione, prezzi, ma sarà necessario caricare almeno un lavoro prima che il negozio possa essere visibile al pubblico.
-				Lo store sarà accettato, e quindi reso pubblico, entro 24h dal caricamento del primo design.
+				Appena creato il negozio sarà già possibile cambiare tutti i dettagli a piacimento, come immagine di copertina, nome, descrizione, prezzi, ma sarà necessario caricare almeno un lavoro prima che il negozio possa essere visibile al pubblico.<br>
+				Quanto ti senti pronto/a mandanci la richiesta a <a href="mailto:<?= config('custom.contacts.email.url') ?>"><?= config('custom.contacts.email.label') ?></a> e pubblicheremo il tuo negozio entro 24 ore.
 			</p>
 		</div>
 
