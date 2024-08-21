@@ -204,6 +204,20 @@
 						@endif
 					</div>
 				</x-form.group>
+
+				<x-form.group>
+					<form
+						method="GET"
+						action=""
+					>
+						<x-inputs.checkbox
+							name="show_all"
+							text="Mostra tutti gli ordini"
+							checked="{{ $showAll }}"
+							class="js-submit-form"
+						/>
+					</form>
+				</x-form.group>
 			</div>
 		</x-dashboard.form.panel>
 
