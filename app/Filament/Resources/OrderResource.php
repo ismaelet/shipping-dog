@@ -307,7 +307,6 @@ class OrderResource extends Resource {
 					->listWithLineBreaks()
 					->wrap()
 					->toggleable()
-					->toggledHiddenByDefault()
 					->searchable(query: function (Builder $query, $search) {
 						$query->whereHas('order_items', function (Builder $query) use ($search) {
 							$query
@@ -355,6 +354,8 @@ class OrderResource extends Resource {
 				IconColumn::make('user_id')
 					->label('Ha account')
 					->boolean()
+					->toggleable()
+					->toggledHiddenByDefault()
 					->state(function (Order $record): bool {
 						return (bool) $record->user_id;
 					})
