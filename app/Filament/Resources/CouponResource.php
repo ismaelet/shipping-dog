@@ -63,11 +63,29 @@ class CouponResource extends Resource {
 					->suffix('%')
 					->required(),
 
+				Forms\Components\TextInput::make('flat_us')
+					->label('Fisso nostro')
+					->default(0)
+					->suffix('€')
+					->required(),
+
+				Forms\Components\TextInput::make('flat_them')
+					->label('Fisso negozio')
+					->default(0)
+					->suffix('€')
+					->required(),
+
 				Forms\Components\Checkbox::make('permanent')
 					->label('Riusabile'),
 
 				Forms\Components\Checkbox::make('shipping')
 					->label('Spedizione gratis'),
+
+				Forms\Components\Checkbox::make('only_one')
+					->label('Applicabile solo al primo prodotto'),
+
+				Forms\Components\Checkbox::make('one_per_acccount')
+					->label('Usabile solo una volta per utente'),
 
 				Forms\Components\DatePicker::make('time_start')
 					->label('Attivo dal')

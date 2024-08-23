@@ -41,6 +41,7 @@ class Coupon {
 	public $sellerFixedDiscount;
 	public $sellerFixedDiscountMultiple;
 	public $onePerCustomer;
+	public $only_one;
 
 	// private $types;
 	// private $minPrice;
@@ -68,6 +69,7 @@ class Coupon {
 			$this->ourFixedDiscountMultiple = $row['flat_us3'];
 			$this->sellerFixedDiscount = $row['flat_them'];
 			$this->sellerFixedDiscountMultiple = $row['flat_them3'];
+			$this->only_one = $row['only_one'];
 			$this->onePerCustomer = (bool) $row['one_per_acccount'];
 
 			/*

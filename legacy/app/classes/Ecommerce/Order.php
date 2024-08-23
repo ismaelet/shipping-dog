@@ -476,10 +476,11 @@ class Order {
 	*/
 	public function removeCoupon() {
 		if ($this->couponId) {
-			\Legacy\System\Classes\LegacyDB::update("orders SET code='' WHERE id = ?", [$this->id]);
+			$newOrder = $this->newOrder();
+			$newOrder->update(['code' => null]);
 
-			foreach ($this->order_items as $orderItem) {
-				// ! reset discount and gain	
+			foreach ($newOrder->order_items as $orderItem) {
+				// ! To add
 			}
 
 			if ($this->coupon->freeShipping) {
@@ -487,10 +488,9 @@ class Order {
 			}
 
 			$this->data['couponCode'] = null;
-			$this->data = [];
-		}
 
-		$this->newOrder()->updatePrice();
+			$newOrder->updatePrice();
+		}
 	}
 
 	/*
@@ -589,6 +589,7 @@ class Order {
 			}
 
 			$order_items = $this->newOrder()->order_items;
+			$applicable = true;
 
 			foreach ($order_items as $orderItem) {
 				$sellerDiscount = 0;
@@ -601,7 +602,7 @@ class Order {
 				$matchesColor = !$coupon->color_id || $coupon->color_id == $orderItem->color_id;
 
 				// calculate the discount amount
-				if ($matchesDesign && $matchesSeller && $matchesType && $matchesColor) {
+				if ($matchesDesign && $matchesSeller && $matchesType && $matchesColor && $applicable) {
 					if (!$coupon->removesGain) {
 						// precentage discount
 						if ($coupon->ourPercentageDiscountMultiple && $this->quantity > 2) {
@@ -648,6 +649,7 @@ class Order {
 					$legacyOrderItem = new LegacyOrderItem($orderItem->id);
 					$legacyOrderItem->updateDiscount($totalDiscount);
 					$legacyOrderItem->updateGainReduction($gainReduction);
+					$applicable = $coupon->only_one ? false : $applicable;
 				}
 			}
 
