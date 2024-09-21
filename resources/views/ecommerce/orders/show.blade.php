@@ -150,13 +150,13 @@
 						<?= $order->address?->phone ?? '' ?>
 					</p>
 
-					@if (in_array($order->status, [EcommerceHelper::statusFromTag('received'), EcommerceHelper::statusFromTag('confirmed')]))
+					{{-- @if (in_array($order->status, [EcommerceHelper::statusFromTag('received'), EcommerceHelper::statusFromTag('confirmed')]))
 						<p class="text-neutral-700">
 							<a href="<?= client_url('/orders/' . $order->id . '/address?token=' . $order->token) ?>">
 								Modifica l'indirizzo
 							</a>
 						</p>
-					@endif
+					@endif --}}
 
 				</article>
 			</div>

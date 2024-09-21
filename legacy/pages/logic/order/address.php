@@ -2,8 +2,6 @@
 
 //setup page
 
-use Legacy\Classes\Ecommerce\OrderItem;
-
 $id = $_GET['id'] ?? false;
 $order = new Cart($id);
 $security = $_GET['key'] ?? false;
