@@ -111,7 +111,14 @@ use Legacy\View\Components\Form\Input;
 						<div class="field <?= $cart->shipping_method->isLocalDelivery() ? 'hidden' : '' ?>" data-shipping-field>
 							<input type="text" class="input delivery-input" name="zip" placeholder="Codice postale" value="<?= trim($address->zip ?? '') ?>" maxlength="5" autocomplete="postal-code" <?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
 
-							<input type="text" class="input delivery-input" name="region" placeholder="Provincia" value="<?= $address->region ?? '' ?>" maxlength="2" autocomplete="address-level1" <?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
+							<select name="region" class="input delivery-input" placeholder="Provincia" <?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>>
+								<option value="" disabled <?= empty($address) ? 'selected' : '' ?>>Provincia</option>
+
+								<?php foreach ($provinces as $province) { ?>
+									<option value="<?= $province->tag ?>" <?= $address->region == $province->tag ? 'selected' : '' ?>><?= $province->name ?> (<?= $province->tag ?>)</option>
+								<?php } ?>
+
+							</select>
 						</div>
 
 						<input type="email" class="input" name="email" placeholder="Indirizzo e-mail" value="<?= $address->email ?? '' ?>" maxlength="50" required autocomplete="email">

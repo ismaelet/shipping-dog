@@ -4,6 +4,7 @@ use App\Http\Middleware\Cart;
 use App\Models\Ecommerce\Address;
 use App\Models\Ecommerce\OrderItem;
 use App\Models\Ecommerce\ShippingMethod;
+use App\Models\Shipping\Province;
 use Legacy\Classes\Ecommerce\Coupon;
 use Legacy\Classes\Ecommerce\Order as LegacyOrder;
 
@@ -18,6 +19,8 @@ $cart->load(
 	'order_items.product_with_trashed.design_with_trashed',
 	'order_items.product_with_trashed.type',
 );
+
+$provinces = Province::orderBy('name')->get();
 
 $legacyCart = new LegacyOrder($cart->id);
 
