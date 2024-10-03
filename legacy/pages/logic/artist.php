@@ -10,7 +10,7 @@ $seller = Seller::find($id);
 $sellerUserId = $seller?->user_id;
 
 // redirect to user's shop if no ID is specified
-if (!$seller) {
+if (!$seller || !$seller->user) {
 	redirect_old('/shop');
 }
 
