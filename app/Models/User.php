@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -21,7 +22,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable implements FilamentUser, HasAvatar {
 
-	use HasApiTokens, HasFactory, Notifiable;
+	use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
 	/**
 	 * The attributes that are mass assignable
@@ -76,7 +77,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	 */
 	public function name(): Attribute {
 		return Attribute::make(
-			get: fn (?string $value): string => $value ?: $this->email,
+			get: fn(?string $value): string => $value ?: $this->email,
 		);
 	}
 
@@ -87,7 +88,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	 */
 	public function isAdmin(): Attribute {
 		return Attribute::make(
-			get: fn (): bool => $this->admin_level,
+			get: fn(): bool => $this->admin_level,
 		);
 	}
 
@@ -98,7 +99,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	 */
 	public function isSuperadmin(): Attribute {
 		return Attribute::make(
-			get: fn (): bool => $this->admin_level == 2,
+			get: fn(): bool => $this->admin_level == 2,
 		);
 	}
 

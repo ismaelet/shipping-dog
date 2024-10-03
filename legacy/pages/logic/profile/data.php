@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 $loc = 'data';
 $error = $_SESSION['error'] ?? false;
 $done = $_SESSION['done'] ?? false;
@@ -66,7 +68,9 @@ if (isset($_POST['edit_icon'])) {
 
 // delete account
 if (isset($_POST['delete-account'])) {
-	delete_user(auth()->id());
+	$user = User::find(auth()->id());
+	$user->delete();
+
 	auth()->logout();
 	session()->flush();
 

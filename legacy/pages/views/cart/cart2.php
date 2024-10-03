@@ -115,7 +115,7 @@ use Legacy\View\Components\Form\Input;
 								<option value="" disabled <?= empty($address) ? 'selected' : '' ?>>Provincia</option>
 
 								<?php foreach ($provinces as $province) { ?>
-									<option value="<?= $province->tag ?>" <?= $address->region == $province->tag ? 'selected' : '' ?>><?= $province->name ?> (<?= $province->tag ?>)</option>
+									<option value="<?= $province->tag ?>" <?= $address?->region == $province->tag ? 'selected' : '' ?>><?= $province->name ?> (<?= $province->tag ?>)</option>
 								<?php } ?>
 
 							</select>
