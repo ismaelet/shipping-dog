@@ -63,7 +63,7 @@ if (!empty($_POST)) {
 	$zip = strtoupper(trim($_POST['zip']));
 	$city = str_replace('-', ',', $_POST['city']);
 	$city = ucwords(strtolower(trim($city)));
-	$reg = strtoupper(trim($_POST['region']));
+	$reg = strtoupper(trim($_POST['region'])) ?? '';
 	$email = strtolower(trim($_POST['email']));
 	$phone = trim($_POST['phone']);
 	$security = random_string();
