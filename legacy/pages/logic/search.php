@@ -2,6 +2,7 @@
 
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Seller;
+use App\Models\User;
 
 $search = $_GET['search'] ?? '';
 
