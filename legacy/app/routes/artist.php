@@ -2,8 +2,10 @@
 
 // artist shop
 \Legacy\System\Classes\LegacyRoute::add('/artist', function () {
-	if (request()->id) {
-		redirect_old('/artist/' . request()->id);
+	$id = (int) request()->id;
+
+	if ($id) {
+		redirect_old('/artist/' . $id);
 	}
 
 	\Legacy\System\Classes\LegacyView::setPage('artist');
