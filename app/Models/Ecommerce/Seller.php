@@ -54,6 +54,7 @@ class Seller extends Model {
 	 * Delete the seller's related data
 	 */
 	public function delete() {
+		dd(1);
 		$this->designs?->each(function ($design) {
 			$design->delete();
 		});
@@ -195,6 +196,7 @@ class Seller extends Model {
 	public function cover(int $size = 1024): string {
 		if (!$this->user) {
 			Log::error('Seller user not found', ['seller' => $this->id]);
+			dd($this->user_id);
 		}
 
 		return $this->user->cover($size);

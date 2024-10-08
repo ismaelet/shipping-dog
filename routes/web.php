@@ -74,18 +74,40 @@ Route::get('/download/{filename}', [DownloadController::class, 'download'])->nam
 Route::get('/emergency-email', [EmergencyEmail::class, 'sendEmail'])->middleware(Admin::class);
 
 Route::get('/seller-email-list', function () {
+
+	$ignoredEmails = [
+		'andrea_trentini94@ya.it',
+		'valeriosiciliano@email.it',
+		'temp@gmail.com',
+		'inseriscilatuaemail@gmail.it',
+		'noncancellareisma@hotmail.it',
+		'oscarufficiale@mail.com',
+		'weareawesome@panicpanik.com',
+		'yourmail@gmail.com',
+		'ssss@gmail.com',
+		'quellidelcalciomercato@aol.com',
+		'ciriii@hotmail.kt',
+		'mettile@ditanelnaso.com',
+		'giorgiamiranda@yahoo.it',
+		'danieletomoiaga@yahoo.it',
+		'greco4581@outlook.it',
+		'attilioguerra@gmail.com',
+	];
+
 	$sellers = EcommerceSeller::join('users', 'users.id', '=', 'stores.user_id')
 		->where('stores.status', true)
 		->get();
-	$emails = $sellers->pluck('email')->toArray();
 
+	$emails = $sellers->pluck('email')->toArray();
 	$emails = array_chunk($emails, 50);
 
 	foreach ($emails as $key => $chunk) {
 		echo '<h3>Gruppo ' . ($key + 1) . '</h3>';
 
 		foreach ($chunk as $email) {
-			echo $email . '<br>';
+			if (!in_array($email, $ignoredEmails)) {
+				echo $email . '<br>';
+			}
 		}
 
 		echo '<br>';
