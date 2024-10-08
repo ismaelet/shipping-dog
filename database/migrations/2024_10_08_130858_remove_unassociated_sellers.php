@@ -13,6 +13,7 @@ return new class extends Migration {
 		Seller::leftJoin('users', 'stores.user_id', '=', 'users.id')
 			->where('users.id', null)
 			->with('designs', 'followers', 'prices', 'payment_request', 'logoGroups')
+			->select('stores.*')
 			->get()
 			->each(function ($seller) {
 				$seller->delete();
