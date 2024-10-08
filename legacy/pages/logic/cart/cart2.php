@@ -57,17 +57,21 @@ if (!in_array($cart->shipping_method_id, ShippingMethod::FREE_SHIPPING_METHODS))
  * Save the address
  */
 if (!empty($_POST)) {
+	$shippingMethod = ShippingMethod::find(request()->shipping_method_id);
 	$full_name = str_replace('-', ',', $_POST['full_name']);
 	$addr = ucwords(strtolower(trim($_POST['address'])));
 	$num = trim($_POST['number']);
 	$zip = strtoupper(trim($_POST['zip']));
 	$city = str_replace('-', ',', $_POST['city']);
 	$city = ucwords(strtolower(trim($city)));
-	$reg = strtoupper(trim($_POST['region'])) ?? '';
 	$email = strtolower(trim($_POST['email']));
 	$phone = trim($_POST['phone']);
 	$security = random_string();
 	$courierNotes = $_POST['courier_notes'] ?? '';
+
+	if ($shippingMethod->isShipped()) {
+		$reg = strtoupper(trim($_POST['region']));
+	}
 
 	Address::updateOrCreate([
 		'order_id' => $cart->id,
@@ -78,7 +82,7 @@ if (!empty($_POST)) {
 		'number' => $num,
 		'zip' => $zip,
 		'city' => $city,
-		'region' => $reg,
+		'region' => $reg ?? '',
 		'email' => $email,
 		'phone' => $phone,
 		'security' => $security
