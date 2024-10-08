@@ -51,7 +51,7 @@ class InventoryItemResource extends Resource {
 			->schema([
 				Select::make('design_id')
 					->label('Design')
-					->relationship('design', 'name')
+					->relationship('design', 'id')
 					->required()
 					->searchable()
 					->preload(),
@@ -61,7 +61,7 @@ class InventoryItemResource extends Resource {
 					->relationship(
 						name: 'type',
 						titleAttribute: 'name',
-						modifyQueryUsing: fn (Builder $query) => $query->where('same_as_type_id', 0)
+						modifyQueryUsing: fn(Builder $query) => $query->where('same_as_type_id', 0)
 							->orWhere('gender_id', 1),
 					)
 					->live()
@@ -76,7 +76,7 @@ class InventoryItemResource extends Resource {
 
 				Select::make('size_id')
 					->label('Taglia')
-					->options(fn (Get $get): Collection => ProductSize::whereHas('types', function ($query) use ($get) {
+					->options(fn(Get $get): Collection => ProductSize::whereHas('types', function ($query) use ($get) {
 						$query->where('product_type_id', $get('type_id'));
 					})->pluck('name', 'id'))
 					->live()
@@ -84,7 +84,7 @@ class InventoryItemResource extends Resource {
 
 				Select::make('position_id')
 					->label('Stampa')
-					->options(fn (Get $get): Collection => ProductPosition::whereHas('types', function ($query) use ($get) {
+					->options(fn(Get $get): Collection => ProductPosition::whereHas('types', function ($query) use ($get) {
 						$query->where('product_type_id', $get('type_id'));
 					})->pluck('name', 'id'))
 					->live()

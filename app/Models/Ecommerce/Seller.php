@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Seller class
@@ -192,6 +193,10 @@ class Seller extends Model {
 	}
 
 	public function cover(int $size = 1024): string {
+		if (!$this->user) {
+			Log::error('Seller user not found', ['seller' => $this->id]);
+		}
+
 		return $this->user->cover($size);
 	}
 

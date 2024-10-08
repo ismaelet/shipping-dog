@@ -6,6 +6,7 @@ use App\Models\Ecommerce\Design\CustomerPhoto;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Design\DesignTag;
 use App\Models\User\Like;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,9 +33,11 @@ class Design extends Model {
 		'logo_group_id'
 	];
 
-	/**
-	 * * Events
-	 */
+	public function full_name(): Attribute {
+		return Attribute::make(
+			get: fn() => $this->name . ' - ' . $this->id,
+		);
+	}
 
 	/**
 	 * Delete the design and the related products

@@ -9,6 +9,7 @@ use App\Http\Controllers\LegacyController;
 use App\Http\Controllers\SellerDashboard\SellerDashboardController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Seller;
+use App\Models\Ecommerce\Seller as EcommerceSeller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -71,6 +72,25 @@ Route::get('/download/{filename}', [DownloadController::class, 'download'])->nam
  * * Misc
  */
 Route::get('/emergency-email', [EmergencyEmail::class, 'sendEmail'])->middleware(Admin::class);
+
+Route::get('/seller-email-list', function () {
+	$sellers = EcommerceSeller::join('users', 'users.id', '=', 'stores.user_id')
+		->where('stores.status', true)
+		->get();
+	$emails = $sellers->pluck('email')->toArray();
+
+	$emails = array_chunk($emails, 50);
+
+	foreach ($emails as $key => $chunk) {
+		echo '<h3>Gruppo ' . ($key + 1) . '</h3>';
+
+		foreach ($chunk as $email) {
+			echo $email . '<br>';
+		}
+
+		echo '<br>';
+	}
+})->middleware(Admin::class);
 
 /**
  * * Legacy routes
