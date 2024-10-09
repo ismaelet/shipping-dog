@@ -92,6 +92,12 @@ Route::get('/seller-email-list', function () {
 		'danieletomoiaga@yahoo.it',
 		'greco4581@outlook.it',
 		'attilioguerra@gmail.com',
+		'giorgiodefrancesco71.1@gmail.com',
+		'fugo.pannacotta@tiscali.it',
+		'admin@mondoduster.it',
+		'aaa@aaa.com',
+		'ernestotommasocampagnuolo2002@gmail.com',
+		'tizianoconta@tiscali.it',
 	];
 
 	$sellers = EcommerceSeller::join('users', 'users.id', '=', 'stores.user_id')
