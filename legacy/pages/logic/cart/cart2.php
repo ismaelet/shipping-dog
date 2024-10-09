@@ -5,6 +5,7 @@ use App\Models\Ecommerce\Address;
 use App\Models\Ecommerce\OrderItem;
 use App\Models\Ecommerce\ShippingMethod;
 use App\Models\Shipping\Province;
+use Illuminate\Support\Facades\Log;
 use Legacy\Classes\Ecommerce\Coupon;
 use Legacy\Classes\Ecommerce\Order as LegacyOrder;
 
@@ -70,6 +71,10 @@ if (!empty($_POST)) {
 	$courierNotes = $_POST['courier_notes'] ?? '';
 
 	if ($shippingMethod->isShipped()) {
+		if (!isset($_POST['region'])) {
+			Log::error('Region not set', ['order_id' => $cart->id, 'posted_data' => $_POST]);
+		}
+
 		$reg = strtoupper(trim($_POST['region']));
 	}
 
