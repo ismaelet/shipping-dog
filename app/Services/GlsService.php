@@ -172,7 +172,7 @@ class GlsService {
 			$zipCode = $address->zip;
 			$provincia = $address->region;
 			$email = $address->email;
-			$serviziAccessori = $address->exchange ? 24 : '';
+			$serviziAccessori = $order->exchange ? 24 : '';
 			$cellulare1 = $address->phone;
 
 			// XML payload to send to the API
