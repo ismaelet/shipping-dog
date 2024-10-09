@@ -69,14 +69,7 @@ if (!empty($_POST)) {
 	$phone = trim($_POST['phone']);
 	$security = random_string();
 	$courierNotes = $_POST['courier_notes'] ?? '';
-
-	if ($shippingMethod->isShipped()) {
-		if (!isset($_POST['region'])) {
-			Log::error('Region not set', ['order_id' => $cart->id, 'posted_data' => $_POST]);
-		}
-
-		$reg = strtoupper(trim($_POST['region']));
-	}
+	$reg = $_POST['region'] ?? '';
 
 	Address::updateOrCreate([
 		'order_id' => $cart->id,
@@ -87,7 +80,7 @@ if (!empty($_POST)) {
 		'number' => $num,
 		'zip' => $zip,
 		'city' => $city,
-		'region' => $reg ?? '',
+		'region' => $reg,
 		'email' => $email,
 		'phone' => $phone,
 		'security' => $security
