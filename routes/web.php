@@ -99,6 +99,7 @@ Route::get('/seller-email-list', function () {
 		'ernestotommasocampagnuolo2002@gmail.com',
 		'tizianoconta@tiscali.it',
 		'giorgiodefrancesco71.1@gmail.com',
+		'admin@mondoduster.it',
 	];
 
 	$sellers = EcommerceSeller::join('users', 'users.id', '=', 'stores.user_id')
