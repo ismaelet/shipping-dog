@@ -97,7 +97,7 @@ class ShippingResource extends Resource {
 
 			// The columns displayed in the table
 			->columns([
-				TextColumn::make('id')
+				TextColumn::make('order_id')
 					->searchable()
 					->label('ID')
 					->sortable(),

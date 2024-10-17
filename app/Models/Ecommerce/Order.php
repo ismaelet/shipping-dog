@@ -652,7 +652,7 @@ class Order extends Model {
 			->where('status', EcommerceHelper::statusFromTag('confirmed'))
 			->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
 			->oldest('orders.created_at')
-			->select('orders.*', 'addresses.full_name');
+			->select('orders.*', 'orders.id as order_id', 'addresses.full_name');
 	}
 
 
