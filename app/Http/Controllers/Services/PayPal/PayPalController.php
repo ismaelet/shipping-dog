@@ -129,9 +129,7 @@ class PayPalController extends Controller {
 
 		// Error handling
 		if ($paymentStatus != 'COMPLETED') {
-			if ($response->details[0]->issue != 'INSTRUMENT_DECLINED') {
-				return $this->error($response, $order);
-			}
+			return $this->error($response, $order);
 		}
 
 		// Confirm the order
