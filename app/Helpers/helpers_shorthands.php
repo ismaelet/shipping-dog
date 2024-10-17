@@ -3,6 +3,7 @@
 use App\Helpers\ArrayHelper;
 use App\Helpers\FileHelper;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Debug an array
@@ -29,7 +30,13 @@ function is_superadmin(): bool {
  * Get the path of a file in the public storage directory
  */
 function public_asset(string $path): string {
-	return FileHelper::publicAsset($path);
+	$filePath = FileHelper::publicAsset($path);
+
+	if (!$filePath) {
+		Log::error('File not found: ' . $path);
+	}
+
+	return $filePath;
 }
 
 /**
