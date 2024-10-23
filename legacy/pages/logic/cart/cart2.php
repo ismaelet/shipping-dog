@@ -110,14 +110,16 @@ if (isset($_POST['remove'])) {
 }
 
 // add code
-if (isset($_POST['add_code'])) {
+if (isset($_POST['add_code']) || !empty($_POST['code'])) {
 	$coupon = Coupon::generateFromCode($_POST['code']);
 	$error = $legacyCart->addCoupon($coupon->id);
 
-	if (!$error) {
-		redirect_old('#code-anch');
-	} else {
-		redirect_old('?step-id=2&error=' . $error . '#code-anch');
+	if (!isset($_POST['add_code'])) {
+		if (!$error) {
+			redirect_old('#code-anch');
+		} else {
+			redirect_old('?step-id=2&error=' . $error . '#code-anch');
+		}
 	}
 }
 

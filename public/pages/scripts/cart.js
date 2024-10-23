@@ -43,7 +43,7 @@ $(function () {
 	/*
 	 * Coupons
 	 */
-	$('#code-inp').on('keyup', function () {
+	$('#code-inp').on('input', function () {
 		if ($(this).val().length) {
 			$('#add_code').show()
 		} else {
