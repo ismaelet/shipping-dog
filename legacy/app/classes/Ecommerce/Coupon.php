@@ -107,7 +107,7 @@ class Coupon {
 	}
 
 	private function getIsExpired() {
-		return strtotime($this->timeEnd) < strtotime('now');
+		return strtotime($this->timeEnd . ' +1 day') < strtotime('now');
 	}
 
 	private function getError() {
