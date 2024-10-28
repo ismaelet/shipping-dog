@@ -163,6 +163,13 @@ class SellerResource extends Resource {
 					->toggledHiddenByDefault()
 					->sortable(),
 
+				// To be paid
+				TextColumn::make('payment_request.paypal')
+					->label('PayPal')
+					->default('-')
+					->searchable()
+					->sortable(),
+
 				// Status
 				ToggleColumn::make('status')
 					->label('Attivo')
@@ -184,7 +191,7 @@ class SellerResource extends Resource {
 					Action::make('view')
 						->label('Visualizza')
 						->icon('icon-visibility')
-						->url(fn (Seller $record): string => route('seller.show', $record))
+						->url(fn(Seller $record): string => route('seller.show', $record))
 						->openUrlInNewTab(true),
 					Action::make('login')
 						->icon('icon-login')
@@ -198,8 +205,8 @@ class SellerResource extends Resource {
 						->label('Rimuovi richiesta')
 						->icon('icon-close')
 						->color('warning')
-						->visible(fn (Seller $record) => $record->request)
-						->action(fn (Seller $record) => $record->update(['request' => false])),
+						->visible(fn(Seller $record) => $record->request)
+						->action(fn(Seller $record) => $record->update(['request' => false])),
 					DeleteAction::make()
 						->icon('icon-delete'),
 				])
