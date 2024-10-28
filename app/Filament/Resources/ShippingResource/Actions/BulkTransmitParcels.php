@@ -41,7 +41,7 @@ class BulkTransmitParcels {
 				if ($response['success']) {
 					Notification::make()
 						->title('Trasmesse')
-						->body('Tutte le spedizioni selezionate sono state trasmesse correttamente')
+						->body($records->count() . ' spedizioni trasmesse correttamente')
 						->success()
 						->send();
 
