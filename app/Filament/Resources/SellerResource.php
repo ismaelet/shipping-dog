@@ -4,6 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SellerResource\Pages;
 use App\Models\Ecommerce\Seller;
+use Dompdf\FrameDecorator\Text;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Split;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
@@ -86,7 +92,29 @@ class SellerResource extends Resource {
 	public static function form(Form $form): Form {
 		return $form
 			->schema([
-				//
+				Section::make([
+					// Price
+					Fieldset::make('Dati del Negozio')
+						->schema([
+							TextInput::make('name')
+								->label('Nome')
+								->placeholder('Nome del negozio')
+								->required()
+								->columnSpanFull(),
+						]),
+
+					// Address
+					Fieldset::make('Dati di Pagamento')
+						->relationship('payment_request')
+						->schema([
+							TextInput::make('paypal')
+								->label('Indirizzo PayPal')
+								->placeholder('Indirizzo PayPal')
+								->readOnly()
+								->default('-')
+								->columnSpanFull(),
+						])
+				])
 			]);
 	}
 
@@ -188,7 +216,7 @@ class SellerResource extends Resource {
 			// Actions
 			->actions([
 				ActionGroup::make([
-					Action::make('view')
+					Action::make('view-shop')
 						->label('Visualizza')
 						->icon('icon-visibility')
 						->url(fn(Seller $record): string => route('seller.show', $record))
