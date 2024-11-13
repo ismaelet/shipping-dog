@@ -7659,7 +7659,7 @@ h3,
 
 .confirmation-message,
 .error-warning {
-	padding-block: 0.5em;
+	padding: 0.5em;
 	border-radius: var(--inp-border-radius);
 	border: var(--border-width) solid;
 	font-weight: var(--fw-medium);
@@ -7676,6 +7676,10 @@ h3,
 	background-color: var(--clr-bad-200);
 	border-color: var(--clr-bad-400);
 	color: var(--clr-bad-400);
+}
+
+.text-left {
+	text-align: left;
 }
 
 /* 6.3 Modifiers */

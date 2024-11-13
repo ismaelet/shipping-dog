@@ -35,6 +35,11 @@ use Legacy\View\Components\Form\Input;
 						La data di consegna prevista comprende, oltre al tempo di spedizione, <strong>1-5 giorni lavorativi</strong> di elaborazione dell'ordine.
 					</p>
 
+					<p class="error-warning mt-4">A causa dei continui scioperi che stanno rallentando l'operatività dei centri logistici GLS, le consegne potrebbero subire dei ritardi di qualche giorno.<br><br>
+
+						Ci scusiamo per il disguido ma questo non dipende dalla nostra volontà. Noi di Shipping Dog faremo tutto il possibile per limitare i danni causati da questo problema inatteso.
+					</p>
+
 				</section>
 
 				<!-- Shipping method -->
