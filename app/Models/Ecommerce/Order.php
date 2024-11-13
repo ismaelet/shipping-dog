@@ -12,8 +12,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
 
 /**
  * Represents a shopping order in the e-commerce system.
@@ -625,7 +627,11 @@ class Order extends Model {
 	 * Send the order's status email.
 	 */
 	public function sendStatusEmail(): void {
-		Mail::to($this->address->email)->queue(new OrderStatusMail($this));
+		try {
+			Mail::to($this->address->email)->queue(new OrderStatusMail($this));
+		} catch (UnexpectedResponseException $e) {
+			Log::info("Email sending failed for {$this->address->email}: " . $e->getMessage());
+		}
 	}
 
 	/**
