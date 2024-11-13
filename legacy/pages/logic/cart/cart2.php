@@ -1,11 +1,9 @@
 <?php
 
-use App\Http\Middleware\Cart;
 use App\Models\Ecommerce\Address;
 use App\Models\Ecommerce\OrderItem;
 use App\Models\Ecommerce\ShippingMethod;
 use App\Models\Shipping\Province;
-use Illuminate\Support\Facades\Log;
 use Legacy\Classes\Ecommerce\Coupon;
 use Legacy\Classes\Ecommerce\Order as LegacyOrder;
 
