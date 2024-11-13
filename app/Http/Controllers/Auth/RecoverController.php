@@ -33,7 +33,7 @@ class RecoverController extends Controller {
 		]);
 
 		// Process the request
-		$email = $_POST['email'];
+		$email = $request->email;
 		$user = User::where('email', $email)->first();
 
 		if ($user) {
