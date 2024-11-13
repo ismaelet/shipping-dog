@@ -210,7 +210,7 @@ class OrderItem extends Model {
 
 		$type = $this->product_with_trashed->type->name;
 		$size = $this->size_id ? 'Taglia: ' . $this->size->name : null;
-		$color = $this->color_id ? 'Colore: ' . $this->color->name : null;
+		$color = $this->color ? 'Colore: ' . $this->color->name : null;
 		$position = $this->position_id > 1 ? $this->position->name : null;
 		$logo = $this->logo_id ? $this->logo->name : null;
 
