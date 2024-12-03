@@ -449,9 +449,7 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 				<!-- Add to cart -->
 				<div class="mar-t-4">
 
-					<p class="error-warning mb-2">A causa dei continui scioperi che stanno rallentando l'operatività dei centri logistici GLS, le consegne potrebbero subire dei ritardi di qualche giorno.<br><br>
-
-						Ci scusiamo per il disguido ma questo non dipende dalla nostra volontà. Noi di Shipping Dog faremo tutto il possibile per limitare i danni causati da questo problema inatteso.
+					<p class="error-warning mb-2">A causa dell'elevato numero di ordini e della pressione sui corrieri, l'ultima data di consegna garantità per Natale è il 12 dicembre. Ordina ora per ricevere il tuo regalo in tempo!
 					</p>
 
 					<button type="submit" id="submit" class="add-to-cart btn button--full-width">
