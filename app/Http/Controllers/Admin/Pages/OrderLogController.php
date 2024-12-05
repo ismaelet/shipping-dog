@@ -27,7 +27,7 @@ class OrderLogController extends Controller {
 		}
 
 		$orders = $orders
-			->with('user', 'user.seller', 'address', 'shipping_method', 'coupon', 'change_request', 'order_items', 'order_items.type', 'order_items.type.sizes', 'order_items.type.colors', 'order_items.product', 'order_items.product_with_trashed', 'order_items.product.type', 'order_items.product.type.sizes', 'order_items.product.type.colors', 'order_items.color', 'order_items.size', 'order_items.position', 'order_items.logo')
+			->with('user', 'user.seller', 'address', 'shipping_method', 'coupon', 'change_request', 'order_items', 'order_items.type', 'order_items.type.sizes', 'order_items.type.colors', 'order_items.product', 'order_items.product_with_trashed', 'order_items.product.type', 'order_items.product.type.sizes', 'order_items.product.type.colors', 'order_items.color', 'order_items.size', 'order_items.position', 'order_items.logo', 'payment_method')
 			->oldest()
 			->get();
 

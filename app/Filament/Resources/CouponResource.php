@@ -6,6 +6,7 @@ use App\Filament\Resources\CouponResource\Pages;
 use App\Filament\Resources\CouponResource\RelationManagers;
 use App\Models\Ecommerce\Coupon;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -74,6 +75,12 @@ class CouponResource extends Resource {
 					->default(0)
 					->suffix('€')
 					->required(),
+
+				Select::make('seller_id')
+					->label('Applica solo al negozio')
+					->relationship('seller', 'name')
+					->searchable()
+					->columnSpanFull(),
 
 				Forms\Components\Checkbox::make('permanent')
 					->label('Riusabile'),

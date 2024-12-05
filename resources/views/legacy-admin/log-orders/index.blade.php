@@ -238,7 +238,8 @@
 				>
 
 					{{-- Order header --}}
-					<p class="js-to-copy">[{{ $order->id }} - {{ $order->createdAtString() }}]</p>
+					<p class="js-to-copy">[{{ $order->id }} - {{ $order->createdAtString() }} - {{ $order->payment_method->name }}]
+					</p>
 
 					{{-- Address --}}
 					@if ($order->address)
