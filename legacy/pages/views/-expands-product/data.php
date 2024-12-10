@@ -1,162 +1,22 @@
 <?php
 
 use App\Models\Ecommerce\Product;
-use Legacy\View\Components\Interactions\LikeButton;
 use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 ?>
 
-<div class="main-wrap pad-t-3 item-type--<?= $product->type->tag ?>" id="item" data-id="<?= $product->id ?>" data-hroot="/legacy" data-seller-id="<?= $product->seller->id ?>">
+<div class="main-wrap mt-4">
+	<p class="error-warning mb-2">A causa dell'elevato numero di ordini e della pressione sui corrieri, l'ultima data di consegna garantità per Natale è il 12 dicembre. Ordina ora per ricevere il tuo regalo in tempo!
+	</p>
+</div>
+
+<div class="main-wrap pad-t-3 item-type--<?= $product->type->tag ?> mb-8" id="item" data-id="<?= $product->id ?>" data-hroot="/legacy" data-seller-id="<?= $product->seller->id ?>">
 
 	<form action="<?= route('order-items.store') ?>" method="POST" class="content grid gap3 al-top">
 
 		<input type="hidden" name="product_id" value="<?= $product->id ?>">
 
-		<div id="left-panel" class="mar-h-auto">
-
-			<!-- Preview image -->
-			<section id="img-sec">
-
-				<div id="img-sqr" class="mar-h-auto">
-
-					<div id="item-img-box">
-
-						<!-- Image -->
-						<img class="img-zoom img-fill js-main-image" id="item-img" src="<?= $product->image(1024) ?>" alt="">
-
-						<!-- Logos on the image -->
-						<?php if ($product->logoGroup() && $product->logoGroup()->preview) { ?>
-
-							<img class="logo-field__preview-logo js-logo-image" alt="">
-
-						<?php } ?>
-
-						<!-- Loading icon on image change -->
-						<div id="img-load" class="bgr">
-							<div id="load-ico">
-								<?= embed_icon('loading') ?>
-							</div>
-						</div>
-
-						<!-- Zoom icon on mobile -->
-						<div id="img-zoom-icon" class="img-zoom icon-box clickable">
-							<?= embed_icon('search') ?>
-						</div>
-
-						<!-- Love button -->
-						<?= LikeButton::render(['design' => $product->design]) ?>
-
-					</div>
-
-				</div>
-
-				<!-- Zoom on mobile -->
-				<div id="img-zoom-bgr">
-					<div id="img-zoom-box">
-						<img class="js-main-image" id="img-zoom" src="<?= $product->image(1024) ?>">
-					</div>
-				</div>
-
-			</section>
-
-			<!-- More products with the same design -->
-			<?php if (!$product->isCustom()) { ?>
-
-				<section id="type-sec">
-					<!-- Types -->
-					<div id="type-pan">
-						<div id="item-type-titles" class="flex gap1 pad-t-2 mar-b-1">
-
-							<?php if ($relatedGarmentCount) { ?>
-
-								<h3 class="item-type-title clickable font-semibold inlb marr1 <?php if ($product->type->category == 'c' || !$relatedAccessoryCount) echo 'active' ?>" data-tar="#more-clothing">Abbigliamento</h3>
-
-							<?php } ?>
-
-							<?php if ($relatedAccessoryCount) { ?>
-
-								<h3 class="item-type-title clickable font-semibold inlb <?php if ($product->type->category == 'm') echo 'active' ?>" data-tar="#more-accessories">Accessori</h3>
-
-							<?php } ?>
-
-						</div>
-
-						<!-- More clothing -->
-						<?php if ($relatedGarmentCount) { ?>
-
-							<div id="more-clothing" class="type-slide <?php if ($product->type->category == 'c' || !$relatedAccessoryCount) echo 'active' ?>">
-
-								<div id="type-slideC" data-pos="1" class="carousel mob-fluid">
-
-									<?php foreach ($relatedGarments as $relatedProduct) { ?>
-
-										<div class="carousel-box">
-											<a href="<?= $relatedProduct->url() ?>">
-												<img src="<?= $relatedProduct->image() ?>" class="img-fill">
-											</a>
-										</div>
-
-									<?php } ?>
-
-								</div>
-
-								<?php if ($relatedGarmentCount > 3) { ?>
-
-									<div class="carousel-arrow left disabled" data-direction="left" data-tar="#type-slideC" style="--icon-size: 50%; color: #202020;">
-										<?= embed_icon('arrow-simple-left') ?>
-									</div>
-
-									<div class="carousel-arrow right" data-direction="right" data-tar="#type-slideC" style="--icon-size: 50%; color: #202020;">
-										<?= embed_icon('arrow-simple-right') ?>
-									</div>
-
-								<?php } ?>
-
-							</div>
-
-						<?php } ?>
-
-						<!-- More accessories -->
-						<?php if ($relatedAccessoryCount) { ?>
-
-							<div id="more-accessories" class="type-slide <?php if ($product->type->category == 'm') echo 'active' ?>">
-
-								<div id="type-slideM" data-pos="1" class="carousel mob-fluid">
-
-									<?php foreach ($relatedAccessories as $relatedProduct) { ?>
-
-										<div class="carousel-box">
-											<a href="<?= $relatedProduct->url() ?>">
-												<img src="<?= $relatedProduct->image() ?>" class="img-fill">
-											</a>
-										</div>
-
-									<?php } ?>
-
-								</div>
-
-								<?php if ($relatedAccessoryCount > 3) { ?>
-
-									<div class="carousel-arrow left disabled" data-direction="left" data-tar="#type-slideM">
-										<div class="icon"></div>
-									</div>
-
-									<div class="carousel-arrow right" data-direction="right" data-tar="#type-slideM">
-										<div class="icon"></div>
-									</div>
-
-								<?php } ?>
-
-							</div>
-
-						<?php } ?>
-
-					</div>
-				</section>
-
-			<?php } ?>
-
-		</div>
+		<?php include_once('images.php') ?>
 
 		<section id="right-panel" class="grid">
 			<div class="">
@@ -449,9 +309,6 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 				<!-- Add to cart -->
 				<div class="mar-t-4">
 
-					<p class="error-warning mb-2">A causa dell'elevato numero di ordini e della pressione sui corrieri, l'ultima data di consegna garantità per Natale è il 12 dicembre. Ordina ora per ricevere il tuo regalo in tempo!
-					</p>
-
 					<button type="submit" id="submit" class="add-to-cart btn button--full-width">
 						<?= embed_icon('cart') ?>
 						Aggiungi al carrello
@@ -464,6 +321,9 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 					<?php } ?>
 
 				</div>
+
+				<!-- Info -->
+				<?php include_once('info.php') ?>
 			</div>
 		</section>
 	</form>

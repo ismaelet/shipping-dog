@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	const logoFieldSelector = '.js-logo'
 
 	const id = $('#item').data('id')
+	const typeId = parseInt(document.getElementById('type-id').dataset.id)
+
+	const primaryImage = document.querySelector('.js-primary-image')
+	const secondaryImages = document.querySelectorAll('.js-secondary-image')
+	const otherImages = document.querySelectorAll('.js-other-images img')
 
 	// change properties
 	$('[name="color_id"]').on('input', function () {
@@ -123,23 +128,63 @@ document.addEventListener('DOMContentLoaded', function () {
 		$('#item-img').css('background-image', $(this).css('background-image'))
 	})
 
+	// Change shown image
+	otherImages.forEach((element) => {
+		element.addEventListener('click', () => {
+			primaryImage.src = element.src
+		})
+	})
+
 	// update image
 	function change_image() {
+		const colorId = get_color_id()
+		const logoId = get_logo_id()
+		const positionId = get_position()
+
+		// Show loader
 		let timeout = setTimeout(function () {
 			$('#img-load').fadeIn()
 		}, 300)
 
 		// change main image
-		get_product(id, get_color_id(), get_position(), get_logo_id()).then((response) => {
+		get_product(id, colorId, positionId, logoId).then((response) => {
 			$('.js-main-image').attr('src', response.image)
 
+			// Hide loader
 			clearTimeout(timeout)
 			$('#img-load').fadeOut()
+
+			// Update secondary images
+			update_secondary_images()
 		})
 
 		// change image for the logos
-		get_product(id, get_color_id(), null, get_logo_id()).then((response) => {
+		get_product(id, colorId, null, logoId).then((response) => {
 			$('.js-front-image').attr('src', response.image)
+		})
+	}
+
+	/**
+	 * Update the secondary images.
+	 */
+	function update_secondary_images() {
+		const colorId = get_color_id()
+
+		let positionId = get_position()
+
+		positionId = positionId == 2 ? 1 : positionId
+
+		secondaryImages.forEach((element) => {
+			const secondaryPositionId = parseInt(element.dataset.positionId)
+
+			if (secondaryPositionId === positionId) {
+				element.dataset.active = 'false'
+			} else {
+				get_type_rasterized_image(typeId, colorId, secondaryPositionId).then((response) => {
+					element.src = response.image
+					element.dataset.active = 'true'
+				})
+			}
 		})
 	}
 
@@ -216,6 +261,25 @@ async function get_product(productId, color_id, positionId, logoId) {
 
 	return axios
 		.get(`/api/products/${productId}`, {
+			params: parameters,
+		})
+		.then((response) => {
+			return response.data
+		})
+		.catch((error) => {
+			console.log(error)
+			return error
+		})
+}
+
+async function get_type_rasterized_image(typeId, colorId, positionId) {
+	let parameters = {
+		color_id: colorId,
+		position_id: positionId,
+	}
+
+	return axios
+		.get(`/api/products/types/${typeId}/rasterized-image`, {
 			params: parameters,
 		})
 		.then((response) => {

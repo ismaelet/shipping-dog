@@ -26,6 +26,17 @@ services:
             - 'mysql:/var/lib/mysql'
         networks:
             - internal
+    vite:
+        image: node:latest
+        container_name: vite
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+        command: bash -c "npm install && npm run build"
+        ports:
+            - '5173:5173'
+        networks:
+            - internal
 networks:
     internal:
         driver: bridge

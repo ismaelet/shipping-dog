@@ -6,6 +6,7 @@ use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductMockup;
 use App\Models\Ecommerce\Product\ProductPosition;
+use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Product\ProductTypeMockup;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -220,6 +221,92 @@ class PreviewHelper {
 		// Generate the image
 		imagewebp($out, $this->fileServerPath(), $this->imageSize >= 1000 ? 90 : 70);
 		imagedestroy($out);
+	}
+
+	/**
+	 * Generate empty image
+	 * 
+	 * @param ProductType $type
+	 * @param ProductColor $color
+	 * @param ProductPosition $position
+	 * @param int $imageSize
+	 * @return string|null
+	 */
+	public static function getEmptyImage(ProductType $type, ProductColor $color, ProductPosition $position, int $imageSize = 1024): string|null {
+		$directory = 'product_types/rasters';
+		$fileName = $type->tag . '-' . $color->tag . '-' . $position->id . '-' . $imageSize . '.webp';
+		$filePath = base_path() . '/public/storage/' . $directory . '/' . $fileName;
+
+		if (FileHelper::exists($directory . '/' . $fileName)) {
+			return FileHelper::publicAsset($directory . '/' . $fileName);
+		}
+
+		// Background image
+		$backgroundImage = public_storage('/product_types/mockups/bgr/grey.png');
+
+		// Clothing images
+		$clothingImage = public_storage($type->image($color->id, $position->id));
+		$clothingImageType = strpos($clothingImage, '.webp') ? 'webp' : 'png';
+
+		$details = file_exists($file = str_replace('.' . $clothingImageType, '-det.' . $clothingImageType, $clothingImage)) ? $file : false;
+
+		// Check if every required image exists
+		if (!file_exists($clothingImage)) {
+			error_log('Doesn\'t exist clothing file: ' . $clothingImage);
+			return null;
+		}
+
+		// Create the directory if it doesn't exist
+		if (!file_exists(public_storage($directory))) {
+			mkdir(public_storage($directory), 0777, true);
+		}
+
+		// Create the base image
+		$x = $y = $imageSize;
+		$out = imagecreatetruecolor($x, $y);
+
+		// Add the background
+		$srcImage = imagecreatefrompng($backgroundImage);
+		$src_size = getimagesize($backgroundImage);
+		$src_w = $src_size[0];
+		$src_h = $src_size[1];
+
+		imagecopyresampled($out, $srcImage, 0, 0, 0, 0, $x, $y, $src_w, $src_h);
+
+		// Add the clothing image
+		try {
+			$srcImage = $clothingImageType == 'webp' ? imagecreatefromwebp($clothingImage) : imagecreatefrompng($clothingImage);
+		} catch (Exception $e) {
+			Log::error('Error creating image from webp', ['Image' => $clothingImage, 'Color' => $color->name, 'Position' => $position->name, 'Tipo' => $type->name]);
+			return null;
+		}
+
+		$src_size = getimagesize($clothingImage);
+		$src_w = $src_size[0];
+		$src_h = $src_size[1];
+
+		if (!isset($src_size[1])) {
+			error_log('No valid clothing image for type ' . ($type->name ?? null) . ' and color: ' . ($color->name ?? null) . ' and position: ' . ($position->name ?? null));
+			return null;
+		}
+
+		imagecopyresampled($out, $srcImage, 0, 0, 0, 0, $x, $y, $src_w, $src_h);
+
+		// Add the details
+		if (file_exists($details)) {
+			$srcImage = $clothingImageType == 'webp' ? imagecreatefromwebp($details) : imagecreatefrompng($details);
+			$src_size = getimagesize($details);
+			$src_w = $src_size[0];
+			$src_h = $src_size[1];
+
+			imagecopyresampled($out, $srcImage, 0, 0, 0, 0, $x, $y, $src_w, $src_h);
+		}
+
+		// Generate the image
+		imagewebp($out, $filePath, $imageSize >= 1000 ? 90 : 70);
+		imagedestroy($out);
+
+		return FileHelper::publicAsset($directory . '/' . $fileName);
 	}
 
 	/**

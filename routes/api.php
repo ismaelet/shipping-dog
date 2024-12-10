@@ -35,6 +35,7 @@ Route::resource('/products', ProductController::class)->only(['show', 'update'])
  * * Product Types
  */
 Route::get('/products/types/{type}/image', [ProductTypeController::class, 'getImage']);
+Route::get('/products/types/{type}/rasterized-image', [ProductTypeController::class, 'getRasterizedImage']);
 
 /**
  * * Product Mockup

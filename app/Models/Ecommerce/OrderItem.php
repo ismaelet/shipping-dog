@@ -49,10 +49,6 @@ class OrderItem extends Model {
 	];
 
 	/**
-	 * * Accessors
-	 */
-
-	/**
 	 * Get the the name of the order, including the design's name and id.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
@@ -62,10 +58,6 @@ class OrderItem extends Model {
 			get: fn(): string => $this->quantity . 'x ' . ($this->design_id ? $this->design_id . ' - ' : '') . $this->product_with_trashed?->name . ' (' . $this->description() . ')'
 		);
 	}
-
-	/**
-	 * * Relationships 
-	 */
 
 	/**
 	 * Get the order that the order item belongs to.
@@ -158,10 +150,6 @@ class OrderItem extends Model {
 	}
 
 	/**
-	 * * Get methods
-	 */
-
-	/**
 	 * Get the order's code.
 	 *
 	 * @return string
@@ -190,8 +178,8 @@ class OrderItem extends Model {
 	 */
 	public function description(): string {
 		$description = $this->type?->name;
-		$description .= $this->size && $this->type?->sizes->count() > 1 ? ' ' . $this->size?->name : '';
 		$description .= $this->color && $this->type?->colors->count() > 1 ? ' ' . $this->color?->name : '';
+		$description .= $this->size && $this->type?->sizes->count() > 1 ? ' ' . $this->size?->name : '';
 		$description .= $this->logo ? ' ' . $this->logo?->name : '';
 		$description .= $this->position_id && $this->position_id > 1 ? ' ' . $this->position?->name : '';
 
@@ -238,10 +226,6 @@ class OrderItem extends Model {
 		return date('d/m/Y', strtotime($this->created_at));
 	}
 
-
-	/**
-	 * ~ Price
-	 */
 	/**
 	 * Get the gross price of a single product.
 	 *
@@ -323,9 +307,8 @@ class OrderItem extends Model {
 		return EcommerceHelper::formatPrice($this->gain, true);
 	}
 
-
 	/**
-	 * * Actions 
+	 * Updates the gain of the order.
 	 */
 	public function updateGain(): void {
 		$this->gain = ($this->productGain * $this->quantity) - $this->gain_disc;
@@ -351,9 +334,10 @@ class OrderItem extends Model {
 	}
 
 	/**
-	 * * Query builders
+	 * Scope a query to only include orders that have been paid.
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
-
 	public static function hasBeenPaid(): Builder {
 		return self::where('status', '>=', EcommerceHelper::statusFromTag('confirmed'));
 	}

@@ -791,12 +791,11 @@ $(document).ready(function () {
 
 	//update position variable
 	function update_position(arrow, panel) {
-		//if is a fixed arrow
 		if (arrow.data('pos')) {
+			//if is a fixed arrow
 			var pos = parseInt(arrow.data('pos'))
-
-			//if is a dynamic arrow
 		} else {
+			//if is a dynamic arrow
 			const step = panel.css('--step') ? parseInt(panel.css('--step')) : 1
 			const span = Math.round(panel.css('--columns'))
 			const direction = arrow.data('direction')

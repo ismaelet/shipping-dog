@@ -175,8 +175,8 @@
 											// Get the order_items
 											$order_items = $filteredOrderItems
 											    ->where('design_id', '=', $product->design_id)
-											    ->sortBy('size_id')
 											    ->sortBy('color_id')
+											    ->sortBy('size_id')
 											    ->sortBy('type_id');
 										@endphp
 
@@ -241,8 +241,8 @@
 								$sortedByData = $filteredOrderItems
 								    ->where('inventory', 0)
 								    ->where('type_id', '=', $typeOrder->type_id)
-								    ->sortBy('color_id')
-								    ->sortBy('size_id');
+								    ->sortBy('size_id')
+								    ->sortBy('color_id');
 							@endphp
 
 							@foreach ($sortedByData as $orderItem)
@@ -250,12 +250,12 @@
 								@php
 									$orderItemDescription = [];
 									$orderItemDescription[] =
-									    $orderItem->size && $orderItem->product_with_trashed->type->sizes->count() > 1
-									        ? $orderItem->size->name
-									        : null;
-									$orderItemDescription[] =
 									    $orderItem->color && $orderItem->product_with_trashed->type->colors->count() > 1
 									        ? $orderItem->color->name
+									        : null;
+									$orderItemDescription[] =
+									    $orderItem->size && $orderItem->product_with_trashed->type->sizes->count() > 1
+									        ? $orderItem->size->name
 									        : null;
 									$orderItemDescription = implode(' ', array_filter($orderItemDescription)) ?: 'Prodotto standard';
 

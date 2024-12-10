@@ -114,6 +114,10 @@ export default {
 			height: {
 				'screen-min': '100svh',
 			},
+			// New spacing
+			spacing: {
+				'content-padding': 'var(--content-padding)',
+			},
 			// Default border color
 			borderColor: {
 				DEFAULT: 'var(--border-color)',

@@ -1,6 +1,6 @@
 /* Artist section */
 #art-sec {
-	background-color: var(--surface-tertiary);
+	background-color: var(--color-neutral-200);
 }
 
 #art-sec .follow-btn {
@@ -120,6 +120,7 @@
 
 /* Related products */
 #more-sec {
+	/* background-color: var(--surface-tertiary); */
 	min-height: 5rem;
 }
 

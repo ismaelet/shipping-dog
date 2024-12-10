@@ -27,37 +27,13 @@ use Legacy\View\Components\Interactions\FollowButton;
 	</div>
 </section>
 
-<!-- Tags -->
-<?php if ($product->design?->tags?->tags) { ?>
-
-	<section id="tag-sec" class="">
-		<div id="tag-block" class="main-wrap text-center pad-t-3">
-
-			<?php
-			$tags = explode(',', $product->design->tags->tags);
-
-			foreach ($tags as $tag) {
-				$tag = str_replace('#', '', $tag);
-			?>
-
-				<a href="<?= client_url('/search?search=' . $tag) ?>">
-					<p class="tag inlb"><?= $tag ?></p>
-				</a>
-
-			<?php } ?>
-
-		</div>
-	</section>
-
-<?php } ?>
-
 <!-- More items -->
 <section id="more-sec" class="">
 
 	<?php if ($relatedProducts->count()) { ?>
 
-		<div class="main-wrap pad-t-3 pad-b-5 text-center">
-			<p class="more-title">Altro di questo artista</p>
+		<div class="main-wrap pad-t-3 pad-b-4 text-center">
+			<p class="more-title">Altro di questo negozio</p>
 
 			<div class="more-line"></div>
 

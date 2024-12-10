@@ -2,6 +2,7 @@
 
 namespace App\Models\Ecommerce\Product;
 
+use App\Helpers\PreviewHelper;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -51,6 +52,15 @@ class ProductType extends Model {
 	 */
 	public function positions(): BelongsToMany {
 		return $this->belongsToMany(ProductPosition::class);
+	}
+
+	/**
+	 * Get the positions with an unique image associated with the product type.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function unique_positions(): BelongsToMany {
+		return $this->belongsToMany(ProductPosition::class)->where('base_of', false);
 	}
 
 	/**
@@ -150,5 +160,23 @@ class ProductType extends Model {
 	 */
 	public function details(?int $color_id = null, ?int $position_id = null): ?string {
 		return $this->image($color_id, $position_id, '-det');
+	}
+
+	/**
+	 * Get the rasterized type's image
+	 * 
+	 * @param ProductColor|int $color
+	 * @param ProductPosition|int $position
+	 * @return string|null
+	 */
+	public function rasterizedImage(ProductColor|int $color, ProductPosition|int $position): ?string {
+		$color = $color instanceof ProductColor ? $color : ProductColor::find($color);
+		$position = $position instanceof ProductPosition ? $position : ProductPosition::find($position);
+
+		return PreviewHelper::getEmptyImage(
+			type: $this,
+			color: $color,
+			position: $position
+		);
 	}
 }

@@ -102,6 +102,7 @@ class ProductTypeResource extends Resource {
 									])
 							]),
 						Tabs\Tab::make('Mockup')
+							->visible(fn($record) => (bool) $record)
 							->schema([
 								Repeater::make('colors')
 									->label('')
@@ -115,34 +116,36 @@ class ProductTypeResource extends Resource {
 													function ($record) use ($type) {
 														$uploaders = [];
 
-														foreach ($type->positions->where('base_of', 0) as $position) {
-															$uploaders[] = FileUpload::make('product-mockup_' . $type->tag . '-' . $record->tag . '-' . $position->id)
-																->label($position->name . ' - Base')
-																->image()
-																->imageResizeMode('cover')
-																->imageCropAspectRatio('1:1')
-																->imageResizeTargetWidth('1024')
-																->imageResizeTargetHeight('1024')
-																->panelAspectRatio('1:1')
-																->disk('public')
-																->directory('product_types/mockups/' . $type->tag)
-																->getUploadedFileNameForStorageUsing(
-																	fn ($record): string => $record->tag . '-' . $position->id . '.webp',
-																);
+														if ($type) {
+															foreach ($type->positions->where('base_of', 0) as $position) {
+																$uploaders[] = FileUpload::make('product-mockup_' . $type->tag . '-' . $record->tag . '-' . $position->id)
+																	->label($position->name . ' - Base')
+																	->image()
+																	->imageResizeMode('cover')
+																	->imageCropAspectRatio('1:1')
+																	->imageResizeTargetWidth('1024')
+																	->imageResizeTargetHeight('1024')
+																	->panelAspectRatio('1:1')
+																	->disk('public')
+																	->directory('product_types/mockups/' . $type->tag)
+																	->getUploadedFileNameForStorageUsing(
+																		fn($record): string => $record->tag . '-' . $position->id . '.webp',
+																	);
 
-															$uploaders[] = FileUpload::make('product-mockup_' . $type->tag . '-' . $record->tag . '-' . $position->id . '-det')
-																->label($position->name . ' - Sovrapponi')
-																->image()
-																->imageResizeMode('cover')
-																->imageCropAspectRatio('1:1')
-																->imageResizeTargetWidth('1024')
-																->imageResizeTargetHeight('1024')
-																->panelAspectRatio('1:1')
-																->disk('public')
-																->directory('product_types/mockups/' . $type->tag)
-																->getUploadedFileNameForStorageUsing(
-																	fn ($record): string => $record->tag . '-' . $position->id . '-det.webp',
-																);
+																$uploaders[] = FileUpload::make('product-mockup_' . $type->tag . '-' . $record->tag . '-' . $position->id . '-det')
+																	->label($position->name . ' - Sovrapponi')
+																	->image()
+																	->imageResizeMode('cover')
+																	->imageCropAspectRatio('1:1')
+																	->imageResizeTargetWidth('1024')
+																	->imageResizeTargetHeight('1024')
+																	->panelAspectRatio('1:1')
+																	->disk('public')
+																	->directory('product_types/mockups/' . $type->tag)
+																	->getUploadedFileNameForStorageUsing(
+																		fn($record): string => $record->tag . '-' . $position->id . '-det.webp',
+																	);
+															}
 														}
 
 														return $uploaders;
@@ -156,7 +159,7 @@ class ProductTypeResource extends Resource {
 									])
 									->addable(false)
 									->deletable(false)
-									->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
+									->itemLabel(fn(array $state): ?string => $state['name'] ?? null)
 									->collapsed(),
 
 							])
