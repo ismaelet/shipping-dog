@@ -51,7 +51,7 @@ class ProductType extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
 	public function positions(): BelongsToMany {
-		return $this->belongsToMany(ProductPosition::class);
+		return $this->belongsToMany(ProductPosition::class)->wherePivot('printable', true);
 	}
 
 	/**

@@ -8,4 +8,8 @@ export default defineConfig({
 			refresh: true,
 		}),
 	],
+	server: {
+		origin: process.env.VITE_SERVER_ORIGIN || 'http://localhost:5173',
+		host: process.env.VITE_SERVER_HOST === 'true',
+	},
 })

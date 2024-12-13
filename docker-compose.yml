@@ -11,8 +11,6 @@ services:
         depends_on:
             - ${DB_HOST}
         command: php artisan serve --host=0.0.0.0 --port=8000
-        networks:
-            - internal
     database:
         container_name: ${DB_HOST}
         image: 'mysql:latest'
@@ -24,22 +22,18 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
             - 'mysql:/var/lib/mysql'
-        networks:
-            - internal
     vite:
         image: node:latest
         container_name: vite
         working_dir: /var/www/html
         volumes:
             - .:/var/www/html
-        command: bash -c "npm install && npm run build"
+        command: /bin/bash -c 'npm install && npm run dev'
+        environment:
+            VITE_SERVER_HOST: true
+            VITE_SERVER_ORIGIN: http://localhost:5173
         ports:
             - '5173:5173'
-        networks:
-            - internal
-networks:
-    internal:
-        driver: bridge
 volumes:
     mysql:
         driver: local

@@ -6,7 +6,7 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 ?>
 
 <div class="main-wrap mt-4">
-	<p class="error-warning mb-2">A causa dell'elevato numero di ordini e della pressione sui corrieri, l'ultima data di consegna garantità per Natale è il 12 dicembre. Ordina ora per ricevere il tuo regalo in tempo!
+	<p class="error-warning mb-2">A del grande afflusso di ordini e della pressione sui corrieri durante questo periodo, NON garantiamo la consegna per Natale per nessun ordine effettuato dopo l'11 dicembre e ci potrebbero essere ritardi, anche consistenti, rispetto alla data di consegna stimata. Le spedizioni riprenderanno regolarmente a partire dal 26 dicembre. Grazie per la comprensione.
 	</p>
 </div>
 

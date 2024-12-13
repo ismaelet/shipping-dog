@@ -322,8 +322,8 @@ class Shop {
 						</div>
 
 						<!-- Tags -->
-						<?php if (!$this->seller) {
-							$res_tags = \Legacy\System\Classes\LegacyDB::select('tag FROM sys_tags WHERE hide=0 ORDER BY count DESC LIMIT 20') ?>
+						<!-- <?php if (!$this->seller) {
+									$res_tags = \Legacy\System\Classes\LegacyDB::select('tag FROM sys_tags WHERE hide=0 ORDER BY count DESC LIMIT 20') ?>
 
 							<div class="srch-box gallery">
 								<h3 class="srch-title pad-t-3 mar-b-05">Tag popolari</h3>
@@ -343,7 +343,7 @@ class Shop {
 									</p>
 								<?php } ?>
 							</div>
-						<?php } ?>
+						<?php } ?> -->
 
 					</div>
 				</div>
