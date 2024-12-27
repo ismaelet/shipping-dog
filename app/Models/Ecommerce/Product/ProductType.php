@@ -113,6 +113,8 @@ class ProductType extends Model {
 
 	/**
 	 * The list of the type's colors that are publicly available
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Collection
 	 */
 	public function publicColors(): Collection {
 		return ProductColor::whereIn('tag', $this->colorList())
@@ -124,6 +126,8 @@ class ProductType extends Model {
 
 	/**
 	 * The infos of this type
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function info(): HasOne {
 		return $this->hasOne(ProductTypeInfo::class, 'product_type_id', 'id');
@@ -131,6 +135,11 @@ class ProductType extends Model {
 
 	/**
 	 * Get the type's image
+	 * 
+	 * @param int|null $color_id
+	 * @param int|null $position_id
+	 * @param string $suffix
+	 * @return string|null
 	 */
 	public function image(?int $color_id = null, ?int $position_id = null, string $suffix = ''): ?string {
 		$color = $color_id ? ProductColor::find($color_id) : $this->colorCollection()->first();

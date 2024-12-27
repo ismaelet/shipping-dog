@@ -41,13 +41,10 @@ $dett_mas_it = $dett_mas_en = "&middot; Tessuto: 100% cotone<br>&middot; Comodo 
 $desc_lss_it = $desc_lss_en = "Le nostre maglie a maniche lunghe in puro cotone sono estremamente morbide e confortevoli. I capi sono già stati pre-lavati per evitare che si restringano dopo il primo lavaggio.";
 $dett_lss_it = $dett_lss_en = "&middot; Tessuto: 100% cotone jersey<br>&middot; Densità: 140 g/m² bianco e 169 g/m² colorati<br>&middot; Vestibilità normale";
 
-$desc_und_it = $desc_und_en = "Intimo uomo moderno e confortevole. I capi sono già stati pre-lavati per evitare che si restringano dopo il primo lavaggio.";
-$dett_und_it = $dett_und_en = "&middot; Tessuto: 95% cotone, 5% elastan<br>&middot; Densità: 150 g/m²<br>&middot; Fascia elasticizzata<br>&middot; Tessuto frontale a doppio strato<br>&middot; Lavabile a 60&deg;";
-
 $desc = $product->type->info ? $product->type->info->description : null;
 $dett = $product->type->info ? implode('<br>', array_map(function ($element) {
 	return "&middot; $element";
-}, explode(',', $product->type->info->details))) : null;
+}, explode(';', $product->type->info->details))) : null;
 
 $desc = !$desc ? (isset(${'desc_' . $product->type->tag . '_' . 'it'}) ? ${'desc_' . $product->type->tag . '_' . 'it'} : null) : $desc;
 $dett = !$dett ? (isset(${'dett_' . $product->type->tag . '_' . 'it'}) ? ${'dett_' . $product->type->tag . '_' . 'it'} : null) : $dett;

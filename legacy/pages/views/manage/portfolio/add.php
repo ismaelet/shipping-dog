@@ -20,7 +20,8 @@
 		<div id="setup-data" class="mwid-650 mar-h-auto">
 			<p class="error mar-b-2">Il file deve essere in <span class="font-semibold">PNG</span>. Il formato <span class="font-semibold wrong-extension"></span> non è accettato.</p>
 			<h1 id="setup-stitle" class="font-semibold txt-15rem mar-b-1">Requisiti del file</h1>
-			<p id="setup-txt" class="mar-h-auto">Il file deve essere un <strong>PNG</strong> con sfondo trasparente dove non vuoi che stampiamo. Raccomandiamo che il lato minore sia di almeno <strong>1000px</strong>.</p>
+			<p id="setup-txt" class="mar-h-auto">Il file deve essere un <strong>PNG</strong> con sfondo trasparente dove non vuoi che stampiamo. Raccomandiamo che il lato minore sia di almeno <strong>1000px</strong>.<br><br>
+				Ricordiamo inoltre bordi con ombreggiature e sfumature di ogni tipo hanno una resa ottimale <strong>SOLO</strong> su capi bianchi, quindi consigliamo grafiche dai <strong>bordi netti</strong> per risaltare al meglio sui capi scuri.</p>
 		</div>
 
 	</section>

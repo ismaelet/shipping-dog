@@ -22,7 +22,7 @@ if ($row = $res->fetch_assoc()) {
 			<p class="desc_txt"><?= $desc ?></p><br>
 		<?php } ?>
 
-		<?php if (!$dett) { ?>
+		<?php if ($dett) { ?>
 			<h3 class="desc_stitle">Dettagli prodotto</h3>
 			<p class="desc_txt"><?= $dett ?></p>
 		<?php } ?>

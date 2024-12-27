@@ -7,10 +7,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductTypeInfo extends Model {
 
-	protected $fillable = ['product_type_id', 'description', 'details'];
+	/**
+	 * The attributes that are mass assignable.
+	 * 
+	 * @var array<int, string>
+	 */
+	protected $fillable = [
+		'product_type_id',
+		'description',
+		'details'
+	];
 
 	/**
 	 * The product type this info belongs to
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function type(): BelongsTo {
 		return $this->belongsTo(ProductType::class, 'product_type_id', 'id');

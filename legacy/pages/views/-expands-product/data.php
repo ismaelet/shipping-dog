@@ -5,10 +5,10 @@ use Legacy\Classes\Ecommerce\Product\Size as LegacyProductSize;
 
 ?>
 
-<div class="main-wrap mt-4">
-	<p class="error-warning mb-2">A del grande afflusso di ordini e della pressione sui corrieri durante questo periodo, NON garantiamo la consegna per Natale per nessun ordine effettuato dopo l'11 dicembre e ci potrebbero essere ritardi, anche consistenti, rispetto alla data di consegna stimata. Le spedizioni riprenderanno regolarmente a partire dal 26 dicembre. Grazie per la comprensione.
+<!-- <div class="main-wrap mt-4">
+	<p class="error-warning mb-2">A del grande afflusso di ordini e della pressione sui corrieri durante questo periodo, NON garantiamo la consegna per Natale per nessun ordine effettuato dopo l'12 dicembre e ci potrebbero essere ritardi, anche consistenti, rispetto alla data di consegna stimata. Le spedizioni riprenderanno regolarmente a partire dal 26 dicembre. Grazie per la comprensione.
 	</p>
-</div>
+</div> -->
 
 <div class="main-wrap pad-t-3 item-type--<?= $product->type->tag ?> mb-8" id="item" data-id="<?= $product->id ?>" data-hroot="/legacy" data-seller-id="<?= $product->seller->id ?>">
 
