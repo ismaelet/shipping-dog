@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Log;
 
@@ -80,6 +81,13 @@ class ProductType extends Model {
 	}
 
 	/**
+	 * Get the default price
+	 */
+	public function price(): HasOne {
+		return $this->hasOne(ProductTypePrice::class, 'type_id');
+	}
+
+	/**
 	 * Get the type's gender
 	 */
 	public function gender(): BelongsTo {
@@ -91,6 +99,13 @@ class ProductType extends Model {
 	 */
 	public function measures(): HasOne {
 		return $this->hasOne(ProductTypeMeasure::class, 'type_id', 'id');
+	}
+
+	/**
+	 * Get the type's mockup sizes
+	 */
+	public function mockup_sizes(): HasMany {
+		return $this->hasMany(ProductTypeMockup::class, 'type_id', 'id');
 	}
 
 	/**

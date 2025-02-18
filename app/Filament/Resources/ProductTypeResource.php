@@ -5,14 +5,20 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductTypeResource\Pages;
 use App\Filament\Resources\ProductTypeResource\RelationManagers;
 use App\Filament\Resources\ProductTypeResource\RelationManagers\ColorsRelationManager;
+use App\Models\Ecommerce\Product;
+use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
 use BladeUI\Icons\Components\Icon;
 use ColorRepeater;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
 use Filament\Forms;
+use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
@@ -24,10 +30,12 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
 use MockupUploader;
@@ -75,7 +83,7 @@ class ProductTypeResource extends Resource {
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public static function getEloquentQuery(): Builder {
-		return self::getModel()::query()->with('gender', 'colors');
+		return self::getModel()::query()->with('gender', 'colors', 'positions', 'mockup_sizes', 'mockup_sizes.position');
 	}
 
 	public static function form(Form $form): Form {
@@ -90,17 +98,82 @@ class ProductTypeResource extends Resource {
 										TextInput::make('name')
 											->label('Nome singolare')
 											->placeholder('Nome singolare')
+											->required()
 											->maxLength(255),
 										TextInput::make('names')
 											->label('Nome plurale')
 											->placeholder('Nome plurale')
+											->required()
 											->maxLength(255),
-										Select::make('gender_id')
-											->label('Genere')
-											->placeholder('Seleziona un genere')
-											->relationship('gender', 'name')
+										// Select::make('gender_id')
+										// 	->label('Genere')
+										// 	->placeholder('Seleziona un genere')
+										// 	->preload()
+										// 	->nullable()
+										// 	->relationship('gender', 'name'),
+										TextInput::make('tag')
+											->label('Tag')
+											->required()
+											->placeholder('Tag')
+											->maxLength(255),
+										Select::make('positions')
+											->label('Posizioni di stampa')
+											->required()
+											->multiple()
+											->preload()
+											->relationship('positions', 'name'),
+										Select::make('sizes')
+											->label('Taglie')
+											->required()
+											->multiple()
+											->preload()
+											->relationship('sizes', 'name'),
+										Fieldset::make('Prezzi')
+											->relationship('price')
+											->schema([
+												TextInput::make('price')
+													->label('Prezzo di default')
+													->placeholder('Prezzo di default')
+													->numeric()
+													->prefix('€')
+													->required(),
+
+												TextInput::make('gain_w')
+													->label('Guadagno bianchi')
+													->placeholder('Guadagno di default')
+													->numeric()
+													->prefix('€')
+													->required(),
+
+												TextInput::make('gain_c')
+													->label('Guadagno colorati')
+													->placeholder('Guadagno di default')
+													->numeric()
+													->prefix('€')
+													->required()
+											])->columns(3)
+											->columnSpan('full'),
+
 									])
 							]),
+						// Tabs\Tab::make('Dimensioni di stampa')
+						// 	->visible(fn($record) => (bool) $record)
+						// 	->schema(function ($record) {
+						// 		$mockups = $record->mockup_sizes->load('position');
+						// 		$inputs = [];
+
+						// 		$mockups->each(function ($mockup) use (&$inputs) {
+						// 			$inputs[] = Fieldset::make(function () use ($mockup) {
+						// 				TextInput::make('product-mockup_' . $mockup->tag . '-' . $mockup->position_id . '-pos_x_min')
+						// 					->label($mockup->position->name . ' - Posizione X minima')
+						// 					->placeholder('Posizione X minima')
+						// 					->numeric()
+						// 					->required();
+						// 			});
+						// 		});
+
+						// 		return $inputs;
+						// }),
 						Tabs\Tab::make('Mockup')
 							->visible(fn($record) => (bool) $record)
 							->schema([
@@ -209,10 +282,12 @@ class ProductTypeResource extends Resource {
 			])
 			->actions([
 				Tables\Actions\EditAction::make(),
+				Tables\Actions\DeleteAction::make()
+					->before(fn($record) => self::deleteAction($record)),
 			])
 			->bulkActions([
 				Tables\Actions\BulkActionGroup::make([
-					Tables\Actions\DeleteBulkAction::make(),
+					Tables\Actions\DeleteBulkAction::make()
 				]),
 			]);
 	}
@@ -229,5 +304,9 @@ class ProductTypeResource extends Resource {
 			'create' => Pages\CreateProductType::route('/create'),
 			'edit' => Pages\EditProductType::route('/{record}/edit'),
 		];
+	}
+
+	public static function deleteAction(ProductType $record) {
+		Product::where('type_id', $record->id)->forceDelete();
 	}
 }

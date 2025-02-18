@@ -16,7 +16,8 @@ class MonthlyRevenueOverview {
 	 */
 	public static function make(): Stat {
 		$value = self::getCurrentInvervalRevenue();
-		$difference = round($value / self::getLastInvervalRevenue() * 100) - 100;
+		$lastIntervalValue = self::getLastInvervalRevenue();
+		$difference = $lastIntervalValue ? round($value / $lastIntervalValue * 100) - 100 : 0;
 		$positiveTrend = $difference > 0;
 
 		return Stat::make('Fatturato mensile', format_price($value))
@@ -42,7 +43,7 @@ class MonthlyRevenueOverview {
 			->perDay()
 			->sum('price');
 
-		return $data->map(fn (TrendValue $value) => $value->aggregate)->toArray();
+		return $data->map(fn(TrendValue $value) => $value->aggregate)->toArray();
 	}
 
 	private static function getCurrentInvervalRevenue(): float {

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ProductTypeResource\Pages;
 
 use App\Filament\Resources\ProductTypeResource;
 use App\Helpers\FileHelper;
+use App\Models\Ecommerce\Product\ProductType;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
@@ -12,7 +13,8 @@ class EditProductType extends EditRecord {
 
 	protected function getHeaderActions(): array {
 		return [
-			Actions\DeleteAction::make(),
+			Actions\DeleteAction::make()
+				->before(fn(ProductType $record) => ProductTypeResource::deleteAction($record))
 		];
 	}
 

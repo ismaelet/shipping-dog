@@ -17,7 +17,8 @@ class MonthlyUsersOverview {
 	 */
 	public static function make(): Stat {
 		$value = self::getCurrentInvervalUserCount();
-		$difference = round($value / self::getLastInvervalUserCount() * 100) - 100;
+		$lastIntervalValue = self::getLastInvervalUserCount();
+		$difference = $lastIntervalValue ? round($value / $lastIntervalValue * 100) - 100 : 0;
 		$positiveTrend = $difference > 0;
 
 		return Stat::make('Nuovi utenti', Number::abbreviate($value))
@@ -41,7 +42,7 @@ class MonthlyUsersOverview {
 			->perDay()
 			->count();
 
-		return $data->map(fn (TrendValue $value) => $value->aggregate)->toArray();
+		return $data->map(fn(TrendValue $value) => $value->aggregate)->toArray();
 	}
 
 	/**

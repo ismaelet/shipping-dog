@@ -11,6 +11,18 @@ class ProductTypeMockup extends Model {
 	protected $fillable = ['type_id', 'position_id', 'pos_x_min', 'pos_x_def', 'pos_y_min', 'pos_y_def', 'siz_x_max', 'siz_x_def', 'siz_y_max'];
 
 	/**
+	 * Get the type of the mockup
+	 */
+	public function type(): BelongsTo {
+		return $this->belongsTo(ProductType::class, 'type_id', 'id');
+	}
+
+	public function position(): BelongsTo {
+		return $this->belongsTo(ProductPosition::class, 'position_id', 'id');
+	}
+
+
+	/**
 	 * Get mockup by type ID
 	 */
 	public static function firstByTypeId(int $type_id, ?int $position_id = null): ?self {
@@ -21,13 +33,6 @@ class ProductTypeMockup extends Model {
 		}
 
 		return null;
-	}
-
-	/**
-	 * Get the type of the mockup
-	 */
-	public function type(): BelongsTo {
-		return $this->belongsTo(ProductType::class, 'type_id', 'id');
 	}
 
 	/**
