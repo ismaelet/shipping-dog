@@ -25,6 +25,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -153,6 +154,18 @@ class ProductTypeResource extends Resource {
 													->required()
 											])->columns(3)
 											->columnSpan('full'),
+										Fieldset::make('Descrizioni')
+											->relationship('info')
+											->schema([
+												Textarea::make('description')
+													->label('Descrizione')
+													->rows(5)
+													->placeholder('Prezzo di default'),
+												Textarea::make('details')
+													->label('Dettagli tecnici')
+													->rows(5)
+													->placeholder('Prezzo di default')
+											])
 
 									])
 							]),

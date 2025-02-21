@@ -44,7 +44,7 @@ $dett_lss_it = $dett_lss_en = "&middot; Tessuto: 100% cotone jersey<br>&middot; 
 $desc = $product->type->info ? $product->type->info->description : null;
 $dett = $product->type->info ? implode('<br>', array_map(function ($element) {
 	return "&middot; $element";
-}, explode(';', $product->type->info->details))) : null;
+}, preg_split('/\r\n|\r|\n/', $product->type->info->details))) : null;
 
 $desc = !$desc ? (isset(${'desc_' . $product->type->tag . '_' . 'it'}) ? ${'desc_' . $product->type->tag . '_' . 'it'} : null) : $desc;
 $dett = !$dett ? (isset(${'dett_' . $product->type->tag . '_' . 'it'}) ? ${'dett_' . $product->type->tag . '_' . 'it'} : null) : $dett;
