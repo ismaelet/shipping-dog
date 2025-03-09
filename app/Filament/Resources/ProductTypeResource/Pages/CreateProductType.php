@@ -18,6 +18,9 @@ class CreateProductType extends CreateRecord {
 	protected static string $resource = ProductTypeResource::class;
 
 	protected function handleRecordCreation(array $data): Model {
+		$sortOrder = ProductTypeResource::getModel()::max('sort') + 1;
+		$data['sort'] = $sortOrder;
+
 		return static::getModel()::create($data);
 	}
 
