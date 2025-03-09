@@ -32,6 +32,7 @@ class ProductType extends Model {
 		'colors',
 		'hidden',
 		'sort',
+		'preorder',
 	];
 
 	/**

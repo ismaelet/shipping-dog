@@ -15,6 +15,7 @@ use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Forms;
 use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
@@ -129,6 +130,9 @@ class ProductTypeResource extends Resource {
 											->multiple()
 											->preload()
 											->relationship('sizes', 'name'),
+										Checkbox::make('preorder')
+											->label('Consegna lunga')
+											->columnSpan(2),
 										Fieldset::make('Prezzi')
 											->relationship('price')
 											->schema([
@@ -151,7 +155,7 @@ class ProductTypeResource extends Resource {
 													->placeholder('Guadagno di default')
 													->numeric()
 													->prefix('€')
-													->required()
+													->required(),
 											])->columns(3)
 											->columnSpan('full'),
 										Fieldset::make('Descrizioni')
@@ -164,10 +168,10 @@ class ProductTypeResource extends Resource {
 												Textarea::make('details')
 													->label('Dettagli tecnici')
 													->rows(5)
-													->placeholder('Prezzo di default')
+													->placeholder('Prezzo di default'),
 											])
 
-									])
+									])->columns(3)
 							]),
 						// Tabs\Tab::make('Dimensioni di stampa')
 						// 	->visible(fn($record) => (bool) $record)
