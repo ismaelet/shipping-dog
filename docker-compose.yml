@@ -18,7 +18,7 @@ services:
             APP_KEY: REDACTED_LARAVEL_APP_KEY
             APP_DEBUG: true
             DB_CONNECTION: mysql
-            DB_HOST: database
+            DB_HOST: db
             DB_PORT: 3306
             DB_DATABASE: project_database
             DB_USERNAME: root
@@ -38,7 +38,7 @@ services:
     vite:
         build:
             context: .
-            dockerfile: docker/vite/Dockerfile
+            dockerfile: docker/app/Dockerfile
         volumes:
             - ./app:/app
             - ./app/.npm:/.npm

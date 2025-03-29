@@ -101,6 +101,10 @@
 		grid-column: full-width;
 	}
 
+	.span-full-width {
+		grid-column: full-width;
+	}
+
 	/* 3.1.2 Content flow */
 	.grid.stack-content {
 		grid-template-areas: 'content';

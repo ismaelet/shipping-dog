@@ -3,6 +3,5 @@
 
 @layer reset, base, layout, components, utilities, old;
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@source "../views";

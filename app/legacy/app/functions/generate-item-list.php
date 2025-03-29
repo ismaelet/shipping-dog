@@ -10,7 +10,3 @@ function generate_item_list($res) {
 		echo ViewManager::renderProductCard($product);
 	}
 }
-
-function generate_item_box(Product $product): void {
-	echo ViewManager::renderProductCard($product);
-}

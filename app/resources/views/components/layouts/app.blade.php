@@ -43,7 +43,7 @@
 	</title>
 
 	<livewire:styles />
-	@vite(['resources/css/main.css', 'resources/js/main.ts'])
+	@vite(['resources/css/app.css', 'resources/js/app.ts'])
 	@stack('styles')
 	@stack('scripts')
 

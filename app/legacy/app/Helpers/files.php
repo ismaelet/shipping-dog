@@ -24,11 +24,6 @@ function public_server_directory(string $path = '') {
 	return $url;
 }
 
-// put the image as background image
-function background_image($img) {
-	return 'style="background-image: url(' . client_path($img) . ');"';
-}
-
 function temp_bg($img) {
 	$img = str_replace(asset('/storage'), '', $img);
 
@@ -74,18 +69,6 @@ function icon_embed(string $file, array $customClasses = []) {
 // put an icon as background image
 function icon_css($icon) {
 	return 'style="background-image: url(' . icon_url($icon) . ');"';
-}
-
-// get the url of a page's image folder 
-function assets_directory($page_url): string|null {
-	if ($page_url) {
-		$url = substr($page_url, strpos($page_url, 'pages') - 1);
-		$url = str_replace(['/views/', '.php'], ['/assets/', '/'], $url);
-	} else {
-		$url = null;
-	}
-
-	return $url;
 }
 
 // parse a url from server url to client url

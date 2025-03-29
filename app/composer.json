@@ -1,4 +1,5 @@
 {
+	"$schema": "https://getcomposer.org/schema.json",
 	"name": "laravel/laravel",
 	"type": "project",
 	"description": "The skeleton application for the Laravel framework.",
@@ -10,26 +11,19 @@
 	"require": {
 		"php": "^8.2",
 		"dompdf/dompdf": "^2.0",
-		"filament/filament": "^3.2",
-		"guzzlehttp/guzzle": "^7.2",
+		"filament/filament": "^3.3",
 		"laravel/framework": "^12.0",
-		"laravel/sanctum": "*",
-		"laravel/tinker": "^2.8",
-		"livewire/livewire": "^3.4",
-		"phpmailer/phpmailer": "^6.9",
-		"sentry/sentry-laravel": "^4.5",
-		"shuchkin/simplexlsxgen": "*",
-		"symfony/filesystem": "^7.1"
+		"laravel/tinker": "^2.10.1"
 	},
 	"require-dev": {
-		"barryvdh/laravel-debugbar": "^3.13",
-		"fakerphp/faker": "^1.9.1",
-		"laravel/pint": "^1.0",
-		"laravel/sail": "^1.18",
-		"mockery/mockery": "^1.4.4",
-		"nunomaduro/collision": "^8.1",
-		"phpunit/phpunit": "^11.0",
-		"spatie/laravel-ignition": "^2.0"
+		"fakerphp/faker": "^1.23",
+		"laravel/pail": "^1.2.2",
+		"laravel/pint": "^1.13",
+		"laravel/sail": "^1.41",
+		"mockery/mockery": "^1.6",
+		"nunomaduro/collision": "^8.6",
+		"pestphp/pest": "^3.7",
+		"pestphp/pest-plugin-laravel": "^3.1"
 	},
 	"autoload": {
 		"psr-4": {
@@ -51,8 +45,7 @@
 	"scripts": {
 		"post-autoload-dump": [
 			"Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-			"@php artisan package:discover --ansi",
-			"@php artisan filament:upgrade"
+			"@php artisan package:discover --ansi"
 		],
 		"post-update-cmd": [
 			"@php artisan vendor:publish --tag=laravel-assets --ansi --force"
@@ -61,7 +54,13 @@
 			"@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
 		],
 		"post-create-project-cmd": [
-			"@php artisan key:generate --ansi"
+			"@php artisan key:generate --ansi",
+			"@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+			"@php artisan migrate --graceful --ansi"
+		],
+		"dev": [
+			"Composer\\Config::disableProcessTimeout",
+			"npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
 		]
 	},
 	"extra": {

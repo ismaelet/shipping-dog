@@ -5,6 +5,7 @@ use App\Http\Controllers\Ecommerce\DesignController;
 use App\Http\Controllers\Ecommerce\PaymentRequestController;
 use App\Http\Controllers\Ecommerce\SaleController;
 use App\Http\Controllers\EmergencyEmail;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegacyController;
 use App\Http\Controllers\SellerDashboard\SellerDashboardController;
 use App\Http\Middleware\Admin;
@@ -22,6 +23,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+/**
+ * * Home
+ */
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 /**
  * * Sellers
@@ -126,7 +132,6 @@ Route::get('/seller-email-list', function () {
 /**
  * * Legacy routes
  */
-Route::any('/', LegacyController::class)->name('home');
 Route::any('/profile', LegacyController::class)->name('user-dashboard');
 Route::any('/order/status', LegacyController::class)->name('order_items.status');
 Route::any('/refund', LegacyController::class)->name('refund');

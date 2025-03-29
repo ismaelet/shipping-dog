@@ -1772,10 +1772,6 @@ select:focus:-webkit-autofill {
 /*
 	* Flex-boxes
 	*/
-.flex {
-	display: flex;
-}
-
 .flex-line {
 	display: flex;
 	flex-wrap: wrap;
@@ -1981,9 +1977,6 @@ select:focus:-webkit-autofill {
 }
 .inlb {
 	display: inline-block;
-}
-.hidden {
-	display: none;
 }
 
 /* Position */
@@ -3464,10 +3457,6 @@ p strong {
 /*
 	* OLD
 	*/
-.hidden {
-	display: none;
-}
-
 .pbtn,
 .sbtn {
 	border-radius: 30px;
@@ -4178,10 +4167,6 @@ p strong {
 }
 
 /* Flex-boxes */
-.flex {
-	display: flex;
-}
-
 .inlflex {
 	display: inline-flex;
 }
@@ -5002,9 +4987,6 @@ main {
 }
 .inlb {
 	display: inline-block;
-}
-.hidden {
-	display: none;
 }
 
 /* Position */
@@ -7026,10 +7008,6 @@ p .svg-icon,
 .debug,
 .debug * {
 	outline: 1px solid red !important;
-}
-
-.hidden {
-	display: none !important;
 }
 
 .smooth-scrolling {

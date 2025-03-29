@@ -1,3 +1,11 @@
+@import url('templates/main.css');
+@import url('home-categories.css');
+@import url('home-client-pics.css');
+@import url('home-designs.css');
+@import url('home-popular.css');
+@import url('home-shops.css');
+@import url('home-slider.css');
+
 /* Structure */
 * {
 	position: initial;

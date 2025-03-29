@@ -6,9 +6,6 @@ use Legacy\System\Classes\Setup;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
-// Load environment variables
-(Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../'))->load();
-
 // Set the error reporting
 if (env('APP_DEBUG') == 'true') {
 	ini_set('display_errors', '1');
