@@ -1,7 +1,5 @@
-@import './base.css';
-@import './custom.css';
-
-@layer reset, base, layout, components, utilities, old;
-
 @import 'tailwindcss';
+@import './base.css';
+@import './theme.css';
+
 @source "../views";

@@ -4,14 +4,17 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
 	plugins: [
-		tailwindcss(),
 		laravel({
-			input: ['resources/css/app.css', 'resources/js/app.ts'],
+			input: ['resources/css/app.css', 'resources/js/app.js'],
 			refresh: true,
 		}),
+		tailwindcss(),
 	],
 	server: {
-		origin: process.env.VITE_SERVER_ORIGIN || 'http://localhost:5173',
-		host: process.env.VITE_SERVER_HOST === 'true',
+		host: '0.0.0.0',
+		port: 5173,
+		hmr: {
+			host: 'localhost',
+		},
 	},
 })

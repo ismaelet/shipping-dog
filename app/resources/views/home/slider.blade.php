@@ -15,7 +15,7 @@
 			<?php for ($i = 1; $i <= $slidesN; $i++) { ?>
 			<div
 				class="slide bgr <?= $i == 1 ? 'active' : '' ?>"
-				<?= background_image('slider/slide-' . $i . '.jpg') ?>
+				<?= background_image('/home/slider/slide-' . $i . '.jpg') ?>
 				data-id="<?= $i ?>"
 			></div>
 			<?php } ?>
@@ -44,14 +44,16 @@
 
 		<!-- Credit box -->
 		<?php /*<div id="slider-credits">
-		
-					<div class="icons">
-		
-						<?php foreach($slideIDs as $key => $designID) {
-							
-							$seller = new Seller(\Legacy\System\Classes\LegacyDB::find('user_id FROM designs WHERE id = ?', [$designID]));
-		
-							?>
+						
+									<div class="icons">
+						
+										<?php foreach($slideIDs as $key => $designID) {
+											
+											$seller = new Seller(\Legacy\System\Classes\LegacyDB::find('user_id FROM designs WHERE id = ?', [$designID]));
+						
+											?>
+		?>
+		?>
 		?>
 
 		<img

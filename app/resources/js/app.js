@@ -1,9 +1,8 @@
 import './bootstrap'
+import.meta.glob(['../images/**'])
 
 // import './app'
 // import 'alpinejs'
-
-// import.meta.glob(['../images/**'])
 
 // import { onEnterViewSetup } from './view_events.ts'
 // import { advancedInputBehaviorSetup } from './inputs.ts'

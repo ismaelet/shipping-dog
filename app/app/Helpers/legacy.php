@@ -117,7 +117,7 @@ function generate_base_url(string $file = '') {
 	if ($file[0] == '/') {
 		$url = $file;
 	} else {
-		$url = 'pages/assets/' . $file;
+		$url = 'images/' . $file;
 	}
 
 	return $url;
@@ -142,7 +142,7 @@ function public_client_url(string $parcialUrl = '') {
 }
 
 function background_image($img) {
-	return 'style="background-image: url(' . client_path($img) . ');"';
+	return 'style="background-image: url(' . asset('images' . $img) . ');"';
 }
 
 function assets_directory($page_url): string|null {
@@ -232,4 +232,16 @@ function des_img_gen(int $design_id): void {
 		imagedestroy($src_image);
 		imagedestroy($dst_image);
 	}
+}
+
+// parse colors
+function parse_rgba($hex, $alpha = 1) {
+	$rgba = [];
+	$hex = str_replace('#', '', $hex);
+
+	for ($i = 0; $i < 3; $i++) $rgba[] = hexdec(substr($hex, $i * 2, 2));
+
+	$rgba[] = $alpha;
+
+	return $rgba;
 }

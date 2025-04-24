@@ -23,10 +23,9 @@
 	.full-width {
 		--breakout-column: calc((var(--breakout-width) - var(--content-width)) / 2);
 		display: grid;
-		grid-template-columns: [full-width-start] minmax(var(--content-padding), 1fr) [breakout-start] minmax(0, var(--breakout-column)) [content-start] min(
-				100% - var(--content-padding) * 2,
-				var(--content-width)
-			) [content-end] minmax(0, var(--breakout-column)) [breakout-end] minmax(var(--content-padding), 1fr) [full-width-end];
+		grid-template-columns:
+			[full-width-start] minmax(var(--content-padding), 1fr) [breakout-start] minmax(0, var(--breakout-column)) [content-start] min(100% - var(--content-padding) * 2, var(--content-width))
+			[content-end] minmax(0, var(--breakout-column)) [breakout-end] minmax(var(--content-padding), 1fr) [full-width-end];
 	}
 	:where(.content-grid > :not(.breakout, .full-width)),
 	:where(.full-width > :not(.breakout, .full-width)) {
