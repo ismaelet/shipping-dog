@@ -376,15 +376,15 @@ textarea[name='info'] {
 	line-height: 1.4;
 }
 
-[data-color-scheme='dark'] .seo-title {
+.dark .seo-title {
 	color: #8db3f5;
 }
 
-[data-color-scheme='dark'] .seo-url {
+.dark .seo-url {
 	color: #aaa;
 }
 
-[data-color-scheme='dark'] .seo-text {
+.dark .seo-text {
 	color: #ddd;
 }
 

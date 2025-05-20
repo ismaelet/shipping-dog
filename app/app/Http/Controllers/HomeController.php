@@ -87,6 +87,7 @@ class HomeController extends Controller {
 			'customerPhotos' => $customerPhotos,
 			'categories' => $categories,
 			'features' => $features,
+			'locationTag' => 'home',
 		]);
 	}
 }

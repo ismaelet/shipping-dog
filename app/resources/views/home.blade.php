@@ -9,8 +9,8 @@
 	>
 @endpushOnce
 
-<x-layouts.main>
-	<div class="span-full-width">
+<x-layouts.main :$locationTag>
+	<div class="span-full-width text-primary">
 		@include('home/slider')
 		@include('home/categories')
 		@include('home/popular')

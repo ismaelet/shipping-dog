@@ -5,7 +5,7 @@
 	padding-block: 4rem;
 }
 
-html[data-color-scheme='dark'] #designs {
+html.dark #designs {
 	background: var(--surface);
 }
 

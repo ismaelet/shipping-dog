@@ -13,14 +13,14 @@ body:has([data-seller-id='7083']) {
 		background-repeat: repeat;
 	}
 
-	[data-color-scheme='dark'] &::before {
+	.dark &::before {
 		background-image: url('/images/shop-7083-background-dark.webp');
 	}
 
 	.item-box {
 		background-color: #fff;
 
-		[data-color-scheme='dark'] & {
+		.dark & {
 			background-color: var(--color-surface-400);
 		}
 	}

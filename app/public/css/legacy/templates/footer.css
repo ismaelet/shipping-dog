@@ -34,7 +34,7 @@ footer .links {
 	transition: color 0.2s;
 }
 
-html[data-color-scheme='dark'] .footer-link {
+html.dark .footer-link {
 	color: var(--color-neutral-300);
 }
 

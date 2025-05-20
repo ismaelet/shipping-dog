@@ -1,4 +1,4 @@
-@props(['title' => null, 'theme' => null, 'headerConfig' => []])
+@props(['title' => null, 'theme' => null, 'headerConfig' => [], 'locationTag' => null])
 
 @push('styles')
 	<style>
@@ -23,7 +23,10 @@
 	:$theme
 >
 	<div class="main-content">
-		<x-navigation.default-header :config="$headerConfig" />
+		<x-navigation.header
+			:config="$headerConfig"
+			:$locationTag
+		/>
 
 		<main>
 			<div class="content-grid min-h-full">
@@ -32,5 +35,5 @@
 		</main>
 	</div>
 
-	<x-navigation.default-footer />
+	<x-navigation.footer />
 </x-layouts.app>

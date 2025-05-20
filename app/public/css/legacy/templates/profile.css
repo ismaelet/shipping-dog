@@ -68,7 +68,7 @@
 	padding-inline: min(2rem, 4vw);
 }
 
-html[data-color-scheme='dark'] .form {
+html.dark .form {
 	background-color: var(--surface);
 }
 

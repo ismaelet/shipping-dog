@@ -193,7 +193,7 @@
 	aspect-ratio: 1 / 1;
 }
 
-html[data-color-scheme='dark'] #features .icon-box {
+html.dark #features .icon-box {
 	background-image: linear-gradient(135deg, var(--surface-secondary), var(--color-background));
 }
 
@@ -203,7 +203,7 @@ html[data-color-scheme='dark'] #features .icon-box {
 	fill: var(--color-primary-400);
 }
 
-html[data-color-scheme='dark'] #features .icon-box svg {
+html.dark #features .icon-box svg {
 	width: 40%;
 	height: 40%;
 	fill: var(--secondary);
@@ -219,7 +219,7 @@ html[data-color-scheme='dark'] #features .icon-box svg {
 	font-weight: 600;
 }
 
-html[data-color-scheme='dark'] #features .title {
+html.dark #features .title {
 	color: var(--secondary);
 }
 

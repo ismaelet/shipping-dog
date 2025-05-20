@@ -19,7 +19,7 @@
 	background-color: var(--clr-surface-400);
 }
 
-[data-color-scheme='dark'] #form .head {
+.dark #form .head {
 	background-color: var(--clr-surface-500);
 }
 
@@ -39,7 +39,7 @@
 	background-color: var(--clr-surface-100);
 }
 
-[data-color-scheme='dark'] #form .body {
+.dark #form .body {
 	background-color: var(--clr-surface-400);
 }
 
@@ -53,7 +53,7 @@
 	border-radius: 0 0 var(--border-radius-400) var(--border-radius-400);
 }
 
-[data-color-scheme='dark'] #form .footer {
+.dark #form .footer {
 	background-color: var(--clr-surface-500);
 }
 
@@ -62,7 +62,7 @@
 	font-family: var(--ff-titles);
 }
 
-[data-color-scheme='dark'] #form .label {
+.dark #form .label {
 	font-weight: var(--fw-regular);
 }
 

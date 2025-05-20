@@ -18,7 +18,7 @@ main {
 	z-index: 1;
 }
 
-[data-color-scheme='dark'] .navigation {
+.dark .navigation {
 	background-color: transparent;
 }
 
@@ -245,7 +245,7 @@ main {
 		--border-size: 2rem;
 	}
 
-	[data-color-scheme='dark'] .navigation {
+	.dark .navigation {
 		background-color: var(--surface-fade);
 	}
 

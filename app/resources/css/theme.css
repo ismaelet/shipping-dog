@@ -89,231 +89,148 @@
 	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
 }
 
-/*
-* 2.2. Base
-*/
-@layer base {
-	:root {
-		/*
-		* 2.1. Colors
-		*/
-		/* 2.1.1 Theme */
-		--theme-h: 34deg;
-		--theme-light-s: 0%;
-		--theme-dark-s: 28%;
+/* Theme */
+@theme {
+	/* Theme: Colors */
+	--theme-h: 34deg;
+	--theme-light-s: 0%;
+	--theme-dark-s: 28%;
+	--color-background-s: 0%;
+	--color-background-l: 100%;
 
-		/* 2.1.1 Primary */
-		--color-primary-300-hsl: 247deg 70% 78%;
-		--color-primary-400-hsl: 35deg 100% 50%;
-		--color-primary-500-hsl: 27deg 100% 45%;
+	--color-neutral-light-100: hsl(var(--theme-h) var(--theme-light-s) 100%);
+	--color-neutral-light-200: hsl(var(--theme-h) var(--theme-light-s) 93%);
+	--color-neutral-light-250: hsl(var(--theme-h) var(--theme-light-s) 85%);
+	--color-neutral-light-300: hsl(var(--theme-h) var(--theme-light-s) 50%);
+	--color-neutral-light-400: hsl(var(--theme-h) var(--theme-light-s) 25%);
+	--color-neutral-light-700: hsl(var(--theme-h) var(--theme-light-s) 13%);
+	--color-neutral-light-900: hsl(var(--theme-h) var(--theme-light-s) 0%);
 
-		/* 2.1.2 Secondary */
-		--color-secondary-400-hsl: 241deg 81% 54%;
-		--color-secondary-500-hsl: 241deg 72% 46%;
+	--color-neutral-dark-100: hsl(var(--theme-h) var(--theme-dark-s) 0%);
+	--color-neutral-dark-200: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.8) 13%);
+	--color-neutral-dark-150: hsl(var(--theme-h) var(--theme-dark-s) 7%);
+	--color-neutral-dark-700: hsl(var(--theme-h) var(--theme-dark-s) 95%);
+	--color-neutral-dark-900: hsl(var(--theme-h) var(--theme-dark-s) 100%);
 
-		/* 2.1.3 Neutral light */
-		--color-neutral-light-100-hsl: var(--theme-h) var(--theme-light-s) 100%;
-		--color-neutral-light-200-hsl: var(--theme-h) var(--theme-light-s) 93%;
-		--color-neutral-light-250-hsl: var(--theme-h) var(--theme-light-s) 85%;
-		--color-neutral-light-300-hsl: var(--theme-h) var(--theme-light-s) 50%;
-		--color-neutral-light-400-hsl: var(--theme-h) var(--theme-light-s) 25%;
-		--color-neutral-light-700-hsl: var(--theme-h) var(--theme-light-s) 13%;
-		--color-neutral-light-900-hsl: var(--theme-h) var(--theme-light-s) 0%;
+	--color-neutral-100: var(--color-neutral-light-100);
+	--color-neutral-200: var(--color-neutral-light-200);
+	--color-neutral-250: var(--color-neutral-light-250);
+	--color-neutral-300: var(--color-neutral-light-300);
+	--color-neutral-400: var(--color-neutral-light-400);
+	--color-neutral-700: var(--color-neutral-light-700);
+	--color-neutral-900: var(--color-neutral-light-900);
 
-		/* 2.1.4 Neutral dark */
-		--color-neutral-dark-100-hsl: var(--theme-h) var(--theme-dark-s) 0%;
-		--color-neutral-dark-150-hsl: var(--theme-h) var(--theme-dark-s) 7%;
-		--color-neutral-dark-200-hsl: var(--theme-h) calc(var(--theme-dark-s) * 0.8) 13%;
-		--color-neutral-dark-250-hsl: var(--theme-h) calc(var(--theme-dark-s) * 0.65) 22%;
-		--color-neutral-dark-300-hsl: var(--theme-h) calc(var(--theme-dark-s) * 0.5) 50%;
-		--color-neutral-dark-350-hsl: var(--theme-h) calc(var(--theme-dark-s) * 0.4) 60%;
-		--color-neutral-dark-400-hsl: var(--theme-h) calc(var(--theme-dark-s) * 0.35) 70%;
-		--color-neutral-dark-700-hsl: var(--theme-h) var(--theme-dark-s) 95%;
-		--color-neutral-dark-900-hsl: var(--theme-h) var(--theme-dark-s) 100%;
+	--color-primary-300: hsl(247deg 70% 78%);
+	--color-primary-400: hsl(35deg 100% 50%);
+	--color-primary-500: hsl(27deg 100% 45%);
+	--color-primary: var(--color-primary-400);
 
-		/* 2.1.6 Background */
-		--color-background-s: var(--theme-light-s);
-		--color-background-l: 100%;
-		--color-background-hsl: var(--theme-h), var(--theme-dark-s), var(--color-background-l);
+	--color-background: hsl(var(--theme-h), var(--theme-dark-s), var(--color-background-l));
 
-		/* 2.1.7 Surfaces */
-		--color-surface-500-hsl: var(--color-neutral-light-200-hsl);
-		--color-surface-700-hsl: 0deg 0% 70%;
+	--color-surface-400: var(--color-neutral-light-100);
 
-		/* 2.1.8 Utility colors */
-		--color-success-400-hsl: 145deg 63% 50%;
-		--color-error-400-hsl: 0deg 100% 50%;
-		--color-success-500-hsl: 145deg 63% 40%;
-		--color-error-500-hsl: 0deg 100% 40%;
+	/* Theme: Fonts */
+	--font-sans: 'Open Sans', system-ui, sans-serif;
+}
 
-		/*
-		* 2.2. Border_items
-		*/
-		--border-width: 1px;
-		--border-color: var(--color-neutral-200);
-		--border: var(--border-width) solid var(--border-color);
-		--border-radius-100: 0.125rem;
-		--border-radius-200: 0.125rem;
-		--border-radius-400: 0.25rem;
-		--border-radius-700: 0.5rem;
-		--border-radius-900: 1rem;
-		--border-radius-1000: 100vw;
+/* Theme: Dark */
+.dark {
+	--theme-h: 220deg;
+	--color-background-s: var(--theme-dark-s);
+	--color-background-l: 10%;
 
-		/*
-		* 2.3. Shadows
-		*/
-		--shadow-400: 0 2rem 3rem -1rem hsl(0deg, 0%, 0%, 0.1);
-		--shadow-700: 0 4rem 6rem -2rem hsl(0deg, 0%, 0%, 0.1);
+	--color-neutral-100: var(--color-neutral-dark-100);
+	--color-neutral-150: var(--color-neutral-dark-150);
+	--color-neutral-200: var(--color-neutral-dark-200);
+	--color-neutral-250: var(--color-neutral-dark-250);
+	--color-neutral-300: var(--color-neutral-dark-300);
+	--color-neutral-350: var(--color-neutral-dark-350);
+	--color-neutral-400: var(--color-neutral-dark-400);
+	--color-neutral-700: var(--color-neutral-dark-700);
+	--color-neutral-900: var(--color-neutral-dark-900);
 
-		/*
-		* 2.4. Typography
-		*/
-		/* 2.4.1 Font family */
-		--font-family-paragraph: 'Open Sans', system-ui, sans-serif;
-		--font-family-heading: 'Poppins', system-ui, sans-serif;
-		--font-family-serif: 'Libre Caslon Display', serif;
+	--color-surface-200: var(--color-neutral-dark-150);
+	--color-surface-400: var(--color-neutral-dark-200);
+	--color-surface-500: var(--color-neutral-dark-250);
 
-		/* 2.4.2 Font size */
-		--font-size-100: 0.625rem;
-		--font-size-200: 0.75rem;
-		--font-size-300: 0.875rem;
-		--font-size-400: 1rem;
-		--font-size-450: 1.125rem;
-		--font-size-500: 1.25rem;
-		--font-size-600: min(1.5rem, 6vw);
-		--font-size-700: min(2rem, 7vw);
-		--font-size-800: min(3.5rem, 12vw);
-		--font-size-900: min(5rem, 15vw);
+	--border-color: var(--color-neutral-250);
 
-		/* 2.4.3 Font weight */
-		--font-weight-thin: 100;
-		--font-weight-extra-light: 200;
-		--font-weight-light: 300;
-		--font-weight-regular: 400;
-		--font-weight-medium: 500;
-		--font-weight-semibold: 600;
-		--font-weight-bold: 700;
-		--font-weight-extra-bold: 800;
-		--font-weight-black: 900;
+	--shadow-400: 0 2rem 3rem -1rem hsl(0deg, 0%, 0%, 0.1);
+	--shadow-700: 0 4rem 6rem -2rem hsl(0deg, 0%, 0%, 0.1);
 
-		/*
-		* 2.5. Containers
-		*/
-		--content-width: 1200px;
-		--breakout-width: 1400px;
-		--content-padding: 1.5rem;
-
-		@media (min-width: 481px) {
-			--content-padding: 2rem;
-		}
-
-		/*
-		* 2.6. Forms
-		*/
-		/* 2.6.1 Inputs */
-		--input-border-width: var(--border-width);
-		--input-border-radius: var(--border-radius-200);
-
-		/*
-		* 2.7. Light mode
-		*/
-		/* 2.7.1 Neutral colors */
-		--color-neutral-100-hsl: var(--color-neutral-light-100-hsl);
-		--color-neutral-200-hsl: var(--color-neutral-light-200-hsl);
-		--color-neutral-250-hsl: var(--color-neutral-light-250-hsl);
-		--color-neutral-300-hsl: var(--color-neutral-light-300-hsl);
-		--color-neutral-400-hsl: var(--color-neutral-light-400-hsl);
-		--color-neutral-700-hsl: var(--color-neutral-light-700-hsl);
-		--color-neutral-900-hsl: var(--color-neutral-light-900-hsl);
-
-		--border-color: var(--color-neutral-250);
-
-		--color-surface-200-hsl: var(--color-neutral-light-200-hsl);
-	}
-
-	/*
- 2.8. Dark mode
-*/
-	.dark {
-		/* 2.8.1 Theme colors */
-		--theme-h: 220deg;
-
-		/* 2.8.2 Neutral colors */
-		--color-neutral-100-hsl: var(--color-neutral-dark-100-hsl);
-		--color-neutral-150-hsl: var(--color-neutral-dark-150-hsl);
-		--color-neutral-200-hsl: var(--color-neutral-dark-200-hsl);
-		--color-neutral-250-hsl: var(--color-neutral-dark-250-hsl);
-		--color-neutral-300-hsl: var(--color-neutral-dark-300-hsl);
-		--color-neutral-350-hsl: var(--color-neutral-dark-350-hsl);
-		--color-neutral-400-hsl: var(--color-neutral-dark-400-hsl);
-		--color-neutral-700-hsl: var(--color-neutral-dark-700-hsl);
-		--color-neutral-900-hsl: var(--color-neutral-dark-900-hsl);
-
-		/* 2.8.3 Background */
-		--color-background-s: var(--theme-dark-s);
-		--color-background-l: 10%;
-		--color-background-hsl: var(--theme-h), var(--theme-dark-s), var(--color-background-l);
-
-		/* 2.8.4 Surfaces */
-		--color-surface-200-hsl: var(--color-neutral-dark-150-hsl);
-		--color-surface-400-hsl: var(--color-neutral-dark-200-hsl);
-		--color-surface-500-hsl: var(--color-neutral-dark-250-hsl);
-
-		/* 2.8.5 Border_items */
-		--border-color: var(--color-neutral-250);
-
-		/* 2.8.6 Shadows */
-		--shadow-400: 0 2rem 3rem -1rem hsl(0deg, 0%, 0%, 0.1);
-		--shadow-700: 0 4rem 6rem -2rem hsl(0deg, 0%, 0%, 0.1);
-
-		/* 2.8.7 Typography */
-		--font-weight-semibold: 500;
-		--font-weight-bold: 600;
-	}
-
-	:root {
-		--color-primary-100: hsl(var(--color-primary-100-hsl));
-		--color-primary-200: hsl(var(--color-primary-200-hsl));
-		--color-primary-300: hsl(var(--color-primary-300-hsl));
-		--color-primary-400: hsl(var(--color-primary-400-hsl));
-		--color-primary-500: hsl(var(--color-primary-500-hsl));
-		--color-secondary-400: hsl(var(--color-secondary-400-hsl));
-		--color-secondary-500: hsl(var(--color-secondary-500-hsl));
-		--color-neutral-light-100: hsl(var(--color-neutral-light-100-hsl));
-		--color-neutral-light-200: hsl(var(--color-neutral-light-200-hsl));
-		--color-neutral-light-300: hsl(var(--color-neutral-light-300-hsl));
-		--color-neutral-light-400: hsl(var(--color-neutral-light-400-hsl));
-		--color-neutral-light-700: hsl(var(--color-neutral-light-700-hsl));
-		--color-neutral-light-900: hsl(var(--color-neutral-light-900-hsl));
-		--color-neutral-dark-100: hsl(var(--color-neutral-dark-100-hsl));
-		--color-neutral-dark-150: hsl(var(--color-neutral-dark-150-hsl));
-		--color-neutral-dark-200: hsl(var(--color-neutral-dark-200-hsl));
-		--color-neutral-dark-250: hsl(var(--color-neutral-dark-250-hsl));
-		--color-neutral-dark-400: hsl(var(--color-neutral-dark-400-hsl));
-		--color-neutral-dark-900: hsl(var(--color-neutral-dark-900-hsl));
-		--color-neutral-100: hsl(var(--color-neutral-100-hsl));
-		--color-neutral-200: hsl(var(--color-neutral-200-hsl));
-		--color-neutral-250: hsl(var(--color-neutral-250-hsl));
-		--color-neutral-300: hsl(var(--color-neutral-300-hsl));
-		--color-neutral-350: hsl(var(--color-neutral-350-hsl));
-		--color-neutral-400: hsl(var(--color-neutral-400-hsl));
-		--color-neutral-700: hsl(var(--color-neutral-700-hsl));
-		--color-neutral-900: hsl(var(--color-neutral-900-hsl));
-		--color-background: hsl(var(--color-background-hsl));
-		--color-surface-200: hsl(var(--color-surface-200-hsl));
-		--color-surface-400: hsl(var(--color-surface-400-hsl));
-		--color-surface-500: hsl(var(--color-surface-500-hsl));
-		--color-surface-700: hsl(var(--color-surface-700-hsl));
-		--color-success-400: hsl(var(--color-success-400-hsl));
-		--color-error-400: hsl(var(--color-error-400-hsl));
-		--color-success-500: hsl(var(--color-success-500-hsl));
-		--color-error-500: hsl(var(--color-error-500-hsl));
-	}
+	--font-weight-semibold: 500;
+	--font-weight-bold: 600;
 }
 
 /*
-* 3. Components
+* Old
 */
+:root {
+	--border-width: 1px;
+	--border-color: var(--color-neutral-200);
+	--border: var(--border-width) solid var(--border-color);
+
+	--color-secondary-400-hsl: 241deg 81% 54%;
+	--color-secondary-500-hsl: 241deg 72% 46%;
+
+	--color-surface-500-hsl: var(--color-neutral-light-200-hsl);
+	--color-surface-700-hsl: 0deg 0% 70%;
+
+	--color-success-400-hsl: 145deg 63% 50%;
+	--color-error-400-hsl: 0deg 100% 50%;
+	--color-success-500-hsl: 145deg 63% 40%;
+	--color-error-500-hsl: 0deg 100% 40%;
+
+	--border-radius-100: 0.125rem;
+	--border-radius-200: 0.125rem;
+	--border-radius-400: 0.25rem;
+	--border-radius-700: 0.5rem;
+	--border-radius-900: 1rem;
+	--border-radius-1000: 100vw;
+
+	--shadow-400: 0 2rem 3rem -1rem hsl(0deg, 0%, 0%, 0.1);
+	--shadow-700: 0 4rem 6rem -2rem hsl(0deg, 0%, 0%, 0.1);
+
+	--font-family-paragraph: 'Open Sans', system-ui, sans-serif;
+	--font-family-heading: 'Poppins', system-ui, sans-serif;
+	--font-family-serif: 'Libre Caslon Display', serif;
+
+	--font-size-100: 0.625rem;
+	--font-size-200: 0.75rem;
+	--font-size-300: 0.875rem;
+	--font-size-400: 1rem;
+	--font-size-450: 1.125rem;
+	--font-size-500: 1.25rem;
+	--font-size-600: min(1.5rem, 6vw);
+	--font-size-700: min(2rem, 7vw);
+	--font-size-800: min(3.5rem, 12vw);
+	--font-size-900: min(5rem, 15vw);
+
+	--font-weight-thin: 100;
+	--font-weight-extra-light: 200;
+	--font-weight-light: 300;
+	--font-weight-regular: 400;
+	--font-weight-medium: 500;
+	--font-weight-bold: 700;
+	--font-weight-extra-bold: 800;
+	--font-weight-black: 900;
+
+	--content-width: 1200px;
+	--breakout-width: 1400px;
+	--content-padding: 1.5rem;
+
+	@media (min-width: 481px) {
+		--content-padding: 2rem;
+	}
+
+	--input-border-width: var(--border-width);
+	--input-border-radius: var(--border-radius-200);
+
+	--border-color: var(--color-neutral-250);
+
+	--color-surface-200-hsl: var(--color-neutral-light-200-hsl);
+}
+
 @layer components {
 	:where(.surface) {
 		background-color: var(--color-surface-400);

@@ -1,10 +1,10 @@
 /* General */
-html[data-color-scheme='dark'] {
+html.dark {
 	--surface: hsl(var(--bgr-h), var(--bgr-s), var(--bgr-l));
 	--bgr: hsl(var(--theme-h), var(--theme-s), 14%);
 }
 
-html[data-color-scheme='dark'] #h-bgr {
+html.dark #h-bgr {
 	background-color: var(--surface-secondary);
 }
 

@@ -18,7 +18,7 @@ main {
 	transition: width 0.4s;
 }
 
-[data-color-scheme='dark'] .menu {
+.dark .menu {
 	background-color: transparent;
 	background-color: var(--surface);
 }
@@ -62,7 +62,7 @@ main {
 	letter-spacing: 0.05em;
 }
 
-[data-color-scheme='dark'] .menu__title {
+.dark .menu__title {
 	font-weight: var(--fw-medium);
 }
 
@@ -208,7 +208,7 @@ main {
 	cursor: pointer;
 }
 
-[data-color-scheme='dark'] .menu__open {
+.dark .menu__open {
 	background-color: var(--clr-surface-500);
 }
 
@@ -251,7 +251,7 @@ main {
 	box-shadow: var(--shadow-big-400);
 }
 
-[data-color-scheme='dark'] .panel {
+.dark .panel {
 	background-color: var(--clr-surface-400);
 }
 
@@ -309,7 +309,7 @@ main {
 		width: 15rem;
 	}
 
-	[data-color-scheme='dark'] .menu {
+	.dark .menu {
 		background-color: var(--clr-surface-300);
 	}
 

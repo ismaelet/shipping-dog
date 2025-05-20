@@ -8,7 +8,7 @@ body:has([data-seller-id='7083']) {
 		background-repeat: repeat;
 	}
 
-	[data-color-scheme='dark'] &::before {
+	.dark &::before {
 		background-image: url('/images/shop-7083-background-dark.webp');
 	}
 
@@ -17,7 +17,7 @@ body:has([data-seller-id='7083']) {
 		padding: 1rem;
 		border-radius: var(--border-radius-400);
 
-		[data-color-scheme='dark'] & {
+		.dark & {
 			background-color: var(--color-surface-400);
 		}
 	}
@@ -94,7 +94,7 @@ main {
 	aspect-ratio: 1;
 }
 
-[data-color-scheme='dark'] .type-slide img {
+.dark .type-slide img {
 	box-shadow: 0 1.2rem 1rem -1.2rem rgba(0, 0, 0, 1);
 }
 

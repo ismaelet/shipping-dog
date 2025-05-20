@@ -223,7 +223,7 @@
 	color: yellow;
 }
 
-[data-color-scheme='dark'] #list .btn.gre {
+.dark #list .btn.gre {
 	border-color: lightgreen;
 	color: lightgreen;
 }

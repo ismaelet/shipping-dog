@@ -6,7 +6,7 @@
 	border-radius: 2px var(--border-radius-400) var(--border-radius-400) 2px;
 }
 
-[data-color-scheme='dark'] .feed__row {
+.dark .feed__row {
 	background-color: var(--clr-surface-600);
 }
 

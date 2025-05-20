@@ -38,7 +38,7 @@
 	height: 100%;
 }
 
-html[data-color-scheme='dark'] #shops .shop .content {
+html.dark #shops .shop .content {
 	background: linear-gradient(180deg, var(--surface-secondary), var(--surface));
 	border: none;
 }
@@ -54,7 +54,7 @@ html[data-color-scheme='dark'] #shops .shop .content {
 	transition: box-shadow 0.3s;
 }
 
-html[data-color-scheme='dark'] #shops .shop .logo {
+html.dark #shops .shop .logo {
 	border-color: var(--surface-secondary);
 }
 
@@ -85,7 +85,7 @@ html[data-color-scheme='dark'] #shops .shop .logo {
 	transition: background-color 0.2s, color 0.2s;
 }
 
-html[data-color-scheme='dark'] #shops .shop .explore:not(:hover) {
+html.dark #shops .shop .explore:not(:hover) {
 	background-color: var(--color-background);
 }
 
