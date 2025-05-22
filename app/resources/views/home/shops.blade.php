@@ -1,3 +1,10 @@
+@pushOnce('styles')
+	<link
+		rel="stylesheet"
+		href="{{ asset('css/legacy/home-shops.css') }}"
+	>
+@endpushOnce
+
 <section id="shops">
 	<div class="main-wrap">
 		<div class="section-heading-box">
@@ -34,10 +41,10 @@
 
 							<div class="data">
 								<p class="name txt-line"><?= $seller->name ?></p>
-								<p class="text mar-t-1 txt-line2"><?= $seller->description ?></p>
+								<p class="text mar-t-1 line-clamp-2"><?= $seller->description ?></p>
 							</div>
 
-							<div class="footer mar-t-2">
+							<div class="footer mt-8">
 								<h3 class="explore">Scopri</h3>
 							</div>
 						</div>

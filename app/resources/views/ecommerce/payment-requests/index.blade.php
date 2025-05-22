@@ -7,9 +7,9 @@
 		<p class="">
 			Per poter procedere al pagamento ti chiediamo di stampare il <span class="font-bold text-neutral-700">PDF</span> che
 			puoi scaricare qui sotto,
-			firmarlo ed inviarlo all'indirizzo e-email <a href="<?= sys_config('contact-email-link') ?>"><span
+			firmarlo ed inviarlo all'indirizzo e-email <a href="<?= config('custom.contacts.email.url') ?>"><span
 					class="font-bold text-neutral-700"
-				><?= sys_config('contact-email') ?></span></a>.
+				><?= config('custom.contacts.email') ?></span></a>.
 		</p>
 
 		@if ($toBePayed >= 70)

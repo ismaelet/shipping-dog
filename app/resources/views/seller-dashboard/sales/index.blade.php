@@ -24,12 +24,12 @@
 					Hai già richiesto il pagamento. Se non hai ancora mandato il documento con la richiesta di pagamento compilato
 					all'indirizzo <a
 						class="txt-sbold txt-c2"
-						href="<?= sys_config('contact-email-link') ?>"
-					><?= sys_config('contact-email') ?></a> ti consigliamo di farlo al più presto.<br><br>
+						href="<?= config('custom.contacts.email.url') ?>"
+					><?= config('custom.contacts.email') ?></a> ti consigliamo di farlo al più presto.<br><br>
 					Se vuoi riscaricare o rigenerare il <strong>PDF</strong> da compilare, puoi cliccare qui sotto.
 				</p>
 
-				<div class="mar-t-2 flex justify-center">
+				<div class="mt-8 flex justify-center">
 					<a
 						class="btn button--auto-width"
 						href="<?= route('seller.payment') ?>"
@@ -45,11 +45,11 @@
 					pagamento di <strong><?= $seller->toBePayedString() ?></strong><br><br>
 					Se invece possiedi una partita IVA oppure non risiedi in Italia, ti preghiamo di contattarci all'indirizzo <a
 						class="txt-sbold txt-c2"
-						href="<?= sys_config('contact-email-link') ?>"
-					><?= sys_config('contact-email') ?></a> per richiedere il pagamento.
+						href="<?= config('custom.contacts.email.url') ?>"
+					><?= config('custom.contacts.email') ?></a> per richiedere il pagamento.
 				</p>
 
-				<div class="mar-t-2 flex justify-center">
+				<div class="mt-8 flex justify-center">
 					<a
 						href="<?= route('seller.payment') ?>"
 						class="btn button--auto-width"
@@ -192,7 +192,7 @@
 								<p class="rec_lbl">DA PAGARE:</p>
 								<input
 									type="text"
-									class="input wid-100 txt-c1"
+									class="input wid-100 text-primary"
 									style="font-weight: bold;"
 									value="<?= $seller->toBePayedString() ?>"
 									disabled

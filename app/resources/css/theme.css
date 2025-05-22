@@ -1,91 +1,51 @@
 /* Assets */
 @font-face {
 	font-family: 'Open Sans';
-	font-weight: 400;
-	font-style: normal;
+	font-weight: 300 700;
 	font-display: auto;
-	unicode-range: U+000-5FF;
-	src: local('Open Sans'), url('../../public/fonts/OpenSans/OpenSans-Regular.ttf') format('truetype');
+	src: local('Open Sans'), url('../../public/fonts/OpenSans/OpenSans.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Open Sans';
-	font-weight: 300;
-	font-style: normal;
+	font-weight: 300 700;
 	font-display: auto;
-	unicode-range: U+000-5FF;
-	src: local('Open Sans'), url('../../public/fonts/OpenSans/OpenSans-Light.ttf') format('truetype');
-}
-
-@font-face {
-	font-family: 'Open Sans';
-	font-weight: 500;
-	font-style: normal;
-	font-display: auto;
-	unicode-range: U+000-5FF;
-	src: local('Open Sans'), url('../../public/fonts/OpenSans/OpenSans-Medium.ttf') format('truetype');
-}
-
-@font-face {
-	font-family: 'Open Sans';
-	font-weight: 600;
-	font-style: normal;
-	font-display: auto;
-	unicode-range: U+000-5FF;
-	src: local('Open Sans'), url('../../public/fonts/OpenSans/OpenSans-SemiBold.ttf') format('truetype');
-}
-
-@font-face {
-	font-family: 'Open Sans';
-	font-weight: 700;
-	font-style: normal;
-	font-display: auto;
-	unicode-range: U+000-5FF;
-	src: local('Open Sans'), url('../../public/fonts/OpenSans/OpenSans-Bold.ttf') format('truetype');
-}
-
-@font-face {
-	font-family: 'Poppins';
-	font-weight: 400;
-	font-style: normal;
-	font-display: auto;
-	unicode-range: U+000-5FF;
-	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+	font-style: italic;
+	src: local('Open Sans'), url('../../public/fonts/OpenSans/OpenSans-Italic.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Poppins';
 	font-weight: 300;
-	font-style: normal;
 	font-display: auto;
-	unicode-range: U+000-5FF;
 	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-Light.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Poppins';
-	font-weight: 500;
-	font-style: normal;
+	font-weight: 400;
 	font-display: auto;
-	unicode-range: U+000-5FF;
+	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Poppins';
+	font-weight: 500;
+	font-display: auto;
 	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Poppins';
 	font-weight: 600;
-	font-style: normal;
 	font-display: auto;
-	unicode-range: U+000-5FF;
 	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Poppins';
 	font-weight: 700;
-	font-style: normal;
 	font-display: auto;
-	unicode-range: U+000-5FF;
 	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
 }
 
@@ -107,8 +67,10 @@
 	--color-neutral-light-900: hsl(var(--theme-h) var(--theme-light-s) 0%);
 
 	--color-neutral-dark-100: hsl(var(--theme-h) var(--theme-dark-s) 0%);
-	--color-neutral-dark-200: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.8) 13%);
 	--color-neutral-dark-150: hsl(var(--theme-h) var(--theme-dark-s) 7%);
+	--color-neutral-dark-200: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.8) 13%);
+	--color-neutral-dark-250: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.65) 22%);
+	--color-neutral-dark-400: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.35) 70%);
 	--color-neutral-dark-700: hsl(var(--theme-h) var(--theme-dark-s) 95%);
 	--color-neutral-dark-900: hsl(var(--theme-h) var(--theme-dark-s) 100%);
 
@@ -125,10 +87,16 @@
 	--color-primary-500: hsl(27deg 100% 45%);
 	--color-primary: var(--color-primary-400);
 
+	--color-secondary-400: hsl(35, 75%, 68%);
+	--color-secondary: var(--color-secondary-400);
+
 	--color-background: hsl(var(--theme-h), var(--theme-dark-s), var(--color-background-l));
 
+	--color-surface-200: var(--color-neutral-light-200);
 	--color-surface-400: var(--color-neutral-light-100);
 	--color-surface: var(--color-surface-400);
+
+	--color-border: var(--color-neutral-200);
 
 	/* Theme: Fonts */
 	--font-sans: 'Open Sans', system-ui, sans-serif;
@@ -154,7 +122,7 @@
 	--color-surface-400: var(--color-neutral-dark-200);
 	--color-surface-500: var(--color-neutral-dark-250);
 
-	--border-color: var(--color-neutral-250);
+	--color-border: var(--color-neutral-250);
 
 	--shadow-400: 0 2rem 3rem -1rem hsl(0deg, 0%, 0%, 0.1);
 	--shadow-700: 0 4rem 6rem -2rem hsl(0deg, 0%, 0%, 0.1);
@@ -168,7 +136,6 @@
 */
 :root {
 	--border-width: 1px;
-	--border-color: var(--color-neutral-200);
 	--border: var(--border-width) solid var(--border-color);
 
 	--color-secondary-400-hsl: 241deg 81% 54%;
@@ -192,9 +159,9 @@
 	--shadow-400: 0 2rem 3rem -1rem hsl(0deg, 0%, 0%, 0.1);
 	--shadow-700: 0 4rem 6rem -2rem hsl(0deg, 0%, 0%, 0.1);
 
-	--font-family-paragraph: 'Open Sans', system-ui, sans-serif;
-	--font-family-heading: 'Poppins', system-ui, sans-serif;
-	--font-family-serif: 'Libre Caslon Display', serif;
+	--font-sans: 'Open Sans', system-ui, sans-serif;
+	--font-serif: 'Libre Caslon Display', serif;
+	--font-heading: 'Poppins', system-ui, sans-serif;
 
 	--font-size-100: 0.625rem;
 	--font-size-200: 0.75rem;
@@ -228,8 +195,6 @@
 	--input-border-radius: var(--border-radius-200);
 
 	--border-color: var(--color-neutral-250);
-
-	--color-surface-200-hsl: var(--color-neutral-light-200-hsl);
 }
 
 @layer components {

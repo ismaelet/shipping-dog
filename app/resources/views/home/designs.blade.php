@@ -1,3 +1,10 @@
+@pushOnce('styles')
+	<link
+		rel="stylesheet"
+		href="{{ asset('css/legacy/home-designs.css') }}"
+	>
+@endpushOnce
+
 <section id="designs">
 	<div class="main-wrap">
 		<div class="section-heading-box">
@@ -31,7 +38,7 @@
 
 					<p class="seller txt-line">by <a
 							href="<?= $design->seller->url() ?>"
-							class="txt-c1-h"
+							class="text-primary-h"
 						><?= $design->seller->name ?></a></p>
 					<p class="txt-sbold txt-c2 mt-2">
 						<a href="<?= $design->url() ?>">

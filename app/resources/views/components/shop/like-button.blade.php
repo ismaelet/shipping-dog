@@ -30,6 +30,7 @@ $design = $design ?? (isset($design_id) ? Design::find($design_id) : null);
 				--icon-size: 70%;
 				transition: opacity .2s;
 				opacity: 0;
+				margin: auto;
 			}
 
 			&[data-liked="false"]:not(:hover) {

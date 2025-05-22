@@ -6,11 +6,14 @@
 @endpushOnce
 
 @pushOnce('scripts')
-	<script src="{{ asset('js/legacy/home.js') }}"></script>
+	<script
+		defer
+		src="{{ asset('js/legacy/home.js') }}"
+	></script>
 @endpushOnce
 
 <x-layouts.legacy-main :$locationTag>
-	<div class="span-full-width text-primary">
+	<div class="span-full-width">
 		@include('home/slider')
 		@include('home/categories')
 		@include('home/popular')

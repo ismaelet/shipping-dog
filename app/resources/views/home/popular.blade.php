@@ -1,3 +1,10 @@
+@pushOnce('styles')
+	<link
+		rel="stylesheet"
+		href="{{ asset('css/legacy/home-popular.css') }}"
+	>
+@endpushOnce
+
 <section id="popular">
 	<div class="main-wrap">
 		<div class="section-heading-box">

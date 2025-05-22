@@ -1,15 +1,4 @@
-@import url('home-categories.css');
-@import url('home-client-pics.css');
-@import url('home-designs.css');
-@import url('home-popular.css');
-@import url('home-shops.css');
-@import url('home-slider.css');
-
 /* Structure */
-* {
-	position: initial;
-}
-
 main {
 	--default-radius: 0.5rem;
 }
@@ -30,7 +19,7 @@ img {
 }
 
 section .more {
-	color: var(--secondary);
+	color: var(--color-secondary);
 	font-size: 1rem;
 	font-weight: 500;
 }

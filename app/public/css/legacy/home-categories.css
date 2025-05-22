@@ -200,13 +200,12 @@ html.dark #features .icon-box {
 #features .icon-box svg {
 	width: 60%;
 	height: 60%;
-	fill: var(--color-primary-400);
 }
 
 html.dark #features .icon-box svg {
 	width: 40%;
 	height: 40%;
-	fill: var(--secondary);
+	fill: var(--color-secondary);
 }
 
 #features p {
@@ -220,11 +219,10 @@ html.dark #features .icon-box svg {
 }
 
 html.dark #features .title {
-	color: var(--secondary);
+	color: var(--color-secondary);
 }
 
 #features .text {
-	color: var(--text-color);
 	line-height: 1.8;
 }
 

@@ -74,14 +74,6 @@ function redirect_old($path = false) {
 	exit();
 }
 
-function sys_config($field) {
-	global $sysConfig;
-
-	include_once(base_path() . '/legacy/app/config/config.php');
-
-	return $sysConfig[$field] ?? null;
-}
-
 function ecommerce_config($paramenter) {
 	global $ecommerceConfig;
 

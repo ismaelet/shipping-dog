@@ -41,7 +41,7 @@
 	h2,
 	h3 {
 		color: var(--color-neutral-700);
-		font-family: var(--font-family-heading);
+		font-family: var(--font-heading);
 		font-weight: unset;
 	}
 
@@ -58,11 +58,6 @@
 /*
 * 2. Base
 */
-@layer base {
-	/*
-	* 2.1. Color parsing
-	*/
-}
 
 /*
 * 3. Layout
@@ -200,8 +195,8 @@
 		border-width: var(--border-width);
 		border-style: solid;
 
-		:where(&) {
-			border-color: var(--border-color);
+		&:where(&) {
+			border-color: var(--color-border);
 		}
 	}
 
@@ -228,6 +223,11 @@
 		height: 100%;
 		background-size: cover;
 		background-position: center;
+	}
+
+	img.background-fill {
+		object-fit: cover;
+		object-position: center;
 	}
 
 	/*

@@ -253,6 +253,10 @@
 			line-height: 45px;
 		}
 
+		.dark .header-search__input {
+			background-color: transparent;
+		}
+
 		#h-srch-cbx:checked~#h-srch-ico-box svg {
 			fill: #fff;
 		}
@@ -845,13 +849,13 @@
 
 					@if (auth()->id())
 						<a href="{{ $header['logged-link'][1] }}">
-							<p class="h-log-txt surface hover:bg-primary hover:border-primary rounded-full transition-colors">
+							<p class="h-log-txt surface hover:bg-primary hover:border-primary rounded-full border transition-colors">
 								{{ $header['logged-link'][0] }}
 							</p>
 						</a>
 					@else
 						<a href="{{ $header['login-link'][1] }}">
-							<p class="h-log-txt surface hover:bg-primary hover:border-primary rounded-full transition-colors">
+							<p class="h-log-txt surface hover:bg-primary hover:border-primary rounded-full border transition-colors">
 								{{ $header['login-link'][0] }}
 							</p>
 						</a>

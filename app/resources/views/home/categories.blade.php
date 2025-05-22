@@ -1,3 +1,10 @@
+@pushOnce('styles')
+	<link
+		rel="stylesheet"
+		href="{{ asset('css/legacy/home-categories.css') }}"
+	>
+@endpushOnce
+
 <section id="categories">
 
 	<!-- Features -->
@@ -40,13 +47,13 @@
 			<div class="img-box">
 				<img
 					class="img-fill"
-					src="<?= client_path('home/categories/category-' . ($key + 1) . '-1.jpg') ?>"
+					src="<?= Vite::image('home/category-' . ($key + 1) . '-1.jpg') ?>"
 					alt=""
 					loading="lazy"
 				>
 				<img
 					class="img-fill"
-					src="<?= client_path('home/categories/category-' . ($key + 1) . '-2.jpg') ?>"
+					src="<?= Vite::image('home/category-' . ($key + 1) . '-2.jpg') ?>"
 					alt=""
 					loading="lazy"
 				>
