@@ -70,15 +70,15 @@
 				@endsession
 
 				<div class="flex flex-wrap justify-center gap-4">
-					<x-inputs.button
+					<x-button
 						href="{{ $order->paymentUrl() }}"
 						class="flex-grow sm:flex-grow-0"
 					>
 						{!! embed_icon('credit-card') !!}
 						Procedi al pagamento
-					</x-inputs.button>
+					</x-button>
 
-					<x-inputs.button
+					<x-button
 						type="submit"
 						variant="secondary"
 						color="error"
@@ -86,7 +86,7 @@
 					>
 						{!! embed_icon('close') !!}
 						Cancella l'ordine
-					</x-inputs.button>
+					</x-button>
 				</div>
 			</form>
 		@elseif (in_array($order->status, [

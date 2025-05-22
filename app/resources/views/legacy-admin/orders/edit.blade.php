@@ -174,14 +174,14 @@
 								/>
 
 								<span class="hidden">
-									<x-inputs.button
+									<x-button
 										type="submit"
 										size="auto"
 										name="update_tracking"
 									>
 										{!! embed_icon('save') !!}
 										Salva
-									</x-inputs.button>
+									</x-button>
 								</span>
 							</div>
 						@endif
@@ -223,7 +223,7 @@
 		<div class="flex w-full flex-wrap justify-between gap-4">
 			<div class="flex flex-wrap gap-4">
 				@if ($record->status != EcommerceHelper::statusFromTag('cancelled'))
-					<x-inputs.button
+					<x-button
 						type="submit"
 						variant="secondary"
 						color="error"
@@ -232,11 +232,11 @@
 					>
 						{!! embed_icon('delete') !!}
 						Cancella l'ordine
-					</x-inputs.button>
+					</x-button>
 				@endif
 
 				@if (!in_array($record->status, [EcommerceHelper::statusFromTag('open'), EcommerceHelper::statusFromTag('received')]))
-					<x-inputs.button
+					<x-button
 						type="submit"
 						variant="secondary"
 						name="new_status"
@@ -244,11 +244,11 @@
 					>
 						{!! embed_icon('back') !!}
 						Imposta come ricevuto
-					</x-inputs.button>
+					</x-button>
 				@endif
 
 				@if ($record->status >= EcommerceHelper::statusFromTag('awaiting-shipping'))
-					<x-inputs.button
+					<x-button
 						type="submit"
 						variant="secondary"
 						name="new_status"
@@ -256,11 +256,11 @@
 					>
 						{!! embed_icon('back') !!}
 						Da trasmettere
-					</x-inputs.button>
+					</x-button>
 				@endif
 
 				@if (!$record->user_id && $record->status == EcommerceHelper::statusFromTag('open'))
-					<x-inputs.button
+					<x-button
 						type="submit"
 						variant="secondary"
 						name="attach_to_current_user"
@@ -268,11 +268,11 @@
 					>
 						{!! embed_icon('link') !!}
 						Associa a me
-					</x-inputs.button>
+					</x-button>
 				@endif
 
 				@if ($record->user_id == auth()->id() && $record->status == EcommerceHelper::statusFromTag('open'))
-					<x-inputs.button
+					<x-button
 						type="submit"
 						variant="secondary"
 						name="detach_from_current_user"
@@ -280,64 +280,64 @@
 					>
 						{!! embed_icon('link_off') !!}
 						Dissocia da me
-					</x-inputs.button>
+					</x-button>
 				@endif
 			</div>
 
 			@if ($record->status == EcommerceHelper::statusFromTag('cancelled'))
-				<x-inputs.button
+				<x-button
 					type="submit"
 					name="new_status"
 					value="{{ EcommerceHelper::statusFromTag('received') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Ripristina l'ordine
-				</x-inputs.button>
+				</x-button>
 			@elseif ($record->status == EcommerceHelper::statusFromTag('open'))
-				<x-inputs.button
+				<x-button
 					type="submit"
 					name="new_status"
 					value="{{ EcommerceHelper::statusFromTag('received') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Conferma l'ordine
-				</x-inputs.button>
+				</x-button>
 			@elseif ($record->status == EcommerceHelper::statusFromTag('received'))
-				<x-inputs.button
+				<x-button
 					type="submit"
 					name="new_status"
 					value="{{ EcommerceHelper::statusFromTag('confirmed') }}"
 				>
 					{!! embed_icon('money') !!}
 					Conferma il pagamento
-				</x-inputs.button>
+				</x-button>
 			@elseif ($record->status == EcommerceHelper::statusFromTag('confirmed'))
-				<x-inputs.button
+				<x-button
 					type="submit"
 					name="new_status"
 					value="{{ EcommerceHelper::statusFromTag('awaiting-shipping') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Etichetta trasmessa
-				</x-inputs.button>
+				</x-button>
 			@elseif ($record->status == EcommerceHelper::statusFromTag('awaiting-shipping'))
-				<x-inputs.button
+				<x-button
 					type="submit"
 					name="new_status"
 					value="{{ EcommerceHelper::statusFromTag('shipped') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Spedito
-				</x-inputs.button>
+				</x-button>
 			@elseif ($record->status == EcommerceHelper::statusFromTag('shipped'))
-				<x-inputs.button
+				<x-button
 					type="submit"
 					name="new_status"
 					value="{{ EcommerceHelper::statusFromTag('delivered') }}"
 				>
 					{!! embed_icon('correct') !!}
 					Consegnato
-				</x-inputs.button>
+				</x-button>
 			@endif
 		</div>
 

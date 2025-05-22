@@ -26,7 +26,7 @@
 			<p class="text--big">Puoi cercare dei prodotti da acquistare qui</p>
 		</div>
 
-		<x-inputs.button :href="'/shop'">Catalogo</x-inputs.button>
+		<x-button :href="'/shop'">Catalogo</x-button>
 	</div>
 
 </x-layouts.main>

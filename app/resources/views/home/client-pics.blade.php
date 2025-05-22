@@ -7,7 +7,7 @@
 
 <section id="client-pics">
 	<div class="header">
-		<div class="main-wrap text-center">
+		<div class="content-grid text-center">
 			<div class="grid">
 				<div class="section-heading-box">
 					<h2 class="section-heading">Le vostre foto</h2>
@@ -42,7 +42,7 @@
 		</div>
 	</div>
 
-	<div class="main-wrap">
+	<div class="content-grid">
 		<div class="gallery">
 
 			<?php foreach ($customerPhotos as $customerPhoto) { ?>

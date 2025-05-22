@@ -59,9 +59,9 @@
 		class="hidden"
 		data-button-container
 	>
-		<x-inputs.button
+		<x-button
 			type="submit"
 			class="w-full"
-		>Applica a <span class="font-bold">TUTTI</span> i capi</x-inputs.button>
+		>Applica a <span class="font-bold">TUTTI</span> i capi</x-button>
 	</div>
 </form>

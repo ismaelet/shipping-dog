@@ -6,7 +6,7 @@
 >
 	@method('DELETE')
 
-	<x-inputs.button
+	<x-button
 		type="submit"
 		variant="secondary"
 		color="error"
@@ -14,5 +14,5 @@
 	>
 		{!! embed_icon('delete') !!}
 		Elimina la grafica
-	</x-inputs.button>
+	</x-button>
 </form>

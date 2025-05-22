@@ -30,7 +30,7 @@
 			data-local-color-scheme="dark"
 		>
 			<div
-				class="background-fill"
+				class="cover-background"
 				style="background-image: url({{ Vite::image($welcomeImage) }}"
 			>
 			</div>

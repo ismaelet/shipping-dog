@@ -6,7 +6,7 @@
 @endpushOnce
 
 <section id="designs">
-	<div class="main-wrap">
+	<div class="content-grid">
 		<div class="section-heading-box">
 			<h2 class="section-heading">Design popolari</h2>
 

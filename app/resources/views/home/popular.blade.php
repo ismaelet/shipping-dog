@@ -6,7 +6,7 @@
 @endpushOnce
 
 <section id="popular">
-	<div class="main-wrap">
+	<div class="content-grid">
 		<div class="section-heading-box">
 			<h2 class="section-heading">Articoli popolari</h2>
 			<a href="<?= client_url('/shop') ?>">
@@ -22,13 +22,11 @@
 				data-loop="1"
 			>
 
-				<?php foreach ($products as $product) { ?>
-
-				<div class="carousel-box">
-					<x-shop.product-card :$product />
-				</div>
-
-				<?php } ?>
+				@foreach ($products as $product)
+					<div class="carousel-box">
+						<x-shop.product-card :$product />
+					</div>
+				@endforeach
 
 			</div>
 

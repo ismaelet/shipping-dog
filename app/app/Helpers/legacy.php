@@ -2,7 +2,8 @@
 
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Product;
-use Legacy\Classes\Ecommerce\ViewManager;
+use App\Legacy\Ecommerce\ViewManager;
+use Illuminate\Support\Facades\Vite;
 use Legacy\System\Classes\Query_Result;
 
 function client_url(string $parcialUrl = '') {
@@ -134,7 +135,7 @@ function public_client_url(string $parcialUrl = '') {
 }
 
 function background_image($img) {
-	return 'style="background-image: url(' . asset('images' . $img) . ');"';
+	return 'style="background-image: url(' . Vite::image($img) . ');"';
 }
 
 function assets_directory($page_url): string|null {
@@ -175,9 +176,9 @@ function des_img_gen(int $design_id): void {
 		//bgr
 		$src_image = imagecreatetruecolor($w, $h);
 
-		if (isset($design->color)) $design->color = \Legacy\System\Classes\LegacyDB::find('color FROM designs WHERE id = ?', [$design->id]);
+		if (isset($design->color)) $design->color = DB::find('color FROM designs WHERE id = ?', [$design->id]);
 
-		$rgba = parse_rgba(\Legacy\System\Classes\LegacyDB::find('color FROM designs WHERE id = ?', [$design->id]));
+		$rgba = parse_rgba(DB::find('color FROM designs WHERE id = ?', [$design->id]));
 		$color = imagecolorallocate($src_image, $rgba[0], $rgba[1], $rgba[2]);
 
 		imagefilledrectangle($src_image, 0, 0, $w - 1, $h - 1, $color);

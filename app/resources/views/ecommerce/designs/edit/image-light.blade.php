@@ -34,7 +34,7 @@
 			class="lg:hidden"
 			x-data
 		>
-			<x-inputs.button
+			<x-button
 				variant="secondary"
 				class="w-full"
 				size="small"
@@ -42,7 +42,7 @@
 			>
 				{!! embed_icon('upload') !!}
 				Ricarica grafica
-			</x-inputs.button>
+			</x-button>
 		</div>
 
 		@error('file_light')

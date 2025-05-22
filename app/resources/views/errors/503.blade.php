@@ -1276,12 +1276,12 @@
 				operativi al più presto</x-typography.main-subheading>
 
 			@if (!$fullMaintenance)
-				<x-inputs.button
+				<x-button
 					href="{{ auth()->check() ? route('user-dashboard') : route('login') }}"
 					variant="secondary"
 				>
 					Indietro
-				</x-inputs.button>
+				</x-button>
 			@endif
 		</div>
 	</div>

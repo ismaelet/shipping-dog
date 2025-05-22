@@ -42,13 +42,13 @@
 
 		@if (!session('submitted') || session('not_found'))
 			{{-- If the form hasn't been submitted or the email is not found --}}
-			<x-inputs.button type="submit">Recupera i dati</x-inputs.button>
+			<x-button type="submit">Recupera i dati</x-button>
 		@endif
 
-		<x-inputs.button
+		<x-button
 			variant="secondary"
 			:href="route('login')"
-		>{{ __('Back') }}</x-inputs.button>
+		>{{ __('Back') }}</x-button>
 
 	</x-slot>
 

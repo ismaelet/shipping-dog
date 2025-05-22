@@ -10,7 +10,7 @@ use App\Models\Ecommerce\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Legacy\Classes\Ecommerce\Order as LegacyOrder;
+use App\Legacy\Ecommerce\Order as LegacyOrder;
 
 class OrderItemController extends Controller {
 

@@ -25,7 +25,7 @@
 	// links
 	$header['links'] = [];
 
-	$header['links'][] = ['title' => 'Home', 'loc' => 'home', 'url' => '/home'];
+	$header['links'][] = ['title' => 'Home', 'loc' => 'home', 'url' => '/'];
 	$header['links'][] = [
 	    'title' => 'Carrello (' . cart_quantity() . ')',
 	    'loc' => 'cart',
@@ -74,7 +74,7 @@
 	    ['Abbigliamento Donna', 'shop', ['gender' => 'f']],
 	    ['Abbigliamento Uomo', 'shop', ['gender' => 'm']],
 	    ['Accessori', 'shop', ['group' => 'm']],
-	    ['Ufficiali', 'seller', ['id' => '1']],
+	    ['Ufficiali', 'seller.show', ['seller' => '1']],
 	];
 
 	$header['dropdowns']['info'] = [
@@ -87,11 +87,11 @@
 	if (Auth::user()?->seller) {
 	    $header['dropdowns']['artist'] = [
 	        ['Il mio negozio', 'seller.show', Auth::user()->seller],
-	        ['Le mie grafiche', 'old-seller-dashboard.portfolio'],
-	        ['Carica una grafica', 'old-seller-dashboard.portfolio.add'],
-	        ['Vendite realizzate', 'old-seller-dashboard.sales'],
-	        ['Modifica prezzi', 'old-seller-dashboard.prices'],
-	        ['Gestisci', 'old-seller-dashboard'],
+	        ['Le mie grafiche', 'seller-dashboard.portfolio'],
+	        ['Carica una grafica', 'seller-dashboard.portfolio.add'],
+	        ['Vendite realizzate', 'seller-dashboard.sales'],
+	        ['Modifica prezzi', 'seller-dashboard.prices'],
+	        ['Gestisci', 'seller-dashboard'],
 	    ];
 	}
 
@@ -689,7 +689,7 @@
 
 					<div class="h-name-box inlb al-mid">
 						<h3 class="h-name uppercase">
-							<a href="/home"><?= $header['name'] ?></a>
+							<a href="/"><?= $header['name'] ?></a>
 						</h3>
 					</div>
 				</form>
@@ -776,9 +776,9 @@
 										<div class="h-drop bgr-c1">
 
 											@foreach ($header['dropdowns'][$h_link['drop']] as $h_drop_link)
-												<p class="h-drop-link bgr-wht-h txt-wht txt-blk-h"><a
-														href="{{ route($h_drop_link[1], $h_drop_link[2] ?? null) }}"
-													>{{ $h_drop_link[0] }}</a></p>
+												<p class="h-drop-link bgr-wht-h txt-wht txt-blk-h">
+													<a href="{{ route($h_drop_link[1], $h_drop_link[2] ?? null) }}">{{ $h_drop_link[0] }}</a>
+												</p>
 											@endforeach
 
 										</div>

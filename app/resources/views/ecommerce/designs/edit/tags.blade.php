@@ -20,11 +20,11 @@
 	>{{ $design->tags?->tags }}</x-inputs.textarea>
 
 	<div class="hidden">
-		<x-inputs.button
+		<x-button
 			type="submit"
 			size="small"
 			class="w-full"
-		>Salva</x-inputs.button>
+		>Salva</x-button>
 	</div>
 
 </form>

@@ -141,13 +141,13 @@
 								class="grow"
 							/>
 
-							<x-inputs.button
+							<x-button
 								class="js-copy-order_items"
 								size="auto"
 							>
 								{!! embed_icon('copy') !!}
 								Copia il log
-							</x-inputs.button>
+							</x-button>
 						</div>
 					</x-form.group>
 				@endif
@@ -172,14 +172,14 @@
 							/>
 
 							<div class="js-apply-search hidden">
-								<x-inputs.button
+								<x-button
 									type="submit"
 									variant="secondary"
 									size="auto"
 								>
 									<?= embed_icon('correct') ?>
 									Applica
-								</x-inputs.button>
+								</x-button>
 							</div>
 						</form>
 
@@ -189,7 +189,7 @@
 								method="POST"
 								class="contents"
 							>
-								<x-inputs.button
+								<x-button
 									type="submit"
 									name="submit"
 									value="clean_log"
@@ -199,7 +199,7 @@
 								>
 									{!! embed_icon('delete') !!}
 									Pulisci il log
-								</x-inputs.button>
+								</x-button>
 							</form>
 						@endif
 					</div>
@@ -297,7 +297,7 @@
 						<p class="text-blue js-to-copy font-bold">CAMBIO TAGLIA</p>
 					@endif
 
-					<x-inputs.button
+					<x-button
 						class="js-copy-from-cart"
 						data-id="{{ $order->id }}"
 						size="small"
@@ -305,7 +305,7 @@
 					>
 						{!! embed_icon('copy') !!}
 						Copia a partire da qui
-					</x-inputs.button>
+					</x-button>
 				</x-dashboard.form.panel>
 			@endforeach
 		@else

@@ -31,19 +31,19 @@
 	{{-- Footer --}}
 	<x-slot name="footer">
 
-		<x-inputs.button type="submit">
+		<x-button type="submit">
 			{!! embed_icon('download') !!}
 			Scarica il <strong>PDF</strong>
-		</x-inputs.button>
+		</x-button>
 
-		<x-inputs.button
+		<x-button
 			name="send"
 			:href="route('seller.payment.edit')"
 			variant="secondary"
 		>
 			{!! embed_icon('edit') !!}
 			Modifica i dati di fatturazione
-		</x-inputs.button>
+		</x-button>
 	</x-slot>
 
 </x-layouts.form>

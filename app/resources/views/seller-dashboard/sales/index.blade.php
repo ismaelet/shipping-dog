@@ -16,7 +16,7 @@
 
 			<?php
 
-	if (\Legacy\System\Classes\LegacyDB::find('request FROM stores WHERE user_id = ?', [$seller->id])) { ?>
+	if (DB::find('request FROM stores WHERE user_id = ?', [$seller->id])) { ?>
 
 			<div class="request">
 

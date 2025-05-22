@@ -367,11 +367,11 @@
 		>
 			<x-typography.component-heading>Ordina senza registrarti</x-typography.component-heading>
 			<p>Clicca qui se vuoi procedere all'acquisto senza registrarti</p>
-			<x-inputs.button
+			<x-button
 				type="submit"
 				name="guest"
 				size="small"
-			>Ordina come ospite</x-inputs.button>
+			>Ordina come ospite</x-button>
 		</form>
 
 		{{-- Login --}}
@@ -403,12 +403,12 @@
 				<x-inputs.warning>{{ $message }}</x-inputs.warning>
 			@enderror
 
-			<x-inputs.button
+			<x-button
 				type="submit"
 				size="small"
 			>
 				Log In
-			</x-inputs.button>
+			</x-button>
 
 			<div class="text-right">
 				<p class=""><a href="{{ route('auth.recover') }}">Hai dimenticato la password?</a></p>
@@ -421,11 +421,11 @@
 
 			<p>Vai qui sotto se vuoi registrarti</p>
 
-			<x-inputs.button
+			<x-button
 				:href="route('register')"
 				variant="secondary"
 				size="small"
-			>Registrati</x-inputs.button>
+			>Registrati</x-button>
 		</div>
 
 		{{-- Continue --}}
@@ -434,11 +434,11 @@
 
 			<p>Vuoi aggiungere altri articoli al carrello prima di continuare?</p>
 
-			<x-inputs.button
+			<x-button
 				:href="route('shop')"
 				variant="secondary"
 				size="small"
-			>Torna al negozio</x-inputs.button>
+			>Torna al negozio</x-button>
 		</div>
 
 	</div>

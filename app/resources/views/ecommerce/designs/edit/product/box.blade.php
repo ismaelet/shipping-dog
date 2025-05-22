@@ -26,12 +26,12 @@
 		>
 
 		@if ($product->status)
-			<x-inputs.button class="edit-btn switch-btn item-panel-open">
+			<x-button class="edit-btn switch-btn item-panel-open">
 				{!! embed_icon('settings') !!}
 				Modifica
-			</x-inputs.button>
+			</x-button>
 
-			<x-inputs.button
+			<x-button
 				type="submit"
 				name="status"
 				value="0"
@@ -40,9 +40,9 @@
 			>
 				{!! embed_icon('close') !!}
 				Disattiva
-			</x-inputs.button>
+			</x-button>
 		@else
-			<x-inputs.button
+			<x-button
 				type="submit"
 				name="status"
 				value="1"
@@ -51,7 +51,7 @@
 			>
 				{!! embed_icon('add') !!}
 				Attiva
-			</x-inputs.button>
+			</x-button>
 		@endif
 
 	</form>

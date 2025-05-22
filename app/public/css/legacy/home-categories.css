@@ -244,7 +244,7 @@ html.dark #features .title {
 }
 
 @media (max-width: 1024px) {
-	#features .main-wrap {
+	#features .content-grid {
 		grid-template-columns: 1fr;
 		max-width: 550px;
 		margin-left: auto;

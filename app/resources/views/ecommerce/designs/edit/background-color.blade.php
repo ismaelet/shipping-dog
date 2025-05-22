@@ -57,9 +57,9 @@
 		class="hidden"
 		data-button-container
 	>
-		<x-inputs.button
+		<x-button
 			type="submit"
 			class="w-full"
-		>Salva</x-inputs.button>
+		>Salva</x-button>
 	</div>
 </form>

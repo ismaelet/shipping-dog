@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\Ecommerce\DesignController;
 use App\Http\Controllers\Ecommerce\PaymentRequestController;
 use App\Http\Controllers\Ecommerce\SaleController;
 use App\Http\Controllers\EmergencyEmail;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LegacyController;
 use App\Http\Controllers\SellerDashboard\SellerDashboardController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Seller;
@@ -30,34 +31,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 /**
- * * Sellers
+ * * Support
  */
-// Seller shop
-Route::get('/artist/{seller}', LegacyController::class)->name('seller.show');
-Route::any('/artist', LegacyController::class)->name('seller');
-
-// Seller dashboard
-Route::prefix('/manage')->middleware(Seller::class)->name('old-seller-dashboard')->group(function () {
-	Route::any('', LegacyController::class);
-	Route::any('/portfolio', LegacyController::class)->name('.portfolio');
-	Route::any('/portfolio/add', LegacyController::class)->name('.portfolio.add');
-	Route::any('/sales/list', LegacyController::class)->name('.sales');
-	Route::any('/sales/prices', LegacyController::class)->name('.prices');
-});
-
-Route::prefix('seller')->middleware(Seller::class)->name('seller.')->group(function () {
-	Route::get('/payment', [PaymentRequestController::class, 'index'])->name('payment');
-	Route::get('/payment/edit', [PaymentRequestController::class, 'edit'])->name('payment.edit');
-	Route::post('/payment/update', [PaymentRequestController::class, 'update'])->name('payment.update');
-	Route::post('/payment/download', [PaymentRequestController::class, 'download'])->name('payment.download');
-});
-
-Route::prefix('/seller-dashboard')->middleware(Seller::class)->name('seller-dashboard')->group(function () {
-	Route::post('{seller}/icon', [SellerDashboardController::class, 'uploadSellerIcon'])->name('.icon');
-	Route::post('{seller}/cover', [SellerDashboardController::class, 'uploadSellerCover'])->name('.cover');
-
-	Route::get('/sales', [SaleController::class, 'index'])->name('.sales');
-});
+Route::any('/contacts', [ContactsController::class, 'index'])->name('contacts');
+Route::any('/infos/faq', [FaqController::class, 'index'])->name('infos.faq');
 
 /**
  * * Designs
@@ -132,9 +109,6 @@ Route::get('/seller-email-list', function () {
 /**
  * * Legacy routes
  */
-Route::any('/profile', LegacyController::class)->name('user-dashboard');
-Route::any('/order/status', LegacyController::class)->name('order_items.status');
-Route::any('/refund', LegacyController::class)->name('refund');
-Route::any('/contacts', LegacyController::class)->name('contacts');
-Route::any('/infos/faq', LegacyController::class)->name('infos.faq');
-Route::any('{path}', LegacyController::class)->where('path', '.*');
+// Route::any('/profile', LegacyController::class)->name('user-dashboard');
+// Route::any('/order/status', LegacyController::class)->name('order_items.status');
+// Route::any('{path}', LegacyController::class)->where('path', '.*');

@@ -12,26 +12,26 @@
 		id="features"
 		class="features"
 	>
-		<div class="main-wrap grid3 gap2">
+		<div class="content-grid">
+			<div class="grid gap-8 md:grid-cols-3">
 
-			<?php foreach ($features as $key => $feature) { ?>
+				@foreach ($features as $key => $feature)
+					<div class="feature va-cen grid">
+						<div class="icon-box">
+							<?= embed_icon('home_feature_' . ($key + 1)) ?>
+						</div>
+						<div class="body">
+							<p class="title"><?= $feature[0] ?></p>
+							<p class="text"><?= $feature[1] ?></p>
+						</div>
+					</div>
+				@endforeach
 
-			<div class="feature va-cen grid">
-				<div class="icon-box">
-					<?= embed_icon('home_feature_' . ($key + 1)) ?>
-				</div>
-				<div class="body">
-					<p class="title"><?= $feature[0] ?></p>
-					<p class="text"><?= $feature[1] ?></p>
-				</div>
 			</div>
-
-			<?php } ?>
-
 		</div>
 	</section>
 
-	<div class="main-wrap mob480">
+	<div class="content-grid mob480">
 		<h2 class="section-heading">I nostri prodotti</h2>
 	</div>
 

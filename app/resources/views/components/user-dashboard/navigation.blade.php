@@ -4,7 +4,7 @@
 	    ['title' => 'Lista ordini', 'url' => route('user-dashboard.orders'), 'icon' => 'cart'],
 	    [
 	        'title' => 'Il mio negozio',
-	        'url' => route('seller', ['id' => auth()->user()->id]),
+	        'url' => route('seller.show', ['id' => auth()->user()->id]),
 	        'icon' => 'shop',
 	        'condition' => auth()->user()->isSeller(),
 	    ],

@@ -119,7 +119,7 @@ class DesignController extends Controller {
 	public function destroy(Design $design): RedirectResponse {
 		$design->delete();
 
-		return to_route('old-seller-dashboard.portfolio');
+		return to_route('seller-dashboard.portfolio');
 	}
 
 	/**

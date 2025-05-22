@@ -124,17 +124,17 @@
 	</x-slot>
 
 	<x-slot name="footer">
-		<x-inputs.button type="submit">
+		<x-button type="submit">
 			{{ $paymentRequest ? 'Modifica' : 'Invia' }}
-		</x-inputs.button>
+		</x-button>
 
 		@if ($paymentRequest)
-			<x-inputs.button
+			<x-button
 				:href="route('seller.payment')"
 				variant="secondary"
 			>
 				Indietro
-			</x-inputs.button>
+			</x-button>
 		@endif
 	</x-slot>
 

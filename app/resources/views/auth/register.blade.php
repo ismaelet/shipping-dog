@@ -64,10 +64,10 @@
 	</x-slot>
 
 	<x-slot name="formFooter">
-		<x-inputs.button type="submit">Registrati</x-inputs.button>
-		<x-inputs.button
+		<x-button type="submit">Registrati</x-button>
+		<x-button
 			href="{{ route('login') }}"
 			variant="secondary"
-		>{{ __('Back') }}</x-inputs.button>
+		>{{ __('Back') }}</x-button>
 	</x-slot>
 </x-layouts.auth>

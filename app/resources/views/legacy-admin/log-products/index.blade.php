@@ -95,14 +95,14 @@
 					/>
 
 					<div class="js-apply-search hidden">
-						<x-inputs.button
+						<x-button
 							type="submit"
 							variant="secondary"
 							size="auto"
 						>
 							<?= embed_icon('correct') ?>
 							Applica
-						</x-inputs.button>
+						</x-button>
 					</div>
 				</form>
 
@@ -112,7 +112,7 @@
 						method="POST"
 						class="grid h-full"
 					>
-						<x-inputs.button
+						<x-button
 							type="submit"
 							name="submit"
 							value="clean_log"
@@ -121,15 +121,15 @@
 						>
 							<?= embed_icon('clean') ?>
 							Pulisci log
-						</x-inputs.button>
+						</x-button>
 					</form>
 
-					<x-inputs.button
+					<x-button
 						class="js-copy-order_items"
 						size="auto"
 					>
 						<?= embed_icon('copy') ?>Copia tutto
-					</x-inputs.button>
+					</x-button>
 				@endif
 			</div>
 

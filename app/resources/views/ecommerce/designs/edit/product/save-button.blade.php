@@ -38,14 +38,14 @@
 		Errore di salvataggio
 	</x-inputs.alert-error>
 
-	<x-inputs.button
+	<x-button
 		class="hidden group-data-[status=active]:flex group-data-[status=error]:flex"
 		data-save-button
 		@click="updateSaveButton($event.target, {{ $function }}($event.target))"
 	>
 		{!! embed_icon('save') !!}
 		Salva
-	</x-inputs.button>
+	</x-button>
 
 	<span class="hidden w-12 justify-self-center group-data-[status=loading]:block">{!! embed_icon('loading') !!}</span>
 </div>

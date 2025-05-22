@@ -28,7 +28,7 @@
 			@for ($i = 1; $i <= $slidesN; $i++)
 				<img
 					src="{{ Vite::image('/home/slide-' . $i . '.webp') }}"
-					class="slide background-fill <?= $i == 1 ? 'active' : '' ?> absolute"
+					class="slide cover-background <?= $i == 1 ? 'active' : '' ?> absolute"
 					data-id="<?= $i ?>"
 				/>
 			@endfor

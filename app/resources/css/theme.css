@@ -100,6 +100,8 @@
 
 	/* Theme: Fonts */
 	--font-sans: 'Open Sans', system-ui, sans-serif;
+
+	--text-900: min(5rem, 15vw);
 }
 
 /* Theme: Dark */

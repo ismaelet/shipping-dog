@@ -102,7 +102,7 @@ for ($month = $lastMonth; $month >= $firstMonth; $month--) {
 
 <?php
 
-$res_year = \Legacy\System\Classes\LegacyDB::select('YEAR(created_at) as year FROM order_items WHERE product_id IN (SELECT id FROM products WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) GROUP BY YEAR(created_at) ORDER BY YEAR(created_at) DESC', [$seller->id]);
+$res_year = DB::select('YEAR(created_at) as year FROM order_items WHERE product_id IN (SELECT id FROM products WHERE user_id = ?) AND order_id IN (SELECT id FROM orders WHERE status>0) GROUP BY YEAR(created_at) ORDER BY YEAR(created_at) DESC', [$seller->id]);
 
 if ($res_year->num_rows > 1) { ?>
 
