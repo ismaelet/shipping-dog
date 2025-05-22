@@ -92,7 +92,7 @@
 
 #cred-ico {
 	display: inline-block;
-	background-color: var(--surface);
+	background-color: var(--color-surface);
 	background-size: cover;
 	background-position: center;
 	border: 0.25rem solid var(--color-background);

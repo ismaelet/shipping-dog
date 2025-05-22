@@ -106,7 +106,7 @@ body:has([data-seller-id='7083']) {
 
 /* Collections */
 #collections {
-	background-color: var(--surface);
+	background-color: var(--color-surface);
 	padding: 2rem 0 4rem 0;
 }
 

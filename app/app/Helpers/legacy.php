@@ -156,10 +156,6 @@ function assets_directory($page_url): string|null {
 	return $url;
 }
 
-function generate_item_box(Product $product): void {
-	echo ViewManager::renderProductCard($product);
-}
-
 function des_img_gen(int $design_id): void {
 
 	$design = Design::find($design_id);

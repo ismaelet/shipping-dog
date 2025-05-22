@@ -147,7 +147,7 @@
 }
 
 #name-inp {
-	background-color: var(--surface);
+	background-color: var(--color-surface);
 	width: 25rem;
 	max-width: 90vw;
 	padding-right: 2.5rem;

@@ -18,7 +18,7 @@
 				<?php foreach ($products as $product) { ?>
 
 				<div class="carousel-box">
-					<?= generate_item_box($product) ?>
+					<x-shop.product-card :$product />
 				</div>
 
 				<?php } ?>

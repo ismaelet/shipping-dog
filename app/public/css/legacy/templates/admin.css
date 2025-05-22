@@ -20,7 +20,7 @@ main {
 
 .dark .menu {
 	background-color: transparent;
-	background-color: var(--surface);
+	background-color: var(--color-surface);
 }
 
 .menu__content {

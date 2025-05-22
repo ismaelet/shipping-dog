@@ -37,7 +37,7 @@
 }
 
 #nav-title {
-	background-color: var(--surface);
+	background-color: var(--color-surface);
 	text-align: center;
 }
 
@@ -69,7 +69,7 @@
 }
 
 html.dark .form {
-	background-color: var(--surface);
+	background-color: var(--color-surface);
 }
 
 .stitle {

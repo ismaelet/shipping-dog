@@ -6,7 +6,7 @@
 }
 
 html.dark #designs {
-	background: var(--surface);
+	background: var(--color-surface);
 }
 
 /* Carousel */

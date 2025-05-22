@@ -7,15 +7,21 @@
 	margin-top: 1rem;
 }
 
-.pay_row {display: table-row; border-bottom: 1px solid var(--surface);}
+.pay_row {
+	display: table-row;
+	border-bottom: 1px solid var(--color-surface);
+}
 
 .pay_cbx_box {
 	display: table-cell;
 	vertical-align: middle;
-	text-align: center
+	text-align: center;
 }
 
-.pay_box {display: table-cell; padding: 16px 0;}
+.pay_box {
+	display: table-cell;
+	padding: 16px 0;
+}
 
 .pay_name {
 	margin-bottom: 1rem;

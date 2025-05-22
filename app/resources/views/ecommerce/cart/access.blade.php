@@ -139,7 +139,7 @@
 			grid-template-columns: max-content minmax(0, 1fr);
 			align-items: center;
 			gap: 3rem;
-			border-top: 1px solid var(--surface);
+			border-top: 1px solid var(--color-surface);
 		}
 
 		.ship_chck_box {
@@ -204,7 +204,7 @@
 			display: grid;
 			gap: 1rem;
 			padding: 1.5rem var(--content-padding);
-			background-color: var(--surface);
+			background-color: var(--color-surface);
 			border-radius: var(--border-radius-400);
 			margin-top: 1rem;
 			text-align: center;

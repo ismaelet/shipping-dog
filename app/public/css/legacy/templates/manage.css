@@ -10,7 +10,7 @@ html.dark #h-bgr {
 
 main {
 	display: grid;
-	background-color: var(--surface);
+	background-color: var(--color-surface);
 	grid-template-columns: 18rem auto;
 }
 

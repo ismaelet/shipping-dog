@@ -1,4 +1,7 @@
-<!-- Slider -->
+@pushOnce('scripts')
+	<script src="{{ asset('js/legacy/home-slider.js') }}"></script>
+@endpushOnce
+
 <section
 	id="slider"
 	data-count="<?= $slidesN = 3 ?>"
@@ -44,14 +47,17 @@
 
 		<!-- Credit box -->
 		<?php /*<div id="slider-credits">
-						
-									<div class="icons">
-						
-										<?php foreach($slideIDs as $key => $designID) {
-											
-											$seller = new Seller(\Legacy\System\Classes\LegacyDB::find('user_id FROM designs WHERE id = ?', [$designID]));
-						
-											?>
+												
+															<div class="icons">
+												
+																<?php foreach($slideIDs as $key => $designID) {
+																	
+																	$seller = new Seller(\Legacy\System\Classes\LegacyDB::find('user_id FROM designs WHERE id = ?', [$designID]));
+												
+																	?>
+		?>
+		?>
+		?>
 		?>
 		?>
 		?>

@@ -22,7 +22,7 @@
 .status-icon svg {
 	position: relative;
 	padding: 0.3rem;
-	background-color: var(--surface);
+	background-color: var(--color-surface);
 	border: 2px solid var(--_status-color);
 	border-radius: 50%;
 	fill: var(--_status-color);

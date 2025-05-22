@@ -1,4 +1,3 @@
-@import url('./templates/main.css');
 @import url('home-categories.css');
 @import url('home-client-pics.css');
 @import url('home-designs.css');
@@ -17,13 +16,6 @@ main {
 
 img {
 	display: block;
-}
-
-/* Title */
-.section-heading {
-	margin-bottom: 2rem;
-	font-size: 2rem;
-	font-weight: 500;
 }
 
 .section-heading-box {

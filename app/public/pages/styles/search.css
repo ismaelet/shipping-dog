@@ -5,7 +5,7 @@ main .main-wrap {
 
 /* Page header */
 #page-header {
-	background-color: var(--surface);
+	background-color: var(--color-surface);
 	height: 15rem;
 }
 

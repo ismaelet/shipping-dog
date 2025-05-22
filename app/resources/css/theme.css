@@ -128,6 +128,7 @@
 	--color-background: hsl(var(--theme-h), var(--theme-dark-s), var(--color-background-l));
 
 	--color-surface-400: var(--color-neutral-light-100);
+	--color-surface: var(--color-surface-400);
 
 	/* Theme: Fonts */
 	--font-sans: 'Open Sans', system-ui, sans-serif;

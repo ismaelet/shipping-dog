@@ -12,33 +12,6 @@ class ViewManager {
 	/*
 	* Render methods
 	*/
-	// product card
-	public static function renderProductCard(Product $product) {
-		ob_start();
-?>
-
-		<div class="item-box">
-			<div class="image">
-				<a href="<?= $product->url() ?>" class="block">
-					<img src="<?= $product->image() ?>" alt="" loading="lazy">
-					<p class="price blu"><?= $product->customerPriceString() ?></p>
-				</a>
-
-				<?= LikeButton::render(['design' => $product->design]) ?>
-
-			</div>
-
-			<div class="item-box-body">
-				<p class="type uppercase"><?= $product->type->name ?></p>
-				<p class="name"><?= $product->name ?></p>
-				<p class="seller">by <a class="txt-c1-h" href="<?= $product->seller->url() ?>"><?= $product->seller->name ?></a></p>
-			</div>
-		</div>
-
-	<?php
-
-		return ob_get_clean();
-	}
 
 	// order list
 	public static function renderOrderList(object $order = null) {
@@ -46,7 +19,7 @@ class ViewManager {
 		$orderItems = $order->order_items->load('logo', 'product', 'product_with_trashed.type', 'product_with_trashed', 'product_with_trashed.design_with_trashed', 'color', 'position', 'size');
 
 		ob_start();
-	?>
+?>
 
 		<section id="items" class="section">
 			<h2 class="title">ARTICOLI</h2>
