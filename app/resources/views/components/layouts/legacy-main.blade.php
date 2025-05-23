@@ -1,4 +1,11 @@
-@props(['title' => null, 'theme' => null, 'headerConfig' => [], 'locationTag' => null])
+@props([
+    'title' => null,
+    'description' => null,
+    'thumbnail' => null,
+    'locationTag' => null,
+    'colorScheme' => null,
+    'headerConfig' => [],
+])
 
 @push('styles')
 	<link
@@ -33,7 +40,9 @@
 
 <x-layouts.app
 	:$title
-	:$theme
+	:$description
+	:$thumbnail
+	:$colorScheme
 >
 	<div class="main-content">
 		<x-navigation.header

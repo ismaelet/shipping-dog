@@ -152,40 +152,35 @@
 
 			<?php } ?>
 
-			<?php if ($footer['contacts']) { ?>
+			@if ($footer['contacts'])
 
-			<div class="contacts footer-col">
-				<h3 class="footer-title">Contatti</h3>
+				<div class="contacts footer-col">
+					<h3 class="footer-title">Contatti</h3>
 
-				<ul class="flex flex-wrap">
+					<ul class="flex flex-wrap">
 
-					@foreach (config('custom.contacts') as $socialMediaTag => $socialMedia)
-						<li>
-							<a
-								href="{{ $socialMedia['url'] }}"
-								class="footer-soc-icon surface-2 hover:bg-primary center-items hover:border-primary transition-colors hover:text-neutral-700"
-							>
-								<?= embed_icon('' . $socialMediaTag) ?>
-							</a>
-						</li>
-					@endforeach
+						@foreach (config('custom.contacts') as $socialMediaTag => $socialMedia)
+							<li>
+								<a
+									href="{{ $socialMedia['url'] }}"
+									class="footer-soc-icon surface-2 hover:bg-primary center-items hover:border-primary transition-colors hover:text-neutral-700"
+								>
+									<?= embed_icon('' . $socialMediaTag) ?>
+								</a>
+							</li>
+						@endforeach
 
-				</ul>
-			</div>
+					</ul>
+				</div>
 
-			<?php } ?>
+			@endif
 
 		</div>
 
-		<p class="border-t border-neutral-200 py-6 text-neutral-300">
+		<p class="border-t border-neutral-200 py-6 text-center text-neutral-300">
 			Copyright © <?= getdate()['year'] ?> <span
 				class="font-medium text-neutral-700"><?= config('custom.meta_data.full_name') ?></span>. Il
 			copyright © di ogni grafica appartiene al rispettivo proprietario.
-			<br>Sito web realizzato da <a
-				class="font-medium text-neutral-700"
-				href="emailto:ismaele.tuffanelli@gmail.com"
-			>Ismaele
-				Tuffanelli</a>
 		</p>
 	</div>
 </footer>

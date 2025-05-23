@@ -83,14 +83,14 @@ class ViewManager {
 						!$orderItem->credit
 					) { ?>
 
-						<button class="use-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_credit" value="<?= $orderItem->id ?>">
+						<button class="use-credit-btn credit-btn btn btn--secondary button--auto-width mt-4" name="item_credit" value="<?= $orderItem->id ?>">
 							<?= embed_icon('dollar') ?>
 							Usa il tuo credito
 						</button>
 
 					<?php } else if ($orderItem->credit) { ?>
 
-						<button class="no-credit-btn credit-btn btn btn--secondary button--auto-width mar-t-1" name="item_no_credit" value="<?= $orderItem->id ?>">
+						<button class="no-credit-btn credit-btn btn btn--secondary button--auto-width mt-4" name="item_no_credit" value="<?= $orderItem->id ?>">
 							<?= embed_icon('close') ?>
 							Non usare il credito
 						</button>

@@ -41,7 +41,7 @@
 
 							<div class="data">
 								<p class="name txt-line"><?= $seller->name ?></p>
-								<p class="text mar-t-1 line-clamp-2"><?= $seller->description ?></p>
+								<p class="text mt-4 line-clamp-2"><?= $seller->description ?></p>
 							</div>
 
 							<div class="footer mt-8">

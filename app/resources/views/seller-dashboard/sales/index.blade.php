@@ -74,7 +74,7 @@
 
 				<button
 					type="button"
-					class="btn button--auto-width place-center mar-t-1"
+					class="btn button--auto-width place-center mt-4"
 					disabled
 				>
 					<?= embed_icon('dollar') ?>

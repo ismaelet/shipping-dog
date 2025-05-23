@@ -22,7 +22,7 @@
 		<p class="type uppercase"><?= $product->type->name ?></p>
 		<p class="name"><?= $product->name ?></p>
 		<p class="seller">by <a
-				class="text-primary-h"
+				class="hover:text-primary"
 				href="<?= $product->seller->url() ?>"
 			><?= $product->seller->name ?></a></p>
 	</div>

@@ -34,7 +34,7 @@
 						>
 					</a>
 
-					<h3 class="name mar-t-1 txt-line"><?= $design->name ?></h3>
+					<h3 class="name txt-line mt-4"><?= $design->name ?></h3>
 
 					<p class="seller txt-line">by <a
 							href="<?= $design->seller->url() ?>"

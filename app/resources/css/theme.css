@@ -201,27 +201,17 @@
 
 @layer components {
 	:where(.surface) {
-		background-color: var(--color-surface-400);
 		border-radius: var(--border-radius-700);
-		box-shadow: var(--shadow-400);
-
-		[data-theme='modern'] & {
-			background-color: transparent;
-			border: var(--border);
-			box-shadow: none;
-		}
+		background-color: transparent;
+		border: var(--border);
+		box-shadow: none;
 	}
 
 	:where(.surface-2) {
-		background-color: var(--color-surface-500);
 		border-radius: var(--border-radius-700);
-		box-shadow: var(--shadow-400);
-
-		[data-theme='modern'] & {
-			background-color: transparent;
-			border: var(--border-width) solid var(--color-neutral-300);
-			box-shadow: none;
-		}
+		background-color: transparent;
+		border: var(--border-width) solid var(--color-neutral-300);
+		box-shadow: none;
 	}
 
 	p:where(.font-bold),

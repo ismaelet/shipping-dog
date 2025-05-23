@@ -13,6 +13,8 @@ use App\Legacy\Ecommerce\Product\Preview as LegacyPreview;
 use App\Legacy\Ecommerce\Design\Logo as LegacyLogo;
 use Illuminate\Database\Eloquent\Collection;
 use App\Legacy\Ecommerce\Design as LegacyDesign;
+use App\Legacy\System\DB;
+use App\Legacy\Traits\DatabaseObject;
 
 /**
  * Class Product
@@ -38,7 +40,7 @@ use App\Legacy\Ecommerce\Design as LegacyDesign;
  */
 class Product {
 
-	use \Legacy\System\Traits\DatabaseObject;
+	use DatabaseObject;
 
 	public const TABLE = 'products';
 	public const INDEX = 'id';
@@ -446,12 +448,4 @@ class Product {
 
 		$this->reset();
 	}
-
-	/*
-	* Render methods
-	*/
-
-	/*
-	* Misc methods
-	*/
 }

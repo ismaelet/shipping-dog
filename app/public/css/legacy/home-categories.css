@@ -155,20 +155,16 @@
 	display: none;
 }
 
-.featured-category .sbtn {
-	margin-top: 1rem;
-	border-color: #000;
-	color: #000;
-	font-family: var(--font-main);
-	font-size: 0.9rem;
+.featured-category .button {
+	border-color: #000 !important;
+	color: #000 !important;
 	font-weight: 500;
-	letter-spacing: 0.1em;
+	transition: background-color 0.2s, color 0.2s !important;
 }
 
-.featured-category .sbtn:hover {
+.featured-category .button:hover {
 	background-color: #000;
-	border-color: #000;
-	color: #fff;
+	color: #fff !important;
 }
 
 .featured-category .name-mob {

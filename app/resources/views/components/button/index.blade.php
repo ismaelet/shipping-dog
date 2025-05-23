@@ -7,7 +7,7 @@
 ])
 
 @php
-	$classes = 'button rounded-full font-heading text-center text-sm sm:text-base';
+	$classes = 'button rounded-full font-heading text-center text-sm sm:text-base cursor-pointer';
 @endphp
 
 @pushOnce('styles')

@@ -18,7 +18,7 @@ class ShopController extends Controller {
 	public function index(Request $request): View {
 		$highlightedDesign = Design::with('seller', 'main_product')->find(1612);
 
-		return view('shop', [
+		return view('ecommerce.shop', [
 			'title' => 'Negozio',
 			'locationTag' => 'shop',
 			'highlightedDesign' => $highlightedDesign,

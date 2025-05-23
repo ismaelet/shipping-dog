@@ -10,7 +10,10 @@
 	</style>
 @endpushOnce
 
-<x-layouts.legacy-main :$locationTag>
+<x-layouts.legacy-main
+	:$locationTag
+	:$title
+>
 
 	<section
 		id="slider"
@@ -83,7 +86,7 @@
 		class="breakout"
 	>
 
-		<div class="stitle-box mar-t-2">
+		<div class="stitle-box mt-8">
 			<h2 class="component-heading"><span class="txt-light">I NOSTRI</span> <span
 					class="txt-c1 font-semibold">PRODOTTI</span></h2>
 			<div

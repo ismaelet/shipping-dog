@@ -22,11 +22,6 @@
 				outline-color: var(--color-primary-400);
 			}
 
-			/* Classic theme */
-			[data-theme="classic"] .surface & {
-				--input-background: var(--color-surface-500);
-			}
-
 			/* Autofill resets */
 			&:-webkit-autofill {
 				outline: var(--border-width) solid var(--border-color) !important;

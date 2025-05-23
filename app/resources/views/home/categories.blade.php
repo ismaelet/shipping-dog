@@ -60,7 +60,10 @@
 				<div class="content desk480">
 					<p class="text"><?= $category[1] ?></p>
 					<h3 class="name"><?= $category[0] ?></h3>
-					<div class="sbtn">Esplora</div>
+					<x-button
+						variant="secondary"
+						class="mt-4 cursor-pointer"
+					>Esplora</x-button>
 				</div>
 			</div>
 			<p class="name-mob txt-line mob480"><?= str_replace('<br>', ' ', $category[0]) ?></p>
