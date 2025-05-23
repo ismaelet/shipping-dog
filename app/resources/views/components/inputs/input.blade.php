@@ -55,5 +55,5 @@
 	value="{{ $value }}"
 	placeholder="{{ $placeholder }}"
 	{{ $required ? 'required' : '' }}
-	{{ $attributes->class(['input text-sm sm:text-base']) }}"
+	{{ $attributes->class(['input text-sm sm:text-base']) }}
 />

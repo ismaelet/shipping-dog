@@ -1,6 +1,6 @@
 /* Structure */
 #client-pics {
-	background-color: var(--surface-secondary);
+	background-color: var(--color-surface-500);
 	padding-bottom: 6rem;
 }
 

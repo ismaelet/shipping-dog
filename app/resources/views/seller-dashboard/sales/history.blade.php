@@ -29,7 +29,7 @@ for ($month = $lastMonth; $month >= $firstMonth; $month--) {
 	$monthSalesCount = $orderItems->count();
 ?>
 
-<div class="sales month-box pad-v-2 mar-b-1">
+<div class="sales month-box mar-b-1 py-8">
 
 	<h3 class="month-title inlb br-c1"><span class="txt-med"><?= $month_str[$month - 1] ?></span> <span
 			class="title-year"><?= $currentYear ?></span></h3>

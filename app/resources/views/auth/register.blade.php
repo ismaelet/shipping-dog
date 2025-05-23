@@ -68,6 +68,6 @@
 		<x-button
 			href="{{ route('login') }}"
 			variant="secondary"
-		>{{ __('Back') }}</x-button>
+		>Indietro</x-button>
 	</x-slot>
 </x-layouts.auth>

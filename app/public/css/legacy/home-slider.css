@@ -36,13 +36,8 @@
 
 #slider-body h1 {
 	font-size: min(5rem, 16vw);
-	font-weight: 500;
+	font-weight: 600;
 	letter-spacing: 0.05em;
-}
-
-#slider-body h1 .text-primary {
-	font-weight: 700;
-	letter-spacing: 0.1em;
 }
 
 #slider-body .stitle {

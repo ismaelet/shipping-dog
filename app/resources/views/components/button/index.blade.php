@@ -4,6 +4,7 @@
     'variant' => 'primary',
     'size' => 'regular',
     'color' => 'default',
+    'confirmation' => null,
 ])
 
 @php
@@ -115,5 +116,6 @@
 		data-variant="{{ $variant }}"
 		data-size="{{ $size }}"
 		data-color="{{ $color }}"
+		@if ($confirmation) onclick="return confirm('{{ $confirmation }}')" @endif
 	>{{ $slot }}</button>
 @endif

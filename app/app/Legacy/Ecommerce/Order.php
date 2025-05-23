@@ -5,7 +5,7 @@ namespace App\Legacy\Ecommerce;
 use App\Models\Ecommerce\Order as NewOrder;
 use App\Models\Ecommerce\OrderItem;
 use App\Legacy\Ecommerce\OrderItem as LegacyOrderItem;
-use Legacy\Classes\User as LegacyUser;
+use App\Legacy\User as LegacyUser;
 
 class Order {
 

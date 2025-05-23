@@ -192,7 +192,7 @@
 			id="store-pan"
 			class="breakout"
 		>
-			<div class="pad-v-2 mar-t-2">
+			<div class="mar-t-2 py-8">
 				<div class="stitle-box">
 					<p class="stitle font-semibold">Shop <span class="item-num txt-light"><span class="itemN"></span> risultati</span>
 					</p>

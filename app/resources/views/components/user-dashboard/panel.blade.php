@@ -1,4 +1,4 @@
-@props(['title' => '', 'icon' => null])
+@props(['title' => null, 'icon' => null])
 
 @pushOnce('styles')
 	<style>

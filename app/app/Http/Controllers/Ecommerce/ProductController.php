@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProductController extends Controller {
 
 	/**
 	 * * Action: show
 	 */
-	public function show(Product $product, Request $request) {
+	public function show(Product $product, Request $request): View|RedirectResponse {
 		if (
 			!$product?->id ||
 			!$product?->seller ||
@@ -30,15 +31,67 @@ class ProductController extends Controller {
 			$product->position_id = $request->position_id;
 		}
 
-		$request->merge([
-			'product' => $product,
-		]);
+		$title = $product->name;
+		$thumbnail = $product->image(1024);
 
-		\Legacy\System\Classes\LegacyView::setPage('product')
-			->setLocation('shop')
-			->setThumbnail($product->image(1024))
-			->setTitle($product->name)
-			->show();
+		$seller = $product->seller;
+
+		$sameDesignProducts = Product::join('product_types', 'products.type_id', '=', 'product_types.id')
+			->where('design_id', $product->design_id)
+			->where('type_id', '<>', $product->type_id)
+			->where('products.status', 1)
+			->where('products.deleted', 0)
+			->orderBy('product_types.sort')
+			->with('design', 'design_with_trashed', 'color', 'position', 'type')
+			->get(['products.*', 'product_types.category']);
+
+		$relatedGarments = $sameDesignProducts->where('category', 'c');
+		$relatedAccessories = $sameDesignProducts->where('category', 'm');
+
+		$relatedProducts = Product::where('user_id', $seller->id)
+			->where(function ($query) use ($product) {
+				$query->where('design_id', '<>', $product->design_id)
+					->orWhere('design_id', 0);
+			})
+			->where('status', '>', 0)
+			->where('type_id', $product->type_id)
+			->where('deleted', 0)
+			->with('design', 'design_with_trashed', 'type', 'color', 'position', 'type')
+			->orderBy('sales', 'desc')
+			->orderBy('id', 'desc')
+			->limit(8)
+			->get();
+
+		if ($relatedProducts->count() < 8) {
+			$moreRelatedProducts = Product::where('user_id', $seller->id)
+				->where(function ($query) use ($product) {
+					$query->where('design_id', '<>', $product->design_id)
+						->orWhere('design_id', 0);
+				})
+				->where('status', '>', 0)
+				->where('type_id', '<>', $product->type_id)
+				->where('deleted', 0)
+				->with('design', 'design_with_trashed', 'type', 'color', 'position', 'type')
+				->orderBy('sales', 'desc')
+				->orderBy('id', 'desc')
+				->limit(8 - $relatedProducts->count())
+				->get();
+
+			$relatedProducts = $relatedProducts->merge($moreRelatedProducts);
+		}
+
+		$productColors = $product->colors();
+
+		return view('ecommerce.product', [
+			'product' => $product,
+			'locationTag' => 'shop',
+			'title' => $title,
+			'thumbnail' => $thumbnail,
+			'productColors' => $productColors,
+			'relatedGarments' => $relatedGarments,
+			'relatedAccessories' => $relatedAccessories,
+			'relatedProducts' => $relatedProducts,
+		]);
 	}
 
 	/**

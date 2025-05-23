@@ -1,6 +1,8 @@
 <?php
 
-namespace Legacy\Classes;
+namespace App\Legacy;
+
+use App\Legacy\System\DB;
 
 class User {
 

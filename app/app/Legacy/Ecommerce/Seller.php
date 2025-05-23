@@ -3,7 +3,7 @@
 namespace App\Legacy\Ecommerce;
 
 use App\Models\Ecommerce\Seller as NewSeller;
-use Legacy\Classes\User as LegacyUser;
+use App\Legacy\User as LegacyUser;
 
 /**
  * Seller class

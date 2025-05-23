@@ -109,6 +109,5 @@ Route::get('/seller-email-list', function () {
 /**
  * * Legacy routes
  */
-// Route::any('/profile', LegacyController::class)->name('user-dashboard');
 // Route::any('/order/status', LegacyController::class)->name('order_items.status');
 // Route::any('{path}', LegacyController::class)->where('path', '.*');

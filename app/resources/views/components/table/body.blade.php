@@ -12,7 +12,7 @@
 
 <tbody>
 	@foreach ($records as $record)
-		<tr class="hover:bg-surface-400 table-row border-t transition-colors">
+		<tr class="hover:bg-surface-400 border-border table-row border-t transition-colors">
 
 			@foreach ($columns as $column)
 				<x-table.cell

@@ -51,8 +51,8 @@
 	}
 	$header['links'][] = [
 	    'title' => 'Profilo',
-	    'loc' => 'profile',
-	    'url' => '/profile',
+	    'loc' => 'user-dashboard',
+	    'url' => '/user-dashboard',
 	    'logged' => true,
 	    'mob' => true,
 	];
@@ -97,7 +97,7 @@
 
 	// login bar
 	$header['login-link'] = ['Login', '/login'];
-	$header['logged-link'] = [auth()->user() ? (auth()->user()->username ?: 'Profilo') : '', '/profile'];
+	$header['logged-link'] = [auth()->user() ? (auth()->user()->username ?: 'Profilo') : '', '/user-dashboard'];
 
 @endphp
 
@@ -582,7 +582,7 @@
 		.h-dropM-link {
 			opacity: 0;
 			display: block;
-			border: 0px solid var(--surface-secondary);
+			border: 0px solid var(--color-surface-500);
 			height: 0;
 			padding-left: 20px;
 			font-size: 0.9rem;

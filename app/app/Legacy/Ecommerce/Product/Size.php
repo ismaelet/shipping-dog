@@ -2,7 +2,7 @@
 
 namespace App\Legacy\Ecommerce\Product;
 
-use LegacyDB;
+use App\Legacy\System\DB;
 
 class Size {
 

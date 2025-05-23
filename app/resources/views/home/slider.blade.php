@@ -40,7 +40,7 @@
 			class="grid justify-items-center gap-12 text-center lg:justify-items-start lg:text-left"
 		>
 			<div class="grid gap-8">
-				<h1 class="txt-wht uppercase">Shipping<br><span class="text-primary">Dog</span></h1>
+				<h1 class="txt-wht uppercase">Shi<span class="text-primary">pp</span>ing<br>Dog</h1>
 				<p class="stitle">T-shirt, abbigliamento e accessori personalizzati</p>
 			</div>
 

@@ -1,15 +1,36 @@
 @php
 	$links = [
-	    ['title' => 'Feed', 'url' => '/profile', 'icon' => 'user'],
-	    ['title' => 'Lista ordini', 'url' => route('user-dashboard.orders'), 'icon' => 'cart'],
+	    [
+	        'title' => 'Attività recenti',
+	        'dashboard_location' => 'recap',
+	        'url' => route('user-dashboard'),
+	        'icon' => 'user',
+	    ],
+	    [
+	        'title' => 'Lista ordini',
+	        'dashboard_location' => 'orders',
+	        'url' => route('user-dashboard.orders'),
+	        'icon' => 'cart',
+	    ],
 	    [
 	        'title' => 'Il mio negozio',
-	        'url' => route('seller.show', ['id' => auth()->user()->id]),
+	        'dashboard_location' => null,
+	        'url' => route('seller.show', ['seller' => auth()->user()->id]),
 	        'icon' => 'shop',
 	        'condition' => auth()->user()->isSeller(),
 	    ],
-	    ['title' => 'I miei dati', 'url' => '/profile/data', 'icon' => 'settings'],
-	    ['title' => 'Logout', 'url' => '/logout', 'icon' => 'logout'],
+	    [
+	        'title' => 'I miei dati',
+	        'dashboard_location' => 'settings',
+	        'url' => route('user-dashboard.settings'),
+	        'icon' => 'settings',
+	    ],
+	    [
+	        'title' => 'Logout',
+	        'dashboard_location' => null,
+	        'url' => route('logout'),
+	        'icon' => 'logout',
+	    ],
 	];
 @endphp
 

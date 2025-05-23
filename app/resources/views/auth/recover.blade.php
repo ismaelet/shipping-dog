@@ -48,7 +48,7 @@
 		<x-button
 			variant="secondary"
 			:href="route('login')"
-		>{{ __('Back') }}</x-button>
+		>Indietro</x-button>
 
 	</x-slot>
 

@@ -8,7 +8,7 @@
 	<x-slot:footer>
 		<x-button type="submit">Esci</x-button>
 		<x-button
-			href="/profile"
+			href="/user-dashboard"
 			variant="secondary"
 		>Indietro</x-button>
 	</x-slot:footer>

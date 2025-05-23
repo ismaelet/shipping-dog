@@ -25,7 +25,7 @@
 }
 
 #shops .shop .cover {
-	background-color: var(--surface-secondary);
+	background-color: var(--color-surface-500);
 	border-radius: var(--default-radius) var(--default-radius) 0 0;
 }
 
@@ -39,7 +39,7 @@
 }
 
 html.dark #shops .shop .content {
-	background: linear-gradient(180deg, var(--surface-secondary), var(--color-surface));
+	background: linear-gradient(180deg, var(--color-surface-500), var(--color-surface));
 	border: none;
 }
 
@@ -55,7 +55,7 @@ html.dark #shops .shop .content {
 }
 
 html.dark #shops .shop .logo {
-	border-color: var(--surface-secondary);
+	border-color: var(--color-surface-500);
 }
 
 #shops .shop .name {
@@ -80,7 +80,7 @@ html.dark #shops .shop .logo {
 	padding: 0 2em;
 	font-size: 1rem;
 	font-weight: 500;
-	font-family: var(--font-main);
+	font-family: var(--font-heading);
 	line-height: 2.6;
 	transition: background-color 0.2s, color 0.2s;
 }

@@ -95,7 +95,7 @@
 
 		/* Bottom notes */
 		#footer-notes {
-			border-top: 1px solid var(--surface-secondary);
+			border-top: 1px solid var(--color-surface-500);
 			padding-block: 2rem;
 			color: var(--color-neutral-300-more);
 		}
@@ -118,39 +118,34 @@
 			class=""
 		>
 
-			<?php foreach ($footer['columns'] as $f_column) { ?>
+			@foreach ($footer['columns'] as $f_column)
+				<div class="footer-col">
 
-			<div class="footer-col">
+					<h3 class="footer-title"><?= $f_column[0] ?></h3>
 
-				<h3 class="footer-title"><?= $f_column[0] ?></h3>
+					<ul class="links">
 
-				<ul class="links">
+						@foreach ($f_column[1] as $f_link)
+							<li class="text-neutral-300">
 
-					<?php foreach ($f_column[1] as $f_link) { ?>
+								@if (isset($f_link[1]))
+									<p class="footer-link active">
+										<a
+											class="transition-colors"
+											href="<?= $f_link[1] ?>"
+										><?= $f_link[0] ?></a>
+									</p>
+								@else
+									<p class="footer-link"><?= $f_link[0] ?></p>
+								@endif
 
-					<li class="text-neutral-300">
+							</li>
+						@endforeach
 
-						<?php if (isset($f_link[1])) { ?>
+					</ul>
 
-						<p class="footer-link active">
-							<a href="<?= $f_link[1] ?>"><?= $f_link[0] ?></a>
-						</p>
-
-						<?php } else { ?>
-
-						<p class="footer-link"><?= $f_link[0] ?></p>
-
-						<?php } ?>
-
-					</li>
-
-					<?php } ?>
-
-				</ul>
-
-			</div>
-
-			<?php } ?>
+				</div>
+			@endforeach
 
 			@if ($footer['contacts'])
 

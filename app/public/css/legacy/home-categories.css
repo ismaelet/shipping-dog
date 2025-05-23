@@ -190,7 +190,7 @@
 }
 
 html.dark #features .icon-box {
-	background-image: linear-gradient(135deg, var(--surface-secondary), var(--color-background));
+	background-image: linear-gradient(135deg, var(--color-surface-500), var(--color-background));
 }
 
 #features .icon-box svg {

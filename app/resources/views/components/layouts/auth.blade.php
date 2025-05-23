@@ -26,11 +26,11 @@
 	<div class="page-content fill-width grid">
 		<!-- Welcome panel -->
 		<section
-			class="welcome-section stack-content grid items-center justify-items-center"
+			class="welcome-section stack-content relative grid items-center justify-items-center"
 			data-local-color-scheme="dark"
 		>
 			<div
-				class="cover-background"
+				class="background"
 				style="background-image: url({{ Vite::image($welcomeImage) }}"
 			>
 			</div>

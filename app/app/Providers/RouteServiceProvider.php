@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider {
+
 	/**
 	 * The path to your application's "home" route.
 	 *
@@ -40,6 +41,9 @@ class RouteServiceProvider extends ServiceProvider {
 
 			Route::middleware(['web', 'auth'])
 				->group(base_path('routes/web-user-dashboard.php'));
+
+			Route::middleware(['web', 'auth'])
+				->group(base_path('routes/web-seller-dashboard.php'));
 
 			Route::middleware('web')
 				->group(base_path('routes/web-ecommerce.php'));

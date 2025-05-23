@@ -1,6 +1,6 @@
 @php
-	$currentLocation = explode('user-dashboard.', request()->route()->getName())[1] ?? null;
-	$dashboardLocation = explode('user-dashboard/', $link['url'])[1] ?? null;
+	$currentLocation = explode('user-dashboard.', request()->route()->getName())[1] ?? 'recap';
+	$dashboardLocation = $link['dashboard_location'];
 	$checked = $currentLocation == $dashboardLocation;
 @endphp
 

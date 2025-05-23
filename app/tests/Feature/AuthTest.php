@@ -37,7 +37,7 @@ class AuthTest extends TestCase {
 			'password' => 'password',
 		]);
 
-		$response->assertRedirect('/profile');
+		$response->assertRedirect('/user-dashboard');
 
 		$this->assertAuthenticatedAs($user);
 	}

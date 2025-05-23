@@ -1,30 +1,15 @@
 <?php
 
-use App\Http\Controllers\Ecommerce\PaymentRequestController;
-use App\Http\Controllers\Ecommerce\SaleController;
-use App\Http\Controllers\SellerDashboard\SellerDashboardController;
-use App\Http\Middleware\Seller;
+use App\Http\Controllers\UserDashboard\UserDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /**
  * * User Dashboard
  */
-Route::prefix('user-dashboard')->name('user-dashboard.')->group(function () {
-	Route::get('/orders', function () {
-		return view('user-dashboard.orders');
-	})->name('orders');
-});
+Route::prefix('user-dashboard')->name('user-dashboard')->group(function () {
+	Route::get('', [UserDashboardController::class, 'index'])->name('');
 
-Route::prefix('seller')->middleware(Seller::class)->name('seller.')->group(function () {
-	Route::get('/payment', [PaymentRequestController::class, 'index'])->name('payment');
-	Route::get('/payment/edit', [PaymentRequestController::class, 'edit'])->name('payment.edit');
-	Route::post('/payment/update', [PaymentRequestController::class, 'update'])->name('payment.update');
-	Route::post('/payment/download', [PaymentRequestController::class, 'download'])->name('payment.download');
-});
+	Route::get('/settings', [UserDashboardController::class, 'settings'])->name('.settings');
 
-Route::prefix('/seller-dashboard')->middleware(Seller::class)->name('seller-dashboard')->group(function () {
-	Route::post('{seller}/icon', [SellerDashboardController::class, 'uploadSellerIcon'])->name('.icon');
-	Route::post('{seller}/cover', [SellerDashboardController::class, 'uploadSellerCover'])->name('.cover');
-
-	Route::get('/sales', [SaleController::class, 'index'])->name('.sales');
+	Route::get('/orders', [UserDashboardController::class, 'orders'])->name('.orders');
 });

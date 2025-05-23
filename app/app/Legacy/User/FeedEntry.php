@@ -1,14 +1,16 @@
 <?php
 
-namespace Legacy\Classes\User;
+namespace App\Legacy\User;
 
 use App\Models\Ecommerce\OrderItem;
 use App\Legacy\Ecommerce\Design as LegacyDesign;
-use Legacy\Classes\User;
+use App\Legacy\System\DB;
+use App\Legacy\Traits\DynamicProperties;
+use App\Legacy\User;
 
 class FeedEntry {
 
-	use \Legacy\System\Traits\DynamicProperties;
+	use DynamicProperties;
 
 	public const INDEX = 'event_id';
 
@@ -63,11 +65,11 @@ class FeedEntry {
 	private function calcText() {
 		switch ($this->type_id) {
 			case 1:
-				$text = '<strong><span class="txt-c1">Shipping Dog</span></strong>: ' . $this->news;
+				$text = '<span class="font-semibold text-neutral-700"><span class="text-primary">Shipping Dog</span></span>: ' . $this->news;
 				break;
 
 			case 2:
-				$text = 'Hai venduto <strong>' . $this->orderItem->quantity . ' x</strong> <a class="design" href="' . $this->orderItem->product?->url() . '">' . $this->orderItem->product?->name . '</a> per <strong>' . $this->orderItem->gainString() . '</strong>';
+				$text = 'Hai venduto <span class="font-semibold text-neutral-700">' . $this->orderItem->quantity . ' x</span> <a class="design" href="' . $this->orderItem->product?->url() . '">' . $this->orderItem->product?->name . '</a> per <span class="font-semibold text-neutral-700">' . $this->orderItem->gainString() . '</span>';
 				break;
 
 			case 3:
@@ -86,7 +88,7 @@ class FeedEntry {
 				$text = '';
 		}
 
-		$text = '<strong>' . $this->created_atString . ':</strong> ' . $text;
+		$text = '<span class="font-semibold text-neutral-700">' . $this->created_atString . ':</span> ' . $text;
 
 		return $text;
 	}

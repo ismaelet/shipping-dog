@@ -58,6 +58,7 @@
 	--color-background-s: 0%;
 	--color-background-l: 100%;
 
+	--color-neutral-light-50: hsl(var(--theme-h) var(--theme-light-s) 100%);
 	--color-neutral-light-100: hsl(var(--theme-h) var(--theme-light-s) 100%);
 	--color-neutral-light-200: hsl(var(--theme-h) var(--theme-light-s) 93%);
 	--color-neutral-light-250: hsl(var(--theme-h) var(--theme-light-s) 85%);
@@ -65,15 +66,20 @@
 	--color-neutral-light-400: hsl(var(--theme-h) var(--theme-light-s) 25%);
 	--color-neutral-light-700: hsl(var(--theme-h) var(--theme-light-s) 13%);
 	--color-neutral-light-900: hsl(var(--theme-h) var(--theme-light-s) 0%);
+	--color-neutral-light-950: hsl(var(--theme-h) var(--theme-light-s) 0%);
 
+	--color-neutral-dark-50: hsl(var(--theme-h) var(--theme-dark-s) 0%);
 	--color-neutral-dark-100: hsl(var(--theme-h) var(--theme-dark-s) 0%);
 	--color-neutral-dark-150: hsl(var(--theme-h) var(--theme-dark-s) 7%);
 	--color-neutral-dark-200: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.8) 13%);
 	--color-neutral-dark-250: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.65) 22%);
+	--color-neutral-dark-300: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.5) 50%);
 	--color-neutral-dark-400: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.35) 70%);
 	--color-neutral-dark-700: hsl(var(--theme-h) var(--theme-dark-s) 95%);
 	--color-neutral-dark-900: hsl(var(--theme-h) var(--theme-dark-s) 100%);
+	--color-neutral-dark-950: hsl(var(--theme-h) var(--theme-dark-s) 100%);
 
+	--color-neutral-50: var(--color-neutral-light-50);
 	--color-neutral-100: var(--color-neutral-light-100);
 	--color-neutral-200: var(--color-neutral-light-200);
 	--color-neutral-250: var(--color-neutral-light-250);
@@ -81,6 +87,7 @@
 	--color-neutral-400: var(--color-neutral-light-400);
 	--color-neutral-700: var(--color-neutral-light-700);
 	--color-neutral-900: var(--color-neutral-light-900);
+	--color-neutral-950: var(--color-neutral-light-950);
 
 	--color-primary-300: hsl(247deg 70% 78%);
 	--color-primary-400: hsl(35deg 100% 50%);
@@ -94,13 +101,17 @@
 
 	--color-surface-200: var(--color-neutral-light-200);
 	--color-surface-400: var(--color-neutral-light-100);
+	--color-surface-500: var(--color-neutral-light-200);
 	--color-surface: var(--color-surface-400);
 
 	--color-border: var(--color-neutral-200);
 
 	/* Theme: Fonts */
 	--font-sans: 'Open Sans', system-ui, sans-serif;
+	--font-heading: 'Poppins', system-ui, sans-serif;
 
+	--text-600: min(1.5rem, 6vw);
+	--text-800: min(3.5rem, 12vw);
 	--text-900: min(5rem, 15vw);
 }
 
@@ -110,6 +121,7 @@
 	--color-background-s: var(--theme-dark-s);
 	--color-background-l: 10%;
 
+	--color-neutral-50: var(--color-neutral-dark-50);
 	--color-neutral-100: var(--color-neutral-dark-100);
 	--color-neutral-150: var(--color-neutral-dark-150);
 	--color-neutral-200: var(--color-neutral-dark-200);
@@ -119,10 +131,12 @@
 	--color-neutral-400: var(--color-neutral-dark-400);
 	--color-neutral-700: var(--color-neutral-dark-700);
 	--color-neutral-900: var(--color-neutral-dark-900);
+	--color-neutral-950: var(--color-neutral-dark-950);
 
 	--color-surface-200: var(--color-neutral-dark-150);
 	--color-surface-400: var(--color-neutral-dark-200);
 	--color-surface-500: var(--color-neutral-dark-250);
+	--color-surface-600: var(--color-neutral-dark-300);
 
 	--color-border: var(--color-neutral-250);
 
@@ -131,6 +145,24 @@
 
 	--font-weight-semibold: 500;
 	--font-weight-bold: 600;
+}
+
+/*
+* Reset
+*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: var(--color-neutral-950);
+	font-family: var(--font-heading);
+	line-height: 1.1;
+}
+
+body {
+	color: var(--color-neutral-400);
 }
 
 /*

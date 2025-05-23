@@ -151,7 +151,7 @@
 		}
 
 		.icon {
-			border: 1px solid var(--surface-secondary);
+			border: 1px solid var(--color-surface-500);
 			border-radius: 100%;
 			width: 20px;
 			height: 20px;
@@ -224,7 +224,7 @@
 		.chck_pric {
 			float: right;
 			color: var(--fc-700);
-			font-family: var(--ff-titles);
+			font-family: var(--font-heading);
 			font-size: var(--fs-400);
 			letter-spacing: 0.05em;
 		}

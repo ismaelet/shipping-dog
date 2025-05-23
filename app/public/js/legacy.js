@@ -177,7 +177,7 @@ $(document).ready(function () {
 
 		var right = ele.offset().left + ele.outerWidth()
 
-		offset = Math.round(right - widMax + 16, 0)
+		offset = Math.round(right - widMax + 80, 0)
 
 		if (offset > 0) {
 			ele.css('left', -offset + 'px')
