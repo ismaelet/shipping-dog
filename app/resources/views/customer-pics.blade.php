@@ -19,16 +19,16 @@
 		<div class="header">
 			<div class="main-wrap text-center">
 				<div class="section-heading-box">
-					<h1 class="section-heading txt-sbold">Le vostre foto</h1>
+					<x-typography.main-heading>Le vostre foto</x-typography.main-heading>
 				</div>
 
-				<p class="mwid-600 mar-h-auto mar-t-2 txt-12rem">Mandaci una foto con un nostro capo indossato su <a
-						class="txt-c1-h"
+				<p class="mx-auto mt-8 max-w-[55ch] text-lg">Mandaci una foto con un nostro capo indossato su <a
+						class="hover:text-primary font-semibold text-neutral-700 transition-colors"
 						href="{{ config('custom.contacts.instagram.url') }}"
 					>Instagram</a> o per <a
-						class="txt-c1-h"
+						class="hover:text-primary font-semibold text-neutral-700 transition-colors"
 						href="{{ config('custom.contacts.email.url') }}"
-					>e-email</a> e ottieni subito un <strong>codice sconto del 15%</strong></p>
+					>e-email</a> e ottieni subito un <span class="font-semibold text-neutral-700">codice sconto del 15%</span></p>
 			</div>
 		</div>
 
