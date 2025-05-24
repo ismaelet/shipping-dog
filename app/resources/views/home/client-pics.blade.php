@@ -33,7 +33,7 @@
 				</div>
 
 				<a
-					href="<?= client_url('/fan-pics') ?>"
+					href="{{ route('customer-pics') }}"
 					class="mar-t-3 block"
 				>
 					<p class="more txt-rig">Esplorale tutte</p>

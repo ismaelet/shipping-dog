@@ -1,14 +1,12 @@
 <?php
 
 use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\CustomerPicsController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\Ecommerce\DesignController;
-use App\Http\Controllers\Ecommerce\PaymentRequestController;
-use App\Http\Controllers\Ecommerce\SaleController;
 use App\Http\Controllers\EmergencyEmail;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SellerDashboard\SellerDashboardController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Seller;
 use App\Models\Ecommerce\Seller as EcommerceSeller;
@@ -54,6 +52,8 @@ Route::get('/download/{filename}', [DownloadController::class, 'download'])->nam
 /**
  * * Misc
  */
+Route::get('/customer-pics', [CustomerPicsController::class, 'index'])->name('customer-pics');
+
 Route::get('/emergency-email', [EmergencyEmail::class, 'sendEmail'])->middleware(Admin::class);
 
 Route::get('/seller-email-list', function () {
