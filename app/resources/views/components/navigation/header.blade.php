@@ -608,10 +608,6 @@
 				height: 65px;
 			}
 
-			#h-pan {
-				padding: 0 3rem;
-			}
-
 			#h-logo {
 				width: 4rem;
 				height: 4rem;
@@ -620,7 +616,7 @@
 
 		@media (max-width: 576px) {
 			#h-pan {
-				padding-inline: 1rem;
+				padding-inline: var(--content-padding);
 			}
 
 			#h-contM {
@@ -704,13 +700,13 @@
 			<!-- Right bar -->
 			<div
 				id="h-nav-rig"
-				class="h-bar flex gap-6 lg:gap-12"
+				class="h-bar flex gap-6 xl:gap-12"
 			>
 
 				<!-- Links -->
 				@if (!$header['force-mob'])
 
-					<div class="h-nav-box hidden gap-12 lg:flex">
+					<div class="h-nav-box hidden gap-12 xl:flex">
 
 						@foreach ($header['links'] as $h_link)
 							@php
@@ -844,7 +840,7 @@
 				<!-- Login bar -->
 				<div
 					id="h-log-box"
-					class="hidden lg:block"
+					class="hidden xl:block"
 				>
 
 					@if (auth()->id())
@@ -866,7 +862,7 @@
 				<!-- Mobile menu -->
 				<div
 					id="h-mob-pan"
-					class="txt-rig flex lg:hidden"
+					class="txt-rig flex xl:hidden"
 				>
 
 					<!-- Mobile icon -->

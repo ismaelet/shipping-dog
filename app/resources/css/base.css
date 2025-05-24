@@ -181,6 +181,27 @@
 			--icon-size: 1em;
 		}
 	}
+
+	.input,
+	.select,
+	.textarea {
+		--input-background: var(--color-surface-400);
+		padding-inline: 0.6em;
+		background-color: var(--input-background);
+		border-radius: var(--input-border-radius);
+		outline: var(--border);
+		color: var(--color-neutral-700);
+		transition: outline-color 0.2s ease-in-out;
+	}
+
+	.input,
+	.select {
+		padding-block: 0.6em;
+	}
+
+	.textarea {
+		padding-block: 0.6em;
+	}
 }
 
 /*

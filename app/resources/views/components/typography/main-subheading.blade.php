@@ -1,3 +1,3 @@
-<p {{ $attributes->class(['subtitle text-subtitle text-neutral-400']) }}>
-    {{ $slot }}
+<p {{ $attributes->class(['subtitle main-subheading text-lg']) }}>
+	{{ $slot }}
 </p>

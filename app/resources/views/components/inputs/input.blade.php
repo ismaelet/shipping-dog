@@ -10,12 +10,12 @@
 	<style>
 		.input {
 			--input-background: var(--color-surface-400);
-			padding-inline: .5em;
+			padding-inline: .6em;
 			background-color: var(--input-background);
 			border-radius: var(--input-border-radius);
 			outline: var(--border);
 			color: var(--color-neutral-700);
-			line-height: 2.8;
+			padding-block: .6em;
 			transition: outline-color 0.2s ease-in-out;
 
 			/* Focus state */

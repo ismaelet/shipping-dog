@@ -10,7 +10,7 @@
 	<style>
 		.input {
 			--input-background: var(--color-surface-400);
-			padding-inline: .5em;
+			padding-inline: .6em;
 			background-color: var(--input-background);
 			border-radius: var(--input-border-radius);
 			outline: var(--border);

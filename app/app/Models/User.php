@@ -154,9 +154,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	}
 
 	//! Legacy support
-	public function cover(?int $size = 1024) {
+	public function cover(?int $size = 1920) {
 		$sizeConversion = [
-			1024 => '',
+			1920 => '',
 			400 => '_m',
 		];
 

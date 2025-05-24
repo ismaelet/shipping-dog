@@ -22,7 +22,7 @@ class DesignController extends Controller {
 	 * * Index action
 	 */
 	public function index() {
-		redirect_old('/manage/portfolio');
+		redirect_old('/seller/portfolio');
 	}
 
 	/**

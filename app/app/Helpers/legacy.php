@@ -1,10 +1,9 @@
 <?php
 
+use App\Legacy\System\DB;
+use App\Legacy\System\Query_Result;
 use App\Models\Ecommerce\Design;
-use App\Models\Ecommerce\Product;
-use App\Legacy\Ecommerce\ViewManager;
 use Illuminate\Support\Facades\Vite;
-use Legacy\System\Classes\Query_Result;
 
 function client_url(string $parcialUrl = '') {
 	return $parcialUrl;
@@ -83,7 +82,7 @@ function ecommerce_config($paramenter) {
 	return $ecommerceConfig[$paramenter];
 }
 
-function rows_to_objects(Query_Result $rows = null, string $className) {
+function rows_to_objects(?Query_Result $rows = null, string $className) {
 	$objects = [];
 
 	while ($row = $rows->fetch_assoc()) {
@@ -245,4 +244,10 @@ function random_string($length = 10) {
 	for ($i = 0; $i < $length; $i++) $randomString .= $characters[rand(0, $charactersLength - 1)];
 
 	return $randomString;
+}
+
+function temp_bg($img) {
+	$img = str_replace(asset('/storage'), '', $img);
+
+	return 'style="background-image: url(' . public_asset($img) . ');"';
 }

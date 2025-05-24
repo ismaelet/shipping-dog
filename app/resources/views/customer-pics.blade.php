@@ -22,13 +22,15 @@
 					<x-typography.main-heading>Le vostre foto</x-typography.main-heading>
 				</div>
 
-				<p class="mx-auto mt-8 max-w-[55ch] text-lg">Mandaci una foto con un nostro capo indossato su <a
+				<x-typography.main-subheading class="mx-auto mt-8 max-w-[55ch]">Mandaci una foto con un nostro capo indossato
+					su <a
 						class="hover:text-primary font-semibold text-neutral-700 transition-colors"
 						href="{{ config('custom.contacts.instagram.url') }}"
 					>Instagram</a> o per <a
 						class="hover:text-primary font-semibold text-neutral-700 transition-colors"
 						href="{{ config('custom.contacts.email.url') }}"
-					>e-email</a> e ottieni subito un <span class="font-semibold text-neutral-700">codice sconto del 15%</span></p>
+					>e-email</a> e ottieni subito un <span class="font-semibold text-neutral-700">codice sconto del
+						15%</span></x-typography.main-subheading>
 			</div>
 		</div>
 

@@ -42,7 +42,7 @@
 				<!-- Edit button -->
 				@if ($vip)
 					<a
-						href="<?= client_url('/manage?id=' . $id) ?>"
+						href="{{ route('seller-dashboard') }}"
 						class="relative"
 					>
 						<p
@@ -338,7 +338,7 @@
 					class="uppercase"
 				>Ancora nessun lavoro caricato</p>
 
-				<a href="/manage/portfolio/add?id={{ $id }}">
+				<a href="/seller-dashboard/portfolio/add?id={{ $id }}">
 					<x-button
 						type="button"
 						class="mt-8 w-full"

@@ -27,15 +27,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/artist/{seller}', [SellerController::class, 'index'])->name('seller.show');
 
-// Seller dashboard
-Route::prefix('/manage')->middleware(Seller::class)->name('seller-dashboard')->group(function () {
-	Route::any('', [SellerDashboardController::class, 'index'])->name('');
-	Route::any('/portfolio', [PortfolioController::class, 'index'])->name('.portfolio');
-	Route::any('/portfolio/add', [PortfolioController::class, 'add'])->name('.portfolio.add');
-	Route::any('/sales/prices', [PortfolioController::class, 'prices'])->name('.prices');
-	// Route::any('/sales/list', LegacyController::class)->name('.sales');
-});
-
 /**
  * * Product
  */

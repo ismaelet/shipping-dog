@@ -2,8 +2,11 @@
 
 namespace App\Legacy\Ecommerce;
 
+use App\Legacy\System\DB;
+use App\Legacy\Traits\DatabaseObject;
 use App\Models\Ecommerce\Seller as NewSeller;
 use App\Legacy\User as LegacyUser;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Seller class
@@ -15,7 +18,7 @@ use App\Legacy\User as LegacyUser;
  */
 class Seller {
 
-	use \Legacy\System\Traits\DatabaseObject;
+	use DatabaseObject;
 
 	public const TABLE = 'stores';
 	public const INDEX = 'user_id';
@@ -47,7 +50,7 @@ class Seller {
 	}
 
 	private function getFollowed() {
-		return auth()->check() && DB::exists('followers WHERE user_id = ? AND follower_id = ?', [auth()->id(), $this->id]);
+		return Auth::check() && DB::exists('followers WHERE user_id = ? AND follower_id = ?', [Auth::id(), $this->id]);
 	}
 
 	private function getUserData() {

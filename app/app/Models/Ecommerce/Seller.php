@@ -192,7 +192,7 @@ class Seller extends Model {
 		return public_asset('users/icons/0.jpg');
 	}
 
-	public function cover(int $size = 1024): string {
+	public function cover(int $size = 1920): string {
 		if (!$this->user) {
 			Log::error('Seller user not found', ['seller' => $this->id]);
 		}
