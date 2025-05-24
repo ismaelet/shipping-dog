@@ -15,8 +15,8 @@ class EcommerceHelper {
 	 */
 	public static function cartId(): ?int {
 		// If the user is logged in, return the ID of their cart
-		if (auth()->check() && auth()->user()->cart) {
-			return auth()->user()->cart->id;
+		if (Auth::check() && Auth::user()->cart) {
+			return Auth::user()->cart->id;
 		}
 
 		// Otherwise, return the ID of the cart stored in the session
@@ -36,7 +36,7 @@ class EcommerceHelper {
 	 * @return Cart|null The active cart if it exists, otherwise null
 	 */
 	public static function cart(): ?Order {
-		if (auth()->check()) {
+		if (Auth::check()) {
 			return Auth::user()->cart ?? null;
 		}
 

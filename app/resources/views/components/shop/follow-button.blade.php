@@ -96,7 +96,7 @@ use Illuminate\Support\Facades\Auth;
 					x-data="{ followed: {{ $followId ? 'true' : 'false' }} }"
 					:data-followed="followed ? 'true' : 'false'"
 					@click="followed = !followed; followed ? storeFollower($event.target) : destroyFollow($event.target);"
-					data-seller-id="{{ $seller_id }}"
+					data-seller-id="{{ $seller->id }}"
 					data-follow-id="{{ $followId }}"
 				>
 					<span>segui</span>

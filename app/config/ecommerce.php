@@ -23,7 +23,7 @@ return [
 				'label' => 'Spedizione',
 			],
 			3 => [
-				'tag' => 'offers',
+				'tag' => 'promotions',
 				'label' => 'Offerte',
 			],
 			4 => [

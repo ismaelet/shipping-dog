@@ -472,28 +472,6 @@ class Order {
 	}
 
 	/*
-	* OLD
-	*/
-	public function removeCoupon() {
-		if ($this->couponId) {
-			$newOrder = $this->newOrder();
-			$newOrder->update(['code' => null]);
-
-			foreach ($newOrder->order_items as $orderItem) {
-				// ! To add
-			}
-
-			if ($this->coupon->freeShipping) {
-				$this->updateShippingMethodId(ShippingMethod::PRIMARY_SHIPPING_METHOD_ID);
-			}
-
-			$this->data['couponCode'] = null;
-
-			$newOrder->updatePrice();
-		}
-	}
-
-	/*
 	* Misc methods
 	*/
 	public function advance(int|null $nextStepId = null) {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\App;
 use App\Helpers\ArrayHelper;
 use App\Helpers\FileHelper;
 use Illuminate\Support\Facades\Auth;
@@ -7,6 +8,9 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * Debug an array
+ * 
+ * @param array $array The array to debug
+ * @return void
  */
 function dd_array(array $array): void {
 	dd('<pre>' . print_r($array, true) . '</pre>');
@@ -14,6 +18,8 @@ function dd_array(array $array): void {
 
 /**
  * Check if the user is an admin
+ * 
+ * @return bool True if the user is an admin, false otherwise
  */
 function is_admin(): bool {
 	return Auth::check() && Auth::user()->is_admin;
@@ -21,9 +27,20 @@ function is_admin(): bool {
 
 /**
  * Check if the user is a supervisor
+ * 
+ * @return bool True if the user is a supervisor, false otherwise
  */
 function is_superadmin(): bool {
 	return Auth::check() && Auth::user()->is_superadmin;
+}
+
+/**
+ * Check if the user is a seller
+ * 
+ * @return bool True if the user is a seller, false otherwise
+ */
+function is_seller(): bool {
+	return App::isSeller();
 }
 
 /**

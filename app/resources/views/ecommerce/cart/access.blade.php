@@ -277,12 +277,6 @@
 			}
 		}
 
-		.access-panel {
-			display: grid;
-			gap: 1.5rem;
-			padding: 1.5rem;
-		}
-
 		@media (min-width: 1024px) {
 			.page-content {
 				grid-template-areas:
@@ -310,59 +304,14 @@
 	</style>
 @endpushOnce
 
-<x-layouts.main>
+<x-layouts.cart>
 
-	<section class="bg-surface-500 stack-content grid justify-items-center">
-		<x-typography.section-heading class="py-24">
-			Ca<span class="text-primary">rr</span>ello
-		</x-typography.section-heading>
-	</section>
-
-	<section class="flow-bar mb-20 mt-16 flex w-full items-center justify-center px-8 md:px-16">
-
-		@foreach (config('ecommerce.cart.steps') as $step => $stepData)
-			{{-- Divisor --}}
-			@if ($step > 1)
-				<div class="flow-line grow border-b"></div>
-			@endif
-
-			{{-- Step --}}
-			<div
-				class="flow-step relative cursor-default"
-				data-active="{{ $step <= $orderStep ? 'true' : 'false' }}"
-				data-current-step="{{ $step == $pageStep ? 'true' : 'false' }}"
-			>
-
-				{{-- Number --}}
-				<a
-					{!! $step <= $orderStep && $step != $pageStep && !($stepData['tag'] == 'access' && Auth::check())
-					    ? 'href="' . route('cart.' . $stepData['tag']) . '"'
-					    : '' !!}
-					class="flow-circle flex aspect-square rounded-full border"
-				>
-
-					@if ($step < $orderStep)
-						{!! embed_icon('correct') !!}
-					@else
-						<p class="flow-number m-auto">{{ $step }}</p>
-					@endif
-
-				</a>
-
-				{{-- Text --}}
-				<p class="flow-text absolute left-1/2 mt-2 -translate-x-1/2 text-xs sm:text-base">{{ $stepData['label'] }}</p>
-
-			</div>
-		@endforeach
-
-	</section>
-
-	<div class="page-content mb-20 grid items-start gap-8 lg:grid-cols-2 lg:gap-16">
+	<div class="page-content grid items-start gap-8 lg:grid-cols-2 lg:gap-16">
 
 		{{-- Guest --}}
 		<form
 			action="{{ route('cart.access.guest') }}"
-			class="guest-panel access-panel surface"
+			class="guest-panel cart-panel surface"
 			method="POST"
 		>
 			<x-typography.component-heading>Ordina senza registrarti</x-typography.component-heading>
@@ -376,7 +325,7 @@
 
 		{{-- Login --}}
 		<form
-			class="login-panel access-panel surface"
+			class="login-panel cart-panel surface"
 			method="POST"
 			action="{{ route('login.auth') }}"
 		>
@@ -416,7 +365,7 @@
 		</form>
 
 		{{-- Register --}}
-		<div class="register-panel access-panel surface">
+		<div class="register-panel cart-panel surface">
 			<x-typography.component-heading>Registrati</x-typography.component-heading>
 
 			<p>Vai qui sotto se vuoi registrarti</p>
@@ -429,7 +378,7 @@
 		</div>
 
 		{{-- Continue --}}
-		<div class="shop-panel access-panel surface">
+		<div class="shop-panel cart-panel surface">
 			<x-typography.component-heading>Continua con gli acquisti</x-typography.component-heading>
 
 			<p>Vuoi aggiungere altri articoli al carrello prima di continuare?</p>
@@ -440,7 +389,5 @@
 				size="small"
 			>Torna al negozio</x-button>
 		</div>
-
 	</div>
-
-</x-layouts.main>
+</x-layouts.cart>

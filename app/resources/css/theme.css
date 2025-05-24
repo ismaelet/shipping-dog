@@ -111,6 +111,7 @@
 	--font-heading: 'Poppins', system-ui, sans-serif;
 
 	--text-600: min(1.5rem, 6vw);
+	--text-700: min(2rem, 7vw);
 	--text-800: min(3.5rem, 12vw);
 	--text-900: min(5rem, 15vw);
 }

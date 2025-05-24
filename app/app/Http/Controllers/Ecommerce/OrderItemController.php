@@ -81,15 +81,13 @@ class OrderItemController extends Controller {
 		// Update the cart data
 		$order->updateOrderItems();
 
-		// ! Legacy support
-		$LegacyOrder = new LegacyOrder($order->id);
-
-		if ($LegacyOrder->couponId) {
-			$couponId = $LegacyOrder->couponId;
-			$LegacyOrder->removeCoupon();
-			$LegacyOrder->addCoupon($couponId);
-		}
-		// ! Legacy support
+		// Update the discount
+		// ! To add
+		// if ($order->coupon?->id) {
+		// 	$couponId = $order->coupon->id;
+		// 	$LegacyOrder->removeCoupon();
+		// 	$LegacyOrder->addCoupon($couponId);
+		// }
 
 		return to_route('cart');
 	}

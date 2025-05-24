@@ -323,18 +323,35 @@ class Order extends Model {
 	}
 
 	/**
-	 * ~ Attribute: Full Order Items Price
+	 * Attribute: Full Order Items Price
 	 * 
 	 * The sum of the order item's prices, not including any discount
 	 */
 	public function fullOrderItemsPrice(): float {
-		$fullOrderItemsPrice = 0;
+		$price = 0;
 
 		foreach ($this->order_items as $orderItem) {
-			$fullOrderItemsPrice += $orderItem->grossPrice();
+			$price += $orderItem->grossPrice();
 		}
 
-		return $fullOrderItemsPrice;
+		return $price;
+	}
+
+	/**
+	 * Attribute: Get the total credit used for order items.
+	 * 
+	 * @return float
+	 */
+	public function usedOrderItemsCredit(): float {
+		$credit = 0;
+
+		foreach ($this->order_items as $orderItem) {
+			if ($orderItem->credit) {
+				$credit += $orderItem->discount();
+			}
+		}
+
+		return $credit;
 	}
 
 	/**
@@ -514,6 +531,25 @@ class Order extends Model {
 		$this->save();
 
 		return $this;
+	}
+
+	/**
+	 * Remove the coupon from the order.
+	 */
+	public function removeCoupon() {
+		if ($this->coupon?->id) {
+			$this->update(['code' => null]);
+
+			foreach ($this->order_items as $orderItem) {
+				// ! To add
+			}
+
+			if ($this->coupon->freeShipping) {
+				$this->updateShippingMethodId(ShippingMethod::PRIMARY_SHIPPING_METHOD_ID);
+			}
+
+			$this->updatePrice();
+		}
 	}
 
 	/**

@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Ecommerce\Cart\CartAccessController;
+use App\Http\Controllers\Ecommerce\Cart\CartAddressController;
+use App\Http\Controllers\Ecommerce\Cart\CartPaymentController;
+use App\Http\Controllers\Ecommerce\Cart\CartPromotionsController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\OrderController;
 use App\Http\Controllers\Ecommerce\OrderItemController;
@@ -39,51 +43,45 @@ Route::resource('products', ProductController::class)->only(['show', 'update'])-
 
 Route::post('/products/{product}/status', [ProductController::class, 'changeStatus'])->name('products.status');
 
+
+/**
+ * * Cart
+ */
+Route::prefix('cart')->name('cart')->group(function () {
+	// Redirect to the current cart step
+	Route::get('', [CartController::class, 'index'])->middleware(Cart::class)->name('');
+
+	// Remove an item from the cart
+	Route::post('/remove/{orderItem}', [CartController::class, 'removeOrderItem'])->name('.remove');
+
+	// Cart step: Access
+	Route::get('/access', [CartAccessController::class, 'index'])->middleware(Cart::class)->name('.access');
+	Route::post('/access/guest', [CartAccessController::class, 'guestLogin'])->name('.access.guest');
+
+	// Cart step: Address
+	Route::get('/address', [CartAddressController::class, 'index'])->middleware(Cart::class)->name('.address');
+	Route::post('/address', [CartAddressController::class, 'update'])->middleware(Cart::class)->name('.address');
+
+	// Cart step: Promotions
+	Route::get('/promotions', [CartPromotionsController::class, 'index'])->middleware(Cart::class)->name('.promotions');
+
+	// Cart step: Payment
+	Route::get('/payment', [CartPaymentController::class, 'index'])->middleware(Cart::class)->name('.payment');
+	Route::post('/payment', [CartPaymentController::class, 'update'])->middleware(Cart::class)->name('.payment');
+});
+
 /**
  * * Order Item
  */
 // Create an order
 Route::resource('order-items', OrderItemController::class)->only(['show', 'store']);
 
-/**
- * * Cart
- */
-// General cart routes
-Route::get('/cart', function () {
-	$orderItemstep = cart()?->step;
-
-	if (!$orderItemstep) {
-		return redirect()->route('cart.empty');
-	}
-
-	if (in_array($orderItemstep, ['access'])) {
-		return redirect()->route('cart.' . $orderItemstep);
-	}
-
-	// ! Legacy support
-	return redirect('/cart/' . $orderItemstep);
-})->name('cart');
-
 // Empty cart
 Route::get('/cart/empty', function () {
 	return view('ecommerce.cart.empty');
 })->middleware(EmptyCart::class)->name('cart.empty');
 
-// Cart steps
-Route::prefix('cart')->middleware(Cart::class)->name('cart.')->group(function () {
-	// Cart step: Access
-	Route::get('/access', [CartController::class, 'indexAccess'])->name('access');
-	Route::post('/access/guest', [CartController::class, 'guestLogin'])->name('access.guest');
 
-	// // Cart step: Address
-	// Route::any('/address', LegacyController::class)->name('address');
-
-	// // Cart step: Offers
-	// Route::any('/offers', LegacyController::class)->name('offers');
-
-	// // Cart step: Payment
-	// Route::any('/payment', LegacyController::class)->name('payment');
-});
 
 /**
  * * Order

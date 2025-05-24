@@ -2,41 +2,33 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
-use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Ecommerce\OrderItem;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class CartController extends Controller {
 
 	/**
-	 * * Index: Access
+	 * Handled by the Middleware
 	 */
-	public function indexAccess(): View|RedirectResponse {
-		// If the user is logged in, advance to the next step
-		if (Auth::check()) {
-			cart()->advance();
-
-			return redirect()->route('cart.' . cart()->stepTag());
-		}
-
-		// Otherwise, show the access page
-		return view('ecommerce.cart.access')
-			->with([
-				'title' => 'Accedi | Carrello',
-				'pageStep' => EcommerceHelper::stepFromTag('access'),
-				'orderStep' => cart()->step,
-			]);
+	public function index(): void {
 	}
 
 	/**
-	 * * Custom: Guest login
+	 * Remove an item from the cart
+	 * 
+	 * @param \App\Legacy\Ecommerce\OrderItem $orderItem
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function guestLogin(): RedirectResponse {
-		// If the user is a guest, advance to the next step
-		cart()->advance();
+	public function removeOrderItem(OrderItem $orderItem): RedirectResponse {
+		if ($orderItem) {
+			$orderItem->delete();
+		}
 
-		return redirect()->route('cart.' . cart()->stepTag());
+		return back()
+			->with([
+				'message' => 'L\'articolo è stato rimosso dal carrello.',
+				'message_type' => 'success',
+			]);
 	}
 }

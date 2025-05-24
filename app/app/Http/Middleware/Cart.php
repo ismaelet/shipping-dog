@@ -16,7 +16,7 @@ class Cart {
 	 */
 	public function handle(Request $request, Closure $next): Response|RedirectResponse {
 		$pageStepTag = explode('.', Route::currentRouteName())[1] ?? null;
-		$pageStep = EcommerceHelper::stepFromTag($pageStepTag);
+		$pageStep = $pageStepTag ? EcommerceHelper::stepFromTag($pageStepTag) : null;
 		$orderStepTag = cart()?->stepTag();
 		$orderStep = cart()?->step;
 
@@ -32,8 +32,8 @@ class Cart {
 			return redirect()->route('cart.' . $firstStep);
 		}
 
-		// If the page step is more advanced than the cart step, redirect to the cart step
-		if ($pageStep > $orderStep) {
+		// If the page step isn't set or is more advanced than the cart step, redirect to the cart step
+		if (!$pageStep || $pageStep > $orderStep) {
 			return redirect()->route('cart.' . $orderStepTag);
 		}
 

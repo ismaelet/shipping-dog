@@ -1,4 +1,5 @@
 @props([
+    'type' => 'checkbox',
     'name' => null,
     'value' => null,
     'checked' => false,
@@ -28,7 +29,7 @@
 			aspect-ratio: 1;
 			margin-block: 2px;
 			margin-left: 2px;
-			border: var(--border-width) solid var(--border-color);
+			border: var(--border-width) solid var(--color-surface-500);
 			border-radius: 50%;
 			cursor: pointer;
 			transition: border-color 0.2s;
@@ -74,7 +75,7 @@
 <label {{ $attributes->class(['checkbox']) }}>
 
 	<input
-		type="checkbox"
+		type="{{ $type }}"
 		name="{{ $name }}"
 		@if ($value !== null) value="{{ $value }}" @endif
 		@checked($checked)

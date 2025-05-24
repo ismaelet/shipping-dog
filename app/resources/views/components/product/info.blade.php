@@ -55,7 +55,7 @@ if ($row = $res->fetch_assoc()) {
     $dett_lss_it = $dett_lss_en = '&middot; Tessuto: 100% cotone jersey<br>&middot; Densità: 140 g/m² bianco e 169 g/m² colorati<br>&middot; Vestibilità normale';
 
     $desc = $product->type->info ? $product->type->info->description : null;
-    $dett = $product->type->info
+    $dett = $product->type->info?->details
         ? implode(
             '<br>',
             array_map(function ($element) {
