@@ -13,6 +13,10 @@
 	border-bottom: 1px solid var(--color-surface-500);
 }
 
+.dashboard-panel {
+	padding: 1.5rem;
+}
+
 #nav-menu {
 	transition: width 0.4s;
 }

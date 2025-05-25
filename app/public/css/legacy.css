@@ -4832,7 +4832,7 @@ body.fixed {
 	background-color: var(--color-surface);
 	height: 0;
 	padding-left: 2rem;
-	font-size: 0.8rem;
+	font-size: 0.875rem;
 	font-weight: 500;
 	line-height: 45px;
 	cursor: pointer;
@@ -6152,14 +6152,6 @@ body.fixed {
 }
 .mar-r-5 {
 	margin-right: 5rem;
-}
-
-.border {
-	border: var(--border);
-}
-
-.border-radius {
-	border-radius: var(--border-radius-400);
 }
 
 .place-left {

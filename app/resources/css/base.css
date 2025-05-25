@@ -211,15 +211,6 @@
 	/*
 	* 5.1 Styling
 	*/
-	.border {
-		border-width: var(--border-width);
-		border-style: solid;
-
-		&:where(&) {
-			border-color: var(--color-border);
-		}
-	}
-
 	.highlight-on-focus {
 		outline-width: var(--border-width);
 		outline-style: solid;

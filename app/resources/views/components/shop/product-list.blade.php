@@ -453,7 +453,7 @@
 							id="remove-filter-type"
 							class="remove-filter clickable pad-t-1"
 						>
-							<span class="txt-blk font-semibold">x</span>
+							<span class="font-semibold text-neutral-700">x</span>
 							rimuovi filtro
 						</p>
 					@endif

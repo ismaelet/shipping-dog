@@ -87,12 +87,9 @@
 	>
 
 		<div class="stitle-box mt-8">
-			<h2 class="component-heading"><span class="txt-light">I NOSTRI</span> <span
-					class="txt-c1 font-semibold">PRODOTTI</span></h2>
-			<div
-				id="anch1"
-				class="anchor"
-			></div>
+			<x-typography.component-heading>
+				<span class="txt-light">I nostri</span> <span class="txt-c1 font-semibold">prodotti</span>
+			</x-typography.component-heading>
 		</div>
 
 		<x-shop.product-list />

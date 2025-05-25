@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Ecommerce\PaymentRequestController;
 use App\Http\Controllers\Ecommerce\SaleController;
+use App\Http\Controllers\SellerDashboard\PortfolioController;
 use App\Http\Controllers\SellerDashboard\SellerDashboardController;
 use App\Http\Middleware\Seller;
 use Illuminate\Support\Facades\Route;
