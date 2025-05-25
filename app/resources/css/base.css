@@ -71,11 +71,11 @@
 		--breakout-column: calc((var(--breakout-width) - var(--content-width)) / 2);
 		display: grid;
 		grid-template-columns:
-			[full-width-start] minmax(var(--content-padding), 1fr)
+			[full-width-start] minmax(var(--content-spacing), 1fr)
 			[breakout-start] minmax(0, var(--breakout-column))
-			[content-start] min(100% - var(--content-padding) * 2, var(--content-width))
+			[content-start] min(100% - var(--content-spacing) * 2, var(--content-width))
 			[content-end] minmax(0, var(--breakout-column))
-			[breakout-end] minmax(var(--content-padding), 1fr) [full-width-end];
+			[breakout-end] minmax(var(--content-spacing), 1fr) [full-width-end];
 	}
 
 	:where(.content-grid > :not(.breakout, .full-width)),
@@ -201,6 +201,21 @@
 
 	.textarea {
 		padding-block: 0.6em;
+	}
+
+	.text-link {
+		color: var(--color-neutral-700);
+		font-weight: var(--font-weight-semibold);
+		transition: color 0.2s;
+
+		&:hover {
+			color: var(--color-primary-400);
+		}
+	}
+
+	.text-strong {
+		color: var(--color-neutral-700);
+		font-weight: var(--font-weight-semibold);
 	}
 }
 

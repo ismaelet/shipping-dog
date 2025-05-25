@@ -3,8 +3,8 @@
 @pushOnce('styles')
 	<style>
 		.dashboard-panel-title {
-			padding-bottom: var(--content-padding);
-			margin-bottom: var(--content-padding);
+			padding-bottom: var(--content-spacing);
+			margin-bottom: var(--content-spacing);
 			border-bottom: var(--border);
 		}
 	</style>

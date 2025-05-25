@@ -1,18 +1,21 @@
 @php
+	use App\Legacy\System\DB;
+
 	$navigationGroups = [];
 @endphp
 
 @pushOnce('styles')
-	<style>
-
-	</style>
+	<link
+		rel="stylesheet"
+		href="{{ asset('css/legacy/sales-index.css') }}"
+	>
 @endpushOnce
 
-<x-layouts.main>
-	<x-dashboard :$navigationGroups>
+<x-layouts.seller-dashboard>
+	<div class="dashboard-panel surface">
 		<div id="head">
 
-			<h1 class="section-heading mb-12 text-center">Lista vendite</h1>
+			<x-typography.component-heading>Lista vendite</x-typography.component-heading>
 
 			<?php
 
@@ -30,10 +33,10 @@
 				</p>
 
 				<div class="mt-8 flex justify-center">
-					<a
-						class="btn button--auto-width"
-						href="<?= route('seller.payment') ?>"
-					>Scarica di nuovo il <strong>PDF</strong></a>
+					<x-button
+						class="button--auto-width"
+						href="{{ route('seller.payment') }}"
+					>Scarica di nuovo il <span class="text-strong">PDF</span></x-button>
 				</div>
 			</div>
 
@@ -44,20 +47,20 @@
 					Se <strong>non hai una partita IVA e risiedi in Italia</strong> puoi usare il bottone qui sotto per richiedere il
 					pagamento di <strong><?= $seller->toBePayedString() ?></strong><br><br>
 					Se invece possiedi una partita IVA oppure non risiedi in Italia, ti preghiamo di contattarci all'indirizzo <a
-						class="txt-sbold txt-c2"
+						class="text-link"
 						href="<?= config('custom.contacts.email.url') ?>"
 					><?= config('custom.contacts.email') ?></a> per richiedere il pagamento.
 				</p>
 
 				<div class="mt-8 flex justify-center">
-					<a
-						href="<?= route('seller.payment') ?>"
-						class="btn button--auto-width"
+					<x-button
+						href="{{ route('seller.payment') }}"
+						class="button--auto-width"
 						name="request-payment"
 					>
-						<?= embed_icon('dollar') ?>
+						{!! embed_icon('dollar') !!}
 						Richiedi il pagamento
-					</a>
+					</x-button>
 				</div>
 			</div>
 
@@ -68,18 +71,19 @@
 				<p class="text">
 					I pagamenti dei guadagni accumulati non sono inviati automaticamente, ma devono essere richiesti cliccando qui
 					sotto.
-					È possibile richiedere il pagamento se il totale a pagare è superiore a <strong>25,00€ netti</strong> (31,25€
+					È possibile richiedere il pagamento se il totale a pagare è superiore a <span class="text-strong">25,00€
+						netti</span> (31,25€
 					lordi).
 				</p>
 
-				<button
+				<x-button
 					type="button"
-					class="btn button--auto-width place-center mt-4"
+					class="button--auto-width"
 					disabled
 				>
-					<?= embed_icon('dollar') ?>
+					{!! embed_icon('dollar') !!}
 					Richiedi il pagamento
-				</button>
+				</x-button>
 
 			</div>
 
@@ -153,12 +157,14 @@
 							</div>
 
 							<div class="rec_cell">
-								<p class="rec_lbl inlb">Bonus: </p>
-								<x-help.info>Per ogni capo venduto riceverai un ulteriore <strong>10%</strong> del guadagno come bonus. Puoi
-									usare
-									questo bonus per pagare le spese di spedizione quando acquisti sul nostro sito, oppure per comprare prodotti
-									del
-									tuo negozio senza pagarli.</x-help.info>
+								<div class="align-center flex gap-4">
+									<p class="rec_lbl inlb">Bonus: </p>
+									<x-help.info>Per ogni capo venduto riceverai un ulteriore <strong>10%</strong> del guadagno come bonus. Puoi
+										usare
+										questo bonus per pagare le spese di spedizione quando acquisti sul nostro sito, oppure per comprare prodotti
+										del
+										tuo negozio senza pagarli.</x-help.info>
+								</div>
 								<input
 									type="text"
 									class="input wid-100"
@@ -208,23 +214,23 @@
 
 		<div
 			id="body"
-			class="mar-t-3"
+			class="mar-t-3 grid grid-cols-1 gap-8"
 		>
 
 			@if ($sales->count())
 
-				<div class="list-cont">
-					@if ($sort == 'designs')
-						@include('seller-dashboard.sales.designs')
-					@elseif ($sort == 'time')
+				@if ($sort == 'designs')
+					@include('seller-dashboard.sales.designs')
+				@elseif ($sort == 'time')
+					<div class="list-cont surface px-(--content-spacing)">
 						@include('seller-dashboard.sales.history')
-					@endif
-				</div>
+					</div>
+				@endif
 			@else
 				<p class="pad-t-3 text-center">Ancora non hai realizzato nessuna vendita</p>
 
 			@endif
 
 		</div>
-	</x-dashboard>
-	</x-layouts.empty>
+	</div>
+</x-layouts.seller-dashboard>

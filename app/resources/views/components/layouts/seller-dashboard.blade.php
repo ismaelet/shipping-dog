@@ -1,5 +1,3 @@
-@props(['seller'])
-
 @pushOnce('styles')
 	<link
 		rel="stylesheet"

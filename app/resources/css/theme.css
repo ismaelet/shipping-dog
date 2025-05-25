@@ -120,6 +120,15 @@
 	--text-800: min(3.5rem, 12vw);
 	--text-850: min(4rem, 13.5vw);
 	--text-900: min(5rem, 15vw);
+
+	/* Theme: Spacing */
+	--content-spacing: 1.5rem;
+}
+
+@media (min-width: 640px) {
+	:root {
+		--content-spacing: 2rem;
+	}
 }
 
 /* Theme: Dark */
@@ -226,11 +235,6 @@ body {
 
 	--content-width: 1200px;
 	--breakout-width: 1400px;
-	--content-padding: 1.5rem;
-
-	@media (min-width: 481px) {
-		--content-padding: 2rem;
-	}
 
 	--input-border-width: var(--border-width);
 	--input-border-radius: var(--border-radius-200);

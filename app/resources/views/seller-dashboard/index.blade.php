@@ -2,7 +2,7 @@
 	$no_cover = strpos($seller->cover(), '0.jpg');
 @endphp
 
-<x-layouts.seller-dashboard :$seller>
+<x-layouts.seller-dashboard>
 	<div class="columns-30rem grid gap-8 lg:gap-20">
 		<div class="grid gap-[inherit]">
 			<form

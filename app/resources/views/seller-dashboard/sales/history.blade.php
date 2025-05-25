@@ -1,4 +1,5 @@
 @use('App\Helpers\EcommerceHelper')
+@use('App\Legacy\System\DB')
 
 <?php
 

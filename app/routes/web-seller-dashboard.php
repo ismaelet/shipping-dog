@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Route;
 // Seller dashboard
 Route::prefix('/seller')->middleware(Seller::class)->name('seller-dashboard')->group(function () {
 	// Home
-	Route::any('', [SellerDashboardController::class, 'index'])->name('');
+	Route::get('', [SellerDashboardController::class, 'index'])->name('');
 	Route::post('{seller}/icon', [SellerDashboardController::class, 'uploadSellerIcon'])->name('.icon');
 	Route::post('{seller}/cover', [SellerDashboardController::class, 'uploadSellerCover'])->name('.cover');
 
 	// Portfolio
-	Route::any('/portfolio', [PortfolioController::class, 'index'])->name('.portfolio');
-	Route::any('/portfolio/add', [PortfolioController::class, 'add'])->name('.portfolio.add');
-	Route::any('/sales/prices', [PortfolioController::class, 'prices'])->name('.prices');
+	Route::get('/portfolio', [PortfolioController::class, 'index'])->name('.portfolio');
+	Route::get('/portfolio/add', [PortfolioController::class, 'add'])->name('.portfolio.add');
+	Route::get('/sales/prices', [PortfolioController::class, 'prices'])->name('.prices');
 
 	// Sales
 	Route::get('/sales', [SaleController::class, 'index'])->name('.sales');

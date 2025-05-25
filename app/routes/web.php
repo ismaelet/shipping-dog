@@ -31,8 +31,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 /**
  * * Support
  */
-Route::any('/contacts', [ContactsController::class, 'index'])->name('contacts');
-Route::any('/infos/faq', [FaqController::class, 'index'])->name('infos.faq');
+Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts');
+Route::get('/infos/faq', [FaqController::class, 'index'])->name('infos.faq');
 
 /**
  * * Designs

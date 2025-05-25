@@ -84,4 +84,4 @@ Route::get('orders/find', [OrderController::class, 'find'])->name('orders.find')
 Route::resource('orders', OrderController::class)->middleware(OrderRecap::class)->only(['show', 'destroy']);
 Route::resource('orders', OrderController::class)->only(['update']);
 
-Route::any('/refund', [RefundController::class, 'index'])->name('refund');
+Route::get('/refund', [RefundController::class, 'index'])->name('refund');

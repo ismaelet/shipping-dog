@@ -616,7 +616,7 @@
 
 		@media (max-width: 576px) {
 			#h-pan {
-				padding-inline: var(--content-padding);
+				padding-inline: var(--content-spacing);
 			}
 
 			#h-contM {

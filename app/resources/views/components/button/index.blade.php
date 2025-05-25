@@ -107,6 +107,16 @@
 				align-items: center;
 				gap: 0.5em;
 			}
+
+			/*  Disabled state */
+			&:disabled {
+				filter: grayscale(1) opacity(0.5);
+				cursor: default;
+
+				&::before {
+					opacity: 0;
+				}
+			}
 		}
 	</style>
 @endPushOnce

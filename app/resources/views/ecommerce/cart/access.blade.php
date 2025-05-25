@@ -203,7 +203,7 @@
 		#chck_box {
 			display: grid;
 			gap: 1rem;
-			padding: 1.5rem var(--content-padding);
+			padding: 1.5rem var(--content-spacing);
 			background-color: var(--color-surface);
 			border-radius: var(--border-radius-400);
 			margin-top: 1rem;

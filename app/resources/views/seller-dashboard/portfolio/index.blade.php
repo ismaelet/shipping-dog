@@ -21,7 +21,7 @@
 	></script>
 @endpushOnce
 
-<x-layouts.seller-dashboard :$seller>
+<x-layouts.seller-dashboard>
 	<form
 		method="POST"
 		class="surface dashboard-panel"
@@ -39,7 +39,7 @@
 
 			<div class="grid grid-cols-1 justify-items-center">
 				<x-button
-					href="{{ client_url('/manage/portfolio/add?id=' . $seller->id) }}"
+					href="{{ route('seller-dashboard.portfolio.add') }}"
 					class="button--auto-width"
 				>
 					{!! embed_icon('upload') !!}
@@ -77,18 +77,20 @@
 					>
 						Puoi riordinare i lavori a piacimento trascinandoli nella posizione desiderata.
 						Se vuoi che i tuoi clienti vedano i prodotti in quest'ordine, vai nelle <a
-							class="link"
-							href="<?= client_url('/manage/settings/general?id=' . auth()->id()) ?>"
-						>impostazioni generali</a> e scegli <strong>"ordine personalizzato"</strong> sotto la voce <strong>"ordina
-							prodotti"</strong>.
+							class="text-link"
+							href="{{ route('seller-dashboard') }}"
+						>impostazioni generali</a> e scegli <span class="font-semibold text-neutral-700">"ordine personalizzato"</span>
+						sotto la voce <span class="font-semibold text-neutral-700">"ordina
+							prodotti"</span>.
 					</p>
 
-					<button
+					<x-button
 						type="submit"
 						id="sort-btn"
 						name="sort"
-						class="sbtn hidden"
-					>Applica</button>
+						class="hidden"
+						variant="secondary"
+					>Applica</x-button>
 				</div>
 			</div>
 
