@@ -2253,9 +2253,6 @@ p.error {
 .txt-lh1 {
 	line-height: 1;
 }
-.txt-lh15 {
-	line-height: 1.5;
-}
 .txt-lh2 {
 	line-height: 2;
 }
@@ -6535,9 +6532,6 @@ body.fixed {
 
 .txt-lh1 {
 	line-height: 1;
-}
-.txt-lh15 {
-	line-height: 1.5;
 }
 .txt-lh2 {
 	line-height: 2;

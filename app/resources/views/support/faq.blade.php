@@ -347,10 +347,11 @@
 				<p class="info_txt">
 					Appena accumulato un guadagno minimo di <strong>25,00€</strong> sarà possibile richiedere il pagamento. A causa
 					delle nuove normative riguardo ai pagamenti occasionali, il pagamento avverrà entro 7-10 giorni lavorativi dal
-					momento della richiesta. Per poter ricevere il pagamento si deve disporre di un account <strong>PayPal<strong>. Nel
-							caso non si abbia un account PayPal crearne uno è semplice, veloce e completamente gratuito. Una volta ricevuto
-							il pagamento su PayPal sarà possibile usare l'importo direttamente, oppure spostarlo comodamente sulla propria
-							carta di credito o conto corrente.
+					momento della richiesta. Per poter ricevere il pagamento si deve disporre di un account <strong>PayPal</strong>.
+					Nel
+					caso non si abbia un account PayPal crearne uno è semplice, veloce e completamente gratuito. Una volta ricevuto
+					il pagamento su PayPal sarà possibile usare l'importo direttamente, oppure spostarlo comodamente sulla propria
+					carta di credito o conto corrente.
 				</p>
 			</div>
 		</div>

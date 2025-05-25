@@ -74,7 +74,6 @@
 
 		.art_name {
 			font-size: 0.9rem;
-			line-height: 1.5;
 			letter-spacing: 0.01em;
 		}
 
@@ -235,10 +234,6 @@
 
 		#total .chck_pric {
 			font-size: 20px;
-		}
-
-		#total h1 {
-			line-height: 1.5;
 		}
 
 		#chck_btn_box {

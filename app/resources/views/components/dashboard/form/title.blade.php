@@ -24,6 +24,6 @@
 		</a>
 	@endif
 
-	<x-dashboard.typography.main-heading>{!! $title !!}</x-dashboard.typography.main-heading>
+	<x-typography.section-heading>{!! $title !!}</x-typography.section-heading>
 
 </div>

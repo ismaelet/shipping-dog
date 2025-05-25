@@ -172,7 +172,7 @@
 
 		</div>
 
-		<p class="border-t border-neutral-200 py-6 text-center text-neutral-300">
+		<p class="border-surface-600 dark:border-surface-500 border-t py-6 text-center text-neutral-300">
 			Copyright © <?= getdate()['year'] ?> <span
 				class="font-medium text-neutral-700"><?= config('custom.meta_data.full_name') ?></span>. Il
 			copyright © di ogni grafica appartiene al rispettivo proprietario.

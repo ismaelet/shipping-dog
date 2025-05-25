@@ -2,4 +2,6 @@
 @import './base.css';
 @import './theme.css';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source "../views";

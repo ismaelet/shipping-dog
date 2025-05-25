@@ -50,11 +50,11 @@ class YearSalesChart extends ChartWidget {
 			'datasets' => [
 				[
 					'label' => now()->year,
-					'data' => $currentYearData->map(fn (TrendValue $value) => $value->aggregate),
+					'data' => $currentYearData->map(fn(TrendValue $value) => $value->aggregate),
 				],
 				[
 					'label' => now()->subYear()->year,
-					'data' => $lastYearData->map(fn (TrendValue $value) => $value->aggregate),
+					'data' => $lastYearData->map(fn(TrendValue $value) => $value->aggregate),
 					'borderColor' => 'rgba(85, 100, 120, 1)',
 					'backgroundColor' => 'rgba(85, 100, 120, 0.1)',
 				],

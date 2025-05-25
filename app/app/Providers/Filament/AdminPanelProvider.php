@@ -2,37 +2,27 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Pages\Dashboard;
-use App\Http\Middleware\Admin;
 use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\MenuItem;
-use Filament\Navigation\NavigationGroup;
+use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Number;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider {
-
 	public function panel(Panel $panel): Panel {
-		Number::useLocale(config('app.locale'));
-
 		return $panel
-			// General settings
-			->default()
 			->id('admin')
 			->path('admin')
-
-			// Style
 			->colors([
 				'danger' => Color::Red,
 				'gray' => Color::Zinc,
@@ -50,36 +40,16 @@ class AdminPanelProvider extends PanelProvider {
 				'status-shipped' => Color::Yellow,
 				'status-delivered' => Color::Orange,
 			])
-			->viteTheme('resources/css/filament/admin/theme.css')
-			->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-			->collapsibleNavigationGroups(false)
-			->brandLogo(fn () => view('filament.admin.logo'))
-
-			// Pages & Components
-			->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+			->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
+			->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
 			->pages([
-				Dashboard::class,
+				Pages\Dashboard::class,
 			])
-			->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-			->userMenuItems([
-				MenuItem::make()
-					->label('Sito Pubblico')
-					->url('/')
-					->icon('icon-home'),
-				MenuItem::make()
-					->label('Pannello Vecchio')
-					->url('/legacy-admin/dashboard')
-					->icon('icon-dashboard'),
-				'logout' => MenuItem::make()->icon('icon-exit'),
+			->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
+			->widgets([
+				Widgets\AccountWidget::class,
+				Widgets\FilamentInfoWidget::class,
 			])
-			->navigationGroups([
-				NavigationGroup::make('Gestione Vendite'),
-				NavigationGroup::make('Gestione Prodotti'),
-				NavigationGroup::make('Gestione Negozi'),
-				NavigationGroup::make('Gestione Utenti'),
-			])
-
-			// Middlewares
 			->middleware([
 				EncryptCookies::class,
 				AddQueuedCookiesToResponse::class,
@@ -93,7 +63,6 @@ class AdminPanelProvider extends PanelProvider {
 			])
 			->authMiddleware([
 				Authenticate::class,
-				Admin::class,
 			]);
 	}
 }

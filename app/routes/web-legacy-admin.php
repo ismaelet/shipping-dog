@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Admin\Pages\DashboardController;
-use App\Http\Controllers\Admin\Pages\LabelGeneratorController;
 use App\Http\Controllers\Admin\Pages\OrderLogController;
 use App\Http\Controllers\Admin\Pages\ProductLogController;
 use App\Http\Controllers\Admin\Resources\OrderController;
@@ -9,7 +8,6 @@ use App\Http\Controllers\Admin\Resources\DesignController;
 use App\Http\Controllers\Admin\Resources\ProductController;
 use App\Http\Controllers\Admin\Resources\SellerBalanceController;
 use App\Http\Controllers\Admin\Resources\SellerController;
-use App\Http\Controllers\Admin\Resources\UserController;
 use Illuminate\Support\Facades\Route;
 
 /**

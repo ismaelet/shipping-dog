@@ -107,6 +107,7 @@
 	--color-surface-200: var(--color-neutral-light-200);
 	--color-surface-400: var(--color-neutral-light-100);
 	--color-surface-500: var(--color-neutral-light-200);
+	--color-surface-600: var(--color-neutral-light-250);
 	--color-surface: var(--color-surface-400);
 
 	--color-border: var(--color-neutral-200);
@@ -117,6 +118,7 @@
 
 	--text-600: min(1.5rem, 6vw);
 	--text-700: min(2rem, 7vw);
+	--text-750: min(3rem, 10vw);
 	--text-800: min(3.5rem, 12vw);
 	--text-850: min(4rem, 13.5vw);
 	--text-900: min(5rem, 15vw);

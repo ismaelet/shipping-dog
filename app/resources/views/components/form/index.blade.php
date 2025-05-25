@@ -7,7 +7,7 @@
 		}
 
 		.form-title {
-			font-size: 2.5rem;
+			font-size: var(--text-750)
 		}
 
 		.form-body {

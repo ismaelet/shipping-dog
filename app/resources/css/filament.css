@@ -1,11 +1,16 @@
 /* Imports */
-@import '/vendor/filament/filament/resources/css/theme.css';
-@import '../../custom.css';
-@config '../../../../tailwind.config.ts';
+:root {
+	--theme-h: 220deg;
+	--theme-dark-s: 28%;
+	--color-background-s: var(--theme-dark-s);
+	--color-background-l: 10%;
+
+	--color-background: hsl(var(--theme-h), var(--theme-dark-s), var(--color-background-l));
+}
 
 /* Resets */
-:root {
-	--font-family-paragraph: 'Poppins', sans-serif;
+html {
+	font-family: 'Poppins', sans-serif !important;
 }
 
 svg:not([fill='none']) {
@@ -58,7 +63,7 @@ html:not(.dark) {
 /* Top bar */
 .fi-logo,
 .fi-header-heading {
-	font-weight: var(--font-weight-medium);
+	font-weight: var(--font-weight-medium) !important;
 }
 
 .fi-dropdown-list-item-icon {
@@ -84,9 +89,9 @@ html:not(.dark) {
 }
 
 .fi-sidebar-item-icon {
-	width: 1.125rem;
-	height: 1.125rem;
-	fill: currentColor;
+	width: 1.125rem !important;
+	height: 1.125rem !important;
+	fill: currentColor !important;
 }
 
 .fi-sidebar-item-button {

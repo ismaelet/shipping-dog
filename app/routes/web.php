@@ -8,6 +8,9 @@ use App\Http\Controllers\EmergencyEmail;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OpenShopController;
+use App\Http\Controllers\PrivacyPolicyController;
+use App\Http\Controllers\SaleTermsController;
+use App\Http\Controllers\UploadTermsController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\NotSeller;
 use App\Models\Ecommerce\Seller as EcommerceSeller;
@@ -41,9 +44,9 @@ Route::post('/open-shop', [OpenShopController::class, 'add'])->middleware(NotSel
 Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts');
 Route::post('/contacts', [ContactsController::class, 'send'])->name('contacts');
 Route::get('/support/faq', [FaqController::class, 'index'])->name('support.faq');
-Route::get('/support/sale-terms', [FaqController::class, 'index'])->name('support.sale-terms');
-Route::get('/support/upload-terms', [FaqController::class, 'index'])->name('support.upload-terms');
-Route::get('/support/privacy-policy', [FaqController::class, 'index'])->name('support.privacy-policy');
+Route::get('/support/sale-terms', [SaleTermsController::class, 'index'])->name('support.sale-terms');
+Route::get('/support/upload-terms', [UploadTermsController::class, 'index'])->name('support.upload-terms');
+Route::get('/support/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('support.privacy-policy');
 
 /**
  * * Designs
