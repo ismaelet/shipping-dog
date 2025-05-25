@@ -13,11 +13,11 @@
 		<x-inputs.alert-success>Modifiche salvate</x-inputs.alert-success>
 	@endif
 
-	<x-inputs.textarea
+	<x-textarea
 		name="tags"
 		placeholder="(Opzionale) Puoi inserire fino a 10 tag separati da virgola. I tag rendono il tuo design più facile da trovare."
 		@input="$el.nextElementSibling.classList.remove('hidden')"
-	>{{ $design->tags?->tags }}</x-inputs.textarea>
+	>{{ $design->tags?->tags }}</x-textarea>
 
 	<div class="hidden">
 		<x-button

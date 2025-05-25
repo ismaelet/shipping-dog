@@ -7,7 +7,9 @@ use App\Http\Controllers\Ecommerce\DesignController;
 use App\Http\Controllers\EmergencyEmail;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OpenShopController;
 use App\Http\Middleware\Admin;
+use App\Http\Middleware\NotSeller;
 use App\Models\Ecommerce\Seller as EcommerceSeller;
 use Illuminate\Support\Facades\Route;
 
@@ -30,13 +32,18 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 /**
  * * Open shop
  */
-Route::get('/open-shop', [ContactsController::class, 'index'])->name('open-shop');
+Route::get('/open-shop', [OpenShopController::class, 'index'])->middleware(NotSeller::class)->name('open-shop');
+Route::post('/open-shop', [OpenShopController::class, 'add'])->middleware(NotSeller::class)->name('open-shop');
 
 /**
  * * Support
  */
 Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts');
-Route::get('/infos/faq', [FaqController::class, 'index'])->name('infos.faq');
+Route::post('/contacts', [ContactsController::class, 'send'])->name('contacts');
+Route::get('/support/faq', [FaqController::class, 'index'])->name('support.faq');
+Route::get('/support/sale-terms', [FaqController::class, 'index'])->name('support.sale-terms');
+Route::get('/support/upload-terms', [FaqController::class, 'index'])->name('support.upload-terms');
+Route::get('/support/privacy-policy', [FaqController::class, 'index'])->name('support.privacy-policy');
 
 /**
  * * Designs

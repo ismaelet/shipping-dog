@@ -36,7 +36,7 @@
 		<x-inputs.label text="Scegli il colore:" />
 
 		<div class="flex items-center gap-2">
-			<x-inputs.input
+			<x-input
 				type="color"
 				name="color"
 				class="cursor-pointer"

@@ -166,7 +166,7 @@
 
 						@if ($record->status > 0)
 							<div class="flex gap-2">
-								<x-inputs.input
+								<x-input
 									name="tracking"
 									value="{{ $record->tracking }}"
 									placeholder="Codice di tracking"

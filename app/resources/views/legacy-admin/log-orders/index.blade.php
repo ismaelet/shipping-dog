@@ -210,7 +210,7 @@
 						method="GET"
 						action=""
 					>
-						<x-inputs.checkbox
+						<x-checkbox
 							name="show_all"
 							text="Mostra tutti gli ordini"
 							checked="{{ $showAll }}"

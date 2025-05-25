@@ -337,11 +337,11 @@
 					name="redirect"
 					value="true"
 				>
-				<x-inputs.input
+				<x-input
 					name="login"
 					placeholder="Username o e-mail"
 				/>
-				<x-inputs.input
+				<x-input
 					type="password"
 					name="password"
 					placeholder="Password"

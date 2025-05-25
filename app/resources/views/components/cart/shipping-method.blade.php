@@ -1,5 +1,5 @@
 <label class="ship_row interactive group">
-	<x-inputs.checkbox
+	<x-checkbox
 		type="radio"
 		class="js-shipping-method js-cart-shipping-price-string"
 		name="shipping_method_id"

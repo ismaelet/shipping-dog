@@ -52,7 +52,7 @@
 			class="grid"
 			x-data
 		>
-			<x-inputs.input
+			<x-input
 				type="file"
 				name="file_dark"
 				@input="$el.closest('form').submit()"

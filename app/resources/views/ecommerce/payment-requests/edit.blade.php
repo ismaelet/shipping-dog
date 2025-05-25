@@ -16,14 +16,14 @@
 		<div class="grid gap-2">
 			<x-form.group>
 				<x-inputs.label text="Nome e cognome" />
-				<x-inputs.input
+				<x-input
 					name="first_name"
 					placeholder="Nome"
 					value="{{ $paymentRequest?->first_name }}"
 					required
 					data-size="2"
 				/>
-				<x-inputs.input
+				<x-input
 					name="last_name"
 					placeholder="Cognome"
 					value="{{ $paymentRequest?->last_name }}"
@@ -34,7 +34,7 @@
 
 			<x-form.group>
 				<x-inputs.label text="Data di nascita" />
-				<x-inputs.input
+				<x-input
 					type="date"
 					name="birthdate"
 					value="{{ $paymentRequest?->birthdate }}"
@@ -44,14 +44,14 @@
 
 			<x-form.group>
 				<x-inputs.label text="Città e provincia di nascita" />
-				<x-inputs.input
+				<x-input
 					name="birthplace"
 					placeholder="Città"
 					value="{{ $paymentRequest?->birthplace }}"
 					required
 					data-size="3"
 				/>
-				<x-inputs.input
+				<x-input
 					class="uppercase"
 					name="birthprovince"
 					placeholder="Provincia"
@@ -63,20 +63,20 @@
 
 			<x-form.group>
 				<x-inputs.label text="Indirizzo di residenza" />
-				<x-inputs.input
+				<x-input
 					name="address"
 					placeholder="Indirizzo"
 					value="{{ $paymentRequest?->address }}"
 					required
 				/>
-				<x-inputs.input
+				<x-input
 					name="city"
 					placeholder="Città"
 					value="{{ $paymentRequest?->city }}"
 					required
 					data-size="2"
 				/>
-				<x-inputs.input
+				<x-input
 					class="uppercase"
 					name="province"
 					placeholder="Provincia"
@@ -84,7 +84,7 @@
 					required
 					data-size="1"
 				/>
-				<x-inputs.input
+				<x-input
 					name="zip"
 					placeholder="CAP"
 					value="{{ $paymentRequest?->zip }}"
@@ -95,14 +95,14 @@
 
 			<x-form.group>
 				<x-inputs.label text="Dati personali" />
-				<x-inputs.input
+				<x-input
 					class="uppercase"
 					name="cf"
 					placeholder="Codice fiscale"
 					value="{{ $paymentRequest?->cf }}"
 					required
 				/>
-				<x-inputs.input
+				<x-input
 					name="national_id"
 					placeholder="Numero della carta di identità"
 					value="{{ $paymentRequest?->national_id }}"
@@ -112,7 +112,7 @@
 
 			<x-form.group>
 				<x-inputs.label text="Indirizzo PayPal" />
-				<x-inputs.input
+				<x-input
 					type="email"
 					name="paypal"
 					placeholder="Indirizzo PayPal"

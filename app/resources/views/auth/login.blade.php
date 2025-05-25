@@ -17,19 +17,19 @@
 >
 
 	<x-slot name="formBody">
-		<x-inputs.input
+		<x-input
 			type="hidden"
 			name="url"
 			:value="old('url')"
 		/>
-		<x-inputs.input
+		<x-input
 			type="text"
 			name="login"
 			:value="old('login')"
 			placeholder="Username o E-mail"
 			required
 		/>
-		<x-inputs.input
+		<x-input
 			type="password"
 			name="password"
 			placeholder="Password"
@@ -41,7 +41,7 @@
 		@endsession
 
 		<div class="flex items-center justify-between">
-			<x-inputs.checkbox
+			<x-checkbox
 				name="remember"
 				text="Resta connesso"
 				checked

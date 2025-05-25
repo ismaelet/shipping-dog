@@ -282,7 +282,7 @@
 		@required($required)
 	>
 
-	<x-inputs.input
+	<x-input
 		class="js-search-show"
 		:name="$shownName ?? null"
 		:value="$shownValue ?? ''"

@@ -1,7 +1,7 @@
 <x-inputs.group>
 	<x-inputs.label text="{{ $label }}" />
 
-	<x-inputs.input
+	<x-input
 		type="range"
 		class="h-8 w-full cursor-pointer disabled:cursor-default"
 		name="{{ $name }}"

@@ -12,7 +12,7 @@
 	        'Supporto',
 	        [
 	            ['Contatti', 'contacts'],
-	            ['FAQ', 'infos.faq'],
+	            ['FAQ', 'support.faq'],
 	            ['Cambio taglia', 'refund'],
 	            ['Stato ordine', 'order/status'],
 	        ],
@@ -21,10 +21,10 @@
 	    [
 	        'Legali',
 	        [
-	            ['Condizioni di vendita', 'infos.sale-terms'],
-	            ['Condizioni di invio', 'infos.contract'],
-	            ['Privacy policy', 'infos.privacy'],
-	            ['P. IVA ' . config('custom.ecommerce.vat')],
+	            ['Condizioni di vendita', route('support.sale-terms')],
+	            ['Condizioni di invio', route('support.upload-terms')],
+	            ['Privacy policy', route('support.privacy-policy')],
+	            ['P. IVA ' . config('ecommerce.vat')],
 	        ],
 	    ],
 	];

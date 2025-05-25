@@ -24,7 +24,7 @@
 	@break
 
 	@case('checkbox')
-		<x-inputs.checkbox
+		<x-checkbox
 			name="{{ $column['name'] }}[]"
 			checked="{{ !empty($column['checked']) }}"
 			:value="$record->{$column['name']}"

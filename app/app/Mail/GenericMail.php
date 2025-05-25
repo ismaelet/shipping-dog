@@ -12,14 +12,16 @@ class GenericMail extends Mailable {
 
 	public $subject;
 	public $content;
+	public $replyTo;
 
 	/**
 	 * Create a new message instance
 	 */
-	public function __construct(string $subject, string $content, array $parameters = []) {
+	public function __construct(string $subject, string $content, array $parameters = [], array|string $replyTo = null) {
 		// Set the subject and content
 		$this->subject = $subject;
 		$this->content = $content;
+		$this->replyTo = $replyTo;
 
 		// Replace parameters in the content
 		foreach ($parameters as $key => $value) {
@@ -33,6 +35,7 @@ class GenericMail extends Mailable {
 	public function build(): self {
 		return $this
 			->subject($this->subject)
+			->replyTo($this->replyTo)
 			->view('emails.default-email');
 	}
 }

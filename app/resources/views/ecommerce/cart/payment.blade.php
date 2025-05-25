@@ -33,7 +33,7 @@ $cart = cart();
 					<x-typography.component-heading class="title">Pagamento</x-typography.component-heading>
 					@foreach ($paymentMethods as $paymentMethod)
 						<label class="chck_item grid grid-cols-[max-content_1fr] items-center gap-4 sm:grid-cols-[5rem_1fr]">
-							<x-inputs.checkbox
+							<x-checkbox
 								type="radio"
 								class=""
 								name="payment_method_id"

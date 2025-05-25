@@ -52,7 +52,7 @@
 	</div>
 
 	<x-inputs.group class="grid gap-2">
-		<x-inputs.input
+		<x-input
 			type="file"
 			name="file_vector"
 			size="small"

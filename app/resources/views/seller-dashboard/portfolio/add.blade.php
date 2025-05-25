@@ -112,7 +112,7 @@
 
 					<?php generate_form($inputs, false, $error); ?>
 
-					<x-inputs.checkbox
+					<x-checkbox
 						name="cbx"
 						text="Dichiaro di aver letto e accettato le <a
 							class='text-link'

@@ -65,7 +65,7 @@
 	    'logged' => true,
 	    'mob' => true,
 	];
-	$header['links'][] = ['title' => 'Vendi', 'loc' => 'sell', 'url' => '/open-shop', 'seller' => false];
+	$header['links'][] = ['title' => 'Vendi', 'loc' => 'open-shop', 'url' => '/open-shop', 'seller' => false];
 	$header['links'][] = ['title' => 'Supporto', 'loc' => 'info', 'url' => '/infos/faq', 'drop' => 'info'];
 	$header['links'][] = ['title' => 'Gestione', 'loc' => 'admin', 'url' => '/admin', 'admin' => true];
 
@@ -81,7 +81,7 @@
 	    ['Contatti', 'contacts'],
 	    ['Cambio taglia o reso', 'refund'],
 	    ['Stato ordine', 'orders.find'],
-	    ['Domande frequenti', 'infos.faq'],
+	    ['Domande frequenti', 'support.faq'],
 	];
 
 	if (Auth::user()?->seller) {
@@ -676,7 +676,7 @@
 					</label>
 
 					<div id="h-srch-inp-box">
-						<x-inputs.input
+						<x-input
 							class="header-search__input"
 							name="search"
 							placeholder="Cerca un prodotto o tag"

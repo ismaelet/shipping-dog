@@ -91,7 +91,7 @@ $cart = cart();
 
 				<div class="gap1 grid">
 
-					<x-inputs.input
+					<x-input
 						name="full_name"
 						placeholder="Nominativo di spedizione"
 						:value="$address->full_name ?? ''"
