@@ -46,6 +46,16 @@
 				&:hover::before {
 					opacity: 0;
 				}
+
+				/* Primary button: Danger color */
+				&[data-color="danger"] {
+					background-color: var(--color-error-400);
+
+					&::before {
+						background-image: linear-gradient(to right, var(--color-error-400), var(--color-error-500));
+					}
+
+				}
 			}
 
 			/* Secondary button */
@@ -60,12 +70,12 @@
 					border-color: var(--color-neutral-400);
 				}
 
-				/* Secondary button: Error color */
-				&[data-color="error"] {
+				/* Secondary button: Danger color */
+				&[data-color="danger"] {
 					border-color: var(--color-error-400);
 					color: var(--color-error-400);
 
-					/* Secondary button: Error color - hover state */
+					/* Secondary button: Danger color - hover state */
 					&:hover {
 						color: var(--color-error-500);
 						border-color: var(--color-error-500);

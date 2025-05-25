@@ -8,6 +8,11 @@
 				grid-template-columns: 18rem 1fr
 			}
 		}
+
+		.dashboard-heading {
+			padding-bottom: 0.5rem;
+			border-bottom: 1px solid var(--color-surface-500);
+		}
 	</style>
 @endpush
 

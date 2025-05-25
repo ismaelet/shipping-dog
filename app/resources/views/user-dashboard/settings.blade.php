@@ -21,7 +21,7 @@
 					class="anchor"
 				></div>
 
-				<x-typography.component-heading>Dati profilo</x-typography.component-heading>
+				<x-typography.component-heading class="dashboard-heading">Dati profilo</x-typography.component-heading>
 
 				<div class="grid grid-cols-1 gap-4">
 
@@ -96,7 +96,7 @@
 					class="anchor"
 				></div>
 
-				<x-typography.component-heading>Password</x-typography.component-heading>
+				<x-typography.component-heading class="dashboard-heading">Password</x-typography.component-heading>
 
 				<div class="grid grid-cols-1 gap-4">
 
@@ -148,12 +148,12 @@
 
 				</div>
 
-				<div class="footer">
-					<button
+				<div class="footer flex justify-center">
+					<x-button
 						type="submit"
 						name="edit_pass"
-						class="btn button--full-width"
-					>Modifica</button>
+						class=""
+					>Modifica</x-button>
 				</div>
 			</form>
 
@@ -162,7 +162,7 @@
 				method="POST"
 				enctype="multipart/form-data"
 			>
-				<x-typography.component-heading>Immagine profilo</x-typography.component-heading>
+				<x-typography.component-heading class="dashboard-heading">Immagine profilo</x-typography.component-heading>
 
 				<div class="grid grid-cols-1 gap-4">
 					<x-inputs.label>Modifica l'immagine profilo:</x-inputs.label>
@@ -184,7 +184,7 @@
 				class="grid grid-cols-1 gap-8"
 				method="POST"
 			>
-				<x-typography.component-heading>Elimina l'account</x-typography.component-heading>
+				<x-typography.component-heading class="dashboard-heading">Elimina l'account</x-typography.component-heading>
 
 				<div class="grid grid-cols-1 gap-4">
 					<p>Clicca qui sotto se vuoi cancellare definitivamente il tuo account. <strong>L'operazione NON può essere
@@ -197,6 +197,7 @@
 						name="delete-account"
 						class=""
 						confirmation="Sei sicuro di voler eliminare l'account? Non potrà essere ripristinato."
+						color="danger"
 					>
 						{!! embed_icon('delete') !!}
 						Elimina l'account
