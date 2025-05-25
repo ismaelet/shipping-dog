@@ -12,6 +12,7 @@
         "flowframe/laravel-trend": "^0.4.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "sentry/sentry-laravel": "^4.13",
         "symfony/filesystem": "^7.2"
     },
     "require-dev": {
