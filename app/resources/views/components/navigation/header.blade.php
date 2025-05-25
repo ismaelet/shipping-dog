@@ -65,8 +65,8 @@
 	    'logged' => true,
 	    'mob' => true,
 	];
-	$header['links'][] = ['title' => 'Vendi', 'loc' => 'sell', 'url' => '/sell', 'seller' => false];
-	$header['links'][] = ['title' => 'Supporto', 'loc' => 'info', 'url' => '/infos.faq', 'drop' => 'info'];
+	$header['links'][] = ['title' => 'Vendi', 'loc' => 'sell', 'url' => '/open-shop', 'seller' => false];
+	$header['links'][] = ['title' => 'Supporto', 'loc' => 'info', 'url' => '/infos/faq', 'drop' => 'info'];
 	$header['links'][] = ['title' => 'Gestione', 'loc' => 'admin', 'url' => '/admin', 'admin' => true];
 
 	// dropdowns

@@ -14,6 +14,12 @@ class FaqController extends Controller {
 	 * @return \Illuminate\View\View
 	 */
 	public function index(Request $request): View {
-		return view('faq', []);
+		$title = 'FAQ';
+		$locationTag = 'support';
+
+		return view('support.faq', [
+			'title' => $title,
+			'locationTag' => $locationTag,
+		]);
 	}
 }

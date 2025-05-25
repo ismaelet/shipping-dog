@@ -8,7 +8,6 @@ use App\Http\Controllers\EmergencyEmail;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
 use App\Http\Middleware\Admin;
-use App\Http\Middleware\Seller;
 use App\Models\Ecommerce\Seller as EcommerceSeller;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +26,11 @@ use Illuminate\Support\Facades\Route;
  * * Home
  */
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+/**
+ * * Open shop
+ */
+Route::get('/open-shop', [ContactsController::class, 'index'])->name('open-shop');
 
 /**
  * * Support
