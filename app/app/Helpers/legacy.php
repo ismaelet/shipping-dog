@@ -252,7 +252,11 @@ function temp_bg($img) {
 	return 'style="background-image: url(' . public_asset($img) . ');"';
 }
 
-// Generate form
+function format($n) {
+	$n = (float) $n;
+	return number_format($n, 2, '.', '');
+}
+
 function generate_form($fields, $data = false, $error = false, $done = false) {
 
 	foreach ($fields as $field) {

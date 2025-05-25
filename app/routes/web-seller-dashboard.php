@@ -3,6 +3,7 @@
 use App\Http\Controllers\Ecommerce\PaymentRequestController;
 use App\Http\Controllers\Ecommerce\SaleController;
 use App\Http\Controllers\SellerDashboard\PortfolioController;
+use App\Http\Controllers\SellerDashboard\PricingController;
 use App\Http\Controllers\SellerDashboard\SellerDashboardController;
 use App\Http\Middleware\Seller;
 use Illuminate\Support\Facades\Route;
@@ -17,10 +18,12 @@ Route::prefix('/seller')->middleware(Seller::class)->name('seller-dashboard')->g
 	// Portfolio
 	Route::get('/portfolio', [PortfolioController::class, 'index'])->name('.portfolio');
 	Route::get('/portfolio/add', [PortfolioController::class, 'add'])->name('.portfolio.add');
-	Route::get('/sales/prices', [PortfolioController::class, 'prices'])->name('.prices');
 
 	// Sales
 	Route::get('/sales', [SaleController::class, 'index'])->name('.sales');
+
+	// Pricing
+	Route::get('/sales/prices', [PricingController::class, 'index'])->name('.prices');
 
 	// Payments
 	Route::get('/payment', [PaymentRequestController::class, 'index'])->name('.payment');
