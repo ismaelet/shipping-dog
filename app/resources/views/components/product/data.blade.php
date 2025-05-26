@@ -28,23 +28,24 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 </div> -->
 
 <div
-	class="breakout pad-t-3 item-type--<?= $product->type->tag ?> mb-8"
+	class="breakout pad-t-3 item-type--{{ $product->type->tag }} mb-8"
 	id="item"
-	data-id="<?= $product->id ?>"
+	data-id="{{ $product->id }}"
 	data-hroot="/legacy"
-	data-seller-id="<?= $product->seller->id ?>"
+	data-seller-id="{{ $product->seller->id }}"
 >
 
 	<form
-		action="<?= route('order-items.store') ?>"
+		action="{{ route('order-items.store') }}"
 		method="POST"
 		class="content gap3 al-top grid"
 	>
+		@csrf
 
 		<input
 			type="hidden"
 			name="product_id"
-			value="<?= $product->id ?>"
+			value="{{ $product->id }}"
 		>
 
 		<x-product.images :$product />
@@ -55,9 +56,9 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 		>
 			<div class="">
 				<!-- Title -->
-				<h1 id="title"><?= $product->name ?></h1>
+				<h1 id="title">{{ $product->name }}</h1>
 
-				<p id="author"><?= $product->type->name ?>
+				<p id="author">{{ $product->type->name }}
 					by <a
 						class="txt-c1-h"
 						href="<?= $product->seller->url() ?>"
