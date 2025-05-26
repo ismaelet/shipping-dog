@@ -57,10 +57,9 @@ services:
     vite:
         build:
             context: .
-            dockerfile: docker/app/Dockerfile
+            dockerfile: docker/php/Dockerfile
         volumes:
-            - ./app:/app
-            - ./app/.npm:/.npm
+            - ./app:/var/www
         command: /bin/bash -c 'npm run dev'
         environment:
             VITE_SERVER_HOST: true

@@ -176,7 +176,7 @@
 						name="edit_icon"
 						class="file-submit hidden"
 					></button>
-					<div class="file-load"></div>
+					<div class="file-load">{!! embed_icon('loading') !!}</div>
 				</div>
 			</form>
 

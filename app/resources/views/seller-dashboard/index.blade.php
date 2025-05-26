@@ -175,7 +175,7 @@
 						Cambia la foto
 					</x-button>
 
-					<div class="file-load"></div>
+					<div class="file-load">{!! embed_icon('loading') !!}</div>
 
 					<input
 						type="file"
@@ -220,7 +220,7 @@
 					{{ $no_cover ? 'Carica copertina' : 'Cambia copertina' }}
 				</x-button>
 
-				<div class="file-load"></div>
+				<div class="file-load">{!! embed_icon('loading') !!}</div>
 
 				<input
 					type="file"

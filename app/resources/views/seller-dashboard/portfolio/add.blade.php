@@ -79,6 +79,7 @@
 				method="POST"
 				enctype="multipart/form-data"
 			>
+				{{-- @csrf --}}
 
 				<div class="gap1 pad-t-2 grid">
 
@@ -131,7 +132,7 @@
 							Carica la grafica
 						</x-button>
 
-						<div class="file-load"></div>
+						<div class="file-load">{!! embed_icon('loading') !!}</div>
 
 					</div>
 

@@ -5,6 +5,8 @@
 	class="surface grid gap-4 p-6"
 	enctype="multipart/form-data"
 >
+	@csrf
+
 	<div>
 		<x-typography.component-heading>Grafica chiara</x-typography.component-heading>
 		<p>grafica utilizzata su capi chiari</p>

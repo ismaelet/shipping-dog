@@ -1294,15 +1294,6 @@ p.error {
 	padding-right: var(--wrap-padding);
 }
 
-/*
-	* Load
-	*/
-.load-icon {
-	background: url(../svg/icons/loading.svg) center / contain no-repeat;
-	width: 3rem;
-	height: 3rem;
-}
-
 .load.fade-in {
 	opacity: 0;
 }
@@ -3785,8 +3776,7 @@ p strong {
 	z-index: 100;
 }
 
-#load-ico,
-.load-icon {
+#load-ico {
 	width: 5rem;
 	height: 5rem;
 	top: 50%;
@@ -4048,7 +4038,6 @@ body.fixed {
 
 .file-load {
 	display: none;
-	background: url(../svg/icons/loading/loading.svg) center / contain no-repeat;
 	height: 4rem;
 	margin: 0 auto;
 }

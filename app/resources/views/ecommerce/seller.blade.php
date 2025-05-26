@@ -271,7 +271,7 @@
 					<?php } ?>
 
 					<div class="sort-load bgr">
-						<div class="sort-load-icon cen img cont"></div>
+						<div class="sort-load-icon cen img cont">{!! embed_icon('loading') !!}</div>
 					</div>
 				</div>
 

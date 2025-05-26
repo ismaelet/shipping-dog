@@ -434,7 +434,7 @@ function generate_input($input, $data, $error, $done) {
 
 				<?php if (isset($input['load'])) { ?>
 
-					<div class="file-load"></div>
+					<div class="file-load"><?php embed_icon('loading') ?></div>
 
 				<?php } ?>
 

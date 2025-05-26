@@ -272,7 +272,6 @@ body:has([data-seller-id='7083']) {
 }
 
 .sort-load-icon {
-	background-image: url(../../system/assets/icons/loading/loading.svg);
 	width: 5rem;
 	height: 5rem;
 }

@@ -9,6 +9,7 @@
 	action="{{ route('designs.upload-image', [$design, 'type' => 'dark']) }}"
 	enctype="multipart/form-data"
 >
+	@csrf
 
 	<div>
 		<x-typography.component-heading>Grafica scura</x-typography.component-heading>
