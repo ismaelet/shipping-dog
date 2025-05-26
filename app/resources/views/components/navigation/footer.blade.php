@@ -13,8 +13,8 @@
 	        [
 	            ['Contatti', 'contacts'],
 	            ['FAQ', 'support.faq'],
-	            ['Cambio taglia', 'refund'],
-	            ['Stato ordine', 'order/status'],
+	            ['Cambio taglia', 'support.refund'],
+	            ['Stato ordine', 'support.order.status'],
 	        ],
 	    ],
 

@@ -7,6 +7,12 @@
 	        'icon' => 'user',
 	    ],
 	    [
+	        'title' => 'Wishlist',
+	        'dashboard_location' => 'wishlist',
+	        'url' => route('user-dashboard.wishlist'),
+	        'icon' => 'love',
+	    ],
+	    [
 	        'title' => 'Lista ordini',
 	        'dashboard_location' => 'orders',
 	        'url' => route('user-dashboard.orders'),

@@ -68,7 +68,7 @@
 
 					<p class="">
 						<a
-							href="{{ route('refund') }}"
+							href="{{ route('support.refund') }}"
 							class="text-link"
 						>Cambio taglia o reso</a>
 					</p>

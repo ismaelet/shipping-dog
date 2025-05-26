@@ -4,6 +4,7 @@ use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\CustomerPicsController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\Ecommerce\DesignController;
+use App\Http\Controllers\Ecommerce\RefundController;
 use App\Http\Controllers\EmergencyEmail;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
@@ -48,6 +49,8 @@ Route::get('/support/faq', [FaqController::class, 'index'])->name('support.faq')
 Route::get('/support/sale-terms', [SaleTermsController::class, 'index'])->name('support.sale-terms');
 Route::get('/support/upload-terms', [UploadTermsController::class, 'index'])->name('support.upload-terms');
 Route::get('/support/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('support.privacy-policy');
+Route::get('/refund', [RefundController::class, 'index'])->name('support.refund');
+Route::get('/order/status', [RefundController::class, 'index'])->name('support.order.status');
 
 /**
  * * Designs

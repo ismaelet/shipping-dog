@@ -104,7 +104,7 @@
 				<p class="info_txt">
 					È possibile eseguire un cambio taglia o un reso del capo, basta seguire la semplice <a
 						class="link"
-						href="{{ route('refund') }}"
+						href="{{ route('support.refund') }}"
 					>procedura online</a>. Nel caso di un cambio, le spese di spedizione del nuovo capo sono a carico del cliente. Vi
 					consigliamo di controllare la lista taglie prima di procedere a un cambio o ad un nuovo acquisto. L'invio del nuovo
 					capo avverrà entro un giorno lavorativo dalla restituzione di quello vecchio.

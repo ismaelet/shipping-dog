@@ -15,6 +15,9 @@ class RefundController extends Controller {
 	 * @return \Illuminate\View\View
 	 */
 	public function index(Request $request): View {
-		abort(404, 'This page is not available yet.');
+		return view('under-construction', [
+			'title' => 'Cambio/Reso',
+			'locationTag' => 'support',
+		]);
 	}
 }

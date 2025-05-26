@@ -77,6 +77,6 @@ class OrderController extends Controller {
 	 * * Custom action: Find
 	 */
 	public function find(Request $request) {
-		redirect_old('/order/status');
+		redirect_old(route('support.order.status'));
 	}
 }

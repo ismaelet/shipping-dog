@@ -61,7 +61,7 @@
 	$header['links'][] = [
 	    'title' => 'Preferiti',
 	    'loc' => 'wishlist',
-	    'url' => '/wishlist',
+	    'url' => route('user-dashboard.wishlist'),
 	    'logged' => true,
 	    'mob' => true,
 	];
@@ -79,7 +79,7 @@
 
 	$header['dropdowns']['info'] = [
 	    ['Contatti', 'contacts'],
-	    ['Cambio taglia o reso', 'refund'],
+	    ['Cambio taglia o reso', 'support.refund'],
 	    ['Stato ordine', 'orders.find'],
 	    ['Domande frequenti', 'support.faq'],
 	];
@@ -815,7 +815,7 @@
 						<a
 							id="h-wish"
 							class="wish icon-box h-link al-mid h-icon"
-							href="<?= '/wishlist' ?>"
+							href="{{ route('user-dashboard.wishlist') }}"
 						>
 							<?= embed_icon('love') ?>
 						</a>
