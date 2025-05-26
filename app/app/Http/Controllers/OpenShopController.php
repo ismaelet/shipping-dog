@@ -34,8 +34,8 @@ class OpenShopController extends Controller {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function add(Request $request): RedirectResponse {
-		$name = trim($_POST['name']);
-		$desc = trim($_POST['desc']);
+		$name = trim($request->name);
+		$desc = trim($request->description);
 
 		if (empty($name)) {
 			return redirect()->back()->withErrors(['name' => 'Il nome del negozio non può essere vuoto.']);

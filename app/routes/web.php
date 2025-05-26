@@ -12,6 +12,7 @@ use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\SaleTermsController;
 use App\Http\Controllers\UploadTermsController;
 use App\Http\Middleware\Admin;
+use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\NotSeller;
 use App\Models\Ecommerce\Seller as EcommerceSeller;
 use Illuminate\Support\Facades\Route;
@@ -35,8 +36,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 /**
  * * Open shop
  */
-Route::get('/open-shop', [OpenShopController::class, 'index'])->middleware(NotSeller::class)->name('open-shop');
-Route::post('/open-shop', [OpenShopController::class, 'add'])->middleware(NotSeller::class)->name('open-shop');
+Route::get('/open-shop', [OpenShopController::class, 'index'])->middleware([NotSeller::class, Authenticate::class])->name('open-shop');
+Route::post('/open-shop', [OpenShopController::class, 'add'])->middleware([NotSeller::class, Authenticate::class])->name('open-shop');
 
 /**
  * * Support
