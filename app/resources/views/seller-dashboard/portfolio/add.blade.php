@@ -79,7 +79,7 @@
 				method="POST"
 				enctype="multipart/form-data"
 			>
-				{{-- @csrf --}}
+				@csrf
 
 				<div class="gap1 pad-t-2 grid">
 

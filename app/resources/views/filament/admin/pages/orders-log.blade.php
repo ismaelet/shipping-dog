@@ -212,10 +212,12 @@
 
 					<div class="flex gap-4">
 						<form
-							action=""
+							action="{{ route('admin.orders-log.update-start-from') }}"
 							method="POST"
 							class="contents"
 						>
+							@csrf
+
 							<x-inputs.search-input
 								search="orders"
 								stored-name="start_order_id"
@@ -240,10 +242,12 @@
 
 						@if ($orders->count())
 							<form
-								action=""
+								action="{{ route('admin.orders-log.clean') }}"
 								method="POST"
 								class="contents"
 							>
+								@csrf
+
 								<x-button
 									type="submit"
 									name="submit"
@@ -294,7 +298,8 @@
 					>
 
 						{{-- Order header --}}
-						<p class="js-to-copy">[{{ $order->id }} - {{ $order->createdAtString() }} - {{ $order->payment_method->name }}]
+						<p class="js-to-copy">[{{ $order->id }} - {{ $order->createdAtString() }} -
+							{{ $order->payment_method->name }}]
 						</p>
 
 						{{-- Address --}}

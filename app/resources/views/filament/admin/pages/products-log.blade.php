@@ -149,10 +149,12 @@
 
 			<div class="flex w-full items-center gap-4">
 				<form
-					action=""
+					action="{{ route('admin.products-log.update-start-from') }}"
 					method="POST"
 					class="contents"
 				>
+					@csrf
+
 					<x-inputs.search-input
 						class="grow"
 						search="orders"
@@ -177,10 +179,12 @@
 
 				@if ($orderItemsCount)
 					<form
-						action=""
+						action="{{ route('admin.products-log.clean') }}"
 						method="POST"
 						class="grid h-full"
 					>
+						@csrf
+
 						<x-button
 							type="submit"
 							name="submit"

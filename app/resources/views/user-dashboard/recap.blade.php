@@ -12,11 +12,6 @@
 	>
 		<div class="form grid grid-cols-1 gap-8">
 
-			<x-typography.component-heading
-				id="title"
-				class="text-center"
-			>Attività recenti</x-typography.component-heading>
-
 			<p class="text-center">
 
 				<?php

@@ -48,8 +48,8 @@ class RouteServiceProvider extends ServiceProvider {
 			Route::middleware('web')
 				->group(base_path('routes/web-ecommerce.php'));
 
-			Route::middleware(['web', 'admin'])
-				->group(base_path('routes/web-legacy-admin.php'));
+			Route::middleware(['web'])
+				->group(base_path('routes/web-admin.php'));
 
 			Route::middleware('web')
 				->group(base_path('routes/web.php'));

@@ -15,8 +15,6 @@ class RefundController extends Controller {
 	 * @return \Illuminate\View\View
 	 */
 	public function index(Request $request): View {
-		return view('contacts', [
-			'locationTag' => 'contacts',
-		]);
+		abort(404, 'This page is not available yet.');
 	}
 }

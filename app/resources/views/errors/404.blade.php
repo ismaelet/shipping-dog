@@ -4,7 +4,9 @@
 	$isBot = preg_match('/bot|crawl|slurp|spider|mediapartners/i', $userAgent) ? true : false;
 	$url = request()->getRequestUri();
 
-	$whiteList = ['/media', '/system', '/wp-', '/uploads', '.well-known', '/store'];
+	$whiteList = ['/media', '/system', '/wp-', '/uploads', '.well-known', '/store', '/loading', 'logo.png', 'jquery'];
+
+	$tempWhiteList = ['/refund', ''];
 
 	foreach ($whiteList as $path) {
 	    if (strpos($url, $path) !== false) {
