@@ -1,3 +1,11 @@
+@php
+
+	Log::error('404 Not Found', [
+	    'url' => request()->getRequestUri(),
+	]);
+
+@endphp
+
 <x-layouts.empty>
 	<div
 		class="stack-content grid"
