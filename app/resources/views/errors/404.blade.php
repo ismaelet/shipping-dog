@@ -26,7 +26,7 @@
 	}
 
 	if (!$isBot) {
-	    Log::error('404 Not Found', [
+	    Log::error('404 Not Found ' . $url, [
 	        'url' => $url,
 	        'user_agent' => $userAgent,
 	        'ip_address' => request()->ip(),

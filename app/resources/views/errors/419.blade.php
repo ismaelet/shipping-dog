@@ -3,7 +3,7 @@
 	$userAgent = request()->header('User-Agent');
 	$url = request()->getRequestUri();
 
-	Log::error('419 expired', [
+	Log::error('419 expired ' . $url, [
 	    'url' => $url,
 	    'user_agent' => $userAgent,
 	    'ip_address' => request()->ip(),
