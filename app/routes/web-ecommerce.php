@@ -29,7 +29,13 @@ Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 
 Route::get('/artist', function () {
-	return redirect()->route('seller.show', ['seller' => Auth::user()->seller]);
+	$seller = Auth::user()?->seller;
+
+	if ($seller) {
+		return redirect()->route('seller.show', ['seller' => $seller]);
+	} else {
+		return redirect()->route('shop');
+	}
 });
 
 Route::get('/artist/{seller}', [SellerController::class, 'index'])->name('seller.show');
