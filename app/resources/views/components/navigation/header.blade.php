@@ -74,7 +74,7 @@
 	    ['Abbigliamento Donna', 'shop', ['gender' => 'f']],
 	    ['Abbigliamento Uomo', 'shop', ['gender' => 'm']],
 	    ['Accessori', 'shop', ['group' => 'm']],
-	    ['Ufficiali', 'seller.show', ['seller' => '1']],
+	    ['Ufficiali', 'seller.show', ['seller' => 1]],
 	];
 
 	$header['dropdowns']['info'] = [
