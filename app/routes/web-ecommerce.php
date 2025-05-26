@@ -15,6 +15,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Middleware\Cart;
 use App\Http\Middleware\EmptyCart;
 use App\Http\Middleware\OrderRecap;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -26,6 +27,11 @@ Route::get('/search', [SearchController::class, 'index'])->name('search');
  * * Shop
  */
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+
+Route::get('/artist', function () {
+	return redirect()->route('seller.show', ['seller' => Auth::user()->seller]);
+});
+
 Route::get('/artist/{seller}', [SellerController::class, 'index'])->name('seller.show');
 
 /**

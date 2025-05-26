@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 // Seller dashboard
 Route::prefix('/seller')->middleware(Seller::class)->name('seller-dashboard')->group(function () {
+
 	// Home
 	Route::get('', [SellerDashboardController::class, 'index'])->name('');
 	Route::post('{seller}/icon', [SellerDashboardController::class, 'uploadSellerIcon'])->name('.icon');

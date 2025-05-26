@@ -121,7 +121,5 @@ Route::get('/seller-email-list', function () {
 })->middleware(Admin::class);
 
 /**
- * * Legacy routes
+ * * Legacy support
  */
-// Route::any('/order/status', LegacyController::class)->name('order_items.status');
-// Route::any('{path}', LegacyController::class)->where('path', '.*');
