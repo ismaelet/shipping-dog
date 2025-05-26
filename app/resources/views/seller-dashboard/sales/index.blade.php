@@ -28,7 +28,7 @@
 					all'indirizzo <a
 						class="txt-sbold txt-c2"
 						href="<?= config('custom.contacts.email.url') ?>"
-					><?= config('custom.contacts.email') ?></a> ti consigliamo di farlo al più presto.<br><br>
+					><?= config('custom.contacts.email.label') ?></a> ti consigliamo di farlo al più presto.<br><br>
 					Se vuoi riscaricare o rigenerare il <strong>PDF</strong> da compilare, puoi cliccare qui sotto.
 				</p>
 
@@ -49,7 +49,7 @@
 					Se invece possiedi una partita IVA oppure non risiedi in Italia, ti preghiamo di contattarci all'indirizzo <a
 						class="text-link"
 						href="<?= config('custom.contacts.email.url') ?>"
-					><?= config('custom.contacts.email') ?></a> per richiedere il pagamento.
+					><?= config('custom.contacts.email.label') ?></a> per richiedere il pagamento.
 				</p>
 
 				<div class="mt-8 flex justify-center">
