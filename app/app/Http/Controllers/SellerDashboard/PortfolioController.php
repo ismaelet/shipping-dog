@@ -18,6 +18,8 @@ class PortfolioController extends Controller {
 	 * @return \Illuminate\View\View
 	 */
 	public function index(Request $request): View {
+		$seller = Auth::user();
+
 		$designs = Design::where('user_id', Auth::id())
 			->where('status', '>', 0)
 			->where('custom', 0)
@@ -36,6 +38,7 @@ class PortfolioController extends Controller {
 			'customProductsCount' => $customProductsCount,
 			'designCount' => $designCount,
 			'designs' => $designs,
+			'seller' => $seller,
 		]);
 	}
 

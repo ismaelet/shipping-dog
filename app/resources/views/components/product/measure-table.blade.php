@@ -27,10 +27,10 @@ $measures = $product->type->measures->get();
 			<p class="">Se non vedi tutte le taglie scorri verso il basso.</p>
 
 			<img
-				src="<?= asset('/pages/assets/item/sizes/img.jpg') ?>"
+				src="{{ Vite::image('product/size-table.jpg') }}"
 				alt=""
 				loading="lazy"
-				class="size-table-img mar-t-1"
+				class="mx-auto w-[15rem]"
 			>
 
 			<div class="size-table-grid mar-b-1">

@@ -7,19 +7,20 @@ use App\Http\Controllers\Ecommerce\Cart\CartPromotionsController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\OrderController;
 use App\Http\Controllers\Ecommerce\OrderItemController;
-use App\Http\Controllers\Ecommerce\PaymentRequestController;
 use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\RefundController;
-use App\Http\Controllers\Ecommerce\SaleController;
 use App\Http\Controllers\Ecommerce\SellerController;
-use App\Http\Controllers\Ecommerce\SellerDashboard\PortfolioController;
 use App\Http\Controllers\Ecommerce\ShopController;
-use App\Http\Controllers\SellerDashboard\SellerDashboardController;
+use App\Http\Controllers\SearchController;
 use App\Http\Middleware\Cart;
 use App\Http\Middleware\EmptyCart;
 use App\Http\Middleware\OrderRecap;
-use App\Http\Middleware\Seller;
 use Illuminate\Support\Facades\Route;
+
+/**
+ * * Search
+ */
+Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 /**
  * * Shop

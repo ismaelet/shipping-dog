@@ -26,7 +26,7 @@
 				<div class="grid grid-cols-1 gap-4">
 
 					@if ($done == 'data')
-						<x-inputs.alert-success>Dati modificati con successo</x-inputs.alert-success>
+						<x-alerts.success>Dati modificati con successo</x-alerts.success>
 					@endif
 
 					<x-inputs.label>Username:</x-inputs.label>
@@ -41,8 +41,8 @@
 					>
 
 					@if ($error == 'user_match')
-						<x-inputs.alert-error>L'username scelto è già associato ad un altro
-							profilo</x-inputs.alert-error>
+						<x-alerts.error>L'username scelto è già associato ad un altro
+							profilo</x-alerts.error>
 					@endif
 
 					<x-inputs.label>Nome e cognome:</x-inputs.label>
@@ -74,7 +74,7 @@
 					>
 
 					@if ($error == 'email_match')
-						<x-inputs.alert-error>L'email scelta è già associata ad un altro profilo</x-inputs.alert-error>
+						<x-alerts.error>L'email scelta è già associata ad un altro profilo</x-alerts.error>
 					@endif
 
 				</div>
@@ -102,7 +102,7 @@
 
 					<?php if ($done == 'pass') { ?>
 
-					<x-inputs.alert-success>Password modificata con successo</x-inputs.alert-success>
+					<x-alerts.success>Password modificata con successo</x-alerts.success>
 
 					<?php } ?>
 
@@ -119,7 +119,7 @@
 
 					<?php if ($error == 'pass_bad') { ?>
 
-					<x-inputs.alert-error>La password inserita non corrisponde alla password attuale</x-inputs.alert-error>
+					<x-alerts.error>La password inserita non corrisponde alla password attuale</x-alerts.error>
 
 					<?php } ?>
 
@@ -142,7 +142,7 @@
 
 					<?php if ($error == 'pass_match') { ?>
 
-					<x-inputs.alert-error>La nuova password e la conferma non corrispondono</x-inputs.alert-error>
+					<x-alerts.error>La nuova password e la conferma non corrispondono</x-alerts.error>
 
 					<?php } ?>
 

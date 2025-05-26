@@ -13,9 +13,7 @@
 
 @if ($productTypeMockup)
 	@php
-		$productMockup = ProductMockup::where('product_id', $product->id)
-		    ->where('position_id', $position->id)
-		    ->first();
+		$productMockup = ProductMockup::where('product_id', $product->id)->where('position_id', $position->id)->first();
 
 		$pX = $productMockup->pos_x ?? $productTypeMockup->pos_x_def;
 		$pY = $productMockup->pos_y ?? $productTypeMockup->pos_y_def;
@@ -89,7 +87,7 @@
 		class="section<?= $key ?> section positions <?= $key == 1 ? 'active' : '' ?> grid grid-cols-1 items-center lg:grid-cols-2"
 		data-mockup-id="{{ $productMockup?->id }}"
 		data-enabled="<?= $enabled ? 'true' : 'false' ?>"
-		data-image-position="<?= $position->basicPositionId() ?>"
+		data-image-position="<?= $position->id ?>"
 		data-panel
 	>
 

@@ -28,15 +28,15 @@
 	data-status="inactive"
 	x-data
 >
-	<x-inputs.alert-success class="hidden group-data-[status=saved]:flex">
+	<x-alerts.success class="hidden group-data-[status=saved]:flex">
 		{!! embed_icon('correct') !!}
 		Impostazioni salvate
-	</x-inputs.alert-success>
+	</x-alerts.success>
 
-	<x-inputs.alert-error class="hidden group-data-[status=error]:flex">
+	<x-alerts.error class="hidden group-data-[status=error]:flex">
 		{!! embed_icon('close') !!}
 		Errore di salvataggio
-	</x-inputs.alert-error>
+	</x-alerts.error>
 
 	<x-button
 		class="hidden group-data-[status=active]:flex group-data-[status=error]:flex"

@@ -61,7 +61,7 @@
 	@endif
 
 	@error('file_dark')
-		<x-inputs.alert-error>{{ $message }}</x-inputs.alert-error>
+		<x-alerts.error>{{ $message }}</x-alerts.error>
 	@enderror
 
 </form>

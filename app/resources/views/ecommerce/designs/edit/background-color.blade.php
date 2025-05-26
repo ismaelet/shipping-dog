@@ -28,7 +28,7 @@
 	</div>
 
 	@if (session('saved-background-color'))
-		<x-inputs.alert-success>Modifiche salvate</x-inputs.alert-success>
+		<x-alerts.success>Modifiche salvate</x-alerts.success>
 	@endif
 
 	{{-- Background color --}}

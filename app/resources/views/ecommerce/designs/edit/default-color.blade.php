@@ -27,7 +27,7 @@
 	</div>
 
 	@if (session('saved-default-color'))
-		<x-inputs.alert-success>Modifiche salvate</x-inputs.alert-success>
+		<x-alerts.success>Modifiche salvate</x-alerts.success>
 	@endif
 
 	{{-- Default color --}}

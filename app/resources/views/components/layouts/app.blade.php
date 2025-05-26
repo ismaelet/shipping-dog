@@ -58,7 +58,7 @@
 <body>
 	{{ $slot }}
 
-	<x-warnings.wip />
+	{{-- <x-warnings.wip /> --}}
 	<livewire:scripts />
 </body>
 

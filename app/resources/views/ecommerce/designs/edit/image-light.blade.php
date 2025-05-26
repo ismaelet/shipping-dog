@@ -46,7 +46,7 @@
 		</div>
 
 		@error('file_light')
-			<x-inputs.alert-error>{{ $message }}</x-inputs.alert-error>
+			<x-alerts.error>{{ $message }}</x-alerts.error>
 		@enderror
 	</x-inputs.group>
 </form>

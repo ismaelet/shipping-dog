@@ -22,23 +22,27 @@ class ProductMockupController extends Controller {
 			'pos_y' => 'required|integer',
 		]);
 
-		$exists = ProductMockup::where('product_id', $request->product_id)
-			->where('position_id', $request->position_id)
-			->exists();
+		// $exists = ProductMockup::where('product_id', $request->product_id)
+		// 	->where('position_id', $request->position_id)
+		// 	->exists();
 
-		if ($exists) {
-			return response()->json([
-				'error' => 'This mockup already exists',
-			], 400);
-		}
+		// if ($exists) {
+		// 	return response()->json([
+		// 		'error' => 'This mockup already exists',
+		// 	], 400);
+		// }
 
-		$mockup = ProductMockup::create($request->only([
-			'product_id',
-			'position_id',
-			'size',
-			'pos_x',
-			'pos_y',
-		]));
+		$mockup = ProductMockup::updateOrCreate(
+			[
+				'product_id' => $request->product_id,
+				'position_id' => $request->position_id,
+			],
+			$request->only([
+				'size',
+				'pos_x',
+				'pos_y',
+			])
+		);
 
 		$this->regeneratePreviews($mockup);
 

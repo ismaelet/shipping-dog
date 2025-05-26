@@ -10,7 +10,7 @@
 	<x-typography.component-heading>Tags</x-typography.component-heading>
 
 	@if (session('saved-tags'))
-		<x-inputs.alert-success>Modifiche salvate</x-inputs.alert-success>
+		<x-alerts.success>Modifiche salvate</x-alerts.success>
 	@endif
 
 	<x-textarea

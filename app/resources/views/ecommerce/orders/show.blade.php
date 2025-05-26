@@ -64,9 +64,9 @@
 				</p>
 
 				@session('error')
-					<x-inputs.alert-error>
+					<x-alerts.error>
 						{{ session('error') }}
-					</x-inputs.alert-error>
+					</x-alerts.error>
 				@endsession
 
 				<div class="flex flex-wrap justify-center gap-4">
