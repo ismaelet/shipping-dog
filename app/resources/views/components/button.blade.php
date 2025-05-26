@@ -64,6 +64,7 @@
 				padding-inline: calc((var(--_padding-y) - var(--border-width)) * 2);
 				border: var(--border-width) solid var(--color-neutral-400);
 				color: var(--color-neutral-700);
+				transition: border 0.2s;
 
 				/* Secondary button: Dark color scheme */
 				.dark & {

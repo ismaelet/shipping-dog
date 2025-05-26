@@ -1,6 +1,8 @@
 <?php
 
-namespace Legacy\Classes;
+namespace App\Legacy\Ecommerce\Design;
+
+use App\Legacy\System\DB;
 
 class Collection {
 
@@ -33,7 +35,7 @@ class Collection {
 		$this->img();
 
 		//get the urls
-		$this->url = CLIENT_ROOT . '/artist/collection?id=' . $this->id;
+		$this->url =  '/artist/collection?id=' . $this->id;
 	}
 
 	function img() {

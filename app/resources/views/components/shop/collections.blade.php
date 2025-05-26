@@ -2,6 +2,7 @@
 
 @php
 	use App\Legacy\System\DB;
+	use App\Legacy\Ecommerce\Design\Collection;
 
 	//get collections
 	if ($vip) {
@@ -21,7 +22,7 @@
 @while ($row = $res->fetch_assoc())
 	@php
 		$i++;
-		$coll = new \Legacy\Classes\Collection($row['id']);
+		$coll = new Collection($row['id']);
 	@endphp
 
 	<div
@@ -35,7 +36,7 @@
 		<h3 class="coll-name txt-low text-center"><?= $coll->name ?></h3>
 
 		<a
-			class="collection"
+			class="collection relative"
 			href="<?= $coll->url ?>"
 			style="background-color: <?= $coll->color ?>;"
 		>
@@ -48,10 +49,13 @@
 			></div>
 
 			<div class="coll-cover bgr"></div>
-
-			<div class="coll-title-box">
-				<h3 class="coll-title txt-line">Scopri di più</h3>
-			</div>
 		</a>
+
+		{{-- <div class="mt-4 flex justify-center">
+			<x-button
+				variant="secondary"
+				size="small"
+			>Esplora</x-button>
+		</div> --}}
 	</div>
 @endwhile

@@ -24,7 +24,7 @@
 				class=""
 			>
 				<input
-					type="text"
+					type="search"
 					class="input"
 					id="srch-inp"
 					name="search"
@@ -43,15 +43,17 @@
 		</form>
 	</section>
 
-	<div class="main-wrap pad-t-4 pad-b-5">
+	<div class="main-wrap pad-t-4 pad-b-5 breakout">
 		<p
 			id="title"
 			class="mar-b-3 text-lg"
-		>Cerca: <span class="text-strong"><?= $search ?></span></h2>
+		>
+			Cerca: <span class="text-strong"><?= $search ?></span>
+		</p>
 
-			<?php if ($resultCount) { ?>
+		<?php if ($resultCount) { ?>
 
-			<?php if ($sellerCount) { ?>
+		<?php if ($sellerCount) { ?>
 
 		<section
 			id="shops"
@@ -135,7 +137,7 @@
 
 		<?php } else { ?>
 
-		<p class="srch_empty">Ci dispiace, la ricerca non ha prodotto risultati.</p>
+		<p class="py-16 text-center text-xl">Ci dispiace, la ricerca non ha prodotto risultati.</p>
 
 		<?php } ?>
 

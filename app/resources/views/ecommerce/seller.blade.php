@@ -268,14 +268,6 @@
 						id="collPos"
 						value="<?= $collBlock ?>"
 					>
-
-					<div class="text-center">
-						<button
-							type="button"
-							id="coll-more"
-							class="sbtn txt-low mar-t-2"
-						>Scopri di più</button>
-					</div>
 					<?php } ?>
 
 					<div class="sort-load bgr">

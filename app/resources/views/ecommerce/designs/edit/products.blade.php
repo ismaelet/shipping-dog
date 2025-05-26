@@ -137,6 +137,7 @@
 		.item-panel .tab {
 			background-color: var(--color-surface-500);
 			border-radius: 3px 3px 0 0;
+			border-color: var(--color-surface-500);
 			color: var(--color-neutral-300);
 			font-size: 0.8rem;
 			letter-spacing: 0.2em;
