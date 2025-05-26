@@ -117,7 +117,7 @@
 						name="cbx"
 						text="Dichiaro di aver letto e accettato le <a
 							class='text-link'
-							href='{{ client_url('/infos/contract') }}'>condizioni di invio</a>"
+							href='{{ route('support.upload-terms') }}'>condizioni di invio</a>"
 						:required="true"
 					/>
 

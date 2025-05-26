@@ -66,7 +66,7 @@
 	    'mob' => true,
 	];
 	$header['links'][] = ['title' => 'Vendi', 'loc' => 'open-shop', 'url' => '/open-shop', 'seller' => false];
-	$header['links'][] = ['title' => 'Supporto', 'loc' => 'info', 'url' => '/infos/faq', 'drop' => 'info'];
+	$header['links'][] = ['title' => 'Supporto', 'loc' => 'info', 'url' => route('support.faq'), 'drop' => 'info'];
 	$header['links'][] = ['title' => 'Gestione', 'loc' => 'admin', 'url' => '/admin', 'admin' => true];
 
 	// dropdowns

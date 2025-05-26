@@ -31,7 +31,7 @@
 		/>
 
 		<x-checkbox
-			text="Ho letto e accetto i <a class='text-link' href='{{ client_url('/infos/terms') }}'>termini di vendita</a>"
+			text="Ho letto e accetto i <a class='text-link' href='{{ route('support.sale-terms') }}'>termini di vendita</a>"
 			name="terms"
 			id="terms"
 			required
