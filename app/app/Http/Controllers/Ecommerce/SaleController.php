@@ -27,6 +27,7 @@ class SaleController extends Controller {
 			->select('*')
 			->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
 			->with('product', 'product.type', 'color', 'order')
+			->latest()
 			->get();
 
 		return view('seller-dashboard.sales.index', compact('seller', 'sort', 'currentYear', 'sales'));

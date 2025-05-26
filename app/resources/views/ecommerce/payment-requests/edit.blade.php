@@ -1,6 +1,6 @@
 <x-layouts.form
 	:$title
-	:action="route('seller.payment.update')"
+	:action="route('seller-dashboard.payment.update')"
 >
 
 	<x-slot name="body">
@@ -130,7 +130,7 @@
 
 		@if ($paymentRequest)
 			<x-button
-				:href="route('seller.payment')"
+				:href="route('seller-dashboard.payment')"
 				variant="secondary"
 			>
 				Indietro

@@ -19,10 +19,10 @@ class PaymentRequestTest extends TestCase {
 
 		// Check the response before creating a payment request
 		$response = $this->actingAs($user)
-			->get(route('seller.payment'));
+			->get(route('seller-dashboard.payment'));
 
 		$response->assertStatus(302);
-		$response->assertRedirectToRoute('seller.payment.edit');
+		$response->assertRedirectToRoute('seller-dashboard.payment.edit');
 	}
 
 	/**
@@ -39,7 +39,7 @@ class PaymentRequestTest extends TestCase {
 
 		// Check the response after creating a payment request
 		$response = $this->actingAs($user)
-			->get(route('seller.payment'));
+			->get(route('seller-dashboard.payment'));
 
 		$response->assertStatus(200);
 		$response->assertViewIs('ecommerce.payment-requests.index');
@@ -54,7 +54,7 @@ class PaymentRequestTest extends TestCase {
 		$seller->update(['user_id' => $user->id]);
 
 		$response = $this->actingAs($user)
-			->get(route('seller.payment.edit'));
+			->get(route('seller-dashboard.payment.edit'));
 
 		$response->assertStatus(200);
 		$response->assertViewIs('ecommerce.payment-requests.edit');

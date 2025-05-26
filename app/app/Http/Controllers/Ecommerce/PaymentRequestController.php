@@ -28,7 +28,7 @@ class PaymentRequestController extends Controller {
 		$waitingDays = ceil($toBePayed / 100);
 
 		if (!$paymentRequest || !$paymentRequest->national_id) {
-			return to_route('seller.payment.edit');
+			return to_route('seller-dashboard.payment.edit');
 		}
 
 		return view('ecommerce.payment-requests.index')
@@ -87,7 +87,7 @@ class PaymentRequestController extends Controller {
 		FileHelper::delete($reciptFilePath);
 		FileHelper::delete($contractFilePath);
 
-		return to_route('seller.payment');
+		return to_route('seller-dashboard.payment');
 	}
 
 	/**
@@ -177,7 +177,7 @@ class PaymentRequestController extends Controller {
 				];
 
 				// Replace the template keys with the template values
-				$templateKeys = array_map(fn ($key) => '{{' . $key . '}}', $templateKeys);
+				$templateKeys = array_map(fn($key) => '{{' . $key . '}}', $templateKeys);
 				$template = str_replace($templateKeys, $templateValues, $template);
 
 				// Generate the PDF

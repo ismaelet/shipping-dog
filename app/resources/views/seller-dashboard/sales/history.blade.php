@@ -125,9 +125,9 @@ if ($res_year->num_rows > 1) { ?>
 			onchange="$('#year-inp').val($(this).val()); $('#search-btn').click();"
 		>
 
-		<p class="year clickable inlb bgr-c1-h txt-wht-h <?php if ($currentYearM == $currentYear) {
+		<p class="year clickable inlb bgr-c1-h txt-wht-h bg-surface <?php if ($currentYearM == $currentYear) {
 		    echo 'active';
-		} ?>">
+		} ?> rounded">
 			<?= $currentYearM ?>
 		</p>
 

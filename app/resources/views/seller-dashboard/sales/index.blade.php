@@ -35,7 +35,7 @@
 				<div class="mt-8 flex justify-center">
 					<x-button
 						class="button--auto-width"
-						href="{{ route('seller.payment') }}"
+						href="{{ route('seller-dashboard.payment') }}"
 					>Scarica di nuovo il <span class="text-strong">PDF</span></x-button>
 				</div>
 			</div>
@@ -54,7 +54,7 @@
 
 				<div class="mt-8 flex justify-center">
 					<x-button
-						href="{{ route('seller.payment') }}"
+						href="{{ route('seller-dashboard.payment') }}"
 						class="button--auto-width"
 						name="request-payment"
 					>
