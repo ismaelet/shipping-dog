@@ -91,8 +91,7 @@
 									</tr>
 									<tr>
 										<td style="">
-											{{-- Content --}}
-											{{ $slot }}
+											{!! $text ?? '' !!}
 										</td>
 									</tr>
 								</table>

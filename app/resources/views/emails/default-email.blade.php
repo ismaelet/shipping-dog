@@ -90,7 +90,7 @@
 									<tr>
 										<td style="">
 											<p>
-												{!! $content !!}
+												{!! $text ?? '' !!}
 											</p>
 										</td>
 									</tr>

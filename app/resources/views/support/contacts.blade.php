@@ -84,6 +84,7 @@
 						method="POST"
 						autocomplete="off"
 					>
+						@csrf
 
 						<div
 							id="form-anch"

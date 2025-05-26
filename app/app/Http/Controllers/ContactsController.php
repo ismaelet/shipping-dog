@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\GenericMail;
+use App\Mail\ContactMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -45,11 +45,11 @@ class ContactsController extends Controller {
 			$content = '<h1 style="text-align: center; padding-bottom: 16px; font-weight: 600;">Richiesta informazioni</h1>
 		<p>Hai ricevuto una richiesta di informazioni da parte di <strong>' . $name . '</strong> (<a href="mailto:' . $clientEmail . '">' . $clientEmail . '</a>) con la seguente domanda:<br><br>"' . $mailText . '"</p>';
 
-			Mail::to(config('custom.contacts.email.label'))
-				->send(new GenericMail(
-					subject: $subject,
-					content: $content,
-					replyTo: [$clientEmail, $name]
+			Mail::to('ismaele.tuffanelli@gmail.com')
+				->send(new ContactMail(
+					email: $clientEmail,
+					name: $name,
+					text: $content
 				));
 
 			$sent = true;
