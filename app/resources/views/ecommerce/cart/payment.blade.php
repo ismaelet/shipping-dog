@@ -29,6 +29,8 @@ $cart = cart();
 				class="grid items-start gap-8 lg:grid-cols-2"
 				method="POST"
 			>
+				@csrf
+
 				<div class="cart-panel surface content-start">
 					<x-typography.component-heading class="title">Pagamento</x-typography.component-heading>
 					@foreach ($paymentMethods as $paymentMethod)

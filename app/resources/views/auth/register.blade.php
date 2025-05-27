@@ -55,7 +55,7 @@
 			/>
 		</x-form.field>
 
-		<x-form.checkbox
+		<x-checkbox
 			name="privacy"
 			text="Ho letto e acconsento al <a class='font-bold text-neutral-700' href='{{ route('support.privacy-policy') }}'>trattamento
                 dei dati</a>"

@@ -30,6 +30,8 @@
 	method="POST"
 	x-data
 >
+	@csrf
+
 	<div class="stack-content center-content grid justify-items-end">
 		<input
 			type="text"

@@ -78,7 +78,7 @@ Route::prefix('cart')->name('cart')->group(function () {
  * * Order Item
  */
 // Create an order
-Route::resource('order-items', OrderItemController::class)->only(['show', 'store']);
+Route::resource('order-items', OrderItemController::class)->only(['store']);
 
 // Empty cart
 Route::get('/cart/empty', function () {

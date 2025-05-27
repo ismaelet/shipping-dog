@@ -28,6 +28,7 @@ use App\Legacy\System\DB;
 			class="form"
 			method="POST"
 		>
+			@csrf
 
 			<div class="pad-t-2 grid grid-cols-1 gap-8">
 

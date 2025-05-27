@@ -16,6 +16,7 @@
 	    'jquery',
 	    'wishlist',
 	    '/it/',
+	    '.php',
 	];
 
 	foreach ($whiteList as $path) {
@@ -26,11 +27,11 @@
 	}
 
 	if (!$isBot) {
-	    Log::error('404 Not Found ' . $url, [
-	        'url' => $url,
-	        'user_agent' => $userAgent,
-	        'ip_address' => request()->ip(),
-	    ]);
+	    // Log::error('404 Not Found ' . $url, [
+	    //     'url' => $url,
+	    //     'user_agent' => $userAgent,
+	    //     'ip_address' => request()->ip(),
+	    // ]);
 	}
 
 @endphp

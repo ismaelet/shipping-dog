@@ -4,6 +4,7 @@
 	action="{{ route('designs.destroy', $design) }}"
 	x-data
 >
+	@csrf
 	@method('DELETE')
 
 	<x-button

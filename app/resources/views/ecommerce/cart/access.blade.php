@@ -309,6 +309,8 @@
 			class="guest-panel cart-panel surface"
 			method="POST"
 		>
+			@csrf
+
 			<x-typography.component-heading>Ordina senza registrarti</x-typography.component-heading>
 			<p>Clicca qui se vuoi procedere all'acquisto senza registrarti</p>
 			<x-button
@@ -324,6 +326,8 @@
 			method="POST"
 			action="{{ route('login.auth') }}"
 		>
+			@csrf
+
 			<x-typography.component-heading>Hai già un account?</x-typography.component-heading>
 
 			<x-inputs.group>

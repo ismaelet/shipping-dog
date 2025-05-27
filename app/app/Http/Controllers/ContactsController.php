@@ -38,7 +38,7 @@ class ContactsController extends Controller {
 
 		if (!$serv || !in_array($serv, ['tiscali', 'gmail', 'libero', 'yahoo', 'hotemail', 'icloud', 'outlook'])) {
 			$error = 'email_bad';
-		} else if (preg_match("/(sexy|bitcoin|wellness|dollars|free|business)/i", $mailText)) {
+		} else if (preg_match("/(sexy|bitcoin|wellness|dollars|free|business|https:)/i", $mailText)) {
 			$error = 'word_bad';
 		} else {
 			$subject = 'Richiesta informazioni da ' . $name . ' (' . $clientEmail . ')';

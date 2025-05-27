@@ -15,11 +15,14 @@ $cart = cart();
 		id="content"
 		method="POST"
 	>
+		@csrf
+
 		<div
 			method="POST"
 			id="left_panel"
 			class="panel grid grid-cols-1 gap-8"
 		>
+			@csrf
 
 			<!-- Country -->
 			<section class="cart-panel surface">
@@ -133,7 +136,7 @@ $cart = cart();
 					>
 						<input
 							type="text"
-							class="input delivery-input"
+							class="input delivery-input w-full"
 							name="city"
 							placeholder="Città"
 							value="<?= $address->city ?? '' ?>"
@@ -206,7 +209,7 @@ $cart = cart();
 						data-shipping-field
 					>
 						<textarea
-						 class="input"
+						 class="input w-full"
 						 name="courier_notes"
 						 placeholder="Note per il corriere (opzionale)"
 						 maxlength="250"

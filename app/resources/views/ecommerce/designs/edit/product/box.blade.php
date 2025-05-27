@@ -18,6 +18,7 @@
 		class="img-buttons mt-2 grid"
 		action="{{ route('products.status', $product) . '#product-' . $product->id }}"
 	>
+		@csrf
 
 		<input
 			type="hidden"

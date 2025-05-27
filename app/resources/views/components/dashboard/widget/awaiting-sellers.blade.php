@@ -19,6 +19,8 @@
 						class="flex items-center text-sm"
 						method="POST"
 					>
+						@csrf
+
 						<span class="aspect-square w-12">
 							<img
 								src="{{ $seller->icon() }}"

@@ -16,6 +16,7 @@
 				class="grid grid-cols-1 gap-8"
 				method="POST"
 			>
+				@csrf
 				<div
 					id="data-anch"
 					class="anchor"
@@ -91,6 +92,7 @@
 				class="grid grid-cols-1 gap-8"
 				method="POST"
 			>
+				@csrf
 				<div
 					id="pass-anch"
 					class="anchor"
@@ -162,6 +164,7 @@
 				method="POST"
 				enctype="multipart/form-data"
 			>
+				@csrf
 				<x-typography.component-heading class="dashboard-heading">Immagine profilo</x-typography.component-heading>
 
 				<div class="grid grid-cols-1 gap-4">
@@ -184,6 +187,7 @@
 				class="grid grid-cols-1 gap-8"
 				method="POST"
 			>
+				@csrf
 				<x-typography.component-heading class="dashboard-heading">Elimina l'account</x-typography.component-heading>
 
 				<div class="grid grid-cols-1 gap-4">

@@ -29,6 +29,8 @@
 			method="POST"
 			enctype="multipart/form-data"
 		>
+			@csrf
+
 			<div id="head-cont">
 
 				<!-- Profile icon -->
@@ -289,6 +291,8 @@
 					class="modal-form"
 					method="POST"
 				>
+					@csrf
+
 					<div class="modal-form-header">
 						<h3 class="lbox-title">Aggiungi una collezione</h3>
 					</div>

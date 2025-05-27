@@ -257,6 +257,11 @@ function format($n) {
 	return number_format($n, 2, '.', '');
 }
 
+function formatc($n) {
+	$n = (float) $n;
+	return number_format($n, 2, ',', '');
+}
+
 function generate_form($fields, $data = false, $error = false, $done = false) {
 
 	foreach ($fields as $field) {

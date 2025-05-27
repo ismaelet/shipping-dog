@@ -9,6 +9,8 @@
 				class="form surface dashboard-panel grid grid-cols-1 content-center"
 				method="POST"
 			>
+				@csrf
+
 				<x-typography.component-heading>Nome e descrizione</x-typography.component-heading>
 
 				<div class="grid gap-4">
@@ -81,6 +83,7 @@
 				id="socials"
 				method="POST"
 			>
+				@csrf
 				<x-typography.component-heading>Socials & Contatti</x-typography.component-heading>
 
 				@if ($saved == 'socials')
@@ -153,6 +156,7 @@
 				enctype="multipart/form-data"
 				action="{{ route('seller-dashboard.icon', $seller) }}"
 			>
+				@csrf
 
 				<div class="grid grid-cols-1 justify-items-center gap-4">
 					<p class="font-heading text-lg text-neutral-700">Immagine di profilo:</p>
@@ -197,6 +201,7 @@
 				enctype="multipart/form-data"
 				action="{{ route('seller-dashboard.cover', $seller) }}"
 			>
+				@csrf
 
 				<p class="font-heading text-lg text-neutral-700">Immagine di copertina:</p>
 
