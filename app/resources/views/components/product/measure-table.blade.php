@@ -2,7 +2,8 @@
 
 use App\Legacy\System\DB;
 
-$measures = $product->type->measures;
+$measures = $product->type->measures->sortBy('id');
+$sizes = $product->type->sizes;
 ?>
 
 @pushOnce('styles')
@@ -41,7 +42,12 @@ $measures = $product->type->measures;
 
 				<p class="txt-line font-semibold text-neutral-700">Altezza:</p>
 
-				@foreach ($measures as $measure)
+
+				@foreach ($sizes as $size)
+					@php
+						$measure = $measures->where('size', $size->tag)->first();
+					@endphp
+
 					<p class="size-table-tag font-semibold text-neutral-700">{{ strtoupper($measure->name) }}:</p>
 					<p class="">{{ $measure->width }} cm</p>
 					<p class="">{{ $measure->height }} cm</p>
