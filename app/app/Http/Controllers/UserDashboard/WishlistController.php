@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Controllers\UserDashboard;
+
+use App\Http\Controllers\Controller;
+use App\Models\User\Like;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+class WishlistController extends Controller {
+
+	/**
+	 * Display the wishlist page.
+	 * 
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\View\View
+	 */
+	public function index(Request $request): View {
+		$title = 'Wishlist';
+
+		$likes = Like::where('user_id', Auth::id())
+			->with('design', 'design.seller', 'design.main_product')
+			->get();
+
+		return view('user-dashboard.wishlist', [
+			'locationTag' => 'user-dashboard',
+			'title' => $title,
+			'likes' => $likes,
+		]);
+	}
+}

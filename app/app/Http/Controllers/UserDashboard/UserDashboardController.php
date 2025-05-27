@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Legacy\System\DB;
 use App\Legacy\User\FeedEntry;
 use App\Models\Ecommerce\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -124,10 +125,10 @@ class UserDashboardController extends Controller {
 			$first_name = trim($_POST['first_name']);
 			$last_name = trim($_POST['last_name']);
 
-			if (\Legacy\System\Classes\LegacyDB::exists('users WHERE username = ? AND ID<>?', [$username, auth()->id()])) $_SESSION['error'] = 'user_match';
-			else if (\Legacy\System\Classes\LegacyDB::exists('users WHERE email=? AND ID<>?', [$email, auth()->id()])) $_SESSION['error'] = 'email_match';
+			if (DB::exists('users WHERE username = ? AND ID<>?', [$username, Auth::id()])) $_SESSION['error'] = 'user_match';
+			else if (DB::exists('users WHERE email=? AND ID<>?', [$email, Auth::id()])) $_SESSION['error'] = 'email_match';
 			else {
-				\Legacy\System\Classes\LegacyDB::update('users SET username = ?, email=?, first_name = ?, last_name = ? WHERE id = ?', [$username, $email, $first_name, $last_name, auth()->id()]);
+				DB::update('users SET username = ?, email=?, first_name = ?, last_name = ? WHERE id = ?', [$username, $email, $first_name, $last_name, Auth::id()]);
 
 				$_SESSION['done'] = 'data';
 			}
@@ -142,13 +143,13 @@ class UserDashboardController extends Controller {
 			$passNew = $_POST['passNew'];
 			$passConf = $_POST['passConf'];
 
-			$db_password = \Legacy\System\Classes\LegacyDB::find('password FROM users WHERE id = ?', auth()->id());
+			$db_password = DB::find('password FROM users WHERE id = ?', Auth::id());
 
 			// update old MD5 passwords
 			if ($db_password[0] != '$' && md5($passOld) == $db_password) {
 
 				$db_password = password_hash($passOld, PASSWORD_DEFAULT);
-				\Legacy\System\Classes\LegacyDB::update('users SET password=? WHERE id = ?', [$db_password, auth()->id()]);
+				DB::update('users SET password=? WHERE id = ?', [$db_password, Auth::id()]);
 			}
 
 			if (!password_verify($passOld, $db_password)) $_SESSION['error'] = 'pass_bad';
@@ -157,7 +158,7 @@ class UserDashboardController extends Controller {
 
 				$passNew = password_hash($passNew, PASSWORD_DEFAULT);
 
-				\Legacy\System\Classes\LegacyDB::update('users SET password=? WHERE id = ?', [$passNew, auth()->id()]);
+				DB::update('users SET password=? WHERE id = ?', [$passNew, Auth::id()]);
 
 				$_SESSION['done'] = 'pass';
 			}
@@ -168,17 +169,17 @@ class UserDashboardController extends Controller {
 		// change icon
 		if (isset($_POST['edit_icon'])) {
 
-			$file = '/uploads/users/icons/' . auth()->id() . '.jpg';
+			$file = '/uploads/users/icons/' . Auth::id() . '.jpg';
 
 			upload_img_OLD($file, 'img', 150, 'crop');
 		}
 
 		// delete account
 		if (isset($_POST['delete-account'])) {
-			$user = User::find(auth()->id());
+			$user = User::find(Auth::id());
 			$user->delete();
 
-			auth()->logout();
+			Auth::logout();
 			session()->flush();
 
 			return redirect()->route('login');
