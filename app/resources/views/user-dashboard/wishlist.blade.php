@@ -3,7 +3,7 @@
 		/* Products */
 		#products {
 			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+			grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
 			gap: 2rem;
 		}
 
@@ -13,11 +13,6 @@
 			box-shadow: 5px 10px 1rem rgba(0, 0, 0, 0.1);
 			width: 100%;
 			aspect-ratio: 1 / 1;
-		}
-
-		#products .name {
-			font-size: 0.9rem;
-			font-weight: 600;
 		}
 
 		#products .shop {
@@ -33,7 +28,7 @@
 		:$title
 	>
 
-		<?php if (!$likes->count()) { ?>
+		<?php if ($likes->count()) { ?>
 
 		<div class="main-wrap pad-t-4 pad-b-5">
 
@@ -59,12 +54,14 @@
 						>
 					</a>
 
-					<p class="name mar-t-1 text-neutral-700"><?= $design->name ?></p>
+					<h4 class="name mt-2">{{ $design->name }}</h4>
 
-					<p class="shop">by <a
-							class="txt-c1-h"
-							href="<?= $design->url() ?>"
-						><?= $design->seller->name ?></a></p>
+					<p class="shop">
+						by <a
+							class="hover:text-primary transition-colors"
+							href="{{ $design->url() }}"
+						>{{ $design->seller->name }}</a>
+					</p>
 
 				</div>
 
