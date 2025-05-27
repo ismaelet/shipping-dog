@@ -36,20 +36,10 @@ class ColorsRelationManager extends RelationManager {
 		return $table
 			->recordTitleAttribute('name')
 			->columns([
-				Tables\Columns\TextColumn::make('id')
-					->sortable()
-					->numeric(),
 				Tables\Columns\TextColumn::make('name')
-					->label('Nome')
+					->label('Colore')
 					->searchable()
 					->sortable(),
-				Tables\Columns\TextColumn::make('tag')
-					->searchable()
-					->sortable(),
-				Tables\Columns\TextColumn::make('reorder')
-					->label('Ordine')
-					->sortable()
-					->numeric(),
 				IconColumn::make('dark')
 					->label('È scuro')
 					->boolean()

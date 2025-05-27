@@ -2,7 +2,7 @@
 
 use App\Legacy\System\DB;
 
-$measures = $product->type->measures->get();
+$measures = $product->type->measures;
 ?>
 
 @pushOnce('styles')
@@ -27,7 +27,7 @@ $measures = $product->type->measures->get();
 			<p class="">Se non vedi tutte le taglie scorri verso il basso.</p>
 
 			<img
-				src="{{ Vite::image('product/size-table.jpg') }}"
+				src="{{ Vite::image('product/size-table.webp') }}"
 				alt=""
 				loading="lazy"
 				class="mx-auto w-[15rem]"
@@ -41,23 +41,11 @@ $measures = $product->type->measures->get();
 
 				<p class="txt-line font-semibold text-neutral-700">Altezza:</p>
 
-				<?php foreach ($product->type->sizes as $size) {
-
-						$measure = $measures->where('size', $size->tag)
-							->first();
-
-						if ($measure) {
-							$measureValues = explode(',', $measure->val);
-					?>
-
-				<p class="size-table-tag font-semibold text-neutral-700"><?= strtoupper($size->name) ?>:</p>
-
-				<p class=""><?= $measureValues[0] ?> cm</p>
-
-				<p class=""><?= $measureValues[1] ?> cm</p>
-
-				<?php }
-					} ?>
+				@foreach ($measures as $measure)
+					<p class="size-table-tag font-semibold text-neutral-700">{{ strtoupper($measure->name) }}:</p>
+					<p class="">{{ $measure->width }} cm</p>
+					<p class="">{{ $measure->height }} cm</p>
+				@endforeach
 
 			</div>
 

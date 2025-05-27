@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\ProductTypeResource\Pages;
 use App\Filament\Admin\Resources\ProductTypeResource\RelationManagers;
 use App\Filament\Admin\Resources\ProductTypeResource\RelationManagers\ColorsRelationManager;
+use App\Filament\Admin\Resources\ProductTypeResource\RelationManagers\MeasuresRelationManager;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductGender;
@@ -312,6 +313,7 @@ class ProductTypeResource extends Resource {
 	public static function getRelations(): array {
 		return [
 			ColorsRelationManager::class,
+			MeasuresRelationManager::class,
 		];
 	}
 

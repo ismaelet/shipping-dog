@@ -3,6 +3,7 @@
 namespace App\Models\Ecommerce\Product;
 
 use App\Helpers\PreviewHelper;
+use App\Models\Ecommerce\Product\Type\Measure;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -77,6 +78,8 @@ class ProductType extends Model {
 
 	/**
 	 * Get the sibling
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function sibling(): HasOne {
 		return $this->hasOne(self::class, 'id', 'sibling_id');
@@ -84,6 +87,8 @@ class ProductType extends Model {
 
 	/**
 	 * Get the default price
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function price(): HasOne {
 		return $this->hasOne(ProductTypePrice::class, 'type_id');
@@ -91,6 +96,8 @@ class ProductType extends Model {
 
 	/**
 	 * Get the type's gender
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function gender(): BelongsTo {
 		return $this->belongsTo(ProductGender::class);
@@ -98,13 +105,17 @@ class ProductType extends Model {
 
 	/**
 	 * Get measures
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function measures(): HasOne {
-		return $this->hasOne(ProductTypeMeasure::class, 'type_id', 'id');
+	public function measures(): HasMany {
+		return $this->hasMany(Measure::class, 'type_id', 'id')->whereNot('size', 'mat');
 	}
 
 	/**
 	 * Get the type's mockup sizes
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function mockup_sizes(): HasMany {
 		return $this->hasMany(ProductTypeMockup::class, 'type_id', 'id');
