@@ -337,6 +337,13 @@ class Order extends Model {
 		return $price;
 	}
 
+	public function usedCredit(): float {
+		$shippingCredit = $this->credit_ship ? $this->grossShippingFee() : 0;
+		$orderItemsCredit = $this->usedOrderItemsCredit();
+
+		return $shippingCredit + $orderItemsCredit;
+	}
+
 	/**
 	 * Attribute: Get the total credit used for order items.
 	 * 

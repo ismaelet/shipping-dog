@@ -310,13 +310,13 @@ $cart = cart();
 						insieme ad un codice sconto ed è possibile usarlo solo se si ha abbastanza credito da coprire l'intero prezzo del
 						prodotto.</p>
 
-					<p class="txt-med text-center">Hai usato <strong>{{ formatc($legacyCart->usedCredit) }} € /
-							{{ formatc($legacyCart->customer->credit) }} €</strong></p>
+					<p class="txt-med text-center">Hai usato <strong>{{ formatc(cart()->usedCredit()) }} € /
+							{{ formatc(cart()->user?->seller?->credit) }} €</strong></p>
 
 					<div class="total-credit">
 						<div
 							class="used-credit"
-							style="width: {{ round(($legacyCart->usedCredit / $legacyCart->customer->credit) * 100) }}%"
+							style="width: {{ round((cart()->usedCredit() / cart()->user?->seller?->credit) * 100) }}%"
 						></div>
 					</div>
 

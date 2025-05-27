@@ -34,7 +34,7 @@
 
 		<?php } ?>
 
-		<?php if ($order->usedCredit) { ?>
+		<?php if ($order->usedCredit()) { ?>
 
 		<div class="chck_item flex justify-between">
 			<p>Credito</p>

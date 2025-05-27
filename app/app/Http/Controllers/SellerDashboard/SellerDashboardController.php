@@ -37,7 +37,6 @@ class SellerDashboardController extends Controller {
 
 	public function _old() {
 
-
 		// edit shop data
 		if (isset($_POST['edit'])) {
 			$name = trim($_POST['name']);

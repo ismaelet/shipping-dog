@@ -25,6 +25,7 @@ Route::prefix('/seller')->middleware(Seller::class)->name('seller-dashboard')->g
 
 	// Pricing
 	Route::get('/sales/prices', [PricingController::class, 'index'])->name('.prices');
+	Route::post('/sales/prices', [PricingController::class, 'update'])->name('.prices');
 
 	// Payments
 	Route::get('/payment', [PaymentRequestController::class, 'index'])->name('.payment');

@@ -18,7 +18,7 @@ $sizes = $product->type->sizes;
 		id="size-lbox"
 		class="lbox modal"
 	>
-		<div class="modal-form">
+		<div class="modal-form measure-table">
 
 			<div class="modal_close lbox-close">
 				{!! embed_icon('close') !!}

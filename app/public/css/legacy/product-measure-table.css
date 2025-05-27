@@ -1,6 +1,11 @@
 /*
 * Layout
 */
+.measure-table {
+	max-height: 100vh;
+	overflow-y: auto;
+}
+
 .size-table-img {
 	margin-inline: auto;
 	max-height: 13rem;

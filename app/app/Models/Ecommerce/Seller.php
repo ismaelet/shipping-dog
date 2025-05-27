@@ -39,6 +39,8 @@ class Seller extends Model {
 	 */
 	protected $fillable = [
 		'user_id',
+		'name',
+		'description',
 		'credit',
 		'earned',
 		'payed',

@@ -34,9 +34,9 @@ use App\Legacy\System\DB;
 
 				<div class="dashboard-panel surface">
 
-					<?php if ($done) { ?>
-					<p class="confirmation">Prezzi modificati con successo</p>
-					<?php } ?>
+					@if (session('success'))
+						<x-alerts.success class="mb-4">{{ session('success') }}</x-alerts.success>
+					@endif
 
 					<h1
 						id="sub_cloth"
