@@ -20,6 +20,8 @@ RUN apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-dev libexif-dev &&
 	docker-php-ext-install exif && \
 	docker-php-ext-configure gd --with-webp --with-jpeg && \
 	docker-php-ext-install gd
+RUN echo "upload_max_filesize=1024M" > /usr/local/etc/php/conf.d/uploads.ini \
+	&& echo "post_max_size=1024M" >> /usr/local/etc/php/conf.d/uploads.ini
 
 # Required to generate XLSX files
 RUN apt-get install -y libonig-dev && \
