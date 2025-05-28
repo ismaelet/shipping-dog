@@ -93,7 +93,7 @@ class PortfolioController extends Controller {
 				],
 				[
 					'type' => 'file',
-					'name' => 'file-vector',
+					'name' => 'file_vector',
 					'accept' => '.pdf,.ai',
 				],
 			],

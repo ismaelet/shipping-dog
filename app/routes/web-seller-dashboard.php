@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Ecommerce\DesignController;
 use App\Http\Controllers\Ecommerce\PaymentRequestController;
 use App\Http\Controllers\Ecommerce\SaleController;
 use App\Http\Controllers\SellerDashboard\PortfolioController;
@@ -35,3 +36,14 @@ Route::prefix('/seller')->middleware(Seller::class)->name('seller-dashboard')->g
 
 	// Customer photos
 });
+
+
+/**
+ * * Designs
+ */
+// Create a design
+Route::resource('designs', DesignController::class)->only(['index', 'store', 'edit', 'destroy']);
+Route::post('/designs/{design}/upload-image', [DesignController::class, 'uploadImage'])->name('designs.upload-image');
+Route::post('/designs/{design}/update-tags', [DesignController::class, 'updateTags'])->name('designs.update-tags');
+Route::post('/designs/{design}/update-background-color', [DesignController::class, 'updateBackgroundColor'])->name('designs.update-background-color');
+Route::post('/designs/{design}/update-default-color', [DesignController::class, 'updateDefaultColor'])->name('designs.update-default-color');

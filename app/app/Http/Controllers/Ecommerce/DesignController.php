@@ -40,7 +40,7 @@ class DesignController extends Controller {
 				}
 			}],
 			'file' => ['required', 'mimes:jpeg,png,gif,webp'],
-			'file-vector' => ['mimes:pdf,ai'],
+			'file_vector' => ['mimes:pdf,ai'],
 			'tags' => ['nullable', 'string', 'max:255'],
 		]);
 
@@ -52,7 +52,7 @@ class DesignController extends Controller {
 		]);
 
 		// Add a logo group
-		$sellerLogoGroup = LogoGroup::where('seller_id', auth()->id())->orderByDesc('id')->first();
+		$sellerLogoGroup = LogoGroup::where('seller_id', Auth::id())->orderByDesc('id')->first();
 
 		if ($sellerLogoGroup) {
 			$design->update([
@@ -61,7 +61,7 @@ class DesignController extends Controller {
 		}
 
 		// Create the products
-		$types = ProductType::where('hidden', 0)->get();
+		$types = ProductType::where('hidden', 0)->with('colors', 'positions')->get();
 
 		foreach ($types as $type) {
 			$colorIds = $type->colors->pluck('id');
@@ -92,8 +92,8 @@ class DesignController extends Controller {
 		$this->uploadImageHelper($design, $request->file('file'));
 
 		// Upload the vector file
-		if ($request->hasFile('file-vector')) {
-			$this->uploadVectorImage($design, $request->file('file-vector'));
+		if ($request->hasFile('file_vector')) {
+			$this->uploadVectorImage($design, $request->file('file_vector'));
 		}
 
 		// Redirect
@@ -217,6 +217,7 @@ class DesignController extends Controller {
 	 * ~ Helper method: upload image
 	 */
 	private function uploadImageHelper(Design $design, UploadedFile $file, string $variant = 'light'): bool {
+		$design->load('products', 'products.color', 'products.type', 'products.position');
 		$fileName = $variant === 'light' ? $design->id : $design->id . '_dark';
 
 		// Save the aspect ratio
