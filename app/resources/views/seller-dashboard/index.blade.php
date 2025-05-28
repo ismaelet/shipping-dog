@@ -17,7 +17,7 @@
 
 					<div class="mt-8 grid grid-cols-1 gap-4">
 						<div class="grid grid-cols-1 gap-2">
-							<x-inputs.label>Nome:</x-inputs.label>
+							<x-label>Nome:</x-label>
 							<input
 								type="text"
 								class="input"
@@ -30,7 +30,7 @@
 						</div>
 
 						<div class="grid grid-cols-1 gap-2">
-							<x-inputs.label>Descrizione (opzionale):</x-inputs.label>
+							<x-label>Descrizione (opzionale):</x-label>
 							<textarea
 							 class="textarea"
 							 name="desc"
@@ -41,7 +41,7 @@
 
 						<div class="grid grid-cols-1 gap-2">
 							<div class="flex items-baseline justify-between">
-								<x-inputs.label>Ordina prodotti:</x-inputs.label>
+								<x-label>Ordina prodotti:</x-label>
 
 								<span class="inlb mt-2">
 									{{ info_box('Puoi scegliere se ordinare i prodotti dal più poplare o dal più recente al meno, oppure seleziona "ordine personalizzato" per seguire l\'ordine della tua lista dei lavori. Questo campo influenza solo l\'ordine predefinito, i clienti potranno comunque riordinare i prodotti in ordine di popolarità o di data di creazione.') }}
@@ -91,7 +91,7 @@
 				@endif
 
 				<div class="gap1 mt-4 grid">
-					<x-inputs.label>Website:</x-inputs.label>
+					<x-label>Website:</x-label>
 					<input
 						type="text"
 						class="input"
@@ -99,7 +99,7 @@
 						value="{{ $row_link['site'] ?? '' }}"
 						placeholder="URL website"
 					>
-					<x-inputs.label>Facebook:</x-inputs.label>
+					<x-label>Facebook:</x-label>
 					<input
 						type="text"
 						class="input"
@@ -107,7 +107,7 @@
 						value="{{ $row_link['facebook'] ?? '' }}"
 						placeholder="Username Facebook o URL completo"
 					>
-					<x-inputs.label>Instagram:</x-inputs.label>
+					<x-label>Instagram:</x-label>
 					<input
 						type="text"
 						class="input"
@@ -115,7 +115,7 @@
 						value="{{ $row_link['instagram'] ?? '' }}"
 						placeholder="Username Instagram o URL completo"
 					>
-					<x-inputs.label>Twitter:</x-inputs.label>
+					<x-label>Twitter:</x-label>
 					<input
 						type="text"
 						class="input"
@@ -123,7 +123,7 @@
 						value="{{ $row_link['twitter'] ?? '' }}"
 						placeholder="Username Twitter o URL completo"
 					>
-					<x-inputs.label>YouTube:</x-inputs.label>
+					<x-label>YouTube:</x-label>
 					<input
 						type="text"
 						class="input"

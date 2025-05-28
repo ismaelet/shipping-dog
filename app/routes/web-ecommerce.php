@@ -5,6 +5,7 @@ use App\Http\Controllers\Ecommerce\Cart\CartAddressController;
 use App\Http\Controllers\Ecommerce\Cart\CartPaymentController;
 use App\Http\Controllers\Ecommerce\Cart\CartPromotionsController;
 use App\Http\Controllers\Ecommerce\CartController;
+use App\Http\Controllers\Ecommerce\Order\OrderFindController;
 use App\Http\Controllers\Ecommerce\OrderController;
 use App\Http\Controllers\Ecommerce\OrderItemController;
 use App\Http\Controllers\Ecommerce\ProductController;
@@ -91,7 +92,8 @@ Route::get('/cart/empty', function () {
  * * Order
  */
 // Find an order
-Route::get('orders/find', [OrderController::class, 'find'])->name('orders.find');
+Route::get('orders/find', [OrderFindController::class, 'index'])->name('orders.find');
+Route::post('orders/find', [OrderFindController::class, 'show'])->name('orders.find');
 
 // Order resource routes
 Route::resource('orders', OrderController::class)->middleware(OrderRecap::class)->only(['show', 'destroy']);

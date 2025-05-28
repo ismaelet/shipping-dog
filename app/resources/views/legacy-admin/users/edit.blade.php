@@ -7,7 +7,7 @@
 		<x-dashboard.form.panel title="Dati personali">
 
 			<x-form.group>
-				<x-inputs.label for="first_name">Nome</x-inputs.label>
+				<x-label for="first_name">Nome</x-label>
 				<x-input
 					name="first_name"
 					placeholder="Nome"
@@ -16,7 +16,7 @@
 			</x-form.group>
 
 			<x-form.group>
-				<x-inputs.label for="last_name">Cognome</x-inputs.label>
+				<x-label for="last_name">Cognome</x-label>
 				<x-input
 					name="last_name"
 					placeholder="Cognome"
@@ -25,7 +25,7 @@
 			</x-form.group>
 
 			<x-form.group>
-				<x-inputs.label for="email">E-mail</x-inputs.label>
+				<x-label for="email">E-mail</x-label>
 				<x-input
 					name="email"
 					placeholder="E-mail"

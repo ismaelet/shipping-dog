@@ -32,7 +32,7 @@
 
 	{{-- Default color --}}
 	<x-inputs.group>
-		<x-inputs.label text="Scegli il colore:" />
+		<x-label text="Scegli il colore:" />
 
 		<div class="flex flex-wrap gap-2">
 			@foreach ($colors as $color)

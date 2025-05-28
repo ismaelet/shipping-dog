@@ -103,7 +103,7 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 					    echo 'hide';
 					} ?>"
 				>
-					<x-inputs.label class="field-label text-sm">Colore</x-inputs.label>
+					<x-label class="field-label text-sm">Colore</x-label>
 					<div class="grid">
 
 						<?php foreach ($productColors as $color) {
@@ -168,7 +168,7 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 					id="size"
 					class="field"
 				>
-					<x-inputs.label class="field-label text-sm">{{ $product->type->category == 'c' ? 'Taglia' : 'Dimensione' }}
+					<x-label class="field-label text-sm">{{ $product->type->category == 'c' ? 'Taglia' : 'Dimensione' }}
 
 						@if (!$product->isCustom() && $sizeTable)
 							<span
@@ -177,7 +177,7 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 							>info taglie</span>
 						@endif
 
-					</x-inputs.label>
+					</x-label>
 
 					<div class="grid">
 
@@ -249,7 +249,7 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 				>
 
 					<div class="">
-						<x-inputs.label class="field-label text-sm">Modello</x-inputs.label>
+						<x-label class="field-label text-sm">Modello</x-label>
 
 						<?php if ($product->type->unisex) {
 						    info_box("Qui puoi scegliere se vedere l'anteprima del prodotto su un modello maschile o femminile, ma ha scopo puramente illustrativo, in quanto tutte le taglie per questo articolo sono unisex.");
@@ -307,7 +307,7 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 					class="field <?= count($productPositions) < 2 || $product->isCustom() ? 'hidden' : '' ?>"
 				>
 
-					<x-inputs.label class="field-label text-sm">Posizione della stampa</x-inputs.label>
+					<x-label class="field-label text-sm">Posizione della stampa</x-label>
 
 					<div class="data-area">
 
@@ -336,7 +336,7 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 				<?php if ($product->logoGroup()) { ?>
 
 				<div class="logo-field field">
-					<x-inputs.label class="field-label text-sm"><?= $product->logoGroup()->name ?></x-inputs.label>
+					<x-label class="field-label text-sm"><?= $product->logoGroup()->name ?></x-label>
 
 					<div
 						class="grid-flow"
@@ -423,7 +423,7 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 				<?php if (false && $product->type->slug == 'cas') { ?>
 
 				<div class="field">
-					<x-inputs.label class="field-label text-sm">Retro</x-inputs.label>
+					<x-label class="field-label text-sm">Retro</x-label>
 
 					<div>
 						<input
@@ -475,7 +475,7 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 					id="qty_cont"
 					class="field hidden"
 				>
-					<x-inputs.label class="field-label text-sm">Quantità</x-inputs.label>
+					<x-label class="field-label text-sm">Quantità</x-label>
 
 					<input
 						type="text"

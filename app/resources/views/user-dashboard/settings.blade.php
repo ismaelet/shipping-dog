@@ -30,7 +30,7 @@
 						<x-alerts.success>Dati modificati con successo</x-alerts.success>
 					@endif
 
-					<x-inputs.label>Username:</x-inputs.label>
+					<x-label>Username:</x-label>
 					<input
 						type="text"
 						class="input inp-nospace"
@@ -46,7 +46,7 @@
 							profilo</x-alerts.error>
 					@endif
 
-					<x-inputs.label>Nome e cognome:</x-inputs.label>
+					<x-label>Nome e cognome:</x-label>
 					<div class="grid gap-[inherit] md:grid-cols-2">
 						<input
 							type="text"
@@ -64,7 +64,7 @@
 						>
 					</div>
 
-					<x-inputs.label>E-mail:</x-inputs.label>
+					<x-label>E-mail:</x-label>
 					<input
 						type="email"
 						class="input"
@@ -108,7 +108,7 @@
 
 					<?php } ?>
 
-					<x-inputs.label>Password:</x-inputs.label>
+					<x-label>Password:</x-label>
 
 					<input
 						type="password"
@@ -168,7 +168,7 @@
 				<x-typography.component-heading class="dashboard-heading">Immagine profilo</x-typography.component-heading>
 
 				<div class="grid grid-cols-1 gap-4">
-					<x-inputs.label>Modifica l'immagine profilo:</x-inputs.label>
+					<x-label>Modifica l'immagine profilo:</x-label>
 					<input
 						type="file"
 						name="file"

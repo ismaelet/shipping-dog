@@ -217,6 +217,17 @@
 		color: var(--color-neutral-700);
 		font-weight: var(--font-weight-semibold);
 	}
+
+	.form-fields {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.form-field {
+		display: grid;
+		gap: 0.5rem;
+	}
 }
 
 /*

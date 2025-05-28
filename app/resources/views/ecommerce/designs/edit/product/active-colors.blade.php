@@ -40,7 +40,7 @@
 	x-data
 >
 	<div class="flex items-center gap-2">
-		<x-inputs.label text="Colori attivi" />
+		<x-label text="Colori attivi" />
 
 		<x-help.info direction="center">È possibile comprare la tua grafica stampata su capi di questi colori. Attiva
 			quelli che ti

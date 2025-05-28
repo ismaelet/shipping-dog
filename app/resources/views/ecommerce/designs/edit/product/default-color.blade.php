@@ -9,7 +9,7 @@
 	@csrf
 
 	<div class="flex items-center gap-2">
-		<x-inputs.label text="Colore predefinito" />
+		<x-label text="Colore predefinito" />
 		<x-help.info direction="center">Qui puoi selezionare il colore del capo che sarà mostrato come prima scelta in
 			tutte le
 			anteprime.</x-help.info>

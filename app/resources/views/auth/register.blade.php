@@ -16,7 +16,7 @@
 	<!-- Form -->
 	<x-slot name="formBody">
 		<x-form.field>
-			<x-inputs.label>E-mail</x-inputs.label>
+			<x-label>E-mail</x-label>
 			<x-form.input
 				type="email"
 				name="email"
@@ -31,7 +31,7 @@
 		</x-form.field>
 
 		<x-form.field>
-			<x-inputs.label>Password</x-inputs.label>
+			<x-label>Password</x-label>
 			<x-form.input
 				type="password"
 				name="password"

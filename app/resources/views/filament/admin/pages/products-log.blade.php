@@ -145,7 +145,7 @@
 	<div class="grid gap-8">
 		{{-- Recap form --}}
 		<x-dashboard.form.panel title="{{ ($validordersCount ? $orderItemsCount : 0) . ' Articoli da fare' }}">
-			<x-inputs.label>Parti dall'ordine:</x-inputs.label>
+			<x-label>Parti dall'ordine:</x-label>
 
 			<div class="flex w-full items-center gap-4">
 				<form

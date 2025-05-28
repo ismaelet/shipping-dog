@@ -183,7 +183,7 @@
 
 				@if ($orders->first())
 					<x-form.group>
-						<x-inputs.label>Copia a partire da:</x-inputs.label>
+						<x-label>Copia a partire da:</x-label>
 						<div class="flex gap-4">
 							<x-inputs.search-input
 								search="orders"
@@ -208,7 +208,7 @@
 				@endif
 
 				<x-form.group>
-					<x-inputs.label>Carica a partire da:</x-inputs.label>
+					<x-label>Carica a partire da:</x-label>
 
 					<div class="flex gap-4">
 						<form

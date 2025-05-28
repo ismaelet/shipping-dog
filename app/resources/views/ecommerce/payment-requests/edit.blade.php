@@ -15,7 +15,7 @@
 
 		<div class="grid gap-2">
 			<x-form.group>
-				<x-inputs.label text="Nome e cognome" />
+				<x-label text="Nome e cognome" />
 				<x-input
 					name="first_name"
 					placeholder="Nome"
@@ -33,7 +33,7 @@
 			</x-form.group>
 
 			<x-form.group>
-				<x-inputs.label text="Data di nascita" />
+				<x-label text="Data di nascita" />
 				<x-input
 					type="date"
 					name="birthdate"
@@ -43,7 +43,7 @@
 			</x-form.group>
 
 			<x-form.group>
-				<x-inputs.label text="Città e provincia di nascita" />
+				<x-label text="Città e provincia di nascita" />
 				<x-input
 					name="birthplace"
 					placeholder="Città"
@@ -62,7 +62,7 @@
 			</x-form.group>
 
 			<x-form.group>
-				<x-inputs.label text="Indirizzo di residenza" />
+				<x-label text="Indirizzo di residenza" />
 				<x-input
 					name="address"
 					placeholder="Indirizzo"
@@ -94,7 +94,7 @@
 			</x-form.group>
 
 			<x-form.group>
-				<x-inputs.label text="Dati personali" />
+				<x-label text="Dati personali" />
 				<x-input
 					class="uppercase"
 					name="cf"
@@ -111,7 +111,7 @@
 			</x-form.group>
 
 			<x-form.group>
-				<x-inputs.label text="Indirizzo PayPal" />
+				<x-label text="Indirizzo PayPal" />
 				<x-input
 					type="email"
 					name="paypal"

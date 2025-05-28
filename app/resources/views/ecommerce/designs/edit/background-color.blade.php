@@ -33,7 +33,7 @@
 
 	{{-- Background color --}}
 	<x-inputs.group>
-		<x-inputs.label text="Scegli il colore:" />
+		<x-label text="Scegli il colore:" />
 
 		<div class="flex items-center gap-2">
 			<x-input
