@@ -33,6 +33,7 @@ class PricingController extends Controller {
 	}
 
 	public function update(): RedirectResponse {
+		$seller = Auth::user()->seller;
 
 		$res = DB::select('id FROM product_types WHERE hidden = 0 ORDER BY id ASC');
 
@@ -42,7 +43,7 @@ class PricingController extends Controller {
 
 			$price = $_POST['price_' . $type->slug];
 
-			$row_price = DB::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [Auth::id(), $type->id]) ?: DB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
+			$row_price = DB::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
 
 			$price_old = $row_price['price'];
 			$gain_w_old = $row_price['gain_w'];
@@ -54,7 +55,7 @@ class PricingController extends Controller {
 			// add prices
 			SellerPrice::updateOrCreate(
 				[
-					'seller_id' => Auth::id(),
+					'seller_id' => $seller->id,
 					'type_id' => $type->id,
 				],
 				[
