@@ -20,6 +20,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class SellerResource extends Resource {
 
@@ -225,7 +226,7 @@ class SellerResource extends Resource {
 						->icon('icon-login')
 						->color('info')
 						->action(function (Seller $record) {
-							auth()->login($record->user);
+							Auth::login($record->user);
 
 							return to_route('user-dashboard');
 						}),

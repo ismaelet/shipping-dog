@@ -5,6 +5,7 @@ namespace App\Helpers;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class FileHelper {
 
@@ -23,6 +24,22 @@ class FileHelper {
 	 */
 	public static function delete(string $path): bool {
 		return Storage::disk('public')->delete($path);
+	}
+
+	/**
+	 * Download a file from the public storage directory
+	 *
+	 * @param string $path The path to the file in the public storage directory
+	 * @return BinaryFileResponse
+	 */
+	public static function download(string $path): BinaryFileResponse {
+		$path = storage_path('app/public/' . $path);
+
+		if (!file_exists($path)) {
+			abort(404);
+		}
+
+		return response()->download($path);
 	}
 
 	/**
@@ -188,7 +205,10 @@ class FileHelper {
 	 */
 	public static function embedSvg(string $fileName, array $customClasses = [], bool $isIcon = false): string {
 		$iconDefault = [
-			'rounded', 'filled', '400', 'icon'
+			'rounded',
+			'filled',
+			'400',
+			'icon'
 		];
 
 		// Replace dots with slashes
