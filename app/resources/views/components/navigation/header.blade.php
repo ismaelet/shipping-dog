@@ -25,14 +25,16 @@
 	// links
 	$header['links'] = [];
 
-	$header['links'][] = ['title' => 'Home', 'loc' => 'home', 'url' => '/'];
+	$header['links'][] = ['title' => 'Home', 'loc' => 'home', 'url' => route('home')];
+
 	$header['links'][] = [
 	    'title' => 'Carrello (' . cart_quantity() . ')',
 	    'loc' => 'cart',
-	    'url' => '/cart',
+	    'url' => route('cart'),
 	    'cart' => true,
 	    'mob' => true,
 	];
+
 	$header['links'][] = [
 	    'title' => 'Login',
 	    'loc' => 'login',
@@ -40,24 +42,44 @@
 	    'logged' => false,
 	    'mob' => true,
 	];
+
 	if (Auth::user()?->seller) {
 	    $header['links'][] = [
 	        'title' => 'Mio negozio',
 	        'loc' => 'artist',
 	        'url' => route('seller.show', Auth::user()->seller),
-	        'drop' => 'artist',
+	        'dropdown' => [
+	            ['Il mio negozio', route('seller.show', ['seller' => Auth::user()->seller])],
+	            ['Le mie grafiche', route('seller-dashboard.portfolio')],
+	            ['Carica una grafica', route('seller-dashboard.portfolio.add')],
+	            ['Vendite realizzate', route('seller-dashboard.sales')],
+	            ['Modifica prezzi', route('seller-dashboard.prices')],
+	            ['Gestisci', route('seller-dashboard')],
+	        ],
 	        'seller' => true,
 	    ];
 	}
+
 	$header['links'][] = [
 	    'title' => 'Profilo',
 	    'loc' => 'user-dashboard',
-	    'url' => '/user-dashboard',
+	    'url' => route('user-dashboard'),
 	    'logged' => true,
 	    'mob' => true,
 	];
-	$header['links'][] = ['title' => 'Prodotti', 'loc' => 'shop', 'url' => '/shop', 'drop' => 'shop'];
-	// $header['links'][] = ['title' => 'Promozioni', 'loc' => 'promotions', 'url' => '/promotions'), 'new' => true];
+
+	$header['links'][] = [
+	    'title' => 'Prodotti',
+	    'loc' => 'shop',
+	    'url' => route('shop'),
+	    'dropdown' => [
+	        ['Abbigliamento Donna', route('shop', ['gender' => 'f'])],
+	        ['Abbigliamento Uomo', route('shop', ['gender' => 'm'])],
+	        ['Accessori', route('shop', ['group' => 'm'])],
+	        ['Ufficiali', route('seller.show', ['seller' => 1])],
+	    ],
+	];
+
 	$header['links'][] = [
 	    'title' => 'Preferiti',
 	    'loc' => 'wishlist',
@@ -65,38 +87,25 @@
 	    'logged' => true,
 	    'mob' => true,
 	];
-	$header['links'][] = ['title' => 'Vendi', 'loc' => 'open-shop', 'url' => '/open-shop', 'seller' => false];
-	$header['links'][] = ['title' => 'Supporto', 'loc' => 'info', 'url' => route('support.faq'), 'drop' => 'info'];
+
+	$header['links'][] = ['title' => 'Vendi', 'loc' => 'open-shop', 'url' => route('open-shop'), 'seller' => false];
+
+	$header['links'][] = [
+	    'title' => 'Supporto',
+	    'loc' => 'info',
+	    'url' => route('support.faq'),
+	    'dropdown' => [
+	        ['Contatti', route('contacts')],
+	        ['Cambio taglia o reso', route('support.refund')],
+	        ['Stato ordine', route('orders.find')],
+	        ['Domande frequenti', route('support.faq')],
+	    ],
+	];
+
 	$header['links'][] = ['title' => 'Gestione', 'loc' => 'admin', 'url' => '/admin', 'admin' => true];
 
-	// dropdowns
-	$header['dropdowns']['shop'] = [
-	    ['Abbigliamento Donna', 'shop', ['gender' => 'f']],
-	    ['Abbigliamento Uomo', 'shop', ['gender' => 'm']],
-	    ['Accessori', 'shop', ['group' => 'm']],
-	    ['Ufficiali', 'seller.show', ['seller' => 1]],
-	];
-
-	$header['dropdowns']['info'] = [
-	    ['Contatti', 'contacts'],
-	    ['Cambio taglia o reso', 'support.refund'],
-	    ['Stato ordine', 'orders.find'],
-	    ['Domande frequenti', 'support.faq'],
-	];
-
-	if (Auth::user()?->seller) {
-	    $header['dropdowns']['artist'] = [
-	        ['Il mio negozio', 'seller.show', Auth::user()->seller],
-	        ['Le mie grafiche', 'seller-dashboard.portfolio'],
-	        ['Carica una grafica', 'seller-dashboard.portfolio.add'],
-	        ['Vendite realizzate', 'seller-dashboard.sales'],
-	        ['Modifica prezzi', 'seller-dashboard.prices'],
-	        ['Gestisci', 'seller-dashboard'],
-	    ];
-	}
-
 	// login bar
-	$header['login-link'] = ['Login', '/login'];
+	$header['login-link'] = ['Login', route('login')];
 	$header['logged-link'] = [auth()->user() ? (auth()->user()->username ?: 'Profilo') : '', '/user-dashboard'];
 
 @endphp
@@ -756,7 +765,7 @@
 										<a href="<?= $h_link['url'] ?>">
 											<?= $h_link['title'] ?>
 
-											@if (isset($h_link['drop']))
+											@if (isset($h_link['dropdown']))
 												<span class="h-drop-ico">&#x25BC;</span>
 											@endif
 
@@ -768,12 +777,12 @@
 										</a>
 									</p>
 
-									@if (isset($h_link['drop']))
+									@if (isset($h_link['dropdown']))
 										<div class="h-drop bgr-c1">
 
-											@foreach ($header['dropdowns'][$h_link['drop']] as $h_drop_link)
+											@foreach ($h_link['dropdown'] as $h_drop_link)
 												<p class="h-drop-link bgr-wht-h txt-wht txt-blk-h">
-													<a href="{{ route($h_drop_link[1], $h_drop_link[2] ?? null) }}">{{ $h_drop_link[0] }}</a>
+													<a href="{{ $h_drop_link[1] }}">{{ $h_drop_link[0] }}</a>
 												</p>
 											@endforeach
 
@@ -930,9 +939,9 @@
 
 									// Check seller filter
 									if (isset($h_link['seller'])) {
-									    if ($h_link['seller'] && auth()->user() && App\Helpers\App::isSeller()) {
+									    if ($h_link['seller'] && (!auth()->user() || !App\Helpers\App::isSeller())) {
 									        $h_valid = false;
-									    } elseif (!$h_link['seller'] || !auth()->user() || !App\Helpers\App::isSeller()) {
+									    } elseif (!$h_link['seller'] && auth()->user() && App\Helpers\App::isSeller()) {
 									        $h_valid = false;
 									    }
 									}
@@ -956,7 +965,7 @@
 											class="h-dropM-cbx hidden"
 										>
 
-										<a <?= !isset($h_link['drop']) ? 'href="' . $h_link['url'] . '"' : '' ?>>
+										<a <?= !isset($h_link['dropdown']) ? 'href="' . $h_link['url'] . '"' : '' ?>>
 											<h3 class="h-linkM-txt txt-med uppercase">
 
 												<span class="h-linkM-bgr bgr bgr-c1"></span>
@@ -964,7 +973,7 @@
 												@php
 													echo $h_link['title'];
 
-													if (isset($h_link['drop'])) {
+													if (isset($h_link['dropdown'])) {
 													    echo ' <span class="h-dropM-ico">&#x25BC;</span>';
 													}
 												@endphp
@@ -973,10 +982,10 @@
 
 										</a>
 
-										@if (isset($h_link['drop']))
+										@if (isset($h_link['dropdown']))
 											<div class="h-dropM">
 
-												@foreach ($header['dropdowns'][$h_link['drop']] as $h_drop_link)
+												@foreach ($h_link['dropdown'] as $h_drop_link)
 													<p class="h-dropM-link txt-wht-h bgr-c3-h">
 														<a href="<?= $h_drop_link[1] ?>">
 															<?= $h_drop_link[0] ?>
