@@ -61,6 +61,7 @@ class DesignResource extends Resource {
 				TextColumn::make('id')
 					->label('ID')
 					->numeric()
+					->searchable()
 					->sortable(),
 
 				TextColumn::make('name')

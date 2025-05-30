@@ -14,10 +14,63 @@ use App\Legacy\System\DB;
 @endpushOnce
 
 @pushOnce('scripts')
-	<script
-		defer
-		src="{{ asset('js/legacy/pricing.js') }}"
-	></script>
+	<script defer>
+		document.addEventListener('DOMContentLoaded', function() {
+			function update_price(ele) {
+				let parent = ele.closest('.price_box');
+
+				let price = ele.value ? parseFloat(ele.value) : 0;
+				let price_def = parent.querySelector('.price_def') ? parseFloat(parent.querySelector('.price_def')
+					?.value) : 0;
+				let gain_w_def = parent.querySelector('.gain_w_def') ? parseFloat(parent.querySelector('.gain_w_def')
+					?.value) : 0;
+				let gain_c_def = parent.querySelector('.gain_c_def') ? parseFloat(parent.querySelector('.gain_c_def')
+					?.value) : 0;
+
+				let base_w = price_def - gain_w_def / 0.75;
+				let base_c = price_def - gain_c_def / 0.75;
+
+				if (!price || price < 0) {
+					price = 0.01;
+				}
+
+				let gain_w = (price - base_w) * 0.75;
+				let gain_c = (price - base_c) * 0.75;
+
+				if (gain_w < 0) gain_w = 0;
+				if (gain_c < 0) gain_c = 0;
+
+				gain_w = gain_w.toFixed(2);
+				gain_c = gain_c.toFixed(2);
+
+				let gain_w_input = parent.querySelector('.gain_w');
+				if (gain_w_input) gain_w_input.value = gain_w + ' €';
+
+				let gain_c_input = parent.querySelector('.gain_c');
+				if (gain_c_input) gain_c_input.value = gain_c + ' €';
+			}
+
+			document.querySelectorAll('.price_inp').forEach(function(input) {
+				input.addEventListener('input', function() {
+					update_price(this);
+				});
+
+				input.addEventListener('blur', function() {
+
+					let price = this.value ? parseFloat(this.value) : 0;
+					let min = this.dataset.min ? parseFloat(this.dataset.min) : 0;
+
+					if (price < min) {
+						price = min;
+					}
+
+					this.value = price.toFixed(2);
+
+					update_price(this);
+				});
+			});
+		});
+	</script>
 @endpushOnce
 
 <x-layouts.seller-dashboard>

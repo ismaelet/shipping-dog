@@ -2,8 +2,7 @@
 FROM php:8.4-fpm
 
 # Set working directory
-WORKDIR /var/www
-COPY ./app /var/www
+WORKDIR /var/www/html
 
 # Install the zip extension
 RUN apt-get update && \
@@ -32,15 +31,8 @@ RUN apt-get install -y libicu-dev && \
 	docker-php-ext-install intl
 
 # Install Composer dependencies
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-	composer update
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install NPM dependencies
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs && \
-    rm -rf node_modules || true && \
-    npm install && \
-    npm run build
-	
-# Expose the working port
-EXPOSE 8000
+    apt-get install -y nodejs
