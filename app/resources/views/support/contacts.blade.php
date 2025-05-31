@@ -3,6 +3,29 @@
 		rel="stylesheet"
 		href="{{ asset('css/legacy/contacts.css') }}"
 	>
+	<style>
+		.form-inp,
+		.form-textarea {
+			display: inline-block;
+			background-color: transparent;
+			width: 100%;
+			border: none;
+			border-bottom: 1px solid var(--color-neutral-400);
+			border-radius: 0;
+			padding: 0;
+			margin: 0;
+			color: var(--color-neutral-700);
+			font-size: 0.9rem;
+			box-sizing: border-box;
+			outline: none !important;
+		}
+
+		.form-textarea {
+			height: 11rem;
+			padding-top: 1rem;
+			resize: none;
+		}
+	</style>
 @endpushOnce
 
 <x-layouts.legacy-main
@@ -78,76 +101,66 @@
 				<!-- Contact form -->
 				<section
 					id="form"
-					class="grid-cell"
+					class="grid-cell overflow-hidden"
 				>
 					<form
 						method="POST"
 						autocomplete="off"
+						class="grid grid-cols-1 gap-4"
 					>
 						@csrf
 
-						<div
-							id="form-anch"
-							class="anchor"
-						></div>
-
 						<x-typography.section-heading class="text-center">Scrivici</x-typography.section-heading>
 
-						<?php if ($sent) { ?>
-						<p class="confirmation mar-t-2">Messaggio inviato, ti risponderemo al più presto</p>
-						<?php } ?>
+						@if (session('success'))
+							<x-alerts.success>{{ session('success') }}</x-alerts.success>
+						@endif
 
-						<?php if ($error == 'email_bad') { ?>
-						<p class="error">Errore: indirizzo email non riconosciuto. Puoi comunque a scriverci direttamente a
-							<?= config('custom.contacts.email.url') ?>, invece di usare questo modulo.</p>
-						<?php } ?>
+						@if (session('error'))
+							<x-alerts.error>{!! session('error') !!}</x-alerts.error>
+						@endif
 
-						<?php if ($error == 'word_bad') { ?>
-						<p class="error">Errore: il messaggio non ha superato i nostri filtri anti-spam. Puoi comunque scriverci
-							direttamente a <?= config('custom.contacts.email.url') ?>, invece di usare questo modulo.</p>
-						<?php } ?>
+						<div class="">
+							<div class="form-lbl-box">
+								<p class="form-lbl">Nome e cognome</p>
+							</div>
+							<input
+								type="text"
+								name="name"
+								class="form-inp"
+								onfocus="$(this).prev().addClass('focus')"
+								onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}"
+								required
+							>
 
-						<div class="form-lbl-box">
-							<p class="form-lbl">Nome e cognome</p>
+							<div class="form-lbl-box">
+								<p class="form-lbl">Indirizzo email</p>
+							</div>
+							<input
+								type="email"
+								name="email"
+								class="form-inp"
+								onfocus="$(this).prev().addClass('focus')"
+								onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}"
+								required
+							>
+
+							<div class="form-lbl-box">
+								<p class="form-lbl">Testo del messaggio</p>
+							</div>
+							<textarea
+							 name="text"
+							 class="form-textarea"
+							 maxlength="500"
+							 onfocus="$(this).prev().addClass('focus')"
+							 onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}"
+							 required
+							></textarea>
 						</div>
-						<input
-							type="text"
-							name="name"
-							class="form-inp"
-							onfocus="$(this).prev().addClass('focus')"
-							onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}"
-							required
-						>
 
-						<div class="form-lbl-box">
-							<p class="form-lbl">Indirizzo email</p>
-						</div>
-						<input
-							type="email"
-							name="email"
-							class="form-inp"
-							onfocus="$(this).prev().addClass('focus')"
-							onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}"
-							required
-						>
-
-						<div class="form-lbl-box">
-							<p class="form-lbl">Testo del messaggio</p>
-						</div>
-						<textarea
-						 name="text"
-						 class="form-textarea"
-						 maxlength="500"
-						 onfocus="$(this).prev().addClass('focus')"
-						 onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}"
-						 required
-						></textarea>
-
-						<div class="txt-rig mar-t-2">
+						<div class="txt-rig">
 							<x-button
 								type="submit"
-								id="submit"
-								name="submit"
 								class="mt-4"
 							>Invia</x-button>
 						</div>

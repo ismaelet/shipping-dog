@@ -5,7 +5,10 @@
 	>
 @endpushOnce
 
-<section id="shops">
+<section
+	id="shops"
+	class="overflow-hidden"
+>
 	<div class="content-grid">
 		<div class="section-heading-box">
 			<h2 class="section-heading">Negozi in evidenza</h2>

@@ -6771,11 +6771,6 @@ body.fixed {
 		border: var(--border-width) solid var(--color-neutral-300);
 		box-shadow: none;
 	}
-
-	p.font-bold,
-	p .font-bold {
-		color: var(--color-neutral-700);
-	}
 }
 
 .items-start {
