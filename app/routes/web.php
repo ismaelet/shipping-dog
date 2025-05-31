@@ -50,7 +50,6 @@ Route::get('/support/sale-terms', [SaleTermsController::class, 'index'])->name('
 Route::get('/support/upload-terms', [UploadTermsController::class, 'index'])->name('support.upload-terms');
 Route::get('/support/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('support.privacy-policy');
 Route::get('/refund', [RefundController::class, 'index'])->name('support.refund');
-Route::get('/order/status', [RefundController::class, 'index'])->name('support.order.status');
 
 /**
  * * Downloads

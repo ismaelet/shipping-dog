@@ -27,7 +27,7 @@ $design = $design ?? (isset($design_id) ? Design::find($design_id) : null);
 			}
 
 			& svg {
-				--icon-size: 70%;
+				--icon-size: 50%;
 				transition: opacity .2s;
 				opacity: 0;
 				margin: auto;

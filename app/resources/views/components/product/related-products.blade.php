@@ -40,7 +40,7 @@ use Legacy\View\Components\Interactions\FollowButton;
 				<p id="art-date">membro dal <?= $product->seller->createdAtString() ?></p>
 
 				<!-- Follow artist -->
-				<x-shop.follow-button :seller="$product->seller" />
+				<livewire:follow-button :seller="$product->seller" />
 			</div>
 		</div>
 	</div>

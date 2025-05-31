@@ -56,7 +56,7 @@
 
 				<!-- Follow button -->
 				<div class="mb-4 mt-8 flex justify-center">
-					<x-shop.follow-button :$seller />
+					<livewire:follow-button :$seller />
 				</div>
 
 				<div

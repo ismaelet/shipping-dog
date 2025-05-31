@@ -44,7 +44,7 @@
 					<input
 						type="search"
 						name="search"
-						class="page-search__input"
+						class="page-search__input text-neutral-light-700 bg-white"
 						value="<?= $_GET['search'] ?? '' ?>"
 						placeholder="Cerca un prodotto"
 						maxlength="30"
