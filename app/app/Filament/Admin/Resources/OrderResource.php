@@ -67,7 +67,7 @@ class OrderResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationGroup = 'Gestione Vendite';
+	protected static ?string $navigationGroup = 'Vendite';
 
 	/**
 	 * Determine whether the resource can be created.

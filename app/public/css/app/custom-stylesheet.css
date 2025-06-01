@@ -6,6 +6,9 @@
 	--color-background-l: 10%;
 
 	--color-background: hsl(var(--theme-h), var(--theme-dark-s), var(--color-background-l));
+
+	--border-width: 1px;
+	--border-color: hsl(var(--theme-h), var(--theme-dark-s), 20%);
 }
 
 /* Resets */

@@ -1,5 +1,5 @@
 @use('App\Models\Ecommerce\Product\ProductMockup')
-@use('App\Models\Ecommerce\Product\ProductTypeMockup')
+@use('App\Models\Ecommerce\Product\ProductTypeMockupSize')
 
 @php
 	$function = 'saveMockup';
@@ -8,7 +8,7 @@
 
 	$enabled = $product->positions()->contains($position->id);
 
-	$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $position->id);
+	$productTypeMockup = ProductTypeMockupSize::firstByTypeId($product->type_id, $position->id);
 @endphp
 
 @if ($productTypeMockup)

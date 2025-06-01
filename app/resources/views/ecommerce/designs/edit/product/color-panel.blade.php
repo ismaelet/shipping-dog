@@ -1,9 +1,9 @@
 @use('App\Models\Ecommerce\Product\ProductMockup')
-@use('App\Models\Ecommerce\Product\ProductTypeMockup')
+@use('App\Models\Ecommerce\Product\ProductTypeMockupSize')
 
 @php
 	$function = 'saveColorChange';
-	$productTypeMockup = ProductTypeMockup::firstByTypeId($product->type_id, $product->position_id);
+	$productTypeMockup = ProductTypeMockupSize::firstByTypeId($product->type_id, $product->position_id);
 
 	$productMockup = ProductMockup::where('product_id', $product->id)
 	    ->where('position_id', $product->position_id)

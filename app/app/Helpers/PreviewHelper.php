@@ -7,7 +7,7 @@ use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductMockup;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductType;
-use App\Models\Ecommerce\Product\ProductTypeMockup;
+use App\Models\Ecommerce\Product\ProductTypeMockupSize;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -108,7 +108,7 @@ class PreviewHelper {
 		$design = $this->product->design_with_trashed;
 
 		// Fetch mockup type data
-		$mockupFrameworkData = ProductTypeMockup::where('type_id', $this->product->type_id)->where('position_id', $this->position->id)->first();
+		$mockupFrameworkData = ProductTypeMockupSize::where('type_id', $this->product->type_id)->where('position_id', $this->position->id)->first();
 
 		// Fetch mockup product data
 		$mockupProductData = ProductMockup::where('product_id', $this->product->id)->where('position_id', $this->position->id)->first();
@@ -129,16 +129,31 @@ class PreviewHelper {
 		// Check if every required image exists
 		if (!file_exists($clothingImage)) {
 			error_log('Doesn\'t exist clothing file: ' . $clothingImage);
+
+			if (config('app.debug')) {
+				dd('Doesn\'t exist clothing file: ' . $clothingImage, $this->product->type->image($this->color->id, $this->position->id), $this->color, $this->position);
+			}
+
 			return;
 		}
 
 		if (!file_exists($designImage)) {
 			error_log('Doesn\'t exist design file: ' . $designImage . ' of product: ' . $this->product->id);
+
+			if (config('app.debug')) {
+				// dd('Doesn\'t exist design file: ' . $designImage, $design->id, $this->color, $this->position);
+			}
+
 			return;
 		}
 
 		if (!$mockupProductData && !$mockupFrameworkData) {
 			error_log('Doesn\'t exist mockup data for product: ' . $this->product->id);
+
+			if (config('app.debug')) {
+				dd('Doesn\'t exist mockup data for product: ' . $this->product->id, $this->product->type->name, $this->color->name, $this->position->name);
+			}
+
 			return;
 		}
 

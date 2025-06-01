@@ -27,7 +27,7 @@ class ShippingResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationGroup = 'Gestione Vendite';
+	protected static ?string $navigationGroup = 'Vendite';
 
 	/**
 	 * The label of a singular resource.

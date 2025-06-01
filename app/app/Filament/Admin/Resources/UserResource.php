@@ -59,7 +59,7 @@ class UserResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationGroup = 'Gestione Utenti';
+	protected static ?string $navigationGroup = 'Utenti e Negozi';
 
 	/**
 	 * The form for creating or updating records.

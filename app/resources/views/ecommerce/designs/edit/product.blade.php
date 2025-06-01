@@ -1,6 +1,6 @@
 @use('App\Models\Ecommerce\Product')
 @use('App\Models\Ecommerce\Product\ProductMockup')
-@use('App\Models\Ecommerce\Product\ProductTypeMockup')
+@use('App\Models\Ecommerce\Product\ProductTypeMockupSize')
 
 @php
 	$tabs = [];

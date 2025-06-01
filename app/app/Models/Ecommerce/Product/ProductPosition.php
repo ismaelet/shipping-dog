@@ -7,22 +7,33 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ProductPosition extends Model {
 
-
-	protected $fillable = [];
-
 	/**
-	 * * Relationships
+	 * The attributes that are mass assignable.
+	 * 
+	 * @var array<int, string>
 	 */
+	protected $fillable = [
+		'name',
+		'tag',
+		'info',
+		'editable',
+		'depending_on',
+		'base_of'
+	];
 
 	/**
-	 * Get the product types for the position.
+	 * Relationship with ProductType
+	 * 
+	 * @return BelongsToMany
 	 */
 	public function types(): BelongsToMany {
-		return $this->belongsToMany(ProductType::class);
+		return $this->belongsToMany(ProductType::class)->withPivot('printable');
 	}
 
 	/**
 	 * Check if the position has a specific mockup
+	 * 
+	 * @return bool
 	 */
 	public function hasSpecificMockup(): bool {
 		return !$this->base_of;
@@ -30,6 +41,8 @@ class ProductPosition extends Model {
 
 	/**
 	 * Get the basic position ID
+	 * 
+	 * @return int
 	 */
 	public function basicPositionId(): int {
 		return $this->base_of ?: $this->id;

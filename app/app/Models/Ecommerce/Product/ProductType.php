@@ -59,6 +59,15 @@ class ProductType extends Model {
 	}
 
 	/**
+	 * Get the positions associated with the product type.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function all_positions(): BelongsToMany {
+		return $this->belongsToMany(ProductPosition::class)->withPivot('printable');
+	}
+
+	/**
 	 * Get the positions with an unique image associated with the product type.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -118,7 +127,7 @@ class ProductType extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function mockup_sizes(): HasMany {
-		return $this->hasMany(ProductTypeMockup::class, 'type_id', 'id');
+		return $this->hasMany(ProductTypeMockupSize::class, 'type_id', 'id');
 	}
 
 	/**

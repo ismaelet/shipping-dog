@@ -18,8 +18,18 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CouponResource extends Resource {
 
+	/**
+	 * The model the resource corresponds to.
+	 * 
+	 * @var string
+	 */
 	protected static ?string $model = Coupon::class;
 
+	/**
+	 * The icon of the resource.
+	 * 
+	 * @var string
+	 */
 	protected static ?string $navigationIcon = 'icon-coupons';
 
 	/**
@@ -41,7 +51,14 @@ class CouponResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationGroup = 'Gestione Prodotti';
+	protected static ?string $navigationGroup = 'Vendite';
+
+	/**
+	 * The sort order of the resource's navigation item.
+	 * 
+	 * @var int
+	 */
+	protected static ?int $navigationSort = 3;
 
 	public static function form(Form $form): Form {
 		return $form

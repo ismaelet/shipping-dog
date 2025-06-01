@@ -46,7 +46,7 @@ class DesignResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationGroup = 'Gestione Prodotti';
+	protected static ?string $navigationGroup = 'Prodotti';
 
 	public static function form(Form $form): Form {
 		return $form

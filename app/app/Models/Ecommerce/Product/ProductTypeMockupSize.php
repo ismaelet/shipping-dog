@@ -5,10 +5,31 @@ namespace App\Models\Ecommerce\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProductTypeMockup extends Model {
+class ProductTypeMockupSize extends Model {
 
+	/**
+	 * The table associated with the model.
+	 *
+	 * @var string
+	 */
 	protected $table = 'items_mockups';
-	protected $fillable = ['type_id', 'position_id', 'pos_x_min', 'pos_x_def', 'pos_y_min', 'pos_y_def', 'siz_x_max', 'siz_x_def', 'siz_y_max'];
+
+	/**
+	 * The attributes that are mass assignable.
+	 * 
+	 * @var array<int, string>
+	 */
+	protected $fillable = [
+		'type_id',
+		'position_id',
+		'pos_x_min',
+		'pos_x_def',
+		'pos_y_min',
+		'pos_y_def',
+		'siz_x_max',
+		'siz_x_def',
+		'siz_y_max'
+	];
 
 	/**
 	 * Get the type of the mockup

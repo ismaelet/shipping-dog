@@ -12,5 +12,12 @@ class OrdersLog extends Page {
 
 	protected static ?string $title = 'Log degli Ordini';
 
-	protected static ?string $navigationGroup = 'Gestione Vendite';
+	protected static ?string $navigationGroup = 'Vendite';
+
+	/**
+	 * The sort order of the resource's navigation item.
+	 * 
+	 * @var int
+	 */
+	protected static ?int $navigationSort = 2;
 }

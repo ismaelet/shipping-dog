@@ -6,6 +6,8 @@ use App\Filament\Admin\Resources\ProductTypeResource\Pages;
 use App\Filament\Admin\Resources\ProductTypeResource\RelationManagers;
 use App\Filament\Admin\Resources\ProductTypeResource\RelationManagers\ColorsRelationManager;
 use App\Filament\Admin\Resources\ProductTypeResource\RelationManagers\MeasuresRelationManager;
+use App\Filament\Admin\Resources\ProductTypeResource\RelationManagers\MockupSizesRelationManager;
+use App\Filament\Admin\Resources\ProductTypeResource\RelationManagers\PositionsRelationManager;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductGender;
@@ -78,7 +80,16 @@ class ProductTypeResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationGroup = 'Gestione Prodotti';
+	protected static ?string $navigationGroup = 'Struttura';
+
+	/**
+	 * The sort order of the resource's navigation item.
+	 * 
+	 * @var int
+	 */
+	protected static ?int $navigationSort = 0;
+
+
 
 	/**
 	 * Get the query for the resource.
@@ -165,11 +176,11 @@ class ProductTypeResource extends Resource {
 												Textarea::make('description')
 													->label('Descrizione')
 													->rows(5)
-													->placeholder('Prezzo di default'),
+													->placeholder('Descrizione (andare a capo per ogni riga)'),
 												Textarea::make('details')
 													->label('Dettagli tecnici')
 													->rows(5)
-													->placeholder('Prezzo di default'),
+													->placeholder('Dettagli tecnici (andare a capo per ogni riga)'),
 											])
 
 									])->columns(3)
@@ -314,6 +325,8 @@ class ProductTypeResource extends Resource {
 		return [
 			ColorsRelationManager::class,
 			MeasuresRelationManager::class,
+			PositionsRelationManager::class,
+			MockupSizesRelationManager::class,
 		];
 	}
 

@@ -26,4 +26,32 @@ class ProductTypeInfo extends Model {
 	public function type(): BelongsTo {
 		return $this->belongsTo(ProductType::class, 'product_type_id', 'id');
 	}
+
+	/**
+	 * Get the formatted description.
+	 * 
+	 * @return string
+	 */
+	public function formattedDescription(): ?string {
+		return $this->description ? implode(
+			'<br>',
+			array_map(function ($element) {
+				return "&middot; $element";
+			}, preg_split('/\r\n|\r|\n/', $this->description)),
+		) : null;
+	}
+
+	/**
+	 * Get the formatted details.
+	 * 
+	 * @return string
+	 */
+	public function formattedDetails(): ?string {
+		return $this->details ? implode(
+			'<br>',
+			array_map(function ($element) {
+				return "&middot; $element";
+			}, preg_split('/\r\n|\r|\n/', $this->details)),
+		) : null;
+	}
 }

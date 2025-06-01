@@ -50,14 +50,14 @@ class ProductColorResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationGroup = 'Gestione Prodotti';
+	protected static ?string $navigationGroup = 'Struttura';
 
 	/**
 	 * The sort order of the resource's navigation item.
 	 * 
 	 * @var int
 	 */
-	protected static ?int $navigationSort = 2;
+	protected static ?int $navigationSort = 1;
 
 	public static function form(Form $form): Form {
 		return $form
