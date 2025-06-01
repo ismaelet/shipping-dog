@@ -36,9 +36,13 @@
 			required
 		/>
 
-		@session('error')
-			<x-inputs.warning>{{ $value }}</x-inputs.warning>
-		@endsession
+		@if ($errors->any())
+			<ul class="grid grid-cols-1 gap-2">
+				@foreach ($errors->all() as $error)
+					<x-inputs.warning>{{ $error }}</x-inputs.warning>
+				@endforeach
+			</ul>
+		@endif
 
 		<div class="flex items-center justify-between">
 			<x-checkbox

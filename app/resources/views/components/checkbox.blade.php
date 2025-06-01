@@ -76,7 +76,7 @@
 	<input
 		type="checkbox"
 		name="{{ $name }}"
-		value="{{ $value }}"
+		value="{{ $value ?? 1 }}"
 		@checked($checked)
 		@required($required)
 	>

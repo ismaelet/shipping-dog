@@ -32,17 +32,16 @@ class LoginController extends Controller {
 	public function auth(Request $request): RedirectResponse {
 		// Validate the request 
 		$credentials = $request->validate([
-			'login' => ['required'],
-			'password' => ['required'],
+			'login' => 'required|string',
+			'password' => 'required|string',
+			'remember' => 'boolean',
 		]);
 
 		// Determine if login input is email or username
 		$fieldType = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-		$credentials[$fieldType] = $credentials['login'];
-		unset($credentials['login']);
 
 		// Attempt to authenticate the user
-		if (Auth::attempt($credentials, $request->filled('remember'))) {
+		if (Auth::attempt([$fieldType => $request->login, 'password' => $request->password], $request->filled('remember'))) {
 			// Merge the guest cart with the user cart
 			$this->mergeGuestCart();
 
@@ -59,8 +58,8 @@ class LoginController extends Controller {
 		}
 
 		// If the authentication fails, redirect back with an error message
-		return back()->with([
-			'error' => 'I dati di accesso sono errati.',
+		return back()->withErrors([
+			'login' => 'Le credenziali fornite non sono corrette.',
 		])->onlyInput('login');
 	}
 
