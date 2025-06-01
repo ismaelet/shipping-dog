@@ -176,11 +176,11 @@ class ProductTypeResource extends Resource {
 												Textarea::make('description')
 													->label('Descrizione')
 													->rows(5)
-													->placeholder('Descrizione (andare a capo per ogni riga)'),
+													->placeholder('Descrizione (una breve descrizione del prodotto)'),
 												Textarea::make('details')
 													->label('Dettagli tecnici')
 													->rows(5)
-													->placeholder('Dettagli tecnici (andare a capo per ogni riga)'),
+													->placeholder('Dettagli tecnici (una lista di informazioni su composizione e vestibilità, andare a capo per ogni riga)'),
 											])
 
 									])->columns(3)

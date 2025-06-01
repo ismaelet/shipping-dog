@@ -1,5 +1,5 @@
 @php
-	$description = $product->type->info?->formattedDescription();
+	$description = $product->type->info?->description;
 	$details = $product->type->info?->formattedDetails();
 @endphp
 

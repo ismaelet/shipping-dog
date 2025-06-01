@@ -17,7 +17,7 @@ class NotSeller {
 		$seller = Auth::user()?->seller;
 
 		if ($seller) {
-			return redirect()->route('seller');
+			return redirect()->route('seller.show');
 		}
 
 		return $next($request);

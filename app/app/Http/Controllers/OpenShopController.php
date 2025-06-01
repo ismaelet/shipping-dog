@@ -51,6 +51,6 @@ class OpenShopController extends Controller {
 			'description' => $desc,
 		]);
 
-		return redirect()->route('seller')->with('success', 'Negozio creato con successo!');
+		return redirect()->route('seller.show')->with('success', 'Negozio creato con successo!');
 	}
 }
