@@ -22,6 +22,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource {
@@ -38,7 +39,7 @@ class UserResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationIcon = 'icon-users';
+	protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
 	/**
 	 * The label of a singular resource.
@@ -206,7 +207,7 @@ class UserResource extends Resource {
 					->icon('icon-login')
 					->color('info')
 					->action(function (User $record) {
-						auth()->login($record);
+						Auth::login($record);
 
 						return to_route('user-dashboard');
 					}),

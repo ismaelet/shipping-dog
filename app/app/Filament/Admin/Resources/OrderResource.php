@@ -46,7 +46,7 @@ class OrderResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationIcon = 'icon-orders';
+	protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
 	/**
 	 * The label of a singular resource.

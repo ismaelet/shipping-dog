@@ -25,7 +25,7 @@ class DesignResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationIcon = 'icon-pic';
+	protected static ?string $navigationIcon = 'heroicon-o-paint-brush';
 
 	/**
 	 * The label of a singular resource.
@@ -85,14 +85,14 @@ class DesignResource extends Resource {
 			->actions([
 				Action::make('download')
 					->label('Design')
-					->icon('icon-download')
+					->icon('heroicon-o-arrow-down-tray')
 					->color('success')
 					->action(
 						fn(Design $record): BinaryFileResponse => FileHelper::download('designs_originals/' . $record->id . '.png')
 					),
 				Action::make('download-dark')
 					->label('Scuro')
-					->icon('icon-download')
+					->icon('heroicon-o-arrow-down-tray')
 					->color('info')
 					->visible(fn(Design $record) => FileHelper::exists('designs_originals/' . $record->id . '_dark.png'))
 					->action(
@@ -100,7 +100,7 @@ class DesignResource extends Resource {
 					),
 				Action::make('download-vector')
 					->label('Vettoriale')
-					->icon('icon-download')
+					->icon('heroicon-o-arrow-down-tray')
 					->color('warning')
 					->visible(fn(Design $record) =>
 					FileHelper::exists('designs_vector/' . $record->id . '.pdf') ||

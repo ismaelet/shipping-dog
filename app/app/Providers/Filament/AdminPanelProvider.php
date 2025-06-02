@@ -27,9 +27,9 @@ class AdminPanelProvider extends PanelProvider {
 			->path('admin')
 			->colors([
 				'danger' => Color::Red,
-				'gray' => Color::Zinc,
+				'gray' => Color::Slate,
 				'info' => Color::Blue,
-				'primary' => Color::Amber,
+				'primary' => Color::Orange,
 				'success' => Color::Green,
 				'warning' => Color::Orange,
 
@@ -44,9 +44,7 @@ class AdminPanelProvider extends PanelProvider {
 			])
 			->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
 			->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
-			->pages([
-				Dashboard::class,
-			])
+			->pages([])
 			->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
 			->widgets([
 				Widgets\AccountWidget::class,
@@ -56,7 +54,7 @@ class AdminPanelProvider extends PanelProvider {
 				MenuItem::make()
 					->label('Sito Pubblico')
 					->url('/')
-					->icon('icon-home'),
+					->icon('heroicon-o-globe-alt')
 			])
 			->middleware([
 				EncryptCookies::class,

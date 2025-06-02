@@ -21,7 +21,7 @@ class ProductPositionResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationIcon = 'icon-position';
+	protected static ?string $navigationIcon = 'heroicon-o-arrow-down-on-square';
 
 	/**
 	 * The label of a singular resource.

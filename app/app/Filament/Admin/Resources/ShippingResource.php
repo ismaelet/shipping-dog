@@ -48,7 +48,7 @@ class ShippingResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationIcon = 'icon-shipping';
+	protected static ?string $navigationIcon = 'heroicon-o-truck';
 
 	/**
 	 * Get the query for the resource.

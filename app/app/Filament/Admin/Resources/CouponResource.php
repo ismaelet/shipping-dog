@@ -30,7 +30,7 @@ class CouponResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationIcon = 'icon-coupons';
+	protected static ?string $navigationIcon = 'heroicon-o-receipt-percent';
 
 	/**
 	 * The label of a singular resource.

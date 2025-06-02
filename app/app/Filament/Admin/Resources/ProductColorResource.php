@@ -29,7 +29,7 @@ class ProductColorResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationIcon = 'icon.s-palette';
+	protected static ?string $navigationIcon = 'heroicon-o-swatch';
 
 	/**
 	 * The label of a singular resource.

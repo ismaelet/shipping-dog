@@ -36,7 +36,7 @@ class SellerResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationIcon = 'icon-shops';
+	protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
 	/**
 	 * The label of a singular resource.

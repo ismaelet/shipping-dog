@@ -28,7 +28,7 @@ class PaymentResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationIcon = 'icon-money';
+	protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
 	/**
 	 * The label of a singular resource.

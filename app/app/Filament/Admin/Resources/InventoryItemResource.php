@@ -23,7 +23,7 @@ class InventoryItemResource extends Resource {
 
 	protected static ?string $model = InventoryItem::class;
 
-	protected static ?string $navigationIcon = 'icon-inventory';
+	protected static ?string $navigationIcon = 'heroicon-o-clipboard';
 
 	/**
 	 * The label of a singular resource.

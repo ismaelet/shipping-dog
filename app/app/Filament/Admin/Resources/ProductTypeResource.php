@@ -59,7 +59,7 @@ class ProductTypeResource extends Resource {
 	 * 
 	 * @var string
 	 */
-	protected static ?string $navigationIcon = 'icon-categories';
+	protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
 
 	/**
 	 * The label of a singular resource.
@@ -90,7 +90,6 @@ class ProductTypeResource extends Resource {
 	protected static ?int $navigationSort = 0;
 
 
-
 	/**
 	 * Get the query for the resource.
 	 * 
@@ -100,6 +99,11 @@ class ProductTypeResource extends Resource {
 		return self::getModel()::query()->with('gender', 'colors', 'positions', 'mockup_sizes', 'mockup_sizes.position');
 	}
 
+	/**
+	 * Get the resource's form schema.
+	 * 
+	 * @return \Filament\Forms\Form
+	 */
 	public static function form(Form $form): Form {
 		return $form
 			->schema([

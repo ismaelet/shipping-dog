@@ -25,6 +25,13 @@
 			padding-top: 1rem;
 			resize: none;
 		}
+
+
+		.form-inp:-webkit-autofill,
+		.form-textarea:-webkit-autofill {
+			-webkit-box-shadow: 0 0 0 1000vw var(--color-background) inset;
+			-webkit-text-fill-color: var(--color-neutral-700);
+		}
 	</style>
 @endpushOnce
 
