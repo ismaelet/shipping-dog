@@ -80,100 +80,45 @@
 						<?= $follN ?> Follower
 					</p>
 
-					<!-- Contacts -->
-					@if (
-						!empty($row_link['site']) ||
-							!empty($row_link['facebook']) ||
-							!empty($row_link['instagram']) ||
-							!empty($row_link['twitter']) ||
-							!empty($row_link['youtube']))
-						<div
-							id="socials"
-							class="mt-4"
-						>
+					@if ($user->contacts)
+						{{-- Contacts --}}
+						<div class="flex flex-wrap justify-center gap-4">
 
-							<?php if (!empty($row_link['site'])) { ?>
-
-							<a
-								href="<?= $row_link['site'] ?>"
-								class="social icon-box fill-c1-h"
-							>
-								<?= embed_icon('website') ?>
-							</a>
-
-							<?php } ?>
-
-							<?php if (!empty($row_link['instagram'])) { ?>
-
-							<a
-								href="https://www.instagram.com/<?= $row_link['instagram'] ?>"
-								class="social icon-box fill-c1-h"
-							>
-								<?= embed_icon('instagram') ?>
-							</a>
-
-							<?php } ?>
-
-							<?php if (!empty($row_link['facebook'])) { ?>
-
-							<a
-								href="https://www.facebook.com/<?= $row_link['facebook'] ?>"
-								class="social icon-box fill-c1-h"
-							>
-								<?= embed_icon('facebook') ?>
-							</a>
-
-							<?php } ?>
-
-							<?php if (!empty($row_link['twitter'])) { ?>
-
-							<a
-								href="https://www.twitter.com/<?= $row_link['twitter'] ?>"
-								class="social icon-box fill-c1-h"
-							>
-								<?= embed_icon('twitter') ?>
-							</a>
-
-							<?php } ?>
-
-							<?php if (!empty($row_link['youtube'])) { ?>
-
-							<a
-								href="https://www.youtube.com/<?= $row_link['youtube'] ?>"
-								class="social icon-box fill-c1-h"
-							>
-								<?= embed_icon('youtube-full') ?>
-							</a>
-
-							<?php } ?>
+							@foreach ($contacts as $contactName => $contact)
+								@if ($user->$contact())
+									<a
+										href="{{ $user->$contact() }}"
+										class="hover:text-primary text-secondary w-5 transition-colors"
+										target="_blank"
+									>
+										{!! embed_icon($contact) !!}
+									</a>
+								@endif
+							@endforeach
 
 						</div>
 					@endif
 
-					<?php if (!empty($legacySeller->description)) { ?>
+					@if (!empty($legacySeller->description))
+						<p
+							id="desc"
+							class="mar-t-2"
+						><?= $legacySeller->description ?></p>
+					@endif
 
-					<p
-						id="desc"
-						class="mar-t-2"
-					><?= $legacySeller->description ?></p>
-
-					<?php } ?>
-
-					<?php if (!$seller->status) { ?>
-
-					<p
-						id="wip"
-						class="mar-v-2"
-					>Il negozio ancora non è pubblico. Ti senti pronto? Il tuo negozio può essere reso pubblico? Faccelo sapere
-						scrivendoci a <a
-							href="<?= config('custom.contacts.email.url') ?>"
-							class="hover:text-primary font-bold transition-colors"
-						><?= config('custom.contacts.email.label') ?></a> o su WhatsApp a <a
-							href="<?= config('custom.contacts.whatsapp.url') ?>"
-							class="hover:text-primary font-bold transition-colors"
-						><?= config('custom.contacts.whatsapp.label') ?></a>.</p>
-
-					<?php } ?>
+					@if (!$seller->status)
+						<p
+							id="wip"
+							class="mar-v-2"
+						>Il negozio ancora non è pubblico. Ti senti pronto? Il tuo negozio può essere reso pubblico? Faccelo sapere
+							scrivendoci a <a
+								href="<?= config('custom.contacts.email.url') ?>"
+								class="hover:text-primary font-bold transition-colors"
+							><?= config('custom.contacts.email.label') ?></a> o su WhatsApp a <a
+								href="<?= config('custom.contacts.whatsapp.url') ?>"
+								class="hover:text-primary font-bold transition-colors"
+							><?= config('custom.contacts.whatsapp.label') ?></a>.</p>
+					@endif
 
 				</div>
 			</div>

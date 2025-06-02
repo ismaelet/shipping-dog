@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Seller;
+use App\Models\User\UserContact;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
@@ -53,10 +54,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	];
 
 	/**
-	 * * Lifecycle hooks
-	 */
-
-	/**
 	 * Delete the user's related data
 	 */
 	public function delete() {
@@ -64,10 +61,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 
 		return parent::delete();
 	}
-
-	/**
-	 * * Accessors
-	 */
 
 	/**
 	 * Get the username
@@ -103,25 +96,17 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	}
 
 	/**
-	 * * Get methods
-	 */
-
-	/**
-	 * Get the user's full name
-	 */
-	public function fullName(): string {
-		$fullName = [];
-		$fullName[] = $this->first_name;
-		$fullName[] = $this->last_name;
-
-		return implode(' ', $fullName);
-	}
-
-	/**
 	 * Get the user's active cart
 	 */
 	public function cart(): HasOne {
 		return $this->hasOne(Order::class, 'user_id', 'id')->where('status', EcommerceHelper::statusFromTag('open'));
+	}
+
+	/**
+	 * Get the user's shop
+	 */
+	public function seller(): HasOne {
+		return $this->hasOne(Seller::class);
 	}
 
 	/**
@@ -132,10 +117,23 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	}
 
 	/**
-	 * Get the user's shop
+	 * Get the user's contact information.
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
-	public function seller(): HasOne {
-		return $this->hasOne(Seller::class);
+	public function contacts(): HasOne {
+		return $this->hasOne(UserContact::class);
+	}
+
+	/**
+	 * Get the user's full name
+	 */
+	public function fullName(): string {
+		$fullName = [];
+		$fullName[] = $this->first_name;
+		$fullName[] = $this->last_name;
+
+		return implode(' ', $fullName);
 	}
 
 	/**
@@ -153,7 +151,69 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 		return public_asset($this->icon());
 	}
 
-	//! Legacy support
+	/**
+	 * Get the user's website URL.
+	 * 
+	 * @return string|null
+	 */
+	public function website(): ?string {
+		return $this->contacts?->website;
+	}
+
+	/**
+	 * Get the user's Facebook URL.
+	 * 
+	 * @return array
+	 */
+	public function facebook(): ?string {
+		return $this->contacts?->facebook;
+	}
+
+	/**
+	 * Get the user's Instagram URL.
+	 * 
+	 * @return string|null
+	 */
+	public function instagram(): ?string {
+		return $this->contacts?->instagram;
+	}
+
+	/**
+	 * Get the user's Twitter URL.
+	 * 
+	 * @return string|null
+	 */
+	public function twitter(): ?string {
+		return $this->contacts?->twitter;
+	}
+
+	/**
+	 * Get the user's YouTube URL.
+	 * 
+	 * @return string|null
+	 */
+	public function youtube(): ?string {
+		return $this->contacts?->youtube;
+	}
+
+	/**
+	 * Get the user's TikTok URL.
+	 * 
+	 * @return string|null
+	 */
+	public function tiktok(): ?string {
+		return $this->contacts?->tiktok;
+	}
+
+	/**
+	 * Get the user's Bluesky URL.
+	 * 
+	 * @return string|null
+	 */
+	public function bluesky(): ?string {
+		return $this->contacts?->bluesky;
+	}
+
 	public function cover(?int $size = 1920) {
 		$sizeConversion = [
 			1920 => '',

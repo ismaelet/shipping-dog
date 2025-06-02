@@ -14,6 +14,7 @@ Route::prefix('/seller')->middleware(Seller::class)->name('seller-dashboard')->g
 
 	// Home
 	Route::get('', [SellerDashboardController::class, 'index'])->name('');
+	Route::put('{seller}/contacts', [SellerDashboardController::class, 'updateContacts'])->name('.contacts');
 	Route::post('{seller}/icon', [SellerDashboardController::class, 'uploadSellerIcon'])->name('.icon');
 	Route::post('{seller}/cover', [SellerDashboardController::class, 'uploadSellerCover'])->name('.cover');
 

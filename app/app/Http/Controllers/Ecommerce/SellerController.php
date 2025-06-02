@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Legacy\Ecommerce\Product;
 use App\Legacy\System\DB;
 use App\Models\Ecommerce\Seller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -18,16 +19,17 @@ class SellerController extends Controller {
 	 * @param \Illuminate\Http\Request $request
 	 * @return \Illuminate\View\View
 	 */
-	public function index(Request $request): View {
+	public function index(Request $request): View|RedirectResponse {
 
 		// get variabiles
 		$id = request()->seller ? (int) request()->seller : (int) request()->id;
 		$seller = Seller::find($id);
+		$user = $seller?->user;
 		$sellerUserId = $seller?->user_id;
 
 		// redirect to user's shop if no ID is specified
-		if (!$seller || !$seller->user) {
-			redirect_old('/shop');
+		if (!$seller) {
+			return redirect('shop');
 		}
 
 		$title = $seller->name;
@@ -41,7 +43,7 @@ class SellerController extends Controller {
 
 		// check if shop hasn't been approved yet
 		$public = $seller->status;
-		if (!$public && !$vip) redirect_old('/shop');
+		if (!$public && !$vip) return redirect('shop');
 
 		// get products data
 		$desMax = 10;
@@ -49,8 +51,6 @@ class SellerController extends Controller {
 		$shop_size = $id == 187 ? 10 : 20;
 
 		// select links
-		$row_link = DB::row('* FROM links WHERE user_id = ?', [$sellerUserId]);
-
 		$hasItems = DB::exists('products WHERE user_id = ? AND status > 0', [$sellerUserId]);
 		$productCount = DB::count(Product::TABLE . ' WHERE user_id = ? AND status > 0', [$sellerUserId]);
 		$likeN = DB::count('likes WHERE design_id IN (SELECT id FROM designs WHERE user_id = ?)', [$sellerUserId]);
@@ -71,22 +71,25 @@ class SellerController extends Controller {
 			} else redirect_old();
 		}
 
+		$contacts = ['website', 'facebook', 'instagram', 'twitter', 'youtube', 'tiktok', 'bluesky'];
+
 		return view('ecommerce.seller', [
 			'title' => $title,
 			'description' => $description,
 			'thumbnail' => $thumbnail,
 			'locationTag' => 'shop',
 			'seller' => $seller,
+			'user' => $user,
 			'vip' => $vip,
 			'owner' => $owner,
 			'id' => $id,
+			'contacts' => $contacts,
 			'productCount' => $productCount,
 			'likeN' => $likeN,
 			'follN' => $follN,
 			'collN' => $collN,
 			'hasItems' => $hasItems,
 			'collBlock' => $collBlock,
-			'row_link' => $row_link,
 		]);
 	}
 }

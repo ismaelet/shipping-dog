@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Legacy\Ecommerce\Seller as LegacySeller;
 use App\Legacy\System\DB;
 use App\Models\Ecommerce\Seller;
+use App\Models\User\UserContact;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,69 +20,69 @@ class SellerDashboardController extends Controller {
 	 * @return \Illuminate\View\View
 	 */
 	public function index(): \Illuminate\View\View {
+		$user = Auth::user();
+		$seller = $user->seller;
+		$noCover = strpos($seller->cover(), '0.jpg');
 
-		$saved = $_GET['saved'] ?? false;
-		$seller = Auth::user()->seller;
-		$legacySeller = new LegacySeller(Auth::id());
-
-		// get socials data
-		$sellerSocials = DB::row('* FROM links WHERE user_id = ?', [Auth::id()]);
-
-		if (!$sellerSocials) DB::add('links (user_id) VALUES (?)', [Auth::id()]);
-
-		return view('seller-dashboard.index', [
-			'seller' => Auth::user()->seller,
-			'saved' => $saved,
-		]);
+		return view('seller-dashboard.index', compact('user', 'seller', 'noCover'));
 	}
 
-	public function _old() {
+	public function updateContacts(Seller $seller, Request $request): RedirectResponse {
+		// Validate the request data for social media contacts
+		$request->validate([
+			'website' => 'nullable|url|max:255',
+			'facebook' => 'nullable|string|max:255',
+			'instagram' => 'nullable|string|max:255',
+			'twitter' => 'nullable|string|max:255',
+			'youtube' => 'nullable|string|max:255',
+			'tiktok' => 'nullable|string|max:255',
+			'bluesky' => 'nullable|string|max:255',
+		]);
 
-		// edit shop data
-		if (isset($_POST['edit'])) {
-			$name = trim($_POST['name']);
-			$desc = trim($_POST['desc']);
-			echo $sort = $_POST['sort'];
-
-			if (empty($name)) $name = $legacySeller->name;
-
-			\Legacy\System\Classes\LegacyDB::update(Seller::TABLE . ' SET name = ?, description = ?, sort = ? WHERE ' . Seller::INDEX . ' = ?', [$name, $desc, $sort, Auth::id()]);
-
-			redirect_old();
+		// Format the URLs for social media contacts
+		foreach (['facebook', 'instagram', 'twitter', 'youtube', 'tiktok', 'bluesky'] as $type) {
+			if ($request->$type) {
+				$request[$type] = $this->formatContactUrl($request[$type], $type);
+			}
 		}
 
+		// Update or create the user contact information
+		UserContact::updateOrCreate(
+			['user_id' => $seller->user_id],
+			$request->only(
+				'website',
+				'facebook',
+				'instagram',
+				'twitter',
+				'youtube',
+				'tiktok',
+				'bluesky'
+			)
+		);
 
-		// edit socials
-		if (isset($_POST['edit-socials'])) {
+		return redirect()
+			->back()
+			->with('success_socials', 'Contatti aggiornati con successo');
+	}
 
-			$site = trim(strtolower($_POST['site']));
+	private function formatContactUrl(string $url, string $type): string {
+		$baseUrls = [
+			'facebook' => 'https://facebook.com/',
+			'instagram' => 'https://instagram.com/',
+			'twitter' => 'https://twitter.com/',
+			'youtube' => 'https://youtube.com/',
+			'tiktok' => 'https://tiktok.com/@',
+			'bluesky' => 'https://bsky.app/profile/',
+		];
 
-			$fb = trim($_POST['fb']);
-			if ($pos = strpos($fb, 'facebook.com/')) $fb = substr($fb, $pos + 13);
-			$fb = strtok($fb, '/');
-			$fb = str_replace('@', '', $fb);
-			$fb = str_replace(' ', '', $fb);
-
-			$inst = trim($_POST['inst']);
-			if ($pos = strpos($inst, 'instagram.com/')) $inst = substr($inst, $pos + 14);
-			$inst = strtok($inst, '/');
-			$inst = str_replace('@', '', $inst);
-
-			$twit = trim($_POST['twit']);
-			if ($pos = strpos($twit, 'twitter.com/')) $twit = substr($twit, $pos + 12);
-			$twit = strtok($twit, '/');
-			$twit = str_replace('@', '', $twit);
-
-			$yt = trim($_POST['yt']);
-			if ($pos = strpos($yt, 'youtube.com/')) $yt = substr($yt, $pos + 12);
-			$yt = strtok($yt, '/');
-
-			if (!\Legacy\System\Classes\LegacyDB::exists('links WHERE user_id = ?', [Auth::id()])) \Legacy\System\Classes\LegacyDB::add('links (user_id) VALUE (?)', [Auth::id()]);
-
-			\Legacy\System\Classes\LegacyDB::update('links SET site=?, facebook=?, instagram=?, twitter=?, youtube=? WHERE user_id = ?', [$site, $fb, $inst, $twit, $yt, Auth::id()]);
-
-			redirect_old();
+		if (str_starts_with($url, $baseUrls[$type])) {
+			return $url;
 		}
+
+		$username = trim($url, "/@");
+		$username = explode_last('/', $username)[1] ?? $username;
+
+		return $baseUrls[$type] . $username;
 	}
 
 	/**
@@ -115,7 +116,6 @@ class SellerDashboardController extends Controller {
 	 * @return RedirectResponse The redirect response.
 	 */
 	public function uploadSellerCover(Seller $seller, Request $request): RedirectResponse {
-
 		$request->validate([
 			'cover' => ['required', 'mimes:jpeg,png,gif,webp'],
 		]);
