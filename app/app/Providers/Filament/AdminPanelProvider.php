@@ -31,7 +31,7 @@ class AdminPanelProvider extends PanelProvider {
 				'info' => Color::Blue,
 				'primary' => Color::Orange,
 				'success' => Color::Green,
-				'warning' => Color::Orange,
+				'warning' => Color::Amber,
 
 				// Order status colors
 				'status-cancelled' => Color::Red,

@@ -18,6 +18,7 @@
 			font-size: 0.9rem;
 			box-sizing: border-box;
 			outline: none !important;
+			transition: border-color 0.2s;
 		}
 
 		.form-textarea {
@@ -31,6 +32,11 @@
 		.form-textarea:-webkit-autofill {
 			-webkit-box-shadow: 0 0 0 1000vw var(--color-background) inset;
 			-webkit-text-fill-color: var(--color-neutral-700);
+		}
+
+		.contact-form-field:has(:focus) .form-inp,
+		.contact-form-field:has(:focus) .form-textarea {
+			border-color: var(--color-primary);
 		}
 	</style>
 @endpushOnce
@@ -123,46 +129,45 @@
 							<x-alerts.success>{{ session('success') }}</x-alerts.success>
 						@endif
 
-						@if (session('error'))
-							<x-alerts.error>{!! session('error') !!}</x-alerts.error>
+						@if ($errors->any())
+							<x-alerts.error>{!! $errors->first() !!}</x-alerts.error>
 						@endif
 
 						<div class="">
-							<div class="form-lbl-box">
-								<p class="form-lbl">Nome e cognome</p>
+							<div class="contact-form-field">
+								<p class="form-label">Nome e cognome</p>
+								<input
+									type="text"
+									name="name"
+									value="{{ old('name') }}"
+									class="form-inp"
+									required
+									placeholder=" "
+								>
 							</div>
-							<input
-								type="text"
-								name="name"
-								class="form-inp"
-								onfocus="$(this).prev().addClass('focus')"
-								onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}"
-								required
-							>
 
-							<div class="form-lbl-box">
-								<p class="form-lbl">Indirizzo email</p>
+							<div class="contact-form-field">
+								<p class="form-label">Indirizzo email</p>
+								<input
+									type="email"
+									name="email"
+									value="{{ old('email') }}"
+									class="form-inp"
+									required
+									placeholder=" "
+								>
 							</div>
-							<input
-								type="email"
-								name="email"
-								class="form-inp"
-								onfocus="$(this).prev().addClass('focus')"
-								onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}"
-								required
-							>
 
-							<div class="form-lbl-box">
-								<p class="form-lbl">Testo del messaggio</p>
+							<div class="contact-form-field">
+								<p class="form-label">Testo del messaggio</p>
+								<textarea
+								 name="text"
+								 class="form-textarea"
+								 maxlength="1000"
+								 required
+								 placeholder=" "
+								>{{ old('text') }}</textarea>
 							</div>
-							<textarea
-							 name="text"
-							 class="form-textarea"
-							 maxlength="500"
-							 onfocus="$(this).prev().addClass('focus')"
-							 onblur="if (!$(this).val().length) {$(this).prev().removeClass('focus')}"
-							 required
-							></textarea>
 						</div>
 
 						<div class="txt-rig">

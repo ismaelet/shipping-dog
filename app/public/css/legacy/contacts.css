@@ -46,19 +46,21 @@
 }
 
 /* Contact form */
-.form-lbl {
+.form-label {
 	padding-top: 1rem;
 	transform-origin: left;
-	transform: translateY(2rem) scale(1.2);
+	transform: translateY(2rem) scale(1);
 	line-height: 1rem;
 	pointer-events: none;
 	z-index: 1;
-	transition: transform 0.3s, color 0.3s;
+	transition: transform 0.2s, color 0.2s;
 }
 
-.focus .form-lbl {
+.contact-form-field:has(:focus) .form-label,
+.contact-form-field:has(input:not(:placeholder-shown)) .form-label,
+.contact-form-field:has(textarea:not(:placeholder-shown)) .form-label {
 	color: var(--color-primary-400);
-	transform: translateY(0.5rem) scale(1);
+	transform: translateY(0.5rem) scale(0.9);
 }
 
 .form-inp {
