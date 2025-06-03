@@ -26,7 +26,7 @@
 			type="text"
 			name="login"
 			:value="old('login')"
-			placeholder="Username o E-mail"
+			placeholder="Username o e-mail"
 			required
 		/>
 		<x-input

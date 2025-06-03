@@ -39,16 +39,16 @@ class SellerController extends Controller {
 		// special status
 		$owner = Auth::id() == $sellerUserId ? true : false;
 		$vip = $owner || is_admin() ? true : false;
-		$edit = isset($_GET['edit']) && $vip ? true : false;
 
 		// check if shop hasn't been approved yet
 		$public = $seller->status;
-		if (!$public && !$vip) return redirect('shop');
+
+		if (!$public && !$vip) {
+			return redirect('shop');
+		}
 
 		// get products data
-		$desMax = 10;
 		$collBlock = 10;
-		$shop_size = $id == 187 ? 10 : 20;
 
 		// select links
 		$hasItems = DB::exists('products WHERE user_id = ? AND status > 0', [$sellerUserId]);

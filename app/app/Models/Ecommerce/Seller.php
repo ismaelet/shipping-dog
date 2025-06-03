@@ -41,6 +41,7 @@ class Seller extends Model {
 		'user_id',
 		'name',
 		'description',
+		'sort',
 		'credit',
 		'earned',
 		'payed',

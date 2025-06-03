@@ -17,6 +17,7 @@ class ContactMail extends Mailable {
 	 * Create a new message instance.
 	 */
 	public function __construct(public string $email, public string $name, public string $text, public ?array $parameters = null) {
+		$this->text = 'Richiesta informazioni da <strong>' . $this->name . '</strong> (' . $this->email . '):<br><br>"' . $this->text . '"';
 	}
 
 	/**
@@ -28,7 +29,7 @@ class ContactMail extends Mailable {
 			replyTo: [
 				new Address($this->email, $this->name),
 			],
-			subject: 'Richiesta informazioni da ' . $this->name . ' (' . $this->email . ')',
+			subject: 'Richiesta informazioni da ' . $this->name,
 		);
 	}
 

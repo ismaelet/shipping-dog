@@ -27,6 +27,36 @@ class SellerDashboardController extends Controller {
 		return view('seller-dashboard.index', compact('user', 'seller', 'noCover'));
 	}
 
+	/**
+	 * Updates the seller's settings.
+	 *
+	 * @param Seller $seller The seller instance.
+	 * @param Request $request The request object.
+	 * @return RedirectResponse The redirect response.
+	 */
+	public function update(Seller $seller, Request $request): RedirectResponse {
+		// Validate the request data
+		$request->validate([
+			'name' => 'required|string|max:50',
+			'description' => 'nullable|string|max:1000',
+			'sort' => 'required|integer|min:1|max:3',
+		]);
+
+		// Update the seller's name and description
+		$seller->update($request->only('name', 'description', 'sort'));
+
+		return redirect()
+			->back()
+			->with('success_settings', 'Impostazioni aggiornate con successo');
+	}
+
+	/**
+	 * Updates the seller's contact information.
+	 * 
+	 * @param Seller $seller The seller instance.
+	 * @param Request $request The request object containing the contact information.
+	 * @return RedirectResponse The redirect response.
+	 */
 	public function updateContacts(Seller $seller, Request $request): RedirectResponse {
 		// Validate the request data for social media contacts
 		$request->validate([
@@ -65,6 +95,13 @@ class SellerDashboardController extends Controller {
 			->with('success_socials', 'Contatti aggiornati con successo');
 	}
 
+	/**
+	 * Formats the contact URL for social media platforms.
+	 *
+	 * @param string $url The URL to format.
+	 * @param string $type The type of social media platform.
+	 * @return string The formatted URL.
+	 */
 	private function formatContactUrl(string $url, string $type): string {
 		$baseUrls = [
 			'facebook' => 'https://facebook.com/',

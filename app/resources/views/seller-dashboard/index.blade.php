@@ -4,13 +4,13 @@
 			<form
 				class="form surface dashboard-panel grid grid-cols-1 content-center"
 				method="POST"
+				action="{{ route('seller-dashboard.settings', $seller) }}"
 			>
 				@csrf
 
 				<x-typography.component-heading>Nome e descrizione</x-typography.component-heading>
 
-				<div class="grid gap-4">
-
+				<div class="grid grid-cols-1 gap-4">
 					<div class="mt-8 grid grid-cols-1 gap-4">
 						<div class="grid grid-cols-1 gap-2">
 							<x-label>Nome:</x-label>
@@ -29,9 +29,10 @@
 							<x-label>Descrizione (opzionale):</x-label>
 							<textarea
 							 class="textarea"
-							 name="desc"
+							 name="description"
 							 placeholder="Descrizione del negozio"
 							 rows="4"
+							 maxlength="1000"
 							>{{ $seller->description }}</textarea>
 						</div>
 
@@ -64,7 +65,12 @@
 						</div>
 					</div>
 
+					@if (session('success_settings'))
+						<x-alerts.success class="mt-4">{!! session('success_settings') !!}</x-alerts.success>
+					@endif
+
 					<div class="form-foot">
+
 						<x-button
 							type="submit"
 							name="edit"
