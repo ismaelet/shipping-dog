@@ -34,7 +34,7 @@ class Icon extends Component {
 	}
 
 	/**
-	 * Updates the icon property when the user changes their icon.
+	 * Renders the icon view.
 	 * 
 	 * @return View
 	 */

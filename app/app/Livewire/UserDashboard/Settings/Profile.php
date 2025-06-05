@@ -58,6 +58,8 @@ class Profile extends Component {
 		]);
 
 		session()->flash('success', 'Dati aggiornati con successo.');
+
+		$this->dispatch('userNameUpdated');
 	}
 
 	/**

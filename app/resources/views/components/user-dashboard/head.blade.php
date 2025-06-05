@@ -14,13 +14,6 @@
 			<livewire:user-dashboard.icon />
 		</div>
 
-		<x-typography.component-heading class="break-all text-center">{{ $user->email }}</x-typography.component-heading>
-
-		@if ($user->fullName())
-			<p class="">
-				{{ $user->fullName() }}
-			</p>
-		@endif
-
+		<livewire:user-dashboard.name />
 	</div>
 </section>
