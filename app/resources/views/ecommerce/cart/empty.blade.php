@@ -16,7 +16,7 @@
 		class="grid content-center justify-items-center gap-12 py-20 text-center"
 		data-spacing="700"
 	>
-		<div class="cart-icon border-primary text-primary aspect-square rounded-full border">
+		<div class="cart-icon border-primary text-primary grid aspect-square place-items-center rounded-full border">
 			{!! embed_icon('empty-cart', ['w-1/2']) !!}
 		</div>
 
@@ -26,7 +26,7 @@
 			<p class="text--big">Puoi cercare dei prodotti da acquistare qui</p>
 		</div>
 
-		<x-button :href="'/shop'">Catalogo</x-button>
+		<x-button href="{{ route('shop') }}">Catalogo</x-button>
 	</div>
 
 </x-layouts.main>

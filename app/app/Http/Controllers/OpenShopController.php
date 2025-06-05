@@ -45,12 +45,12 @@ class OpenShopController extends Controller {
 			return redirect()->back()->withErrors(['name' => 'Hai già un negozio aperto.']);
 		}
 
-		Seller::create([
+		$seller = Seller::create([
 			'user_id' => Auth::id(),
 			'name' => $name,
 			'description' => $desc,
 		]);
 
-		return redirect()->route('seller.show')->with('success', 'Negozio creato con successo!');
+		return redirect()->route('seller.show', ['seller' => $seller])->with('success', 'Negozio creato con successo!');
 	}
 }
