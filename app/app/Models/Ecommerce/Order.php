@@ -304,7 +304,7 @@ class Order extends Model {
 	 * A stylized html span element to show the order's status
 	 */
 	public function statusLabel(): string {
-		return '<span class="order-label px-4 py-1 gap-2 border rounded whitespace-nowrap" style="--icon-size: 1em; border-color: ' . $this->statusColor() . '; color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon(), ['shrink-0']) . ' ' . $this->statusName() . '</span>';
+		return '<span class="order-label px-4 py-1 gap-2 border rounded whitespace-nowrap flex" style=" border-color: ' . $this->statusColor() . '; color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon(), ['shrink-0', 'w-[1em]']) . ' ' . $this->statusName() . '</span>';
 	}
 
 	/**

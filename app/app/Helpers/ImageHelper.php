@@ -5,6 +5,7 @@ namespace App\Helpers;
 use GdImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ImageHelper {
 
@@ -18,7 +19,7 @@ class ImageHelper {
 	 * @param int $quality (optional) The quality of the image, from 0 to 100
 	 * @return bool Whether the image was uploaded
 	 */
-	public static function upload(UploadedFile $file, string $path, int $size = null, string $mode = 'largest', int $quality = 80): bool {
+	public static function upload(UploadedFile $file, string $path, ?int $size = null, string $mode = 'largest', int $quality = 80): bool {
 		// Get the directory, file name and type
 		[$pathDirectory, $fileName] = explode_last('/', $path);
 		$newImageType = pathinfo($path, PATHINFO_EXTENSION);
@@ -51,8 +52,8 @@ class ImageHelper {
 	 * @param \Illuminate\Http\UploadedFile $file The file to create the image from
 	 * @return \GdImage|false The created image, or false if the image couldn't be created
 	 */
-	private static function createFromFile(UploadedFile $file): GdImage|false {
-		$fileName = $file->getPathname();
+	private static function createFromFile(UploadedFile|TemporaryUploadedFile $file): GdImage|false {
+		$fileName = is_a($file, TemporaryUploadedFile::class) ? $file->getRealPath() : $file->getPathname();
 		$imageType = exif_imagetype($fileName);
 
 		return match ($imageType) {
@@ -99,10 +100,10 @@ class ImageHelper {
 			case 'crop':
 				if ($ratio > 1) {
 					$x = ($originalWidth - $originalHeigth) / 2;
-					return [$newSize, $newSize, $x, 0, $originalWidth, $originalHeigth];
+					return [$newSize, $newSize, $x, 0, $originalHeigth, $originalHeigth];
 				} else {
 					$y = ($originalHeigth - $originalWidth) / 2;
-					return [$newSize, $newSize, 0, $y, $originalWidth, $originalHeigth];
+					return [$newSize, $newSize, 0, $y, $originalWidth, $originalWidth];
 				}
 		}
 

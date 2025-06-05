@@ -115,7 +115,7 @@ $design = $design ?? (isset($design_id) ? Design::find($design_id) : null);
 	@if (Auth::check())
 		@if ($design->seller->user_id != Auth::id())
 			<div
-				class="like-button stack-content js-like-button grid"
+				class="like-button stack-content js-like-button grid place-items-center"
 				x-data="{ liked: {{ $design->isLiked() ? 'true' : 'false' }} }"
 				:data-liked="liked ? 'true' : 'false'"
 				:title="liked ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'"
@@ -123,8 +123,8 @@ $design = $design ?? (isset($design_id) ? Design::find($design_id) : null);
 				data-like-id="{{ $design->auth_user_like->id ?? null }}"
 				@click="liked = !liked; toggleLike(event.target)"
 			>
-				{!! embed_icon('love-stroke') !!}
-				{!! embed_icon('love') !!}
+				{!! embed_icon('love-stroke', ['w-1/2']) !!}
+				{!! embed_icon('love', ['w-1/2']) !!}
 			</div>
 		@endif
 	@else

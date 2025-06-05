@@ -48,8 +48,6 @@
 			@class($classes)
 			value="{{ $record->id }}"
 			x-data
-			@click="window.confirm(['Confermi di voler eliminare questo elemento?']);
-					"
 		>
 			{!! embed_icon('delete') !!}
 		</button>

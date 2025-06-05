@@ -107,7 +107,7 @@
 			>
 
 				@if ($step < $pageStep)
-					<div class="flow-icon icon-box">
+					<div class="flow-icon icon-box grid place-items-center">
 						{!! embed_icon('correct') !!}
 					</div>
 				@else

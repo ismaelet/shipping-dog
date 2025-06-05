@@ -112,7 +112,3 @@ Route::get('/seller-email-list', function () {
 		echo '<br>';
 	}
 })->middleware(Admin::class);
-
-/**
- * * Legacy support
- */

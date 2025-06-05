@@ -130,7 +130,6 @@ class SellerDashboardController extends Controller {
 	 * @return RedirectResponse The redirect response.
 	 */
 	public function uploadSellerIcon(Seller $seller, Request $request): RedirectResponse {
-
 		$request->validate([
 			'icon' => ['required', 'mimes:jpeg,png,gif,webp'],
 		]);

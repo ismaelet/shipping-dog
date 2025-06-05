@@ -100,13 +100,6 @@ class ProductColorResource extends Resource {
 					->label('Nome')
 					->searchable()
 					->sortable(),
-				Tables\Columns\TextColumn::make('tag')
-					->searchable()
-					->sortable(),
-				Tables\Columns\TextColumn::make('reorder')
-					->label('Ordine')
-					->sortable()
-					->numeric(),
 				Tables\Columns\IconColumn::make('dark')
 					->label('È scuro')
 					->boolean()

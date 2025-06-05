@@ -1,3 +1,5 @@
+@props(['message' => null])
+
 @pushOnce('styles')
 	<style>
 		.error-message {
@@ -7,5 +9,5 @@
 @endpushOnce
 
 <p
-	{{ $attributes->merge(['class' => 'error-message text-error-400 px-4 py-2 border border-error-400 bg-error-400/10 text-center']) }}
->{{ $slot }}</p>
+	{{ $attributes->merge(['class' => 'error-message text-error-400 px-4 py-2 border border-error-400 bg-error-400/10 text-center rounded']) }}
+>{{ $slot }}{{ $message }}</p>

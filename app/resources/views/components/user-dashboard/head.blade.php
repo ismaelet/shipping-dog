@@ -2,11 +2,6 @@
 	$user = auth()->user();
 @endphp
 
-@pushOnce('styles')
-	<style>
-	</style>
-@endpushOnce
-
 <section class="full-width">
 	<div
 		class="full-width h-72 bg-cover bg-center"
@@ -15,17 +10,17 @@
 
 	<div class="grid grid-cols-1 justify-items-center gap-1">
 
-		<img
-			src="{{ public_asset($user->icon()) }}"
-			class="border-background -mt-10 h-20 w-20 rounded-full border-[5px]"
-		>
+		<div class="border-background -mt-10 h-20 w-20 rounded-full border-[5px]">
+			<livewire:user-dashboard.icon />
+		</div>
 
 		<x-typography.component-heading class="break-all text-center">{{ $user->email }}</x-typography.component-heading>
 
-		<p class="">
-			<?= $user->first_name ?>
-			<?= empty($user->last_name) ? '' : ' ' . $user->last_name ?>
-		</p>
+		@if ($user->fullName())
+			<p class="">
+				{{ $user->fullName() }}
+			</p>
+		@endif
 
 	</div>
 </section>

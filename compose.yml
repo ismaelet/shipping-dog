@@ -15,7 +15,7 @@ services:
             APP_SHORT_DESCRIPTION: 'T-shirt, Abbigliamento e Accessori Personalizzati'
 
             APP_LOCALE: it
-            APP_FALLBACK_LOCALE: it
+            APP_FALLBACK_LOCALE: en
             APP_URL: http://localhost:8000
             APP_ENV: local
             APP_DEBUG: true

@@ -17,12 +17,12 @@
 
 				@foreach ($features as $key => $feature)
 					<div class="feature va-cen grid">
-						<div class="icon-box">
-							<?= embed_icon('home_feature_' . ($key + 1)) ?>
+						<div class="icon-box grid place-items-center">
+							{!! embed_icon('home_feature_' . ($key + 1)) !!}
 						</div>
 						<div class="body">
-							<p class="title"><?= $feature[0] ?></p>
-							<p class="text"><?= $feature[1] ?></p>
+							<p class="title">{{ $feature[0] }}</p>
+							<p class="text">{{ $feature[1] }}</p>
 						</div>
 					</div>
 				@endforeach

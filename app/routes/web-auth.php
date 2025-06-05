@@ -8,17 +8,26 @@ use App\Http\Controllers\Auth\ResetController;
 use Illuminate\Support\Facades\Route;
 
 /**
- * Auth routes
+ * Login routes
  */
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'auth'])->middleware('guest')->name('login.auth');
 
+/**
+ * Registration routes
+ */
 Route::get('/register', [RegisterController::class, 'index'])->name('register')->middleware('guest');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.store');
 
+/**
+ * Logout routes
+ */
 Route::get('/logout', [LogoutController::class, 'index'])->name('logout')->middleware('auth');
 Route::post('/logout', [LogoutController::class, 'logout'])->middleware('auth');
 
+/**
+ * Recover and reset password routes
+ */
 Route::get('/recover', [RecoverController::class, 'index'])->name('auth.recover')->middleware('guest');
 Route::post('/recover', [RecoverController::class, 'store'])->middleware('guest');
 

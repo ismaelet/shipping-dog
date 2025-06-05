@@ -5,7 +5,10 @@ namespace App\Helpers;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
+use function PHPUnit\Framework\isString;
 
 class FileHelper {
 
@@ -79,13 +82,13 @@ class FileHelper {
 	/**
 	 * Upload an image
 	 */
-	public static function uploadImage(UploadedFile $file, string $filePath, ?int $size = null, string $mode = 'min', int $quality = 80): bool {
+	public static function uploadImage(UploadedFile|TemporaryUploadedFile $file, string $filePath, ?int $size = null, string $mode = 'min', int $quality = 80): bool {
 		$fileDirectory = ArrayHelper::explodeLast('/', $filePath)[0];
 		$fileName = ArrayHelper::explodeLast('/', $filePath)[1];
 		$type = explode_last('.', $fileName)[1];
 
 		// Get image data
-		$srcImg = $file->getPathname();
+		$srcImg = is_a($file, TemporaryUploadedFile::class) ? $file->getRealPath() : $file->getPathname();
 		$srcType = exif_imagetype($srcImg);
 		$srcResolution = getimagesize($srcImg);
 		$srcWidth = $srcResolution[0] ?? 0;
