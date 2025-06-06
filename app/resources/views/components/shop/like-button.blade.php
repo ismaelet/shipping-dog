@@ -134,8 +134,8 @@ $design = $design ?? (isset($design_id) ? Design::find($design_id) : null);
 			data-liked="false"
 			title="Aggiungi ai preferiti"
 		>
-			{!! embed_icon('love-stroke') !!}
-			{!! embed_icon('love') !!}
+			{!! embed_icon('love-stroke', ['w-1/2']) !!}
+			{!! embed_icon('love', ['w-1/2']) !!}
 		</a>
 
 	@endif

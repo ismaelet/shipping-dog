@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentMethod extends Model {
 
-	protected $table = 'sys_payment';
+	/**
+	 * The attributes that are mass assignable.
+	 * 
+	 * @var array<int, string>
+	 */
 	protected $fillable = [];
 }

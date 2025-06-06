@@ -30,18 +30,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 /**
- * * Home
+ * Home
  */
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 /**
- * * Open shop
+ * Open shop
  */
 Route::get('/open-shop', [OpenShopController::class, 'index'])->middleware([NotSeller::class, Authenticate::class])->name('open-shop');
 Route::post('/open-shop', [OpenShopController::class, 'add'])->middleware([NotSeller::class, Authenticate::class])->name('open-shop');
 
 /**
- * * Support
+ * Support
  */
 Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts');
 Route::post('/contacts', [ContactsController::class, 'send'])->name('contacts');
@@ -49,15 +49,24 @@ Route::get('/support/faq', [FaqController::class, 'index'])->name('support.faq')
 Route::get('/support/sale-terms', [SaleTermsController::class, 'index'])->name('support.sale-terms');
 Route::get('/support/upload-terms', [UploadTermsController::class, 'index'])->name('support.upload-terms');
 Route::get('/support/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('support.privacy-policy');
-Route::get('/refund', [RefundController::class, 'index'])->name('support.refund');
 
 /**
- * * Downloads
+ * Refund
+ */
+Route::get('/refund', function () {
+	return redirect()->route('support.refund.search');
+})->name('support.refund');
+
+Route::get('/refund/search', [RefundController::class, 'indexSearch'])->name('support.refund.search');
+Route::post('/refund/search', [RefundController::class, 'search'])->name('support.refund.search');
+
+/**
+ * Downloads
  */
 Route::get('/download/{filename}', [DownloadController::class, 'download'])->name('download')->where('filename', '.*');
 
 /**
- * * Misc
+ * Misc
  */
 Route::get('/customer-pics', [CustomerPicsController::class, 'index'])->name('customer-pics');
 

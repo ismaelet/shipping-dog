@@ -62,12 +62,14 @@ class CartPaymentController extends Controller {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function update(Request $request): RedirectResponse {
-		$cart = cart();
-		$paymentMethodId = $request->payment_method_id;
-
-		$cart->update([
-			'payment_method_id' => $paymentMethodId,
+		$request->validate([
+			'payment_method_id' => 'required|exists:payment_methods,id',
 		]);
+
+		$cart = cart();
+		$cart->update($request->only('payment_method_id'));
+
+		$paymentMethodId = $cart->payment_method_id;
 
 		if ($paymentMethodId == 1) {
 			return redirect($cart->paymentUrl());
