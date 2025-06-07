@@ -358,32 +358,31 @@
 			transition: color 0.2s;
 		}
 
+		.h-icon {
+			height: 1.25rem;
+			cursor: pointer;
+			transition: color 0.2s;
+
+			.js-color-scheme-switcher {
+				height: 100%;
+			}
+
+			svg {
+				width: 100%;
+				height: 100%;
+			}
+
+			&:hover {
+				color: var(--color-primary-400);
+			}
+		}
+
 		/* Wishlist & Cart */
 		@media (max-width: 480px) {
 			header:has(#h-srch-cbx:checked) .h-icon {
 				visibility: hidden;
 				pointer-events: none;
 			}
-		}
-
-		#h-cart {
-			display: block;
-			background-position: center;
-			background-size: contain;
-			width: 20px;
-			height: 20px;
-			padding: 0;
-			position: relative;
-		}
-
-		#h-cart svg,
-		#h-wish svg {
-			fill: var(--h-text-color);
-		}
-
-		#h-cart:hover svg,
-		#h-wish:hover svg {
-			fill: var(--color-primary-400);
 		}
 
 		#h-cart-num {
@@ -399,14 +398,6 @@
 			text-align: center;
 		}
 
-		#h-wish {
-			background-position: center;
-			background-size: contain;
-			width: 20px;
-			height: 20px;
-			padding: 0;
-		}
-
 		/* Theme switch */
 		.theme-switch .icon-box {
 			display: flex;
@@ -414,18 +405,6 @@
 			aspect-ratio: 1;
 			cursor: pointer;
 			justify-content: center;
-		}
-
-		.theme-switch svg {
-			fill: var(--h-text-color);
-		}
-
-		.theme-switch .icon-box:hover svg {
-			fill: var(--color-primary-400);
-		}
-
-		.theme-switch .dark-icon svg {
-			width: 75%;
 		}
 
 		.theme-switch [data-color-scheme="light"] {
@@ -804,14 +783,14 @@
 						<!-- Theme switch -->
 						<div class="theme-switch h-icon">
 							<div
-								class="light-icon icon-box js-color-scheme-switcher"
+								class="light-icon js-color-scheme-switcher"
 								data-color-scheme="light"
 							>
 								<?= embed_icon('sun') ?>
 							</div>
 
 							<div
-								class="dark-icon icon-box js-color-scheme-switcher"
+								class="dark-icon js-color-scheme-switcher"
 								data-color-scheme="dark"
 							>
 								<?= embed_icon('moon') ?>
@@ -822,8 +801,7 @@
 					@if ($header['wishlist'])
 						<!-- Favorites icon -->
 						<a
-							id="h-wish"
-							class="wish icon-box h-link al-mid h-icon"
+							class="h-icon"
 							href="{{ route('user-dashboard.wishlist') }}"
 						>
 							<?= embed_icon('love') ?>
@@ -832,15 +810,14 @@
 
 					<!-- Cart icon -->
 					<a
-						id="h-cart"
-						class="bag icon-box h-link al-mid h-icon"
-						href="<?= '/cart' ?>"
+						class="h-icon relative justify-center"
+						href="{{ route('cart') }}"
 					>
 
 						<?= embed_icon('bag') ?>
 
 						@if (cart_quantity())
-							<h1 id="h-cart-num"><?= cart_quantity() ?></h1>
+							<h1 id="h-cart-num">{{ cart_quantity() }}</h1>
 						@endif
 
 					</a>

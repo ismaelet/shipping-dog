@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\SellerDashboard;
 
 use App\Http\Controllers\Controller;
-use App\Legacy\System\DB;
 use App\Models\Ecommerce\Design;
+use App\Models\Ecommerce\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -27,18 +27,29 @@ class PortfolioController extends Controller {
 			->orderByDesc('id')
 			->get();
 
-		$customProducts = DB::select('id FROM products WHERE user_id = ? AND deleted = 0 AND (design_id = 0 OR design_id IN (SELECT id FROM designs WHERE custom = 1)) ORDER BY sort ASC, id DESC', [Auth::id()]);
+		$customProducts = Product::where('user_id', Auth::id())
+			->where(function ($query) {
+				$query->where('design_id', false)
+					->orWhereIn('design_id', function ($subQuery) {
+						$subQuery->select('id')
+							->from('designs')
+							->where('custom', true);
+					});
+			})
+			->with('type', 'color', 'position', 'design_with_trashed')
+			->orderBy('sort')
+			->orderByDesc('id')
+			->get();
 
-		$designCount = $designs->count();
-		$customProductsCount = $customProducts->num_rows;
-		$totalCount = $designCount + $customProductsCount;
+		$totalCount = $designs->count() + $customProducts->count();
+		$isCustomSeller = (bool)($seller->custom || $customProducts->count());
 
 		return view('seller-dashboard.portfolio.index', [
-			'totalCount' => $totalCount,
-			'customProductsCount' => $customProductsCount,
-			'designCount' => $designCount,
-			'designs' => $designs,
 			'seller' => $seller,
+			'isCustomSeller' => $isCustomSeller,
+			'designs' => $designs,
+			'customProducts' => $customProducts,
+			'totalCount' => $totalCount,
 		]);
 	}
 

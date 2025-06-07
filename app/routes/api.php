@@ -56,8 +56,3 @@ Route::resource('/orders', OrderController::class)->only(['index', 'show', 'upda
  * * Likes
  */
 Route::resource('/likes', LikeController::class)->only(['store', 'destroy']);
-
-/**
- * * Followers
- */
-Route::resource('/followers', FollowerController::class)->only(['store', 'destroy']);

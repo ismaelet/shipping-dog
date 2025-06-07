@@ -30,14 +30,12 @@
 
 		<div class="mt-12 grid grid-cols-1 gap-8 text-center">
 
-			<?php if (!$totalCount) { ?>
+			@if (!$totalCount)
+				<p class="txt-c-title txt-med txt-ls05 mar-b-1">Ancora non hai caricato nessuna grafica. Clicca qui sotto per
+					cominciare:</p>
+			@endif
 
-			<p class="txt-c-title txt-med txt-ls05 mar-b-1">Ancora non hai caricato nessuna grafica. Clicca qui sotto per
-				cominciare:</p>
-
-			<?php } ?>
-
-			<div class="grid grid-cols-1 justify-items-center">
+			<div class="flex flex-wrap justify-center gap-8">
 				<x-button
 					href="{{ route('seller-dashboard.portfolio.add') }}"
 					class="button--auto-width"
@@ -46,7 +44,7 @@
 					Carica una grafica
 				</x-button>
 
-				@if ($seller->custom || $customProductsCount)
+				@if ($isCustomSeller)
 					<x-button
 						href="{{ client_url('/manage/portfolio/product') }}"
 						class="button--auto-width"
@@ -59,147 +57,139 @@
 
 			</div>
 
-			<?php if ($totalCount) { ?>
-
-			<div
-				id="sort-box"
-				class="text-center"
-			>
-				<div class="border-surface-500 grid grid-cols-1 justify-items-center gap-4 border border-dashed p-4 sm:p-8">
-					<div
-						id="sort-icon"
-						class="icon inlb"
-					><?= embed_icon('move') ?></div>
-
-					<p
-						id="sort-txt"
-						class="mar-h-auto"
-					>
-						Puoi riordinare i lavori a piacimento trascinandoli nella posizione desiderata.
-						Se vuoi che i tuoi clienti vedano i prodotti in quest'ordine, vai nelle <a
-							class="text-link"
-							href="{{ route('seller-dashboard') }}"
-						>impostazioni generali</a> e scegli <span class="font-semibold text-neutral-700">"ordine personalizzato"</span>
-						sotto la voce <span class="font-semibold text-neutral-700">"ordina
-							prodotti"</span>.
-					</p>
-
-					<x-button
-						type="submit"
-						id="sort-btn"
-						name="sort"
-						class="hidden"
-						variant="secondary"
-					>Applica</x-button>
-				</div>
-			</div>
-
-			<?php if ($designCount) { ?>
-
-			<div
-				id="gallery"
-				class="mar-t-2 gap1 js-sortable grid text-center"
-			>
-
-				<?php foreach ($designs as $design) { ?>
-
-				<div class="img-box">
-					<input
-						type="hidden"
-						name="id[]"
-						value="<?= $design->id ?>"
-					>
-					<input
-						type="hidden"
-						class="pos js-order"
-						name="pos[]"
-						value="<?= $design->sort ?>"
-					>
-
-					<a
-						class="des-img sqr block"
-						href="<?= route('designs.edit', $design) ?>"
-					>
-						<img
-							class="img-fill"
-							src="<?= $design->image() ?>"
-							loading="lazy"
-						>
-					</a>
-
-					<p class="name fa-center txt-c-title txt-med mar-t-1 txt-line"><?= $design->name ?></p>
-				</div>
-
-				<?php } ?>
-
-			</div>
-
-			<?php } ?>
-
-			<?php if ($customProductsCount) { ?>
-
-			<div
-				class="grid-flow"
-				data-spacing="700"
-			>
-				<h2 class="text-component-heading fa-center mar-t-4">Prodotti personalizzati</h2>
+			@if ($totalCount)
 
 				<div
-					class="grid-flow js-sortable"
-					data-spacing="400"
-					data-columns="15rem"
+					id="sort-box"
+					class="text-center"
 				>
+					<div class="border-surface-500 grid grid-cols-1 justify-items-center gap-4 border border-dashed p-4 sm:p-8">
+						<div
+							id="sort-icon"
+							class="icon inlb"
+						>{!! embed_icon('move') !!}</div>
 
-					<?php while ($productRow = $customProducts->fetch_assoc()) {
-						$product = Product::find($productRow['id']);
-					?>
+						<p
+							id="sort-txt"
+							class="mar-h-auto"
+						>
+							Puoi riordinare i lavori a piacimento trascinandoli nella posizione desiderata.
+							Se vuoi che i tuoi clienti vedano i prodotti in quest'ordine, vai nelle <a
+								class="text-link"
+								href="{{ route('seller-dashboard') }}"
+							>impostazioni generali</a> e scegli <span class="font-semibold text-neutral-700">"ordine personalizzato"</span>
+							sotto la voce <span class="font-semibold text-neutral-700">"ordina
+								prodotti"</span>.
+						</p>
 
+						<x-button
+							type="submit"
+							id="sort-btn"
+							name="sort"
+							class="hidden"
+							variant="secondary"
+						>Applica</x-button>
+					</div>
+				</div>
+
+				@if ($designs->count())
 					<div
-						class="img-box grid-flow fa-center"
-						data-spacing="200"
+						id="gallery"
+						class="mar-t-2 gap1 js-sortable grid text-center"
 					>
-						<input
-							type="hidden"
-							name="product-id[]"
-							value="<?= $product->id ?>"
-						>
-						<input
-							type="hidden"
-							class="pos js-order"
-							name="product-order[]"
-							value="<?= $product->sort ?>"
+
+						@foreach ($designs as $design)
+							<div class="img-box">
+								<input
+									type="hidden"
+									name="id[]"
+									value="{{ $design->id }}"
+								>
+								<input
+									type="hidden"
+									class="pos js-order"
+									name="pos[]"
+									value="{{ $design->sort }}"
+								>
+
+								<a
+									class="des-img sqr block"
+									href="{{ route('designs.edit', $design) }}"
+								>
+									<img
+										class="img-fill"
+										src="{{ $design->image() }}"
+										loading="lazy"
+									>
+								</a>
+
+								<p class="name fa-center txt-c-title txt-med mar-t-1 txt-line">{{ $design->name }}</p>
+							</div>
+						@endforeach
+
+					</div>
+
+				@endif
+
+				@if ($customProducts->count())
+					<div
+						class="grid-flow"
+						data-spacing="700"
+					>
+						<x-typography.component-heading-small class="">Prodotti
+							personalizzati</x-typography.component-heading-small>
+
+						<div
+							class="grid-flow js-sortable"
+							data-spacing="400"
+							data-columns="15rem"
 						>
 
-						<a
-							class="des-img sqr block"
-							href="<?= '/manage/portfolio/product?id=' . $product->id ?>"
-						>
-							<img
-								class="img-fill"
-								src="<?= $product->image() ?>"
-								loading="lazy"
-							>
-						</a>
+							@foreach ($customProducts as $product)
+								<div
+									class="img-box grid-flow fa-center"
+									data-spacing="200"
+								>
+									<input
+										type="hidden"
+										name="product-id[]"
+										value="{{ $product->id }}"
+									>
+									<input
+										type="hidden"
+										class="pos js-order"
+										name="product-order[]"
+										value="{{ $product->sort }}"
+									>
 
-						<div>
-							<p class="fc-titles"><?= $product->name ?></p>
-							<p class=""><?= $product->type->name ?></p>
+									<a
+										class="des-img sqr block"
+										href="{{ '/manage/portfolio/product?id=' . $product->id }}"
+									>
+										<img
+											class="img-fill"
+											src="{{ $product->image() }}"
+											loading="lazy"
+										>
+									</a>
 
-							<?php if (!$product->status) { ?>
-							<p class="fc-warning">Non pubblicato</p>
-							<?php } ?>
+									<div>
+										<p class="fc-titles">{{ $product->name }}</p>
+										<p class="">{{ $product->type->name }}</p>
+
+										@if (!$product->status)
+											<p class="fc-warning">Non pubblicato</p>
+										@endif
+
+									</div>
+								</div>
+							@endforeach
 
 						</div>
 					</div>
+				@endif
 
-					<?php } ?>
-
-				</div>
-			</div>
-
-			<?php } ?>
-
-			<?php } ?>
+			@endif
 		</div>
 
 	</form>
