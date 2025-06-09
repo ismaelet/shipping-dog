@@ -44,6 +44,12 @@
 			</ul>
 		@endif
 
+		@if (session('status'))
+			<x-alerts.success>
+				{{ session('status') }}
+			</x-alerts.success>
+		@endif
+
 		<div class="flex items-center justify-between">
 			<x-checkbox
 				name="remember"
@@ -52,7 +58,7 @@
 			/>
 
 			<a
-				href="/recover"
+				href="{{ route('password.request') }}"
 				class="text-right transition-colors hover:text-neutral-700"
 			>
 				<p class="">Hai dimenticato la password?</p>

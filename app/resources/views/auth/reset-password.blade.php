@@ -1,4 +1,7 @@
-<x-layouts.form :title="$title">
+<x-layouts.form
+	:$title
+	action="{{ route('password.update') }}"
+>
 
 	<x-slot name="body">
 
@@ -11,23 +14,23 @@
 				Inserisci qui sotto la nuova password desiderata:
 			</p>
 
-			<x-form.input
+			<x-input
 				type="hidden"
 				name="token"
 				:value="$token"
 			/>
-			<x-form.input
+			<x-input
 				type="hidden"
 				name="email"
 				:value="$email"
 			/>
-			<x-form.input
+			<x-input
 				type="password"
 				name="password"
 				placeholder="Nuova password"
 				required
 			/>
-			<x-form.input
+			<x-input
 				type="password"
 				name="password_confirmation"
 				placeholder="Conferma la nuova password"
@@ -46,7 +49,7 @@
 		@if (session('error'))
 			<x-button
 				variant="secondary"
-				:href="route('auth.recover')"
+				:href="route('password.request')"
 			>{{ __('Richiedi un nuovo codice') }}</x-button>
 		@else
 			@if (!session('submitted'))

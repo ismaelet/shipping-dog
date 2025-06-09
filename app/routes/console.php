@@ -30,18 +30,5 @@ Schedule::command(GlsTrackParcels::class)
 	->dailyAt('19:00')
 	->environments(['staging', 'production']);
 
-// /**
-//  * Activate the seller with ID 7083 on the first Saturday of the month
-//  */
-// Schedule::call(fn () => Seller::find(7083)->update(['status' => 1]))
-// 	->daily()
-// 	->when(fn () => now() == now()->firstOfMonth()->next('Saturday'))
-// 	->environments(['staging', 'production']);
 
-// /**
-//  * Deactivate the seller with ID 7083 on the following Monday
-//  */
-// Schedule::call(fn () => Seller::find(7083)->update(['status' => 0]))
-// 	->daily()
-// 	->when(fn () => now() == now()->firstOfMonth()->next('Saturday')->next('Monday'))
-// 	->environments(['staging', 'production']);
+Schedule::command('auth:clear-resets')->daily();

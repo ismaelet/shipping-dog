@@ -359,7 +359,7 @@
 			</x-button>
 
 			<div class="text-right">
-				<p class=""><a href="{{ route('auth.recover') }}">Hai dimenticato la password?</a></p>
+				<p class=""><a href="{{ route('password.request') }}">Hai dimenticato la password?</a></p>
 			</div>
 		</form>
 

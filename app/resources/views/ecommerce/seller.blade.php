@@ -88,10 +88,13 @@
 								@if ($user->$contact())
 									<a
 										href="{{ $user->$contact() }}"
-										class="hover:text-primary text-secondary w-5 transition-colors"
+										class="hover:text-primary text-secondary transition-colors"
 										target="_blank"
 									>
-										{!! embed_icon($contact) !!}
+										<x-dynamic-component
+											:component="'icon-' . $contact"
+											class="h-5 w-5"
+										/>
 									</a>
 								@endif
 							@endforeach

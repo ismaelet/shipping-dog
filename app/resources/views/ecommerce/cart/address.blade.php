@@ -18,11 +18,9 @@ $cart = cart();
 		@csrf
 
 		<div
-			method="POST"
 			id="left_panel"
 			class="panel grid grid-cols-1 gap-8"
 		>
-			@csrf
 
 			<!-- Country -->
 			<section class="cart-panel surface">

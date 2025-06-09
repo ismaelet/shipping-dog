@@ -657,10 +657,10 @@
 					<label
 						for="h-srch-cbx"
 						id="h-srch-ico-box"
-						class="stack-content grid justify-items-center"
+						class="stack-content grid place-items-center"
 					>
 						<div class="background fill-all"></div>
-						<?= embed_icon('search') ?>
+						<x-icon-search />
 					</label>
 
 					<div id="h-srch-inp-box">

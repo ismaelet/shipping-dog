@@ -28,8 +28,8 @@ Route::post('/logout', [LogoutController::class, 'logout'])->middleware('auth');
 /**
  * Recover and reset password routes
  */
-Route::get('/recover', [RecoverController::class, 'index'])->name('auth.recover')->middleware('guest');
-Route::post('/recover', [RecoverController::class, 'store'])->middleware('guest');
+Route::get('/forgot-password', [RecoverController::class, 'index'])->middleware('guest')->name('password.request');
+Route::post('/forgot-password', [RecoverController::class, 'store'])->middleware('guest')->name('password.email');
 
-Route::get('/reset', [ResetController::class, 'index'])->name('auth.reset')->middleware('guest');
-Route::post('/reset', [ResetController::class, 'update'])->middleware('guest');
+Route::get('/reset-password/{token}', [ResetController::class, 'index'])->middleware('guest')->name('password.reset');
+Route::post('/reset-password', [ResetController::class, 'update'])->middleware('guest')->name('password.update');
