@@ -100,7 +100,7 @@ class OrderResource extends Resource {
 				Actions::make([
 					FormAction::make('send-email')
 						->label('Reinvia e-mail')
-						->icon('icon-send')
+						->icon('heroicon-o-paper-airplane')
 						->color('info')
 						->requiresConfirmation()
 						->action(function (Order $record): bool {
@@ -178,14 +178,14 @@ class OrderResource extends Resource {
 										->label('E-mail')
 										->placeholder('E-mail')
 										->required()
-										->suffixIcon('icon-email')
+										->suffixIcon('heroicon-o-envelope')
 										->columnSpanFull(),
 
 									TextInput::make('phone')
 										->label('Telefono')
 										->placeholder('Telefono')
 										->required()
-										->suffixIcon('icon-phone')
+										->suffixIcon('heroicon-o-phone')
 										->columnSpanFull(),
 								])->columns(['lg' => 4]),
 						]),

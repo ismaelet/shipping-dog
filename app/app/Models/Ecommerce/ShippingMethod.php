@@ -3,6 +3,7 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class ShippingMethod extends Model {
@@ -11,7 +12,7 @@ class ShippingMethod extends Model {
 	public const NO_DELIVERY_SHIPPING_METHODS = [11];
 	public const SHIPPING_METHODS_WITH_LABELS = [1, 2];
 
-	private const REQUIRED_WORKING_DAYS = [1, 2];
+	private const REQUIRED_WORKING_DAYS = ['min' => 1, 'max' => 6, 'min-long' => 7, 'max-long' => 10];
 	private const WEEKEND_DAYS = [6, 7];
 	private const HOLIDAYS = ['25-12', '26-12', '15-08'];
 	private const MONTH_NAMES = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
@@ -19,10 +20,6 @@ class ShippingMethod extends Model {
 
 	protected $table = 'sys_shipping';
 	protected $fillable = [];
-
-	/**
-	 * * Attributes
-	 */
 
 	/**
 	 * Get the shipping price
@@ -59,11 +56,13 @@ class ShippingMethod extends Model {
 	 * Estimate the delivery time
 	 */
 	public function minimumWorkingDays(bool $longDelivery): int {
-		return $longDelivery ? 7 : ((date('H') > 18) ? 2 : 1);
+		$estimated = $longDelivery ? self::REQUIRED_WORKING_DAYS['min-long'] : self::REQUIRED_WORKING_DAYS['min'];
+		return (date('H') > 18) ? $estimated + 1 : $estimated;
 	}
 
 	public function maximumWorkingDays(bool $longDelivery): int {
-		return $longDelivery ? 8 : 5;
+		$estimated = $longDelivery ? self::REQUIRED_WORKING_DAYS['max-long'] : self::REQUIRED_WORKING_DAYS['max'];
+		return (date('H') > 18) ? $estimated + 1 : $estimated;
 	}
 
 	public function minimumShippingDays(): int {
@@ -115,7 +114,7 @@ class ShippingMethod extends Model {
 		$dayNumber = date('d', $date);
 		$monthNumber = date('m', $date);
 
-		return self::DAY_NAMES[$weekDayNumber - 1] . ' <span class="font-bold">' . $dayNumber . '</span> ' . strtolower(substr(self::MONTH_NAMES[$monthNumber - 1], 0, 3)) . '.';
+		return strtolower(self::DAY_NAMES[$weekDayNumber - 1]) . ' <span class="text-strong">' . $dayNumber . '</span> ' . strtolower(substr(self::MONTH_NAMES[$monthNumber - 1], 0, 3)) . '.';
 	}
 
 	public function minimumDeliveryDate(?string $startingTime = null, bool $longDelivery) {
@@ -135,12 +134,13 @@ class ShippingMethod extends Model {
 	}
 
 	public function deliveryDateString(?string $startingTime = null, bool $longDelivery): string {
-		return $this->minimumDeliveryDateString($startingTime, $longDelivery) . ' - ' . strtolower($this->maximumDeliveryDateString($startingTime, $longDelivery));
+		return 'Consegna stimata: ' . $this->minimumDeliveryDateString($startingTime, $longDelivery) . ' - ' . strtolower($this->maximumDeliveryDateString($startingTime, $longDelivery));
 	}
 
-	// * Static methods * //
 	/**
 	 * Get the shipping methods that require labels
+	 * 
+	 * @return array
 	 */
 	public static function shippingMethodsWithLabels(): array {
 		return self::SHIPPING_METHODS_WITH_LABELS;

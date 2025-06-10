@@ -35,8 +35,11 @@
 			class="status-bar flex items-center justify-center gap-4"
 			style="color: {{ $order->statusColor() }}"
 		>
-			<span class="status-icon aspect-square w-12 rounded-full border">
-				{!! embed_icon($order->statusIcon()) !!}
+			<span class="status-icon grid aspect-square w-12 place-items-center rounded-full border">
+				<x-dynamic-component
+					:component="'icon-' . $order->statusIcon()"
+					class="w-1/2"
+				/>
 			</span>
 
 			<x-typography.component-heading>
@@ -116,6 +119,7 @@
 
 		<div class="grid items-start gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12">
 			<div class="grid gap-6 sm:gap-8">
+				{{-- Payment --}}
 				<article class="page-panel surface">
 					<x-typography.component-subheading>
 						Metodo di pagamento
@@ -124,6 +128,7 @@
 					<x-typography.component-heading>{{ $order->payment_method?->name }}</x-typography.component-heading>
 				</article>
 
+				{{-- Shipping --}}
 				<article class="page-panel surface">
 					<x-typography.component-subheading>Metodo di spedizione</x-typography.component-subheading>
 
@@ -221,19 +226,19 @@
 							<p class="font-medium text-neutral-700"><?= $order->fullOrderItemsPriceString() ?></p>
 						</div>
 
-						<div class="flex justify-between gap-4 border-t py-3">
+						<div class="border-border flex justify-between gap-4 border-t py-3">
 							<p class="">Spedizione</p>
 							<p class="font-medium text-neutral-700"><?= $order->shippingFeeString() ?></p>
 						</div>
 
 						@if ($order->orderItemsDiscount())
-							<div class="flex justify-between gap-4 border-t py-3">
+							<div class="border-border flex justify-between gap-4 border-t py-3">
 								<p class="">Sconto</p>
 								<p class="font-medium text-neutral-700">- <?= $order->orderItemsDiscountString() ?></p>
 							</div>
 						@endif
 
-						<div class="flex justify-between gap-4 border-t py-3 text-lg">
+						<div class="border-border flex justify-between gap-4 border-t py-3 text-lg">
 							<p class="">Totale</p>
 							<p class="font-medium text-neutral-700"><?= $order->priceString() ?></p>
 						</div>

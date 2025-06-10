@@ -7,6 +7,7 @@ use App\Mail\OrderStatusMail;
 use App\Models\User;
 use App\Services\GlsService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -74,6 +75,12 @@ class Order extends Model {
 		}
 
 		return parent::update($attributes, $options);
+	}
+
+	protected function estimatedDelivery(): Attribute {
+		return Attribute::make(
+			get: fn(): string => $this->shipping_method->deliveryDateString($this->created_at, $this->hasLongDelivery())
+		);
 	}
 
 	/**
