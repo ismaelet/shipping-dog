@@ -215,13 +215,6 @@ $cart = cart();
 					</div>
 
 				</div>
-
-				<button
-					type="submit"
-					id="submit"
-					name="submit"
-					class="hidden"
-				></button>
 			</section>
 		</div>
 
@@ -231,68 +224,10 @@ $cart = cart();
 		>
 
 			<!-- Order items -->
-			<x-cart.order-list />
+			<livewire:cart.order-items-panel />
 
 			@if (!$cart->usedOrderItemsCredit())
-				<!-- Discount code -->
-				<section
-					id="code"
-					class="cart-panel surface"
-				>
-					<x-typography.component-heading>Codice sconto</x-typography.component-heading>
-					<div
-						id="code_cont"
-						class="grid grid-cols-1 gap-4"
-						method="POST"
-						action="#code-anch"
-					>
-
-						@if (!$cart->coupon?->id)
-							<input
-								type="text"
-								id="code-inp"
-								name="code"
-								class="input wide"
-								placeholder="Codice sconto (opzionale)"
-								onFocus="$('.err').hide()"
-							>
-							@if ($error == 'coupon-invalid')
-								<p class="error">Il codice inserito non esiste</p>
-							@endif
-							@if ($error == 'coupon-expired')
-								<p class="error">Il codice inserito è scaduto</p>
-							@endif
-							@if ($error == 'coupon-not-active')
-								<p class="error">Il codice inserito non è attivo</p>
-							@endif
-							@if ($error == 'coupon-not-logged')
-								<p class="error">Devi essere registrato per poter usare questo codice</p>
-							@endif
-							@if ($error == 'coupon-used')
-								<p class="error">Hai già usato il codice inserito</p>
-							@endif
-
-							<x-button
-								type="submit"
-								id="add_code"
-								name="add_code"
-								class="hidden"
-								formnovalidate
-							>Aggiungi</x-button>
-						@else
-							<p class="code_txt">
-								Codice usato: <span class="code txt-c1">{{ $cart->coupon->code }}</span>
-							</p>
-							<x-button
-								type="submit"
-								name="del_code"
-								id="code_remove"
-								formnovalidate
-							>Rimuovi</x-button>
-						@endif
-
-					</div>
-				</section>
+				<livewire:cart.coupon-panel />
 			@endif
 
 			@if (is_seller() && !$cart->coupon?->id && $cart->user->seller->credit)
@@ -303,9 +238,11 @@ $cart = cart();
 				>
 					<x-typography.component-heading>Credito</x-typography.component-heading>
 
-					<p>Per ogni vendita realizzata ottieni un <strong>10% di bonus</strong> sui guadagni, che puoi usare per pagare le
+					<p>Per ogni vendita realizzata ottieni un <strong>10% di bonus</strong> sui guadagni, che puoi usare per pagare
+						le
 						spese di spedizione oppure per comprare articoli del tuo negozio.<br><br>Questo credito non può essere usato
-						insieme ad un codice sconto ed è possibile usarlo solo se si ha abbastanza credito da coprire l'intero prezzo del
+						insieme ad un codice sconto ed è possibile usarlo solo se si ha abbastanza credito da coprire l'intero prezzo
+						del
 						prodotto.</p>
 
 					<p class="txt-med text-center">Hai usato <strong>{{ formatc(cart()->usedCredit()) }} € /
@@ -323,7 +260,7 @@ $cart = cart();
 			@endif
 
 			<!-- Recap -->
-			<x-cart.recap-panel />
+			<livewire:cart.recap-panel />
 
 		</div>
 	</form>

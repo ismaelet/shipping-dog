@@ -60,7 +60,7 @@ $cart = cart();
 				</div>
 
 				<!-- Recap -->
-				<x-cart.recap-panel />
+				<livewire:cart.recap-panel />
 			</form>
 		</div>
 	</div>

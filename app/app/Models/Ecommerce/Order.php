@@ -151,11 +151,6 @@ class Order extends Model {
 		return $this->hasMany(OrderItem::class);
 	}
 
-
-	/**
-	 * * Get methods
-	 */
-
 	/**
 	 * Get the order's code.
 	 *
@@ -257,10 +252,6 @@ class Order extends Model {
 		return $this->stepData()['tag'];
 	}
 
-
-	/**
-	 * ~ Attributes: Status
-	 */
 	/**
 	 * Get the order's status data.
 	 *
@@ -549,22 +540,135 @@ class Order extends Model {
 	}
 
 	/**
-	 * Remove the coupon from the order.
+	 * Try to apply a coupon to the order.
+	 * 
+	 * @param string $couponCode The coupon code to apply
+	 * @return string|false Returns an error message if the coupon is invalid, or true if the coupon was applied successfully.
 	 */
-	public function removeCoupon() {
-		if ($this->coupon?->id) {
-			$this->update(['code' => null]);
+	public function applyCoupon(string $couponCode): string|false {
+		$coupon = Coupon::firstWhere('code', $couponCode);
 
-			foreach ($this->order_items as $orderItem) {
-				// ! To add
-			}
-
-			if ($this->coupon->freeShipping) {
-				$this->updateShippingMethodId(ShippingMethod::PRIMARY_SHIPPING_METHOD_ID);
-			}
-
-			$this->updatePrice();
+		if (!$coupon) {
+			return 'Il codice sconto non esiste';
 		}
+
+		// Check if the coupon exists
+		if ($error = $coupon->isValid()) {
+			return $error;
+		}
+
+		// Remove shipping cost if the coupon has free shipping
+		if ($coupon->shipping) {
+			$this->update([
+				'shipping_method_id' => ShippingMethod::FREE_SHIPPING_METHODS[0]
+			]);
+		}
+
+		// Apply the coupon to the order items
+		foreach ($this->order_items as $orderItem) {
+			$sellerDiscount = 0;
+			$ourDiscount = 0;
+
+			// Check if the order matches the coupon requirements
+			$matchesDesign = !$coupon->design_id || $coupon->design_id == $orderItem->design_id;
+			$matchesSeller = !$coupon->seller_id || $coupon->seller_id == $orderItem->seller_id;
+			$matchesType = !$coupon->type_id || $coupon->type_id == $orderItem->type_id;
+			$matchesColor = !$coupon->color_id || $coupon->color_id == $orderItem->color_id;
+
+			// Check if the order item matches the coupon requirements
+			if (!$matchesDesign || !$matchesSeller || !$matchesType || !$matchesColor) {
+				continue;
+			}
+
+			// Calculate the discount amount
+			if ($coupon->nogain) {
+				$totalDiscount = $orderItem->gain;
+				$gainReduction = $orderItem->gain;
+			} else {
+				// Precentage discount
+				if ($coupon->mod_us3 && $this->quantity > 2) {
+					$ourDiscountPercentage = $coupon->mod_us3;
+				} else if ($coupon->mod_us2 && $this->quantity > 1) {
+					$ourDiscountPercentage = $coupon->mod_us2;
+				} else {
+					$ourDiscountPercentage = $coupon->mod_us;
+				}
+
+				if ($coupon->mod_them3 && $this->quantity > 2) {
+					$sellerDiscountPercentage = $coupon->mod_them3;
+				} else if ($coupon->mod_them2 && $this->quantity > 1) {
+					$sellerDiscountPercentage = $coupon->mod_them2;
+				} else {
+					$sellerDiscountPercentage = $coupon->mod_them;
+				}
+
+				// Fixed discount
+				if ($coupon->flat_us3 && $this->quantity > 2) {
+					$ourDiscountFixed = $coupon->flat_us3;
+				} else if ($coupon->flat_us2 && $this->quantity > 1) {
+					$ourDiscountFixed = $coupon->flat_us2;
+				} else {
+					$ourDiscountFixed = $coupon->flat_us;
+				}
+
+				if ($coupon->flat_them3 && $this->quantity > 2) {
+					$sellerDiscountFixed = $coupon->flat_them3;
+				} else if ($coupon->flat_them2 && $this->quantity > 1) {
+					$sellerDiscountFixed = $coupon->flat_them2;
+				} else {
+					$sellerDiscountFixed = $coupon->flat_them;
+				}
+
+				// Total discount
+				$ourDiscount = ($orderItem->grossProductPrice() * $ourDiscountPercentage / 100) + $ourDiscountFixed;
+				$sellerDiscount = ($orderItem->grossProductPrice() * $sellerDiscountPercentage / 100) + $sellerDiscountFixed;
+
+				// Calulate the total discount and reduced gain
+				$totalDiscount = $ourDiscount + $sellerDiscount;
+				$gainReduction = $sellerDiscount;
+			}
+
+			$orderItem->update([
+				'price_disc' => $totalDiscount,
+				'gain_disc' => $gainReduction,
+			]);
+
+			// Break the loop if the coupon is only valid for one item
+			if ($coupon->only_one) {
+				break;
+			}
+		}
+
+		$this->update([
+			'code' => $coupon->code,
+		]);
+
+		$this->updatePrice();
+
+		return false;
+	}
+
+	/**
+	 * Remove the coupon from the order.
+	 * 
+	 * @return void
+	 */
+	public function removeCoupon(): void {
+		// Remove the coupon code from the order
+		$this->update([
+			'code' => null,
+		]);
+
+		// Reset the order items discount
+		foreach ($this->order_items as $orderItem) {
+			$orderItem->update([
+				'price_disc' => 0,
+				'gain_disc' => 0,
+			]);
+		}
+
+		// Update the order price
+		$this->updatePrice();
 	}
 
 	/**

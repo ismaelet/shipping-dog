@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class UsedCoupon extends Model {
 
-	protected $table = 'codes_used';
-	protected $fillable = ['coupon_id', 'user_id'];
+	/**
+	 * The attributes that are mass assignable.
+	 * 
+	 * @var array<int:string>
+	 */
+	protected $fillable = [
+		'coupon_id',
+		'user_id'
+	];
 }

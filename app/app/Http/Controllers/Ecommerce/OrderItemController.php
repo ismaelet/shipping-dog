@@ -15,7 +15,10 @@ use App\Legacy\Ecommerce\Order as LegacyOrder;
 class OrderItemController extends Controller {
 
 	/**
-	 * * Create a new order
+	 * Store a new order item in the cart.
+	 * 
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function store(Request $request): RedirectResponse {
 		// Fetch the product
@@ -82,12 +85,11 @@ class OrderItemController extends Controller {
 		$order->updateOrderItems();
 
 		// Update the discount
-		// ! To add
-		// if ($order->coupon?->id) {
-		// 	$couponId = $order->coupon->id;
-		// 	$LegacyOrder->removeCoupon();
-		// 	$LegacyOrder->addCoupon($couponId);
-		// }
+		if ($order->coupon?->id) {
+			$couponId = $order->coupon->id;
+			$LegacyOrder->removeCoupon();
+			$LegacyOrder->addCoupon($couponId);
+		}
 
 		return to_route('cart');
 	}

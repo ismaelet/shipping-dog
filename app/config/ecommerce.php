@@ -63,7 +63,7 @@ return [
 				'tag' => 'awaiting-shipping',
 				'label' => 'In preparazione',
 				'color' => 'hsl(95, 70%, 50%)',
-				'icon' => 'stroked.400.deployed_code_history',
+				'icon' => 'deployed_code_history',
 			],
 			'4' => [
 				'tag' => 'shipped',

@@ -1,15 +1,4 @@
-@props(['order' => null])
-
-@php
-
-	$order = $order ?: cart();
-
-@endphp
-
-<div
-	id=""
-	class="cart-panel surface"
->
+<div class="cart-panel surface">
 	<x-typography.component-heading>Riepilogo</x-typography.component-heading>
 	<div class="grid grid-cols-1 gap-4">
 		<div class="chck_item flex justify-between">

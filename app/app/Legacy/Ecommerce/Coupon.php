@@ -79,37 +79,6 @@ class Coupon {
 		}
 	}
 
-	/**
-	 * Get methods
-	 */
-	private function getUsed() {
-		return $this->data['used'] = DB::exists('codes_used WHERE coupon_id = ? AND user_id = ?', [$this->id, auth()->id()]);
-	}
-
-	private function getIsValid() {
-		$error = false;
-
-		if (!$this->id) {
-			$error = 'coupon-invalid';
-		} else if (strtotime($this->timeStart) > strtotime('now')) {
-			$error = 'coupon-not-active';
-		} else if ($this->isExpired) {
-			$error = 'coupon-expired';
-		} else if ($this->onePerCustomer && !auth()->check()) {
-			$error = 'coupon-not-logged';
-		} else if ($this->onePerCustomer && $this->used) {
-			$error = 'coupon-used';
-		}
-
-		$this->data['error'] = $error;
-
-		return $error ? false : true;
-	}
-
-	private function getIsExpired() {
-		return strtotime($this->timeEnd . ' +1 day') < strtotime('now');
-	}
-
 	private function getError() {
 		$this->isValid;
 
