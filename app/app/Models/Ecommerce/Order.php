@@ -4,6 +4,7 @@ namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
 use App\Mail\OrderStatusMail;
+use App\Models\SentEmail;
 use App\Models\User;
 use App\Services\GlsService;
 use Illuminate\Database\Eloquent\Builder;
@@ -677,10 +678,28 @@ class Order extends Model {
 	 * Send the order's status email.
 	 */
 	public function sendStatusEmail(): void {
+		$type = 'order-status-update-' . $this->statusTag();
+		$email = $this->address->email;
+
+		// Check if the email is already sent
+		if (SentEmail::where('email', $email)
+			->where('type', $type)
+			->exists()
+		) {
+			Log::error("Email already sent for {$email} with type {$type}");
+			return;
+		}
+
+		// Create a new SentEmail record
+		SentEmail::create([
+			'email' => $email,
+			'type' => $type,
+		]);
+
 		try {
-			Mail::to($this->address->email)->queue(new OrderStatusMail($this));
+			Mail::to($email)->queue(new OrderStatusMail($this));
 		} catch (UnexpectedResponseException $e) {
-			Log::info("Email sending failed for {$this->address->email}: " . $e->getMessage());
+			Log::info("Email sending failed for {$email}: " . $e->getMessage());
 		}
 	}
 

@@ -23,7 +23,7 @@ class TransmitParcel {
 		return Action::make('confirm-parcel')
 			->label('Trasmetti')
 			->requiresConfirmation()
-			->icon('icon-send')
+			->icon('heroicon-o-paper-airplane')
 			->color('primary')
 			->action(function (Order $record): bool {
 				// Transmit the parcel

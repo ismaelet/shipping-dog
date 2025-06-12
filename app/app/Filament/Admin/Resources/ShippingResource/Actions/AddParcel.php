@@ -24,7 +24,7 @@ class AddParcel {
 			->label('Crea')
 			->color('info')
 			->requiresConfirmation()
-			->icon('icon-add')
+			->icon('heroicon-o-plus')
 			->action(function (Order $record): bool {
 				// Add the parcel
 				$request = function () use ($record) {

@@ -27,7 +27,7 @@
 				padding-block: var(--_padding-y);
 				padding-inline: calc(var(--_padding-y) * 2);
 				background-color: var(--color-primary-400);
-				box-shadow: 0px 1rem 4rem -1rem hsl(var(--color-primary-400-hsl) / .4);
+				box-shadow: 0px 1rem 4rem -1rem color-mix(in hsl, var(--color-primary-400), transparent 60%);
 				color: #fff;
 				transition: opacity 0.2s;
 

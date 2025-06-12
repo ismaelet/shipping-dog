@@ -23,7 +23,7 @@ class RemoveLabeling {
 		return Action::make('already-shipped')
 			->label('Cancella')
 			->requiresConfirmation()
-			->icon('icon-delete')
+			->icon('heroicon-o-trash')
 			->color('danger')
 			->action(function (Order $record): bool {
 				$response = $record->update([

@@ -154,27 +154,20 @@
 @pushOnce('styles')
 	<style>
 		:root {
-			--color-primary-400: oklch(82.8% 0.189 84.429);
-			--color-neutral-400: oklch(70.8% 0 0);
-
-			--border-color: var(--color-neutral-400);
+			--color-primary-400: rgb(var(--primary-400));
+			--color-primary-500: rgb(var(--primary-500));
+			--color-error-400: rgb(var(--danger-400));
+			--color-error-500: rgb(var(--danger-500));
+			--color-neutral-400: rgb(var(--gray-400));
+			--border-color: rgb(var(--gray-600));
 
 			--border-width: 1px;
-		}
-
-		.surface {
-			padding: 2rem;
-			border-radius: 1rem;
-			border: 1px solid #555;
-		}
-
-		button svg {
-			width: 1em;
 		}
 	</style>
 @endpushOnce
 
 <x-filament-panels::page>
+
 	<div class="grid gap-8">
 
 		{{-- Recap form --}}
@@ -196,11 +189,8 @@
 								class="grow"
 							/>
 
-							<x-button
-								class="js-copy-order_items"
-								size="auto"
-							>
-								{!! embed_icon('copy') !!}
+							<x-button class="js-copy-order_items">
+								<x-heroicon-o-clipboard-document-list class="text-white" />
 								Copia il log
 							</x-button>
 						</div>
@@ -232,7 +222,6 @@
 								<x-button
 									type="submit"
 									variant="secondary"
-									size="auto"
 								>
 									<?= embed_icon('correct') ?>
 									Applica
@@ -250,13 +239,9 @@
 
 								<x-button
 									type="submit"
-									name="submit"
-									value="clean_log"
-									variant="secondary"
-									class=""
-									size="auto"
+									color="danger"
 								>
-									{!! embed_icon('delete') !!}
+									<x-heroicon-o-trash />
 									Pulisci il log
 								</x-button>
 							</form>
@@ -273,7 +258,7 @@
 							name="show_all"
 							text="Mostra tutti gli ordini"
 							checked="{{ $showAll }}"
-							class="js-submit-form"
+							@change="$event.target.closest('form').submit()"
 						/>
 					</form>
 				</x-form.group>
@@ -361,10 +346,9 @@
 						<x-button
 							class="js-copy-from-cart"
 							data-id="{{ $order->id }}"
-							size="small"
 							variant="secondary"
 						>
-							{!! embed_icon('copy') !!}
+							<x-heroicon-o-clipboard class="text-white" />
 							Copia a partire da qui
 						</x-button>
 					</x-dashboard.form.panel>
