@@ -17,7 +17,7 @@
 	<x-slot name="formBody">
 		<x-form.field>
 			<x-label>E-mail</x-label>
-			<x-form.input
+			<x-input
 				type="email"
 				name="email"
 				:value="old('email')"
@@ -26,13 +26,13 @@
 			/>
 
 			@error('email')
-				<x-form.input-warning>{{ $message }}</x-form.input-warning>
+				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
 		</x-form.field>
 
 		<x-form.field>
 			<x-label>Password</x-label>
-			<x-form.input
+			<x-input
 				type="password"
 				name="password"
 				placeholder="Password"
@@ -41,12 +41,12 @@
 			/>
 
 			@error('password')
-				<x-form.input-warning>{{ $message }}</x-form.input-warning>
+				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
 		</x-form.field>
 
 		<x-form.field>
-			<x-form.input
+			<x-input
 				type="password"
 				name="password_confirmation"
 				placeholder="Conferma la password"

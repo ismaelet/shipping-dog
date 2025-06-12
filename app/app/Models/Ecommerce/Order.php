@@ -790,7 +790,7 @@ class Order extends Model {
 			->where('type', $type)
 			->exists()
 		) {
-			Log::error("Email already sent for {$email} with type {$type}");
+			// Log::error("Email already sent for {$email} with type {$type}");
 			return;
 		}
 
