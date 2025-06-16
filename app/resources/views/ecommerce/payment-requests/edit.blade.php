@@ -13,7 +13,7 @@
 			Per poter generare i documenti necessari per il pagamento, abbiamo bisogno di alcuni tuoi dati:
 		</p>
 
-		<div class="grid gap-2">
+		<div class="grid gap-6">
 			<x-form.group>
 				<x-label text="Nome e cognome" />
 				<x-input
@@ -49,16 +49,28 @@
 					placeholder="Città"
 					value="{{ $paymentRequest?->birthplace }}"
 					required
-					data-size="3"
+					data-size="2"
 				/>
-				<x-input
-					class="uppercase"
+				<select
+					class="input"
 					name="birthprovince"
 					placeholder="Provincia"
-					value="{{ $paymentRequest?->birthprovince }}"
 					required
-					data-size="1"
-				/>
+					data-size="2"
+				>
+					<option
+						value=""
+						disabled
+						@selected(empty($paymentRequest?->birthprovince))
+					>Provincia</option>
+
+					@foreach ($provinces as $province)
+						<option
+							value="{{ $province->tag }}"
+							@selected($paymentRequest?->birthprovince == $province->tag)
+						>{{ $province->name . ' (' . $province->tag . ')' }}</option>
+					@endforeach
+				</select>
 			</x-form.group>
 
 			<x-form.group>
@@ -70,27 +82,39 @@
 					required
 				/>
 				<x-input
-					name="city"
-					placeholder="Città"
-					value="{{ $paymentRequest?->city }}"
-					required
-					data-size="2"
-				/>
-				<x-input
-					class="uppercase"
-					name="province"
-					placeholder="Provincia"
-					value="{{ $paymentRequest?->province }}"
-					required
-					data-size="1"
-				/>
-				<x-input
 					name="zip"
 					placeholder="CAP"
 					value="{{ $paymentRequest?->zip }}"
 					required
 					data-size="1"
 				/>
+				<x-input
+					name="city"
+					placeholder="Città"
+					value="{{ $paymentRequest?->city }}"
+					required
+					data-size="2"
+				/>
+				<select
+					class="input"
+					name="province"
+					placeholder="Provincia"
+					required
+					data-size="1"
+				>
+					<option
+						value=""
+						disabled
+						@selected(empty($paymentRequest?->province))
+					>Provincia</option>
+
+					@foreach ($provinces as $province)
+						<option
+							value="{{ $province->tag }}"
+							@selected($paymentRequest?->province == $province->tag)
+						>{{ $province->name . ' (' . $province->tag . ')' }}</option>
+					@endforeach
+				</select>
 			</x-form.group>
 
 			<x-form.group>

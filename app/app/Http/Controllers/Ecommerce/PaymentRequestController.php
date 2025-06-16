@@ -6,6 +6,7 @@ use App\Helpers\ArrayHelper;
 use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Seller\PaymentRequest;
+use App\Models\Shipping\Province;
 use DateTimeImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -41,16 +42,20 @@ class PaymentRequestController extends Controller {
 	/**
 	 * Display the payment request edit page.
 	 *
-	 * @param  Request  $request
+	 * @param  Request $request
 	 * @return View
 	 */
 	public function edit(Request $request): View {
 		$seller = $request->seller;
 		$paymentRequest = $seller->payment_request;
+		$provinces = Province::orderBy('name')->get();
 
 		return view('ecommerce.payment-requests.edit')
-			->with('title', 'Richiesta Pagamento')
-			->with('paymentRequest', $paymentRequest);
+			->with([
+				'title' => 'Richiesta Pagamento',
+				'paymentRequest' => $paymentRequest,
+				'provinces' => $provinces
+			]);
 	}
 
 	/**

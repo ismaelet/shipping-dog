@@ -150,12 +150,12 @@ $cart = cart();
 								<?= empty($address) ? 'selected' : '' ?>
 							>Provincia</option>
 
-							<?php foreach ($provinces as $province) { ?>
-							<option
-								value="<?= $province->tag ?>"
-								<?= $address?->region == $province->tag ? 'selected' : '' ?>
-							><?= $province->name ?> (<?= $province->tag ?>)</option>
-							<?php } ?>
+							@foreach ($provinces as $province)
+								<option
+									value="{{ $province->tag }}"
+									@selected($address?->region == $province->tag)
+								>{{ $province->name . ' (' . $province->tag . ')' }}</option>
+							@endforeach
 
 						</select>
 					</div>
