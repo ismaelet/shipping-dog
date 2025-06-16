@@ -4,6 +4,7 @@ namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
 use App\Mail\OrderStatusMail;
+use App\Models\Ecommerce\Seller\Payment;
 use App\Models\SentEmail;
 use App\Models\User;
 use App\Services\GlsService;
@@ -34,6 +35,7 @@ class Order extends Model {
 		'shipping_method_id',
 		'payment_method_id',
 		'code',
+		'price',
 		'quantity',
 		'credit_ship',
 		'shipping',
@@ -353,7 +355,7 @@ class Order extends Model {
 
 		foreach ($this->order_items as $orderItem) {
 			if ($orderItem->credit) {
-				$credit += $orderItem->discount();
+				$credit += $orderItem->priceBeforeCredit();
 			}
 		}
 
@@ -532,9 +534,10 @@ class Order extends Model {
 		$orderItemsPrice = $this->orderItemsPrice();
 		$shippingFee = $this->shippingFee();
 
-		$this->price = $orderItemsPrice + $shippingFee;
-		$this->shipping = $shippingFee;
-		$this->save();
+		$this->update([
+			'price' => $orderItemsPrice + $shippingFee,
+			'shipping' => $shippingFee,
+		]);
 
 		return $this;
 	}
@@ -692,9 +695,14 @@ class Order extends Model {
 			'status' => EcommerceHelper::statusFromTag('confirmed'),
 		]);
 
-		// Remove the shipping price from the user's credit, if it was paid with the credit
-		if ($this->credit_ship) {
-			$this->user->seller?->updateCredit();
+		// Remove the used credit from the seller's credit
+		if ($this->usedCredit()) {
+			Payment::create([
+				'seller_id' => $this->user->seller?->id,
+				'value' => -$this->usedCredit(),
+				'other' => true,
+				'description' => 'Credito utilizzato per acquisto',
+			]);
 		}
 
 		// Destroy used coupons
@@ -747,9 +755,9 @@ class Order extends Model {
 				$orderItem->seller->updateEarned();
 
 				// Update the seller's credit
-				if ($orderItem->credit) {
-					$orderItem->seller->updateCredit();
-				}
+				// if ($orderItem->credit) {
+				// 	$orderItem->seller->updateCredit();
+				// }
 			}
 		}
 	}

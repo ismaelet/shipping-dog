@@ -14,53 +14,46 @@
 			><?= $order->shippingFeeString() ?></p>
 		</div>
 
-		<?php if ($order->discount()) { ?>
-
-		<div class="chck_item flex justify-between">
-			<p>Sconto</p>
-			<p class="font-semibold text-neutral-700">- <?= $order->discountString() ?></p>
-		</div>
-
-		<?php } ?>
-
-		<?php if ($order->usedCredit()) { ?>
-
-		<div class="chck_item flex justify-between">
-			<p>Credito</p>
-			<p class="font-semibold text-neutral-700">-<?= $order->usedCreditString ?></p>
-		</div>
-
-		<?php } ?>
+		@if ($order->discount())
+			<div class="chck_item flex justify-between">
+				<p>Sconto</p>
+				<p class="font-semibold text-neutral-700">- <?= $order->discountString() ?></p>
+			</div>
+		@endif
 
 		<div
 			id="total"
 			class="chck_item flex justify-between"
 		>
 			<p class="chck_name">Totale</p>
-			<p class="chck_pric js-cart-price-string font-semibold text-neutral-700"><?= $order->priceString() ?></p>
+			<p class="chck_pric js-cart-price-string font-semibold text-neutral-700">{{ price($order->price) }}</p>
 		</div>
 
-		<?php if (in_array($order->statusTag(), ['open', 'received'])) { ?>
+		@if ($order->usedCredit())
+			<div class="chck_item flex justify-between">
+				<p class="text-secondary">Credito usato</p>
+				<p class="text-secondary font-semibold">{{ price($order->usedCredit()) }}</p>
+			</div>
+		@endif
 
-		<div
-			id="chck_btn_box"
-			class="gap1 grid"
-		>
-			<x-button
-				type="submit"
-				id="checkout"
-				class="btn button--full-width"
-				onclick="$('#submit').click();"
-			>Prosegui</x-button>
-			<x-button
-				class="btn btn--secondary button--full-width"
-				href="{{ route('shop') }}"
-				variant="secondary"
-			>Continua con gli acquisti</x->
-		</div>
-
-
-		<?php } ?>
+		@if (in_array($order->statusTag(), ['open', 'received']))
+			<div
+				id="chck_btn_box"
+				class="gap1 grid"
+			>
+				<x-button
+					type="submit"
+					id="checkout"
+					class="btn button--full-width"
+					onclick="$('#submit').click();"
+				>Prosegui</x-button>
+				<x-button
+					class="btn btn--secondary button--full-width"
+					href="{{ route('shop') }}"
+					variant="secondary"
+				>Continua con gli acquisti</x->
+			</div>
+		@endif
 
 	</div>
 </div>

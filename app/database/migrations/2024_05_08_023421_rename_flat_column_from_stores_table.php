@@ -18,10 +18,10 @@ return new class extends Migration {
 		DB::update('UPDATE stores SET earned = IFNULL((SELECT SUM(gain) as tot FROM order_items WHERE seller_id = stores.id AND status > 1), 0)');
 
 		// Update paied
-		DB::update('UPDATE stores SET payed = IFNULL((SELECT SUM(value) as tot FROM stores_payments WHERE seller_id = stores.id AND other = 0), 0)');
+		DB::update('UPDATE stores SET payed = IFNULL((SELECT SUM(value) as tot FROM seller_payments WHERE seller_id = stores.id AND other = 0), 0)');
 
 		// Update other transferences
-		DB::update('UPDATE stores SET other_transfers = IFNULL((SELECT SUM(value) as tot FROM stores_payments WHERE seller_id = stores.id AND other = 1), 0)');
+		DB::update('UPDATE stores SET other_transfers = IFNULL((SELECT SUM(value) as tot FROM seller_payments WHERE seller_id = stores.id AND other = 1), 0)');
 
 		// Update shipping price
 		DB::update('UPDATE orders SET shipping = (CASE WHEN quantity = 1 THEN 5.9 ELSE 7.4 END) WHERE credit_ship = 1 AND shipping = 0');

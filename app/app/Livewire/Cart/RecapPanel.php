@@ -16,7 +16,7 @@ class RecapPanel extends Component {
 	 * 
 	 * @return void
 	 */
-	public function mount(?Order $order = null): void {
+	public function boot(?Order $order = null): void {
 		$this->order = $order->id ?: cart();
 	}
 
@@ -27,6 +27,24 @@ class RecapPanel extends Component {
 	 */
 	#[On('orderItemsUpdated')]
 	public function refreshOrderItems(): void {
+	}
+
+	/**
+	 * Refresh the shipping details when the 'shippingUpdated' event is dispatched.
+	 * 
+	 * @return void
+	 */
+	#[On('shippingUpdated')]
+	public function refreshShipping(): void {
+	}
+
+	/**
+	 * Refresh the credit used when the 'usedCreditUpdated' event is dispatched.
+	 * 
+	 * @return void
+	 */
+	#[On('usedCreditUpdated')]
+	public function usedCreditUpdated(): void {
 	}
 
 	/**

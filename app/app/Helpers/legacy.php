@@ -1,8 +1,10 @@
 <?php
 
+use App\Helpers\FileHelper;
 use App\Legacy\System\DB;
 use App\Legacy\System\Query_Result;
 use App\Models\Ecommerce\Design;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Vite;
 
 function client_url(string $parcialUrl = '') {
@@ -410,10 +412,10 @@ function generate_input($input, $data, $error, $done) {
 			case 'cbx': ?>
 
 				<label class="
-					checkbox
-					<?= $input['custom-class'] ?? '' ?>
-					<?= isset($input['size']) ? 'inp-size' . $input['size'] : '' ?>
-				">
+				checkbox
+				<?= $input['custom-class'] ?? '' ?>
+				<?= isset($input['size']) ? 'inp-size' . $input['size'] : '' ?>
+			">
 
 					<input type="checkbox" name="<?= $name ?>" value="<?= $value ?>" <?= !empty($input['checked']) || ($name && isset($_POST[$name])) || ($name && isset($data[$name]) && $data[$name] == $value) ? 'checked' : '' ?> <?= isset($input['required']) ? 'required' : '' ?>>
 
@@ -448,11 +450,11 @@ function generate_input($input, $data, $error, $done) {
 			default: ?>
 
 				<input type="<?= $type ?>" class="input
-					<?= $input['custom-class'] ?? '' ?>
-				" name="<?= $name ?>" value="<?= $value ?>" placeholder="<?= $styling ? '' : ($input['text'] ?? '') ?>" <?= isset($input['minlength']) ? 'minlength="' . $input['minlength'] . '"' : '' ?> <?= isset($input['maxlength']) ? 'maxlength="' . $input['maxlength'] . '"' : '' ?> <?= isset($input['min']) ? 'min="' . $input['min'] . '"' : '' ?> <?= isset($input['max']) ? 'max="' . $input['max'] . '"' : '' ?> <?= isset($input['step']) ? 'step="' . $input['step'] . '"' : '' ?> <?= isset($input['required']) ? 'required' : '' ?> <?= isset($input['readonly']) ? 'readonly' : '' ?> <?= isset($input['required']) ? 'required' : '' ?> data-size="<?= $input['size'] ?? 4 ?>" <?php
-																																																																																																																																																																									if (isset($input['data']))
-																																																																																																																																																																										foreach ($input['data'] as $dataName => $dataValue) echo 'data-' . $dataName . '="' . $dataValue . '" '
-																																																																																																																																																																									?>>
+				<?= $input['custom-class'] ?? '' ?>
+			" name="<?= $name ?>" value="<?= $value ?>" placeholder="<?= $styling ? '' : ($input['text'] ?? '') ?>" <?= isset($input['minlength']) ? 'minlength="' . $input['minlength'] . '"' : '' ?> <?= isset($input['maxlength']) ? 'maxlength="' . $input['maxlength'] . '"' : '' ?> <?= isset($input['min']) ? 'min="' . $input['min'] . '"' : '' ?> <?= isset($input['max']) ? 'max="' . $input['max'] . '"' : '' ?> <?= isset($input['step']) ? 'step="' . $input['step'] . '"' : '' ?> <?= isset($input['required']) ? 'required' : '' ?> <?= isset($input['readonly']) ? 'readonly' : '' ?> <?= isset($input['required']) ? 'required' : '' ?> data-size="<?= $input['size'] ?? 4 ?>" <?php
+																																																																																																																																																																								if (isset($input['data']))
+																																																																																																																																																																									foreach ($input['data'] as $dataName => $dataValue) echo 'data-' . $dataName . '="' . $dataValue . '" '
+																																																																																																																																																																								?>>
 
 			<?php break;
 		}
@@ -473,16 +475,16 @@ function generate_input($input, $data, $error, $done) {
 	}
 
 	/*
-	* (string) search: the parcial name of file that fill be fetched (the full name will be search-*name*)
-	* (string) name: the input's name
-	* (string) text: the placeholder text
-	* ? (string) name-show: the name of the visible field, used in custom situation, for ex. to add a new entry based on the typed name
-	* ? (mixed) value: the actual value of the input
-	* ? (mixed) value-show: the shown value of the input
-	* ? (string) custom-classes: custom classes that the whole block will have
-	* ? (bool) required: set if the input is required
-	* ? (bool) title: if set, it will show the shown input content on hover
-	*/
+* (string) search: the parcial name of file that fill be fetched (the full name will be search-*name*)
+* (string) name: the input's name
+* (string) text: the placeholder text
+* ? (string) name-show: the name of the visible field, used in custom situation, for ex. to add a new entry based on the typed name
+* ? (mixed) value: the actual value of the input
+* ? (mixed) value-show: the shown value of the input
+* ? (string) custom-classes: custom classes that the whole block will have
+* ? (bool) required: set if the input is required
+* ? (bool) title: if set, it will show the shown input content on hover
+*/
 
 	function input_search($input) {
 		$showValue = $input['value-show'] ?? '';
@@ -502,3 +504,55 @@ function generate_input($input, $data, $error, $done) {
 	</div>
 
 <?php }
+
+	/**
+	 * Import an svg and embed it in the HTML
+	 */
+	function embed_svg(string $fileName, array $customClasses = []): ?string {
+		return FileHelper::embedSvg($fileName, $customClasses);
+	}
+
+	/**
+	 * Import an icon and embed it in the HTML
+	 */
+	function embed_icon(string $fileName, array $customClasses = []): ?string {
+		return FileHelper::embedSvg($fileName, $customClasses, true);
+	}
+
+	/**
+	 * Explode a string by the last occurrence of a separator
+	 */
+	function explode_last($separator, $string): array {
+		return ArrayHelper::explodeLast($separator, $string);
+	}
+
+
+	/**
+	 * Debug an array
+	 * 
+	 * @param array $array The array to debug
+	 * @return void
+	 */
+	function dd_array(array $array): void {
+		dd('<pre>' . print_r($array, true) . '</pre>');
+	}
+
+	/**
+	 * Get the path of a file in the public storage directory
+	 */
+	function public_asset(string $path): string {
+		$filePath = FileHelper::publicAsset($path);
+
+		if (!$filePath) {
+			Log::error('File not found: ' . $path);
+		}
+
+		return $filePath;
+	}
+
+	/**
+	 * Get the path of a file in the public storage directory
+	 */
+	function public_storage(?string $path = null): string {
+		return FileHelper::publicStoragePath($path);
+	}

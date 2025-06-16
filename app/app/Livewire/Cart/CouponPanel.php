@@ -6,13 +6,18 @@ use App\Models\Ecommerce\Coupon;
 use App\Models\Ecommerce\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class CouponPanel extends Component {
 
 	public Order $cart;
+
 	public ?Coupon $coupon;
+
 	public string $couponCode = '';
+
+	public bool $usedCredit;
 
 	/**
 	 * Initialize the component.
@@ -23,6 +28,7 @@ class CouponPanel extends Component {
 		$this->cart = cart();
 		$this->coupon = $this->cart?->coupon;
 		$this->couponCode = $this->coupon?->code ?? '';
+		$this->usedCredit = $this->cart->usedCredit();
 	}
 
 	/**
@@ -72,6 +78,16 @@ class CouponPanel extends Component {
 		session()->flash('success', 'Codice sconto rimosso con successo!');
 
 		$this->dispatch('orderItemsUpdated');
+	}
+
+	/**
+	 * Refresh the credit used when the 'usedCreditUpdated' event is dispatched.
+	 * 
+	 * @return void
+	 */
+	#[On('usedCreditUpdated')]
+	public function usedCreditUpdated(): void {
+		$this->usedCredit = $this->cart->usedCredit();
 	}
 
 	/**

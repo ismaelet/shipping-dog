@@ -14,8 +14,9 @@
 			<p class="price blu"><?= $product->customerPriceString() ?></p>
 		</a>
 
-		<livewire:wishlist-button :design="$product->design" />
-
+		@if ($product->design)
+			<livewire:wishlist-button :design="$product->design" />
+		@endif
 	</div>
 
 	<div class="item-box-body">

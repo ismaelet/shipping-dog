@@ -28,21 +28,33 @@ class Product extends Model {
 
 	use HasFactory, SoftDeletes;
 
-	protected $fillable = ['name', 'design_id', 'user_id', 'type_id', 'color_id', 'colors', 'status', 'positions'];
+	/**
+	 * The attributes that are mass assignable.
+	 * 
+	 * @var array<int, string>
+	 */
+	protected $fillable = [
+		'name',
+		'design_id',
+		'user_id',
+		'type_id',
+		'color_id',
+		'colors',
+		'status',
+		'positions'
+	];
 
 	/**
-	 * * Expand basic methods
+	 * Replace the default delete method to also delete the specific price.
+	 * 
+	 * @return bool|null
 	 */
-	public function delete() {
+	public function delete(): ?bool {
 		$this->specific_price()->delete();
 
 		return parent::delete();
 	}
 
-
-	/**
-	 * * Accessors & Mutators 
-	 */
 	/**
 	 * The position ID attribute mutator.
 	 *
@@ -50,14 +62,10 @@ class Product extends Model {
 	 */
 	public function positionId(): Attribute {
 		return Attribute::make(
-			get: fn (?int $value) => $value ?: (int) explode(',', $this->positions)[0] ?? null,
-			set: fn (int $value) => $value,
+			get: fn(?int $value) => $value ?: (int) explode(',', $this->positions)[0] ?? null,
+			set: fn(int $value) => $value,
 		);
 	}
-
-	/**
-	 * * Relationships 
-	 */
 
 	/**
 	 * Get the product's seller.
@@ -129,9 +137,6 @@ class Product extends Model {
 
 
 	/**
-	 * * Attributes 
-	 */
-	/**
 	 * ~ Attributes: Prices 
 	 */
 	// Get the product's price
@@ -151,7 +156,7 @@ class Product extends Model {
 	}
 
 	public function sellerPrice() {
-		return $this->price()->price - $this->price()->gain_w / .75;
+		return ($this->price()->price - $this->price()->gain_w / .75) * 0.9;
 	}
 
 	public function productPrice(): float {
@@ -382,8 +387,8 @@ class Product extends Model {
 	 */
 	public function logoId(): Attribute {
 		return Attribute::make(
-			get: fn (?int $value) => $value,
-			set: fn (int $value) => $value,
+			get: fn(?int $value) => $value,
+			set: fn(int $value) => $value,
 		);
 	}
 

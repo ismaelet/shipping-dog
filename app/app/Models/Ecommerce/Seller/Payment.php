@@ -13,7 +13,7 @@ class Payment extends Model {
 	 * 
 	 * @var string
 	 */
-	protected $table = 'stores_payments';
+	protected $table = 'seller_payments';
 
 	/**
 	 * The attributes that are mass assignable.
@@ -24,6 +24,7 @@ class Payment extends Model {
 		'seller_id',
 		'value',
 		'other',
+		'description',
 	];
 
 	/**

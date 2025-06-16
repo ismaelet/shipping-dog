@@ -48,17 +48,15 @@
 
 <div>
 	@if (Auth::check())
-		@if ($design->seller->user_id != Auth::id())
-			<div
-				class="like-button text-neutral-light-400 stack-content hover:text-primary grid place-items-center"
-				title="{{ $wishlisted ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti' }}"
-				data-wishlisted="{{ $wishlisted ? 'true' : 'false' }}"
-				wire:click="{{ $wishlisted ? 'destroy' : 'store' }}"
-			>
-				<x-icon-love-stroke class="w-1/2" />
-				<x-icon-love class="w-1/2" />
-			</div>
-		@endif
+		<div
+			class="like-button text-neutral-light-400 stack-content hover:text-primary grid place-items-center"
+			title="{{ $wishlisted ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti' }}"
+			data-wishlisted="{{ $wishlisted ? 'true' : 'false' }}"
+			wire:click="{{ $wishlisted ? 'destroy' : 'store' }}"
+		>
+			<x-icon-love-stroke class="w-1/2" />
+			<x-icon-love class="w-1/2" />
+		</div>
 	@else
 		<a
 			class="like-button text-neutral-light-400 stack-content hover:text-primary grid place-items-center"

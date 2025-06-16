@@ -34,11 +34,8 @@
 	class="info group relative w-max cursor-pointer"
 	data-direction="{{ $direction }}"
 >
-	<div
-		class="group-hover:text-primary aspect-square w-6 rounded-full border transition-colors"
-		style="--icon-size: 60%;"
-	>
-		{!! embed_icon('question') !!}
+	<div class="group-hover:text-primary grid aspect-square w-6 place-items-center rounded-full border transition-colors">
+		<x-icon-question class="w-2/5" />
 	</div>
 
 	<p

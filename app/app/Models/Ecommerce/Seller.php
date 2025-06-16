@@ -215,6 +215,15 @@ class Seller extends Model {
 	}
 
 	/**
+	 * Get the amount of credit that can be used for the current order.
+	 * 
+	 * @return float
+	 */
+	public function usableCredit(): float {
+		return $this->toBePayed() - cart()?->usedCredit();
+	}
+
+	/**
 	 * Get the formatted balance
 	 */
 	public function earnedString(): string {

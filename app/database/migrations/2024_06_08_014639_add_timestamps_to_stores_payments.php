@@ -10,18 +10,18 @@ return new class extends Migration {
 	 * Run the migrations.
 	 */
 	public function up(): void {
-		Schema::table('stores_payments', function (Blueprint $table) {
+		Schema::table('seller_payments', function (Blueprint $table) {
 			$table->timestamps();
 		});
 
-		DB::table('stores_payments')->update(['created_at' => DB::raw('time')]);
+		DB::table('seller_payments')->update(['created_at' => DB::raw('time')]);
 	}
 
 	/**
 	 * Reverse the migrations.
 	 */
 	public function down(): void {
-		Schema::table('stores_payments', function (Blueprint $table) {
+		Schema::table('seller_payments', function (Blueprint $table) {
 			$table->dropTimestamps();
 		});
 	}

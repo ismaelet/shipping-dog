@@ -74,7 +74,7 @@ class Seller {
 	}
 
 	private function getPayed() {
-		return DB::sum('value FROM stores_payments WHERE seller_id = ? AND other = 0', [$this->id]);
+		return DB::sum('value FROM seller_payments WHERE seller_id = ? AND other = 0', [$this->id]);
 	}
 
 	private function getPayedString() {
@@ -82,7 +82,7 @@ class Seller {
 	}
 
 	private function getOtherTransfers() {
-		return DB::sum('value FROM stores_payments WHERE seller_id = ? AND other = 1', [$this->id]);
+		return DB::sum('value FROM seller_payments WHERE seller_id = ? AND other = 1', [$this->id]);
 	}
 
 	private function getOtherTransfersString() {
@@ -140,7 +140,7 @@ class Seller {
 	*/
 	public function delete() {
 		DB::delete(self::TABLE . ' WHERE ' . self::INDEX . ' = ?', [$this->id]);
-		DB::delete('stores_payments WHERE seller_id = ?', [$this->id]);
+		DB::delete('seller_payments WHERE seller_id = ?', [$this->id]);
 
 		foreach ($this->designs as $design) {
 			$design->delete(true);

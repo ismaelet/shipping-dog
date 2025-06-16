@@ -35,7 +35,7 @@ for ($month = $lastMonth; $month >= $firstMonth; $month--) {
 	<h3 class="month-title inlb br-c1"><span class="txt-med"><?= $month_str[$month - 1] ?></span> <span
 			class="title-year"><?= $currentYear ?></span></h3>
 
-	<p class="month-gain inlb"><strong><?= EcommerceHelper::formatPrice($monthTotGain) ?> €</strong> da
+	<p class="month-gain inlb"><strong><?= EcommerceHelper::formatPrice($monthTotGain) ?></strong> da
 		<strong><?= $monthSalesCount ?></strong>
 		vendite
 	</p>

@@ -219,11 +219,11 @@ class SellerResource extends Resource {
 				ActionGroup::make([
 					Action::make('view-shop')
 						->label('Visualizza')
-						->icon('icon-visibility')
+						->icon('heroicon-o-eye')
 						->url(fn(Seller $record): string => route('seller.show', $record))
 						->openUrlInNewTab(true),
 					Action::make('login')
-						->icon('icon-login')
+						->icon('heroicon-o-arrow-left-end-on-rectangle')
 						->color('info')
 						->action(function (Seller $record) {
 							Auth::login($record->user);
@@ -232,12 +232,11 @@ class SellerResource extends Resource {
 						}),
 					Action::make('remove-request')
 						->label('Rimuovi richiesta')
-						->icon('icon-close')
+						->icon('heroicon-o-x-circle')
 						->color('warning')
 						->visible(fn(Seller $record) => $record->request)
 						->action(fn(Seller $record) => $record->update(['request' => false])),
-					DeleteAction::make()
-						->icon('icon-delete'),
+					DeleteAction::make(),
 				])
 			])
 

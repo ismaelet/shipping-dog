@@ -145,7 +145,7 @@
 						id="recap-data"
 						class="gap1 grid"
 					>
-						<div class="rec_row">
+						<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 							<div class="rec_cell">
 								<p class="rec_lbl">Guadagno:</p>
 								<input
@@ -156,7 +156,7 @@
 								>
 							</div>
 
-							<div class="rec_cell">
+							{{-- <div class="rec_cell">
 								<div class="align-center flex gap-4">
 									<p class="rec_lbl inlb">Bonus: </p>
 									<x-help.info>Per ogni capo venduto riceverai un ulteriore <strong>10%</strong> del guadagno come bonus. Puoi
@@ -171,9 +171,7 @@
 									value="<?= $seller->creditString() ?>"
 									disabled
 								>
-							</div>
-						</div>
-						<div class="rec_row">
+							</div> --}}
 							<div class="rec_cell">
 								<p class="rec_lbl">PAGATO:</p>
 								<input
@@ -183,9 +181,15 @@
 									disabled
 								>
 							</div>
+						</div>
+						<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 
 							<div class="rec_cell">
-								<p class="rec_lbl">ALTRO:</p>
+								<div class="align-center flex gap-4">
+									<p class="rec_lbl inlb">Altro:</p>
+									<x-help.info>Qui figura il totale usato per acquistare prodotti dal proprio negozio, usando il credito
+										accoumulato, oppure altri pagamenti di natura varia.</x-help.info>
+								</div>
 								<input
 									type="text"
 									class="input wid-100"

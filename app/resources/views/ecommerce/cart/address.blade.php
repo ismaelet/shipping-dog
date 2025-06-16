@@ -19,7 +19,7 @@ $cart = cart();
 
 		<div
 			id="left_panel"
-			class="panel grid grid-cols-1 gap-8"
+			class="panel grid grid-cols-1 content-start gap-8"
 		>
 
 			<!-- Country -->
@@ -49,30 +49,9 @@ $cart = cart();
 							:$shippingMethod
 							:$cart
 						/>
+
 						@if ($cart->shipping_method_id == $shippingMethod->id)
-							@if (
-								$shippingMethod->price($cart->quantity) &&
-									!$cart->coupon &&
-									!$cart->credit_ship &&
-									Auth::check() &&
-									Auth::user()->seller &&
-									Auth::user()->seller->credit >= $shippingMethod->price($cart->quantity))
-								<button
-									class="use-credit-btn credit-btn btn btn--secondary button--full-width mar-b-2"
-									name="ship_credit"
-								>
-									{!! embed_icon('dollar') !!}
-									Usa il tuo credito
-								</button>
-							@elseif ($cart->credit_ship)
-								<button
-									class="no-credit-btn credit-btn btn btn--secondary button--full-width mar-b-2"
-									name="ship_no_credit"
-								>
-									{!! embed_icon('close') !!}
-									Non usare il credito
-								</button>
-							@endif
+							<livewire:cart.shipping-credit-button />
 						@endif
 					@endforeach
 
@@ -223,43 +202,16 @@ $cart = cart();
 			class="panel grid grid-cols-1 content-start gap-8"
 		>
 
-			<!-- Order items -->
+			{{-- Order items --}}
 			<livewire:cart.order-items-panel />
 
-			@if (!$cart->usedOrderItemsCredit())
-				<livewire:cart.coupon-panel />
-			@endif
+			{{-- Credit panel --}}
+			<livewire:cart.credit-panel />
 
-			@if (is_seller() && !$cart->coupon?->id && $cart->user->seller->credit)
-				<!-- Used credit panel -->
-				<section
-					id="credit-section"
-					class="cart-panel surface"
-				>
-					<x-typography.component-heading>Credito</x-typography.component-heading>
+			{{-- Coupon panel --}}
+			<livewire:cart.coupon-panel />
 
-					<p>Per ogni vendita realizzata ottieni un <strong>10% di bonus</strong> sui guadagni, che puoi usare per pagare
-						le
-						spese di spedizione oppure per comprare articoli del tuo negozio.<br><br>Questo credito non può essere usato
-						insieme ad un codice sconto ed è possibile usarlo solo se si ha abbastanza credito da coprire l'intero prezzo
-						del
-						prodotto.</p>
-
-					<p class="txt-med text-center">Hai usato <strong>{{ formatc(cart()->usedCredit()) }} € /
-							{{ formatc(cart()->user?->seller?->credit) }} €</strong></p>
-
-					<div class="total-credit">
-						<div
-							class="used-credit"
-							style="width: {{ round((cart()->usedCredit() / cart()->user?->seller?->credit) * 100) }}%"
-						></div>
-					</div>
-
-
-				</section>
-			@endif
-
-			<!-- Recap -->
+			{{-- Recap panel --}}
 			<livewire:cart.recap-panel />
 
 		</div>

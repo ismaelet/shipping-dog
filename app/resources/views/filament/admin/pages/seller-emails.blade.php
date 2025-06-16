@@ -28,6 +28,8 @@
 	    'giorgiodefrancesco71.1@gmail.com',
 	    'admin@mondoduster.it',
 	    'fiel89@hotmail.it',
+	    'squillacegiovanni98@gmail.com',
+	    'sanseverotrash@gmx.com',
 	];
 
 	$sellers = Seller::join('users', 'users.id', '=', 'stores.user_id')->where('stores.status', true)->get();

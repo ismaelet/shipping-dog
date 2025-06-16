@@ -1,20 +1,7 @@
 <?php
 
 use App\Helpers\App;
-use App\Helpers\ArrayHelper;
-use App\Helpers\FileHelper;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
-/**
- * Debug an array
- * 
- * @param array $array The array to debug
- * @return void
- */
-function dd_array(array $array): void {
-	dd('<pre>' . print_r($array, true) . '</pre>');
-}
 
 /**
  * Check if the user is an admin
@@ -44,42 +31,13 @@ function is_seller(): bool {
 }
 
 /**
- * Get the path of a file in the public storage directory
+ * Format a price value according to the current currency.
+ * 
+ * @param float $value The price value to format
+ * @return string The formatted price value
  */
-function public_asset(string $path): string {
-	$filePath = FileHelper::publicAsset($path);
+function price(float $value): string {
+	$formatter = new NumberFormatter(config('app.locale'), NumberFormatter::CURRENCY);
 
-	if (!$filePath) {
-		Log::error('File not found: ' . $path);
-	}
-
-	return $filePath;
-}
-
-/**
- * Get the path of a file in the public storage directory
- */
-function public_storage(?string $path = null): string {
-	return FileHelper::publicStoragePath($path);
-}
-
-/**
- * Import an svg and embed it in the HTML
- */
-function embed_svg(string $fileName, array $customClasses = []): ?string {
-	return FileHelper::embedSvg($fileName, $customClasses);
-}
-
-/**
- * Import an icon and embed it in the HTML
- */
-function embed_icon(string $fileName, array $customClasses = []): ?string {
-	return FileHelper::embedSvg($fileName, $customClasses, true);
-}
-
-/**
- * Explode a string by the last occurrence of a separator
- */
-function explode_last($separator, $string): array {
-	return ArrayHelper::explodeLast($separator, $string);
+	return $formatter->formatCurrency($value, config('custom.currency', 'EUR'));
 }

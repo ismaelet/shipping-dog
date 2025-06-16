@@ -263,12 +263,30 @@ class OrderItem extends Model {
 	}
 
 	/**
+	 * Get the total price of the order before applying credit (that would bring it to 0).
+	 *
+	 * @return float
+	 */
+	public function priceBeforeCredit(): float {
+		return $this->productPrice() * $this->quantity;
+	}
+
+	/**
 	 * Get the total discount.
 	 *
 	 * @return float
 	 */
 	public function discount(): float {
-		return $this->credit ? $this->grossPrice() : $this->productDiscount() * $this->quantity;
+		return $this->credit ? $this->grossProductPrice() : $this->productDiscount() * $this->quantity;
+	}
+
+	/**
+	 * Get the used credit for the order item.
+	 * 
+	 * @return float
+	 */
+	public function usedCredit(): float {
+		return $this->credit ? $this->priceBeforeCredit() : 0;
 	}
 
 	/**
@@ -277,7 +295,16 @@ class OrderItem extends Model {
 	 * @return float
 	 */
 	public function price(): float {
-		return number_format($this->grossPrice() - $this->discount(), 2);
+		return $this->credit ? 0 : round($this->grossPrice() - $this->discount(), 2);
+	}
+
+	/**
+	 * The total show price of the order.
+	 *
+	 * @return float
+	 */
+	public function shownPrice(): float {
+		return $this->priceBeforeCredit();
 	}
 
 	/**

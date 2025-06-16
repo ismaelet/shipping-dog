@@ -31,7 +31,6 @@
 				color: #fff;
 				transition: opacity 0.2s;
 
-
 				&::before {
 					content: "";
 					position: absolute;
@@ -69,6 +68,18 @@
 				/* Secondary button: Dark color scheme */
 				.dark & {
 					border-color: var(--color-neutral-400);
+				}
+
+				/* Secondary button: Primary color */
+				&[data-color="primary"] {
+					border-color: var(--color-primary-400);
+					color: var(--color-primary-400);
+
+					/* Secondary button: Danger color - hover state */
+					&:hover {
+						color: var(--color-primary-500);
+						border-color: var(--color-primary-500);
+					}
 				}
 
 				/* Secondary button: Danger color */

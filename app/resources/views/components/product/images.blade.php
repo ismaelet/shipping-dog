@@ -75,7 +75,9 @@ use Legacy\View\Components\Interactions\LikeButton;
 				</div>
 
 				<!-- Love button -->
-				<livewire:wishlist-button :design="$product->design" />
+				@if ($product->design)
+					<livewire:wishlist-button :design="$product->design" />
+				@endif
 
 			</div>
 
@@ -87,7 +89,7 @@ use Legacy\View\Components\Interactions\LikeButton;
 				<img
 					class="js-main-image"
 					id="img-zoom"
-					src="<?= $product->image(1024) ?>"
+					src="{{ $product->image(1024) }}"
 				>
 			</div>
 		</div>

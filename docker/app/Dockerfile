@@ -1,18 +1,17 @@
-# Get the base image
-FROM php:8.4-fpm
+# Base step
+FROM php:8.4-fpm AS base
 
-# Set working directory
+# Base: Install PHP extensions
+RUN apt-get update && apt-get install -y \
+        zlib1g-dev \
+        libzip-dev \
+        libicu-dev \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install zip pdo pdo_mysql mysqli intl \
+    && docker-php-ext-enable mysqli
+
+# Base: Set working directory
 WORKDIR /var/www/html
-
-# Install the zip extension
-RUN apt-get update && \
-	apt-get install -y zlib1g-dev libzip-dev && \
-	docker-php-ext-configure zip && \
-	docker-php-ext-install zip
-
-# Install MySQLi
-RUN docker-php-ext-install pdo pdo_mysql mysqli && \
-	docker-php-ext-enable mysqli
 
 # Required to generate images
 RUN apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-dev libexif-dev && \

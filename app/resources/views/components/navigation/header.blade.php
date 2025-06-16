@@ -359,6 +359,7 @@
 		}
 
 		.h-icon {
+			width: 1.25rem;
 			height: 1.25rem;
 			cursor: pointer;
 			transition: color 0.2s;
