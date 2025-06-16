@@ -14,7 +14,7 @@
 			<p class="price blu"><?= $product->customerPriceString() ?></p>
 		</a>
 
-		<x-shop.like-button :design="$product->design" />
+		<livewire:wishlist-button :design="$product->design" />
 
 	</div>
 

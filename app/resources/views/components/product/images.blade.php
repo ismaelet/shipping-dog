@@ -75,7 +75,7 @@ use Legacy\View\Components\Interactions\LikeButton;
 				</div>
 
 				<!-- Love button -->
-				<x-shop.like-button :design="$product->design" />
+				<livewire:wishlist-button :design="$product->design" />
 
 			</div>
 

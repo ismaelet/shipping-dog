@@ -19,14 +19,12 @@ class WishlistController extends Controller {
 	public function index(Request $request): View {
 		$title = 'Wishlist';
 
-		$likes = Like::where('user_id', Auth::id())
-			->with('design', 'design.seller', 'design.main_product')
-			->get();
+		$wishlistItems = Auth::user()->wishlist_items->load('design', 'design.main_product', 'design.seller');
 
 		return view('user-dashboard.wishlist', [
 			'locationTag' => 'user-dashboard',
 			'title' => $title,
-			'likes' => $likes,
+			'likes' => $wishlistItems,
 		]);
 	}
 }

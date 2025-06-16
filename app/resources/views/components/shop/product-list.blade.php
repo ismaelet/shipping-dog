@@ -510,11 +510,11 @@
 			></button>
 			<?php } ?>
 
-			<div
+			{{-- <div
 				id="load"
 				class="js-shop-load"
 			>
-			</div>
+			</div> --}}
 
 			<div class="grid5 grid4-1440w grid3-1024w grid2-480w col-gap1 row-gap2">
 

@@ -51,8 +51,3 @@ Route::resource('/logos', LogoController::class)->only(['show']);
  * * Orders
  */
 Route::resource('/orders', OrderController::class)->only(['index', 'show', 'update']);
-
-/**
- * * Likes
- */
-Route::resource('/likes', LikeController::class)->only(['store', 'destroy']);

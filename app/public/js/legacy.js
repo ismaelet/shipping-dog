@@ -1,6 +1,3 @@
-/*
- * Ajax call
- */
 async function AJAX(parcialEndpoint, parameters = {}, contentType = 'json', debug = true) {
 	let responseData
 

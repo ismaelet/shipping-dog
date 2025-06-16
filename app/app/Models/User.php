@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Seller;
+use App\Models\User\Like;
 use App\Models\User\UserContact;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -110,6 +111,15 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	}
 
 	/**
+	 * Get the user's contact information.
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
+	public function contacts(): HasOne {
+		return $this->hasOne(UserContact::class);
+	}
+
+	/**
 	 * Get the user's orders
 	 */
 	public function orders(): HasMany {
@@ -117,12 +127,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	}
 
 	/**
-	 * Get the user's contact information.
+	 * Get the user's wishlist items
 	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function contacts(): HasOne {
-		return $this->hasOne(UserContact::class);
+	public function wishlist_items(): HasMany {
+		return $this->hasMany(Like::class);
 	}
 
 	/**
