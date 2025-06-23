@@ -11,46 +11,71 @@ use Livewire\Component;
 
 class CreditPanel extends Component {
 
+	/**
+	 * Property: The open order.
+	 * 
+	 * @var Order
+	 */
 	public Order $order;
 
+	/**
+	 * Property: The seller record of the authenticated user.
+	 * 
+	 * @var Seller|null
+	 */
 	public ?Seller $seller = null;
 
+	/**
+	 * Property: Whether the credit panel is visible.
+	 * 
+	 * @var bool
+	 */
 	public bool $visible = false;
 
+	/**
+	 * Property: The total credit used in the order.
+	 * 
+	 * @var float
+	 */
 	public float $usedCredit;
 
+	/**
+	 * Property: The total credit available to the seller.
+	 * 
+	 * @var float
+	 */
 	public float $totalCredit;
 
 	/**
-	 * Initialize the component.
+	 * Lifecycle hook: Mount the component.
 	 * 
 	 * @return void
 	 */
 	public function mount(): void {
 		$this->order = cart();
-		$this->seller = Auth::user()->seller;
-		$this->visible = is_seller() && $this->seller->toBePayed() && !$this->order->coupon;
+		$this->seller = Auth::user()?->seller;
+		$this->visible = is_seller() && $this->seller?->toBePayed() && !$this->order->coupon;
 		$this->usedCredit = $this->order->usedCredit();
-		$this->totalCredit = $this->seller->toBePayed();
+		$this->totalCredit = (float) $this->seller?->toBePayed();
 	}
 
 	/**
-	 * Refresh the credit used when the 'usedCreditUpdated' event is dispatched.
+	 * Lifecycle hook: Render the component view.
+	 * 
+	 * @return \Illuminate\View\View
+	 */
+	public function render(): View {
+		return view('livewire.cart.credit-panel');
+	}
+
+	/**
+	 * Event handler: Update the amount of credit used in the order.
 	 * 
 	 * @return void
 	 */
 	#[On('usedCreditUpdated')]
 	public function usedCreditUpdated(): void {
 		$this->usedCredit = $this->order->usedCredit();
-		$this->totalCredit = $this->seller->toBePayed();
-	}
-
-	/**
-	 * Render the component view.
-	 * 
-	 * @return \Illuminate\View\View
-	 */
-	public function render(): View {
-		return view('livewire.cart.credit-panel');
+		$this->totalCredit = (float) $this->seller->toBePayed();
 	}
 }

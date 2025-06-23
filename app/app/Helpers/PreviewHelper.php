@@ -345,4 +345,19 @@ class PreviewHelper {
 			$files
 		);
 	}
+
+	/**
+	 * Static Method: Delete all images related to a specific product type
+	 */
+	public static function deleteByProductType(ProductType $type): void {
+		$files = glob(public_storage('products/' . $type->tag . '/*'));
+
+		array_map(
+			function ($file) {
+				$file = str_replace(public_storage(), '', $file);
+				FileHelper::delete($file);
+			},
+			$files
+		);
+	}
 }

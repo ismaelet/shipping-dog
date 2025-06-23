@@ -27,7 +27,7 @@ class ShippingCreditButton extends Component {
 
 		$shippingFeed = (bool) $this->order->shipping_method->price($this->order->quantity);
 		$couponUsed = $this->order->coupon;
-		$usableCredit = Auth::user()->seller->usableCredit();
+		$usableCredit = (float) Auth::user()?->seller?->usableCredit();
 		$hasSufficientCredit = $usableCredit >= $shippingFeed;
 
 		$this->elegible = is_seller() && $shippingFeed && $hasSufficientCredit && !$couponUsed;

@@ -45,8 +45,8 @@ class ProductController extends Controller {
 			->with('design', 'design_with_trashed', 'color', 'position', 'type')
 			->get(['products.*', 'product_types.category']);
 
-		$relatedGarments = $sameDesignProducts->where('category', 'c');
-		$relatedAccessories = $sameDesignProducts->where('category', 'm');
+		$relatedGarments = $sameDesignProducts->where('category', 'c')->sortBy('product_types.sort');
+		$relatedAccessories = $sameDesignProducts->where('category', 'm')->sortBy('product_types.sort');
 
 		$relatedProducts = Product::where('user_id', $seller->id)
 			->where(function ($query) use ($product) {

@@ -34,10 +34,10 @@
 				&::before {
 					content: "";
 					position: absolute;
-					z-index: -1;
-					border-radius: inherit;
 					inset: 0;
+					z-index: -1;
 					background-image: linear-gradient(to right, var(--color-primary-400), var(--color-primary-500));
+					border-radius: inherit;
 					transition: inherit;
 				}
 

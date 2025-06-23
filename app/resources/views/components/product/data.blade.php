@@ -520,6 +520,10 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 
 				<!-- Info -->
 				<x-product.info :$product />
+
+				@if ($product->design && in_array($product->type->tag, ['patch', 'hat']))
+					<x-product.accessories :$product />
+				@endif
 			</div>
 		</section>
 	</form>

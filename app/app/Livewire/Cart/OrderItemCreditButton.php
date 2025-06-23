@@ -28,7 +28,7 @@ class OrderItemCreditButton extends Component {
 
 		$price = $this->orderItem->priceBeforeCredit();
 		$couponUsed = $order->coupon;
-		$usableCredit = Auth::user()->seller->usableCredit();
+		$usableCredit = (float) Auth::user()?->seller?->usableCredit();
 		$hasSufficientCredit = $usableCredit >= $price;
 
 		$this->elegible = is_seller() && $price && $hasSufficientCredit && !$couponUsed;

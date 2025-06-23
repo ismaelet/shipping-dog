@@ -4,11 +4,11 @@
 	$url = request()->getRequestUri();
 
 	if (!request()->pwd) {
-	    Log::error('419 expired ' . $url, [
-	        'url' => $url,
-	        'user_agent' => $userAgent,
-	        'ip_address' => request()->ip(),
-	    ]);
+	    // Log::error('419 expired ' . $url, [
+	    //     'url' => $url,
+	    //     'user_agent' => $userAgent,
+	    //     'ip_address' => request()->ip(),
+	    // ]);
 	}
 
 @endphp
