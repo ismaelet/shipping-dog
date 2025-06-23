@@ -11,15 +11,19 @@
 @endpushOnce
 
 @if ($description || $details)
-	<div class="mt-8">
-		@if ($description)
-			<h3 class="desc_stitle">Descrizione</h3>
-			<p class="desc_txt">{!! $description !!}</p>
-		@endif
+	<div class="mt-12 grid grid-cols-1 gap-8">
+		<div class="">
+			@if ($description)
+				<h3 class="desc_stitle">Descrizione</h3>
+				<p class="desc_txt">{!! $description !!}</p>
+			@endif
+		</div>
 
-		@if ($details)
-			<h3 class="desc_stitle">Dettagli prodotto</h3>
-			<p class="desc_txt">{!! $details !!}</p>
-		@endif
+		<div>
+			@if ($details)
+				<h3 class="desc_stitle">Dettagli prodotto</h3>
+				<p class="desc_txt">{!! $details !!}</p>
+			@endif
+		</div>
 	</div>
 @endif

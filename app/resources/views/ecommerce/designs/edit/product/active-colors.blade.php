@@ -50,7 +50,7 @@
 	<div class="flex flex-wrap gap-2">
 		@foreach ($colors as $color)
 			<label
-				class="has-[:checked]:border-primary border-xl aspect-square w-8 shrink-0 cursor-pointer rounded-full transition-colors"
+				class="has-[:checked]:border-primary aspect-square w-8 shrink-0 cursor-pointer rounded-full border-2 transition-colors"
 				style="background-color: {{ $color->primary_color_hex }};"
 				title="{{ $color->name }}"
 			>

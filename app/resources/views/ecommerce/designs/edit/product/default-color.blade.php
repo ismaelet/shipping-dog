@@ -19,7 +19,7 @@
 		@foreach ($colors as $color)
 			<label
 				@class([
-					'color-checkbox has-[:checked]:border-primary border-xl aspect-square w-8 shrink-0 cursor-pointer rounded-full transition-colors',
+					'color-checkbox has-[:checked]:border-primary border-2 aspect-square w-8 shrink-0 cursor-pointer rounded-full transition-colors',
 					'hidden' => !$product->colors()->contains('id', $color->id),
 				])
 				style="background-color: {{ $color->primary_color_hex }};"

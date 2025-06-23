@@ -46,7 +46,7 @@
 		--_color: aqua;
 		position: absolute;
 		aspect-ratio: 1;
-		translate: -50% 0;
+		translate: -50% -50%;
 		outline: 2px dashed var(--_color);
 
 		&:before,
