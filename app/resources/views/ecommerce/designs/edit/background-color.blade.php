@@ -9,6 +9,14 @@
 	</script>
 @endpushOnce
 
+@pushOnce('styles')
+	<style>
+		.color-picker {
+			padding: 0;
+		}
+	</style>
+@endpushOnce
+
 <form
 	id="background-color"
 	action="{{ route('designs.update-background-color', $design) }}"
@@ -39,7 +47,7 @@
 			<x-input
 				type="color"
 				name="color"
-				class="cursor-pointer"
+				class="color-picker cursor-pointer"
 				value="{{ $design->color }}"
 				@input="change_color(event); $el.closest('form').querySelector('[data-button-container]').classList.remove('hidden')"
 			/>
