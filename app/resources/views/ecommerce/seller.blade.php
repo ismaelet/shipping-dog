@@ -148,7 +148,7 @@
 					</p>
 				</div>
 
-				<x-shop.product-list />
+				<x-shop.product-list :$seller />
 			</div>
 		</div>
 

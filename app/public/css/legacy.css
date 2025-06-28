@@ -4801,7 +4801,7 @@ body.fixed {
 	transition: background 0.3s, transform 0.3s;
 }
 
-.gender-cbx:checked ~ .gender-title-box .gender-ico {
+.category-selector:has(:checked) .gender-ico {
 	transform: rotate(0deg);
 }
 
@@ -4823,21 +4823,21 @@ body.fixed {
 }
 
 .type-title:hover,
-.type-cbx:checked + .type-title {
+.type-selector:has(:checked) .type-title {
 	background-color: var(--color-secondary);
 	color: var(--color-neutral-700);
 }
 
-.gender-cbx:checked ~ .gender-title-box .gender-title {
+.category-selector:has(:checked) .gender-title {
 	background-color: var(--color-primary-400);
 	border-color: var(--color-primary-400);
 	color: #fff;
 }
 
-.gender-cbx:checked ~ .gender-ddown {
+.category-selector:has(:checked) .gender-ddown {
 	opacity: 1;
 }
-.gender-cbx:checked ~ .gender-ddown .type-title {
+.category-selector:has(:checked) .type-title {
 	height: 45px;
 }
 

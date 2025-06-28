@@ -1,6 +1,7 @@
+@props(['seller' => null, 'searchGenderTag' => null, 'searchTypeTag' => null])
+
 @php
 
-	use App\Legacy\System\DB;
 	use App\Models\Ecommerce\Product;
 	use App\Models\Ecommerce\Product\ProductGender;
 	use App\Models\Ecommerce\Product\ProductType;
@@ -19,8 +20,6 @@
 	$page = 1;
 	$edit = false;
 	$theme = 'dark';
-	$id = request()->seller ? (int) request()->seller : (int) request()->id;
-	$seller = Seller::find($id);
 
 	if (isset($_GET['search'])) {
 	    $search = $_GET['search'];
@@ -48,7 +47,7 @@
 	if (isset($_GET['sort']) && in_array($_GET['sort'], ['new', 'popular', 'custom'])) {
 	    $sort = $_GET['sort'];
 	} elseif ($seller) {
-	    switch (DB::find('sort FROM stores WHERE user_id = ?', $seller->user_id)) {
+	    switch ($seller->sort) {
 	        case 3:
 	            $sort = 'custom';
 	            break;
@@ -76,7 +75,7 @@
 	    $products->where('products.user_id', $seller->user_id);
 	} else {
 	    // Filter for the general shop
-	    $products->where('stores.status', 1)->where('stores.hidden', 0);
+	    $products->where('stores.status', true)->where('stores.hidden', false);
 	}
 
 	// Order the products
@@ -283,164 +282,30 @@
 				<div class="srch-box">
 					<h3 class="srch-title">Modello</h3>
 
-					<!-- Men clothing -->
-					<div>
-						<input
-							type="checkbox"
-							id="gender-cbx-m"
-							name="gender"
-							class="gender-cbx hidden"
-							value="m"
-							<?php if ($searchGenderTag == 'm') {
-							    echo 'checked';
-							} ?>
-						>
+					{{-- Women's clothing --}}
+					<x-shop.category-selector
+						genderId="2"
+						group="c"
+						:$seller
+						:$searchGenderTag
+						:$searchTypeTag
+					/>
 
-						<label
-							class="gender-title-box"
-							for="gender-cbx-m"
-						>
-							<p class="gender-title">
-								<span class="gender-ico icon"><?= embed_icon('arrow-simple-down') ?></span>
-								<span class="">Uomo</span>
-							</p>
-						</label>
+					{{-- Men's clothing --}}
+					<x-shop.category-selector
+						genderId="1"
+						group="c"
+						:$seller
+						:$searchGenderTag
+						:$searchTypeTag
+					/>
 
-						<div class="gender-ddown">
-							<?php
-									if ($seller) $res = DB::select("
-											id FROM product_types WHERE category='c' AND (gender_id=1 OR gender_id=3) AND hidden = 0 AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$seller->user_id]);
-
-									else $res = DB::select("
-											id FROM product_types WHERE category='c' AND (gender_id=1 OR gender_id=3) AND hidden = 0 AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY id ASC");
-
-									while ($row = $res->fetch_assoc()) {
-
-										$type = new LegacyProductType($row['id']) ?>
-
-							<label>
-								<input
-									type="checkbox"
-									class="type-cbx hidden"
-									name="type"
-									value="<?= $type->slug ?>"
-									<?php if ($searchGenderTag == 'm' && $searchTypeTag == $type->slug) {
-									    echo 'checked';
-									} ?>
-								>
-								<p class="type-title"><?= $type->names ?></p>
-							</label>
-							<?php } ?>
-						</div>
-					</div>
-
-					<!-- Women clothing -->
-					<div>
-						<input
-							type="checkbox"
-							id="gender-cbx-f"
-							name="gender"
-							class="gender-cbx hidden"
-							value="f"
-							<?php if ($searchGenderTag == 'f') {
-							    echo 'checked';
-							} ?>
-						>
-
-						<label
-							class="gender-title-box"
-							for="gender-cbx-f"
-						>
-							<p class="gender-title">
-								<span class="gender-ico icon"><?= embed_icon('arrow-simple-down') ?></span>
-								<span class="">Donna</span>
-							</p>
-						</label>
-
-						<div class="gender-ddown">
-							<?php
-
-									if ($seller) {
-										$res = DB::select("
-											id FROM product_types WHERE category='c' AND (gender_id=2 OR gender_id=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY id ASC", [$seller->user_id]);
-									} else {
-										$res = DB::select("
-											id FROM product_types WHERE category='c' AND (gender_id=2 OR gender_id=3) AND (hidden = 0 OR ID=115) AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY id ASC");
-									}
-
-									while ($row = $res->fetch_assoc()) {
-										$type = new LegacyProductType($row['id']);
-									?>
-
-							<label>
-								<input
-									type="checkbox"
-									class="type-cbx hidden"
-									name="type"
-									value="<?= $type->slug ?>"
-									<?php if ($searchGenderTag == 'f' && $searchTypeTag == $type->slug) {
-									    echo 'checked';
-									} ?>
-								>
-								<p class="type-title"><?= $type->names ?></p>
-							</label>
-							<?php } ?>
-						</div>
-					</div>
-
-					<!-- Accessories -->
-					<div>
-						<input
-							type="checkbox"
-							id="gender-cbx-u"
-							name="gender"
-							class="gender-cbx hidden"
-							value="u"
-							<?php if ($searchGenderTag == 'u') {
-							    echo 'checked';
-							} ?>
-						>
-
-						<label
-							class="gender-title-box"
-							for="gender-cbx-u"
-						>
-							<p class="gender-title">
-								<span class="gender-ico icon"><?= embed_icon('arrow-simple-down') ?></span>
-								<span class="">Accessori</span>
-							</p>
-						</label>
-
-						<div class="gender-ddown">
-							<?php
-
-									if ($seller) {
-										$res = DB::select("
-											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM products WHERE user_id = ? AND status = 1) ORDER BY name ASC", [$seller->user_id]);
-									} else {
-										$res = DB::select("
-											id FROM product_types WHERE (category='m' OR ID=111) AND ID IN (SELECT type_id FROM products WHERE status = 1) ORDER BY name ASC");
-									}
-
-									while ($row = $res->fetch_assoc()) {
-
-										$type = new LegacyProductType($row['id']) ?>
-
-							<label>
-								<input
-									type="checkbox"
-									class="type-cbx hidden"
-									name="type"
-									value="<?= $type->slug ?>"
-									<?php if ($searchTypeTag == $type->slug) {
-									    echo 'checked';
-									} ?>
-								>
-								<p class="type-title"><?= $type->names ?></p>
-							</label>
-							<?php } ?>
-						</div>
-					</div>
+					{{-- Accessories --}}
+					<x-shop.category-selector
+						group="m"
+						:$seller
+						:$searchTypeTag
+					/>
 
 					<button
 						type="submit"
@@ -458,33 +323,6 @@
 						</p>
 					@endif
 				</div>
-
-				<!-- Tags -->
-				<!-- <?php if (!$seller) {
-									$res_tags = DB::select('tag FROM sys_tags WHERE hide=0 ORDER BY count DESC LIMIT 20') ?>
-
-							<div class="srch-box gallery">
-								<h3 class="srch-title pad-t-3 mar-b-05">Tag popolari</h3>
-								<?php while ($row_tags = $res_tags->fetch_assoc()) { ?>
-									<label>
-										<input type="checkbox" name="tag" value="<?= $row_tags['tag'] ?>" class="tag-cbx hidden" <?php if ($row_tags['tag'] == $slug) {
-										    echo 'checked';
-										} ?>>
-										<p class="tag"><?= $row_tags['tag'] ?></p>
-									</label>
-								<?php } ?>
-
-								<button type="submit" id="filter_tag" class="hidden"></button>
-
-								<?php if ($slug) { ?>
-									<p id="remove-filter-tag" class="remove-filter clickable pad-t-1">
-										<span class="txt-blk font-semibold">x</span>
-										rimuovi filtro
-									</p>
-								<?php } ?>
-							</div>
-						<?php } ?> -->
-
 			</div>
 		</div>
 	</section>

@@ -146,6 +146,14 @@ class ProductTypeResource extends Resource {
 											->multiple()
 											->preload()
 											->relationship('sizes', 'name'),
+										Select::make('variant_of')
+											->label('Variante di')
+											->relationship(
+												name: 'main_type',
+												titleAttribute: 'name',
+												ignoreRecord: true
+											)
+											->preload(),
 										Checkbox::make('preorder')
 											->label('Consegna lunga')
 											->columnSpan(2),

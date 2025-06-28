@@ -3,6 +3,7 @@
 namespace App\Models\Ecommerce\Product;
 
 use App\Helpers\PreviewHelper;
+use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\Type\Measure;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -16,8 +17,6 @@ class ProductType extends Model {
 
 	/**
 	 * The attributes that are mass assignable.
-	 *
-	 * @var array
 	 */
 	protected $fillable = [
 		'tag',
@@ -26,6 +25,7 @@ class ProductType extends Model {
 		'names',
 		'gender_id',
 		'sibling_id',
+		'variant_of',
 		'unisex',
 		'sizes',
 		'positions',
@@ -37,102 +37,95 @@ class ProductType extends Model {
 	];
 
 	/**
-	 * * Relationships
-	 */
-
-	/**
-	 * Get the colors associated with the product type.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function colors(): BelongsToMany {
-		return $this->belongsToMany(ProductColor::class);
-	}
-
-	/**
-	 * Get the positions associated with the product type.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function positions(): BelongsToMany {
-		return $this->belongsToMany(ProductPosition::class)->wherePivot('printable', true);
-	}
-
-	/**
-	 * Get the positions associated with the product type.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function all_positions(): BelongsToMany {
-		return $this->belongsToMany(ProductPosition::class)->withPivot('printable');
-	}
-
-	/**
-	 * Get the positions with an unique image associated with the product type.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function unique_positions(): BelongsToMany {
-		return $this->belongsToMany(ProductPosition::class)->where('base_of', false);
-	}
-
-	/**
-	 * Get the positions associated with the product type.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function sizes(): BelongsToMany {
-		return $this->belongsToMany(ProductSize::class);
-	}
-
-	/**
-	 * Get the sibling
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
-	 */
-	public function sibling(): HasOne {
-		return $this->hasOne(self::class, 'id', 'sibling_id');
-	}
-
-	/**
-	 * Get the default price
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
-	 */
-	public function price(): HasOne {
-		return $this->hasOne(ProductTypePrice::class, 'type_id');
-	}
-
-	/**
-	 * Get the type's gender
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * Relationship: Get the type's gender
 	 */
 	public function gender(): BelongsTo {
 		return $this->belongsTo(ProductGender::class);
 	}
 
 	/**
-	 * Get measures
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 * Relationship: Get the type's gender
+	 */
+	public function main_type(): BelongsTo {
+		return $this->belongsTo(self::class, 'variant_of', 'id');
+	}
+
+	/**
+	 * Relationship: Get the colors associated with the product type
+	 */
+	public function colors(): BelongsToMany {
+		return $this->belongsToMany(ProductColor::class);
+	}
+
+	/**
+	 * Relationship: Get the positions associated with the product type
+	 */
+	public function positions(): BelongsToMany {
+		return $this->belongsToMany(ProductPosition::class)->wherePivot('printable', true);
+	}
+
+	/**
+	 * Relationship: Get the positions associated with the product type
+	 */
+	public function all_positions(): BelongsToMany {
+		return $this->belongsToMany(ProductPosition::class)->withPivot('printable');
+	}
+
+	/**
+	 * Relationship: Get the positions with an unique image associated with the product type
+	 */
+	public function unique_positions(): BelongsToMany {
+		return $this->belongsToMany(ProductPosition::class)->where('base_of', false);
+	}
+
+	/**
+	 * Relationship: Get the positions associated with the product type
+	 */
+	public function sizes(): BelongsToMany {
+		return $this->belongsToMany(ProductSize::class);
+	}
+
+	/**
+	 * Relationship: Get the sibling
+	 */
+	public function sibling(): HasOne {
+		return $this->hasOne(self::class, 'id', 'sibling_id');
+	}
+
+	/**
+	 * Relationship: Get the default price
+	 */
+	public function price(): HasOne {
+		return $this->hasOne(ProductTypePrice::class, 'type_id');
+	}
+
+	/**
+	 * Relationship: Get the other product types that are variants of this type
+	 */
+	public function variants(): HasMany {
+		return $this->hasMany(self::class, 'variant_of', 'id');
+	}
+
+	/**
+	 * Relationship: Get measures
 	 */
 	public function measures(): HasMany {
 		return $this->hasMany(Measure::class, 'type_id', 'id')->whereNot('size', 'mat');
 	}
 
 	/**
-	 * Get the type's mockup sizes
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 * Relationship: Get the type's mockup sizes
 	 */
 	public function mockup_sizes(): HasMany {
 		return $this->hasMany(ProductTypeMockupSize::class, 'type_id', 'id');
 	}
 
 	/**
-	 * * Get methods
+	 * Relationship: Get the type's mockup sizes
 	 */
+	public function products(): HasMany {
+		return $this->hasMany(Product::class, 'type_id', 'id');
+	}
 
 	/**
 	 * The list of the type's colors as array
