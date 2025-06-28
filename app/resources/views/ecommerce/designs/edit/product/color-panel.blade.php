@@ -105,7 +105,7 @@
 			>
 
 			<div class="item-colors-field colors-pan grid gap-8">
-				<x-typography.component-heading class="text-center">Seleziona i colori disponibili</x-typography.component-heading>
+				<x-heading.component class="text-center">Seleziona i colori disponibili</x-heading.component>
 
 				<p class="">Qui puoi selezionare i vari colori disponibili per questo capo e il colore principale,
 					che verrà mostrato in tutte le anteprime.</p>

@@ -20,7 +20,7 @@
 			</span>
 		@endif
 
-		<x-typography.component-heading>{{ $title }}</x-typography.component-heading>
+		<x-heading.component>{{ $title }}</x-heading.component>
 	</div>
 
 	{{-- Panel body --}}

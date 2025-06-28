@@ -26,7 +26,7 @@
 		method="POST"
 		class="surface dashboard-panel"
 	>
-		<x-typography.component-heading>Portfolio</x-typography.component-heading>
+		<x-heading.component>Portfolio</x-heading.component>
 
 		<div class="mt-12 grid grid-cols-1 gap-8 text-center">
 
@@ -136,8 +136,8 @@
 						class="grid-flow"
 						data-spacing="700"
 					>
-						<x-typography.component-heading-small class="">Prodotti
-							personalizzati</x-typography.component-heading-small>
+						<x-heading.component-small class="">Prodotti
+							personalizzati</x-heading.component-small>
 
 						<div
 							class="grid-flow js-sortable"

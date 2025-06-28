@@ -3,8 +3,8 @@
 	method="POST"
 	enctype="multipart/form-data"
 >
-	<x-typography.component-heading-small class="dashboard-heading">Immagine
-		profilo</x-typography.component-heading-small>
+	<x-heading.component-small class="dashboard-heading">Immagine
+		profilo</x-heading.component-small>
 
 	@session('success')
 		<x-alerts.success>

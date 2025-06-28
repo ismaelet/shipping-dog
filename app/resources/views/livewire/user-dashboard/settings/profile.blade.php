@@ -3,7 +3,7 @@
 	method="POST"
 	wire:submit="save"
 >
-	<x-typography.component-heading-small class="dashboard-heading">Dati profilo</x-typography.component-heading-small>
+	<x-heading.component-small class="dashboard-heading">Dati profilo</x-heading.component-small>
 
 	<div class="form-fields">
 		@session('success')

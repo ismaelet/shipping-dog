@@ -1,5 +1,5 @@
 <div class="text-center">
-	<x-typography.component-heading class="break-all text-center">{{ $email }}</x-typography.component-heading>
+	<x-heading.component class="break-all text-center">{{ $email }}</x-heading.component>
 
 	@if ($fullName)
 		<p class="">

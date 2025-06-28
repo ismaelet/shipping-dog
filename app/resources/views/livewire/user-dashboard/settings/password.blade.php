@@ -3,8 +3,8 @@
 	method="POST"
 	wire:submit="save"
 >
-	<x-typography.component-heading-small class="dashboard-heading">Modifica la
-		password</x-typography.component-heading-small>
+	<x-heading.component-small class="dashboard-heading">Modifica la
+		password</x-heading.component-small>
 
 	<div class="form-fields">
 		@session('success')

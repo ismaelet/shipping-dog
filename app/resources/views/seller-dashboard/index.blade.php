@@ -8,7 +8,7 @@
 			>
 				@csrf
 
-				<x-typography.component-heading>Nome e descrizione</x-typography.component-heading>
+				<x-heading.component>Nome e descrizione</x-heading.component>
 
 				<div class="grid grid-cols-1 gap-4">
 					<div class="mt-8 grid grid-cols-1 gap-4">
@@ -90,7 +90,7 @@
 				@method('PUT')
 				@csrf
 
-				<x-typography.component-heading>Socials & Contatti</x-typography.component-heading>
+				<x-heading.component>Socials & Contatti</x-heading.component>
 
 				@if (session('success_socials'))
 					<x-alerts.success class="mt-4">{!! session('success_socials') !!}</x-alerts.success>
@@ -219,7 +219,7 @@
 		<div class="form surface dashboard-panel grid grid-cols-1">
 			{{-- Images --}}
 			<div class="">
-				<x-typography.component-heading>Immagini negozio</x-typography.component-heading>
+				<x-heading.component>Immagini negozio</x-heading.component>
 				<form
 					class="file-form grid grid-cols-1 pt-4 text-center"
 					method="POST"

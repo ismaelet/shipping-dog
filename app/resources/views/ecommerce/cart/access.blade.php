@@ -311,7 +311,7 @@
 		>
 			@csrf
 
-			<x-typography.component-heading>Ordina senza registrarti</x-typography.component-heading>
+			<x-heading.component>Ordina senza registrarti</x-heading.component>
 			<p>Clicca qui se vuoi procedere all'acquisto senza registrarti</p>
 			<x-button
 				type="submit"
@@ -328,7 +328,7 @@
 		>
 			@csrf
 
-			<x-typography.component-heading>Hai già un account?</x-typography.component-heading>
+			<x-heading.component>Hai già un account?</x-heading.component>
 
 			<x-inputs.group>
 				<input
@@ -365,7 +365,7 @@
 
 		{{-- Register --}}
 		<div class="register-panel cart-panel surface">
-			<x-typography.component-heading>Registrati</x-typography.component-heading>
+			<x-heading.component>Registrati</x-heading.component>
 
 			<p>Vai qui sotto se vuoi registrarti</p>
 
@@ -378,7 +378,7 @@
 
 		{{-- Continue --}}
 		<div class="shop-panel cart-panel surface">
-			<x-typography.component-heading>Continua con gli acquisti</x-typography.component-heading>
+			<x-heading.component>Continua con gli acquisti</x-heading.component>
 
 			<p>Vuoi aggiungere altri articoli al carrello prima di continuare?</p>
 

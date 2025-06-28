@@ -4680,7 +4680,7 @@ body.fixed {
 	}
 }
 
-#store {
+#product-list {
 	display: grid;
 	grid-template-columns: 16rem auto;
 	grid-template-areas:
@@ -4761,6 +4761,7 @@ body.fixed {
 
 #search-inp {
 	border: none;
+	outline: none;
 	background-color: transparent;
 	color: var(--color-neutral-700);
 	font-size: 0.8rem;
@@ -4881,7 +4882,7 @@ body.fixed {
 	z-index: 2;
 }
 
-#store-empty {
+#product-list-empty {
 	margin: 15vh 0 10vh 0;
 	font-size: 1rem;
 	letter-spacing: 0.05em;
@@ -4917,7 +4918,7 @@ body.fixed {
 }
 
 @media (max-width: 768px) {
-	#store {
+	#product-list {
 		grid-template-columns: minmax(0, 1fr);
 		grid-template-areas:
 			'search-bar'

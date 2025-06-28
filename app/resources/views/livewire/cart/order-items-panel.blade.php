@@ -2,7 +2,7 @@
 	id="items"
 	class="cart-panel surface"
 >
-	<x-typography.component-heading>Articoli</x-typography.component-heading>
+	<x-heading.component>Articoli</x-heading.component>
 
 	<div id="items_panel">
 

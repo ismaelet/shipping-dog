@@ -1,5 +1,5 @@
 <div class="cart-panel surface">
-	<x-typography.component-heading>Riepilogo</x-typography.component-heading>
+	<x-heading.component>Riepilogo</x-heading.component>
 	<div class="grid grid-cols-1 gap-4">
 		<div class="chck_item flex justify-between">
 			<p class="">Articoli</p>

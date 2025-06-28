@@ -24,7 +24,7 @@ $cart = cart();
 
 			<!-- Country -->
 			<section class="cart-panel surface">
-				<x-typography.component-heading>Metodo di spedizione</x-typography.component-heading>
+				<x-heading.component>Metodo di spedizione</x-heading.component>
 
 				<p class="bott_txt">
 					@if ($cart->hasLongDelivery())
@@ -63,7 +63,7 @@ $cart = cart();
 				id="address"
 				class="address-form cart-panel surface <?= $cart->shipping_method->isLocalDelivery() ? 'address-form--local-delivery' : '' ?>"
 			>
-				<x-typography.component-heading>Indirizzo</x-typography.component-heading>
+				<x-heading.component>Indirizzo</x-heading.component>
 
 				<?php if ($error == 'address') { ?>
 				<p class="text-error">* tutti campi sono necessari</p>

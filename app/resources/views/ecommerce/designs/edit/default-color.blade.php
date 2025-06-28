@@ -18,7 +18,7 @@
 	@csrf
 
 	<div class="grid gap-2">
-		<x-typography.component-heading>Colori</x-typography.component-heading>
+		<x-heading.component>Colori</x-heading.component>
 
 		<p>
 			Qui puoi selezionare il colore del capo che sarà mostrato come prima scelta in tutte le anteprime. Non influenza i

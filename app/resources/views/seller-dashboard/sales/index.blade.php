@@ -15,7 +15,7 @@
 	<div class="dashboard-panel surface">
 		<div id="head">
 
-			<x-typography.component-heading>Lista vendite</x-typography.component-heading>
+			<x-heading.component>Lista vendite</x-heading.component>
 
 			<?php
 

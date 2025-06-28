@@ -59,7 +59,7 @@
 			id="shops"
 			class="mar-b-4"
 		>
-			<x-typography.component-heading>Negozi:</x-typography>
+			<x-heading.component>Negozi:</x-typography>
 				<div class="gallery mt-4">
 
 					<?php foreach ($sellers as $seller) { ?>
@@ -94,7 +94,7 @@
 		<?php if ($designCount) { ?>
 
 		<section id="items">
-			<x-typography.component-heading>Prodotti:</x-typography>
+			<x-heading.component>Prodotti:</x-typography>
 				<div class="gallery mt-4">
 
 					<?php foreach ($designs as $design) {

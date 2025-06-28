@@ -12,7 +12,7 @@
 	@csrf
 
 	<div>
-		<x-typography.component-heading>Grafica scura</x-typography.component-heading>
+		<x-heading.component>Grafica scura</x-heading.component>
 
 		<div class="flex gap-2">
 			<p>(opzionale) grafica utilizzata su capi scuri</p>

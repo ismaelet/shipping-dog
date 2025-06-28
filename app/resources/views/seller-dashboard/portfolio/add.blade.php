@@ -71,7 +71,7 @@
 		<!-- Step 2: fill in the data -->
 		<div id="data-form">
 
-			<x-typography.component-heading>Carica una grafica</x-typography.component-heading>
+			<x-heading.component>Carica una grafica</x-heading.component>
 
 			<form
 				action="{{ route('designs.store') }}"

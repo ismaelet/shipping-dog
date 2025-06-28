@@ -23,8 +23,8 @@
 				@csrf
 				@method('DELETE')
 
-				<x-typography.component-heading-small class="dashboard-heading">Elimina
-					l'account</x-typography.component-heading-small>
+				<x-heading.component-small class="dashboard-heading">Elimina
+					l'account</x-heading.component-small>
 
 				<div class="grid grid-cols-1 gap-4">
 					<p>Clicca qui sotto se vuoi cancellare definitivamente il tuo account. <span

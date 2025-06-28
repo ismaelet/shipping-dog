@@ -134,164 +134,157 @@
 	>
 
 		<!-- Official shop -->
+		@if ($hasItems)
 
-		<?php if ($hasItems) { ?>
-
-		<!-- Shop -->
-		<div
-			id="store-pan"
-			class="breakout"
-		>
-			<div class="mar-t-2 py-8">
-				<div class="stitle-box">
-					<p class="stitle font-semibold">Shop <span class="item-num txt-light"><span class="itemN"></span> risultati</span>
-					</p>
-				</div>
-
-				<x-shop.product-list :$seller />
-			</div>
-		</div>
-
-		@if ($collN || $owner)
-			<!-- Collections -->
-			<section
-				id="collections"
-				class="full-width"
+			<!-- Shop -->
+			<div
+				id="store-pan"
+				class="breakout"
 			>
+				<div class="">
+					{{-- Products --}}
+					<livewire:shop.product-list :$seller />
+				</div>
+			</div>
 
-				<div
-					class="sort-pan"
-					data-type="coll"
+			@if ($collN || $owner)
+				<!-- Collections -->
+				<section
+					id="collections"
+					class="full-width"
 				>
-					<h3
-						id="coll-title"
-						class="txt-med mar-b-2"
-					>Collezioni</h3>
 
 					<div
-						id="collections-grid"
-						class="sortable"
+						class="sort-pan breakout"
+						data-type="coll"
 					>
+						<h3
+							id="coll-title"
+							class="txt-med mar-b-2"
+						>Collezioni</h3>
 
-						<?php if ($owner) { ?>
+						<div
+							id="collections-grid"
+							class="sortable"
+						>
 
-						<div class="coll-ele add">
-							<div
-								class="collection clickable lbox-open"
-								data-tar="#coll-add-lbox"
-							>
-								<div class="center-items hei-100">
+							<?php if ($owner) { ?>
 
-									<div class="coll-add-box cen wid-100 text-center">
-										<div class="coll-add-ico text-neutral-700">
-											<?= embed_icon('add') ?>
+							<div class="coll-ele add">
+								<div
+									class="collection clickable lbox-open"
+									data-tar="#coll-add-lbox"
+								>
+									<div class="center-items hei-100">
+
+										<div class="coll-add-box cen wid-100 text-center">
+											<div class="coll-add-ico text-neutral-700">
+												<?= embed_icon('add') ?>
+											</div>
+											<p class="coll-add-txt txt-wht">Aggiungi collezione</p>
 										</div>
-										<p class="coll-add-txt txt-wht">Aggiungi collezione</p>
 									</div>
 								</div>
 							</div>
+
+							<?php } ?>
+
+							<x-shop.collections
+								:$vip
+								:$id
+								:$collBlock
+							/>
+
 						</div>
 
+						<?php if ($collN > $collBlock) { ?>
+						<input
+							type="hidden"
+							id="collN"
+							value="<?= $collN ?>"
+						>
+						<input
+							type="hidden"
+							id="collBlock"
+							value="<?= $collBlock ?>"
+						>
+						<input
+							type="hidden"
+							id="collPos"
+							value="<?= $collBlock ?>"
+						>
 						<?php } ?>
 
-						<x-shop.collections
-							:$vip
-							:$id
-							:$collBlock
-						/>
-
+						<div class="sort-load bgr">
+							<div class="sort-load-icon cen img cont">{!! embed_icon('loading') !!}</div>
+						</div>
 					</div>
 
-					<?php if ($collN > $collBlock) { ?>
-					<input
-						type="hidden"
-						id="collN"
-						value="<?= $collN ?>"
-					>
-					<input
-						type="hidden"
-						id="collBlock"
-						value="<?= $collBlock ?>"
-					>
-					<input
-						type="hidden"
-						id="collPos"
-						value="<?= $collBlock ?>"
-					>
-					<?php } ?>
+				</section>
+			@endif
 
-					<div class="sort-load bgr">
-						<div class="sort-load-icon cen img cont">{!! embed_icon('loading') !!}</div>
-					</div>
-				</div>
-
-			</section>
-		@endif
-
-		@if ($vip)
-			<!-- New collection lbox -->
-			<div
-				id="coll-add-lbox"
-				class="modal lbox"
-			>
-
-				<form
-					class="modal-form"
-					method="POST"
+			@if ($vip)
+				<!-- New collection lbox -->
+				<div
+					id="coll-add-lbox"
+					class="modal lbox"
 				>
-					@csrf
 
-					<div class="modal-form-header">
-						<h3 class="lbox-title">Aggiungi una collezione</h3>
-					</div>
-					<div class="lbox-body">
-						<input
-							type="text"
-							name="name"
-							class="input"
-							placeholder="Nome della collezione"
-							required
-						>
-					</div>
-					<div class="modal-form-footer">
-						<x-button
-							type="submit"
-							name="add_folder"
-							class="w-full"
-						>Aggiungi</x-button>
+					<form
+						class="modal-form"
+						method="POST"
+					>
+						@csrf
+
+						<div class="modal-form-header">
+							<h3 class="lbox-title">Aggiungi una collezione</h3>
+						</div>
+						<div class="lbox-body">
+							<input
+								type="text"
+								name="name"
+								class="input"
+								placeholder="Nome della collezione"
+								required
+							>
+						</div>
+						<div class="modal-form-footer">
+							<x-button
+								type="submit"
+								name="add_folder"
+								class="w-full"
+							>Aggiungi</x-button>
+							<x-button
+								type="button"
+								variant="secondary"
+								class="lbox-close w-full"
+							>Annulla</x-button>
+						</div>
+					</form>
+				</div>
+			@endif
+		@else
+			<!-- If the shop is empty -->
+			<div
+				id="empty"
+				class="pb-40 pt-20 text-center"
+			>
+				<div id="empty-box">
+					<p
+						id="empty-title"
+						class="uppercase"
+					>Ancora nessun lavoro caricato</p>
+
+					<a href="/seller-dashboard/portfolio/add?id={{ $id }}">
 						<x-button
 							type="button"
-							variant="secondary"
-							class="lbox-close w-full"
-						>Annulla</x-button>
-					</div>
-				</form>
+							class="mt-8 w-full"
+						>Carica un lavoro</x-button>
+					</a>
+				</div>
 			</div>
+
 		@endif
-
-		<?php } else { ?>
-
-		<!-- If the shop is empty -->
-		<div
-			id="empty"
-			class="pb-40 pt-20 text-center"
-		>
-			<div id="empty-box">
-				<p
-					id="empty-title"
-					class="uppercase"
-				>Ancora nessun lavoro caricato</p>
-
-				<a href="/seller-dashboard/portfolio/add?id={{ $id }}">
-					<x-button
-						type="button"
-						class="mt-8 w-full"
-					>Carica un lavoro</x-button>
-				</a>
-			</div>
-		</div>
-
-		<?php } ?>
 
 	</div>
 

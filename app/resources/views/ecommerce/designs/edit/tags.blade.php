@@ -7,7 +7,7 @@
 >
 	@csrf
 
-	<x-typography.component-heading>Tags</x-typography.component-heading>
+	<x-heading.component>Tags</x-heading.component>
 
 	@if (session('saved-tags'))
 		<x-alerts.success>Modifiche salvate</x-alerts.success>

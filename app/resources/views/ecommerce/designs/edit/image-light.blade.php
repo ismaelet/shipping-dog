@@ -8,7 +8,7 @@
 	@csrf
 
 	<div>
-		<x-typography.component-heading>Grafica chiara</x-typography.component-heading>
+		<x-heading.component>Grafica chiara</x-heading.component>
 		<p>grafica utilizzata su capi chiari</p>
 	</div>
 

@@ -42,9 +42,9 @@
 				/>
 			</span>
 
-			<x-typography.component-heading>
+			<x-heading.component>
 				<?= $order->statusName() ?>
-			</x-typography.component-heading>
+			</x-heading.component>
 		</div>
 
 		@if (in_array($order->status, [EcommerceHelper::statusFromTag('received')]))
@@ -125,16 +125,16 @@
 						Metodo di pagamento
 					</x-typography.component-subheading>
 
-					<x-typography.component-heading>{{ $order->payment_method?->name }}</x-typography.component-heading>
+					<x-heading.component>{{ $order->payment_method?->name }}</x-heading.component>
 				</article>
 
 				{{-- Shipping --}}
 				<article class="page-panel surface">
 					<x-typography.component-subheading>Metodo di spedizione</x-typography.component-subheading>
 
-					<x-typography.component-heading>
+					<x-heading.component>
 						{!! $order->shipping_method->name !!}
-					</x-typography.component-heading>
+					</x-heading.component>
 
 					<div>
 						<p>
@@ -146,7 +146,7 @@
 
 				{{-- Address --}}
 				<article class="page-panel surface">
-					<x-typography.component-heading>Indirizzo</x-typography.component-heading>
+					<x-heading.component>Indirizzo</x-heading.component>
 
 					<p>
 						<?= implode('<br>', $order->address?->full_address) ?><br>
@@ -168,7 +168,7 @@
 
 			<div class="grid gap-6 sm:gap-8">
 				<article class="page-panel surface">
-					<x-typography.component-heading>Articoli</x-typography.component-heading>
+					<x-heading.component>Articoli</x-heading.component>
 
 					@foreach ($order->order_items as $orderItem)
 						<div class="grid grid-cols-2 items-center gap-4 md:grid-cols-4">
@@ -218,7 +218,7 @@
 				</article>
 
 				<article class="page-panel surface">
-					<x-typography.component-heading>Riepilogo</x-typography.component-heading>
+					<x-heading.component>Riepilogo</x-heading.component>
 
 					<div>
 						<div class="flex justify-between gap-4 py-3">

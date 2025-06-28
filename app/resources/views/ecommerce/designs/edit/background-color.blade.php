@@ -27,7 +27,7 @@
 	@csrf
 
 	<div class="grid gap-2">
-		<x-typography.component-heading>Colore di sfondo</x-typography.component-heading>
+		<x-heading.component>Colore di sfondo</x-heading.component>
 		<p>
 			Questo colore verrà usato come sfondo della tua grafica in alcune sezioni del sito. Scegli un colore che faccia
 			risaltare bene la tua immagine. Non inflenza in alcun modo la stampa o il colore dei capi su cui la grafica sarà

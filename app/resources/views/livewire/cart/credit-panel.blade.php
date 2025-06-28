@@ -1,7 +1,7 @@
 <div class="contents">
 	@if ($visible)
 		<section class="cart-panel surface">
-			<x-typography.component-heading>Credito</x-typography.component-heading>
+			<x-heading.component>Credito</x-heading.component>
 
 			<p>Puoi usare i tuoi guadagni per acquistare prodotti del tuo negozio o pagare le spese di spedizione.<br><br>Questa
 				funzionalità

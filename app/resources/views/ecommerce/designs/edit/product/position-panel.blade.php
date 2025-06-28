@@ -114,8 +114,8 @@
 
 		<div class="grid gap-8 py-10">
 			<div class="grid gap-2">
-				<x-typography.component-heading class="text-center">Stampa in posizione
-					<?= strtolower($position->name) ?></x-typography.component-heading>
+				<x-heading.component class="text-center">Stampa in posizione
+					<?= strtolower($position->name) ?></x-heading.component>
 
 				<p><?= $position->info ?></p>
 

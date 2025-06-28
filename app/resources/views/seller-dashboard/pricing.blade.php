@@ -75,7 +75,7 @@ use App\Legacy\System\DB;
 
 <x-layouts.seller-dashboard>
 	<div class="">
-		<x-typography.component-heading>Modifica prezzi</x-typography.component-heading>
+		<x-heading.component>Modifica prezzi</x-heading.component>
 
 		<form
 			class="form"

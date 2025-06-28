@@ -10,7 +10,7 @@
 @push('styles')
 	<link
 		rel="stylesheet"
-		href="{{ asset('css/legacy.css') }}"
+		href="{{ asset('css/legacy.css') }}?v={{ filemtime(public_path('css/legacy.css')) }}"
 	>
 	<style>
 		.main-content {

@@ -24,7 +24,7 @@
 
 				@foreach ($products as $product)
 					<div class="carousel-box">
-						<x-shop.product-card :$product />
+						<livewire:shop.product-card :$product />
 					</div>
 				@endforeach
 

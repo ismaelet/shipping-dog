@@ -1,7 +1,7 @@
 <div class="contents">
 	@if (!$usedCredit)
 		<article class="cart-panel surface">
-			<x-typography.component-heading>Codice sconto</x-typography.component-heading>
+			<x-heading.component>Codice sconto</x-heading.component>
 
 			<div class="grid grid-cols-1 gap-4">
 

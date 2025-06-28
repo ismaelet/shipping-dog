@@ -87,12 +87,12 @@
 	>
 
 		<div class="stitle-box mt-8">
-			<x-typography.component-heading>
+			<x-heading.component>
 				<span class="txt-light">I nostri</span> <span class="txt-c1 font-semibold">prodotti</span>
-			</x-typography.component-heading>
+			</x-heading.component>
 		</div>
 
-		<x-shop.product-list />
+		<livewire:shop.product-list />
 
 	</div>
 

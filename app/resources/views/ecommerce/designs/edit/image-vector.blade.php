@@ -16,7 +16,7 @@
 	@csrf
 
 	<div>
-		<x-typography.component-heading class="flex gap-2">
+		<x-heading.component class="flex gap-2">
 			Grafica vettoriale
 
 			@if ($hasVector)
@@ -24,7 +24,7 @@
 					<x-icon-correct />
 				</span>
 			@endif
-		</x-typography.component-heading>
+		</x-heading.component>
 
 		<div class="flex gap-2">
 			@if ($hasVector)

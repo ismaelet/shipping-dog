@@ -32,7 +32,7 @@ $cart = cart();
 				@csrf
 
 				<div class="cart-panel surface content-start">
-					<x-typography.component-heading class="title">Pagamento</x-typography.component-heading>
+					<x-heading.component class="title">Pagamento</x-heading.component>
 					@foreach ($paymentMethods as $paymentMethod)
 						<label class="chck_item grid grid-cols-[max-content_1fr] items-center gap-4 sm:grid-cols-[5rem_1fr]">
 							<x-checkbox
