@@ -137,12 +137,12 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 								style="background-color: <?= $color->primary_color_hex ?>"
 							>
 
-								<?php if ($color->secondary_color_hex) { ?>
-								<span
-									class="secondary-color"
-									style="background-color: <?= $color->secondary_color_hex ?>"
-								></span>
-								<?php } ?>
+								@if ($color->secondary_color_hex)
+									<span
+										class="secondary-color"
+										style="background-color: <?= $color->secondary_color_hex ?>"
+									></span>
+								@endif
 
 							</div>
 						</label>
@@ -231,34 +231,37 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 				<?php } ?>
 
 				<!-- Gender -->
-				<?php if ($product->type->gender) {
-					$new = true;
+				@if ($product->type->gender)
+					@php
+						$new = true;
 
-					$genders = [];
-					$genders[] = $product->type->gender;
-					$sibling = $product->type->sibling;
+						$genders = [];
+						$genders[] = $product->type->gender;
+						$sibling = $product->type->sibling;
 
-					if ($sibling) {
-						$genders[] = $sibling->gender;
+					@endphp
 
-				?>
+					@if ($sibling)
+						@php
+							$genders[] = $sibling->gender;
+						@endphp
 
-				<section
-					id="gender"
-					class="field relative"
-				>
+						<section
+							id="gender"
+							class="field relative"
+						>
 
-					<div class="">
-						<x-label class="field-label text-sm">Modello</x-label>
+							<div class="">
+								<x-label class="field-label text-sm">Modello</x-label>
 
-						<?php if ($product->type->unisex) {
-						    info_box("Qui puoi scegliere se vedere l'anteprima del prodotto su un modello maschile o femminile, ma ha scopo puramente illustrativo, in quanto tutte le taglie per questo articolo sono unisex.");
-						} ?>
-					</div>
+								<?php if ($product->type->unisex) {
+								    info_box("Qui puoi scegliere se vedere l'anteprima del prodotto su un modello maschile o femminile, ma ha scopo puramente illustrativo, in quanto tutte le taglie per questo articolo sono unisex.");
+								} ?>
+							</div>
 
-					<div class="grid">
+							<div class="grid">
 
-						<?php foreach ($genders as $key => $gender) {
+								<?php foreach ($genders as $key => $gender) {
 									$relatedProduct = null;
 
 									if ($key && $product->design_id) {
@@ -270,33 +273,39 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 									if (!$key || $relatedProduct) {
 								?>
 
-						<div class="gend_box">
-							<input
-								type="radio"
-								class="cbx"
-								id="cbx-gend_<?= $gender->slug ?>"
-								name="gender_id"
-								value="<?= $gender->id ?>"
-								<?= !$relatedProduct ? 'checked' : '' ?>
-							>
+								<div class="gend_box">
+									<input
+										type="radio"
+										class="cbx"
+										id="cbx-gend_<?= $gender->slug ?>"
+										name="gender_id"
+										value="<?= $gender->id ?>"
+										<?= !$relatedProduct ? 'checked' : '' ?>
+									>
 
-							<a
-								<?= $relatedProduct ? 'href="' . $relatedProduct->url() . '"' : '' ?>
-								class="gend_lbl"
-							>
-								<h1 class="gend_txt"><?= $gender->name ?></h1>
-							</a>
-						</div>
+									<a
+										<?= $relatedProduct ? 'href="' . $relatedProduct->url() . '"' : '' ?>
+										class="gend_lbl"
+									>
+										<h1 class="gend_txt"><?= $gender->name ?></h1>
+									</a>
+								</div>
 
-						<?php }
+								<?php }
 								} ?>
 
-					</div>
+							</div>
 
-				</section>
+						</section>
+					@endif
+				@endif
 
-				<?php }
-				} ?>
+				@if ($product->type->variants->count() || $product->type->main_type)
+					<x-product.variants
+						:product="$product"
+						:productColors="$productColors"
+					/>
+				@endif
 
 				<!-- Position -->
 				<?php
@@ -521,9 +530,9 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 				<!-- Info -->
 				<x-product.info :$product />
 
-				@if ($product->design && in_array($product->type->tag, ['patch', 'hat']))
+				{{-- @if ($product->design && in_array($product->type->tag, ['patch', 'hat']))
 					<x-product.accessories :$product />
-				@endif
+				@endif --}}
 			</div>
 		</section>
 	</form>

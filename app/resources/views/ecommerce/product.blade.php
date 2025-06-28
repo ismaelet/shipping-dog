@@ -31,8 +31,5 @@
 		:$relatedGarments
 		:$relatedAccessories
 	/>
-	<x-product.related-products
-		:$product
-		:$relatedProducts
-	/>
+	<x-product.related-products :$product />
 </x-layouts.legacy-main>

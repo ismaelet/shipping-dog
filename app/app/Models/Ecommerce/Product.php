@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class Product extends Model {
@@ -29,9 +30,7 @@ class Product extends Model {
 	use HasFactory, SoftDeletes;
 
 	/**
-	 * The attributes that are mass assignable.
-	 * 
-	 * @var array<int, string>
+	 * The attributes that are mass assignable
 	 */
 	protected $fillable = [
 		'name',
@@ -45,9 +44,7 @@ class Product extends Model {
 	];
 
 	/**
-	 * Replace the default delete method to also delete the specific price.
-	 * 
-	 * @return bool|null
+	 * Replace the default delete method to also delete the specific price
 	 */
 	public function delete(): ?bool {
 		$this->specific_price()->delete();
@@ -56,9 +53,7 @@ class Product extends Model {
 	}
 
 	/**
-	 * The position ID attribute mutator.
-	 *
-	 * @return Attribute The position ID attribute.
+	 * The position ID attribute mutator
 	 */
 	public function positionId(): Attribute {
 		return Attribute::make(
@@ -68,9 +63,7 @@ class Product extends Model {
 	}
 
 	/**
-	 * Get the product's seller.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * Get the product's seller
 	 */
 	public function seller(): BelongsTo {
 		return $this->belongsTo(Seller::class, 'user_id', 'user_id');
@@ -78,8 +71,6 @@ class Product extends Model {
 
 	/**
 	 * Get the product's design.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function design(): BelongsTo {
 		return $this->belongsTo(Design::class);
@@ -87,8 +78,6 @@ class Product extends Model {
 
 	/**
 	 * Get the product's design including trashed designs.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function design_with_trashed(): BelongsTo {
 		return $this->design()->withTrashed();
@@ -96,8 +85,6 @@ class Product extends Model {
 
 	/**
 	 * Get the product's type.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function type(): BelongsTo {
 		return $this->belongsTo(ProductType::class);
@@ -105,8 +92,6 @@ class Product extends Model {
 
 	/**
 	 * Get the product's price.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function specific_price(): HasOne {
 		return $this->hasOne(ProductPrice::class);
@@ -114,8 +99,6 @@ class Product extends Model {
 
 	/**
 	 * Get the platform price.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function base_price(): HasOne {
 		return $this->hasOne(BasePrice::class, 'type_id', 'type_id');
@@ -137,9 +120,8 @@ class Product extends Model {
 
 
 	/**
-	 * ~ Attributes: Prices 
+	 * Get the product's price
 	 */
-	// Get the product's price
 	public function price(): ProductPrice|SellerPrice|BasePrice {
 		// Check if the product has a specific price
 		if ($this->specific_price) {
@@ -348,16 +330,11 @@ class Product extends Model {
 	 * Check if the product is owned by the logged user
 	 */
 	public function userIsOwner(): bool {
-		return $this->user_id == auth()->id();
+		return $this->user_id == Auth::id();
 	}
 
 	/**
-	 * ~ Attributes: Logos 
-	 */
-	/**
-	 * Get the product's logo group.
-	 *
-	 * @return LogoGroup|null The logo group associated with the product, or null if not available.
+	 * Get the product's logo group
 	 */
 	public function logoGroup(): ?LogoGroup {
 		if ($this->design && in_array($this->type_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])) {
@@ -369,8 +346,6 @@ class Product extends Model {
 
 	/**
 	 * Get the product's logos.
-	 *
-	 * @return \Illuminate\Support\Collection|null
 	 */
 	public function logos(): ?Collection {
 		if ($this->logoGroup()) {
@@ -382,8 +357,6 @@ class Product extends Model {
 
 	/**
 	 * Set the product's logo id.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Attributes\Attribute
 	 */
 	public function logoId(): Attribute {
 		return Attribute::make(
@@ -394,8 +367,6 @@ class Product extends Model {
 
 	/**
 	 * Get the product's logo.
-	 *
-	 * @return \App\Models\Ecommerce\Logo|null
 	 */
 	public function logo(): ?Logo {
 		if ($this->logo_id) {
@@ -407,6 +378,43 @@ class Product extends Model {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Get a collection of related products
+	 */
+	public function relatedProducts(int $quantity = 8): Collection {
+		$relatedProducts = Product::where('user_id', $this->seller->id)
+			->where(function ($query) {
+				$query->where('design_id', '<>', $this->design_id)
+					->orWhere('design_id', false);
+			})
+			->where('type_id', $this->type->shownType()->id)
+			->where('status', true)
+			->with('design', 'design_with_trashed', 'type', 'color', 'position', 'type')
+			->orderBy('sales', 'desc')
+			->orderBy('id', 'desc')
+			->limit($quantity)
+			->get();
+
+		if ($relatedProducts->count() >= $quantity) {
+			return $relatedProducts;
+		}
+
+		return $relatedProducts->merge(
+			Product::where('user_id', $this->seller->id)
+				->whereHas(function ($query) {
+					$query->where('design_id', '<>', $this->design_id)
+						->orWhere('design_id', false);
+				})
+				->where('type_id', '<>', $this->type->shownType()->id)
+				->where('status', true)
+				->with('design', 'design_with_trashed', 'type', 'color', 'position', 'type')
+				->orderBy('sales', 'desc')
+				->orderBy('id', 'desc')
+				->limit($quantity - $relatedProducts->count())
+				->get()
+		);
 	}
 
 	// ! Legacy methods

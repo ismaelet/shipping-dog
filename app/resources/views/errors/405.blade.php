@@ -3,12 +3,12 @@
 	$userAgent = request()->header('User-Agent');
 	$url = request()->getRequestUri();
 
-	Log::error('405 method not allowed ' . $url, [
-	    'method' => request()->method(),
-	    'url' => $url,
-	    'user_agent' => $userAgent,
-	    'ip_address' => request()->ip(),
-	]);
+	// Log::error('405 method not allowed ' . $url, [
+	//     'method' => request()->method(),
+	//     'url' => $url,
+	//     'user_agent' => $userAgent,
+	//     'ip_address' => request()->ip(),
+	// ]);
 
 @endphp
 
