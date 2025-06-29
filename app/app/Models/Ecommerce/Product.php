@@ -403,7 +403,7 @@ class Product extends Model {
 
 		return $relatedProducts->merge(
 			Product::where('user_id', $this->seller->id)
-				->whereHas(function ($query) {
+				->where(function ($query) {
 					$query->where('design_id', '<>', $this->design_id)
 						->orWhere('design_id', false);
 				})

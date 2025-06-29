@@ -35,6 +35,17 @@ class ContactsController extends Controller {
 		$clientEmail = trim($request->email);
 		$mailText = trim($request->text);
 
+		$bannedWords = ['CEO'];
+
+		foreach ($bannedWords as $word) {
+			if (str_contains($mailText, $word)) {
+				return redirect()->back()->withInput()->withErrors([
+					'spam' => '<span class="font-bold">Errore</span>: il messaggio non ha superato i nostri filtri anti-spam. Puoi comunque a scriverci direttamente a
+							<a href="' . config('custom.contacts.email.url') . '" class="font-bold">' . config('custom.contacts.email.label') . '</a>, invece di usare questo formulario.',
+				]);
+			}
+		}
+
 		try {
 			// Send message
 			$content = '<h1 style="text-align: center; padding-bottom: 16px; font-weight: 600;">Richiesta informazioni</h1>

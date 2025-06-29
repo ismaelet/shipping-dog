@@ -9,6 +9,7 @@ use App\Models\Ecommerce\Seller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\View\View;
 
 class SellerController extends Controller {
@@ -72,6 +73,17 @@ class SellerController extends Controller {
 		}
 
 		$contacts = ['website', 'facebook', 'instagram', 'twitter', 'youtube', 'tiktok', 'bluesky'];
+
+		// $products = FacadesDB::table('products')
+		// 	->where(function ($query) {
+		// 		$query->whereNot('design_id', false)
+		// 			->whereNotIn('design_id', function ($query) {
+		// 				$query->select('id')->from('designs')->whereNull('deleted_at');
+		// 			});
+		// 	})
+		// 	->count();
+
+		// dd($products);
 
 		return view('ecommerce.seller', [
 			'title' => $title,

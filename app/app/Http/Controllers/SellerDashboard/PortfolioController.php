@@ -12,17 +12,12 @@ use Illuminate\View\View;
 class PortfolioController extends Controller {
 
 	/**
-	 * Display the seller's portfolio.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
+	 * Action: Index, display the seller's portfolio page
 	 */
 	public function index(Request $request): View {
 		$seller = Auth::user();
 
 		$designs = Design::where('user_id', Auth::id())
-			->where('status', '>', 0)
-			->where('custom', 0)
 			->orderBy('sort')
 			->orderByDesc('id')
 			->get();
@@ -55,9 +50,6 @@ class PortfolioController extends Controller {
 
 	/**
 	 * Display the page to add a new design to the portfolio.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
 	 */
 	public function add(Request $request): View {
 		// setup errors
@@ -120,28 +112,5 @@ class PortfolioController extends Controller {
 			'inputs' => $inputs,
 			'error' => $error,
 		]);
-	}
-
-	public function old() {
-		if (isset($_POST['sort'])) {
-			if (isset($_POST['id'])) {
-				foreach ($_POST['id'] as $i => $design_id) {
-					$pos = $_POST['pos'][$i];
-
-					\Legacy\System\Classes\LegacyDB::update('designs SET sort=? WHERE id = ?', [$pos, $design_id]);
-					\Legacy\System\Classes\LegacyDB::update('products SET sort=? WHERE design_id = ?', [$pos, $design_id]);
-				}
-			}
-
-			if (isset($_POST['product-id'])) {
-				foreach ($_POST['product-id'] as $i => $productId) {
-					$productOrder = $_POST['product-order'][$i];
-
-					\Legacy\System\Classes\LegacyDB::update('products SET sort=? WHERE id = ?', [$productOrder, $productId]);
-				}
-			}
-
-			redirect_old();
-		}
 	}
 }
