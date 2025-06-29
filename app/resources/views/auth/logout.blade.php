@@ -1,4 +1,4 @@
-<x-layouts.form :title="$title">
+<x-layouts.form :$title>
 	<x-slot:body>
 		<p class="text-center">
 			Desideri davvero disconnetterti?

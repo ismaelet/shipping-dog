@@ -41,7 +41,7 @@ class ProductList extends Component {
 	 * Property: The current page number for pagination
 	 */
 	#[Url]
-	public ?int $page = 1;
+	public int|string|null $page = 1;
 
 	/**
 	 * Property: The default page size for pagination
@@ -132,6 +132,8 @@ class ProductList extends Component {
 	 * Setup the product list based on the selected filters and sorting
 	 */
 	public function setup(): void {
+		$this->page = (int) $this->page;
+
 		// Set the selected type
 		$this->selectedType = $this->selectedTypeId ? ProductType::find($this->selectedTypeId) : null;
 
@@ -152,7 +154,10 @@ class ProductList extends Component {
 		$products = Product::join('stores', 'products.user_id', '=', 'stores.user_id')
 			->leftJoin('designs', 'products.design_id', '=', 'designs.id')
 			->where('products.status', 1)
-			->where('products.deleted', 0);
+			->where('products.deleted', 0)
+			->whereHas('type', function ($query) {
+				$query->whereNull('variant_of');
+			});
 
 		if ($this->seller) {
 			// Filter for a specific shop
