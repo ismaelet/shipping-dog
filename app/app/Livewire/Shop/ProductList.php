@@ -35,7 +35,7 @@ class ProductList extends Component {
 	 * Property: The sorting criteria for the products
 	 */
 	#[Url]
-	public string $sort = 'popular';
+	public ?string $sort = null;
 
 	/**
 	 * Property: The current page number for pagination
@@ -161,6 +161,13 @@ class ProductList extends Component {
 			// Filter for the general shop
 			$products->where('stores.status', true)->where('stores.hidden', false);
 		}
+
+		// Set the sort criteria based on the seller's preferences or default
+		if (!$this->sort && $this->seller) {
+			$this->sort = ['new', 'popular', 'custom'][$this->seller->sort - 1] ?? null;
+		}
+
+		$this->sort = !$this->sort ? 'popular' : $this->sort;
 
 		// Order the products
 		switch ($this->sort) {

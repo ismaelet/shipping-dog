@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
-use App\Legacy\Ecommerce\Product;
+use App\Legacy\Ecommerce\Product as LegacyProduct;
 use App\Legacy\System\DB;
+use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Seller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\View\View;
 
 class SellerController extends Controller {
@@ -53,7 +53,7 @@ class SellerController extends Controller {
 
 		// select links
 		$hasItems = DB::exists('products WHERE user_id = ? AND status > 0', [$sellerUserId]);
-		$productCount = DB::count(Product::TABLE . ' WHERE user_id = ? AND status > 0', [$sellerUserId]);
+		$productCount = DB::count(LegacyProduct::TABLE . ' WHERE user_id = ? AND status > 0', [$sellerUserId]);
 		$likeN = DB::count('likes WHERE design_id IN (SELECT id FROM designs WHERE user_id = ?)', [$sellerUserId]);
 		$follN = DB::count('followers WHERE follower_id = ?', [$sellerUserId]);
 
@@ -73,17 +73,6 @@ class SellerController extends Controller {
 		}
 
 		$contacts = ['website', 'facebook', 'instagram', 'twitter', 'youtube', 'tiktok', 'bluesky'];
-
-		// $products = FacadesDB::table('products')
-		// 	->where(function ($query) {
-		// 		$query->whereNot('design_id', false)
-		// 			->whereNotIn('design_id', function ($query) {
-		// 				$query->select('id')->from('designs')->whereNull('deleted_at');
-		// 			});
-		// 	})
-		// 	->count();
-
-		// dd($products);
 
 		return view('ecommerce.seller', [
 			'title' => $title,
