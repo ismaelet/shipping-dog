@@ -11,16 +11,23 @@ use Livewire\Component;
 
 class OrderItemCreditButton extends Component {
 
+	/**
+	 * Property: The order item for which the credit button is displayed
+	 */
 	public OrderItem $orderItem;
 
+	/**
+	 * Property: Whether the credit has been used for the order item
+	 */
 	public bool $usedCredit;
 
+	/**
+	 * Property: Whether the seller is elegible to use credit for the order item
+	 */
 	public bool $elegible;
 
 	/**
-	 * Initialize the component.
-	 * 
-	 * @return void
+	 * Lifecycle hook: Mount the component
 	 */
 	public function mount(): void {
 		$order = cart();
@@ -35,9 +42,14 @@ class OrderItemCreditButton extends Component {
 	}
 
 	/**
-	 * Use the credit for the order item.
-	 * 
-	 * @return void
+	 * Lifecycle hook: Render the component view
+	 */
+	public function render(): View {
+		return view('livewire.cart.order-item-credit-button');
+	}
+
+	/**
+	 * Event handler: Use the credit for the order item
 	 */
 	public function useCredit(): void {
 		$this->orderItem->update([
@@ -53,9 +65,7 @@ class OrderItemCreditButton extends Component {
 
 
 	/**
-	 * Remove the credit used for the order item.
-	 * 
-	 * @return void
+	 * Event handler: Remove the credit used for the order item
 	 */
 	public function removeCredit(): void {
 		$this->orderItem->update([
@@ -70,20 +80,9 @@ class OrderItemCreditButton extends Component {
 	}
 
 	/**
-	 * Refresh the credit used when the 'usedCreditUpdated' event is dispatched.
-	 * 
-	 * @return void
+	 * Event handler: Refresh the credit used when the 'usedCreditUpdated' event is dispatched
 	 */
 	#[On('usedCreditUpdated')]
 	public function usedCreditUpdated(): void {
-	}
-
-	/**
-	 * Render the component view.
-	 * 
-	 * @return \Illuminate\View\View
-	 */
-	public function render(): View {
-		return view('livewire.cart.order-item-credit-button');
 	}
 }

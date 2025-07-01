@@ -275,7 +275,7 @@
 						class="uppercase"
 					>Ancora nessun lavoro caricato</p>
 
-					<a href="/seller-dashboard/portfolio/add?id={{ $id }}">
+					<a href="{{ route('seller-dashboard.portfolio.add') }}">
 						<x-button
 							type="button"
 							class="mt-8 w-full"

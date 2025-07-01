@@ -54,7 +54,7 @@ class CreditPanel extends Component {
 	public function mount(): void {
 		$this->order = cart();
 		$this->seller = Auth::user()?->seller;
-		$this->visible = is_seller() && $this->seller?->toBePayed() && !$this->order->coupon;
+		$this->visible = is_seller() && $this->seller?->toBePayed() > 0 && !$this->order->coupon;
 		$this->usedCredit = $this->order->usedCredit();
 		$this->totalCredit = (float) $this->seller?->toBePayed();
 	}

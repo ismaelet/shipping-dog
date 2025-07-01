@@ -26,50 +26,36 @@ class SellerResource extends Resource {
 
 	/**
 	 * The model the resource corresponds to.
-	 * 
-	 * @var string
 	 */
 	protected static ?string $model = Seller::class;
 
 	/**
 	 * The icon of the resource.
-	 * 
-	 * @var string
 	 */
 	protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
 	/**
 	 * The label of a singular resource.
-	 * 
-	 * @var string
 	 */
 	protected static ?string $label = 'Negozio';
 
 	/**
 	 * The label of a plural resource.
-	 * 
-	 * @var string
 	 */
 	protected static ?string $pluralLabel = 'Negozi';
 
 	/**
 	 * The group in which the resource's navigation item will be displayed.
-	 * 
-	 * @var string
 	 */
 	protected static ?string $navigationGroup = 'Utenti e Negozi';
 
 	/**
 	 * The sort order of the resource's navigation item.
-	 * 
-	 * @var int
 	 */
 	protected static ?int $navigationSort = 2;
 
 	/**
 	 * Get the display value of the resource navigation badge.
-	 * 
-	 * @return string|null
 	 */
 	public static function getNavigationBadge(): ?string {
 		return static::getModel()::isAwaiting()->count();
@@ -77,8 +63,6 @@ class SellerResource extends Resource {
 
 	/**
 	 * Get the display color of the resource navigation badge.
-	 * 
-	 * @return string|null
 	 */
 	public static function getNavigationBadgeColor(): ?string {
 		return static::getNavigationBadge() > 0 ? 'primary' : 'gray';
@@ -86,9 +70,6 @@ class SellerResource extends Resource {
 
 	/**
 	 * The form for creating or updating records.
-	 * 
-	 * @param \Filament\Forms\Form $form
-	 * @return \Filament\Forms\Form
 	 */
 	public static function form(Form $form): Form {
 		return $form
@@ -111,7 +92,6 @@ class SellerResource extends Resource {
 							TextInput::make('paypal')
 								->label('Indirizzo PayPal')
 								->placeholder('Indirizzo PayPal')
-								->readOnly()
 								->default('-')
 								->columnSpanFull(),
 						])
@@ -121,8 +101,6 @@ class SellerResource extends Resource {
 
 	/**
 	 * Get the query for the resource.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public static function getEloquentQuery(): Builder {
 		return self::$model::query()
@@ -132,9 +110,6 @@ class SellerResource extends Resource {
 
 	/**
 	 * The table for listing records.
-	 * 
-	 * @param \Filament\Tables\Table $table
-	 * @return \Filament\Tables\Table
 	 */
 	public static function table(Table $table): Table {
 		return $table
@@ -246,8 +221,6 @@ class SellerResource extends Resource {
 
 	/**
 	 * Get the pages available to the resource.
-	 * 
-	 * @return array
 	 */
 	public static function getPages(): array {
 		return [

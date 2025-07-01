@@ -10,16 +10,23 @@ use Livewire\Component;
 
 class ShippingCreditButton extends Component {
 
+	/**
+	 * Property: The open order
+	 */
 	public Order $order;
 
+	/**
+	 * Property: Whether the seller is elegible to use shipping credit
+	 */
 	public bool $elegible;
 
+	/**
+	 * Property: Whether the shipping credit has been used
+	 */
 	public bool $usedCredit;
 
 	/**
-	 * Initialize the component.
-	 * 
-	 * @return void
+	 * Lifecycle hook: Mount the component
 	 */
 	public function mount(): void {
 		$this->order = cart();
@@ -34,9 +41,14 @@ class ShippingCreditButton extends Component {
 	}
 
 	/**
-	 * Use the shipping credit.
-	 * 
-	 * @return void
+	 * Lifecycle hook: Render the component view
+	 */
+	public function render(): View {
+		return view('livewire.cart.shipping-credit-button');
+	}
+
+	/**
+	 * Use the shipping credit
 	 */
 	public function useCredit(): void {
 		$this->order->update([
@@ -51,9 +63,7 @@ class ShippingCreditButton extends Component {
 	}
 
 	/**
-	 * Remove the shipping credit.
-	 * 
-	 * @return void
+	 * Remove the shipping credit
 	 */
 	public function removeCredit(): void {
 		$this->order->update([
@@ -68,20 +78,9 @@ class ShippingCreditButton extends Component {
 	}
 
 	/**
-	 * Refresh the credit used when the 'usedCreditUpdated' event is dispatched.
-	 * 
-	 * @return void
+	 * Refresh the credit used when the 'usedCreditUpdated' event is dispatched
 	 */
 	#[On('usedCreditUpdated')]
 	public function usedCreditUpdated(): void {
-	}
-
-	/**
-	 * Render the component view.
-	 * 
-	 * @return \Illuminate\View\View
-	 */
-	public function render(): View {
-		return view('livewire.cart.shipping-credit-button');
 	}
 }

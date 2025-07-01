@@ -17,8 +17,8 @@ class Pagination extends Component {
 	/**
 	 * Property: The current page number for pagination
 	 */
-	#[Url, Reactive]
-	public int $page;
+	#[Reactive]
+	public $page;
 
 	/**
 	 * Property: The default page size for pagination

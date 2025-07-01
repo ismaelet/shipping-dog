@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Cart\Payments\FreeController;
 use App\Http\Controllers\Ecommerce\Cart\CartAccessController;
 use App\Http\Controllers\Ecommerce\Cart\CartAddressController;
 use App\Http\Controllers\Ecommerce\Cart\CartPaymentController;
@@ -75,6 +76,11 @@ Route::prefix('cart')->name('cart')->group(function () {
 });
 
 /**
+ * Payment methods
+ */
+Route::get('cart/pay/free', [FreeController::class, 'process'])->name('cart.payment.free');
+
+/**
  * * Order Item
  */
 // Create an order
@@ -84,8 +90,6 @@ Route::resource('order-items', OrderItemController::class)->only(['store']);
 Route::get('/cart/empty', function () {
 	return view('ecommerce.cart.empty');
 })->middleware(EmptyCart::class)->name('cart.empty');
-
-
 
 /**
  * * Order

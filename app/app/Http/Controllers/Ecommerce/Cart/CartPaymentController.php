@@ -13,8 +13,6 @@ class CartPaymentController extends Controller {
 
 	/**
 	 * View the cart payment page
-	 * 
-	 * @return View
 	 */
 	public function index(): View {
 
@@ -58,8 +56,6 @@ class CartPaymentController extends Controller {
 
 	/**
 	 * Update the cart payment method
-	 * 
-	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function update(Request $request): RedirectResponse {
 		$request->validate([
@@ -80,7 +76,9 @@ class CartPaymentController extends Controller {
 				'token' => $token,
 			]);
 
-			return redirect('/pay/promotion?token=' . $token);
+			return redirect()->route('cart.payment.free', [
+				'token' => $token,
+			]);
 		}
 
 		return back()->with([

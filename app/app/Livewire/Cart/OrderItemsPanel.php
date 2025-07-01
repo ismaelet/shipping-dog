@@ -9,21 +9,27 @@ use Livewire\Component;
 
 class OrderItemsPanel extends Component {
 
+	/**
+	 * Property: The open order
+	 */
 	public Order $order;
 
 	/**
-	 * Initialize the component.
-	 * 
-	 * @return void
+	 * Lifecycle hook: Mount the component
 	 */
 	public function mount(?Order $order = null): void {
 		$this->order = $order->id ?: cart();
 	}
 
 	/**
-	 * Refresh the order items when the 'orderItemsUpdated' event is dispatched.
-	 * 
-	 * @return void
+	 * Lifecycle hook: Render the component view
+	 */
+	public function render(): View {
+		return view('livewire.cart.order-items-panel');
+	}
+
+	/**
+	 * Event handler: Refresh the order items when the 'orderItemsUpdated' event is dispatched
 	 */
 	#[On('orderItemsUpdated')]
 	public function refreshOrderItems(): void {
@@ -37,14 +43,5 @@ class OrderItemsPanel extends Component {
 			'order_items.product_with_trashed.design_with_trashed',
 			'order_items.product_with_trashed.type',
 		);
-	}
-
-	/**
-	 * Render the component view.
-	 * 
-	 * @return \Illuminate\View\View
-	 */
-	public function render(): View {
-		return view('livewire.cart.order-items-panel');
 	}
 }
