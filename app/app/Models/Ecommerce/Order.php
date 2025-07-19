@@ -154,54 +154,42 @@ class Order extends Model {
 	}
 
 	/**
-	 * Get the order's code.
-	 *
-	 * @return string
+	 * Get the order's code
 	 */
 	public function idCode(): string {
 		return '#' . str_pad($this->id, 5, '0', STR_PAD_LEFT);
 	}
 
 	/**
-	 * Get the order's created at date as a string.
-	 *
-	 * @return string
+	 * Get the order's created at date as a string
 	 */
 	public function createdAtString(): string {
 		return date('d/m/Y', strtotime($this->created_at));
 	}
 
 	/**
-	 * Get the order's payment URL.
-	 *
-	 * @return string
+	 * Get the order's payment URL
 	 */
 	public function paymentUrl(): string {
 		return route('paypal.orders.create', ['order_id' => $this->id]);
 	}
 
 	/**
-	 * Get the order's recap URL.
-	 *
-	 * @return string
+	 * Get the order's recap URL
 	 */
 	public function recapUrl(): string {
 		return route('orders.show', ['order' => $this->id]);
 	}
 
 	/**
-	 * Get the order's recap URL with the security token.
-	 *
-	 * @return string
+	 * Get the order's recap URL with the security token
 	 */
 	public function recapUrlWithToken(): string {
 		return route('orders.show', ['order' => $this->id, 'token' => $this->token]);
 	}
 
 	/**
-	 * Check if the order has a long delivery time.
-	 *
-	 * @return bool
+	 * Check if the order has a long delivery time
 	 */
 	public function hasLongDelivery(): bool {
 		foreach ($this->order_items as $orderItem) {
@@ -300,9 +288,7 @@ class Order extends Model {
 	}
 
 	/**
-	 * ~ Attribute: Status Label
-	 * 
-	 * A stylized html span element to show the order's status
+	 * Attribute: Status Label
 	 */
 	public function statusLabel(): string {
 		return '<span class="order-label px-4 py-1 gap-2 border rounded whitespace-nowrap flex" style=" border-color: ' . $this->statusColor() . '; color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon(), ['shrink-0', 'w-[1em]']) . ' ' . $this->statusName() . '</span>';
@@ -310,8 +296,6 @@ class Order extends Model {
 
 	/**
 	 * ~ Attribute: Order Items Price
-	 * 
-	 * The sum of the order item's prices
 	 */
 	public function orderItemsPrice(): float {
 		$orderItemsPrice = 0;
@@ -325,8 +309,6 @@ class Order extends Model {
 
 	/**
 	 * Attribute: Full Order Items Price
-	 * 
-	 * The sum of the order item's prices, not including any discount
 	 */
 	public function fullOrderItemsPrice(): float {
 		$price = 0;
@@ -338,6 +320,9 @@ class Order extends Model {
 		return $price;
 	}
 
+	/**
+	 * The used credit for the order
+	 */
 	public function usedCredit(): float {
 		$shippingCredit = $this->credit_ship ? $this->grossShippingFee() : 0;
 		$orderItemsCredit = $this->usedOrderItemsCredit();
@@ -347,8 +332,6 @@ class Order extends Model {
 
 	/**
 	 * Attribute: Get the total credit used for order items.
-	 * 
-	 * @return float
 	 */
 	public function usedOrderItemsCredit(): float {
 		$credit = 0;
@@ -364,8 +347,6 @@ class Order extends Model {
 
 	/**
 	 * Get the order's net shipping fee.
-	 *
-	 * @return float
 	 */
 	public function shippingFee(): float {
 		return $this->credit_ship ? 0 : $this->grossShippingFee();
@@ -373,8 +354,6 @@ class Order extends Model {
 
 	/**
 	 * Get the order's gross shipping fee.
-	 *
-	 * @return float
 	 */
 	public function grossShippingFee(): float {
 		return $this->shipping_method ? $this->shipping_method->price($this->order_items->sum('quantity')) : 0;
@@ -382,8 +361,6 @@ class Order extends Model {
 
 	/**
 	 * Get the order's total discount.
-	 *
-	 * @return float
 	 */
 	public function discount(): float {
 		return $this->orderItemsDiscount() + $this->shippingDiscount();
@@ -391,8 +368,6 @@ class Order extends Model {
 
 	/**
 	 * Get the order's total order_items discount.
-	 *
-	 * @return float
 	 */
 	public function orderItemsDiscount(): float {
 		$orderItemsDiscount = 0;
@@ -406,8 +381,6 @@ class Order extends Model {
 
 	/**
 	 * ~ Attribute: Shipping Discount
-	 *
-	 * The discount on the shipping fee
 	 */
 	public function shippingDiscount(): float {
 		return $this->credit_ship ? $this->grossShippingFee() : 0;
@@ -415,8 +388,6 @@ class Order extends Model {
 
 	/**
 	 * ~ Attribute: Price String
-	 *
-	 * The order's price formatted as a price string
 	 */
 	public function priceString(): string {
 		return EcommerceHelper::formatPrice($this->price);
@@ -424,8 +395,6 @@ class Order extends Model {
 
 	/**
 	 * ~ Attribute: Full Order Items Price String
-	 *
-	 * The sum of the order items price, without any discount, formatted as a price string
 	 */
 	public function fullOrderItemsPriceString(): string {
 		return EcommerceHelper::formatPrice($this->fullOrderItemsPrice());
@@ -433,8 +402,6 @@ class Order extends Model {
 
 	/**
 	 * ~ Attribute: Shipping Fee String
-	 *
-	 * The shipping fee formatted as a price string
 	 */
 	public function shippingFeeString(): string {
 		return EcommerceHelper::formatPrice($this->shippingFee());
@@ -442,8 +409,6 @@ class Order extends Model {
 
 	/**
 	 * Get the order's total discount formatted as a price string.
-	 *
-	 * @return string
 	 */
 	public function discountString(): string {
 		return EcommerceHelper::formatPrice($this->discount());
@@ -451,23 +416,13 @@ class Order extends Model {
 
 	/**
 	 * Get the order's order_items discount formatted as a price string.
-	 *
-	 * @return string
 	 */
 	public function orderItemsDiscountString(): string {
 		return EcommerceHelper::formatPrice($this->orderItemsDiscount());
 	}
 
-
-	/**
-	 * * Actions
-	 */
-
 	/**
 	 * Advance the order to the next step or to a specific step.
-	 *
-	 * @param string|null $advanceToStepTag The tag of the step to advance to (optional)
-	 * @return self The updated order instance
 	 */
 	public function advance(?string $advanceToStepTag = null): self {
 		// If no specific step is given, advance to the next step
@@ -499,8 +454,6 @@ class Order extends Model {
 
 	/**
 	 * Update the order's quantity and price.
-	 *
-	 * @return self
 	 */
 	public function updateOrderItems(): self {
 		$this->updateQuantity();
@@ -511,8 +464,6 @@ class Order extends Model {
 
 	/**
 	 * Update the order's quantity.
-	 *
-	 * @return self
 	 */
 	public function updateQuantity(): self {
 		$this->quantity = $this->order_items->sum('quantity');
@@ -527,8 +478,6 @@ class Order extends Model {
 
 	/**
 	 * Update the order's price.
-	 *
-	 * @return self
 	 */
 	public function updatePrice(): self {
 		$orderItemsPrice = $this->orderItemsPrice();
@@ -544,9 +493,6 @@ class Order extends Model {
 
 	/**
 	 * Try to apply a coupon to the order.
-	 * 
-	 * @param string $couponCode The coupon code to apply
-	 * @return string|false Returns an error message if the coupon is invalid, or true if the coupon was applied successfully.
 	 */
 	public function applyCoupon(string $couponCode): string|false {
 		$coupon = Coupon::firstWhere('code', $couponCode);
@@ -653,8 +599,6 @@ class Order extends Model {
 
 	/**
 	 * Remove the coupon from the order.
-	 * 
-	 * @return void
 	 */
 	public function removeCoupon(): void {
 		// Remove the coupon code from the order
@@ -676,9 +620,6 @@ class Order extends Model {
 
 	/**
 	 * Confirm the order.
-	 *
-	 * @param bool $sendNotification
-	 * @return void
 	 */
 	public function confirm(bool $sendNotification = true, bool $updateDate = true): void {
 		// Forget the order ID
@@ -731,8 +672,6 @@ class Order extends Model {
 
 	/**
 	 * Confirm the order's order_items.
-	 *
-	 * @return void
 	 */
 	public function confirmOrderItems(): void {
 		foreach ($this->order_items as $orderItem) {
@@ -787,14 +726,15 @@ class Order extends Model {
 	}
 
 	/**
-	 * Send the order's status email.
+	 * Action: Send the order's status email
 	 */
-	public function sendStatusEmail(): void {
+	public function sendStatusEmail(bool $forced = false): void {
 		$type = 'order-status-update-' . $this->statusTag();
 		$email = $this->address->email;
 
 		// Check if the email is already sent
-		if (SentEmail::where('email', $email)
+		if (
+			!$forced && SentEmail::where('email', $email)
 			->where('type', $type)
 			->exists()
 		) {
@@ -817,18 +757,12 @@ class Order extends Model {
 
 	/**
 	 * Delete the order.
-	 *
-	 * @return bool
 	 */
 	public function delete(): bool {
 		session()->forget('cart_id');
 
 		return parent::delete();
 	}
-
-	/**
-	 * * Query builders
-	 */
 
 	public static function hasBeenPaid(): Builder {
 		return self::where('status', '>=', EcommerceHelper::statusFromTag('confirmed'));

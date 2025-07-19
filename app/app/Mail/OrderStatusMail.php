@@ -45,6 +45,7 @@ class OrderStatusMail extends Mailable {
 	 */
 	public function content(): Content {
 		$content = $this->generateContent();
+		$showRecap = in_array($this->order->status, [EcommerceHelper::statusFromTag('received'), EcommerceHelper::statusFromTag('confirmed')]);
 
 		if (!$content) {
 			Log::error('OrderStatusMail: Status content not found', ['order' => $this->order, 'status' => $this->order->statusName()]);
@@ -54,8 +55,10 @@ class OrderStatusMail extends Mailable {
 			view: 'emails.order-status',
 			with: [
 				'order' => $this->order,
+				'orderIdCode' => $this->order->idCode(),
 				'title' => $this->subject,
 				'info' => $content,
+				'showRecap' => $showRecap,
 			],
 		);
 	}
@@ -70,8 +73,7 @@ class OrderStatusMail extends Mailable {
 			case EcommerceHelper::statusFromTag('received'):
 				return 'L\'ordine è in fase di elaborazione del pagamento. Se entro un ora non riceverai una mail di conferma, conferma che il pagamento sia andato in porto.<br><br>In caso contrario puoi usare il bottone qui sotto per tornare al riepilogo dell\'ordine ed effettuarlo.<br><br>Se hai già pagato, ma l\'ordine continua a non essere confermato, contatta il nostro servizio clienti a <a href="' . config('custom.contacts.email.url') . '">' . config('custom.contacts.email.label') . '</a>.';
 			case EcommerceHelper::statusFromTag('confirmed'):
-				return 'Abbiamo confermato il pagameto dell\'ordine. I prodotti verranno spediti entro <span
-				class="font-bold text-neutral-700">' . $this->order->shipping_method->minimumWorkingDays($this->order->hasLongDelivery()) . '-' . $this->order->shipping_method->maximumWorkingDays($this->order->hasLongDelivery()) . 'giorni lavorativi</span>.<br><br>Ti ringraziamo per aver scelto di acquistare da noi.';
+				return 'Abbiamo confermato il pagameto dell\'ordine. I prodotti verranno spediti entro <strong>' . $this->order->shipping_method->minimumWorkingDays($this->order->hasLongDelivery()) . '-' . $this->order->shipping_method->maximumWorkingDays($this->order->hasLongDelivery()) . ' giorni lavorativi</strong>.<br><br>Ti ringraziamo per aver scelto di acquistare da noi.';
 			case EcommerceHelper::statusFromTag('shipped'):
 				return 'L\'ordine è stato spedito e verrà consegnato entro <strong>48h larovative</strong>.';
 			case EcommerceHelper::statusFromTag('delivered'):

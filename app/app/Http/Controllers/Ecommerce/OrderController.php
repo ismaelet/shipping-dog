@@ -13,12 +13,6 @@ class OrderController extends Controller {
 
 	/**
 	 * Resource action: Show
-	 * 
-	 * Display the specified resource.
-	 * 
-	 * @param Order $order
-	 * @param Request $request
-	 * @return View
 	 */
 	public function show(Order $order, Request $request): View {
 		$order->load(
@@ -42,12 +36,6 @@ class OrderController extends Controller {
 
 	/**
 	 * Resource action: Update
-	 * 
-	 * Update the specified resource in storage.
-	 * 
-	 * @param Order $order
-	 * @param Request $request
-	 * @return RedirectResponse
 	 */
 	public function update(Order $order, Request $request): RedirectResponse {
 		$request->validate([
@@ -72,10 +60,6 @@ class OrderController extends Controller {
 
 	/**
 	 * Resource action: Destroy
-	 * 
-	 * Remove the specified resource from storage.
-	 * @param Order $order
-	 * @return RedirectResponse
 	 */
 	public function destroy(Order $order): RedirectResponse {
 		$order->load(

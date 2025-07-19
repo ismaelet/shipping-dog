@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
@@ -38,7 +37,7 @@ class ContactMail extends Mailable {
 	 */
 	public function content(): Content {
 		return new Content(
-			view: 'emails.default-email',
+			view: 'emails.contact-email',
 			with: $this->parameters ?? [],
 		);
 	}

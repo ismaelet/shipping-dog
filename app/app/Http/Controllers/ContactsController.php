@@ -12,10 +12,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 class ContactsController extends Controller {
 
 	/**
-	 * Display the contacts page.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
+	 * Resource action: Index
 	 */
 	public function index(Request $request): View {
 		return view('support.contacts', [
@@ -24,6 +21,9 @@ class ContactsController extends Controller {
 		]);
 	}
 
+	/**
+	 * Action: Send contact email
+	 */
 	public function send(Request $request): RedirectResponse {
 		$request->validate([
 			'name' => 'required|string|max:255',

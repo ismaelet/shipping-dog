@@ -1,12 +1,9 @@
-@use ('App\Helpers\EcommerceHelper');
-
-<x-layouts.email :$title>
+<x-layouts.email>
 	<table width="100%">
 
 		<tr>
 			<td>
-				<h1 style="font-size: 32px; font-weight: 600; color: hsl(0, 0%, 13%)">{{ $title }}</h1>
-				<h3 style="padding-bottom: 16px">Ordine n&deg; {{ $order->idCode() }}</h3>
+				<h2 style="font-size: 20px; font-weight: 600; color: hsl(0, 0%, 13%)">{{ $title }}</h2>
 			</td>
 		</tr>
 
@@ -40,7 +37,7 @@
 			</td>
 		</tr>
 
-		@if (in_array($order->status, [EcommerceHelper::statusFromTag('received'), EcommerceHelper::statusFromTag('confirmed')]))
+		@if ($showRecap)
 			<tr>
 				<td style="padding-top: 32px">
 					<h2 style="padding-top: 16px; border-top: 1px solid #ebebeb; line-height: 2">Riepilogo dell'ordine</h2>

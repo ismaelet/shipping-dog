@@ -1,5 +1,3 @@
-@props(['title'])
-
 <!DOCTYPE html>
 <html lang="it">
 
@@ -9,7 +7,7 @@
 		name="viewport"
 		content="width=device-width, initial-scale=1.0"
 	/>
-	<title>{{ $title }}</title>
+	<title></title>
 
 	<style>
 		* {
@@ -91,7 +89,9 @@
 									</tr>
 									<tr>
 										<td style="">
-											{!! $text ?? '' !!}
+											<p>
+												{!! $text ?? ($slot ?? '') !!}
+											</p>
 										</td>
 									</tr>
 								</table>
