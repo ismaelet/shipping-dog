@@ -62,10 +62,12 @@
 @pushOnce('styles')
 	<style>
 		:root {
-			--color-primary-400: oklch(82.8% 0.189 84.429);
-			--color-neutral-400: oklch(70.8% 0 0);
-
-			--border-color: var(--color-neutral-400);
+			--color-primary-400: rgb(var(--primary-400));
+			--color-primary-500: rgb(var(--primary-500));
+			--color-error-400: rgb(var(--danger-400));
+			--color-error-500: rgb(var(--danger-500));
+			--color-neutral-400: rgb(var(--gray-400));
+			--border-color: rgb(var(--gray-600));
 
 			--border-width: 1px;
 		}
@@ -187,12 +189,11 @@
 
 						<x-button
 							type="submit"
-							name="submit"
 							value="clean_log"
-							variant="secondary"
 							size="auto"
+							color="danger"
 						>
-							<?= embed_icon('clean') ?>
+							<x-heroicon-o-trash />
 							Pulisci log
 						</x-button>
 					</form>
@@ -201,7 +202,8 @@
 						class="js-copy-order_items"
 						size="auto"
 					>
-						<?= embed_icon('copy') ?>Copia tutto
+						<x-heroicon-o-clipboard-document-list class="text-white" />
+						Copia tutto
 					</x-button>
 				@endif
 			</div>

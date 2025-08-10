@@ -64,9 +64,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	}
 
 	/**
-	 * Get the username
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
+	 * Attribute: Get the username
 	 */
 	public function name(): Attribute {
 		return Attribute::make(
@@ -75,9 +73,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	}
 
 	/**
-	 * Get whether the user is an admin
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
+	 * Attribute: Get whether the user is an admin
 	 */
 	public function isAdmin(): Attribute {
 		return Attribute::make(
@@ -86,9 +82,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	}
 
 	/**
-	 * Get whether the user is a superadmin
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
+	 * Attribute: Get whether the user is a superadmin
 	 */
 	public function isSuperadmin(): Attribute {
 		return Attribute::make(
@@ -111,9 +105,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 	}
 
 	/**
-	 * Get the user's contact information.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 * Get the user's contact information
 	 */
 	public function contacts(): HasOne {
 		return $this->hasOne(UserContact::class);
@@ -128,8 +120,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 
 	/**
 	 * Get the user's wishlist items
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function wishlist_items(): HasMany {
 		return $this->hasMany(Like::class);
@@ -153,6 +143,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
 		return (bool) $this->seller;
 	}
 
+	/**
+	 * Whether the user can access the Filament admin panel
+	 */
 	public function canAccessPanel(Panel $panel): bool {
 		return $this->is_admin;
 	}

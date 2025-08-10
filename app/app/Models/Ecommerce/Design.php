@@ -28,6 +28,7 @@ class Design extends Model {
 		'user_id',
 		'status',
 		'ratio',
+		'sort',
 		'color',
 		'default_color_id',
 		'logo_group_id'

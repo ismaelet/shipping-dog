@@ -10,7 +10,7 @@ class OrdersLog extends Page {
 
 	protected static string $view = 'filament.admin.pages.orders-log';
 
-	protected static ?string $title = 'Log degli Ordini';
+	protected static ?string $title = 'Log degli ordini';
 
 	protected static ?string $navigationGroup = 'Vendite';
 

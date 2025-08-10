@@ -111,7 +111,7 @@
 												>
 													<img
 														style="max-width: 20px; max-height: 20px; margin: 0px 8px;"
-														src="{{ Vite::image('contacts/' . $contactSlug . '.png') }}""
+														src="{{ Vite::image('contacts/' . $contactSlug . '.png') }}"
 														alt=""
 													>
 												</a>

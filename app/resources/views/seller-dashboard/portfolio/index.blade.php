@@ -26,6 +26,7 @@
 		method="POST"
 		class="surface dashboard-panel"
 	>
+		@csrf
 		<x-heading.component>Portfolio</x-heading.component>
 
 		<div class="mt-12 grid grid-cols-1 gap-8 text-center">
@@ -88,6 +89,7 @@
 							name="sort"
 							class="hidden"
 							variant="secondary"
+							formaction="{{ route('seller-dashboard.portfolio.sort') }}"
 						>Applica</x-button>
 					</div>
 				</div>

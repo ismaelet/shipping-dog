@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SellerDashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Product;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -112,5 +113,20 @@ class PortfolioController extends Controller {
 			'inputs' => $inputs,
 			'error' => $error,
 		]);
+	}
+
+	/**
+	 * Handle the sorting of portfolio items
+	 */
+	public function sort(Request $request): RedirectResponse {
+		$designIds = $request->input('id', []);
+		$positions = $request->input('pos', []);
+
+		// Update the sort order of each design
+		foreach ($designIds as $index => $id) {
+			Design::where('id', $id)->update(['sort' => $positions[$index]]);
+		}
+
+		return redirect()->back();
 	}
 }

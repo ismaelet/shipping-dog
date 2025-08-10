@@ -10,7 +10,7 @@ class ProductsLog extends Page {
 
 	protected static string $view = 'filament.admin.pages.products-log';
 
-	protected static ?string $title = 'Log dei Prodotti';
+	protected static ?string $title = 'Log dei prodotti';
 
 	protected static ?string $navigationGroup = 'Vendite';
 

@@ -35,64 +35,46 @@ use Illuminate\Support\Facades\Mail;
 class OrderResource extends Resource {
 
 	/**
-	 * The model the resource corresponds to.
-	 * 
-	 * @var string
+	 * Property: The model the resource corresponds to
 	 */
 	protected static ?string $model = Order::class;
 
 	/**
-	 * The icon of the resource.
-	 * 
-	 * @var string
+	 * Property: The icon that should be displayed in the navigation item for the resource
 	 */
-	protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
+	protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
 	/**
-	 * The label of a singular resource.
-	 * 
-	 * @var string
+	 * Property: The label of a singular resource
 	 */
 	protected static ?string $label = 'Ordine';
 
 	/**
-	 * The label of a plural resource.
-	 * 
-	 * @var string
+	 * Property: The label of a plural resource
 	 */
 	protected static ?string $pluralLabel = 'Ordini';
 
 	/**
-	 * The group in which the resource's navigation item will be displayed.
-	 * 
-	 * @var string
+	 * Property: The group the resource should be displayed in the navigation
 	 */
 	protected static ?string $navigationGroup = 'Vendite';
 
 	/**
-	 * Determine whether the resource can be created.
-	 * 
-	 * @return bool
+	 * Determine whether the resource can be created
 	 */
 	public static function canCreate(): bool {
 		return false;
 	}
 
 	/**
-	 * Determine whether the resource can be deleted.
-	 * 
-	 * @param \Illuminate\Database\Eloquent\Model $record
-	 * @return bool
+	 * Determine whether the resource can be deleted
 	 */
 	public static function canDelete(Model $record): bool {
 		return false;
 	}
 
 	/**
-	 * The form for creating or updating records.
-	 * 
-	 * @param \Filament\Forms\Form $form
-	 * @return \Filament\Forms\Form
+	 * The form for creating or updating records
 	 */
 	public static function form(Form $form): Form {
 		return $form
@@ -258,10 +240,7 @@ class OrderResource extends Resource {
 	}
 
 	/**
-	 * The table for the resource.
-	 * 
-	 * @param \Filament\Tables\Table $table
-	 * @return \Filament\Tables\Table
+	 * The table for the resource
 	 */
 	public static function table(Table $table): Table {
 		return $table
