@@ -11,24 +11,24 @@ return new class extends Migration {
 	 * Run the migrations.
 	 */
 	public function up(): void {
-		$thresholdDate = "2024-05-31";
 		$sellers = Seller::with('order_items', 'payments')->get();
 
 		$negativeSellers = $sellers->filter(function ($seller) {
 			return $seller->toBePayed() < 0;
 		});
 
-		$negativeSellers->each(function ($seller) use ($thresholdDate) {
+		$negativeSellers->each(function ($seller) {
+			$thresholdDate = $seller->payments->max('created_at');
 			$toReachBalance = ($seller->toBePayed());
 
 			$ordersAfterThreshold = $seller->order_items->filter(function ($orderItem) use ($thresholdDate) {
-				return $orderItem->created_at >= $thresholdDate;
+				return $orderItem->created_at > $thresholdDate;
 			});
 
 			$earningsAfterThreshold = $ordersAfterThreshold->sum('gain');
 			$toReachBalance -= $earningsAfterThreshold;
 
-			$payment = Payment::create([
+			Payment::create([
 				'seller_id' => $seller->id,
 				'value' => $toReachBalance,
 				'description' => 'Per bilanciare ordini eliminati',
