@@ -22,7 +22,11 @@ $cart = cart();
 				dovrai ritirarlo nella nostra sede in Piazza Scopoli, 9, 38033 Cavalese (TN)</p>
 		@endif
 
-		<div class="">
+		<div class="grid grid-cols-1 gap-8">
+
+			@if ($warning)
+				<x-alerts.warning :message="$warning->message" />
+			@endif
 
 			<form
 				id="pay_panel"

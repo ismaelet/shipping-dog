@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Product;
+use App\Models\Warning;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -49,6 +50,8 @@ class ProductController extends Controller {
 
 		$productColors = $product->colors();
 
+		$warning = Warning::currentWarning();
+
 		return view('ecommerce.product', [
 			'product' => $product,
 			'locationTag' => 'shop',
@@ -57,6 +60,7 @@ class ProductController extends Controller {
 			'productColors' => $productColors,
 			'relatedGarments' => $relatedGarments,
 			'relatedAccessories' => $relatedAccessories,
+			'warning' => $warning,
 		]);
 	}
 

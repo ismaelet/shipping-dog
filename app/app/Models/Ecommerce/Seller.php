@@ -27,15 +27,11 @@ class Seller extends Model {
 
 	/**
 	 * The table associated with the model.
-	 * 
-	 * @var string
 	 */
 	protected $table = 'stores';
 
 	/**
 	 * The attributes that are mass assignable.
-	 * 
-	 * @var array
 	 */
 	protected $fillable = [
 		'user_id',
@@ -48,10 +44,6 @@ class Seller extends Model {
 		'status',
 		'request'
 	];
-
-	/**
-	 * * Lifecycle hooks
-	 */
 
 	/**
 	 * Delete the seller's related data
@@ -246,9 +238,6 @@ class Seller extends Model {
 		return EcommerceHelper::formatPrice($this->toBePayed(), true);
 	}
 
-	/**
-	 * * Actions
-	 */
 	public function updateEarned(): self {
 		$this->update([
 			'earned' => $this->order_items->where('status', '>=', EcommerceHelper::statusFromTag('confirmed'))->sum('gain')
@@ -259,8 +248,6 @@ class Seller extends Model {
 
 	/**
 	 * Update the seller's paid amount
-	 * 
-	 * @return Seller
 	 */
 	public function updatePaid(): static {
 		$this->update([

@@ -24,6 +24,7 @@
 	<x-product.data
 		:$product
 		:$productColors
+		:$warning
 	/>
 	<x-product.tags :$product />
 	<x-product.other-types

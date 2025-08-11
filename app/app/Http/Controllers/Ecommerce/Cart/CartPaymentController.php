@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ecommerce\Cart;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\PaymentMethod;
+use App\Models\Warning;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -47,10 +48,13 @@ class CartPaymentController extends Controller {
 			}
 		}
 
+		$warning = Warning::currentWarning();
+
 		return view('ecommerce.cart.payment')
 			->with([
 				'title' => 'Pagamento',
 				'paymentMethods' => $paymentMethods,
+				'warning' => $warning,
 			]);
 	}
 

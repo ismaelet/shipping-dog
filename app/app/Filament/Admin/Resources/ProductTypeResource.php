@@ -49,51 +49,37 @@ class ProductTypeResource extends Resource {
 
 	/**
 	 * The model the resource corresponds to.
-	 * 
-	 * @var string
 	 */
 	protected static ?string $model = ProductType::class;
 
 	/**
 	 * The icon of the resource.
-	 * 
-	 * @var string
 	 */
 	protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
 
 	/**
 	 * The label of a singular resource.
-	 * 
-	 * @var string
 	 */
 	protected static ?string $label = 'Categoria';
 
 	/**
 	 * The label of a plural resource.
-	 * 
-	 * @var string
 	 */
 	protected static ?string $pluralLabel = 'Categorie';
 
 	/**
 	 * The group in which the resource's navigation item will be displayed.
-	 * 
-	 * @var string
 	 */
 	protected static ?string $navigationGroup = 'Struttura';
 
 	/**
 	 * The sort order of the resource's navigation item.
-	 * 
-	 * @var int
 	 */
 	protected static ?int $navigationSort = 0;
 
 
 	/**
 	 * Get the query for the resource.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public static function getEloquentQuery(): Builder {
 		return self::getModel()::query()->with('gender', 'colors', 'positions', 'mockup_sizes', 'mockup_sizes.position');

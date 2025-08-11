@@ -1,4 +1,4 @@
-@props(['product', 'productColors'])
+@props(['product', 'productColors', 'warning'])
 
 <?php
 
@@ -21,11 +21,6 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 		src="{{ asset('js/legacy/product.js') }}"
 	></script>
 @endpushOnce
-
-<!-- <div class="main-wrap mt-4">
-	<p class="error-warning mb-2">A del grande afflusso di ordini e della pressione sui corrieri durante questo periodo, NON garantiamo la consegna per Natale per nessun ordine effettuato dopo l'12 dicembre e ci potrebbero essere ritardi, anche consistenti, rispetto alla data di consegna stimata. Le spedizioni riprenderanno regolarmente a partire dal 26 dicembre. Grazie per la comprensione.
-	</p>
-</div> -->
 
 <div
 	class="breakout pad-t-3 item-type--{{ $product->type->tag }} mb-8"
@@ -505,7 +500,11 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 				</div>
 
 				<!-- Add to cart -->
-				<div class="mar-t-4">
+				<div class="mar-t-4 grid grid-cols-1 gap-4">
+
+					@if ($warning)
+						<x-alerts.warning :message="$warning->message" />
+					@endif
 
 					<x-button
 						type="submit"
@@ -518,7 +517,7 @@ use App\Legacy\Ecommerce\Product\Size as LegacyProductSize;
 
 					<?php if (!$product->isCustom() && $product->blankProduct()) { ?>
 
-					<p class="mt-4">Vuoi acquistare il prodotto senza grafica? <a
+					<p class="">Vuoi acquistare il prodotto senza grafica? <a
 							class="font-bold text-neutral-950"
 							href="<?= $product->blankProduct()->url() ?>"
 						>Clicca qui</a>.</p>

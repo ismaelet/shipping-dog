@@ -16,9 +16,6 @@ class CartController extends Controller {
 
 	/**
 	 * Remove an item from the cart
-	 * 
-	 * @param \App\Legacy\Ecommerce\OrderItem $orderItem
-	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function removeOrderItem(OrderItem $orderItem): RedirectResponse {
 		if ($orderItem) {

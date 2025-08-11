@@ -16,9 +16,6 @@ class UserDashboardController extends Controller {
 
 	/**
 	 * Display the user dashboard
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
 	 */
 	public function index(Request $request): View {
 		$title = 'Attività recenti';
@@ -50,9 +47,6 @@ class UserDashboardController extends Controller {
 
 	/**
 	 * Display the orders tab
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
 	 */
 	public function orders(Request $request): View {
 		$title = 'Ordini';

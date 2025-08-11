@@ -11,10 +11,7 @@ use Illuminate\View\View;
 class SaleController extends Controller {
 
 	/**
-	 * Display a listing of the sales for the seller.
-	 * 
-	 * @param Request $request
-	 * @return View
+	 * Display a listing of the sales for the seller
 	 */
 	public function index(Request $request): View {
 		$seller = $request->seller;
