@@ -5,14 +5,28 @@
 	use App\Models\Ecommerce\OrderItem;
 	use App\Models\Framework\Configuration;
 
-	// Get the date from which to start the log
-	$startFromTime = Configuration::where('name', 'product_log_start_from')->value('value');
-	$validorders = Order::where('created_at', '>=', $startFromTime)->where(
+	$request = request();
+
+	// Get the start from time
+	$startFromTime = null;
+
+	if ($request->start_from) {
+	    $startFromOrderId = explode(' - ', $request->start_from)[0];
+	    $startFromOrder = Order::find($startFromOrderId);
+
+	    $startFromTime = $startFromOrder->created_at;
+	}
+
+	$startFromTime = $startFromTime ?: Configuration::where('name', 'product_log_start_from')->value('value');
+
+	// Fetch the orders
+	$orders = Order::where('created_at', '>=', $startFromTime)->where(
 	    'status',
 	    '>',
 	    EcommerceHelper::statusFromTag('received'),
 	);
-	$startFromCart = $validorders->exists() ? $validorders->oldest()->first() : null;
+
+	$startFromCart = $orders->exists() ? $orders->oldest()->first() : null;
 
 	// Get the orders
 	if ($startFromCart) {
@@ -32,7 +46,17 @@
 	            'addresses.full_name as customerName',
 	            'products.name as productName',
 	            'product_types.name as productTypeName',
-	        )
+	        );
+
+	    if (!$request->show_all) {
+	        $filteredOrderItems = $filteredOrderItems->where(
+	            'orders.status',
+	            '<',
+	            EcommerceHelper::statusFromTag('awaiting-shipping'),
+	        );
+	    }
+
+	    $filteredOrderItems = $filteredOrderItems
 	        ->with(
 	            'type',
 	            'type.sizes',
@@ -52,10 +76,12 @@
 	    $firstCart = $filteredOrderItems->sortBy('confirmedTime')->first();
 	}
 
-	$validordersCount = $validorders->count();
+	$ordersCount = $orders->count();
 	$orderItemsCount = $filteredOrderItems?->count() ?? 0;
 	$firstCart = $firstCart ?? null;
 	$filteredOrderItems = $filteredOrderItems ?? null;
+
+	$showAll = (bool) $request->show_all;
 
 @endphp
 
@@ -64,6 +90,8 @@
 		:root {
 			--color-primary-400: rgb(var(--primary-400));
 			--color-primary-500: rgb(var(--primary-500));
+			--color-secondary-400: rgb(var(--secondary-400));
+			--color-secondary-500: rgb(var(--secondary-500));
 			--color-error-400: rgb(var(--danger-400));
 			--color-error-500: rgb(var(--danger-500));
 			--color-neutral-400: rgb(var(--gray-400));
@@ -80,6 +108,18 @@
 
 		button svg {
 			width: 1em;
+		}
+
+		.h-8 {
+			height: 2rem;
+		}
+
+		.h-10 {
+			height: 2.5rem;
+		}
+
+		.h-12 {
+			height: 3rem;
 		}
 	</style>
 @endpushOnce
@@ -146,68 +186,70 @@
 <x-filament-panels::page>
 	<div class="grid gap-8">
 		{{-- Recap form --}}
-		<x-dashboard.form.panel title="{{ ($validordersCount ? $orderItemsCount : 0) . ' Articoli da fare' }}">
-			<x-label>Parti dall'ordine:</x-label>
+		<x-dashboard.form.panel title="{{ ($ordersCount ? $orderItemsCount : 0) . ' Articoli da fare' }}">
+			<form>
+				@csrf
 
-			<div class="flex w-full items-center gap-4">
-				<form
-					action="{{ route('admin.products-log.update-start-from') }}"
-					method="POST"
-					class="contents"
-				>
-					@csrf
+				<div class="grid w-full grid-cols-1 gap-8">
+					<x-form.group>
+						<x-label>Parti dall'ordine:</x-label>
+						<div class="flex gap-4">
+							<x-input
+								name="start_from"
+								class="grow"
+								value="{{ $orders->first()?->id ? $orders->first()->id . ' - ' . $orders->first()->address->full_name : '' }}"
+								placeholder="Ordine da cui partire"
+								required
+							/>
 
-					<x-inputs.search-input
-						class="grow"
-						search="orders"
-						stored-name="start_order_id"
-						stored-value="{{ $startFromCart ? $startFromCart->id : null }}"
-						shown-value="{{ $startFromCart ? $startFromCart->id . ' - ' . $startFromCart->address->full_name : '' }}"
-						placeholder="Ordine da cui partire"
-						required
-					/>
+							<x-button
+								class=""
+								type="submit"
+								color="secondary"
+							>
+								Carica
+							</x-button>
+						</div>
+					</x-form.group>
 
-					<div class="js-apply-search hidden">
-						<x-button
-							type="submit"
-							variant="secondary"
-							size="auto"
-						>
-							<?= embed_icon('correct') ?>
-							Applica
-						</x-button>
-					</div>
-				</form>
+					@if ($orderItemsCount)
+						<div class="flex h-10 gap-2">
+							<div class="grid h-full">
 
-				@if ($orderItemsCount)
-					<form
-						action="{{ route('admin.products-log.clean') }}"
-						method="POST"
-						class="grid h-full"
-					>
-						@csrf
+								<x-button
+									type="submit"
+									value="clean_log"
+									size="auto"
+									color="danger"
+									formaction="{{ route('admin.products-log.clean') }}"
+								>
+									<x-heroicon-o-trash />
+									Pulisci log
+								</x-button>
+							</div>
 
-						<x-button
-							type="submit"
-							value="clean_log"
-							size="auto"
-							color="danger"
-						>
-							<x-heroicon-o-trash />
-							Pulisci log
-						</x-button>
-					</form>
+							<x-button
+								class="js-copy-order_items"
+								size="auto"
+							>
+								<x-heroicon-o-clipboard-document-list class="text-white" />
+								Copia tutto
+							</x-button>
+						</div>
+					@endif
 
-					<x-button
-						class="js-copy-order_items"
-						size="auto"
-					>
-						<x-heroicon-o-clipboard-document-list class="text-white" />
-						Copia tutto
-					</x-button>
-				@endif
-			</div>
-
+					<x-form.group>
+						<div>
+							<x-checkbox
+								name="show_all"
+								text="Mostra anche gli ordini pronti o spediti"
+								checked="{{ $showAll }}"
+								@change="$event.target.closest('form').submit()"
+							/>
+						</div>
+					</x-form.group>
+				</div>
+			</form>
 		</x-dashboard.form.panel>
 
 		{{-- Logs --}}
@@ -219,7 +261,7 @@
 				class="log gap-8"
 			>
 
-				@if ($validordersCount)
+				@if ($ordersCount)
 					@php
 						$sortedBySellers = $filteredOrderItems->sortBy('seller_id')->unique('seller_id');
 					@endphp
@@ -299,7 +341,7 @@
 				class="log gap-8"
 			>
 
-				@if ($validordersCount)
+				@if ($ordersCount)
 					@php
 						$sortedByTypes = $filteredOrderItems->sortBy('type_id')->unique('type_id');
 					@endphp

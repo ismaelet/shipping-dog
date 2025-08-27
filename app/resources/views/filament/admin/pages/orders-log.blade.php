@@ -6,9 +6,19 @@
 
 	$request = request();
 
-	// fetch date
-	$startFromTime = Configuration::where('name', 'order_log_start_from')->value('value');
+	// Get the start from time
+	$startFromTime = null;
 
+	if ($request->start_from) {
+	    $startFromOrderId = explode(' - ', $request->start_from)[0];
+	    $startFromOrder = Order::find($startFromOrderId);
+
+	    $startFromTime = $startFromOrder->created_at;
+	}
+
+	$startFromTime = $startFromTime ?: Configuration::where('name', 'order_log_start_from')->value('value');
+
+	// Fetch the orders
 	$orders = Order::where('created_at', '>=', $startFromTime)->where(
 	    'status',
 	    '>',
@@ -156,6 +166,8 @@
 		:root {
 			--color-primary-400: rgb(var(--primary-400));
 			--color-primary-500: rgb(var(--primary-500));
+			--color-secondary-400: rgb(var(--secondary-400));
+			--color-secondary-500: rgb(var(--secondary-500));
 			--color-error-400: rgb(var(--danger-400));
 			--color-error-500: rgb(var(--danger-500));
 			--color-neutral-400: rgb(var(--gray-400));
@@ -172,97 +184,89 @@
 
 		{{-- Recap form --}}
 		<x-dashboard.form.panel :title="'Mostrando ' . $orders->count() . ' ordini'">
-			<div class="grid gap-8">
+			<form
+				method="GET"
+				action=""
+			>
+				<div class="grid gap-8">
 
-				@if ($orders->first())
+					@if ($orders->first())
+						<x-form.group>
+							<x-label>Copia a partire da:</x-label>
+							<div class="flex gap-4">
+								<x-inputs.search-input
+									search="orders"
+									stored-name="start_copy_order_id"
+									stored-value="{{ $orders->first()->id }}"
+									shown-value="{{ $orders->first()->id . ' - ' . $orders->first()->address->full_name }}"
+									placeholder="Ordine da cui copiare"
+									:where="$ordersFilter"
+									required
+									class="grow"
+								/>
+
+								<x-button class="js-copy-order_items">
+									<x-heroicon-o-clipboard-document-list class="text-white" />
+									Copia il log
+								</x-button>
+							</div>
+						</x-form.group>
+					@endif
+
 					<x-form.group>
-						<x-label>Copia a partire da:</x-label>
+						<x-label>Parti dall'ordine:</x-label>
 						<div class="flex gap-4">
-							<x-inputs.search-input
-								search="orders"
-								stored-name="start_copy_order_id"
-								stored-value="{{ $orders->first()->id }}"
-								shown-value="{{ $orders->first()->id . ' - ' . $orders->first()->address->full_name }}"
-								placeholder="Ordine da cui copiare"
-								:where="$ordersFilter"
-								required
+							<x-input
+								name="start_from"
 								class="grow"
+								value="{{ $orders->first()?->id ? $orders->first()->id . ' - ' . $orders->first()->address->full_name : '' }}"
+								placeholder="Ordine da cui partire"
+								required
 							/>
 
-							<x-button class="js-copy-order_items">
-								<x-heroicon-o-clipboard-document-list class="text-white" />
-								Copia il log
+							<x-button
+								class=""
+								type="submit"
+								color="secondary"
+							>
+								Carica
 							</x-button>
 						</div>
 					</x-form.group>
-				@endif
 
-				<x-form.group>
-					<x-label>Carica a partire da:</x-label>
+					@if ($orders->count())
+						<x-form.group>
+							<div class="flex gap-4">
 
-					<div class="flex gap-4">
-						<form
-							action="{{ route('admin.orders-log.update-start-from') }}"
-							method="POST"
-							class="contents"
-						>
-							@csrf
+								<div class="contents">
+									@csrf
 
-							<x-inputs.search-input
-								search="orders"
-								stored-name="start_order_id"
-								stored-value="{{ $orders->first()->id ?? '' }}"
-								shown-value="{{ $orders->first() ? $orders->first()->id . ' - ' . $orders->first()->address->full_name : '' }}"
-								placeholder="Ordine da cui partire"
-								required
-								class="grow"
-							/>
-
-							<div class="js-apply-search hidden">
-								<x-button
-									type="submit"
-									variant="secondary"
-								>
-									<?= embed_icon('correct') ?>
-									Applica
-								</x-button>
+									<x-button
+										type="submit"
+										color="danger"
+										variant="secondary"
+										formaction="{{ route('admin.orders-log.clean') }}"
+									>
+										<x-heroicon-o-trash />
+										Pulisci il log
+									</x-button>
+								</div>
 							</div>
-						</form>
+						</x-form.group>
+					@endif
 
-						@if ($orders->count())
-							<form
-								action="{{ route('admin.orders-log.clean') }}"
-								method="POST"
-								class="contents"
-							>
-								@csrf
-
-								<x-button
-									type="submit"
-									color="danger"
-								>
-									<x-heroicon-o-trash />
-									Pulisci il log
-								</x-button>
-							</form>
-						@endif
-					</div>
-				</x-form.group>
-
-				<x-form.group>
-					<form
-						method="GET"
-						action=""
-					>
-						<x-checkbox
-							name="show_all"
-							text="Mostra tutti gli ordini"
-							checked="{{ $showAll }}"
-							@change="$event.target.closest('form').submit()"
-						/>
-					</form>
-				</x-form.group>
-			</div>
+					<x-form.group>
+						<div action="">
+							<x-checkbox
+								name="show_all"
+								text="Mostra anche gli ordini pronti o spediti"
+								checked="{{ $showAll }}"
+								@change="$event.target.closest('form').submit()"
+							/>
+						</div>
+					</x-form.group>
+				</div>
+			</form>
 		</x-dashboard.form.panel>
 
 		{{-- Orders --}}
@@ -357,8 +361,8 @@
 				<x-dashboard.form.panel>
 					<p class="py-8">
 						Nessun ordine registrato dopo le <span
-							class="font-bold text-neutral-700"><?= (new DateTime($startFromTime))->format('H:i:s') ?></span>
-						del <span class="font-bold text-neutral-700"><?= (new DateTime($startFromTime))->format('d/m/Y') ?></span>
+							class="font-bold text-neutral-700">{{ new DateTime($startFromTime)->format('H:i:s') }}</span>
+						del <span class="font-bold text-neutral-700">{{ new DateTime($startFromTime)->format('d/m/Y') }}</span>
 					</p>
 				</x-dashboard.form.panel>
 			@endif

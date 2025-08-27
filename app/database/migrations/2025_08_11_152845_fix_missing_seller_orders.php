@@ -38,6 +38,10 @@ return new class extends Migration {
 
 			$seller->updatePaid();
 		});
+
+		$humanBodyCollectionSeller = Seller::find(187);
+		$humanBodyCollectionSeller->updateEarned();
+		$humanBodyCollectionSeller->updatePaid();
 	}
 
 	/**

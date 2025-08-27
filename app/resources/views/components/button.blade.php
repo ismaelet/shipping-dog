@@ -46,6 +46,17 @@
 					opacity: 0;
 				}
 
+				/* Primary button: Secondary color */
+				&[data-color="secondary"] {
+					background-color: var(--color-secondary-400);
+					box-shadow: 0px 1rem 4rem -1rem color-mix(in hsl, var(--color-secondary-400), transparent 60%);
+
+					&::before {
+						background-image: linear-gradient(to right, var(--color-secondary-400), var(--color-secondary-500));
+					}
+
+				}
+
 				/* Primary button: Danger color */
 				&[data-color="danger"] {
 					background-color: var(--color-error-400);
