@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ecommerce\Cart;
 
+use Legacy\System\Classes\LegacyDB;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Address;
 use App\Models\Ecommerce\ShippingMethod;
@@ -13,11 +14,11 @@ use Illuminate\View\View;
 class CartAddressController extends Controller {
 
 	/**
-	 * View the cart address page
-	 * 
-	 * @return \Illuminate\View\View
-	 */
-	public function index(): View {
+     * View the cart address page
+     *
+     * @return View
+     */
+    public function index(): View {
 
 		$error = $_GET['error'] ?? false;
 		$cart = cart();
@@ -61,11 +62,11 @@ class CartAddressController extends Controller {
 	}
 
 	/**
-	 * Update or create the address
-	 * 
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function update(): RedirectResponse {
+     * Update or create the address
+     *
+     * @return RedirectResponse
+     */
+    public function update(): RedirectResponse {
 		$cart = cart();
 
 		$full_name = str_replace('-', ',', $_POST['full_name']);
@@ -133,7 +134,7 @@ class CartAddressController extends Controller {
 		}
 
 		if (isset($_POST['item_credit'])) {
-			\Legacy\System\Classes\LegacyDB::update('order_items SET credit=1 WHERE id = ?', [$_POST['item_credit']]);
+			LegacyDB::update('order_items SET credit=1 WHERE id = ?', [$_POST['item_credit']]);
 
 			$legacyCart->update();
 
@@ -141,7 +142,7 @@ class CartAddressController extends Controller {
 		}
 
 		if (isset($_POST['item_no_credit'])) {
-			\Legacy\System\Classes\LegacyDB::update('order_items SET credit=0 WHERE id = ?', [$_POST['item_no_credit']]);
+			LegacyDB::update('order_items SET credit=0 WHERE id = ?', [$_POST['item_no_credit']]);
 
 			$legacyCart->update();
 

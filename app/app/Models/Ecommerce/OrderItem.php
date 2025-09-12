@@ -49,103 +49,103 @@ class OrderItem extends Model {
 	];
 
 	/**
-	 * Get the the name of the order, including the design's name and id.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
-	 */
-	protected function fullName(): Attribute {
+     * Get the the name of the order, including the design's name and id.
+     *
+     * @return Attribute
+     */
+    protected function fullName(): Attribute {
 		return Attribute::make(
 			get: fn(): string => $this->quantity . 'x ' . ($this->design_id ? $this->design_id . ' - ' : '') . $this->product_with_trashed?->name . ' (' . $this->description() . ')'
 		);
 	}
 
 	/**
-	 * Get the order that the order item belongs to.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function order(): BelongsTo {
+     * Get the order that the order item belongs to.
+     *
+     * @return BelongsTo
+     */
+    public function order(): BelongsTo {
 		return $this->belongsTo(Order::class);
 	}
 
 	/**
-	 * Get the order's seller.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function seller(): BelongsTo {
+     * Get the order's seller.
+     *
+     * @return BelongsTo
+     */
+    public function seller(): BelongsTo {
 		return $this->belongsTo(Seller::class);
 	}
 
 	/**
-	 * Get the order's design.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function design(): BelongsTo {
+     * Get the order's design.
+     *
+     * @return BelongsTo
+     */
+    public function design(): BelongsTo {
 		return $this->belongsTo(Design::class);
 	}
 
 	/**
-	 * Get the order's product.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function product(): BelongsTo {
+     * Get the order's product.
+     *
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo {
 		return $this->belongsTo(Product::class);
 	}
 
 	/**
-	 * Get the order's product including trashed products.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function product_with_trashed(): BelongsTo {
+     * Get the order's product including trashed products.
+     *
+     * @return BelongsTo
+     */
+    public function product_with_trashed(): BelongsTo {
 		return $this->product()->withTrashed();
 	}
 
 	/**
-	 * Get the order's type.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function type(): BelongsTo {
+     * Get the order's type.
+     *
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo {
 		return $this->belongsTo(ProductType::class, 'type_id');
 	}
 
 	/**
-	 * Get the order's color.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function color(): BelongsTo {
+     * Get the order's color.
+     *
+     * @return BelongsTo
+     */
+    public function color(): BelongsTo {
 		return $this->belongsTo(ProductColor::class);
 	}
 
 	/**
-	 * Get the order's size.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function size(): BelongsTo {
+     * Get the order's size.
+     *
+     * @return BelongsTo
+     */
+    public function size(): BelongsTo {
 		return $this->belongsTo(ProductSize::class);
 	}
 
 	/**
-	 * Get the order's position.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function position(): BelongsTo {
+     * Get the order's position.
+     *
+     * @return BelongsTo
+     */
+    public function position(): BelongsTo {
 		return $this->belongsTo(ProductPosition::class);
 	}
 
 	/**
-	 * Get the order's logo.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function logo(): BelongsTo {
+     * Get the order's logo.
+     *
+     * @return BelongsTo
+     */
+    public function logo(): BelongsTo {
 		return $this->belongsTo(Logo::class);
 	}
 
@@ -361,11 +361,11 @@ class OrderItem extends Model {
 	}
 
 	/**
-	 * Scope a query to only include orders that have been paid.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Builder
-	 */
-	public static function hasBeenPaid(): Builder {
+     * Scope a query to only include orders that have been paid.
+     *
+     * @return Builder
+     */
+    public static function hasBeenPaid(): Builder {
 		return self::where('status', '>=', EcommerceHelper::statusFromTag('confirmed'));
 	}
 }

@@ -6,7 +6,7 @@ use \Legacy\System\Traits\DatabaseObject;
 
 class Color {
 
-	use \Legacy\System\Traits\DatabaseObject;
+	use DatabaseObject;
 
 	public const TABLE = 'product_colors';
 	public const INDEX = 'id';

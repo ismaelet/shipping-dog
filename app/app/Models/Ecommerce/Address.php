@@ -24,15 +24,14 @@ class Address extends Model {
 	];
 
 	/**
-	 * * Accessors
-	 */
-
-	/**
-	 * Get the full address
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Casts\Attribute
-	 */
-	public function fullAddress(): Attribute {
+     * * Accessors
+     */
+    /**
+     * Get the full address
+     *
+     * @return Attribute
+     */
+    public function fullAddress(): Attribute {
 		return Attribute::make(
 			get: function (): ?array {
 				$nameLine = $this->full_name;
@@ -48,15 +47,14 @@ class Address extends Model {
 	}
 
 	/**
-	 * * Relationships
-	 */
-
-	/**
-	 * Get the address' cart
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function cart(): BelongsTo {
+     * * Relationships
+     */
+    /**
+     * Get the address' cart
+     *
+     * @return BelongsTo
+     */
+    public function cart(): BelongsTo {
 		return $this->belongsTo(Order::class, 'order_id', 'id');
 	}
 

@@ -2,6 +2,8 @@
 
 namespace App\Legacy\System;
 
+use Legacy\System\Classes\LegacyView;
+
 class Viewer {
 	const TEMPLATE_OPENING_TAG = '{% extends ';
 	const BLOCK_OPENING_TAG = '{% block ';
@@ -25,9 +27,9 @@ class Viewer {
 		self::$viewsPath = base_path() . '/legacy/pages/views';
 
 		// fetch the view files
-		self::$templateFile = self::getTemplateFile(\Legacy\System\Classes\LegacyView::$template);
+		self::$templateFile = self::getTemplateFile(LegacyView::$template);
 
-		if (file_exists($file = self::$viewsPath . '/' . \Legacy\System\Classes\LegacyView::$name . '.php')) {
+		if (file_exists($file = self::$viewsPath . '/' . LegacyView::$name . '.php')) {
 			self::$viewFile = $file;
 		}
 
@@ -53,7 +55,7 @@ class Viewer {
 		$parentName = false;
 
 		// access variables
-		foreach (\Legacy\System\Classes\LegacyView::$variables as $var => $value) {
+		foreach (LegacyView::$variables as $var => $value) {
 			${$var} = $value;
 		}
 

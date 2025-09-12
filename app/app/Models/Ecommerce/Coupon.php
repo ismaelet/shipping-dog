@@ -28,11 +28,11 @@ class Coupon extends Model {
 	];
 
 	/**
-	 * Get the seller on whose products the coupon can be used.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function seller(): BelongsTo {
+     * Get the seller on whose products the coupon can be used.
+     *
+     * @return BelongsTo
+     */
+    public function seller(): BelongsTo {
 		return $this->belongsTo(Seller::class);
 	}
 

@@ -2,9 +2,11 @@
 
 namespace App\Legacy\System;
 
+use Legacy\System\Traits\DatabaseObject;
+
 class User {
 
-	use \Legacy\System\Traits\DatabaseObject;
+	use DatabaseObject;
 
 	public const TABLE = 'users';
 	public const INDEX = 'id';

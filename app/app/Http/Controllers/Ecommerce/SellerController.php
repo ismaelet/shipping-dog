@@ -15,12 +15,12 @@ use Illuminate\View\View;
 class SellerController extends Controller {
 
 	/**
-	 * Display the seller page.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function index(Request $request): View|RedirectResponse {
+     * Display the seller page.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View|RedirectResponse {
 
 		// get variabiles
 		$id = request()->seller ? (int) request()->seller : (int) request()->id;

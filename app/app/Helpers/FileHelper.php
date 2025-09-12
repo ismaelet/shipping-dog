@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -242,7 +243,7 @@ class FileHelper {
 
 			// Add the classes to the icon and return it
 			return str_replace('<svg', '<svg class="' . $classes . '"', $file);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			if (env('APP_DEBUG')) {
 				dd('Icon not found: ' . $fileName . ')');
 			}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SellerDashboard;
 
+use Illuminate\View\View;
 use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Legacy\Ecommerce\Seller as LegacySeller;
@@ -15,11 +16,11 @@ use Illuminate\Support\Facades\Auth;
 class SellerDashboardController extends Controller {
 
 	/**
-	 * Displays the seller dashboard.
-	 *
-	 * @return \Illuminate\View\View
-	 */
-	public function index(): \Illuminate\View\View {
+     * Displays the seller dashboard.
+     *
+     * @return View
+     */
+    public function index(): View {
 		$user = Auth::user();
 		$seller = $user->seller;
 		$noCover = strpos($seller->cover(), '0.jpg');

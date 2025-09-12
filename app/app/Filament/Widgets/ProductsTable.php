@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use Filament\Tables\Columns\TextColumn;
 use App\Models\Ecommerce\Design;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -26,13 +27,13 @@ class ProductsTable extends TableWidget {
 					->limit(7)
 			)
 			->columns([
-				Tables\Columns\TextColumn::make('recent_sales')
+				TextColumn::make('recent_sales')
 					->numeric()
 					->label('Vendite'),
-				Tables\Columns\TextColumn::make('name')
+				TextColumn::make('name')
 					->label('Prodotto')
 					->wrap(),
-				Tables\Columns\TextColumn::make('seller.name')
+				TextColumn::make('seller.name')
 					->label('Negozio')
 					->wrap(),
 			])

@@ -2,6 +2,8 @@
 
 namespace App\Legacy\System;
 
+use Legacy\System\Classes\LegacyView;
+
 class Scripts {
 
 	private $list = [];
@@ -18,11 +20,11 @@ class Scripts {
 		foreach ($files as $file) $this->add($this->getFileName($file), 'app');
 
 		// add page script
-		$this->add(\Legacy\System\Classes\LegacyView::$name, 'page', 4);
+		$this->add(LegacyView::$name, 'page', 4);
 
 		// add additional page scripts
-		$files = glob(SERVER_ROOT . '/pages/scripts/-expands-' . \Legacy\System\Classes\LegacyView::$name . '/*.js');
-		foreach ($files as $file) $this->add('-expands-' . \Legacy\System\Classes\LegacyView::$name . '/' . $this->getFileName($file), 'page', 5);
+		$files = glob(SERVER_ROOT . '/pages/scripts/-expands-' . LegacyView::$name . '/*.js');
+		foreach ($files as $file) $this->add('-expands-' . LegacyView::$name . '/' . $this->getFileName($file), 'page', 5);
 	}
 
 	// load a script

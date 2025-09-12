@@ -7,11 +7,11 @@ use Filament\Widgets\ChartWidget;
 
 class ProductTypesChart extends ChartWidget {
 
-	protected static ?string $heading = 'Categorie più vendute';
+	protected ?string $heading = 'Categorie più vendute';
 
-	protected static ?string $description = 'Le categorie di prodotto più vendute del mese';
+	protected ?string $description = 'Le categorie di prodotto più vendute del mese';
 
-	protected static ?string $pollingInterval = null;
+	protected ?string $pollingInterval = null;
 
 	protected static bool $isLazy = false;
 

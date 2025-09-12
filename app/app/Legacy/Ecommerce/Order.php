@@ -2,6 +2,7 @@
 
 namespace App\Legacy\Ecommerce;
 
+use Legacy\System\Traits\DatabaseObject;
 use App\Models\Ecommerce\Order as NewOrder;
 use App\Models\Ecommerce\OrderItem;
 use App\Legacy\Ecommerce\OrderItem as LegacyOrderItem;
@@ -9,7 +10,7 @@ use App\Legacy\User as LegacyUser;
 
 class Order {
 
-	use \Legacy\System\Traits\DatabaseObject;
+	use DatabaseObject;
 
 	public const TABLE = 'orders';
 	public const INDEX = 'id';

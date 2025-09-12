@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
+use Dompdf\Options;
+use Dompdf\Dompdf;
 use App\Helpers\ArrayHelper;
 use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
@@ -186,8 +188,8 @@ class PaymentRequestController extends Controller {
 				$template = str_replace($templateKeys, $templateValues, $template);
 
 				// Generate the PDF
-				$options = (new \Dompdf\Options())->set('isRemoteEnabled', true);
-				$dompdf = new \Dompdf\Dompdf($options);
+				$options = (new Options())->set('isRemoteEnabled', true);
+				$dompdf = new Dompdf($options);
 				$dompdf->loadHtml($template);
 				$dompdf->setPaper('A4', 'portrait');
 				$dompdf->render();

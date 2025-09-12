@@ -15,7 +15,7 @@ function order_id(): ?int {
 /**
  * Get the active cart.
  *
- * @return \App\Models\Ecommerce\Order|null The active cart object, or null if no active cart exists.
+ * @return Order|null The active cart object, or null if no active cart exists.
  */
 function cart(): ?Order {
 	return EcommerceHelper::cart();

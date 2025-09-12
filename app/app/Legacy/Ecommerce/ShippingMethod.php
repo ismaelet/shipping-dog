@@ -25,7 +25,7 @@ use \Legacy\System\Traits\DatabaseObject;
  */
 class ShippingMethod {
 
-	use \Legacy\System\Traits\DatabaseObject;
+	use DatabaseObject;
 
 	public const TABLE = 'sys_shipping';
 	public const INDEX = 'id';

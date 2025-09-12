@@ -11,12 +11,12 @@ use Illuminate\View\View;
 class WishlistController extends Controller {
 
 	/**
-	 * Display the wishlist page.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function index(Request $request): View {
+     * Display the wishlist page.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View {
 		$title = 'Wishlist';
 
 		$wishlistItems = Auth::user()->wishlist_items->load('design', 'design.main_product', 'design.seller');

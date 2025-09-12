@@ -54,11 +54,11 @@ class WishlistButton extends Component {
 	}
 
 	/**
-	 * Render the component.
-	 * 
-	 * @return \Illuminate\View\View
-	 */
-	public function render(): View {
+     * Render the component.
+     *
+     * @return View
+     */
+    public function render(): View {
 		return view('livewire.wishlist-button');
 	}
 }

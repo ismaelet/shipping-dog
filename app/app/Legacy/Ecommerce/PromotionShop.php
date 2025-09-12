@@ -13,7 +13,7 @@ use Legacy\Classes\ViewManager\Ecommerce\PromotionShopTemplate;
  */
 class PromotionShop {
 
-	use \Legacy\System\Traits\DynamicProperties;
+	use DynamicProperties;
 
 	private const LIMIT = 40;
 	private const ALLOWED_SORT_TYPES = ['new', 'price'];

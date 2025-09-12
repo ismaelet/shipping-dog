@@ -60,11 +60,11 @@ class CreditPanel extends Component {
 	}
 
 	/**
-	 * Lifecycle hook: Render the component view.
-	 * 
-	 * @return \Illuminate\View\View
-	 */
-	public function render(): View {
+     * Lifecycle hook: Render the component view.
+     *
+     * @return View
+     */
+    public function render(): View {
 		return view('livewire.cart.credit-panel');
 	}
 

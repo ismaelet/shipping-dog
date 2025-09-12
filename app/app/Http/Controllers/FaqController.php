@@ -8,12 +8,12 @@ use Illuminate\View\View;
 class FaqController extends Controller {
 
 	/**
-	 * Display the FAQ page.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function index(Request $request): View {
+     * Display the FAQ page.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View {
 		$title = 'FAQ';
 		$locationTag = 'support';
 

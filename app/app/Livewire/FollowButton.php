@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Illuminate\View\View;
 use App\Models\Ecommerce\Seller;
 use App\Models\Ecommerce\Seller\Follower;
 use Illuminate\Support\Facades\Auth;
@@ -85,11 +86,11 @@ class FollowButton extends Component {
 	}
 
 	/**
-	 * Render the component view.
-	 * 
-	 * @return \Illuminate\View\View
-	 */
-	public function render(): \Illuminate\View\View {
+     * Render the component view.
+     *
+     * @return View
+     */
+    public function render(): View {
 		return view('livewire.follow-button');
 	}
 }

@@ -12,12 +12,12 @@ use Illuminate\View\View;
 class OpenShopController extends Controller {
 
 	/**
-	 * Display the home page.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function index(Request $request): View {
+     * Display the home page.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View {
 		$title = 'Apri un negozio';
 		$locationTag = 'open-shop';
 
@@ -28,12 +28,12 @@ class OpenShopController extends Controller {
 	}
 
 	/**
-	 * Create a new shop.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function add(Request $request): RedirectResponse {
+     * Create a new shop.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function add(Request $request): RedirectResponse {
 		$name = trim($request->name);
 		$desc = trim($request->description);
 

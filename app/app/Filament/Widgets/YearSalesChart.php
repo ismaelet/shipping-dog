@@ -9,11 +9,11 @@ use Flowframe\Trend\TrendValue;
 
 class YearSalesChart extends ChartWidget {
 
-	protected static ?string $heading = 'Panoramica annuale';
+	protected ?string $heading = 'Panoramica annuale';
 
-	protected static ?string $description = 'Panoramica delle vendite dell\'anno corrente e del precedente.';
+	protected ?string $description = 'Panoramica delle vendite dell\'anno corrente e del precedente.';
 
-	protected static ?string $pollingInterval = null;
+	protected ?string $pollingInterval = null;
 
 	protected static bool $isLazy = false;
 

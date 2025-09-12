@@ -98,12 +98,12 @@ class UserDashboardController extends Controller {
 	}
 
 	/**
-	 * Display the settings tab
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function settings(Request $request): View {
+     * Display the settings tab
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function settings(Request $request): View {
 		return view('user-dashboard.settings', [
 			'locationTag' => 'user-dashboard',
 			'title' => 'Impostazioni',

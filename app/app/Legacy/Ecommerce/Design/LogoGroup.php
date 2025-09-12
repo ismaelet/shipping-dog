@@ -7,7 +7,7 @@ use \Legacy\System\Traits\DatabaseObject;
 
 class LogoGroup {
 
-	use \Legacy\System\Traits\DatabaseObject;
+	use DatabaseObject;
 
 	public const TABLE = 'extras_folder';
 	public const INDEX = 'id';

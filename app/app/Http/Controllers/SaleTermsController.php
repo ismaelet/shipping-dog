@@ -8,12 +8,12 @@ use Illuminate\View\View;
 class SaleTermsController extends Controller {
 
 	/**
-	 * Display the sale terms page.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function index(Request $request): View {
+     * Display the sale terms page.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View {
 		$title = 'Condizioni di vendita';
 		$locationTag = 'support';
 

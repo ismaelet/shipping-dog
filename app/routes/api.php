@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\DesignController;
-use App\Http\Controllers\Api\FollowerController;
-use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\LogoController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductMockupController;
@@ -46,8 +43,3 @@ Route::resource('products/mockups', ProductMockupController::class)->only(['stor
  * * Logos
  */
 Route::resource('/logos', LogoController::class)->only(['show']);
-
-/**
- * * Orders
- */
-Route::resource('/orders', OrderController::class)->only(['index', 'show', 'update']);

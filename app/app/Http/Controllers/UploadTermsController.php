@@ -8,12 +8,12 @@ use Illuminate\View\View;
 class UploadTermsController extends Controller {
 
 	/**
-	 * Display the upload terms page.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function index(Request $request): View {
+     * Display the upload terms page.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View {
 		$title = 'Condizioni di invio';
 		$locationTag = 'support';
 

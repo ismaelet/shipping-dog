@@ -31,11 +31,11 @@ class ProductColor extends Model {
 	];
 
 	/**
-	 * Get the colors associated with the product type.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function types(): BelongsToMany {
+     * Get the colors associated with the product type.
+     *
+     * @return BelongsToMany
+     */
+    public function types(): BelongsToMany {
 		return $this->belongsToMany(ProductType::class);
 	}
 }

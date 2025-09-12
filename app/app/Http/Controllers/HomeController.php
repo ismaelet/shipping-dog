@@ -12,12 +12,12 @@ use Illuminate\View\View;
 class HomeController extends Controller {
 
 	/**
-	 * Display the home page.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function index(Request $request): View {
+     * Display the home page.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View {
 
 		$productN = 20;
 		$popularDesignCount = 20;

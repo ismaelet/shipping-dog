@@ -18,12 +18,12 @@ class RefundController extends Controller {
 	];
 
 	/**
-	 * Step 1: Display the refund search page.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function indexSearch(Request $request): View {
+     * Step 1: Display the refund search page.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function indexSearch(Request $request): View {
 		return view(env('APP_ENV') == 'local' ? 'support.refund.search' : 'under-construction', [
 			'title' => 'Cambio/Reso',
 			'locationTag' => 'support',
@@ -31,12 +31,12 @@ class RefundController extends Controller {
 	}
 
 	/**
-	 * Step 1: Search for an order by ID and email.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\RedirectResponse 
-	 */
-	public function search(Request $request): RedirectResponse {
+     * Step 1: Search for an order by ID and email.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function search(Request $request): RedirectResponse {
 		// Validate the request input
 		$request->validate([
 			'order_id' => 'required|string',

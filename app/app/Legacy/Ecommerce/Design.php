@@ -16,7 +16,7 @@ use \Legacy\System\Traits\DatabaseObject;
  */
 class Design {
 
-	use \Legacy\System\Traits\DatabaseObject;
+	use DatabaseObject;
 
 	public const TABLE = 'designs';
 	public const INDEX = 'id';

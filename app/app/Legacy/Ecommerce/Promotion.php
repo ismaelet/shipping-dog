@@ -9,7 +9,7 @@ use \Legacy\System\Traits\DatabaseObject;
  */
 class Promotion {
 
-	use \Legacy\System\Traits\DatabaseObject;
+	use DatabaseObject;
 
 	public const TABLE = 'inventory';
 	public const INDEX = 'id';

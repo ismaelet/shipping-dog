@@ -2,6 +2,10 @@
 
 namespace App\Legacy\System;
 
+use Legacy\System\Classes\Logic;
+use Legacy\System\Classes\StyleLoader;
+use Legacy\System\Classes\ScriptLoader;
+
 class LegacyView {
 	public static $name = null;
 	public static $title = null;
@@ -123,13 +127,13 @@ class LegacyView {
 		foreach (self::$middlewares as $middleware) MiddlewareLoader::run($middleware);
 
 		// load the logic
-		\Legacy\System\Classes\Logic::add(self::$template, 'template');
-		\Legacy\System\Classes\Logic::add(self::$name, 'page');
-		\Legacy\System\Classes\Logic::load();
+		Logic::add(self::$template, 'template');
+		Logic::add(self::$name, 'page');
+		Logic::load();
 
 		// load page resources
-		\Legacy\System\Classes\StyleLoader::addPageStyles(\Legacy\System\Classes\LegacyView::$name);
-		\Legacy\System\Classes\ScriptLoader::addPageScripts(\Legacy\System\Classes\LegacyView::$name);
+		StyleLoader::addPageStyles(\Legacy\System\Classes\LegacyView::$name);
+		ScriptLoader::addPageScripts(\Legacy\System\Classes\LegacyView::$name);
 
 		// render page
 		Viewer::render();

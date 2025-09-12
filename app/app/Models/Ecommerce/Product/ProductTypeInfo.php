@@ -19,11 +19,11 @@ class ProductTypeInfo extends Model {
 	];
 
 	/**
-	 * The product type this info belongs to
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function type(): BelongsTo {
+     * The product type this info belongs to
+     *
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo {
 		return $this->belongsTo(ProductType::class, 'product_type_id', 'id');
 	}
 

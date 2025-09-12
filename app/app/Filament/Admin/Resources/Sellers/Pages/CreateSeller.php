@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Filament\Admin\Resources\Sellers\Pages;
+
+use App\Filament\Admin\Resources\Sellers\SellerResource;
+use Filament\Actions;
+use Filament\Resources\Pages\CreateRecord;
+
+class CreateSeller extends CreateRecord {
+	protected static string $resource = SellerResource::class;
+}

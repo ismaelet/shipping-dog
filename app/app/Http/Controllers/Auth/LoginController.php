@@ -24,12 +24,12 @@ class LoginController extends Controller {
 	}
 
 	/**
-	 * Custom action: Authenticate the user
-	 *
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function auth(Request $request): RedirectResponse {
+     * Custom action: Authenticate the user
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function auth(Request $request): RedirectResponse {
 		// Validate the request 
 		$credentials = $request->validate([
 			'login' => 'required|string',

@@ -48,11 +48,11 @@ class RecapPanel extends Component {
 	}
 
 	/**
-	 * Render the component view.
-	 * 
-	 * @return \Illuminate\View\View
-	 */
-	public function render(): View {
+     * Render the component view.
+     *
+     * @return View
+     */
+    public function render(): View {
 		return view('livewire.cart.recap-panel');
 	}
 }

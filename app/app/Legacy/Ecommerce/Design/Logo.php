@@ -6,7 +6,7 @@ use \Legacy\System\Traits\DatabaseObject;
 
 class Logo {
 
-	use \Legacy\System\Traits\DatabaseObject;
+	use DatabaseObject;
 
 	public const TABLE = 'extras';
 	public const INDEX = 'id';

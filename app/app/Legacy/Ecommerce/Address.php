@@ -7,7 +7,7 @@ use \Legacy\System\Traits\DynamicProperties;
 
 class Address {
 
-	use \Legacy\System\Traits\DynamicProperties;
+	use DynamicProperties;
 
 	public const TABLE = 'addresses';
 	public const INDEX = 'id';

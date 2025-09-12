@@ -27,12 +27,12 @@ class RecoverController extends Controller {
 	}
 
 	/**
-	 * Process the request
-	 * 
-	 * @param Request $request
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function store(Request $request): RedirectResponse {
+     * Process the request
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse {
 		$request->validate([
 			'email' => 'required|email',
 		]);

@@ -2,11 +2,12 @@
 
 namespace App\Legacy\Ecommerce\Product;
 
+use Legacy\System\Traits\DynamicProperties;
 use App\Legacy\Ecommerce\Product as LegacyProduct;
 
 class Preview {
 
-	use \Legacy\System\Traits\DynamicProperties;
+	use DynamicProperties;
 
 	public const SMALL_IMAGE_SIZE = 400;
 	public const BIG_IMAGE_SIZE = 1024;

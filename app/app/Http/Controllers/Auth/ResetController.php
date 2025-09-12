@@ -16,12 +16,12 @@ use Illuminate\View\View;
 class ResetController extends Controller {
 
 	/**
-	 * Render the reset password page.
-	 * 
-	 * @param Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function index(Request $request): View {
+     * Render the reset password page.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View {
 		$email = $request->email;
 		$token = $request->token;
 
@@ -34,12 +34,12 @@ class ResetController extends Controller {
 	}
 
 	/**
-	 * Process the request.
-	 * 
-	 * @param Request $request
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function update(Request $request): RedirectResponse {
+     * Process the request.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function update(Request $request): RedirectResponse {
 		// Validate the request
 		$request->validate([
 			'token' => 'required',

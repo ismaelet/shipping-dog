@@ -15,12 +15,12 @@ use App\Legacy\Ecommerce\Order as LegacyOrder;
 class OrderItemController extends Controller {
 
 	/**
-	 * Store a new order item in the cart.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function store(Request $request): RedirectResponse {
+     * Store a new order item in the cart.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse {
 		// Fetch the product
 		$product = Product::find($request->product_id);
 

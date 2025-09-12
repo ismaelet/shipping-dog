@@ -2,6 +2,7 @@
 
 namespace App\Legacy\System;
 
+use Legacy\System\Classes\LegacyRoute;
 use Exception;
 use mysqli;
 
@@ -122,6 +123,6 @@ class Setup {
 		}
 
 		// render page
-		\Legacy\System\Classes\LegacyRoute::run();
+		LegacyRoute::run();
 	}
 }

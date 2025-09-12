@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Filament\Admin\Resources\Shippings\Pages;
+
+use Filament\Actions\CreateAction;
+use App\Filament\Admin\Resources\Shippings\ShippingResource;
+use Filament\Actions;
+use Filament\Resources\Pages\ListRecords;
+
+class ListShippings extends ListRecords {
+	protected static string $resource = ShippingResource::class;
+
+	protected function getHeaderActions(): array {
+		return [
+			CreateAction::make(),
+		];
+	}
+}

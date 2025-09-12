@@ -1,3 +1,130 @@
+/* Theme: Dark */
+.dark {
+	--theme-h: 220deg;
+	--color-background-s: var(--theme-dark-s);
+	--color-background-l: 10%;
+
+	--color-neutral-50: var(--color-neutral-dark-50);
+	--color-neutral-100: var(--color-neutral-dark-100);
+	--color-neutral-150: var(--color-neutral-dark-150);
+	--color-neutral-200: var(--color-neutral-dark-200);
+	--color-neutral-250: var(--color-neutral-dark-250);
+	--color-neutral-300: var(--color-neutral-dark-300);
+	--color-neutral-350: var(--color-neutral-dark-350);
+	--color-neutral-400: var(--color-neutral-dark-400);
+	--color-neutral-700: var(--color-neutral-dark-700);
+	--color-neutral-900: var(--color-neutral-dark-900);
+	--color-neutral-950: var(--color-neutral-dark-950);
+
+	--color-surface-200: var(--color-neutral-dark-150);
+	--color-surface-400: var(--color-neutral-dark-200);
+	--color-surface-500: var(--color-neutral-dark-250);
+	--color-surface-600: var(--color-neutral-dark-300);
+
+	--color-border: var(--color-neutral-250);
+
+	--shadow-400: 0 2rem 3rem -1rem hsl(0deg, 0%, 0%, 0.1);
+	--shadow-700: 0 4rem 6rem -2rem hsl(0deg, 0%, 0%, 0.1);
+
+	--font-weight-semibold: 500;
+	--font-weight-bold: 600;
+}
+
+/*
+* Reset
+*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: var(--color-neutral-950);
+	font-family: var(--font-heading);
+	line-height: 1.1;
+}
+
+body {
+	color: var(--color-neutral-400);
+}
+
+/*
+* Old
+*/
+:root {
+	--border-width: 1px;
+	--border: var(--border-width) solid var(--border-color);
+
+	--color-secondary-400-hsl: 241deg 81% 54%;
+	--color-secondary-500-hsl: 241deg 72% 46%;
+
+	--color-surface-500-hsl: var(--color-neutral-light-200-hsl);
+	--color-surface-700-hsl: 0deg 0% 70%;
+
+	--color-success-400-hsl: 145deg 63% 50%;
+	--color-error-400-hsl: 0deg 100% 50%;
+	--color-success-500-hsl: 145deg 63% 40%;
+	--color-error-500-hsl: 0deg 100% 40%;
+
+	--border-radius-100: 0.125rem;
+	--border-radius-200: 0.125rem;
+	--border-radius-400: 0.25rem;
+	--border-radius-700: 0.5rem;
+	--border-radius-900: 1rem;
+	--border-radius-1000: 100vw;
+
+	--shadow-400: 0 2rem 3rem -1rem hsl(0deg, 0%, 0%, 0.1);
+	--shadow-700: 0 4rem 6rem -2rem hsl(0deg, 0%, 0%, 0.1);
+
+	--font-sans: 'Open Sans', system-ui, sans-serif;
+	--font-serif: 'Libre Caslon Display', serif;
+	--font-heading: 'Poppins', system-ui, sans-serif;
+
+	--font-size-100: 0.625rem;
+	--font-size-200: 0.75rem;
+	--font-size-300: 0.875rem;
+	--font-size-400: 1rem;
+	--font-size-450: 1.125rem;
+	--font-size-500: 1.25rem;
+	--font-size-600: min(1.5rem, 6vw);
+	--font-size-700: min(2rem, 7vw);
+	--font-size-800: min(3.5rem, 12vw);
+	--font-size-900: min(5rem, 15vw);
+
+	--font-weight-thin: 100;
+	--font-weight-extra-light: 200;
+	--font-weight-light: 300;
+	--font-weight-regular: 400;
+	--font-weight-medium: 500;
+	--font-weight-bold: 700;
+	--font-weight-extra-bold: 800;
+	--font-weight-black: 900;
+
+	--content-width: 1200px;
+	--breakout-width: 1400px;
+
+	--input-border-width: var(--border-width);
+	--input-border-radius: var(--border-radius-200);
+
+	--border-color: var(--color-neutral-250);
+}
+
+@layer components {
+	:where(.surface) {
+		border-radius: var(--border-radius-700);
+		background-color: transparent;
+		border: var(--border);
+		box-shadow: none;
+	}
+
+	:where(.surface-2) {
+		border-radius: var(--border-radius-700);
+		background-color: transparent;
+		border: var(--border-width) solid var(--color-neutral-300);
+		box-shadow: none;
+	}
+}
+
 @layer reset {
 	body {
 		color: var(--color-neutral-400);

@@ -19,11 +19,11 @@ class Province extends Model {
 	];
 
 	/**
-	 * Get the region that owns the province.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function region(): BelongsTo {
+     * Get the region that owns the province.
+     *
+     * @return BelongsTo
+     */
+    public function region(): BelongsTo {
 		return $this->belongsTo(Region::class);
 	}
 }

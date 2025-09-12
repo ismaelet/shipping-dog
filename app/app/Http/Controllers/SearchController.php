@@ -10,12 +10,12 @@ use Illuminate\View\View;
 class SearchController extends Controller {
 
 	/**
-	 * Display the search page.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\View\View
-	 */
-	public function index(Request $request): View {
+     * Display the search page.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View {
 		$search = $_GET['search'] ?? '';
 		$locationTag = 'search';
 		$title = 'Cerca: ' . $search;

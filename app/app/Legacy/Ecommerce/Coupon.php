@@ -12,7 +12,7 @@ use \Legacy\System\Traits\DynamicProperties;
  */
 class Coupon {
 
-	use \Legacy\System\Traits\DynamicProperties;
+	use DynamicProperties;
 
 	public const TABLE = 'codes';
 	public const INDEX = 'id';

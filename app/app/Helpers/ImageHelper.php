@@ -10,16 +10,16 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 class ImageHelper {
 
 	/**
-	 * Upload an image
-	 * 
-	 * @param \Illuminate\Http\UploadedFile $file The image to upload
-	 * @param string $filePath The path to the image
-	 * @param int|null $size (optional) The size of the image
-	 * @param string $mode (optional) The mode to resize the image, can be 'width', 'height', 'largest', 'smallest' or 'crop'
-	 * @param int $quality (optional) The quality of the image, from 0 to 100
-	 * @return bool Whether the image was uploaded
-	 */
-	public static function upload(UploadedFile $file, string $path, ?int $size = null, string $mode = 'largest', int $quality = 80): bool {
+     * Upload an image
+     *
+     * @param UploadedFile $file The image to upload
+     * @param string $filePath The path to the image
+     * @param int|null $size (optional) The size of the image
+     * @param string $mode (optional) The mode to resize the image, can be 'width', 'height', 'largest', 'smallest' or 'crop'
+     * @param int $quality (optional) The quality of the image, from 0 to 100
+     * @return bool Whether the image was uploaded
+     */
+    public static function upload(UploadedFile $file, string $path, ?int $size = null, string $mode = 'largest', int $quality = 80): bool {
 		// Get the directory, file name and type
 		[$pathDirectory, $fileName] = explode_last('/', $path);
 		$newImageType = pathinfo($path, PATHINFO_EXTENSION);
@@ -47,12 +47,12 @@ class ImageHelper {
 	}
 
 	/**
-	 * Create an image from a file
-	 * 
-	 * @param \Illuminate\Http\UploadedFile $file The file to create the image from
-	 * @return \GdImage|false The created image, or false if the image couldn't be created
-	 */
-	private static function createFromFile(UploadedFile|TemporaryUploadedFile $file): GdImage|false {
+     * Create an image from a file
+     *
+     * @param UploadedFile $file The file to create the image from
+     * @return GdImage|false The created image, or false if the image couldn't be created
+     */
+    private static function createFromFile(UploadedFile|TemporaryUploadedFile $file): GdImage|false {
 		$fileName = is_a($file, TemporaryUploadedFile::class) ? $file->getRealPath() : $file->getPathname();
 		$imageType = exif_imagetype($fileName);
 
@@ -111,12 +111,12 @@ class ImageHelper {
 	}
 
 	/**
-	 * Create an image
-	 *
-	 * @param array $sizes The sizes of the image
-	 * @return \GdImage The created image
-	 */
-	private static function createCanvas(int $width, int $height, string $imageType): GdImage {
+     * Create an image
+     *
+     * @param array $sizes The sizes of the image
+     * @return GdImage The created image
+     */
+    private static function createCanvas(int $width, int $height, string $imageType): GdImage {
 		// Create the canvas
 		$canvas = imagecreatetruecolor($width, $height);
 
@@ -133,17 +133,17 @@ class ImageHelper {
 	}
 
 	/**
-	 * Create the image
-	 * 
-	 * @param \GdImage $originalImage The original image
-	 * @param \GdImage $canvas The canvas for the new image
-	 * @param string $path The path to the new image
-	 * @param string $type The type of the new image
-	 * @param array $sizes The sizes of the new image
-	 * @param int $quality The quality of the new image
-	 * @return void
-	 */
-	private static function create(GdImage $originalImage, GdImage $canvas, string $path, string $type, array $sizes, int $quality): void {
+     * Create the image
+     *
+     * @param GdImage $originalImage The original image
+     * @param GdImage $canvas The canvas for the new image
+     * @param string $path The path to the new image
+     * @param string $type The type of the new image
+     * @param array $sizes The sizes of the new image
+     * @param int $quality The quality of the new image
+     * @return void
+     */
+    private static function create(GdImage $originalImage, GdImage $canvas, string $path, string $type, array $sizes, int $quality): void {
 		[$newWidth, $newHeight, $x, $y, $originalWidth, $originalHeigth] = $sizes;
 
 		imagecopyresampled($canvas, $originalImage, 0, 0, $x, $y, $newWidth, $newHeight, $originalWidth, $originalHeigth);

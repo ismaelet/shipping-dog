@@ -20,38 +20,38 @@ class ChangeRequest extends Model {
 	];
 
 	/**
-	 * Get the old cart that owns the change request.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function old_order(): BelongsTo {
+     * Get the old cart that owns the change request.
+     *
+     * @return BelongsTo
+     */
+    public function old_order(): BelongsTo {
 		return $this->belongsTo(Order::class, 'old_order_id');
 	}
 
 	/**
-	 * Get the new cart generated from the change request.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function new_order(): BelongsTo {
+     * Get the new cart generated from the change request.
+     *
+     * @return BelongsTo
+     */
+    public function new_order(): BelongsTo {
 		return $this->belongsTo(Order::class, 'new_order_id');
 	}
 
 	/**
-	 * Get the changes for the change request.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 */
-	public function changes(): HasMany {
+     * Get the changes for the change request.
+     *
+     * @return HasMany
+     */
+    public function changes(): HasMany {
 		return $this->hasMany(Change::class, 'change_request_id');
 	}
 
 	/**
-	 * Get the only the changes that are a real change, for the change request.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 */
-	public function realChanges(): HasMany {
+     * Get the only the changes that are a real change, for the change request.
+     *
+     * @return HasMany
+     */
+    public function realChanges(): HasMany {
 		return $this->hasMany(Change::class, 'change_request_id')->where('is_change', true);
 	}
 }
