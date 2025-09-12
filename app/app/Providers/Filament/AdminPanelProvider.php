@@ -29,13 +29,9 @@ class AdminPanelProvider extends PanelProvider {
 			->id('admin')
 			->path('admin')
 			->colors([
-				'danger' => Color::Red,
-				'gray' => Color::Slate,
-				'info' => Color::Blue,
+				'gray' => Color::Gray,
 				'primary' => Color::Orange,
-				'secondary' => Color::Blue,
-				'success' => Color::Green,
-				'warning' => Color::Amber,
+				'secondary' => Color::Cyan,
 
 				// Order status colors
 				'status-cancelled' => Color::Red,

@@ -30,10 +30,5 @@ class AppServiceProvider extends ServiceProvider {
 
 		// Prevent lazy loading in non-production environments
 		Model::preventLazyLoading(!app()->isProduction());
-
-		// Filament asset registration
-		FilamentAsset::register([
-			Css::make('custom-stylesheet', __DIR__ . '/../../resources/css/app.css'),
-		]);
 	}
 }

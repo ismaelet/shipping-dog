@@ -87,68 +87,68 @@ class Order extends Model {
 	}
 
 	/**
-     * * Relationships
-     */
-    /**
-     * Get the order's user.
-     *
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo {
+	 * * Relationships
+	 */
+	/**
+	 * Get the order's user.
+	 *
+	 * @return BelongsTo
+	 */
+	public function user(): BelongsTo {
 		return $this->belongsTo(User::class);
 	}
 
 	/**
-     * Get the order's shipping method.
-     *
-     * @return BelongsTo
-     */
-    public function shipping_method(): BelongsTo {
+	 * Get the order's shipping method.
+	 *
+	 * @return BelongsTo
+	 */
+	public function shipping_method(): BelongsTo {
 		return $this->belongsTo(ShippingMethod::class);
 	}
 
 	/**
-     * Get the order's payment method.
-     *
-     * @return BelongsTo
-     */
-    public function payment_method(): BelongsTo {
+	 * Get the order's payment method.
+	 *
+	 * @return BelongsTo
+	 */
+	public function payment_method(): BelongsTo {
 		return $this->belongsTo(PaymentMethod::class);
 	}
 
 	/**
-     * Get the order's address.
-     *
-     * @return HasOne
-     */
-    public function address(): HasOne {
+	 * Get the order's address.
+	 *
+	 * @return HasOne
+	 */
+	public function address(): HasOne {
 		return $this->hasOne(Address::class);
 	}
 
 	/**
-     * Get the order's coupon.
-     *
-     * @return HasOne
-     */
-    public function coupon(): HasOne {
+	 * Get the order's coupon.
+	 *
+	 * @return HasOne
+	 */
+	public function coupon(): HasOne {
 		return $this->hasOne(Coupon::class, 'code', 'code');
 	}
 
 	/**
-     * Get the order's change request.
-     *
-     * @return HasOne
-     */
-    public function change_request(): HasOne {
+	 * Get the order's change request.
+	 *
+	 * @return HasOne
+	 */
+	public function change_request(): HasOne {
 		return $this->hasOne(ChangeRequest::class, 'new_order_id');
 	}
 
 	/**
-     * Get the order's order_items.
-     *
-     * @return HasMany
-     */
-    public function order_items(): HasMany {
+	 * Get the order's order_items.
+	 *
+	 * @return HasMany
+	 */
+	public function order_items(): HasMany {
 		return $this->hasMany(OrderItem::class);
 	}
 
@@ -777,14 +777,14 @@ class Order extends Model {
 
 
 	/**
-     * * Static methods
-     */
-    /**
-     * Get the orders that need a label to be printed.
-     *
-     * @return Collection
-     */
-    public static function unlabelled(): Collection {
+	 * * Static methods
+	 */
+	/**
+	 * Get the orders that need a label to be printed.
+	 *
+	 * @return Collection
+	 */
+	public static function unlabelled(): Collection {
 		return self::join('addresses', 'orders.id', '=', 'addresses.order_id')
 			->where('status', EcommerceHelper::statusFromTag('confirmed'))
 			->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())

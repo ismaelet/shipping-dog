@@ -14,8 +14,6 @@ function is_admin(): bool {
 
 /**
  * Check if the user is a supervisor
- * 
- * @return bool True if the user is a supervisor, false otherwise
  */
 function is_superadmin(): bool {
 	return Auth::check() && Auth::user()->is_superadmin;
@@ -23,8 +21,6 @@ function is_superadmin(): bool {
 
 /**
  * Check if the user is a seller
- * 
- * @return bool True if the user is a seller, false otherwise
  */
 function is_seller(): bool {
 	return App::isSeller();
@@ -32,12 +28,11 @@ function is_seller(): bool {
 
 /**
  * Format a price value according to the current currency.
- * 
- * @param float $value The price value to format
- * @return string The formatted price value
  */
 function price(float $value): string {
 	$formatter = new NumberFormatter(config('app.locale'), NumberFormatter::CURRENCY);
+	$formatted = $formatter->formatCurrency($value, config('custom.currency', 'EUR'));
 
-	return $formatter->formatCurrency($value, config('custom.currency', 'EUR'));
+	// Replace non-breaking space (&nbsp;) with a regular space
+	return str_replace("\u{00A0}", ' ', $formatted);
 }
