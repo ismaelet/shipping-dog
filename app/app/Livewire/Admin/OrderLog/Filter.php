@@ -88,6 +88,7 @@ class Filter extends Component implements HasSchemas {
 							->default(false)
 							->reactive(),
 						Grid::make(2)
+							->visible(fn(): bool => $this->orders?->count() > 0)
 							->schema([
 								Action::make('copy')
 									->label('Copia tutto')

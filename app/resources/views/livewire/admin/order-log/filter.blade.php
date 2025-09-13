@@ -16,7 +16,7 @@
 @endpushOnce
 
 <div class="dashboard-filter">
-	<form wire:submit="create">
+	<form>
 		{{ $this->form }}
 	</form>
 
