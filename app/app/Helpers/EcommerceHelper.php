@@ -9,9 +9,7 @@ use Illuminate\Support\Number;
 class EcommerceHelper {
 
 	/**
-	 * Get the ID of the active cart.
-	 *
-	 * @return int|null The ID of the active cart, or null if no active cart is found
+	 * Get the ID of the active cart
 	 */
 	public static function cartId(): ?int {
 		// If the user is logged in, return the ID of their cart
@@ -32,8 +30,6 @@ class EcommerceHelper {
 
 	/**
 	 * Get the active cart
-	 *
-	 * @return Cart|null The active cart if it exists, otherwise null
 	 */
 	public static function cart(): ?Order {
 		if (Auth::check()) {
@@ -68,10 +64,7 @@ class EcommerceHelper {
 	}
 
 	/**
-	 * Get the step index based on the given step tag.
-	 *
-	 * @param string $stepTag The step tag to search for.
-	 * @return int The step index if found, false otherwise.
+	 * Get the step index based on the given step tag
 	 */
 	public static function stepFromTag(string $stepTag): int {
 		$stepKeyPosition = array_search($stepTag, array_column(config('ecommerce.cart.steps'), 'tag'));
@@ -84,10 +77,7 @@ class EcommerceHelper {
 	}
 
 	/**
-	 * Get the status index based on the given status tag.
-	 *
-	 * @param string $statusTag The status tag to search for.
-	 * @return int The status index if found, false otherwise.
+	 * Get the status index based on the given status tag
 	 */
 	public static function statusFromTag(string $statusTag): int {
 		$statusKeyPosition = array_search($statusTag, array_column(config('ecommerce.order.statuses'), 'tag'));

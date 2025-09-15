@@ -15,7 +15,7 @@ use stdClass;
 class PayPalController extends Controller {
 
 	/**
-	 * * Action: Authenticate
+	 * Action: Authenticate
 	 */
 	public function authenticate(): string|RedirectResponse {
 		// Set the headers
@@ -50,7 +50,7 @@ class PayPalController extends Controller {
 	}
 
 	/**
-	 * * Action: Create
+	 * Action: Create
 	 */
 	public function create(Request $request): RedirectResponse {
 		// Get the order
@@ -104,7 +104,7 @@ class PayPalController extends Controller {
 	}
 
 	/**
-	 * * Action: Capture
+	 * Action: Capture
 	 */
 	public function capture(Order $order): RedirectResponse {
 		$order->load('order_items.type');
@@ -139,7 +139,7 @@ class PayPalController extends Controller {
 	}
 
 	/**
-	 * * Action: Cancel
+	 * Action: Cancel
 	 */
 	public function cancel(Order $order, Request $request): RedirectResponse {
 		// Get the tokens from the session and the request
