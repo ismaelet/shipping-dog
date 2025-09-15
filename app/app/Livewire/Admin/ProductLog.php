@@ -33,6 +33,16 @@ class ProductLog extends Component {
 	public bool $showAll = false;
 
 	/**
+	 * Property: Whether to show printed items
+	 */
+	public bool $showPrinted = true;
+
+	/**
+	 * Property: Whether to show items in cart
+	 */
+	public bool $showInCart = true;
+
+	/**
 	 * Lifecycle hook: Mount the component
 	 */
 	public function mount() {
@@ -79,6 +89,24 @@ class ProductLog extends Component {
 	}
 
 	/**
+	 * Event handler: Handle 'showPrintedUpdated' event
+	 */
+	#[On('showPrintedUpdated')]
+	public function onShowPrintedUpdated(array $data): void {
+		$this->showPrinted = $data['show_printed'];
+		$this->orderItems = $this->loadOrderItems();
+	}
+
+	/**
+	 * Event handler: Handle 'showInCartUpdated' event
+	 */
+	#[On('showInCartUpdated')]
+	public function onShowInCartUpdated(array $data): void {
+		$this->showInCart = $data['show_in_cart'];
+		$this->orderItems = $this->loadOrderItems();
+	}
+
+	/**
 	 * Load orders from the database
 	 */
 	public function loadOrderItems(): ?Collection {
@@ -109,6 +137,14 @@ class ProductLog extends Component {
 				->where('orders.status', EcommerceHelper::statusFromTag('confirmed'));
 		}
 
+		if (!$this->showPrinted) {
+			$filteredOrderItems = $filteredOrderItems->where('order_items.is_printed', false);
+		}
+
+		if (!$this->showInCart) {
+			$filteredOrderItems = $filteredOrderItems->where('order_items.is_in_cart', false);
+		}
+
 		return $filteredOrderItems
 			->with(
 				'type',
@@ -122,6 +158,8 @@ class ProductLog extends Component {
 				'product_with_trashed.type',
 				'product_with_trashed.type.colors',
 				'product_with_trashed.type.sizes',
+				'seller',
+				'design',
 			)
 			->get();
 	}

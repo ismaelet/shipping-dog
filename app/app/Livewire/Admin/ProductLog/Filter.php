@@ -83,10 +83,22 @@ class Filter extends Component implements HasSchemas {
 							->action('load')
 							->color('info')
 							->button(),
-						Checkbox::make('include_ready')
-							->label('Includi ordini pronti o spediti')
-							->default(false)
-							->reactive(),
+						Grid::make(3)
+							->schema([
+								Checkbox::make('include_ready')
+									->label('Includi ordini pronti o spediti')
+									->default(false)
+									->reactive(),
+								Checkbox::make('show_printed')
+									->label('Mostra articoli stampati')
+									->default(true)
+									->reactive(),
+								Checkbox::make('show_in_cart')
+									->label('Mostra articoli in carrello')
+									->default(true)
+									->reactive(),
+							])
+							->columnSpanFull(),
 						Grid::make(2)
 							->visible(fn(): bool => $this->orderItems?->count() > 0)
 							->schema([
@@ -159,5 +171,19 @@ class Filter extends Component implements HasSchemas {
 	 */
 	public function updatedDataIncludeReady($value): void {
 		$this->dispatch('includeReadyUpdated', ['include_ready' => $value]);
+	}
+
+	/**
+	 * Update handler: Handle changes to the 'show_printed' checkbox
+	 */
+	public function updatedDataShowPrinted($value): void {
+		$this->dispatch('showPrintedUpdated', ['show_printed' => $value]);
+	}
+
+	/**
+	 * Update handler: Handle changes to the 'show_in_cart' checkbox
+	 */
+	public function updatedDataShowInCart($value): void {
+		$this->dispatch('showInCartUpdated', ['show_in_cart' => $value]);
 	}
 }

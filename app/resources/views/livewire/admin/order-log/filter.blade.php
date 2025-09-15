@@ -8,10 +8,6 @@
 		.fi-ac-btn-action {
 			width: 100%;
 		}
-
-		.fi-grid-col:has(.fi-checkbox-input) {
-			grid-column: span 2;
-		}
 	</style>
 @endpushOnce
 

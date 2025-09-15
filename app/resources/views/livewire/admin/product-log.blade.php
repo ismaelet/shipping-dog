@@ -131,6 +131,10 @@
 			display: grid;
 		}
 
+		.flex {
+			display: flex;
+		}
+
 		.block {
 			break-inside: avoid;
 			display: block;
@@ -156,6 +160,10 @@
 			grid-template-columns: repeat(auto-fill, minmax(min(25rem, 100%), 1fr));
 		}
 
+		.items-center {
+			align-items: center;
+		}
+
 		.columns-3 {
 			columns: 3;
 		}
@@ -168,8 +176,16 @@
 			gap: 1rem;
 		}
 
+		.gap-2 {
+			gap: 0.5rem;
+		}
+
 		.opacity-50 {
 			opacity: 0.5;
+		}
+
+		.opacity-30 {
+			opacity: 0.3;
 		}
 
 		.opacity-20 {
@@ -191,6 +207,80 @@
 		.text-primary {
 			color: var(--primary-400);
 		}
+
+		.w-6 {
+			width: 1.5rem;
+		}
+
+		.h-6 {
+			height: 1.5rem;
+		}
+
+		.w-4 {
+			width: 1rem;
+		}
+
+		.h-4 {
+			height: 1rem;
+		}
+
+		.w-2\/3 {
+			width: 66.666667%;
+		}
+
+		.h-2\/3 {
+			height: 66.666667%;
+		}
+
+		.w-1\/2 {
+			width: 50%;
+		}
+
+		.h-1\/2 {
+			height: 50%;
+		}
+
+		.border-2 {
+			border-width: 2px;
+		}
+
+		.rounded-full {
+			border-radius: 9999px;
+		}
+
+		.place-items-center {
+			place-items: center;
+		}
+
+		.cursor-pointer {
+			cursor: pointer;
+		}
+
+		.dashboard-panel svg {
+			fill: currentColor;
+		}
+
+		.data-\[active\=true\]\:opacity-100[data-active="true"] {
+			opacity: 1;
+		}
+
+		.data-\[active\=true\]\:text-secondary-400[data-active="true"] {
+			color: var(--secondary-400);
+		}
+
+		.data-\[active\=true\]\:text-success-400[data-active="true"] {
+			color: var(--success-400);
+		}
+
+		.transition-all {
+			transition-property: all;
+			transition-duration: 150ms;
+			transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		}
+
+		.text-sm {
+			font-size: 0.875rem;
+		}
 	</style>
 @endpushOnce
 
@@ -210,67 +300,39 @@
 			<div class="dashboard-panel">
 
 				@if ($orderItems?->count())
-					@php
-						$sortedBySellers = $orderItems->sortBy('seller_id')->unique('seller_id');
-					@endphp
-
 					<div class="columns-3">
-						@foreach ($sortedBySellers as $sellerOrder)
-							{{-- Sellers --}}
+						{{-- Filter by seller --}}
+						@foreach ($orderItems->pluck('seller')->unique() as $seller)
 							<div class="seller js-seller mt-4 block">
-								<h3 class="text-primary js-title">{{ strtoupper($sellerOrder->storeName) }}</h3>
-
-								@php
-									// Get the order_items
-									$sortedByProducts = $orderItems
-									    ->where('seller_id', '=', $sellerOrder->seller_id)
-									    ->sortBy('design_id')
-									    ->unique('design_id');
-								@endphp
+								<h3 class="text-primary js-title">{{ strtoupper($seller->name) }}</h3>
 
 								<div class="designs grid gap-4">
-									@foreach ($sortedByProducts as $product)
+									{{-- Filter by design --}}
+									@foreach ($orderItems->where('seller_id', $seller->id)->pluck('design')->unique() as $design)
 										<div class="design js-design">
 											<p class="js-title text-neutral-700">
-												[ {{ ($product->design_id ? $product->design_id . ' - ' : '') . $product->productName }} ]
+												--- {{ ($design ? $design->id . ' - ' : '') . $design->name }} ---
 											</p>
 
-											@php
-												$mergedorder_items = [];
-												// Get the order_items
-												$order_items = $orderItems
-												    ->where('design_id', '=', $product->design_id)
-												    ->sortBy('color_id')
-												    ->sortBy('size_id')
-												    ->sortBy('type_id');
-											@endphp
-
-											@foreach ($order_items as $orderItem)
-												@php
-													$orderItemDescription = $orderItem->description();
-													$orderItemDescription = $orderItem->inventory
-													    ? $orderItemDescription . ' <strong>(INVENTARIO)</strong>'
-													    : $orderItemDescription;
-
-													if (isset($mergedorder_items[$orderItemDescription])) {
-													    $mergedorder_items[$orderItemDescription]['quantity'] += $orderItem->quantity;
-													} else {
-													    $mergedorder_items[$orderItemDescription] = [
-													        'url' => $orderItem->product_with_trashed->fullUrl($orderItem->color_id, $orderItem->position_id),
-													        'quantity' => 1,
-													    ];
-													}
-												@endphp
-											@endforeach
-
-											@foreach ($mergedorder_items as $orderItemDescription => $productData)
-												<p class="js-to-copy">
-													<a
-														href="{{ $productData['url'] }}"
-														target="_bank"
-													>{!! $productData['quantity'] . ' x ' . $orderItemDescription !!}</a>
-												</p>
-											@endforeach
+											<div class="mt-2 grid grid-cols-1 gap-2">
+												{{-- Filter by type --}}
+												@foreach ($orderItems->where('design_id', $design->id)->pluck('type')->unique() as $type)
+													{{-- Filter by color --}}
+													@foreach ($orderItems->where('design_id', $design->id)->where('type_id', $type->id)->sortBy('color_id')->pluck('color')->unique() as $color)
+														{{-- Filter by size --}}
+														@foreach ($orderItems->where('design_id', $design->id)->where('type_id', $type->id)->where('color_id', $color->id)->sortBy('size_id')->pluck('size')->unique() as $size)
+															<livewire:admin.product-log.type-item
+																:key="`type-item-{{ $type->id }}-color-{{ $color->id }}-size-{{ $size->id }}`"
+																:order-items="$orderItems"
+																:type="$type"
+																:color="$color"
+																:size="$size"
+																:design="$design"
+															/>
+														@endforeach
+													@endforeach
+												@endforeach
+											</div>
 										</div>
 									@endforeach
 								</div>
@@ -290,51 +352,29 @@
 
 				@if ($orderItems?->count())
 					@php
-						$sortedByTypes = $orderItems->sortBy('type_id')->unique('type_id');
+						$productTypes = $orderItems->sortBy('type_id')->pluck('type')->unique('id');
 					@endphp
+
 					<div class="columns-3">
-
-						@foreach ($sortedByTypes as $typeOrder)
-							{{-- Product type --}}
+						@foreach ($productTypes as $productType)
 							<div class="product-type js-product mt-4 block">
-								<h3 class="text-primary js-title">{{ strtoupper($typeOrder->productTypeName) }}</h3>
+								<h3 class="text-primary js-title">{{ strtoupper($productType->name) }}</h3>
 
-								@php
-									$mergedorder_items = [];
-
-									// Get the order_items
-									$sortedByData = $orderItems
-									    ->where('inventory', 0)
-									    ->where('type_id', '=', $typeOrder->type_id)
-									    ->sortBy('size_id')
-									    ->sortBy('color_id');
-								@endphp
-
-								@foreach ($sortedByData as $orderItem)
-									{{-- Order --}}
-									@php
-										$orderItemDescription = [];
-										$orderItemDescription[] =
-										    $orderItem->color && $orderItem->product_with_trashed->type->colors->count() > 1
-										        ? $orderItem->color->name
-										        : null;
-										$orderItemDescription[] =
-										    $orderItem->size && $orderItem->product_with_trashed->type->sizes->count() > 1
-										        ? $orderItem->size->name
-										        : null;
-										$orderItemDescription = implode(' ', array_filter($orderItemDescription)) ?: 'Prodotto standard';
-
-										if (isset($mergedorder_items[$orderItemDescription])) {
-										    $mergedorder_items[$orderItemDescription] += $orderItem->quantity;
-										} else {
-										    $mergedorder_items[$orderItemDescription] = 1;
-										}
-									@endphp
-								@endforeach
-
-								@foreach ($mergedorder_items as $orderItemDescription => $quantity)
-									<p class="js-to-copy">{{ $quantity . ' x ' . $orderItemDescription }}</p>
-								@endforeach
+								<div class="mt-2 grid grid-cols-1 gap-2">
+									{{-- Filter by color --}}
+									@foreach ($orderItems->where('type_id', $productType->id)->sortBy('color_id')->pluck('color')->unique() as $color)
+										{{-- Filter by size --}}
+										@foreach ($orderItems->where('type_id', $productType->id)->where('color_id', $color->id)->sortBy('size_id')->pluck('size')->unique() as $size)
+											<livewire:admin.product-log.type-item
+												:key="`type-item-{{ $productType->id }}-color-{{ $color->id }}-size-{{ $size->id }}`"
+												:order-items="$orderItems"
+												:type="$productType"
+												:color="$color"
+												:size="$size"
+											/>
+										@endforeach
+									@endforeach
+								</div>
 							</div>
 						@endforeach
 					</div>
