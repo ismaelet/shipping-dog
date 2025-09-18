@@ -10,12 +10,16 @@ use App\Http\Controllers\Ecommerce\Order\OrderFindController;
 use App\Http\Controllers\Ecommerce\OrderController;
 use App\Http\Controllers\Ecommerce\OrderItemController;
 use App\Http\Controllers\Ecommerce\ProductController;
+use App\Http\Controllers\Ecommerce\RefundController;
 use App\Http\Controllers\Ecommerce\SellerController;
 use App\Http\Controllers\Ecommerce\ShopController;
 use App\Http\Controllers\SearchController;
 use App\Http\Middleware\Cart;
 use App\Http\Middleware\EmptyCart;
+use App\Http\Middleware\HasChangeRequestAccess;
 use App\Http\Middleware\OrderRecap;
+use App\Http\Middleware\Refund;
+use App\Http\Middleware\RefundSkip;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -76,7 +80,7 @@ Route::prefix('cart')->name('cart')->group(function () {
 });
 
 /**
- * Payment methods
+ *  * Payment
  */
 Route::get('cart/pay/free', [FreeController::class, 'process'])->name('cart.payment.free');
 
@@ -101,3 +105,20 @@ Route::post('orders/find', [OrderFindController::class, 'show'])->name('orders.f
 // Order resource routes
 Route::resource('orders', OrderController::class)->middleware(OrderRecap::class)->only(['show', 'destroy']);
 Route::resource('orders', OrderController::class)->only(['update']);
+
+/**
+ * * Refund / Change
+ */
+Route::prefix('/refund')->name('support.refund.')->group(function () {
+
+	// Search step
+	Route::get('/search', [RefundController::class, 'indexSearch'])->middleware(RefundSkip::class)->name('search');
+	Route::post('/search', [RefundController::class, 'search'])->name('search');
+
+	// Select order items step
+	Route::get('/{changeRequest}/select', [RefundController::class, 'indexSelect'])->middleware(HasChangeRequestAccess::class)->name('select');
+	Route::post('/{changeRequest}/select', [RefundController::class, 'select'])->middleware(HasChangeRequestAccess::class)->name('select');
+
+	// Cancel request
+	Route::post('/{changeRequest}/cancel', [RefundController::class, 'cancel'])->middleware(HasChangeRequestAccess::class)->name('cancel');
+});

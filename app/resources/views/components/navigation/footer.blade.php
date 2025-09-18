@@ -13,7 +13,7 @@
 	        [
 	            ['Contatti', 'contacts'],
 	            ['FAQ', 'support.faq'],
-	            ['Cambio taglia', 'support.refund'],
+	            ['Cambio taglia', 'support.refund.search'],
 	            ['Stato ordine', 'support.order.status'],
 	        ],
 	    ],

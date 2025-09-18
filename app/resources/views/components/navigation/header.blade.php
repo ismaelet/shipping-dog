@@ -96,7 +96,7 @@
 	    'url' => route('support.faq'),
 	    'dropdown' => [
 	        ['Contatti', route('contacts')],
-	        ['Cambio taglia o reso', route('support.refund')],
+	        ['Cambio taglia o reso', route('support.refund.search')],
 	        ['Stato ordine', route('orders.find')],
 	        ['Domande frequenti', route('support.faq')],
 	    ],

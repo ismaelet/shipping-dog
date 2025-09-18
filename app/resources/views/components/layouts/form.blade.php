@@ -1,4 +1,4 @@
-@props(['title', 'body', 'footer', 'method' => null, 'action' => null])
+@props(['title', 'body', 'footer', 'method' => null, 'action' => null, 'size' => 'md'])
 
 @push('styles')
 	<style>
@@ -19,5 +19,6 @@
 		:$footer
 		:$action
 		:$method
+		:$size
 	/>
 </x-layouts.main>

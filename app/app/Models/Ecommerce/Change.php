@@ -9,8 +9,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Change extends Model {
 
-	protected $table = 'ecommerce_changes';
-	protected $fillable = ['old_order_id', 'new_order_id', 'change_request_id', 'is_change'];
+	/**
+	 * The attributes that are mass assignable
+	 */
+	protected $fillable = [
+		'change_request_id',
+		'old_order_item_id',
+		'new_order_item_id',
+		'is_change'
+	];
 
 	/**
 	 * Get the old order that owns the change.

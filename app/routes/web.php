@@ -51,16 +51,6 @@ Route::get('/support/upload-terms', [UploadTermsController::class, 'index'])->na
 Route::get('/support/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('support.privacy-policy');
 
 /**
- * Refund
- */
-Route::get('/refund', function () {
-	return redirect()->route('support.refund.search');
-})->name('support.refund');
-
-Route::get('/refund/search', [RefundController::class, 'indexSearch'])->name('support.refund.search');
-Route::post('/refund/search', [RefundController::class, 'search'])->name('support.refund.search');
-
-/**
  * Downloads
  */
 Route::get('/download/{filename}', [DownloadController::class, 'download'])->name('download')->where('filename', '.*');

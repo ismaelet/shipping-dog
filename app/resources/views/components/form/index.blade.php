@@ -1,9 +1,17 @@
-@props(['title', 'body', 'footer', 'method' => 'POST', 'action' => ''])
+@props(['title', 'body', 'footer', 'method' => 'POST', 'action' => '', 'size' => 'md'])
 
 @push('styles')
 	<style>
 		main {
 			--content-width: 60ch;
+
+			&:has(.form[data-size="lg"]) {
+				--content-width: 80ch;
+			}
+
+			&:has(.form[data-size="xl"]) {
+				--content-width: 100ch;
+			}
 		}
 
 		.form-title {
@@ -21,6 +29,7 @@
 	action="{{ $action }}"
 	method="{{ $method == 'GET' ?: 'POST' }}"
 	enctype="multipart/form-data"
+	data-size="{{ $size }}"
 >
 	@method($method)
 
