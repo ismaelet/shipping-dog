@@ -16,21 +16,23 @@ class Change extends Model {
 		'change_request_id',
 		'old_order_item_id',
 		'new_order_item_id',
+		'old_size_id',
+		'new_size_id',
 		'is_change'
 	];
 
 	/**
 	 * Get the old order that owns the change.
 	 */
-	public function old_order(): BelongsTo {
-		return $this->belongsTo(OrderItem::class, 'old_order_id', 'id');
+	public function old_order_item(): BelongsTo {
+		return $this->belongsTo(OrderItem::class, 'old_order_item_id', 'id');
 	}
 
 	/**
 	 * Get the new order generated from the change
 	 */
-	public function new_order(): BelongsTo {
-		return $this->belongsTo(OrderItem::class, 'new_order_id', 'id');
+	public function new_order_item(): BelongsTo {
+		return $this->belongsTo(OrderItem::class, 'new_order_item_id', 'id');
 	}
 
 	/**

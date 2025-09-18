@@ -2,6 +2,7 @@
 
 namespace App\Models\Ecommerce;
 
+use App\Http\Controllers\Ecommerce\RefundController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,8 +15,18 @@ class ChangeRequest extends Model {
 	protected $fillable = [
 		'old_order_id',
 		'new_order_id',
-		'step'
+		'step',
+		'token',
 	];
+
+	/**
+	 * The lifecycle hooks for the model
+	 */
+	protected static function booted(): void {
+		static::deleting(function (ChangeRequest $changeRequest) {
+			$changeRequest->items()->delete();
+		});
+	}
 
 	/**
 	 * Get the old cart that owns the change request
@@ -34,7 +45,7 @@ class ChangeRequest extends Model {
 	/**
 	 * Get the order items for the change request
 	 */
-	public function order_items(): HasMany {
+	public function items(): HasMany {
 		return $this->hasMany(Change::class, 'change_request_id');
 	}
 
@@ -56,6 +67,65 @@ class ChangeRequest extends Model {
 	 * Check if the change request is only a refund
 	 */
 	public function isRefundOnly(): bool {
-		return !$this->items_to_change;
+		return !$this->items_to_change->count();
+	}
+
+	/**
+	 * Confirm the change request and create the new order if needed
+	 */
+	public function confirm(): void {
+		$this->update(['step' => array_key_last(RefundController::STEPS)]);
+
+		if (!$this->isRefundOnly()) {
+			$oldOrder = $this->old_order;
+
+			// Create a new order for the change
+			$newOrder = $oldOrder
+				->replicate()
+				->fill([
+					'payment_method_id' => PaymentMethod::where('tag', 'ppl')->first()->id,
+					'shipping_method_id' => ShippingMethod::where('tag', 'pre')->first()->id,
+					'price' => 8.00,
+					'shipping' => 8.00,
+					'quantity' => $this->items_to_change->count(),
+					'status' => 2,
+					'token' => $this->token,
+					'exchange' => true,
+					'tracking' => null,
+				]);
+
+			$newOrder->save();
+
+			$this->update(['new_order_id' => $newOrder->id]);
+
+			// Create the address for the new order
+			$oldOrder->address?->replicate()
+				->fill([
+					'order_id' => $newOrder->id,
+				])
+				->save();
+
+
+			// Create the order items for the new order
+			$this->items_to_change->each(function ($item) {
+				$oldOrderItem = $item->old_order_item;
+
+				$oldOrderItem->replicate()
+					->fill([
+						'order_id' => $this->new_order_id,
+						'size_id' => $item->new_size_id ?? $oldOrderItem->size_id,
+						'gain' => 0,
+						'gain_disc' => 0,
+						'inventory' => false,
+						'credit' => false,
+						'is_printed' => false,
+						'is_in_production' => false,
+					]);
+
+				$oldOrderItem->save();
+
+				$item->update(['new_order_item_id' => $oldOrderItem->id]);
+			});
+		}
 	}
 }

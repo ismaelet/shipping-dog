@@ -1,13 +1,22 @@
 <div class="flex items-center gap-2">
 	{{-- Row --}}
-	<p class="js-to-copy">
-		{{ $quantity }}
-		x
-		@if ($category === 'design')
+	@if ($category === 'design')
+		<a
+			href="{{ $product->fullUrl(color_id: $color->id) }}"
+			class="js-to-copy"
+		>
+			{{ $quantity }}
+			x
 			{{ $type->name }}
-		@endif
-		{{ $color->name . ' ' . $size->name }}
-	</p>
+			{{ $color->name . ' ' . $size->name }}
+		</a>
+	@else
+		<p class="js-to-copy">
+			{{ $quantity }}
+			x
+			{{ $color->name . ' ' . $size->name }}
+		</p>
+	@endif
 
 	{{-- Added as print --}}
 	<div

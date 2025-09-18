@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Admin\ProductLog;
 
-use App\Legacy\Ecommerce\Product;
 use App\Models\Ecommerce\Design;
+use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductSize;
 use App\Models\Ecommerce\Product\ProductType;
@@ -59,6 +59,11 @@ class TypeItem extends Component {
 	public ?Design $design = null;
 
 	/**
+	 * Property: The product (optional)
+	 */
+	public ?Product $product = null;
+
+	/**
 	 * Property: The design (optional)
 	 */
 	public string $category;
@@ -82,6 +87,9 @@ class TypeItem extends Component {
 
 		if ($this->design) {
 			$quantityQuery = $quantityQuery->where('design_id', $this->design->id);
+			$this->product = Product::where('design_id', $this->design->id)
+				->where('type_id', $this->type->id)
+				->first();
 		}
 
 		$this->quantity = $quantityQuery->sum('quantity');

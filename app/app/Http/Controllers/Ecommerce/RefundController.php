@@ -21,7 +21,15 @@ class RefundController extends Controller {
 	/**
 	 * Step 1: Display the refund search page
 	 */
-	public function indexSearch(Request $request): View {
+	public function indexSearch(Request $request): View|RedirectResponse {
+		if (session()->has('change_request_id')) {
+			$changeRequest = ChangeRequest::find(session('change_request_id'));
+
+			if ($changeRequest) {
+				return redirect()->route('support.refund.' . RefundController::STEPS[$changeRequest->step], $changeRequest);
+			}
+		}
+
 		return view('support.refund.search', [
 			'title' => 'Cambio/Reso',
 			'locationTag' => 'support',
@@ -59,7 +67,9 @@ class RefundController extends Controller {
 		$changeRequest = ChangeRequest::where('old_order_id', $orderId)->first();
 
 		if ($changeRequest) {
-			return redirect()->route('support.refund.' . self::STEPS[$changeRequest->step]);
+			session(['change_request_id' => $changeRequest->id]);
+
+			return redirect()->route('support.refund.' . self::STEPS[$changeRequest->step], $changeRequest);
 		}
 
 		$changeRequest = ChangeRequest::create([
@@ -90,7 +100,7 @@ class RefundController extends Controller {
 	/**
 	 * Step 2: Process the selected order items for refund/change
 	 */
-	public function select(Request $request, ChangeRequest $changeRequest): RedirectResponse|View {
+	public function select(Request $request, ChangeRequest $changeRequest): RedirectResponse {
 		$order = $changeRequest->old_order;
 
 		foreach ($order->order_items as $orderItem) {
@@ -112,32 +122,44 @@ class RefundController extends Controller {
 			}
 		}
 
-		$changeRequest->load('order_items');
+		$changeRequest->load('items');
 
-		if ($changeRequest->order_items->isEmpty()) {
+		if ($changeRequest->items->isEmpty()) {
 			return redirect()
 				->back()
 				->with(['error' => 'Devi selezionare almeno un cambio o reso per poter procedere'])
 				->withInput();
 		}
 
-		$changeRequest->update([
-			'step' => 3,
-		]);
+		if ($changeRequest->isRefundOnly()) {
+			$changeRequest->confirm();
 
-		return view('under-construction', [
-			'title' => 'In costruzione',
+			return redirect()->route('support.refund.' . array_last(self::STEPS), $changeRequest);
+		} else {
+			return redirect()->route('paypal.exchange.create', $changeRequest);
+		}
+	}
+
+	/**
+	 * Step 3: Display the confirmation page
+	 */
+	public function indexConfirm(ChangeRequest $changeRequest): View|RedirectResponse {
+		if ($changeRequest->step < array_key_last(self::STEPS)) {
+			return redirect()->route('support.refund.' . self::STEPS[$changeRequest->step], $changeRequest);
+		}
+
+		return view('support.refund.confirm', [
+			'title' => 'Cambio/Reso',
 			'locationTag' => 'support',
+			'changeRequest' => $changeRequest,
 		]);
-
-		// return redirect()->route('support.refund.' . self::STEPS[$changeRequest->step], $changeRequest);
 	}
 
 	/**
 	 * Cancel the change/refund request
 	 */
 	public function cancel(ChangeRequest $changeRequest): RedirectResponse {
-		if (!$changeRequest->payed) {
+		if ($changeRequest->step < array_key_last(self::STEPS) || $changeRequest->isRefundOnly()) {
 			$changeRequest->delete();
 		}
 

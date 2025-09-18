@@ -112,12 +112,15 @@ Route::resource('orders', OrderController::class)->only(['update']);
 Route::prefix('/refund')->name('support.refund.')->group(function () {
 
 	// Search step
-	Route::get('/search', [RefundController::class, 'indexSearch'])->middleware(RefundSkip::class)->name('search');
+	Route::get('/search', [RefundController::class, 'indexSearch'])->name('search');
 	Route::post('/search', [RefundController::class, 'search'])->name('search');
 
 	// Select order items step
 	Route::get('/{changeRequest}/select', [RefundController::class, 'indexSelect'])->middleware(HasChangeRequestAccess::class)->name('select');
 	Route::post('/{changeRequest}/select', [RefundController::class, 'select'])->middleware(HasChangeRequestAccess::class)->name('select');
+
+	// Confirmation step
+	Route::get('/{changeRequest}/confirm', [RefundController::class, 'indexConfirm'])->middleware(HasChangeRequestAccess::class)->name('confirm');
 
 	// Cancel request
 	Route::post('/{changeRequest}/cancel', [RefundController::class, 'cancel'])->middleware(HasChangeRequestAccess::class)->name('cancel');

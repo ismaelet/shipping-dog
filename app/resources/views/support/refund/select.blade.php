@@ -21,7 +21,7 @@
 
 					{{-- Data --}}
 					<div class="justify-self-center p-4 pb-0 sm:p-0">
-						<h3 class="text-lg">{{ $orderItem->product_with_trashed->name }}</h3>
+						<h4 class="text-lg">{{ $orderItem->product_with_trashed->name }}</h4>
 
 						<p class="text-small-paragraph">
 							{{ $orderItem->description() }}
@@ -75,6 +75,9 @@
 			<x-alerts.warning>{{ session('error') }}</x-alerts.warning>
 		@endsession
 
+		<p>
+			In caso di cambio taglia, il costo di questa procedura corrisponde al costo della nuova spedizione ovvero <strong>8,00€</strong> e cliccando su "Richiedi", verrai reindirizzato/a su PayPal per effettuare il pagamento.<br><br>In caso di reso potrai restituire l'articolo con il metodo di spedizione che preferisci e non verrai reindirizzato/a su PayPal.
+		</p>
 	</x-slot>
 
 	<x-slot name="footer">

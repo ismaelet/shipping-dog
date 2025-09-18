@@ -14,15 +14,10 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Represents an order in the e-commerce system.
- */
 class OrderItem extends Model {
 
 	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
+	 * The attributes that are mass assignable
 	 */
 	protected $fillable = [
 		'fullProductPrice',
