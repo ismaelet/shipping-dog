@@ -90,12 +90,12 @@ class Filter extends Component implements HasSchemas {
 									->default(false)
 									->reactive(),
 								Checkbox::make('show_printed')
-									->label('Mostra articoli stampati')
-									->default(true)
+									->label('Mostra articoli in coda di stampa')
+									->default(false)
 									->reactive(),
 								Checkbox::make('show_in_cart')
 									->label('Mostra articoli in carrello')
-									->default(true)
+									->default(false)
 									->reactive(),
 							])
 							->columnSpanFull(),

@@ -46,7 +46,7 @@
 							src="{{ $customerPhoto->image() }}"
 							alt=""
 							loading="lazy"
-							class="img-fill"
+							class="img-fill bg-neutral-200"
 						>
 						<div class="overlay pad-2 va-cen grid text-center">
 							<div class="title-box">
@@ -55,7 +55,7 @@
 									<p class="design-name txt-wht txt-11rem txt-line font-semibold">{{ $customerPhoto->design->name }}</p>
 								@endif
 
-								<p class="client-name txt-wht txt-line uppercase">{{ $customerPhoto->fullName() }}</p>
+								<p class="client-name txt-wht txt-line uppercase">{{ $customerPhoto->full_name }}</p>
 							</div>
 						</div>
 					</a>

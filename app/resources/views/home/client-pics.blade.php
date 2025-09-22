@@ -5,7 +5,10 @@
 	>
 @endpushOnce
 
-<section id="client-pics">
+<section
+	id="client-pics"
+	class="overflow-hidden"
+>
 	<div class="header">
 		<div class="content-grid text-center">
 			<div class="grid">
@@ -43,28 +46,28 @@
 	</div>
 
 	<div class="content-grid">
-		<div class="gallery">
+		<div class="gallery span-full-width grid-cols-3 px-8 lg:-mx-64 lg:grid-cols-7 lg:px-0">
 
 			<?php foreach ($customerPhotos as $customerPhoto) { ?>
 
 			<a
 				href="<?= $customerPhoto->design?->url() ?>"
-				class="client__image image stack-items"
+				class="client__image image lg:nth-[1]:opacity-20 lg:nth-last-[1]:opacity-20 relative last:hidden lg:last:block"
 			>
 				<img
 					src="<?= $customerPhoto->image() ?>"
 					alt=""
 					loading="lazy"
-					class="img-fill"
+					class="img-fill bg-neutral-200"
 				>
-				<div class="overlay pad-2 va-cen grid text-center">
+				<div class="overlay pad-2 va-cen absolute inset-0 grid text-center">
 					<div class="title-box">
 
 						<?php if ($customerPhoto->design) { ?>
 						<p class="design-name txt-wht txt-11rem txt-line font-semibold"><?= $customerPhoto->design->name ?></p>
 						<?php } ?>
 
-						<p class="client-name txt-wht txt-line uppercase"><?= $customerPhoto->fullName() ?></p>
+						<p class="client-name txt-wht txt-line uppercase"><?= $customerPhoto->full_name ?></p>
 					</div>
 				</div>
 			</a>

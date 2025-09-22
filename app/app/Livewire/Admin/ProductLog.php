@@ -35,12 +35,12 @@ class ProductLog extends Component {
 	/**
 	 * Property: Whether to show printed items
 	 */
-	public bool $showPrinted = true;
+	public bool $showPrinted = false;
 
 	/**
 	 * Property: Whether to show items in cart
 	 */
-	public bool $showInCart = true;
+	public bool $showInCart = false;
 
 	/**
 	 * Lifecycle hook: Mount the component
@@ -137,12 +137,19 @@ class ProductLog extends Component {
 				->where('orders.status', EcommerceHelper::statusFromTag('confirmed'));
 		}
 
-		if (!$this->showPrinted) {
-			$filteredOrderItems = $filteredOrderItems->where('order_items.is_printed', false);
-		}
+		if (!$this->showPrinted && !$this->showInCart) {
+			$filteredOrderItems = $filteredOrderItems->where(function ($query) {
+				$query->where('order_items.is_printed', false)
+					->orWhere('order_items.is_in_cart', false);
+			});
+		} else {
+			if (!$this->showPrinted) {
+				$filteredOrderItems = $filteredOrderItems->where('order_items.is_printed', false);
+			}
 
-		if (!$this->showInCart) {
-			$filteredOrderItems = $filteredOrderItems->where('order_items.is_in_cart', false);
+			if (!$this->showInCart) {
+				$filteredOrderItems = $filteredOrderItems->where('order_items.is_in_cart', false);
+			}
 		}
 
 		return $filteredOrderItems

@@ -14,7 +14,6 @@
 /* Gallery */
 #client-pics .gallery {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
 	gap: 2rem;
 	margin-top: -3rem;
 }
