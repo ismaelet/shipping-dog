@@ -138,17 +138,16 @@ class ProductLog extends Component {
 		}
 
 		if (!$this->showPrinted && !$this->showInCart) {
-			$filteredOrderItems = $filteredOrderItems->where(function ($query) {
-				$query->where('order_items.is_printed', false)
-					->orWhere('order_items.is_in_cart', false);
-			});
+			$filteredOrderItems = $filteredOrderItems
+				->where('order_items.is_printed', false)
+				->where('order_items.is_in_cart', false);
 		} else {
-			if (!$this->showPrinted) {
-				$filteredOrderItems = $filteredOrderItems->where('order_items.is_printed', false);
+			if ($this->showPrinted) {
+				$filteredOrderItems = $filteredOrderItems->where('order_items.is_printed', true);
 			}
 
-			if (!$this->showInCart) {
-				$filteredOrderItems = $filteredOrderItems->where('order_items.is_in_cart', false);
+			if ($this->showInCart) {
+				$filteredOrderItems = $filteredOrderItems->where('order_items.is_in_cart', true);
 			}
 		}
 

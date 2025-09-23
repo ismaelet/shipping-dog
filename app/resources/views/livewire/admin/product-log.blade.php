@@ -12,74 +12,82 @@
 				} [m])) ?? '';
 
 			const sections = [];
-			const plainSections = [];
 
 			// Add seller text
+			const sellersHtml = ['<h2 style="text-align: center;">DESIGN</h2>'];
+
 			const sellers = document.querySelectorAll('.js-seller');
 
+			// Loop sellers
 			sellers.forEach(sellerEl => {
-				const titleEl = sellerEl.querySelector('.js-title');
-				const title = titleEl ? titleEl.textContent.trim() : '';
+				const sellerHtml = [];
 
-				const lines = Array.from(sellerEl.querySelectorAll('.js-to-copy'))
-					.map(el => el.innerText.trim())
-					.filter(Boolean);
+				const title = sellerEl.querySelector('.js-title').textContent.trim();
 
-				if (!title && !lines.length) return;
+				const sellerTitleHtml = `<h3 style="margin: 8px 0 0 0;">${title}</h3>`;
 
-				// Build HTML section (inline styles → safer for Outlook/Word)
-				const html =
-					`<div style="margin:0 0 8px 0;">
-		  ${title ? `<div style="color:#ff9600;font-weight:700;margin:0 0 4px 0;">${escapeHtml(title)}</div>` : ''}
-		  <div>${lines.map(l => `${escapeHtml(l)}`).join('<br>')}</div>
-		</div>`;
+				sellerHtml.push(sellerTitleHtml);
 
-				// Build plain-text section
-				const plain =
-					`${title ? title + '\n' : ''}${lines.join('\n')}`;
+				// Loop designs
+				const designs = sellerEl.querySelectorAll('.js-design');
 
-				sections.push(html);
-				plainSections.push(plain);
-			});
+				designs.forEach(function(design) {
+					const designHtml = [];
+					const title = design.querySelector('.js-title').textContent.trim();
 
-			// Add separator between sellers and products
-			sections.push('<div style="margin:8px 0; text-align:center;">---</div>');
-			plainSections.push('---');
+					designHtml.push(
+						`<h4 style="margin: 0;">${escapeHtml(title)}</h4>`);
 
-			// Add products text
-			const productsEl = document.querySelector('.js-products');
-
-			if (productsEl) {
-				const productTypes = productsEl.querySelectorAll('.js-product');
-
-				productTypes.forEach(productEl => {
-					const titleEl = productEl.querySelector('.js-title');
-					const title = titleEl ? titleEl.textContent.trim() : '';
-
-					const lines = Array.from(productEl.querySelectorAll('.js-to-copy'))
+					const lines = Array.from(design.querySelectorAll('.js-to-copy'))
 						.map(el => el.innerText.trim())
 						.filter(Boolean);
 
-					if (!title && !lines.length) return;
-
 					// Build HTML section (inline styles → safer for Outlook/Word)
 					const html =
-						`<div style="margin:0 0 8px 0;">
-			${title ? `<div style="color:#ff9600;font-weight:700;margin:0 0 4px 0;">${escapeHtml(title)}</div>` : ''}
-			<div>${lines.map(l => `${escapeHtml(l)}`).join('<br>')}</div>
-		  </div>`;
+						`<div>${lines.map(l => `${escapeHtml(l)}`).join('<br>')}</div>`;
 
 					// Build plain-text section
-					const plain =
-						`${title ? title + '\n' : ''}${lines.join('\n')}`;
-
-					sections.push(html);
-					plainSections.push(plain);
+					designHtml.push(html);
+					sellerHtml.push(designHtml.join(''));
 				});
-			}
+
+				sellersHtml.push(sellerHtml.join(''));
+			});
+
+			// Add product text
+			const productsHtml = ['<h2 style="text-align: center;">PRODOTTI</h2>'];
+
+			const products = document.querySelectorAll('.js-product');
+
+			// Loop products
+			products.forEach(product => {
+				const productHtml = [];
+
+				const title = product.querySelector('.js-title').textContent.trim();
+
+				const productTitleHtml = `<h3 style="margin: 8px 0 0 0;">${title}</h3>`;
+
+				productHtml.push(productTitleHtml);
+
+				// Loop designs
+				const lines = Array.from(product.querySelectorAll('.js-to-copy'))
+					.map(el => el.innerText.trim())
+					.filter(Boolean);
+
+				// Build HTML section (inline styles → safer for Outlook/Word)
+				const html =
+					`<div>${lines.map(l => `${escapeHtml(l)}`).join('<br>')}</div>`;
+
+				// Build plain-text section
+				productHtml.push(html);
+				productsHtml.push(productHtml.join(''));
+			});
+
+			// Copy texts
+			sections.push(sellersHtml.join('<div style="margin-top: 4px"></div>'));
+			sections.push(productsHtml.join('<div style="margin-top: 4px"></div>'));
 
 			const htmlPayload = sections.join('<div style="height:8px"></div>');
-			const plainPayload = plainSections.join('\n\n');
 
 			try {
 				// Copy as rich HTML + plain text
@@ -87,9 +95,6 @@
 					new ClipboardItem({
 						'text/html': new Blob([htmlPayload], {
 							type: 'text/html'
-						}),
-						'text/plain': new Blob([plainPayload], {
-							type: 'text/plain'
 						}),
 					}),
 				]);
