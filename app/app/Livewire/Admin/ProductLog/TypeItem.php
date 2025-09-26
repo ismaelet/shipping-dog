@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\ProductLog;
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductColor;
+use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductSize;
 use App\Models\Ecommerce\Product\ProductType;
 use Illuminate\Database\Eloquent\Collection;
@@ -34,6 +35,21 @@ class TypeItem extends Component {
 	public ProductSize $size;
 
 	/**
+	 * Property: The position (optional)
+	 */
+	public ?ProductPosition $position = null;
+
+	/**
+	 * Property: The design (optional)
+	 */
+	public ?Design $design = null;
+
+	/**
+	 * Property: The product (optional)
+	 */
+	public ?Product $product = null;
+
+	/**
 	 * Property: The count of printed items
 	 */
 	public int $isPrintedCount;
@@ -52,16 +68,6 @@ class TypeItem extends Component {
 	 * Property: The count of items not in cart
 	 */
 	public int $isNotInCartCount;
-
-	/**
-	 * Property: The design (optional)
-	 */
-	public ?Design $design = null;
-
-	/**
-	 * Property: The product (optional)
-	 */
-	public ?Product $product = null;
 
 	/**
 	 * Property: The design (optional)

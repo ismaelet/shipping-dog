@@ -326,14 +326,18 @@
 													@foreach ($orderItems->where('design_id', $design->id)->where('type_id', $type->id)->sortBy('color_id')->pluck('color')->unique() as $color)
 														{{-- Filter by size --}}
 														@foreach ($orderItems->where('design_id', $design->id)->where('type_id', $type->id)->where('color_id', $color->id)->sortBy('size_id')->pluck('size')->unique() as $size)
-															<livewire:admin.product-log.type-item
-																:key="`type-item-{{ $type->id }}-color-{{ $color->id }}-size-{{ $size->id }}`"
-																:order-items="$orderItems"
-																:type="$type"
-																:color="$color"
-																:size="$size"
-																:design="$design"
-															/>
+															{{-- Filter by position --}}
+															@foreach ($orderItems->where('design_id', $design->id)->where('type_id', $type->id)->where('color_id', $color->id)->where('size_id', $size->id)->sortBy('position')->pluck('position')->unique() as $position)
+																<livewire:admin.product-log.type-item
+																	:key="`type-item-{{ $type->id }}-color-{{ $color->id }}-size-{{ $size->id }}`"
+																	:order-items="$orderItems"
+																	:type="$type"
+																	:color="$color"
+																	:size="$size"
+																	:position="$position"
+																	:design="$design"
+																/>
+															@endforeach
 														@endforeach
 													@endforeach
 												@endforeach

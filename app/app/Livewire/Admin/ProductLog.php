@@ -139,8 +139,11 @@ class ProductLog extends Component {
 
 		if (!$this->showPrinted && !$this->showInCart) {
 			$filteredOrderItems = $filteredOrderItems
-				->where('order_items.is_printed', false)
-				->where('order_items.is_in_cart', false);
+				->where(
+					fn($query) =>
+					$query->where('order_items.is_printed', false)
+						->orWhere('order_items.is_in_cart', false)
+				);
 		} else {
 			if ($this->showPrinted) {
 				$filteredOrderItems = $filteredOrderItems->where('order_items.is_printed', true);

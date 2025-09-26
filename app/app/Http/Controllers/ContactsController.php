@@ -33,8 +33,10 @@ class ContactsController extends Controller {
 
 		$name = trim($request->name);
 		$clientEmail = trim($request->email);
+		$emailDomain = substr(strrchr($clientEmail, "@"), 1);
 		$mailText = trim($request->text);
 
+		$allowedEmailDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'libero.it', 'hotmail.it', 'icloud.com', 'protonmail.com', 'tiscali.it', 'virgilio.it', 'alice.it', 'fastwebnet.it', 'email.it', 'gmx.it', 'inwind.it', 'tin.it', 'tim.it', 'yahoo.it'];
 		$bannedWords = ['CEO'];
 
 		foreach ($bannedWords as $word) {
@@ -44,6 +46,13 @@ class ContactsController extends Controller {
 							<a href="' . config('custom.contacts.email.url') . '" class="font-bold">' . config('custom.contacts.email.label') . '</a>, invece di usare questo formulario.',
 				]);
 			}
+		}
+
+		if (!in_array($emailDomain, $allowedEmailDomains)) {
+			return redirect()->back()->withInput()->withErrors([
+				'spam' => '<span class="font-bold">Errore</span>: il messaggio non ha superato i nostri filtri anti-spam. Puoi comunque a scriverci direttamente a
+							<a href="' . config('custom.contacts.email.url') . '" class="font-bold">' . config('custom.contacts.email.label') . '</a>, invece di usare questo formulario.',
+			]);
 		}
 
 		try {

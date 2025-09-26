@@ -2,13 +2,18 @@
 	{{-- Row --}}
 	@if ($category === 'design')
 		<a
-			href="{{ $product->fullUrl(color_id: $color->id) }}"
+			href="{{ $product->fullUrl(color_id: $color->id, position_id: $position->id) }}"
 			class="js-to-copy"
 		>
 			{{ $quantity }}
 			x
 			{{ $type->name }}
-			{{ $color->name . ' ' . $size->name }}
+			{{ $color->name }}
+			{{ $size->name }}
+
+			@if ($position->id !== 1)
+				- {{ $position->name }}
+			@endif
 		</a>
 	@else
 		<p class="js-to-copy">
