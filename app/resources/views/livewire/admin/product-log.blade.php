@@ -316,7 +316,16 @@
 									@foreach ($orderItems->where('seller_id', $seller->id)->pluck('design')->unique() as $design)
 										<div class="design js-design">
 											<p class="js-title text-neutral-700">
-												--- {{ ($design ? $design->id . ' - ' : '') . $design->name }} ---
+												@if ($design->originalImage())
+													<a
+														href="{{ $design->originalImage() }}"
+														download
+													>
+														--- {{ ($design ? $design->id . ' - ' : '') . $design->name }} ---
+													</a>
+												@else
+													--- {{ ($design ? $design->id . ' - ' : '') . $design->name }} ---
+												@endif
 											</p>
 
 											<div class="mt-2 grid grid-cols-1 gap-2">

@@ -38,376 +38,355 @@ use Illuminate\Support\Facades\Mail;
 
 class OrderResource extends Resource {
 
-	/**
-	 * Property: The model the resource corresponds to
-	 */
-	protected static ?string $model = Order::class;
+    /**
+     * Property: The model the resource corresponds to
+     */
+    protected static ?string $model = Order::class;
 
-	/**
-	 * Property: The icon that should be displayed in the navigation item for the resource
-	 */
-	protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-shopping-bag';
+    /**
+     * Property: The icon that should be displayed in the navigation item for the resource
+     */
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-shopping-bag';
 
-	/**
-	 * Property: The label of a singular resource
-	 */
-	protected static ?string $label = 'Ordine';
+    /**
+     * Property: The label of a singular resource
+     */
+    protected static ?string $label = 'Ordine';
 
-	/**
-	 * Property: The label of a plural resource
-	 */
-	protected static ?string $pluralLabel = 'Ordini';
+    /**
+     * Property: The label of a plural resource
+     */
+    protected static ?string $pluralLabel = 'Ordini';
 
-	/**
-	 * Property: The group the resource should be displayed in the navigation
-	 */
-	protected static string | \UnitEnum | null $navigationGroup = 'Vendite';
+    /**
+     * Property: The group the resource should be displayed in the navigation
+     */
+    protected static string | \UnitEnum | null $navigationGroup = 'Vendite';
 
-	/**
-	 * Determine whether the resource can be created
-	 */
-	public static function canCreate(): bool {
-		return false;
-	}
+    /**
+     * Determine whether the resource can be created
+     */
+    public static function canCreate(): bool {
+        return false;
+    }
 
-	/**
-	 * Determine whether the resource can be deleted
-	 */
-	public static function canDelete(Model $record): bool {
-		return false;
-	}
+    /**
+     * Determine whether the resource can be deleted
+     */
+    public static function canDelete(Model $record): bool {
+        return false;
+    }
 
-	/**
-	 * The form for creating or updating records
-	 */
-	public static function form(Schema $schema): Schema {
-		return $schema
-			->components([
-				Actions::make([
-					Action::make('send-email')
-						->label('Reinvia e-mail')
-						->icon('heroicon-o-paper-airplane')
-						->color('info')
-						->requiresConfirmation()
-						->action(function (Order $record): bool {
-							Mail::to($record->address->email)->queue(new OrderStatusMail($record));
+    /**
+     * The form for creating or updating records
+     */
+    public static function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                Actions::make([
+                    Action::make('send-email')
+                        ->label('Reinvia e-mail')
+                        ->icon('heroicon-o-paper-airplane')
+                        ->color('info')
+                        ->requiresConfirmation()
+                        ->action(function (Order $record): bool {
+                            Mail::to($record->address->email)->queue(new OrderStatusMail($record));
 
-							if (true) {
-								Notification::make()
-									->title('E-mail inviata')
-									->body('A ' . $record->address->email . ' correttamente')
-									->success()
-									->send();
+                            if (true) {
+                                Notification::make()
+                                    ->title('E-mail inviata')
+                                    ->body('A ' . $record->address->email . ' correttamente')
+                                    ->success()
+                                    ->send();
 
-								return true;
-							}
+                                return true;
+                            }
 
-							Notification::make()
-								->title('Trasmesso')
-								->body('Errore durante l\'invio dell\'email')
-								->danger()
-								->send();
+                            Notification::make()
+                                ->title('Trasmesso')
+                                ->body('Errore durante l\'invio dell\'email')
+                                ->danger()
+                                ->send();
 
-							return false;
-						})
-				]),
+                            return false;
+                        })
+                ])->columnSpanFull(),
 
-				// Split the form into two columns
-				Flex::make([
+                // Price
+                Fieldset::make('Prezzo')
+                    ->schema([
+                        View::make('filament.forms.orders.order-items-recap'),
+                    ])->columnSpanFull(),
 
-					// First column
-					Grid::make()
-						->schema([
-							// Price
-							Fieldset::make('Prezzo')
-								->schema([
-									View::make('filament.forms.orders.order-items-recap'),
-								])
-								->columns(1)
-								->grow(true),
+                // Address
+                Fieldset::make('Destinatario')
+                    ->relationship('address')
+                    ->schema([
+                        TextInput::make('full_name')
+                            ->label('Nome completo')
+                            ->placeholder('Nome e cognome')
+                            ->required()
+                            ->columnSpanFull(),
 
-							// Address
-							Fieldset::make('Destinatario')
-								->relationship('address')
-								->schema([
-									TextInput::make('full_name')
-										->label('Nome completo')
-										->placeholder('Nome e cognome')
-										->required()
-										->columnSpanFull(),
+                        TextInput::make('address')
+                            ->label('Indirizzo')
+                            ->placeholder('Indirizzo')
+                            ->columnSpan(['lg' => 3]),
 
-									TextInput::make('address')
-										->label('Indirizzo')
-										->placeholder('Indirizzo')
-										->columnSpan(['lg' => 3]),
+                        TextInput::make('number')
+                            ->label('Numero')
+                            ->placeholder('Numero'),
 
-									TextInput::make('number')
-										->label('Numero')
-										->placeholder('Numero'),
+                        TextInput::make('city')
+                            ->label('Città')
+                            ->placeholder('Città')
+                            ->columnSpan(['lg' => 2]),
 
-									TextInput::make('city')
-										->label('Città')
-										->placeholder('Città')
-										->columnSpan(['lg' => 2]),
+                        TextInput::make('zip')
+                            ->label('CAP')
+                            ->placeholder('CAP')
+                            ->length(5),
 
-									TextInput::make('zip')
-										->label('CAP')
-										->placeholder('CAP')
-										->length(5),
+                        TextInput::make('region')
+                            ->label('Regione')
+                            ->placeholder('Regione')
+                            ->maxLength(2),
 
-									TextInput::make('region')
-										->label('Regione')
-										->placeholder('Regione')
-										->maxLength(2),
+                        TextInput::make('email')
+                            ->label('E-mail')
+                            ->placeholder('E-mail')
+                            ->required()
+                            ->suffixIcon('heroicon-o-envelope')
+                            ->columnSpanFull(),
 
-									TextInput::make('email')
-										->label('E-mail')
-										->placeholder('E-mail')
-										->required()
-										->suffixIcon('heroicon-o-envelope')
-										->columnSpanFull(),
+                        TextInput::make('phone')
+                            ->label('Telefono')
+                            ->placeholder('Telefono')
+                            ->required()
+                            ->suffixIcon('heroicon-o-phone')
+                            ->columnSpanFull(),
+                    ])->columnSpanFull(),
 
-									TextInput::make('phone')
-										->label('Telefono')
-										->placeholder('Telefono')
-										->required()
-										->suffixIcon('heroicon-o-phone')
-										->columnSpanFull(),
-								])->columns(['lg' => 4]),
-						]),
+                // Order details
+                Fieldset::make('Dati dell\'ordine')
+                    ->schema([
+                        Select::make('status')
+                            ->label('Stato')
+                            ->options(
+                                array_combine(
+                                    array_keys(config('ecommerce.order.statuses')),
+                                    array_column(config('ecommerce.order.statuses'), 'label')
+                                )
+                            )
+                            ->required()
+                            ->columnSpanFull(),
+                    ])->columnSpanFull(),
 
-					// Second column
-					Grid::make()
-						->schema([
+                // Shipping
+                Fieldset::make('Spedizione')
+                    ->schema([
+                        Select::make('shipping_method_id')
+                            ->label('Metodo di spedizione')
+                            ->options(
+                                ShippingMethod::all()->pluck('name', 'id')
+                            )
+                            ->required(),
 
-							// Order details
-							Fieldset::make('Dati dell\'ordine')
-								->schema([
-									Select::make('status')
-										->label('Stato')
-										->options(
-											array_combine(
-												array_keys(config('ecommerce.order.statuses')),
-												array_column(config('ecommerce.order.statuses'), 'label')
-											)
-										)
-										->required()
-										->columnSpanFull(),
-								])
-								->columns(1)
-								->grow(true),
+                        TextInput::make('tracking')
+                            ->label('Numero di tracking')
+                            ->placeholder('Numero di tracking')
+                            ->readOnly()
+                            ->columnSpanFull(),
 
-							// Shipping
-							Fieldset::make('Spedizione')
-								->schema([
-									Select::make('shipping_method_id')
-										->label('Metodo di spedizione')
-										->options(
-											ShippingMethod::all()->pluck('name', 'id')
-										)
-										->required(),
+                        Toggle::make('exchange')
+                            ->label('Exchange')
+                            ->columnSpanFull(),
+                    ]),
 
-									TextInput::make('tracking')
-										->label('Numero di tracking')
-										->placeholder('Numero di tracking')
-										->readOnly()
-										->columnSpanFull(),
+                // Payment
+                Fieldset::make('Pagamento')
+                    ->schema([
+                        Select::make('payment_method_id')
+                            ->label('Metodo di pagamento')
+                            ->options(
+                                PaymentMethod::all()->pluck('name', 'id')
+                            )
+                            ->required(),
 
-									Toggle::make('exchange')
-										->label('Exchange')
-										->columnSpanFull(),
-								])->columns(1),
+                        TextInput::make('token')
+                            ->label('Codice della transazione')
+                            ->placeholder('Codice della transazione')
+                            ->readOnly()
+                            ->columnSpanFull(),
+                    ])
+            ]);
+    }
 
-							// Payment
-							Fieldset::make('Pagamento')
-								->schema([
-									Select::make('payment_method_id')
-										->label('Metodo di pagamento')
-										->options(
-											PaymentMethod::all()->pluck('name', 'id')
-										)
-										->required(),
+    /**
+     * The table for the resource
+     */
+    public static function table(Table $table): Table {
+        return $table
 
-									TextInput::make('token')
-										->label('Codice della transazione')
-										->placeholder('Codice della transazione')
-										->readOnly()
-										->columnSpanFull(),
-								])
-								->columns(1),
-						])
-						->grow(false),
-				])
-					->from('lg')
-			])
-			->columns(1);
-	}
+            // The query that should be used to fetch records. This query
+            ->query(function (): Builder {
+                return Order::leftJoin('addresses', 'orders.id', '=', 'addresses.order_id')
+                    ->select('orders.id as order_id', 'orders.*')
+                    ->with('order_items', 'order_items.product_with_trashed', 'order_items.type', 'order_items.position', 'order_items.type.colors', 'order_items.type.sizes', 'order_items.color', 'order_items.size', 'order_items.logo');
+            })
 
-	/**
-	 * The table for the resource
-	 */
-	public static function table(Table $table): Table {
-		return $table
+            // The columns that should be displayed in the table.
+            ->columns([
+                // ID
+                TextColumn::make('order_id')
+                    ->searchable()
+                    ->sortable()
+                    ->numeric()
+                    ->label('ID'),
 
-			// The query that should be used to fetch records. This query
-			->query(function (): Builder {
-				return Order::leftJoin('addresses', 'orders.id', '=', 'addresses.order_id')
-					->select('orders.id as order_id', 'orders.*')
-					->with('order_items', 'order_items.product_with_trashed', 'order_items.type', 'order_items.position', 'order_items.type.colors', 'order_items.type.sizes', 'order_items.color', 'order_items.size', 'order_items.logo');
-			})
+                // Recipient
+                TextColumn::make('address.full_address')
+                    ->label('Destinatario')
+                    ->placeholder('-')
+                    ->listWithLineBreaks()
+                    ->wrap()
+                    ->searchable(query: function (Builder $query, $search) {
+                        $query->where('full_name', 'like', '%' . $search . '%')
+                            ->orWhere('first_name', 'like', '%' . $search . '%')
+                            ->orWhere('last_name', 'like', '%' . $search . '%')
+                            ->orWhere('address', 'like', '%' . $search . '%')
+                            ->orWhere('city', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%');
+                    })
+                    ->sortable(['full_name', 'first_name', 'last_name', 'address', 'email']),
 
-			// The columns that should be displayed in the table.
-			->columns([
-				// ID
-				TextColumn::make('order_id')
-					->searchable()
-					->sortable()
-					->numeric()
-					->label('ID'),
+                // Products
+                TextColumn::make('order_items.full_name')
+                    ->state(function (Order $record): array {
+                        return $record->order_items->pluck('full_name')->toArray();
+                    })
+                    ->label('Articoli')
+                    ->listWithLineBreaks()
+                    ->wrap()
+                    ->toggleable()
+                    ->searchable(query: function (Builder $query, $search) {
+                        $query->whereHas('order_items', function (Builder $query) use ($search) {
+                            $query
+                                ->WhereHas('product', function (Builder $query) use ($search) {
+                                    $query->where('name', 'like', '%' . $search . '%');
+                                })
+                                ->orWhereHas('seller', function (Builder $query) use ($search) {
+                                    $query->where('name', 'like', '%' . $search . '%');
+                                });
+                        });
+                    })
+                    ->placeholder('nessun articolo'),
 
-				// Recipient
-				TextColumn::make('address.full_address')
-					->label('Destinatario')
-					->placeholder('-')
-					->listWithLineBreaks()
-					->wrap()
-					->searchable(query: function (Builder $query, $search) {
-						$query->where('full_name', 'like', '%' . $search . '%')
-							->orWhere('first_name', 'like', '%' . $search . '%')
-							->orWhere('last_name', 'like', '%' . $search . '%')
-							->orWhere('address', 'like', '%' . $search . '%')
-							->orWhere('city', 'like', '%' . $search . '%')
-							->orWhere('email', 'like', '%' . $search . '%');
-					})
-					->sortable(['full_name', 'first_name', 'last_name', 'address', 'email']),
+                // Total price
+                TextColumn::make('price')
+                    ->label('Totale')
+                    ->money(currency: 'EUR')
+                    ->sortable(),
 
-				// Products
-				TextColumn::make('order_items.full_name')
-					->state(function (Order $record): array {
-						return $record->order_items->pluck('full_name')->toArray();
-					})
-					->label('Articoli')
-					->listWithLineBreaks()
-					->wrap()
-					->toggleable()
-					->searchable(query: function (Builder $query, $search) {
-						$query->whereHas('order_items', function (Builder $query) use ($search) {
-							$query
-								->WhereHas('product', function (Builder $query) use ($search) {
-									$query->where('name', 'like', '%' . $search . '%');
-								})
-								->orWhereHas('seller', function (Builder $query) use ($search) {
-									$query->where('name', 'like', '%' . $search . '%');
-								});
-						});
-					})
-					->placeholder('nessun articolo'),
+                // Status
+                SelectColumn::make('status')
+                    ->label('Stato')
+                    ->sortable()
+                    ->label('Stato')
+                    ->options(
+                        array_combine(
+                            array_keys(config('ecommerce.order.statuses')),
+                            array_map(fn($status) => '<span style="color: var(--status-' . $status['tag'] . '-400); text-wrap: nowrap;">' . $status['label'] . '</span >', config('ecommerce.order.statuses'))
+                        )
+                    )
+                    ->searchableOptions()
+                    ->allowOptionsHtml(),
+                // TextColumn::make('status')
+                // 	->label('Stato')
+                // 	->sortable()
+                // 	->badge()
+                // 	->color(function (int $state): string {
+                // 		$tag = config('ecommerce.order.statuses')[$state]['tag'];
 
-				// Total price
-				TextColumn::make('price')
-					->label('Totale')
-					->money(currency: 'EUR')
-					->sortable(),
+                // 		return 'status-' . $tag;
+                // 	})
+                // 	->formatStateUsing(function (int $state): string {
+                // 		return config('ecommerce.order.statuses')[$state]['label'];
+                // 	}),
 
-				// Status
-				SelectColumn::make('status')
-					->label('Stato')
-					->sortable()
-					->label('Stato')
-					->options(
-						array_combine(
-							array_keys(config('ecommerce.order.statuses')),
-							array_map(fn($status) => '<span style="color: var(--status-' . $status['tag'] . '-400); text-wrap: nowrap;">' . $status['label'] . '</span >', config('ecommerce.order.statuses'))
-						)
-					)
-					->searchableOptions()
-					->allowOptionsHtml(),
-				// TextColumn::make('status')
-				// 	->label('Stato')
-				// 	->sortable()
-				// 	->badge()
-				// 	->color(function (int $state): string {
-				// 		$tag = config('ecommerce.order.statuses')[$state]['tag'];
+                // Whether the customer is registered
+                IconColumn::make('user_id')
+                    ->label('Ha account')
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->state(function (Order $record): bool {
+                        return (bool) $record->user_id;
+                    })
+                    ->sortable(),
 
-				// 		return 'status-' . $tag;
-				// 	})
-				// 	->formatStateUsing(function (int $state): string {
-				// 		return config('ecommerce.order.statuses')[$state]['label'];
-				// 	}),
+                // Tracking
+                TextColumn::make('tracking')
+                    ->placeholder('senza tracking')
+                    ->label('Tracking')
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->searchable()
+                    ->sortable(),
 
-				// Whether the customer is registered
-				IconColumn::make('user_id')
-					->label('Ha account')
-					->boolean()
-					->toggleable()
-					->toggledHiddenByDefault()
-					->state(function (Order $record): bool {
-						return (bool) $record->user_id;
-					})
-					->sortable(),
+                // Created at
+                TextColumn::make('created_at')
+                    ->label('Creato il')
+                    ->dateTime('d-m-Y')
+                    ->sortable(),
+            ])
 
-				// Tracking
-				TextColumn::make('tracking')
-					->placeholder('senza tracking')
-					->label('Tracking')
-					->toggleable()
-					->toggledHiddenByDefault()
-					->searchable()
-					->sortable(),
+            // The default sort column and direction.
+            ->defaultSort('created_at', 'desc')
 
-				// Created at
-				TextColumn::make('created_at')
-					->label('Creato il')
-					->dateTime('d-m-Y')
-					->sortable(),
-			])
+            // The filters that should be available for the table.
+            ->filters([
+                SelectFilter::make('status')
+                    ->label('Stato')
+                    ->options(array_combine(array_keys(config('ecommerce.order.statuses')), array_column(config('ecommerce.order.statuses'), 'label')))
+                    ->default((array_values(array_filter(array_keys(config('ecommerce.order.statuses'))))))
+                    ->multiple(),
+            ], layout: FiltersLayout::AboveContent)
+            ->filtersFormColumns(1)
 
-			// The default sort column and direction.
-			->defaultSort('created_at', 'desc')
+            // The actions that should be available for the resources.
+            ->recordActions([
+                ViewAction::make()
+                    ->color('info'),
+                EditAction::make()
+            ])
 
-			// The filters that should be available for the table.
-			->filters([
-				SelectFilter::make('status')
-					->label('Stato')
-					->options(array_combine(array_keys(config('ecommerce.order.statuses')), array_column(config('ecommerce.order.statuses'), 'label')))
-					->default((array_values(array_filter(array_keys(config('ecommerce.order.statuses'))))))
-					->multiple(),
-			], layout: FiltersLayout::AboveContent)
-			->filtersFormColumns(1)
+            // The bulk actions that should be available for the table.
+            ->toolbarActions([
+                BulkActionGroup::make([]),
+            ]);
+    }
 
-			// The actions that should be available for the resources.
-			->recordActions([
-				ViewAction::make()
-					->color('info'),
-				EditAction::make()
-			])
+    /**
+     * Get the pages available to the resource.
+     * 
+     * @return array
+     */
+    public static function getPages(): array {
+        return [
+            'index' => ListOrders::route('/'),
+            'edit' => EditOrder::route('/{record}/edit'),
+        ];
+    }
 
-			// The bulk actions that should be available for the table.
-			->toolbarActions([
-				BulkActionGroup::make([]),
-			]);
-	}
-
-	/**
-	 * Get the pages available to the resource.
-	 * 
-	 * @return array
-	 */
-	public static function getPages(): array {
-		return [
-			'index' => ListOrders::route('/'),
-			'edit' => EditOrder::route('/{record}/edit'),
-		];
-	}
-
-	/**
-	 * Get the relations available to the resource.
-	 * 
-	 * @return array
-	 */
-	public static function getRelations(): array {
-		return [
-			OrderItemsRelationManager::class,
-		];
-	}
+    /**
+     * Get the relations available to the resource.
+     * 
+     * @return array
+     */
+    public static function getRelations(): array {
+        return [
+            OrderItemsRelationManager::class,
+        ];
+    }
 }
