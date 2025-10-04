@@ -10,20 +10,18 @@ use Illuminate\Support\Facades\Route;
  * User Dashboard
  */
 Route::prefix('user-dashboard')->name('user-dashboard')->group(function () {
-	// Recap page
-	Route::get('', [UserDashboardController::class, 'index'])->name('');
+    // Recap page
+    Route::get('', [UserDashboardController::class, 'index'])->name('');
 
-	// Settings
-	Route::get('/settings', [UserDashboardController::class, 'settings'])->name('.settings');
+    // Settings
+    Route::get('/settings', [UserDashboardController::class, 'settings'])->name('.settings');
 
-	// Order list
-	Route::get('/orders', [UserDashboardController::class, 'orders'])->name('.orders');
+    // Order list
+    Route::get('/orders', [UserDashboardController::class, 'orders'])->name('.orders');
 
-	// Wishlist
-	Route::get('/wishlist', [WishlistController::class, 'index'])->name('.wishlist');
+    // Wishlist
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('.wishlist');
 });
 
 // Delete the account
-Route::delete('/user', function () {
-	abort(405);
-})->name('user.destroy');
+Route::delete('/user', [UserController::class, 'destroy'])->name('user.destroy');

@@ -15,214 +15,210 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Design extends Model {
 
-	use SoftDeletes;
+    use SoftDeletes;
 
-	/**
-	 * The attributes that are mass assignable.
-	 * 
-	 * @var array
-	 */
-	protected $fillable = [
-		'id',
-		'name',
-		'user_id',
-		'status',
-		'ratio',
-		'sort',
-		'color',
-		'default_color_id',
-		'logo_group_id'
-	];
+    /**
+     * The attributes that are mass assignable.
+     * 
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'name',
+        'user_id',
+        'status',
+        'ratio',
+        'sort',
+        'color',
+        'default_color_id',
+        'logo_group_id'
+    ];
 
-	public function full_name(): Attribute {
-		return Attribute::make(
-			get: fn() => $this->name . ' - ' . $this->id,
-		);
-	}
+    public function full_name(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->name . ' - ' . $this->id,
+        );
+    }
 
-	/**
-	 * Delete the design and the related products
-	 */
-	public function delete() {
-		$this->products()->delete();
+    /**
+     * Delete the design and the related products
+     */
+    public function delete() {
+        $this->products()->delete();
 
-		return parent::delete();
-	}
+        return parent::delete();
+    }
 
-	/**
-	 * * Relationships
-	 */
+    /**
+     * Get the design's seller
+     */
+    public function seller(): BelongsTo {
+        return $this->belongsTo(Seller::class, 'user_id', 'user_id');
+    }
 
-	/**
-	 * Get the design's seller
-	 */
-	public function seller(): BelongsTo {
-		return $this->belongsTo(Seller::class, 'user_id', 'user_id');
-	}
+    /**
+     * Get the design's main
+     */
+    public function main_product(): HasOne {
+        return $this->hasOne(Product::class)
+            ->where('status', true)
+            ->orderBy('type_id');
+    }
 
-	/**
-	 * Get the design's main
-	 */
-	public function main_product(): HasOne {
-		return $this->hasOne(Product::class)
-			->where('status', true)
-			->orderBy('type_id');
-	}
+    /**
+     * Get the design's products
+     */
+    public function products(): HasMany {
+        return $this->hasMany(Product::class)
+            ->where('status', true)
+            ->orderBy('type_id');
+    }
 
-	/**
-	 * Get the design's products
-	 */
-	public function products(): HasMany {
-		return $this->hasMany(Product::class)
-			->where('status', true)
-			->orderBy('type_id');
-	}
+    /**
+     * Get the design's likes
+     */
+    public function likes(): HasMany {
+        return $this->hasMany(Like::class);
+    }
 
-	/**
-	 * Get the design's likes
-	 */
-	public function likes(): HasMany {
-		return $this->hasMany(Like::class);
-	}
+    /**
+     * Get the design's tags
+     */
+    public function tags(): HasOne {
+        return $this->hasOne(DesignTag::class);
+    }
 
-	/**
-	 * Get the design's tags
-	 */
-	public function tags(): HasOne {
-		return $this->hasOne(DesignTag::class);
-	}
+    /**
+     * Get the design's customer photos
+     */
+    public function customerPhotos(): HasMany {
+        return $this->hasMany(CustomerPhoto::class);
+    }
 
-	/**
-	 * Get the design's customer photos
-	 */
-	public function customerPhotos(): HasMany {
-		return $this->hasMany(CustomerPhoto::class);
-	}
+    /**
+     * Get the design's logo group
+     */
+    public function logo_group(): BelongsTo {
+        return $this->belongsTo(LogoGroup::class);
+    }
 
-	/**
-	 * Get the design's logo group
-	 */
-	public function logo_group(): BelongsTo {
-		return $this->belongsTo(LogoGroup::class);
-	}
+    /**
+     * Ge the desing's url, that is the url of the main product
+     */
+    public function url(): ?string {
+        return $this->main_product?->url();
+    }
 
-	/**
-	 * Ge the desing's url, that is the url of the main product
-	 */
-	public function url(): ?string {
-		return $this->main_product?->url();
-	}
+    /**
+     * Get the design's time string
+     */
+    public function createdAtString(): string {
+        return date('d/m/Y', strtotime($this->created_at));
+    }
 
-	/**
-	 * Get the design's time string
-	 */
-	public function createdAtString(): string {
-		return date('d/m/Y', strtotime($this->created_at));
-	}
+    /**
+     * Get the count of products
+     */
+    public function productCount(): int {
+        return $this->products->count();
+    }
 
-	/**
-	 * Get the count of products
-	 */
-	public function productCount(): int {
-		return $this->products->count();
-	}
+    /**
+     * Check if the design is liked by the logged user
+     */
+    public function auth_user_like(): HasOne {
+        return $this->hasOne(Like::class)
+            ->where('user_id', auth()->id());
+    }
 
-	/**
-	 * Check if the design is liked by the logged user
-	 */
-	public function auth_user_like(): HasOne {
-		return $this->hasOne(Like::class)
-			->where('user_id', auth()->id());
-	}
+    public function isLiked(): bool {
+        return $this->auth_user_like ? true : false;
+    }
 
-	public function isLiked(): bool {
-		return $this->auth_user_like ? true : false;
-	}
+    /**
+     * Get the design's image
+     */
+    public function image(int $size = 400): string {
+        $file = $size == 400 ? 'designs/previews/' . $this->id . '_m.webp' : 'designs/previews/' . $this->id . '.webp';
 
-	/**
-	 * Get the design's image
-	 */
-	public function image(int $size = 400): string {
-		$file = $size == 400 ? 'designs/previews/' . $this->id . '_m.webp' : 'designs/previews/' . $this->id . '.webp';
+        if (!file_exists(public_storage($file))) {
+            des_img_gen($this->id);
+        }
 
-		if (!file_exists(public_storage($file))) {
-			des_img_gen($this->id);
-		}
+        if (file_exists(public_storage($file))) {
+            return public_asset($file);
+        }
 
-		if (file_exists(public_storage($file))) {
-			return public_asset($file);
-		}
+        return public_asset('product_types/mockups/no-image.webp');
+    }
 
-		return public_asset('product_types/mockups/no-image.webp');
-	}
+    public function originalImage(): ?string {
 
-	public function originalImage(): ?string {
+        if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '.ai'))) {
+            return public_asset($file);
+        }
 
-		if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '.ai'))) {
-			return public_asset($file);
-		}
+        if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '.pdf'))) {
+            return public_asset($file);
+        }
 
-		if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '.pdf'))) {
-			return public_asset($file);
-		}
+        if (file_exists(public_storage($file = 'designs_originals/' . $this->id . '.png'))) {
+            return public_asset($file);
+        }
 
-		if (file_exists(public_storage($file = 'designs_originals/' . $this->id . '.png'))) {
-			return public_asset($file);
-		}
+        return null;
+    }
 
-		return null;
-	}
+    public function originalDarkImage(): ?string {
 
-	public function originalDarkImage(): ?string {
+        if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '_dark.ai'))) {
+            return public_asset($file);
+        }
 
-		if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '_dark.ai'))) {
-			return public_asset($file);
-		}
+        if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '_dark.pdf'))) {
+            return public_asset($file);
+        }
 
-		if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '_dark.pdf'))) {
-			return public_asset($file);
-		}
+        if (file_exists(public_storage($file = 'designs_originals/' . $this->id . '_dark.png'))) {
+            return public_asset($file);
+        }
 
-		if (file_exists(public_storage($file = 'designs_originals/' . $this->id . '_dark.png'))) {
-			return public_asset($file);
-		}
+        return null;
+    }
 
-		return null;
-	}
+    /**
+     * Delete the design and clean the related data
+     */
+    public function deleteAndClean(bool $permanently = false): void {
+        // Delete products
+        foreach ($this->products as $product) {
+            $product->deleteAndClean($permanently);
+        }
 
-	/**
-	 * Delete the design and clean the related data
-	 */
-	public function deleteAndClean(bool $permanently = false): void {
-		// Delete products
-		foreach ($this->products as $product) {
-			$product->deleteAndClean($permanently);
-		}
+        if ($permanently) {
+            // Delete likes
+            foreach ($this->likes as $like) {
+                $like->delete();
+            }
 
-		if ($permanently) {
-			// Delete likes
-			foreach ($this->likes as $like) {
-				$like->delete();
-			}
+            // Delete tags
+            foreach ($this->tags as $tag) {
+                $tag->delete();
+            }
 
-			// Delete tags
-			foreach ($this->tags as $tag) {
-				$tag->delete();
-			}
+            // Delete customer photos
+            if ($this->customer_photos) {
+                foreach ($this->customer_photos as $customerPhoto) {
+                    $customerPhoto->delete();
+                }
+            }
 
-			// Delete customer photos
-			if ($this->customer_photos) {
-				foreach ($this->customer_photos as $customerPhoto) {
-					$customerPhoto->delete();
-				}
-			}
-
-			// Delete design
-			$this->delete();
-		} else {
-			// Disable design
-			$this->status = 0;
-			$this->save();
-		}
-	}
+            // Delete design
+            $this->delete();
+        } else {
+            // Disable design
+            $this->status = 0;
+            $this->save();
+        }
+    }
 }

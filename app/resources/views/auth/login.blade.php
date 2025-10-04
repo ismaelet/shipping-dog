@@ -17,6 +17,12 @@
 >
 
 	<x-slot name="formBody">
+		@session('success')
+			<x-alerts.success>
+				{{ session('success') }}
+			</x-alerts.success>
+		@endsession
+
 		<x-input
 			type="hidden"
 			name="url"
