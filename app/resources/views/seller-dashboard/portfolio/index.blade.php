@@ -47,7 +47,7 @@
 
 				@if ($isCustomSeller)
 					<x-button
-						href="{{ client_url('/manage/portfolio/product') }}"
+						href="{{ route('seller-dashboard.portfolio.products.add') }}"
 						class="button--auto-width"
 						variant="secondary"
 					>
@@ -166,7 +166,7 @@
 
 									<a
 										class="des-img sqr block"
-										href="{{ '/manage/portfolio/product?id=' . $product->id }}"
+										href="{{ route('seller-dashboard.portfolio.products.show', $product) }}"
 									>
 										<img
 											class="img-fill"

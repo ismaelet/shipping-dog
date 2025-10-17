@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -42,7 +43,8 @@ class Seller extends Model {
         'earned',
         'payed',
         'status',
-        'request'
+        'request',
+        'custom'
     ];
 
     /**
@@ -145,7 +147,7 @@ class Seller extends Model {
      */
     public function auth_follower(): HasOne {
         return $this->hasOne(Follower::class, 'user_id', 'id')
-            ->where('follower_id', auth()->id());
+            ->where('follower_id', Auth::id());
     }
 
     public function isFollowed(): bool {

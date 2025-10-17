@@ -122,7 +122,9 @@
 	</label>
 
 	{{-- Categories --}}
-	<div class="dashboard-categories border-surface-500 grid grid-cols-1 gap-6 border-b lg:mt-8 lg:border-b-0">
+	<div
+		class="dashboard-categories border-surface-500 grid grid-cols-1 gap-6 border-b lg:sticky lg:top-8 lg:mt-8 lg:border-b-0"
+	>
 
 		@foreach ($navigation as $category)
 			<div class="navigation-category group grid last:pb-8 lg:last:pb-0">
