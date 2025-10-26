@@ -13,6 +13,7 @@ use App\Models\Ecommerce\Product\ProductType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PortfolioController extends Controller {
@@ -185,7 +186,8 @@ class PortfolioController extends Controller {
             'description' => 'nullable|string',
             'default-color-id' => 'required|integer|exists:product_colors,id',
             'colors' => 'array',
-            'cover-image' => 'nullable|image|max:5120', // Max 5MB
+            'cover-image' => 'nullable|image|max:5120',
+            'more-images' => 'nullable|image',
         ]);
 
         $type = ProductType::find($request->input('type_id'));
@@ -206,7 +208,7 @@ class PortfolioController extends Controller {
             'status' => true,
         ]);
 
-        // upload product images
+        // Upload product images
         ProductDescription::updateOrCreate(
             ['product_id' => $product->id],
             ['description' => $description]
@@ -247,7 +249,8 @@ class PortfolioController extends Controller {
             'description' => 'nullable|string',
             'default-color-id' => 'required|integer|exists:product_colors,id',
             'colors' => 'array',
-            'cover-image' => 'nullable|image|max:5120', // Max 5MB
+            'cover-image' => 'nullable|image|max:5120',
+            'more-images.*' => 'nullable|image',
         ]);
 
         $name = $request->input('name');
@@ -293,6 +296,11 @@ class PortfolioController extends Controller {
             );
         }
 
+        // Upload more images
+        if ($request->file('more-images')) {
+            $this->uploadMoreImages($request, $product);
+        }
+
         return redirect()->route('seller-dashboard.portfolio.products.show', $product)->with('success', 'Il prodotto è stato aggiornato con successo.');
     }
 
@@ -329,5 +337,37 @@ class PortfolioController extends Controller {
         $product->delete();
 
         return redirect()->route('seller-dashboard.portfolio')->with('success', 'Prodotto eliminato con successo.');
+    }
+
+    /**
+     * Upload more images for the product
+     */
+    public function uploadMoreImages(Request $request, Product $product): void {
+        $moreImages = $request->file('more-images');
+
+        $this->deleteOldMoreImages($product);
+
+        foreach ($moreImages as $key => $image) {
+            ImageHelper::upload(
+                file: $image,
+                path: 'products/custom/' . $product->id . '-more-' . $key . '.webp',
+                size: 1024,
+                mode: 'width',
+                quality: 90
+            );
+        }
+    }
+
+    /**
+     * Delete old more images
+     */
+    public function deleteOldMoreImages(Product $product): void {
+        $prefix = 'products/custom/' . $product->id . '-more-';
+
+        $files = Storage::disk('public')->files('products/custom');
+
+        $matchingFiles = array_filter($files, fn($file) => str_starts_with($file, $prefix));
+
+        Storage::disk('public')->delete($matchingFiles);
     }
 }

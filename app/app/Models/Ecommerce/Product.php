@@ -22,7 +22,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Product extends Model {
@@ -447,7 +449,23 @@ class Product extends Model {
         }
     }
 
+    /**
+     * Get the specific cover image path
+     */
     public function specificCoverImage(): string {
         return public_asset('/products/' . $this->id . '-cover.webp');
+    }
+
+    /**
+     * Get custom images array
+     */
+    public function customImages(): SupportCollection {
+        $prefix = 'products/custom/' . $this->id . '-more-';
+
+        $files = Storage::disk('public')->files('products/custom');
+
+        $matchingFiles = array_filter($files, fn($file) => str_starts_with($file, $prefix));
+
+        return collect($matchingFiles)->map(fn($file) => public_asset($file));
     }
 }

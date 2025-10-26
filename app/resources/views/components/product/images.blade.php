@@ -10,51 +10,61 @@ use Legacy\View\Components\Interactions\LikeButton;
 >
 
 	<!-- Preview image -->
-	<section class="image-section">
+	<section
+		class="image-section grid w-full grid-cols-1 gap-4 lg:sticky lg:top-8 lg:has-[.other-images]:grid-cols-[max-content_minmax(0,_1fr)]"
+	>
 
 		<!-- Other images -->
-		<?php if ($product->type->unique_positions->count() > 1) { ?>
-		<div class="other-images js-other-images">
-			<img
-				class="js-main-image"
-				src="<?= $product->image(1024) ?>"
-				alt=""
-			>
+		@if ((!$product->isCustom() && $product->type->unique_positions->count() > 1) || $product->customImages()->count())
+			<div class="other-images js-other-images row-start-2 flex-wrap justify-center lg:row-auto">
+				<img
+					class="js-main-image aspect-square w-20 object-cover"
+					src="{{ $product->image(1024) }}"
+					alt=""
+				>
 
-			<?php foreach ($product->type->unique_positions as $position) { ?>
-			<img
-				class="js-secondary-image"
-				src="<?= $product->type->rasterizedImage($product->color_id, $position->id) ?>"
-				alt=""
-				data-position-id="<?= $position->id ?>"
-				data-active="<?= $position->id == $product->position_id ? 'false' : 'true' ?>"
-			>
-			<?php } ?>
-		</div>
-		<?php } ?>
+				@if (!$product->isCustom())
+					@foreach ($product->type->unique_positions as $position)
+						<img
+							class="js-secondary-image aspect-square w-20 object-cover"
+							src="{{ $product->type->rasterizedImage($product->color_id, $position->id) }}"
+							alt=""
+							data-position-id="{{ $position->id }}"
+							data-active="{{ $position->id == $product->position_id ? 'false' : 'true' }}"
+						>
+					@endforeach
+				@else
+					@foreach ($product->customImages() as $image)
+						<img
+							class="js-secondary-image aspect-square w-20 object-cover"
+							src="{{ $image }}"
+							alt=""
+						>
+					@endforeach
+				@endif
+			</div>
+		@endif
 
 		<!-- Main image -->
-		<div class="main-image">
+		<div class="main-image max-w-full">
 
 			<div id="item-img-box">
 
 				<!-- Image -->
 				<img
-					class="img-zoom img-fill js-main-image js-primary-image"
+					class="img-zoom img-fill js-main-image js-primary-image w-full"
 					id="item-img"
-					src="<?= $product->image(1024) ?>"
+					src="{{ $product->image(1024) }}"
 					alt=""
 				>
 
 				<!-- Logos on the image -->
-				<?php if ($product->logoGroup() && $product->logoGroup()->preview) { ?>
-
-				<img
-					class="logo-field__preview-logo js-logo-image"
-					alt=""
-				>
-
-				<?php } ?>
+				@if ($product->logoGroup() && $product->logoGroup()->preview)
+					<img
+						class="logo-field__preview-logo js-logo-image"
+						alt=""
+					>
+				@endif
 
 				<!-- Loading icon on image change -->
 				<div
@@ -62,7 +72,7 @@ use Legacy\View\Components\Interactions\LikeButton;
 					class="bgr"
 				>
 					<div id="load-ico">
-						<?= embed_icon('loading') ?>
+						{!! embed_icon('loading') !!}
 					</div>
 				</div>
 
@@ -71,7 +81,7 @@ use Legacy\View\Components\Interactions\LikeButton;
 					id="img-zoom-icon"
 					class="img-zoom icon-box clickable"
 				>
-					<?= embed_icon('search') ?>
+					{!! embed_icon('search') !!}
 				</div>
 
 				<!-- Love button -->
@@ -93,7 +103,5 @@ use Legacy\View\Components\Interactions\LikeButton;
 				>
 			</div>
 		</div>
-
 	</section>
-
 </div>

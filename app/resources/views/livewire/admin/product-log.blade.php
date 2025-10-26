@@ -316,27 +316,34 @@
 									@foreach ($orderItems->where('seller_id', $seller->id)->pluck('design')->unique() as $design)
 										<div class="design js-design">
 											<p class="js-title text-neutral-700">
-												@if ($design->originalImage())
+												@if ($design?->originalImage())
 													<a
 														href="{{ $design->originalImage() }}"
 														download
 													>
-														--- {{ ($design ? $design->id . ' - ' : '') . $design->name }} ---
+														--- {{ ($design ? $design->id . ' - ' : '') . $design?->name }} ---
 													</a>
 												@else
-													--- {{ ($design ? $design->id . ' - ' : '') . $design->name }} ---
+													@if ($design)
+														--- {{ ($design ? $design->id . ' - ' : '') . $design->name }} ---
+													@else
+														@php
+															$customProduct = $orderItems->where('design_id', null)->where('seller_id', $seller->id)->first();
+														@endphp
+														--- {{ $customProduct->product->name }} ---
+													@endif
 												@endif
 											</p>
 
 											<div class="mt-2 grid grid-cols-1 gap-2">
 												{{-- Filter by type --}}
-												@foreach ($orderItems->where('design_id', $design->id)->pluck('type')->unique() as $type)
+												@foreach ($orderItems->where('design_id', $design?->id)->pluck('type')->unique() as $type)
 													{{-- Filter by color --}}
-													@foreach ($orderItems->where('design_id', $design->id)->where('type_id', $type->id)->sortBy('color_id')->pluck('color')->unique() as $color)
+													@foreach ($orderItems->where('design_id', $design?->id)->where('type_id', $type->id)->sortBy('color_id')->pluck('color')->unique() as $color)
 														{{-- Filter by size --}}
-														@foreach ($orderItems->where('design_id', $design->id)->where('type_id', $type->id)->where('color_id', $color->id)->sortBy('size_id')->pluck('size')->unique() as $size)
+														@foreach ($orderItems->where('design_id', $design?->id)->where('type_id', $type->id)->where('color_id', $color->id)->sortBy('size_id')->pluck('size')->unique() as $size)
 															{{-- Filter by position --}}
-															@foreach ($orderItems->where('design_id', $design->id)->where('type_id', $type->id)->where('color_id', $color->id)->where('size_id', $size->id)->sortBy('position')->pluck('position')->unique() as $position)
+															@foreach ($orderItems->where('design_id', $design?->id)->where('type_id', $type->id)->where('color_id', $color->id)->where('size_id', $size->id)->sortBy('position')->pluck('position')->unique() as $position)
 																<livewire:admin.product-log.type-item
 																	:key="`type-item-{{ $type->id }}-color-{{ $color->id }}-size-{{ $size->id }}`"
 																	:order-items="$orderItems"

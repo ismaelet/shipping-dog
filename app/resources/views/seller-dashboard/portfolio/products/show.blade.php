@@ -336,6 +336,21 @@
 				@endif
 
 			</div>
+
+			@if ($product)
+				<div class="form-field">
+					<div>
+						<x-label>Altre immagini (opzionali):</x-label>
+					</div>
+
+					<input
+						type="file"
+						class="input"
+						name="more-images[]"
+						multiple
+					>
+				</div>
+			@endif
 		</div>
 
 

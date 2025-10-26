@@ -13,6 +13,7 @@ use App\Filament\Admin\Resources\Sellers\Pages\EditSeller;
 use App\Filament\Admin\Resources\SellerResource\Pages;
 use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Seller;
+use App\Models\Ecommerce\Seller\Payment;
 use Dompdf\FrameDecorator\Text;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
@@ -230,6 +231,23 @@ class SellerResource extends Resource {
                         ->action(
                             fn(Seller $record): BinaryFileResponse => FileHelper::download('documents/payments/Comunicazione_' . $record->id . '.pdf')
                         ),
+                    Action::make('pay-seller')
+                        ->label('Paga negozio')
+                        ->icon('heroicon-o-currency-euro')
+                        ->color('primary')
+                        ->visible(fn(Seller $record) => $record->request)
+                        ->action(function (Seller $record) {
+                            Payment::create([
+                                'seller_id' => $record->id,
+                                'value' => $record->to_be_paid,
+                                'other' => false,
+                            ]);
+
+                            $record->updatePaid();
+                            $record->update([
+                                'request' => false
+                            ]);
+                        }),
                     Action::make('remove-request')
                         ->label('Rimuovi richiesta')
                         ->icon('heroicon-o-x-circle')
