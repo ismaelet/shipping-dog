@@ -11,67 +11,90 @@ use Illuminate\Database\Eloquent\Model;
 
 class InventoryItem extends Model {
 
-	protected $table = 'inventory';
-	protected $fillable = [
-		'product_id',
-		'design_id',
-		'type_id',
-		'color_id',
-		'size_id',
-		'position_id',
-		'logo_id'
-	];
+    protected $table = 'inventory';
+    protected $fillable = [
+        'product_id',
+        'design_id',
+        'type_id',
+        'color_id',
+        'size_id',
+        'position_id',
+        'logo_id'
+    ];
 
-	/**
-	 * * Relationships
-	 */
+    /**
+     * Lifecycle hooks
+     */
+    protected static function booted(): void {
 
-	/**
-	 * Get the product that owns the inventory item.
-	 */
-	public function product() {
-		return $this->belongsTo(Product::class);
-	}
+        // After creating a record
+        static::created(function (self $record) {
+            if (!$record->product) {
+                $product = Product::where('design_id', $record->design_id)
+                    ->where('type_id', $record->type_id)
+                    ->first();
 
-	/**
-	 * Get the design that owns the inventory item.
-	 */
-	public function design() {
-		return $this->belongsTo(Design::class);
-	}
+                if ($product) {
+                    $record->product()->associate($product);
+                    $record->save();
+                }
+            }
 
-	/**
-	 * Get the type that owns the inventory item.
-	 */
-	public function type() {
-		return $this->belongsTo(ProductType::class);
-	}
+            if (!$record->type) {
+                if ($record->product) {
+                    $record->type()->associate($record->product->type);
+                    $record->save();
+                }
+            }
+        });
+    }
 
-	/**
-	 * Get the color that owns the inventory item.
-	 */
-	public function color() {
-		return $this->belongsTo(ProductColor::class);
-	}
+    /**
+     * Get the product that owns the inventory item.
+     */
+    public function product() {
+        return $this->belongsTo(Product::class);
+    }
 
-	/**
-	 * Get the size that owns the inventory item.
-	 */
-	public function size() {
-		return $this->belongsTo(ProductSize::class);
-	}
+    /**
+     * Get the design that owns the inventory item.
+     */
+    public function design() {
+        return $this->belongsTo(Design::class);
+    }
 
-	/**
-	 * Get the position that owns the inventory item.
-	 */
-	public function position() {
-		return $this->belongsTo(ProductPosition::class);
-	}
+    /**
+     * Get the type that owns the inventory item.
+     */
+    public function type() {
+        return $this->belongsTo(ProductType::class);
+    }
 
-	/**
-	 * Get the logo that owns the inventory item.
-	 */
-	public function logo() {
-		return $this->belongsTo(Logo::class);
-	}
+    /**
+     * Get the color that owns the inventory item.
+     */
+    public function color() {
+        return $this->belongsTo(ProductColor::class);
+    }
+
+    /**
+     * Get the size that owns the inventory item.
+     */
+    public function size() {
+        return $this->belongsTo(ProductSize::class);
+    }
+
+    /**
+     * Get the position that owns the inventory item.
+     */
+    public function position() {
+        return $this->belongsTo(ProductPosition::class);
+    }
+
+    /**
+     * Get the logo that owns the inventory item.
+     */
+    public function logo() {
+        return $this->belongsTo(Logo::class);
+    }
 }
