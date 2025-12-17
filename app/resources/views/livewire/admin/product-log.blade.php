@@ -330,7 +330,7 @@
 														@php
 															$customProduct = $orderItems->where('design_id', null)->where('seller_id', $seller->id)->first();
 														@endphp
-														--- {{ $customProduct->product->name }} ---
+														--- {{ $customProduct?->product?->name ?: ' Prodotto non trovato ' }} ---
 													@endif
 												@endif
 											</p>
@@ -409,5 +409,21 @@
 
 			</div>
 		</div>
+
+		{{-- Inventory --}}
+		@if ($inventoryItems?->count())
+			<div class="">
+				<h3 class="dashboard-panel-title">In inventario</h3>
+				<div class="dashboard-panel">
+
+					<div class="grid grid-cols-1 gap-4">
+						@foreach ($inventoryItems as $item)
+							<p>{{ $item->full_name }}</p>
+						@endforeach
+					</div>
+
+				</div>
+			</div>
+		@endif
 	</div>
 </div>

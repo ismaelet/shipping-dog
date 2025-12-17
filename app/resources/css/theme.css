@@ -3,7 +3,9 @@
 	font-family: 'Open Sans';
 	font-weight: 300 900;
 	font-display: auto;
-	src: local('Open Sans'), url('../../public/fonts/OpenSans/OpenSans.ttf') format('truetype');
+	src:
+		local('Open Sans'),
+		url('../../public/fonts/OpenSans/OpenSans.ttf') format('truetype');
 }
 
 @font-face {
@@ -11,42 +13,54 @@
 	font-weight: 300 900;
 	font-display: auto;
 	font-style: italic;
-	src: local('Open Sans'), url('../../public/fonts/OpenSans/OpenSans-Italic.ttf') format('truetype');
+	src:
+		local('Open Sans'),
+		url('../../public/fonts/OpenSans/OpenSans-Italic.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Poppins';
 	font-weight: 300;
 	font-display: auto;
-	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+	src:
+		local('Poppins'),
+		url('../../public/fonts/Poppins/Poppins-Light.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Poppins';
 	font-weight: 400;
 	font-display: auto;
-	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+	src:
+		local('Poppins'),
+		url('../../public/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Poppins';
 	font-weight: 500;
 	font-display: auto;
-	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+	src:
+		local('Poppins'),
+		url('../../public/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Poppins';
 	font-weight: 600;
 	font-display: auto;
-	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+	src:
+		local('Poppins'),
+		url('../../public/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Poppins';
 	font-weight: 700;
 	font-display: auto;
-	src: local('Poppins'), url('../../public/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+	src:
+		local('Poppins'),
+		url('../../public/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
 }
 
 /* Theme */
@@ -89,6 +103,10 @@
 	--color-neutral-900: var(--color-neutral-light-900);
 	--color-neutral-950: var(--color-neutral-light-950);
 
+	--color-neutral-border: var(--color-gray-300);
+	--color-neutral-heading: var(--color-neutral-400);
+	--color-neutral-text: var(--color-slate-600);
+
 	--color-primary-300: hsl(247deg 70% 78%);
 	--color-primary-400: hsl(35deg 100% 50%);
 	--color-primary-500: hsl(27deg 100% 45%);
@@ -128,8 +146,20 @@
 	--content-spacing: 1.5rem;
 }
 
+.dark {
+	--color-neutral-heading: #fff;
+}
+
 @media (min-width: 640px) {
 	:root {
 		--content-spacing: 2rem;
 	}
+}
+
+/*
+* Utility Classes
+*/
+.text-highlight {
+	color: var(--color-neutral-heading);
+	font-weight: var(--font-weight-semibold);
 }

@@ -41,6 +41,14 @@
 				@endforeach
 			</div>
 
+			@if (!$changeRequest->isRefundOnly())
+				<x-alert
+					type="success"
+					class="my-4"
+				>Grazie per aver effetuato il pagamento. Procedi ora con la spedizione del reso all'indirizzo indicato nelle
+					istruzioni sottostanti.</x-alert>
+			@endif
+
 			<h3 class="mb-2 mt-8 text-lg font-semibold text-neutral-700">Istruzioni</h3>
 			<p class="txt info">
 				@if ($changeRequest->isRefundOnly())
@@ -60,11 +68,14 @@
 				@else
 					<span class="font-semibold text-neutral-700">1.</span> Grazie per aver terminato la procedura di cambio. Metteremo
 					in produzione il nuovo capo, che
-					sarà spedito in 1-5 giorni lavorativi tramite <span class="font-semibold text-neutral-700">corriere
+					sarà spedito in
+					{{ $changeRequest->new_order->shipping_method->minimumWorkingDays(false) }}-{{ $changeRequest->new_order->shipping_method->maximumWorkingDays(false) }}
+					giorni
+					lavorativi tramite <span class="font-semibold text-neutral-700">corriere
 						GLS</span>.<br><br>
 					<span class="font-semibold text-neutral-700">2.</span> Quando il nuovo capo sarà spedito riceverai una e-email da
 					parte del corriere la data di
-					consegna stimata.
+					consegna stimata.<br><br>
 					<span class="font-semibold text-neutral-700">3.</span> Per rendere il capo vecchio è sufficiente darlo al corriere
 					quando ti consegnerà il capo nuovo.
 				@endif
@@ -104,6 +115,12 @@
 				variant="secondary"
 				color="danger"
 			>Cancella la richiesta di reso</x-button>
+		@else
+			<button
+				type="submit"
+				formaction="{{ route('support.refund.clear') }}"
+				class="text-secondary-400 cursor-pointer"
+			>Effettua un altro cambio</button>
 		@endif
 	</x-slot>
 </x-layouts.form>

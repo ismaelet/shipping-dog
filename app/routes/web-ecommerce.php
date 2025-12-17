@@ -34,13 +34,13 @@ Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 
 Route::get('/artist', function () {
-	$seller = Auth::user()?->seller;
+    $seller = Auth::user()?->seller;
 
-	if ($seller) {
-		return redirect()->route('seller.show', ['seller' => $seller]);
-	} else {
-		return redirect()->route('shop');
-	}
+    if ($seller) {
+        return redirect()->route('seller.show', ['seller' => $seller]);
+    } else {
+        return redirect()->route('shop');
+    }
 });
 
 Route::get('/artist/{seller}', [SellerController::class, 'index'])->name('seller.show');
@@ -57,26 +57,26 @@ Route::post('/products/{product}/status', [ProductController::class, 'changeStat
  * * Cart
  */
 Route::prefix('cart')->name('cart')->group(function () {
-	// Redirect to the current cart step
-	Route::get('', [CartController::class, 'index'])->middleware(Cart::class)->name('');
+    // Redirect to the current cart step
+    Route::get('', [CartController::class, 'index'])->middleware(Cart::class)->name('');
 
-	// Remove an item from the cart
-	Route::post('/remove/{orderItem}', [CartController::class, 'removeOrderItem'])->name('.remove');
+    // Remove an item from the cart
+    Route::post('/remove/{orderItem}', [CartController::class, 'removeOrderItem'])->name('.remove');
 
-	// Cart step: Access
-	Route::get('/access', [CartAccessController::class, 'index'])->middleware(Cart::class)->name('.access');
-	Route::post('/access/guest', [CartAccessController::class, 'guestLogin'])->name('.access.guest');
+    // Cart step: Access
+    Route::get('/access', [CartAccessController::class, 'index'])->middleware(Cart::class)->name('.access');
+    Route::post('/access/guest', [CartAccessController::class, 'guestLogin'])->name('.access.guest');
 
-	// Cart step: Address
-	Route::get('/address', [CartAddressController::class, 'index'])->middleware(Cart::class)->name('.address');
-	Route::post('/address', [CartAddressController::class, 'update'])->middleware(Cart::class)->name('.address');
+    // Cart step: Address
+    Route::get('/address', [CartAddressController::class, 'index'])->middleware(Cart::class)->name('.address');
+    Route::post('/address', [CartAddressController::class, 'update'])->middleware(Cart::class)->name('.address');
 
-	// Cart step: Promotions
-	Route::get('/promotions', [CartPromotionsController::class, 'index'])->middleware(Cart::class)->name('.promotions');
+    // Cart step: Promotions
+    Route::get('/promotions', [CartPromotionsController::class, 'index'])->middleware(Cart::class)->name('.promotions');
 
-	// Cart step: Payment
-	Route::get('/payment', [CartPaymentController::class, 'index'])->middleware(Cart::class)->name('.payment');
-	Route::post('/payment', [CartPaymentController::class, 'update'])->middleware(Cart::class)->name('.payment');
+    // Cart step: Payment
+    Route::get('/payment', [CartPaymentController::class, 'index'])->middleware(Cart::class)->name('.payment');
+    Route::post('/payment', [CartPaymentController::class, 'update'])->middleware(Cart::class)->name('.payment');
 });
 
 /**
@@ -92,7 +92,7 @@ Route::resource('order-items', OrderItemController::class)->only(['store']);
 
 // Empty cart
 Route::get('/cart/empty', function () {
-	return view('ecommerce.cart.empty');
+    return view('ecommerce.cart.empty');
 })->middleware(EmptyCart::class)->name('cart.empty');
 
 /**
@@ -111,17 +111,20 @@ Route::resource('orders', OrderController::class)->only(['update']);
  */
 Route::prefix('/refund')->name('support.refund.')->group(function () {
 
-	// Search step
-	Route::get('/search', [RefundController::class, 'indexSearch'])->name('search');
-	Route::post('/search', [RefundController::class, 'search'])->name('search');
+    // Search step
+    Route::get('/search', [RefundController::class, 'indexSearch'])->name('search');
+    Route::post('/search', [RefundController::class, 'search'])->name('search');
 
-	// Select order items step
-	Route::get('/{changeRequest}/select', [RefundController::class, 'indexSelect'])->middleware(HasChangeRequestAccess::class)->name('select');
-	Route::post('/{changeRequest}/select', [RefundController::class, 'select'])->middleware(HasChangeRequestAccess::class)->name('select');
+    // Select order items step
+    Route::get('/{changeRequest}/select', [RefundController::class, 'indexSelect'])->middleware(HasChangeRequestAccess::class)->name('select');
+    Route::post('/{changeRequest}/select', [RefundController::class, 'select'])->middleware(HasChangeRequestAccess::class)->name('select');
 
-	// Confirmation step
-	Route::get('/{changeRequest}/confirm', [RefundController::class, 'indexConfirm'])->middleware(HasChangeRequestAccess::class)->name('confirm');
+    // Confirmation step
+    Route::get('/{changeRequest}/confirm', [RefundController::class, 'indexConfirm'])->middleware(HasChangeRequestAccess::class)->name('confirm');
 
-	// Cancel request
-	Route::post('/{changeRequest}/cancel', [RefundController::class, 'cancel'])->middleware(HasChangeRequestAccess::class)->name('cancel');
+    // Cancel request
+    Route::post('/{changeRequest}/cancel', [RefundController::class, 'cancel'])->middleware(HasChangeRequestAccess::class)->name('cancel');
+
+    // Clear refund session
+    Route::get('/new', [RefundController::class, 'clear'])->name('clear');
 });

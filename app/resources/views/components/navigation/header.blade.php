@@ -304,7 +304,6 @@
 		}
 
 		.h-link-txt a {
-			display: block;
 			color: var(--h-text-color);
 			transition: color 0.1s;
 		}
@@ -312,11 +311,6 @@
 		.h-link-txt:hover a,
 		.h-link-txt.active a {
 			color: var(--color-primary-400);
-		}
-
-		.h-drop-ico {
-			font-size: 0.8em;
-			vertical-align: top;
 		}
 
 		/* Desktop dropdown menu */
@@ -742,11 +736,14 @@
 									<p
 										class="h-link-txt <?= isset($h_link['loc']) && isset($locationTag) && $locationTag == $h_link['loc'] ? 'active' : '' ?>"
 									>
-										<a href="<?= $h_link['url'] ?>">
+										<a
+											href="<?= $h_link['url'] ?>"
+											class="flex items-center gap-2"
+										>
 											<?= $h_link['title'] ?>
 
 											@if (isset($h_link['dropdown']))
-												<span class="h-drop-ico">&#x25BC;</span>
+												<x-icon-arrow-simple-down class="w-4 shrink-0" />
 											@endif
 
 											@if (!empty($h_link['new']))

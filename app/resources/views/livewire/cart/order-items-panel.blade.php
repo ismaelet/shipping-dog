@@ -1,3 +1,5 @@
+@use('App\Helpers\PreviewHelper')
+
 <section
 	id="items"
 	class="cart-panel surface"
@@ -9,29 +11,29 @@
 		@foreach ($order->order_items as $orderItem)
 			<div class="row grid">
 				<!--Image-->
-				<?php if ($orderItem->product) { ?>
-				<a
-					href="<?= $orderItem->product ? $orderItem->product->url() : '' ?>"
-					class="img_cont"
-				>
-					<img
-						src="<?= $orderItem->image() ?>"
-						class="img-fill"
+				@if ($orderItem->product)
+					<a
+						href="{{ $orderItem->product ? $orderItem->product->url() : '' }}"
+						class="img_cont"
 					>
-				</a>
-				<?php } else { ?>
-				<div>
-					<img
-						src="<?= public_asset(PreviewHelper::PLACEHOLDER_IMAGE) ?>"
-						class="img-fill"
-					>
-				</div>
-				<?php } ?>
+						<img
+							src="{{ $orderItem->image() }}"
+							class="img-fill"
+						>
+					</a>
+				@else
+					<div>
+						<img
+							src="{{ public_asset(PreviewHelper::PLACEHOLDER_IMAGE) }}"
+							class="img-fill"
+						>
+					</div>
+				@endif
 
 				<!--Data-->
 				<div class="art_data">
-					<a href="<?= $orderItem->product ? $orderItem->product->url() : null ?>">
-						<h4 class=""><?= $orderItem->name() ?></h3>
+					<a href="{{ $orderItem->product ? $orderItem->product->url() : null }}">
+						<h4 class="">{{ $orderItem->name() }}</h4>
 					</a>
 
 					<p class="text-strong">
@@ -47,7 +49,7 @@
 					</p>
 
 					<p class="order-list__description">
-						<?= $orderItem->multilineDescription() ?>
+						{!! nl2br($orderItem->multilineDescription()) !!}
 					</p>
 				</div>
 
@@ -56,8 +58,7 @@
 						type="submit"
 						class="remove icon-box text-neutral-700"
 						formnovalidate="formnovalidate"
-						formaction="{{ route('cart.remove', $orderItem->id) }}
-					"
+						formaction="{{ route('cart.remove', $orderItem->id) }}"
 					>
 						{!! embed_icon('close') !!}
 					</button>

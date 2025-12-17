@@ -235,11 +235,10 @@ class SellerResource extends Resource {
                         ->label('Paga negozio')
                         ->icon('heroicon-o-currency-euro')
                         ->color('primary')
-                        ->visible(fn(Seller $record) => $record->request)
                         ->action(function (Seller $record) {
                             Payment::create([
                                 'seller_id' => $record->id,
-                                'value' => $record->to_be_paid,
+                                'value' => round($record->to_be_paid, 2),
                                 'other' => false,
                             ]);
 
