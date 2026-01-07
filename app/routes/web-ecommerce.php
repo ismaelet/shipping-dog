@@ -126,5 +126,5 @@ Route::prefix('/refund')->name('support.refund.')->group(function () {
     Route::post('/{changeRequest}/cancel', [RefundController::class, 'cancel'])->middleware(HasChangeRequestAccess::class)->name('cancel');
 
     // Clear refund session
-    Route::get('/new', [RefundController::class, 'clear'])->name('clear');
+    Route::post('/new', [RefundController::class, 'clear'])->name('clear');
 });

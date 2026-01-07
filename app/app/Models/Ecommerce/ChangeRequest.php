@@ -3,9 +3,11 @@
 namespace App\Models\Ecommerce;
 
 use App\Http\Controllers\Ecommerce\RefundController;
+use App\Mail\ChangeConfirmation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Mail;
 
 class ChangeRequest extends Model {
 
@@ -128,7 +130,21 @@ class ChangeRequest extends Model {
                 $newOrderItem->save();
 
                 $item->update(['new_order_item_id' => $newOrderItem->id]);
+
+                InventoryItem::create([
+                    'product_id' => $newOrderItem->product_id,
+                    'design_id' => $newOrderItem->design_id,
+                    'type_id' => $newOrderItem->type_id,
+                    'color_id' => $newOrderItem->color_id,
+                    'size_id' => $newOrderItem->size_id,
+                    'position_id' => $newOrderItem->position_id,
+                    'logo_id' => $newOrderItem->logo_id,
+                ]);
             });
+
+            if (!$this->isRefundOnly()) {
+                Mail::to($oldOrder->address->email)->send(new ChangeConfirmation());
+            }
         }
     }
 }
