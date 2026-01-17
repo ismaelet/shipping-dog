@@ -11,54 +11,51 @@ use Livewire\Component;
 
 class WishlistButton extends Component {
 
-	public Design $design;
+    public Design $design;
 
-	public ?Like $wishlistRecord = null;
+    public ?User $user;
 
-	public ?User $user;
+    public ?int $wishlistRecordId = null;
 
-	public bool $wishlisted;
+    public bool $wishlisted = false;
 
-	public function mount(): void {
-		$this->user = Auth::user();
-		$this->wishlistRecord = $this->user?->wishlist_items()->where('design_id', $this->design->id)->first();
-		$this->wishlisted = (bool) $this->wishlistRecord;
-	}
+    public function mount(): void {
+        $this->user = Auth::user();
+        $this->wishlistRecordId = $this->user?->wishlist_items()
+            ->where('design_id', $this->design->id)
+            ->value('id');
+        $this->wishlisted = (bool) $this->wishlistRecordId;
+    }
 
-	/**
-	 * Add the design to the wishlist.
-	 * 
-	 * @return void
-	 */
-	public function store(): void {
-		Like::create([
-			'user_id' => $this->user->id,
-			'design_id' => $this->design->id,
-		]);
+    /**
+     * Add the design to the wishlist
+     */
+    public function store(): void {
+        $like = Like::create([
+            'user_id' => $this->user->id,
+            'design_id' => $this->design->id,
+        ]);
 
-		$this->wishlisted = true;
-	}
+        $this->wishlistRecordId = $like->id;
+        $this->wishlisted = true;
+    }
 
-	/**
-	 * Remove the design from the wishlist.
-	 * 
-	 * @return void
-	 */
-	public function destroy(): void {
-		Like::where([
-			'user_id' => $this->user->id,
-			'design_id' => $this->design->id,
-		])->delete();
+    /**
+     * Remove the design from the wishlist
+     */
+    public function destroy(): void {
+        Like::where('user_id', $this->user->id)
+            ->where('design_id', $this->design->id)
+            ->delete();
 
-		$this->wishlisted = false;
-	}
+        $this->wishlistRecordId = null;
+        $this->wishlisted = false;
+    }
 
-	/**
-     * Render the component.
-     *
-     * @return View
+    /**
+     * Render the component
      */
     public function render(): View {
-		return view('livewire.wishlist-button');
-	}
+        return view('livewire.wishlist-button');
+    }
 }
