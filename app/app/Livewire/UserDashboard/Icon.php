@@ -10,35 +10,35 @@ use Livewire\Component;
 
 class Icon extends Component {
 
-	public string $icon;
+    public string $icon;
 
-	private User $user;
+    private User $user;
 
-	/**
-	 * Initializes the component with the authenticated user's data.
-	 * 
-	 * @return void
-	 */
-	public function mount(): void {
-		$this->user = Auth::user();
-		$this->icon = $this->user->icon();
-	}
+    /**
+     * Initializes the component with the authenticated user's data.
+     * 
+     * @return void
+     */
+    public function mount(): void {
+        $this->user = Auth::user();
+        $this->icon = $this->user->icon();
+    }
 
-	/**
-	 * Listens for the 'userIconUpdated' event to refresh the icon.
-	 * 
-	 * @return void
-	 */
-	#[On('userIconUpdated')]
-	public function updatedIcon(): void {
-	}
+    /**
+     * Listens for the 'userIconUpdated' event to refresh the icon.
+     * 
+     * @return void
+     */
+    #[On('userIconUpdated')]
+    public function updatedIcon(): void {
+    }
 
-	/**
-	 * Renders the icon view.
-	 * 
-	 * @return View
-	 */
-	public function render(): View {
-		return view('livewire.user-dashboard.icon');
-	}
+    /**
+     * Renders the icon view.
+     * 
+     * @return View
+     */
+    public function render(): View {
+        return view('livewire.user-dashboard.icon');
+    }
 }

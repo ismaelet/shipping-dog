@@ -106,7 +106,7 @@
 
 	// login bar
 	$header['login-link'] = ['Login', route('login')];
-	$header['logged-link'] = [auth()->user() ? (auth()->user()->username ?: 'Profilo') : '', '/user-dashboard'];
+	$header['logged-link'] = [auth()->user() ? 'Profilo' : '', '/user-dashboard'];
 
 @endphp
 

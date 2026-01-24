@@ -13,244 +13,236 @@ use function PHPUnit\Framework\isString;
 
 class FileHelper {
 
-	private const SVG_PATH = '/resources/svg';
-	private const ICONS_PATH = self::SVG_PATH . '/icons';
+    private const SVG_PATH = '/resources/svg';
+    private const ICONS_PATH = self::SVG_PATH . '/icons';
 
-	/**
-	 * Check if a file exists in the storage
-	 */
-	public static function exists(string $path): bool {
-		return Storage::disk('public')->exists($path);
-	}
+    /**
+     * Check if a file exists in the storage
+     */
+    public static function exists(string $path): bool {
+        return Storage::disk('public')->exists($path);
+    }
 
-	/**
-	 * Delete a file from the storage
-	 */
-	public static function delete(string $path): bool {
-		return Storage::disk('public')->delete($path);
-	}
+    /**
+     * Delete a file from the storage
+     */
+    public static function delete(string $path): bool {
+        return Storage::disk('public')->delete($path);
+    }
 
-	/**
-	 * Download a file from the public storage directory
-	 *
-	 * @param string $path The path to the file in the public storage directory
-	 * @return BinaryFileResponse
-	 */
-	public static function download(string $path): BinaryFileResponse {
-		$path = storage_path('app/public/' . $path);
+    /**
+     * Download a file from the public storage directory
+     *
+     * @param string $path The path to the file in the public storage directory
+     * @return BinaryFileResponse
+     */
+    public static function download(string $path): BinaryFileResponse {
+        $path = storage_path('app/public/' . $path);
 
-		if (!file_exists($path)) {
-			abort(404);
-		}
+        if (!file_exists($path)) {
+            abort(404);
+        }
 
-		return response()->download($path);
-	}
+        return response()->download($path);
+    }
 
-	/**
-	 * Get the path of a file in the public assets directory
-	 */
-	public static function publicStoragePath(?string $path = ''): string {
-		return storage_path('app/public/' . $path);
-	}
+    /**
+     * Get the path of a file in the public assets directory
+     */
+    public static function publicStoragePath(?string $path = ''): string {
+        return storage_path('app/public/' . $path);
+    }
 
-	/**
-	 * Get the versioned path of a file in the public storage directory
-	 */
-	public static function publicAsset(string $path): string {
-		$publicFilePath = asset('storage/' . $path);
-		$storedFilePath = base_path() . '/public/storage/' . $path;
-		$fileVersion = file_exists($storedFilePath) ? filemtime($storedFilePath) : 0;
+    /**
+     * Get the versioned path of a file in the public storage directory
+     */
+    public static function publicAsset(string $path): string {
+        $publicFilePath = asset('storage/' . $path);
+        $storedFilePath = base_path() . '/public/storage/' . $path;
+        $fileVersion = file_exists($storedFilePath) ? filemtime($storedFilePath) : 0;
 
-		return $publicFilePath . '?v=' . $fileVersion;
-	}
+        return $publicFilePath . '?v=' . $fileVersion;
+    }
 
-	/**
-	 * Move a file to the public storage directory
-	 */
-	public static function uploadFile(UploadedFile $file, string $filePath): bool {
-		$fileDirectory = ArrayHelper::explodeLast('/', $filePath)[0];
-		$fileName = ArrayHelper::explodeLast('/', $filePath)[1];
+    /**
+     * Move a file to the public storage directory
+     */
+    public static function uploadFile(UploadedFile $file, string $filePath): bool {
+        $fileDirectory = ArrayHelper::explodeLast('/', $filePath)[0];
+        $fileName = ArrayHelper::explodeLast('/', $filePath)[1];
 
-		if (Storage::disk('public')->exists($filePath)) {
-			Storage::disk('public')->delete($filePath);
-		}
+        if (Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath);
+        }
 
-		$storedFile = $file->storeAs($fileDirectory, $fileName, 'public');
+        $storedFile = $file->storeAs($fileDirectory, $fileName, 'public');
 
-		return (bool) $storedFile;
-	}
+        return (bool) $storedFile;
+    }
 
-	/**
-	 * Upload an image
-	 */
-	public static function uploadImage(UploadedFile|TemporaryUploadedFile $file, string $filePath, ?int $size = null, string $mode = 'min', int $quality = 80): bool {
-		$fileDirectory = ArrayHelper::explodeLast('/', $filePath)[0];
-		$fileName = ArrayHelper::explodeLast('/', $filePath)[1];
-		$type = explode_last('.', $fileName)[1];
+    /**
+     * Upload an image
+     */
+    public static function uploadImage(UploadedFile|TemporaryUploadedFile $file, string $filePath, ?int $size = null, string $mode = 'min', int $quality = 80): bool {
+        $fileDirectory = ArrayHelper::explodeLast('/', $filePath)[0];
+        $fileName = ArrayHelper::explodeLast('/', $filePath)[1];
+        $type = explode_last('.', $fileName)[1];
 
-		// Get image data
-		$srcImg = is_a($file, TemporaryUploadedFile::class) ? $file->getRealPath() : $file->getPathname();
-		$srcType = exif_imagetype($srcImg);
-		$srcResolution = getimagesize($srcImg);
-		$srcWidth = $srcResolution[0] ?? 0;
-		$srcHeight = $srcResolution[1] ?? 0;
+        // Get image data
+        $srcImg = is_a($file, TemporaryUploadedFile::class) ? $file->getRealPath() : $file->getPathname();
+        $srcType = exif_imagetype($srcImg);
+        $srcResolution = getimagesize($srcImg);
+        $srcWidth = $srcResolution[0] ?? 0;
+        $srcHeight = $srcResolution[1] ?? 0;
 
-		// Create the storage directory if it doesn't exist
-		if (!Storage::directoryExists('public/' . $fileDirectory)) {
-			Storage::makeDirectory('public/' . $fileDirectory);
-		}
+        // Create the storage directory if it doesn't exist
+        if (!Storage::directoryExists('public/' . $fileDirectory)) {
+            Storage::makeDirectory('public/' . $fileDirectory);
+        }
 
-		// Calculate the new dimensions based on the mode
-		$x = 0;
-		$y = 0;
-		$ratio = $srcWidth / $srcHeight;
+        // Calculate the new dimensions based on the mode
+        $x = 0;
+        $y = 0;
+        $ratio = $srcWidth / $srcHeight;
 
-		switch ($mode) {
-			case 'width':
-				$newWidth = $size;
-				$newHeight = $size / $ratio;
-				break;
+        switch ($mode) {
+            case 'width':
+                $newWidth = $size;
+                $newHeight = $size / $ratio;
+                break;
 
-			case 'height':
-				$newWidth = $size * $ratio;
-				$newHeight = $size;
-				break;
+            case 'height':
+                $newWidth = $size * $ratio;
+                $newHeight = $size;
+                break;
 
-			case 'max':
-				if ($ratio > 1) {
-					$newWidth = $size;
-					$newHeight = $size / $ratio;
-				} else {
-					$newWidth = $size * $ratio;
-					$newHeight = $size;
-				}
-				break;
+            case 'max':
+                if ($ratio > 1) {
+                    $newWidth = $size;
+                    $newHeight = $size / $ratio;
+                } else {
+                    $newWidth = $size * $ratio;
+                    $newHeight = $size;
+                }
+                break;
 
-			case 'min':
-				if ($ratio > 1) {
-					$newWidth = $size * $ratio;
-					$newHeight = $size;
-				} else {
-					$newWidth = $size;
-					$newHeight = $size / $ratio;
-				}
-				break;
+            case 'min':
+                if ($ratio > 1) {
+                    $newWidth = $size * $ratio;
+                    $newHeight = $size;
+                } else {
+                    $newWidth = $size;
+                    $newHeight = $size / $ratio;
+                }
+                break;
 
-			case 'crop':
-				$newWidth = $newHeight = $size;
-				$new_ratio = 1;
+            case 'crop':
+                $newWidth = $newHeight = $size;
+                $new_ratio = 1;
 
-				if ($ratio > $new_ratio) {
-					$srcWidth = $srcHeight * $new_ratio;
-					$x = ($srcResolution[0] - $srcWidth) / 2;
-				} else {
-					$srcHeight = $srcWidth / $new_ratio;
-					$y = ($srcResolution[1] - $srcHeight) / 2;
-				}
-				break;
-		}
+                if ($ratio > $new_ratio) {
+                    $srcWidth = $srcHeight * $new_ratio;
+                    $x = ($srcResolution[0] - $srcWidth) / 2;
+                } else {
+                    $srcHeight = $srcWidth / $new_ratio;
+                    $y = ($srcResolution[1] - $srcHeight) / 2;
+                }
+                break;
+        }
 
-		// Start the image creation
-		$tempImg = imagecreatetruecolor($newWidth, $newHeight);
+        // Start the image creation
+        $tempImg = imagecreatetruecolor($newWidth, $newHeight);
 
-		switch ($srcType) {
-			case IMAGETYPE_WEBP:
-				$originalImg = imagecreatefromwebp($srcImg);
-				break;
-			case IMAGETYPE_PNG:
-				$originalImg = imagecreatefrompng($srcImg);
-				break;
-			case IMAGETYPE_JPEG:
-				$originalImg = imagecreatefromjpeg($srcImg);
-				break;
-			default:
-				$originalImg = imagecreatefromstring(file_get_contents($srcImg));
-		}
+        switch ($srcType) {
+            case IMAGETYPE_WEBP:
+                $originalImg = imagecreatefromwebp($srcImg);
+                break;
+            case IMAGETYPE_PNG:
+                $originalImg = imagecreatefrompng($srcImg);
+                break;
+            case IMAGETYPE_JPEG:
+                $originalImg = imagecreatefromjpeg($srcImg);
+                break;
+            default:
+                $originalImg = imagecreatefromstring(file_get_contents($srcImg));
+        }
 
-		// Save the new image
-		switch ($type) {
-			case 'webp':
-				imagealphablending($tempImg, false);
-				imagesavealpha($tempImg, true);
-				$trsp = imagecolorallocatealpha($tempImg, 255, 255, 255, 127);
-				imagefilledrectangle($tempImg, 0, 0, $newWidth, $newHeight, $trsp);
-				imagecopyresampled($tempImg, $originalImg, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
-				imagewebp($tempImg, public_storage($filePath), $quality);
+        // Save the new image
+        switch ($type) {
+            case 'webp':
+                imagealphablending($tempImg, false);
+                imagesavealpha($tempImg, true);
+                $trsp = imagecolorallocatealpha($tempImg, 255, 255, 255, 127);
+                imagefilledrectangle($tempImg, 0, 0, $newWidth, $newHeight, $trsp);
+                imagecopyresampled($tempImg, $originalImg, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
+                imagewebp($tempImg, public_storage($filePath), $quality);
 
-				break;
+                break;
 
-			case 'jpg':
-				imagecopyresampled($tempImg, $originalImg, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
-				imagejpeg($tempImg, public_storage($filePath), $quality);
+            case 'jpg':
+                imagecopyresampled($tempImg, $originalImg, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
+                imagejpeg($tempImg, public_storage($filePath), $quality);
 
-				break;
+                break;
 
-			case 'png':
-				imagealphablending($tempImg, false);
-				imagesavealpha($tempImg, true);
-				$trsp = imagecolorallocatealpha($tempImg, 255, 255, 255, 127);
-				imagefilledrectangle($tempImg, 0, 0, $newWidth, $newHeight, $trsp);
-				imagecopyresampled($tempImg, $originalImg, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
-				imagepng($tempImg, public_storage($filePath));
+            case 'png':
+                imagealphablending($tempImg, false);
+                imagesavealpha($tempImg, true);
+                $trsp = imagecolorallocatealpha($tempImg, 255, 255, 255, 127);
+                imagefilledrectangle($tempImg, 0, 0, $newWidth, $newHeight, $trsp);
+                imagecopyresampled($tempImg, $originalImg, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
+                imagepng($tempImg, public_storage($filePath));
 
-				break;
-		}
+                break;
+        }
 
-		imagedestroy($originalImg);
-		imagedestroy($tempImg);
+        imagedestroy($originalImg);
+        imagedestroy($tempImg);
 
-		// Return the success of the operation
-		return self::exists($filePath);
-	}
+        // Return the success of the operation
+        return self::exists($filePath);
+    }
 
 
-	/**
-	 * Import an icon and embed it in the HTML
-	 */
-	public static function embedSvg(string $fileName, array $customClasses = [], bool $isIcon = false): string {
-		$iconDefault = [
-			'rounded',
-			'filled',
-			'400',
-			'icon'
-		];
+    /**
+     * Import an icon and embed it in the HTML
+     */
+    public static function embedSvg(string $fileName, array $customClasses = [], bool $isIcon = false): string {
+        $iconDefault = [
+            'rounded',
+            'filled',
+            '400',
+            'icon'
+        ];
 
-		// Replace dots with slashes
-		$fileName = str_replace('.', '/', $fileName);
+        // Replace dots with slashes
+        $fileName = str_replace('.', '/', $fileName);
 
-		// Add the default icon directories
-		if ($isIcon) {
-			$fileName = explode('/', $fileName);
-			$toFill = count($iconDefault) - count($fileName);
+        // Add the default icon directories
+        if ($isIcon) {
+        }
 
-			for ($i = 0; $i < $toFill; $i++) {
-				array_unshift($fileName, $iconDefault[$toFill - $i - 1]);
-			}
+        // Add the default class and any custom classes
+        $classes = implode(' ', ['svg-icon', ...$customClasses]);
 
-			$fileName = implode('/', $fileName);
-		}
+        // Get the icon file
+        $fileDirectory = $isIcon ? self::ICONS_PATH : self::SVG_PATH;
+        $filePath = $isIcon ? resource_path('svg/icons/' . $fileName . '.svg') : base_path() . $fileDirectory . '/' . $fileName . '.svg';
 
-		// Add the default class and any custom classes
-		$classes = implode(' ', ['svg-icon', ...$customClasses]);
+        // Get the icon content
+        try {
+            $file = file_get_contents($filePath);
 
-		// Get the icon file
-		$fileDirectory = $isIcon ? self::ICONS_PATH : self::SVG_PATH;
-		$filePath = base_path() . $fileDirectory . '/' . $fileName . '.svg';
+            // Add the classes to the icon and return it
+            return str_replace('<svg', '<svg class="' . $classes . '"', $file);
+        } catch (Exception $e) {
+            if (env('APP_DEBUG')) {
+                dd('Icon not found: ' . $fileName);
+            }
 
-		// Get the icon content
-		try {
-			$file = file_get_contents($filePath);
+            Log::error('Icon not found: ' . $fileName . ')');
+        }
 
-			// Add the classes to the icon and return it
-			return str_replace('<svg', '<svg class="' . $classes . '"', $file);
-		} catch (Exception $e) {
-			if (env('APP_DEBUG')) {
-				dd('Icon not found: ' . $fileName . ')');
-			}
-
-			Log::error('Icon not found: ' . $fileName . ')');
-		}
-
-		return '';
-	}
+        return '';
+    }
 }

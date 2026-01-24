@@ -10,10 +10,10 @@
 	</style>
 @endpushOnce
 
-<div class="stack-content group relative grid place-items-center">
+<div class="stack-content group relative grid h-full w-full place-items-center">
 	<img
 		src="{{ $image }}"
-		class=""
+		class="h-full w-full object-cover"
 		alt=""
 	>
 

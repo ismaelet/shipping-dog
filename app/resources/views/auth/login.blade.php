@@ -30,9 +30,9 @@
 		/>
 		<x-input
 			type="text"
-			name="login"
-			:value="old('login')"
-			placeholder="Username o e-mail"
+			name="email"
+			:value="old('email')"
+			placeholder="Indirizzo e-mail"
 			required
 		/>
 		<x-input
@@ -73,10 +73,27 @@
 	</x-slot>
 
 	<x-slot name="formFooter">
-		<x-button type="submit">Log In</x-button>
-		<x-button
-			:href="route('register')"
-			variant="secondary"
-		>Registrati</x-button>
+		<div class="grid w-full max-w-[min(30rem,100%)] grid-cols-1 gap-4">
+			<x-button type="submit">Log In</x-button>
+
+			<x-button
+				href="{{ route('auth.google.redirect') }}"
+				variant="secondary"
+			>
+				<x-icon-google />
+				Login con Google
+			</x-button>
+
+			<div class="grid grid-cols-[1fr_auto_1fr] items-center gap-4 text-center">
+				<span class="border-neutral-400"></span>
+				<p>Non hai un account?</p>
+				<span class="border-neutral-400"></span>
+			</div>
+
+			<x-button
+				:href="route('register')"
+				variant="secondary"
+			>Registrati</x-button>
+		</div>
 	</x-slot>
 </x-layouts.auth>

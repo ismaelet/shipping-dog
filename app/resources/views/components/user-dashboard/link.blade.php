@@ -11,9 +11,10 @@
 		'transition-colors hover:text-primary' => !$checked,
 	])>
 		<p class="font-heading flex items-center gap-4 text-sm sm:text-base">
-			<span class="aspect-square w-5">
-				{!! embed_icon($link['icon']) !!}
-			</span>
+			<x-dynamic-component
+				class="h-5 w-5"
+				:component="'icon-' . $link['icon']"
+			/>
 
 			{{ $link['title'] }}
 		</p>

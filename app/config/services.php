@@ -2,7 +2,7 @@
 
 return [
 
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Third Party Services
     |--------------------------------------------------------------------------
@@ -14,37 +14,43 @@ return [
     |
     */
 
-	'mailgun' => [
-		'domain' => env('MAILGUN_DOMAIN'),
-		'secret' => env('MAILGUN_SECRET'),
-		'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
-		'scheme' => 'https',
-	],
+    'mailgun' => [
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'scheme' => 'https',
+    ],
 
-	'postmark' => [
-		'token' => env('POSTMARK_TOKEN'),
-	],
+    'postmark' => [
+        'token' => env('POSTMARK_TOKEN'),
+    ],
 
-	'ses' => [
-		'key' => env('AWS_ACCESS_KEY_ID'),
-		'secret' => env('AWS_SECRET_ACCESS_KEY'),
-		'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
-	],
+    'ses' => [
+        'key' => env('AWS_ACCESS_KEY_ID'),
+        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
 
-	'paypal' => [
-		'client_id' => 'AWW2ARJTiBxj8VLzrfBxc5WrWMYUBFJzG8pBOp6vk5Jl5fTo4bn_J_9GvnEhuWJGnKom3DYWe-yX0AHc',
-		'client_secret' => 'REMOVED_SECRET',
+    'paypal' => [
+        'client_id' => 'AWW2ARJTiBxj8VLzrfBxc5WrWMYUBFJzG8pBOp6vk5Jl5fTo4bn_J_9GvnEhuWJGnKom3DYWe-yX0AHc',
+        'client_secret' => 'REMOVED_SECRET',
 
-		'sandbox' => [
-			'client_id' => 'AcB6CifmIAzH7ASX8AavVjP3-2KQlnU55cGfmjH1IwhoWPYbqwxlZgImZ-vxv0ZLak0rbnMjzrYeir7z',
-			'client_secret' => 'REMOVED_SECRET'
-		]
-	],
+        'sandbox' => [
+            'client_id' => 'AcB6CifmIAzH7ASX8AavVjP3-2KQlnU55cGfmjH1IwhoWPYbqwxlZgImZ-vxv0ZLak0rbnMjzrYeir7z',
+            'client_secret' => 'REMOVED_SECRET'
+        ]
+    ],
 
-	'gls' => [
-		'client_id' => 200162,
-		'client_password' => 2001621122,
-		'contract_code' => 7841,
-		'headquarters' => 'TT',
-	]
+    'gls' => [
+        'client_id' => 200162,
+        'client_password' => 2001621122,
+        'contract_code' => 7841,
+        'headquarters' => 'TT',
+    ],
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
+    ],
 ];

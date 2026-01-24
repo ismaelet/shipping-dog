@@ -38,10 +38,10 @@
 				<div class="feed__row grid">
 					<img
 						class="feed__image"
-						src="<?= $feedEntry->clientImage ?>"
+						src="<?= $feedEntry->image() ?>"
 						loading="lazy"
 					>
-					<p class="feed__text"><?= $feedEntry->text ?></p>
+					<p class="feed__text"><?= $feedEntry->text() ?></p>
 				</div>
 
 				<?php } ?>

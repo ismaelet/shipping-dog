@@ -28,20 +28,18 @@ class LoginController extends Controller {
      */
     public function auth(Request $request): RedirectResponse {
         $credentials = $request->validate([
-            'login' => ['required', 'string'],
+            'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
             'remember' => ['sometimes', 'boolean'],
         ]);
 
-        $login = $credentials['login'];
+        $email = $credentials['email'];
         $password = $credentials['password'];
         $remember = $request->boolean('remember');
 
-        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-
         // Standard authentication attempt
-        if (Auth::attempt([$fieldType => $login, 'password' => $password], $remember)) {
-            $this->mergeGuestCart();
+        if (Auth::attempt(['email' => $email, 'password' => $password], $remember)) {
+            self::mergeGuestCart();
             $request->session()->regenerate();
 
             return redirect()->intended('user-dashboard');
@@ -49,11 +47,10 @@ class LoginController extends Controller {
 
         // Legacy fallback for MD5 hashed passwords
         $user = User::query()
-            ->where($fieldType, $login)
+            ->where('email', $email)
             ->first();
 
         if ($user && $this->isMD5($user->password) && hash_equals($user->password, md5($password))) {
-            // Upgrade password to bcrypt
             $user->password = Hash::make($password);
             $user->save();
 
@@ -67,8 +64,8 @@ class LoginController extends Controller {
 
         // Authentication failed
         return back()->withErrors([
-            'login' => 'Le credenziali fornite non sono corrette.',
-        ])->onlyInput('login');
+            'email' => 'Le credenziali fornite non sono corrette.',
+        ])->onlyInput('email');
     }
 
     private function isMD5(string $hash): bool {
@@ -81,7 +78,7 @@ class LoginController extends Controller {
      * If the user does not have a cart, assign the guest cart to the user by updating the user_id of the guest cart to the authenticated user's id.
      * If there is no guest cart no action is taken.
      */
-    private function mergeGuestCart(): void {
+    public static function mergeGuestCart(): void {
         if (session('order_id')) {
             // Find the guest cart
             $guestCart = Order::where('id', session('order_id'))

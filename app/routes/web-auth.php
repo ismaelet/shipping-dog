@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RecoverController;
@@ -33,3 +34,13 @@ Route::post('/forgot-password', [RecoverController::class, 'store'])->middleware
 
 Route::get('/reset-password/{token}', [ResetController::class, 'index'])->middleware('guest')->name('password.reset');
 Route::post('/reset-password', [ResetController::class, 'update'])->middleware('guest')->name('password.update');
+
+
+/**
+ * Google oAuth routes
+ */
+Route::get('/auth/google', [GoogleLoginController::class, 'redirect'])
+    ->name('auth.google.redirect');
+
+Route::get('/auth/google/callback', [GoogleLoginController::class, 'callback'])
+    ->name('auth.google.callback');

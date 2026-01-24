@@ -15,8 +15,8 @@
 	<div class="grid items-center justify-items-center gap-4">
 		<x-label>Modifica l'immagine profilo:</x-label>
 
-		<div class="relative w-48 overflow-hidden rounded-full">
-			<x-inputs.replace-image :image="public_asset($user->icon())" />
+		<div class="relative aspect-square w-28 overflow-hidden rounded-full">
+			<x-inputs.replace-image :image="$user->icon()" />
 		</div>
 
 		@error('image')

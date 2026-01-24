@@ -64,10 +64,22 @@
 	</x-slot>
 
 	<x-slot name="formFooter">
-		<x-button type="submit">Registrati</x-button>
-		<x-button
-			href="{{ route('login') }}"
-			variant="secondary"
-		>Indietro</x-button>
+		<div class="grid w-full max-w-[min(30rem,100%)] grid-cols-1 gap-4">
+			<x-button type="submit">Registrati</x-button>
+
+			<div class="grid grid-cols-[1fr_auto_1fr] items-center gap-4 text-center">
+				<span class="border-neutral-400"></span>
+				<p>oppure</p>
+				<span class="border-neutral-400"></span>
+			</div>
+
+			<x-button
+				href="{{ route('auth.google.redirect') }}"
+				variant="secondary"
+			>
+				<x-icon-google />
+				Registrati con Google
+			</x-button>
+		</div>
 	</x-slot>
 </x-layouts.auth>

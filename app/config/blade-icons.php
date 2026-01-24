@@ -2,7 +2,7 @@
 
 return [
 
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Icons Sets
     |--------------------------------------------------------------------------
@@ -13,29 +13,29 @@ return [
     |
     */
 
-	'sets' => [
-		'rounded-filled-400' => [
-			'path' => 'resources/svg/icons/rounded/filled/400',
-			'prefix' => 'icon',
-		],
+    'sets' => [
+        'rounded-filled-400' => [
+            'path' => 'resources/svg/icons',
+            'prefix' => 'icon',
+        ],
 
-		'rounded-filled-200' => [
-			'path' => 'resources/svg/icons/rounded/filled/200',
-			'prefix' => 'icon.200',
-		],
+        'rounded-filled-200' => [
+            'path' => 'resources/svg/icons/rounded/filled/200',
+            'prefix' => 'icon.200',
+        ],
 
-		'rounded-stroked-400' => [
-			'path' => 'resources/svg/icons/rounded/stroked/400',
-			'prefix' => 'icon.s',
-		],
+        'rounded-stroked-400' => [
+            'path' => 'resources/svg/icons/rounded/stroked/400',
+            'prefix' => 'icon.s',
+        ],
 
-		'rounded-stroked-200' => [
-			'path' => 'resources/svg/icons/rounded/stroked/200',
-			'prefix' => 'icon.s.200',
-		],
-	],
+        'rounded-stroked-200' => [
+            'path' => 'resources/svg/icons/rounded/stroked/200',
+            'prefix' => 'icon.s.200',
+        ],
+    ],
 
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Global Default Classes
     |--------------------------------------------------------------------------
@@ -45,9 +45,9 @@ return [
     |
     */
 
-	'class' => 'svg-icon',
+    'class' => 'svg-icon',
 
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Global Default Attributes
     |--------------------------------------------------------------------------
@@ -57,12 +57,12 @@ return [
     |
     */
 
-	'attributes' => [
-		// 'width' => 50,
-		// 'height' => 50,
-	],
+    'attributes' => [
+        // 'width' => 50,
+        // 'height' => 50,
+    ],
 
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Global Fallback Icon
     |--------------------------------------------------------------------------
@@ -73,9 +73,9 @@ return [
     |
     */
 
-	'fallback' => '',
+    'fallback' => '',
 
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Components
     |--------------------------------------------------------------------------
@@ -85,9 +85,9 @@ return [
     |
     */
 
-	'components' => [
+    'components' => [
 
-		/*
+        /*
         |----------------------------------------------------------------------
         | Disable Components
         |----------------------------------------------------------------------
@@ -98,9 +98,9 @@ return [
         |
         */
 
-		'disabled' => false,
+        'disabled' => false,
 
-		/*
+        /*
         |----------------------------------------------------------------------
         | Default Icon Component Name
         |----------------------------------------------------------------------
@@ -110,8 +110,8 @@ return [
         |
         */
 
-		'default' => 'icon',
+        'default' => 'icon',
 
-	],
+    ],
 
 ];
