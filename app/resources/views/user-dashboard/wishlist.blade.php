@@ -28,74 +28,33 @@
 		:$title
 	>
 
-		<?php if ($likes->count()) { ?>
-
-		<div class="main-wrap pad-t-4 pad-b-5">
-
-			<div
-				id="products"
-				class=""
-			>
-
-				<?php foreach ($likes as $like) {
-				$design = $like->design;
-			?>
-
-				<div class="product">
-
-					<a
-						class="img-box"
-						href="<?= $design->url() ?>"
-					>
-						<img
-							src="<?= $design->image() ?>"
-							alt=""
-							loading="lazy"
-						>
-					</a>
-
-					<h4 class="name mt-2">{{ $design->name }}</h4>
-
-					<p class="shop">
-						by <a
-							class="hover:text-primary transition-colors"
-							href="{{ $design->url() }}"
-						>{{ $design->seller->name }}</a>
-					</p>
-
-				</div>
-
-				<?php } ?>
-
+		@if ($likes->count())
+			<div class="main-wrap pad-t-4 pad-b-5">
+				<livewire:wishlist />
 			</div>
-
-		</div>
-
-		<?php } else { ?>
-
-		<div class="main-wrap">
-			<div
-				id="empty-box"
-				class="text-center"
-			>
-
+		@else
+			<div class="main-wrap">
 				<div
-					id="empty-icon"
-					class="inlb mar-b-2"
-				></div>
+					id="empty-box"
+					class="text-center"
+				>
 
-				<div class="grid grid-cols-1 justify-items-center gap-8">
-					<p id="empty-txt">Nessuna grafica nella wishlist. Cerca nel nostro negozio un prodotto che possa piacerti.</p>
+					<div
+						id="empty-icon"
+						class="inlb mar-b-2"
+					></div>
 
-					<x-button href="{{ route('shop') }}">
-						Vai al negozio
-					</x-button>
+					<div class="grid grid-cols-1 justify-items-center gap-8">
+						<p id="empty-txt">Nessuna grafica nella wishlist. Cerca nel nostro negozio un prodotto che possa piacerti.</p>
+
+						<x-button href="{{ route('shop') }}">
+							Vai al negozio
+						</x-button>
+					</div>
+
 				</div>
-
 			</div>
-		</div>
-
-		<?php } ?>
+		@endif
 
 
 	</x-user-dashboard.panel>

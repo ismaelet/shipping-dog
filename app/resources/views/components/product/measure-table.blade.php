@@ -13,54 +13,52 @@ $sizes = $product->type->sizes;
 	>
 @endpushOnce
 
-@if ($sizeTable)
-	<div
-		id="size-lbox"
-		class="lbox modal"
-	>
-		<div class="modal-form measure-table">
+<div
+	id="size-lbox"
+	class="lbox modal"
+>
+	<div class="modal-form measure-table">
 
-			<div class="modal_close lbox-close">
-				{!! embed_icon('close') !!}
-			</div>
+		<div class="modal_close lbox-close">
+			{!! embed_icon('close') !!}
+		</div>
 
-			<h3 class="txt-15rem txt-semibold mar-b-1 brb2 br-blk">Taglie:</h3>
-			<p class="">Se non vedi tutte le taglie scorri verso il basso.</p>
+		<h3 class="txt-15rem txt-semibold mar-b-1 brb2 br-blk">Taglie:</h3>
+		<p class="">Se non vedi tutte le taglie scorri verso il basso.</p>
 
-			<img
-				src="{{ Vite::image('product/size-table.webp') }}"
-				alt=""
-				loading="lazy"
-				class="mx-auto w-[15rem]"
-			>
+		<img
+			src="{{ Vite::image('product/size-table.webp') }}"
+			alt=""
+			loading="lazy"
+			class="mx-auto w-60"
+		>
 
-			<div class="size-table-grid mar-b-1">
+		<div class="size-table-grid mar-b-1">
 
-				<div class="_empty"></div>
+			<div class="_empty"></div>
 
-				<p class="txt-line font-semibold text-neutral-700">Larghezza:</p>
+			<p class="txt-line font-semibold text-neutral-700">Larghezza:</p>
 
-				<p class="txt-line font-semibold text-neutral-700">Altezza:</p>
+			<p class="txt-line font-semibold text-neutral-700">Altezza:</p>
 
 
-				@foreach ($sizes as $size)
-					@php
-						$measure = $measures->where('size', $size->tag)->first();
-					@endphp
+			@foreach ($sizes as $size)
+				@php
+					$measure = $measures->where('size', $size->tag)->first();
+				@endphp
 
-					<p class="size-table-tag font-semibold text-neutral-700">{{ strtoupper($measure->name) }}:</p>
-					<p class="">{{ $measure->width }} cm</p>
-					<p class="">{{ $measure->height }} cm</p>
-				@endforeach
-
-			</div>
-
-			<?php if (DB::exists('items_types_measures WHERE type_id=? AND size=?', [$product->type->id, 'mat'])) { ?>
-			<p class="">Composizione:
-				<?= DB::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$product->type->id, 'mat']) ?>
-			</p>
-			<?php } ?>
+				<p class="size-table-tag font-semibold text-neutral-700">{{ strtoupper($measure->name) }}:</p>
+				<p class="">{{ $measure->width }} cm</p>
+				<p class="">{{ $measure->height }} cm</p>
+			@endforeach
 
 		</div>
+
+		<?php if (DB::exists('items_types_measures WHERE type_id=? AND size=?', [$product->type->id, 'mat'])) { ?>
+		<p class="">Composizione:
+			<?= DB::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$product->type->id, 'mat']) ?>
+		</p>
+		<?php } ?>
+
 	</div>
-@endif
+</div>

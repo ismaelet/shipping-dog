@@ -14,9 +14,14 @@ return [
     */
 
     'sets' => [
-        'rounded-filled-400' => [
+        'default' => [
             'path' => 'resources/svg/icons',
             'prefix' => 'icon',
+        ],
+
+        'svg' => [
+            'path' => 'resources/svg',
+            'prefix' => 'svg',
         ],
 
         'rounded-filled-200' => [

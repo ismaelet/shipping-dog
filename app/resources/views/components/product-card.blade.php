@@ -12,9 +12,7 @@
 			<p class="price blu">{{ $product->customerPriceString() }}</p>
 		</a>
 
-		@if ($product->design)
-			<livewire:wishlist-button :design="$product->design" />
-		@endif
+		<livewire:wishlist-button :product="$product" />
 	</div>
 
 	<div class="item-box-body">

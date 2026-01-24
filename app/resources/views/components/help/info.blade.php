@@ -1,45 +1,55 @@
-@props(['direction' => 'right'])
+@pushOnce('scripts')
+	<script defer>
+		document.addEventListener('DOMContentLoaded', () => {
+			const infos = document.querySelectorAll('.js-info');
 
-@pushOnce('styles')
-	<style>
-		.info[data-direction="center"] {
-			.info-text {
-				translate: calc(-50%) 0;
-			}
-		}
+			function update(tooltip) {
+				if (!tooltip) return;
 
-		@media (max-width: 1024px) {
-			.info[data-direction="mobile-left"] {
-				.info-text {
-					translate: calc(-100% + 2.5rem) 0;
+				// reset
+				tooltip.style.setProperty('--tooltip-shift', '0px');
+
+				// measure after reset
+				const rect = tooltip.getBoundingClientRect();
+				const padding = 12;
+
+				let shift = 0;
+
+				// right overflow
+				if (rect.right > window.innerWidth - padding) {
+					shift -= (rect.right - (window.innerWidth - padding));
 				}
+
+				// left overflow
+				if (rect.left < padding) {
+					shift += (padding - rect.left);
+				}
+
+				tooltip.style.setProperty('--tooltip-shift', `${Math.round(shift)}px`);
 			}
 
-			.info[data-direction="mobile-center"] {
-				.info-text {
-					translate: calc(-50%) 0;
-				}
-			}
+			infos.forEach(info => {
+				const tooltip = info.querySelector('[data-tooltip]');
+				if (!tooltip) return;
 
-			.info[data-direction="mobile-right"] {
-				.info-text {
-					translate: calc(100% - 2.5rem) 0;
-				}
-			}
-		}
-	</style>
+				// update when it’s likely to matter
+				info.addEventListener('mouseenter', () => requestAnimationFrame(() => update(tooltip)));
+				window.addEventListener('resize', () => update(tooltip));
+			});
+		});
+	</script>
 @endpushOnce
 
-<div
-	class="info group relative w-max cursor-pointer"
-	data-direction="{{ $direction }}"
->
+
+<div class="info js-info group relative w-max cursor-pointer">
 	<div class="group-hover:text-primary grid aspect-square w-6 place-items-center rounded-full border transition-colors">
 		<x-icon-question class="w-2/5" />
 	</div>
 
 	<p
-		class="info-text surface-2 bg-background pointer-events-none absolute z-10 w-[30rem] max-w-[70vw] -translate-y-2 p-3 text-sm italic opacity-0 shadow transition-all group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
+		class="info-text surface-2 bg-background w-120 pointer-events-none absolute left-1/2 z-10 max-w-[70vw] -translate-y-2 p-3 text-sm italic opacity-0 shadow transition-all group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
+		style="transform: translateX(calc(-50% + var(--tooltip-shift, 0px))) translateY(-0.5rem);"
+		data-tooltip
 	>
 		{{ $slot }}
 	</p>

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Design extends Model {
 
@@ -77,9 +78,9 @@ class Design extends Model {
     /**
      * Get the design's likes
      */
-    public function likes(): HasMany {
-        return $this->hasMany(Like::class);
-    }
+    // public function likes(): HasMany {
+    //     return $this->hasMany(Like::class);
+    // }
 
     /**
      * Get the design's tags
@@ -126,14 +127,14 @@ class Design extends Model {
     /**
      * Check if the design is liked by the logged user
      */
-    public function auth_user_like(): HasOne {
-        return $this->hasOne(Like::class)
-            ->where('user_id', auth()->id());
-    }
+    // public function auth_user_like(): HasOne {
+    //     return $this->hasOne(Like::class)
+    //         ->where('user_id', Auth::id());
+    // }
 
-    public function isLiked(): bool {
-        return $this->auth_user_like ? true : false;
-    }
+    // public function isLiked(): bool {
+    //     return $this->auth_user_like ? true : false;
+    // }
 
     /**
      * Get the design's image
@@ -196,11 +197,6 @@ class Design extends Model {
         }
 
         if ($permanently) {
-            // Delete likes
-            foreach ($this->likes as $like) {
-                $like->delete();
-            }
-
             // Delete tags
             foreach ($this->tags as $tag) {
                 $tag->delete();

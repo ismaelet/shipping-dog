@@ -36,18 +36,18 @@ $otherProductTypes = $otherProductTypes;
 		class="carousel-arrow left disabled"
 		data-direction="left"
 		data-tar="#type-slide<?= $i ?>"
-		style="--icon-size: 60%; color: #202020;"
+		style="--icon-size: 40%; color: #202020;"
 	>
-		<x-icon-arrow-simple-left class="h-1/2 w-1/2" />
+		<x-icon-arrow-simple-left class="h-1/3 w-1/3" />
 	</div>
 
 	<div
 		class="carousel-arrow right"
 		data-direction="right"
 		data-tar="#type-slide<?= $i ?>"
-		style="--icon-size: 60%; color: #202020;"
+		style="--icon-size: 40%; color: #202020;"
 	>
-		<x-icon-arrow-simple-right class="h-1/2 w-1/2" />
+		<x-icon-arrow-simple-right class="h-1/3 w-1/3" />
 	</div>
 
 	<?php } ?>

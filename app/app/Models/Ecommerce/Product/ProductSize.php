@@ -7,17 +7,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ProductSize extends Model {
 
-	protected $table = 'items_sizes';
-	protected $fillable = [];
+    /**
+     * Property: The table associated with the model
+     */
+    protected $table = 'items_sizes';
 
-	/**
-	 * * Relationships
-	 */
+    /**
+     * Property: The attributes that are mass assignable
+     */
+    protected $fillable = [];
 
-	/**
-	 * Get the product types for the size.
-	 */
-	public function types(): BelongsToMany {
-		return $this->belongsToMany(ProductType::class);
-	}
+    /**
+     * Relationship: Get the product types for the size
+     */
+    public function types(): BelongsToMany {
+        return $this->belongsToMany(ProductType::class);
+    }
 }

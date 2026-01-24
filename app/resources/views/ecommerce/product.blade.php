@@ -15,22 +15,24 @@
 	:$thumbnail
 	:$locationTag
 >
-	<input
-		type="hidden"
-		id="type-id"
-		data-id="<?php echo $product->type_id; ?>"
-	/>
+	<div class="full-width">
+		<input
+			type="hidden"
+			id="type-id"
+			data-id="<?php echo $product->type_id; ?>"
+		/>
 
-	<x-product.data
-		:$product
-		:$productColors
-		:$warning
-	/>
-	<x-product.tags :$product />
-	<x-product.other-types
-		:$product
-		:$relatedGarments
-		:$relatedAccessories
-	/>
-	<x-product.related-products :$product />
+		<x-product.data
+			:$product
+			:$productColors
+			:$warning
+		/>
+		<x-product.tags :$product />
+		<x-product.other-types
+			:$product
+			:$relatedGarments
+			:$relatedAccessories
+		/>
+		<x-product.related-products :$product />
+	</div>
 </x-layouts.legacy-main>

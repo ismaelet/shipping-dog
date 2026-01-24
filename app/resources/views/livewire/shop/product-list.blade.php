@@ -144,7 +144,7 @@
 					<div class="grid5 grid4-1440w grid3-1024w grid2-480w col-gap1 row-gap2">
 
 						@foreach ($products as $product)
-							<livewire:shop.product-card
+							<x-product-card
 								:$product
 								:key="'product-' . $product->id"
 							/>

@@ -62,7 +62,10 @@ main {
 	line-height: 1.5rem;
 	transform-origin: left;
 	vertical-align: baseline;
-	transition: border 0.2s, color 0.3s, font-size 0.2s;
+	transition:
+		border 0.2s,
+		color 0.3s,
+		font-size 0.2s;
 }
 
 .item-type-title:hover,
@@ -123,7 +126,9 @@ main {
 .img-pos {
 	background-color: #ddd;
 	border-radius: var(--border-radius-400);
-	box-shadow: 0 1.6rem 1rem -1.2rem rgba(0, 0, 0, 0.3), -1px -1px 1px rgba(255, 255, 255, 0.6) inset;
+	box-shadow:
+		0 1.6rem 1rem -1.2rem rgba(0, 0, 0, 0.3),
+		-1px -1px 1px rgba(255, 255, 255, 0.6) inset;
 	padding-bottom: 100%;
 	margin: 1rem 0;
 }
@@ -327,7 +332,7 @@ main {
 	transform: rotate(-45deg);
 }
 
-.cbx:checked + .color-box {
+.color-box:has(:checked) {
 	border-color: var(--color-primary-400);
 }
 
@@ -368,7 +373,9 @@ main {
 	font-family: var(--font-heading);
 	letter-spacing: 0.03em;
 	cursor: pointer;
-	transition: border-color 0.2s, color 0.2s;
+	transition:
+		border-color 0.2s,
+		color 0.2s;
 }
 
 input:checked + .data-selector__label {
@@ -383,7 +390,9 @@ input:checked + .data-selector__label {
 	border-radius: 30px;
 	text-align: center;
 	cursor: pointer;
-	transition: background 0.2s, border 0.2s;
+	transition:
+		background 0.2s,
+		border 0.2s;
 }
 
 .size_txt,
@@ -465,7 +474,9 @@ input:checked + .pos_txt_lbl {
 	aspect-ratio: 1;
 	cursor: pointer;
 	filter: grayscale(1);
-	transition: border 0.2s, filter 0.2s;
+	transition:
+		border 0.2s,
+		filter 0.2s;
 
 	&:has(:checked) {
 		border-color: var(--color-primary-400);

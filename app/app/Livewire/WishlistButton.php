@@ -2,38 +2,70 @@
 
 namespace App\Livewire;
 
-use App\Models\Ecommerce\Design;
+use App\Models\Ecommerce\Product;
 use App\Models\User;
 use App\Models\User\Like;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class WishlistButton extends Component {
 
-    public Design $design;
+    /**
+     * Property: The product to wishlist
+     */
+    public Product $product;
 
+    /**
+     * Property: The authenticated user
+     */
     public ?User $user;
 
+    /**
+     * Property: The wishlist record ID if wishlisted
+     */
     public ?int $wishlistRecordId = null;
 
+    /**
+     * Property: Whether the product is wishlisted
+     */
     public bool $wishlisted = false;
 
+    /**
+     * Property: The color ID of the product
+     */
+    public ?int $colorId = null;
+
+    /**
+     * Property: The position ID of the product
+     */
+    public ?int $positionId = null;
+
+    /**
+     * Lifecycle method: Mount the component
+     */
     public function mount(): void {
         $this->user = Auth::user();
+        $this->colorId = $this->product->color_id;
+        $this->positionId = $this->product->position_id;
         $this->wishlistRecordId = $this->user?->wishlist_items()
-            ->where('design_id', $this->design->id)
+            ->where('product_id', $this->product->id)
+            ->where('color_id', $this->colorId)
+            ->where('position_id', $this->positionId)
             ->value('id');
         $this->wishlisted = (bool) $this->wishlistRecordId;
     }
 
     /**
-     * Add the design to the wishlist
+     * Add the product to the wishlist
      */
     public function store(): void {
         $like = Like::create([
             'user_id' => $this->user->id,
-            'design_id' => $this->design->id,
+            'product_id' => $this->product->id,
+            'color_id' => $this->colorId,
+            'position_id' => $this->positionId,
         ]);
 
         $this->wishlistRecordId = $like->id;
@@ -41,11 +73,13 @@ class WishlistButton extends Component {
     }
 
     /**
-     * Remove the design from the wishlist
+     * Remove the product from the wishlist
      */
     public function destroy(): void {
         Like::where('user_id', $this->user->id)
-            ->where('design_id', $this->design->id)
+            ->where('product_id', $this->product->id)
+            ->where('color_id', $this->colorId)
+            ->where('position_id', $this->positionId)
             ->delete();
 
         $this->wishlistRecordId = null;
@@ -57,5 +91,33 @@ class WishlistButton extends Component {
      */
     public function render(): View {
         return view('livewire.wishlist-button');
+    }
+
+    /**
+     * Event listener: Update color
+     */
+    #[On('change-color')]
+    public function changeColor(int $id): void {
+        $this->colorId = $id;
+        $this->wishlistRecordId = $this->user?->wishlist_items()
+            ->where('product_id', $this->product->id)
+            ->where('color_id', $this->colorId)
+            ->where('position_id', $this->positionId)
+            ->value('id');
+        $this->wishlisted = (bool) $this->wishlistRecordId;
+    }
+
+    /**
+     * Event listener: Update position
+     */
+    #[On('change-position')]
+    public function changePosition(int $id): void {
+        $this->positionId = $id;
+        $this->wishlistRecordId = $this->user?->wishlist_items()
+            ->where('product_id', $this->product->id)
+            ->where('color_id', $this->colorId)
+            ->where('position_id', $this->positionId)
+            ->value('id');
+        $this->wishlisted = (bool) $this->wishlistRecordId;
     }
 }

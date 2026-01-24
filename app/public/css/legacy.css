@@ -6,7 +6,13 @@ html {
 	}
 
 	&.theme-transition * {
-		transition: background 0.3s, border-color 0.3s, outline-color 0.3s, box-shadow 0.3s, color 0.3s, fill 0.3s !important;
+		transition:
+			background 0.3s,
+			border-color 0.3s,
+			outline-color 0.3s,
+			box-shadow 0.3s,
+			color 0.3s,
+			fill 0.3s !important;
 	}
 }
 
@@ -645,7 +651,9 @@ body.fixed {
 	background: url('../svg/icons/upload.svg') center / contain no-repeat;
 	transform: translateY(50%);
 	filter: invert(1);
-	transition: opacity 0.2s, transform 0.2s;
+	transition:
+		opacity 0.2s,
+		transform 0.2s;
 }
 
 .replace-img:hover::after {
@@ -664,7 +672,9 @@ body.fixed {
 	height: clamp(1.5rem, 50%, 3rem);
 	margin: auto;
 	filter: invert(1);
-	transition: opacity 0.2s, transform 0.2s;
+	transition:
+		opacity 0.2s,
+		transform 0.2s;
 }
 
 .loading .replace-img::before {
@@ -724,7 +734,9 @@ body.fixed {
 	width: 3rem;
 	height: 3rem;
 	cursor: pointer;
-	transition: background-color 0.2s, border 0.2s;
+	transition:
+		background-color 0.2s,
+		border 0.2s;
 }
 
 .carousel-arrow:hover {
@@ -932,7 +944,9 @@ p.error {
 	font-size: 1rem;
 	line-height: 1;
 	pointer-events: none;
-	transition: color 0.15s, transform 0.15s;
+	transition:
+		color 0.15s,
+		transform 0.15s;
 }
 
 .fancy-input.not-filled:not(:focus-within) .fancy-input-lbl {
@@ -1306,7 +1320,9 @@ p.error {
 	transform: translateX(calc(var(--slide-in-intensity) * -1));
 }
 .slide-left {
-	transition: opacity 0.5s ease-in, transform 0.5s ease-out;
+	transition:
+		opacity 0.5s ease-in,
+		transform 0.5s ease-out;
 }
 
 .load.slide-right {
@@ -1314,7 +1330,9 @@ p.error {
 	transform: translateX(var(--slide-in-intensity));
 }
 .slide-right {
-	transition: opacity 0.5s ease-in, transform 0.5s ease-out;
+	transition:
+		opacity 0.5s ease-in,
+		transform 0.5s ease-out;
 }
 
 .load.slide-top {
@@ -1322,7 +1340,9 @@ p.error {
 	transform: translateY(calc(var(--slide-in-intensity) * -1));
 }
 .slide-top {
-	transition: opacity 0.5s ease-in, transform 0.5s ease-out;
+	transition:
+		opacity 0.5s ease-in,
+		transform 0.5s ease-out;
 }
 
 .load.slide-bottom {
@@ -1330,7 +1350,9 @@ p.error {
 	transform: translateY(var(--slide-in-intensity));
 }
 .slide-bottom {
-	transition: opacity 0.5s ease-in, transform 0.5s ease-out;
+	transition:
+		opacity 0.5s ease-in,
+		transform 0.5s ease-out;
 }
 
 .ld-1 {
@@ -2398,14 +2420,19 @@ p.error {
 	place-items: center;
 	background-color: #fff;
 	border-radius: 50%;
-	box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 4px -1px, rgba(0, 0, 0, 0.05) 0px 5px 10px 0px, rgba(0, 0, 0, 0.05) 0px 1px 12px 0px;
+	box-shadow:
+		rgba(0, 0, 0, 0.15) 0px 3px 4px -1px,
+		rgba(0, 0, 0, 0.05) 0px 5px 10px 0px,
+		rgba(0, 0, 0, 0.05) 0px 1px 12px 0px;
 	width: 2.5rem;
 	height: 2.5rem;
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
 	cursor: pointer;
-	transition: background-color 0.2s, border 0.2s;
+	transition:
+		background-color 0.2s,
+		border 0.2s;
 }
 
 .carousel-arrow:hover {
@@ -2616,7 +2643,9 @@ p.error {
 	transform: translateY(-10px);
 	line-height: 1.5;
 	font-style: italic;
-	transition: opacity 0.3s, transform 0.3s;
+	transition:
+		opacity 0.3s,
+		transform 0.3s;
 	pointer-events: none;
 }
 
@@ -2636,7 +2665,7 @@ p.error {
 
 [data-color-scheme='light'] .carousel-arrow:hover,
 .dark .carousel-arrow:hover {
-	background-color: var(--color-primary-400);
+	background-color: var(--color-gray-300);
 }
 
 [data-color-scheme='light'] .carousel-arrow.disabled:hover {
@@ -3790,7 +3819,9 @@ p strong {
 }
 .ld-lef {
 	transform: translateX(0);
-	transition: opacity 0.7s ease-in, transform 0.7s;
+	transition:
+		opacity 0.7s ease-in,
+		transform 0.7s;
 }
 
 .load.ld-rig,
@@ -3799,7 +3830,9 @@ p strong {
 }
 .ld-rig {
 	transform: translateX(0);
-	transition: opacity 0.7s ease-in, transform 0.7s;
+	transition:
+		opacity 0.7s ease-in,
+		transform 0.7s;
 }
 
 .load.ld-top,
@@ -3808,7 +3841,9 @@ p strong {
 }
 .ld-top {
 	transform: translateY(0);
-	transition: opacity 0.7s ease-in, transform 0.7s;
+	transition:
+		opacity 0.7s ease-in,
+		transform 0.7s;
 }
 
 .load.ld-bot,
@@ -3817,7 +3852,9 @@ p strong {
 }
 .ld-bot {
 	transform: translateY(0);
-	transition: opacity 0.7s ease-in, transform 0.7s;
+	transition:
+		opacity 0.7s ease-in,
+		transform 0.7s;
 }
 
 .load.ld-bgr,
@@ -4747,7 +4784,9 @@ body.fixed {
 #search-inp-box {
 	background-color: var(--color-surface);
 	border-radius: 10em;
-	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 7px 16px rgba(0, 0, 0, 0.1);
+	box-shadow:
+		0 5px 10px rgba(0, 0, 0, 0.1),
+		0 7px 16px rgba(0, 0, 0, 0.1);
 	grid-template-columns: auto 1.5rem;
 	padding-left: 1rem;
 	padding-right: 1rem;
@@ -4788,7 +4827,10 @@ body.fixed {
 	font-size: var(--font-size-300);
 	line-height: 3.5;
 	cursor: pointer;
-	transition: background 0.5s, border 0.3s, color 0.2s;
+	transition:
+		background 0.5s,
+		border 0.3s,
+		color 0.2s;
 }
 
 .gender-ico {
@@ -4799,7 +4841,9 @@ body.fixed {
 	vertical-align: middle;
 	margin-left: 0.5rem;
 	transform: rotate(-90deg);
-	transition: background 0.3s, transform 0.3s;
+	transition:
+		background 0.3s,
+		transform 0.3s;
 }
 
 .category-selector:has(:checked) .gender-ico {
@@ -4819,7 +4863,10 @@ body.fixed {
 	font-weight: 500;
 	line-height: 45px;
 	cursor: pointer;
-	transition: background 0.2s, color 0.2s, height 0.3s;
+	transition:
+		background 0.2s,
+		color 0.2s,
+		height 0.3s;
 	overflow: hidden;
 }
 
@@ -4851,7 +4898,10 @@ body.fixed {
 	font-size: var(--font-size-300);
 	margin: 0 8px 8px 0;
 	cursor: pointer;
-	transition: background 0.2s, border 0.2s, color 0.2s;
+	transition:
+		background 0.2s,
+		border 0.2s,
+		color 0.2s;
 }
 
 .tag-cbx:checked + .tag,
@@ -4945,7 +4995,9 @@ body.fixed {
 
 	#search-inp-box {
 		background-color: var(--color-background);
-		box-shadow: 0 15px 10px -0.5rem rgba(0, 0, 0, 0.1), 0 7px 16px rgba(0, 0, 0, 0.1);
+		box-shadow:
+			0 15px 10px -0.5rem rgba(0, 0, 0, 0.1),
+			0 7px 16px rgba(0, 0, 0, 0.1);
 	}
 
 	#search-sec.open {
@@ -5620,7 +5672,9 @@ body.fixed {
 	background-size: contain;
 	background-repeat: no-repeat;
 	filter: invert(1);
-	transition: translate 0.2s, opacity 0.2s;
+	transition:
+		translate 0.2s,
+		opacity 0.2s;
 }
 
 .replace-image--fixed::after,
@@ -5668,7 +5722,10 @@ body.fixed {
 	background-color: hsl(0, 0%, 100%, 0.9);
 	border-radius: 50%;
 	color: #202020;
-	transition: opacity 0.3s, background-color 0.3s, color 0.3s;
+	transition:
+		opacity 0.3s,
+		background-color 0.3s,
+		color 0.3s;
 }
 
 .playable-video__overlay:hover .playable-video__play-button {
@@ -6152,7 +6209,10 @@ body.fixed {
 
 .load--fade-in,
 .load--fade-out {
-	transition: translate var(--animation-duration) ease-out, visibility 0s var(--animation-duration), opacity var(--animation-duration) ease-in;
+	transition:
+		translate var(--animation-duration) ease-out,
+		visibility 0s var(--animation-duration),
+		opacity var(--animation-duration) ease-in;
 }
 
 .js-load.load--fade-in {

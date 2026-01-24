@@ -190,7 +190,7 @@ $(document).ready(function () {
 		},
 		function () {
 			$(this).find('.tip-icon-txt').removeClass('active')
-		}
+		},
 	)
 
 	$('.tip-icon').click(function () {
@@ -540,7 +540,7 @@ $(document).ready(function () {
 			var scor = parseInt(group.find('.scor-imp').val())
 
 			score(group, scor)
-		}
+		},
 	)
 
 	//Score
@@ -571,7 +571,7 @@ $(document).ready(function () {
 				{
 					scrollTop: target.offset().top,
 				},
-				500
+				500,
 			)
 		}
 	})
@@ -873,7 +873,7 @@ $(document).ready(function () {
 				// Replace IMG with SVG
 				img.replaceWith(svg)
 			},
-			'xml'
+			'xml',
 		)
 	})
 })

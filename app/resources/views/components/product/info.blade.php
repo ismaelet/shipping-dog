@@ -1,6 +1,6 @@
 @php
-	$description = $product->type->info?->description;
-	$details = $product->type->info?->formattedDetails();
+	$description = nl2br($product->type->info?->description);
+	$details = nl2br($product->type->info?->formattedDetails());
 @endphp
 
 @pushOnce('styles')
