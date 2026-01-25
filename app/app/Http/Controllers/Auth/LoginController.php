@@ -33,6 +33,7 @@ class LoginController extends Controller {
             'remember' => ['sometimes', 'boolean'],
         ]);
 
+        $intendedUrl = $request->input('intended', route('user-dashboard'));
         $email = $credentials['email'];
         $password = $credentials['password'];
         $remember = $request->boolean('remember');
@@ -42,7 +43,7 @@ class LoginController extends Controller {
             self::mergeGuestCart();
             $request->session()->regenerate();
 
-            return redirect()->intended('user-dashboard');
+            return redirect()->intended($intendedUrl);
         }
 
         // Legacy fallback for MD5 hashed passwords
@@ -56,10 +57,10 @@ class LoginController extends Controller {
 
             Auth::login($user, $remember);
 
-            $this->mergeGuestCart();
+            self::mergeGuestCart();
             $request->session()->regenerate();
 
-            return redirect()->intended('user-dashboard');
+            return redirect()->intended($intendedUrl);
         }
 
         // Authentication failed
@@ -79,27 +80,32 @@ class LoginController extends Controller {
      * If there is no guest cart no action is taken.
      */
     public static function mergeGuestCart(): void {
-        if (session('order_id')) {
+        $sessionOrderId = session('cart_id');
+
+        if ($sessionOrderId) {
             // Find the guest cart
-            $guestCart = Order::where('id', session('order_id'))
+            $guestCart = Order::where('id', $sessionOrderId)
                 ->where('status', 0)
+                ->whereNull('user_id')
                 ->first();
 
             if ($guestCart) {
-                // Find the user cart
-                $userCart = Auth::user()->cart;
+                /** @var User $user */
+                $user = Auth::user();
+                $userCart = $user->cart()->first();
 
                 if ($userCart) {
                     // If the user has a cart, merge the guest cart with the user cart
-                    $guestCart->order_items->each(function (OrderItem $orderItem) use ($userCart) {
+                    $guestCart->order_items->each(function (OrderItem $orderItem) use ($userCart, $user) {
                         $orderItem->order_id = $userCart->id;
+                        $orderItem->user_id = $user->id;
                         $orderItem->save();
                     });
 
                     $guestCart->delete();
                 } else {
                     // If the user does not have a cart, assign the guest cart to the user
-                    $guestCart->user_id = Auth::id();
+                    $guestCart->user_id = $user->id;
                     $guestCart->save();
                 }
             }

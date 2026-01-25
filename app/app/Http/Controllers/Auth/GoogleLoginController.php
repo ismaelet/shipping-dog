@@ -16,6 +16,10 @@ class GoogleLoginController extends Controller {
      * Redirect the user to the Google authentication page.
      */
     public function redirect(Request $request): RedirectResponse {
+        if ($request->has('intended')) {
+            $request->session()->put('url.intended', $request->input('intended'));
+        }
+
         return Socialite::driver('google')
             ->redirect();
     }
@@ -24,6 +28,7 @@ class GoogleLoginController extends Controller {
      * Obtain the user information from Google
      */
     public function callback(Request $request): RedirectResponse {
+        $intendedUrl = session()->pull('url.intended', route('user-dashboard'));
         $googleUser = Socialite::driver('google')->user();
 
         $email = $googleUser->getEmail();
@@ -51,7 +56,7 @@ class GoogleLoginController extends Controller {
 
         $request->session()->regenerate();
 
-        return redirect()->intended('user-dashboard');
+        return redirect()->intended($intendedUrl);
     }
 
     private function registerUser($googleUser): User {

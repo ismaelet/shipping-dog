@@ -22,7 +22,7 @@ class Color extends Component {
      */
     public function mount(Product $product) {
         $this->product = $product;
-        $this->selectedColorId = $product?->color->id ?: 0;
+        $this->selectedColorId = $product->color_id;
     }
 
     /**

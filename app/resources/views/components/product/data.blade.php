@@ -269,6 +269,16 @@
 						<x-alerts.warning :message="$warning->message" />
 					@endif
 
+					@if ($errors->any())
+						<div class="">
+							<ul class="grid grid-cols-1 gap-1">
+								@foreach ($errors->all() as $error)
+									<x-alert type="error">{{ $error }}</x-alert>
+								@endforeach
+							</ul>
+						</div>
+					@endif
+
 					<x-button
 						type="submit"
 						id="submit"

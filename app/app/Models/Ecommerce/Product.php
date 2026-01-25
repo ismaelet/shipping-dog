@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -256,6 +257,12 @@ class Product extends Model {
 
         // Return null if any of the required data is missing
         if (!$product || !$color || !$position) {
+            Log::warning('Preview image missing data', [
+                'product_id' => $product?->id,
+                'color_id' => $color?->id,
+                'position_id' => $position?->id,
+            ]);
+
             return null;
         }
 

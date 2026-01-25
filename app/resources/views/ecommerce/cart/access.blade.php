@@ -324,7 +324,7 @@
 		<form
 			class="login-panel cart-panel surface"
 			method="POST"
-			action="{{ route('login.auth') }}"
+			action="{{ route('login.auth', ['intended' => route('cart.address')]) }}"
 		>
 			@csrf
 
@@ -337,29 +337,40 @@
 					value="true"
 				>
 				<x-input
-					name="login"
-					placeholder="Username o e-mail"
+					name="email"
+					placeholder="Indirizzo e-mail"
 				/>
 				<x-input
 					type="password"
 					name="password"
 					placeholder="Password"
 				/>
+
+				<div class="text-right">
+					<p class=""><a href="{{ route('password.request') }}">Hai dimenticato la password?</a></p>
+				</div>
 			</x-inputs.group>
 
-			@error('login')
-				<x-inputs.warning>{{ $message }}</x-inputs.warning>
+			@error('email')
+				<x-alert type="error">{{ $message }}</x-alert>
 			@enderror
 
-			<x-button
-				type="submit"
-				size="small"
-			>
-				Log In
-			</x-button>
+			<div class="grid grid-cols-1 gap-2">
+				<x-button
+					type="submit"
+					size="small"
+				>
+					Log In
+				</x-button>
 
-			<div class="text-right">
-				<p class=""><a href="{{ route('password.request') }}">Hai dimenticato la password?</a></p>
+				<x-button
+					href="{{ route('auth.google.redirect', ['intended' => route('cart.address')]) }}"
+					variant="secondary"
+					size="small"
+				>
+					<x-icon-google />
+					Accedi con Google
+				</x-button>
 			</div>
 		</form>
 
@@ -369,11 +380,22 @@
 
 			<p>Vai qui sotto se vuoi registrarti</p>
 
-			<x-button
-				:href="route('register')"
-				variant="secondary"
-				size="small"
-			>Registrati</x-button>
+			<div class="grid grid-cols-1 gap-2">
+				<x-button
+					:href="route('register')"
+					variant="secondary"
+					size="small"
+				>Registrati</x-button>
+
+				<x-button
+					href="{{ route('auth.google.redirect', ['intended' => route('cart.address')]) }}"
+					variant="secondary"
+					size="small"
+				>
+					<x-icon-google />
+					Accedi con Google
+				</x-button>
+			</div>
 		</div>
 
 		{{-- Continue --}}
