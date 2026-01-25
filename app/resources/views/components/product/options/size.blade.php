@@ -27,7 +27,7 @@
 	<div class="grid">
 
 		@foreach ($sizes as $size)
-			<label class="size_box">
+			<label class="data-selector__label uppercase">
 				<input
 					type="radio"
 					class="cbx"
@@ -35,10 +35,7 @@
 					value="{{ $size->id }}"
 					@checked($loop->first)
 				>
-
-				<div class="size_lbl">
-					<h1 class="size_txt uppercase">{{ $size->name }}</h1>
-				</div>
+				{{ $size->name }}
 			</label>
 		@endforeach
 

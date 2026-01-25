@@ -107,18 +107,11 @@
 							class="field relative"
 						>
 
-							<div class="">
+							<div class="flex items-center gap-2">
 								<x-label class="field-label text-sm">Modello</x-label>
-
-								@if ($product->type->unisex)
-									<x-help.info>
-										Qui puoi scegliere se vedere l'anteprima del prodotto su un modello maschile o femminile, ma ha
-										scopo puramente illustrativo, in quanto tutte le taglie per questo articolo sono unisex.
-									</x-help.info>
-								@endif
 							</div>
 
-							<div class="grid">
+							<div class="columns-10rem grid gap-2">
 
 								@foreach ($genders as $key => $gender)
 									@php
@@ -132,23 +125,20 @@
 									@endphp
 
 									@if (!$key || $relatedProduct)
-										<div class="gend_box">
+										<a
+											class="data-selector__label"
+											@if ($relatedProduct) href="{{ $relatedProduct->url() }}" @endif
+										>
 											<input
 												type="radio"
 												class="cbx"
-												id="cbx-gend_{{ $gender->slug }}"
 												name="gender_id"
 												value="{{ $gender->id }}"
 												{{ !$relatedProduct ? 'checked' : '' }}
 											>
 
-											<a
-												@if ($relatedProduct) href="{{ $relatedProduct->url() }}" @endif
-												class="gend_lbl"
-											>
-												<h1 class="gend_txt">{{ $gender->name }}</h1>
-											</a>
-										</div>
+											{{ $gender->name }}
+										</a>
 									@endif
 								@endforeach
 

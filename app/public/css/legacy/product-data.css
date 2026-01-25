@@ -347,12 +347,6 @@ main {
 	text-transform: none;
 }
 
-#gender .tip-box {
-	position: absolute;
-	top: 0;
-	right: 0;
-}
-
 #size .grid {
 	display: flex;
 	flex-wrap: wrap;
@@ -360,25 +354,24 @@ main {
 	width: 100%;
 }
 
-#gender .grid {
-	grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
-	grid-gap: 0.5rem;
-}
-
 .data-selector__label {
-	padding: 0.5em 2em;
+	min-width: 5rem;
+	padding: 0.6rem 1.2rem;
 	border: 2px solid var(--color-surface-500);
 	border-radius: var(--border-radius-1000);
 	color: var(--color-neutral-950);
 	font-family: var(--font-heading);
+	font-size: 0.875rem;
 	letter-spacing: 0.03em;
+	text-align: center;
 	cursor: pointer;
 	transition:
 		border-color 0.2s,
 		color 0.2s;
 }
 
-input:checked + .data-selector__label {
+input:checked + .data-selector__label,
+.data-selector__label:has(:checked) {
 	border-color: var(--color-primary-400);
 	color: var(--color-primary-400);
 }
@@ -398,7 +391,6 @@ input:checked + .data-selector__label {
 .size_txt,
 .gend_txt {
 	padding: 0 1.5rem;
-	font-size: 0.9rem;
 	line-height: 2.5;
 	transition: color 0.2s;
 }

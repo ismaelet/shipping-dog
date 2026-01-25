@@ -189,6 +189,10 @@ body {
 
 	/* 3.1.3 Grid columns */
 	.grid {
+		&.columns-10rem {
+			grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr));
+		}
+
 		&.columns-15rem {
 			grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
 		}
@@ -382,7 +386,9 @@ body {
 			opacity: 1;
 			pointer-events: auto;
 			translate: 0 0;
-			transition: translate var(--_enter-animation-speed) ease-out, opacity var(--_enter-animation-speed) ease-in;
+			transition:
+				translate var(--_enter-animation-speed) ease-out,
+				opacity var(--_enter-animation-speed) ease-in;
 			transition-delay: var(--_enter-animation-delay);
 		}
 	}
@@ -394,7 +400,9 @@ body {
 		--_exit-animation-intensity: var(--_animation-intensity, 0.5rem);
 
 		&[data-exit-animation-type='fade-out'] {
-			transition: translate var(--_exit-animation-speed) ease-out, opacity var(--_exit-animation-speed) ease-in;
+			transition:
+				translate var(--_exit-animation-speed) ease-out,
+				opacity var(--_exit-animation-speed) ease-in;
 			transition-delay: var(--_exit-animation-delay);
 
 			&[data-exited='true'] {

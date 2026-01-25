@@ -20,7 +20,7 @@ class WishlistButton extends Component {
     /**
      * Property: The authenticated user
      */
-    public ?User $user;
+    public ?User $user = null;
 
     /**
      * Property: The wishlist record ID if wishlisted
