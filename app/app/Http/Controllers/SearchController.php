@@ -9,68 +9,68 @@ use Illuminate\View\View;
 
 class SearchController extends Controller {
 
-	/**
+    /**
      * Display the search page.
      *
      * @param Request $request
      * @return View
      */
     public function index(Request $request): View {
-		$search = $_GET['search'] ?? '';
-		$locationTag = 'search';
-		$title = 'Cerca: ' . $search;
+        $search = $_GET['search'] ?? '';
+        $locationTag = 'search';
+        $title = 'Cerca: ' . $search;
 
-		$resultCount = 0;
-		$max = 20;
+        $resultCount = 0;
+        $max = 20;
 
-		if (strlen($search) > 2) {
+        if (strlen($search) > 2) {
 
-			$search = trim(strtolower($search));
+            $search = trim(strtolower($search));
 
-			//get design results
-			$designs = Design::join('stores', 'designs.user_id', '=', 'stores.user_id')
-				->where('stores.status', true)
-				->where('designs.name', 'like', "%$search%")
-				->orWhere('stores.name', 'like', "%$search%")
-				// ->orWhereHas('tags', function ($query) use ($search) {
-				// $query->where('tags', 'like', "%$search%");
-				// })
-				->orderByDesc('designs.sales')
-				->orderByDesc('stores.sales')
-				->orderByDesc('designs.id')
-				->limit($max)
-				->with('main_product', 'products', 'main_product.design_with_trashed', 'main_product.color', 'main_product.position', 'main_product.type', 'seller')
-				->select('designs.*')
-				->get();
+            //get design results
+            $designs = Design::join('sellers', 'designs.user_id', '=', 'sellers.user_id')
+                ->where('sellers.status', true)
+                ->where('designs.name', 'like', "%$search%")
+                ->orWhere('sellers.name', 'like', "%$search%")
+                // ->orWhereHas('tags', function ($query) use ($search) {
+                // $query->where('tags', 'like', "%$search%");
+                // })
+                ->orderByDesc('designs.sales')
+                ->orderByDesc('sellers.sales')
+                ->orderByDesc('designs.id')
+                ->limit($max)
+                ->with('main_product', 'products', 'main_product.design_with_trashed', 'main_product.color', 'main_product.position', 'main_product.type', 'seller')
+                ->select('designs.*')
+                ->get();
 
-			$designCount = $designs->count();
+            $designCount = $designs->count();
 
-			//get seller results
-			$sellers = Seller::where('status', true)
-				->where('name', 'like', "%$search%")
-				->orderByDesc('sales')
-				->orderByDesc('id')
-				->limit($max)
-				->with('user')
-				->get();
+            //get seller results
+            $sellers = Seller::where('status', true)
+                ->where('name', 'like', "%$search%")
+                ->orderByDesc('sales')
+                ->orderByDesc('id')
+                ->limit($max)
+                ->with('user')
+                ->get();
 
-			$sellerCount = $sellers->count();
+            $sellerCount = $sellers->count();
 
-			//get total number of results		
-			$resultCount = $designCount + $sellerCount;
-		}
+            //get total number of results		
+            $resultCount = $designCount + $sellerCount;
+        }
 
 
-		return view('search', [
-			'title' => $title,
-			'locationTag' => $locationTag,
-			'search' => $search,
-			'designs' => $designs ?? collect(),
-			'sellers' => $sellers ?? collect(),
-			'designCount' => $designCount ?? 0,
-			'sellerCount' => $sellerCount ?? 0,
-			'resultCount' => $resultCount,
-			'maxResults' => $max,
-		]);
-	}
+        return view('search', [
+            'title' => $title,
+            'locationTag' => $locationTag,
+            'search' => $search,
+            'designs' => $designs ?? collect(),
+            'sellers' => $sellers ?? collect(),
+            'designCount' => $designCount ?? 0,
+            'sellerCount' => $sellerCount ?? 0,
+            'resultCount' => $resultCount,
+            'maxResults' => $max,
+        ]);
+    }
 }

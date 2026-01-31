@@ -129,7 +129,7 @@ use App\Legacy\System\DB;
 				$type = new LegacyProductType($row['id']);
 				$gender = new Gender($type->genderId);
 
-				$row_price = DB::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
+				$row_price = DB::row('* FROM prices_sellers WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
 
 				$price = $row_price['price'];
 				$gain_w = $row_price['gain_w'];
@@ -218,7 +218,7 @@ use App\Legacy\System\DB;
 
 				$type = new LegacyProductType($row['id']);
 
-				$row_price = DB::row('* FROM prices_stores WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
+				$row_price = DB::row('* FROM prices_sellers WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
 
 				$price = $row_price['price'];
 				$gain_w = $row_price['gain_w'];

@@ -19,7 +19,7 @@
 
 			<?php
 
-	if (DB::find('request FROM stores WHERE user_id = ?', [$seller->id])) { ?>
+	if (DB::find('request FROM sellers WHERE user_id = ?', [$seller->id])) { ?>
 
 			<div class="request">
 

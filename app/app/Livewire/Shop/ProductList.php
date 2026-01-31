@@ -151,7 +151,7 @@ class ProductList extends Component {
         }
 
         // Start building the query
-        $products = Product::join('stores', 'products.user_id', '=', 'stores.user_id')
+        $products = Product::join('sellers', 'products.user_id', '=', 'sellers.user_id')
             ->leftJoin('designs', 'products.design_id', '=', 'designs.id')
             ->where('products.status', 1)
             ->where('products.deleted', 0)
@@ -164,7 +164,7 @@ class ProductList extends Component {
             $products->where('products.user_id', $this->seller->user_id);
         } else {
             // Filter for the general shop
-            $products->where('stores.status', true)->where('stores.hidden', false);
+            $products->where('sellers.status', true)->where('sellers.hidden', false);
         }
 
         // Set the sort criteria based on the seller's preferences or default
@@ -198,7 +198,7 @@ class ProductList extends Component {
             $products->where(function ($query) {
                 $query
                     ->where('products.name', 'like', '%' . $this->search . '%')
-                    ->orWhere('stores.name', 'like', '%' . $this->search . '%')
+                    ->orWhere('sellers.name', 'like', '%' . $this->search . '%')
                     ->orWhereIn('design_id', function ($query) {
                         $query
                             ->select('design_id')

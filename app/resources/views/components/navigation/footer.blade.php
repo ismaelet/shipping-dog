@@ -6,15 +6,15 @@
 
 	// links
 	$footer['columns'] = [
-	    ['Esplora', [['Home', 'home'], ['Prodotti', 'shop'], ['Vendi', 'sell']]],
+	    ['Esplora', [['Home', route('home')], ['Prodotti', route('shop')], ['Vendi', route('open-shop')]]],
 
 	    [
 	        'Supporto',
 	        [
-	            ['Contatti', 'contacts'],
-	            ['FAQ', 'support.faq'],
-	            ['Cambio taglia', 'support.refund.search'],
-	            ['Stato ordine', 'support.order.status'],
+	            ['Contatti', route('contacts')],
+	            ['FAQ', route('support.faq')],
+	            ['Cambio taglia', route('support.refund.search')],
+	            ['Stato ordine', route('orders.find')],
 	        ],
 	    ],
 

@@ -6,24 +6,24 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-	/**
-	 * Run the migrations.
-	 */
-	public function up(): void {
-		Seller::leftJoin('users', 'stores.user_id', '=', 'users.id')
-			->where('users.id', null)
-			->with('designs', 'followers', 'prices', 'payment_request', 'logoGroups')
-			->select('stores.*')
-			->get()
-			->each(function ($seller) {
-				$seller->delete();
-			});
-	}
+    /**
+     * Run the migrations.
+     */
+    public function up(): void {
+        Seller::leftJoin('users', 'sellers.user_id', '=', 'users.id')
+            ->where('users.id', null)
+            ->with('designs', 'followers', 'prices', 'payment_request', 'logoGroups')
+            ->select('sellers.*')
+            ->get()
+            ->each(function ($seller) {
+                $seller->delete();
+            });
+    }
 
-	/**
-	 * Reverse the migrations.
-	 */
-	public function down(): void {
-		//
-	}
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void {
+        //
+    }
 };

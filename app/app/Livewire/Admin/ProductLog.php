@@ -122,16 +122,16 @@ class ProductLog extends Component {
         // Get the orders
         $filteredOrderItems = OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
             ->join('addresses', 'addresses.order_id', '=', 'orders.id')
-            ->join('stores', 'stores.id', '=', 'order_items.seller_id')
+            ->join('sellers', 'sellers.id', '=', 'order_items.seller_id')
             ->join('products', 'products.id', '=', 'order_items.product_id')
             ->join('product_types', 'product_types.id', '=', 'order_items.type_id')
             ->where('orders.created_at', '>=', $this->firstOrder?->created_at)
-            ->where('orders.status', '>=', EcommerceHelper::statusFromTag('confirmed'))
+            ->where('orders.status', '>=', EcommerceHelper::status('confirmed'))
             ->select(
                 'orders.id as order_id',
                 'orders.created_at as confirmedTime',
                 'order_items.*',
-                'stores.name as storeName',
+                'sellers.name as storeName',
                 'addresses.full_name as customerName',
                 'products.name as productName',
                 'product_types.name as productTypeName',
@@ -139,7 +139,7 @@ class ProductLog extends Component {
 
         if (!$this->showAll) {
             $filteredOrderItems = $filteredOrderItems
-                ->where('orders.status', EcommerceHelper::statusFromTag('confirmed'));
+                ->where('orders.status', EcommerceHelper::status('confirmed'));
         }
 
         if (!$this->showPrinted && !$this->showInCart) {

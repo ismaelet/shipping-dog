@@ -14,41 +14,41 @@ use Filament\Notifications\Notification;
  */
 class RemoveLabeling {
 
-	/**
+    /**
      * Create a new action.
      *
      * @return Action
      */
     public static function make(): Action {
-		return Action::make('already-shipped')
-			->label('Cancella')
-			->requiresConfirmation()
-			->icon('heroicon-o-trash')
-			->color('danger')
-			->action(function (Order $record): bool {
-				$response = $record->update([
-					'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),
-				]);
+        return Action::make('already-shipped')
+            ->label('Cancella')
+            ->requiresConfirmation()
+            ->icon('heroicon-o-trash')
+            ->color('danger')
+            ->action(function (Order $record): bool {
+                $response = $record->update([
+                    'status' => EcommerceHelper::status('awaiting-shipping'),
+                ]);
 
-				// Success
-				if ($response) {
-					Notification::make()
-						->title('Eliminata')
-						->body('Spedizione eliminata correttamente')
-						->success()
-						->send();
+                // Success
+                if ($response) {
+                    Notification::make()
+                        ->title('Eliminata')
+                        ->body('Spedizione eliminata correttamente')
+                        ->success()
+                        ->send();
 
-					return true;
-				}
+                    return true;
+                }
 
-				// Error
-				Notification::make()
-					->title('Errore')
-					->body('Errore durante l\'eliminazione della spedizione')
-					->danger()
-					->send();
+                // Error
+                Notification::make()
+                    ->title('Errore')
+                    ->body('Errore durante l\'eliminazione della spedizione')
+                    ->danger()
+                    ->send();
 
-				return false;
-			});
-	}
+                return false;
+            });
+    }
 }

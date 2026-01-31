@@ -32,7 +32,7 @@
 	    'sanseverotrash@gmx.com',
 	];
 
-	$sellers = Seller::join('users', 'users.id', '=', 'stores.user_id')->where('stores.status', true)->get();
+	$sellers = Seller::join('users', 'users.id', '=', 'sellers.user_id')->where('sellers.status', true)->get();
 
 	$emails = $sellers->pluck('email')->toArray();
 	$emails = array_chunk($emails, 50);

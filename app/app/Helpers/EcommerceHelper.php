@@ -5,87 +5,74 @@ namespace App\Helpers;
 use App\Models\Ecommerce\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Number;
+use NumberFormatter;
 
 class EcommerceHelper {
 
-	/**
-	 * Get the ID of the active cart
-	 */
-	public static function cartId(): ?int {
-		// If the user is logged in, return the ID of their cart
-		if (Auth::check() && Auth::user()->cart) {
-			return Auth::user()->cart->id;
-		}
+    /**
+     * Get the ID of the active cart
+     */
+    public static function cartId(): ?int {
+        // If the user is logged in, return the ID of their cart
+        if (Auth::check()) {
+            return Auth::user()->cart?->id;
+        }
 
-		// Otherwise, return the ID of the cart stored in the session
-		$sessionCart = Order::find(session('cart_id'));
+        // Otherwise, return the ID of the cart stored in the session
+        $sessionCart = Order::where('id', session('cart_id'))
+            ->where('status', [EcommerceHelper::status('open')])
+            ->first();
 
-		if ($sessionCart && !$sessionCart->status) {
-			return $sessionCart->id;
-		}
+        // Return the ID of the session cart if it exists, otherwise null
+        return $sessionCart?->id;
+    }
 
-		// If no cart is found, return null
-		return null;
-	}
+    /**
+     * Get the active cart
+     */
+    public static function cart(): ?Order {
+        return Order::find(self::cartId());
+    }
 
-	/**
-	 * Get the active cart
-	 */
-	public static function cart(): ?Order {
-		if (Auth::check()) {
-			return Auth::user()->cart ?? null;
-		}
+    /**
+     * Format a price value according to the current currency
+     */
+    public static function formatPrice(?float $value, bool $forceNumber = true): string {
+        if (!$value && !$forceNumber) {
+            return __('Free');
+        }
 
-		if (session('cart_id')) {
-			return Order::where('id', session('cart_id'))
-				->whereIn('status', [EcommerceHelper::statusFromTag('open'), EcommerceHelper::statusFromTag('received')])
-				->first();
-		}
+        $formatter = new NumberFormatter(config('app.locale'), NumberFormatter::CURRENCY);
 
-		return null;
-	}
+        $formatted = $formatter->formatCurrency($value, config('custom.currency', 'EUR'));
 
-	/**
-	 * Get the number of items in the cart
-	 */
-	public static function cartQuantity(): int {
-		return self::cart() ? self::cart()->order_items->count() : 0;
-	}
+        // Replace non-breaking space (&nbsp;) with a regular space
+        return str_replace("\u{00A0}", ' ', $formatted);
+    }
 
-	/**
-	 * Format a price
-	 */
-	public static function formatPrice(float $price, bool $forceNumber = true): string {
-		if ($price || $forceNumber) {
-			return Number::currency($price, 'EUR', config('app.locale'));
-		} else {
-			return __('Gratis');
-		}
-	}
+    /**
+     * Get the step index based on the given step tag
+     */
+    public static function stepFromTag(string $stepTag): int {
+        $stepKeyPosition = array_search($stepTag, array_column(config('ecommerce.cart.steps'), 'tag'));
 
-	/**
-	 * Get the step index based on the given step tag
-	 */
-	public static function stepFromTag(string $stepTag): int {
-		$stepKeyPosition = array_search($stepTag, array_column(config('ecommerce.cart.steps'), 'tag'));
+        if ($stepKeyPosition === false) {
+            return false;
+        }
 
-		if ($stepKeyPosition === false) {
-			return false;
-		}
+        return array_keys(config('ecommerce.cart.steps'))[$stepKeyPosition];
+    }
 
-		return array_keys(config('ecommerce.cart.steps'))[$stepKeyPosition];
-	}
+    /**
+     * Get the status index based on the given status tag
+     */
+    public static function status(string $statusTag): int {
+        $statusKeyPosition = array_search($statusTag, array_column(config('ecommerce.order.statuses'), 'tag'));
 
-	/**
-	 * Get the status index based on the given status tag
-	 */
-	public static function statusFromTag(string $statusTag): int {
-		$statusKeyPosition = array_search($statusTag, array_column(config('ecommerce.order.statuses'), 'tag'));
+        if ($statusKeyPosition === false) {
+            return false;
+        }
 
-		if ($statusKeyPosition === false) {
-			return false;
-		}
-
-		return array_keys(config('ecommerce.order.statuses'))[$statusKeyPosition];
-	}
+        return array_keys(config('ecommerce.order.statuses'))[$statusKeyPosition];
+    }
 }

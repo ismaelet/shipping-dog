@@ -28,7 +28,7 @@
 	$header['links'][] = ['title' => 'Home', 'loc' => 'home', 'url' => route('home')];
 
 	$header['links'][] = [
-	    'title' => 'Carrello (' . cart_quantity() . ')',
+	    'title' => 'Carrello (' . cart()?->quantity . ')',
 	    'loc' => 'cart',
 	    'url' => route('cart'),
 	    'cart' => true,
@@ -107,6 +107,9 @@
 	// login bar
 	$header['login-link'] = ['Login', route('login')];
 	$header['logged-link'] = [auth()->user() ? 'Profilo' : '', '/user-dashboard'];
+
+	// Cart
+	$cartQuantity = cart()?->quantity ?? 0;
 
 @endphp
 
@@ -720,7 +723,7 @@
 								}
 
 								// Check cart filter
-								if (isset($h_link['cart']) && !cart_quantity()) {
+								if (isset($h_link['cart']) && !$cartQuantity) {
 								    $h_valid = false;
 								}
 
@@ -814,8 +817,8 @@
 
 						<?= embed_icon('bag') ?>
 
-						@if (cart_quantity())
-							<h1 id="h-cart-num">{{ cart_quantity() }}</h1>
+						@if ($cartQuantity)
+							<h1 id="h-cart-num">{{ $cartQuantity }}</h1>
 						@endif
 
 					</a>
@@ -927,7 +930,7 @@
 									}
 
 									// Check cart filter
-									if (isset($h_link['cart']) && !cart_quantity()) {
+									if (isset($h_link['cart']) && !$cartQuantity) {
 									    $h_valid = false;
 									}
 

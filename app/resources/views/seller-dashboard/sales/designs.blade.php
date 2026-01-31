@@ -51,7 +51,7 @@ use App\Models\Ecommerce\OrderItem;
 			<p class="list-inp text-sm"><?= $designData->name ?></p>
 		</div>
 		<div class="list-cell">
-			<p class="list-inp text-sm"><?= format_price($designData->totGain) ?></p>
+			<p class="list-inp text-sm"><?= price($designData->totGain) ?></p>
 		</div>
 		<div class="list-cell">
 			<p class="list-inp text-sm"><?= $lastOrder->createdAtString() ?></p>

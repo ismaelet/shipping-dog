@@ -5,21 +5,21 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-	/**
-	 * Run the migrations.
-	 */
-	public function up(): void {
-		Schema::table('prices_stores', function (Blueprint $table) {
-			$table->timestamps();
-		});
-	}
+    /**
+     * Run the migrations.
+     */
+    public function up(): void {
+        Schema::table('prices_sellers', function (Blueprint $table) {
+            $table->timestamps();
+        });
+    }
 
-	/**
-	 * Reverse the migrations.
-	 */
-	public function down(): void {
-		Schema::table('prices_stores', function (Blueprint $table) {
-			$table->dropTimestamps();
-		});
-	}
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void {
+        Schema::table('prices_sellers', function (Blueprint $table) {
+            $table->dropTimestamps();
+        });
+    }
 };

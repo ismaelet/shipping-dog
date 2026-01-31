@@ -15,7 +15,7 @@ return new class extends Migration {
             ->get();
 
         $users->each(function ($user) {
-            $seller = DB::table('stores')
+            $seller = DB::table('sellers')
                 ->where('user_id', $user->id)
                 ->first();
 

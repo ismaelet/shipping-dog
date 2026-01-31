@@ -13,170 +13,170 @@ use stdClass;
 
 class GlsService {
 
-	/**
-	 * Endpoints
-	 * 
-	 * @var string
-	 */
-	private string $addParcelEndpoint = 'https://labelservice.gls-italy.com/ilswebservice.asmx/AddParcel';
-	private string $closeWorkDayByShipmentNumberEndpoint = 'https://labelservice.gls-italy.com/ilsWebService.asmx/CloseWorkDayByShipmentNumber';
-	private string $trackParcelEndpoint = 'https://infoweb.gls-italy.com/XML/get_xml_track.php';
+    /**
+     * Endpoints
+     * 
+     * @var string
+     */
+    private string $addParcelEndpoint = 'https://labelservice.gls-italy.com/ilswebservice.asmx/AddParcel';
+    private string $closeWorkDayByShipmentNumberEndpoint = 'https://labelservice.gls-italy.com/ilsWebService.asmx/CloseWorkDayByShipmentNumber';
+    private string $trackParcelEndpoint = 'https://infoweb.gls-italy.com/XML/get_xml_track.php';
 
-	/**
-	 * * Add Parcel
-	 * 
-	 * @param Collection|Order $orders
-	 * @return bool
-	 */
-	public function addParcels(Collection|Order $orders): bool {
-		// If a single order is passed, convert it to a collection
-		if ($orders instanceof Order) {
-			$orders = new Collection([$orders]);
-		}
+    /**
+     * * Add Parcel
+     * 
+     * @param Collection|Order $orders
+     * @return bool
+     */
+    public function addParcels(Collection|Order $orders): bool {
+        // If a single order is passed, convert it to a collection
+        if ($orders instanceof Order) {
+            $orders = new Collection([$orders]);
+        }
 
-		// Set headers
-		$headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
+        // Set headers
+        $headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
 
-		// Set the body
-		$body = [
-			'XMLInfoParcel' => "<Info>
+        // Set the body
+        $body = [
+            'XMLInfoParcel' => "<Info>
 				" . $this->payloadHeader() . "
 				" . $this->addParcelsData($orders) . "
 			</Info>"
-		];
+        ];
 
-		// Send the request
-		$response = $this->sendRequest($this->addParcelEndpoint, $headers, $body);
+        // Send the request
+        $response = $this->sendRequest($this->addParcelEndpoint, $headers, $body);
 
-		if (!$response) {
-			return false;
-		}
+        if (!$response) {
+            return false;
+        }
 
-		// Update the orders
-		return $this->updateOrdersAfterAdd($orders, $response);
-	}
+        // Update the orders
+        return $this->updateOrdersAfterAdd($orders, $response);
+    }
 
-	/**
-	 * * Transmit Parcel
-	 *	
-	 * CloseWorkDayByShipmentNumber in the GLS API
-	 * 
-	 * @return bool
-	 */
-	public function transmitParcels(Collection|Order $orders): array {
-		// If a single order is passed, convert it to a collection
-		if ($orders instanceof Order) {
-			$orders = new Collection([$orders]);
-		}
+    /**
+     * * Transmit Parcel
+     *	
+     * CloseWorkDayByShipmentNumber in the GLS API
+     * 
+     * @return bool
+     */
+    public function transmitParcels(Collection|Order $orders): array {
+        // If a single order is passed, convert it to a collection
+        if ($orders instanceof Order) {
+            $orders = new Collection([$orders]);
+        }
 
-		$orders = $orders->load('address');
+        $orders = $orders->load('address');
 
-		// Set headers
-		$headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
+        // Set headers
+        $headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
 
-		// Set body
-		$body = [
-			'_xmlRequest' => "<Info>
+        // Set body
+        $body = [
+            '_xmlRequest' => "<Info>
 			" . $this->payloadHeader() . "
 			" . $this->transmitParcelsData($orders) . "
 		</Info>"
-		];
+        ];
 
-		// Send the request
-		$response = $this->sendRequest($this->closeWorkDayByShipmentNumberEndpoint, $headers, $body);
+        // Send the request
+        $response = $this->sendRequest($this->closeWorkDayByShipmentNumberEndpoint, $headers, $body);
 
-		if (!$response) {
-			return [
-				'success' => false,
-				'error' => 'Errore nella trasmissione'
-			];
-		}
+        if (!$response) {
+            return [
+                'success' => false,
+                'error' => 'Errore nella trasmissione'
+            ];
+        }
 
-		// Update the orders
-		return $this->updateOrdersAfterTransmit($response);
-	}
+        // Update the orders
+        return $this->updateOrdersAfterTransmit($response);
+    }
 
-	/**
-	 * * Track parcel
-	 * 
-	 * @return void
-	 */
-	public function trackParcels(): void {
-		$orders = $this->trackParcelOrders();
-		$orders->each(function ($order) {
-			$this->trackParcel($order);
-		});
-	}
+    /**
+     * * Track parcel
+     * 
+     * @return void
+     */
+    public function trackParcels(): void {
+        $orders = $this->trackParcelOrders();
+        $orders->each(function ($order) {
+            $this->trackParcel($order);
+        });
+    }
 
-	/**
-	 * ~ Helper: Send Request
-	 * 
-	 * @param string $endpoint
-	 * @param array $headers
-	 * @param array $body
-	 * @return stdClass|false
-	 */
-	private function sendRequest(string $endpoint, array $headers, array $body): stdClass|false {
-		try {
-			$client = new Client();
+    /**
+     * ~ Helper: Send Request
+     * 
+     * @param string $endpoint
+     * @param array $headers
+     * @param array $body
+     * @return stdClass|false
+     */
+    private function sendRequest(string $endpoint, array $headers, array $body): stdClass|false {
+        try {
+            $client = new Client();
 
-			$response = $client->request('POST', $endpoint, [
-				'headers' => $headers,
-				'form_params' => $body
-			]);
+            $response = $client->request('POST', $endpoint, [
+                'headers' => $headers,
+                'form_params' => $body
+            ]);
 
-			// Get response body
-			$response = simplexml_load_string($response->getBody()->getContents());
-			$response = json_encode($response);
+            // Get response body
+            $response = simplexml_load_string($response->getBody()->getContents());
+            $response = json_encode($response);
 
-			return json_decode($response);
-		} catch (Exception $e) {
-			Log::error('Error sending a request to GLS ', ['Exception' => $e]);
+            return json_decode($response);
+        } catch (Exception $e) {
+            Log::error('Error sending a request to GLS ', ['Exception' => $e]);
 
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 
-	/**
-	 * ~ Helper: Payload Header 
-	 * 
-	 * @return string
-	 */
-	private function payloadHeader(): string {
-		$headquarters = config('services.gls.headquarters');
-		$clientId = config('services.gls.client_id');
-		$clientPassword = config('services.gls.client_password');
+    /**
+     * ~ Helper: Payload Header 
+     * 
+     * @return string
+     */
+    private function payloadHeader(): string {
+        $headquarters = config('services.gls.headquarters');
+        $clientId = config('services.gls.client_id');
+        $clientPassword = config('services.gls.client_password');
 
-		return "<SedeGls>$headquarters</SedeGls>
+        return "<SedeGls>$headquarters</SedeGls>
 		<CodiceClienteGls>$clientId</CodiceClienteGls>
 		<PasswordClienteGls>$clientPassword</PasswordClienteGls>";
-	}
+    }
 
-	/**
-	 * ~ Add Parcel Helper: Add Parcels Data
-	 * 
-	 * @param Collection $orders
-	 * @return string
-	 */
-	private function addParcelsData(Collection $orders): string {
+    /**
+     * ~ Add Parcel Helper: Add Parcels Data
+     * 
+     * @param Collection $orders
+     * @return string
+     */
+    private function addParcelsData(Collection $orders): string {
 
-		$contractCode = config('services.gls.contract_code');
+        $contractCode = config('services.gls.contract_code');
 
-		$parcelsXml = '';
+        $parcelsXml = '';
 
-		$orders->each(function ($order) use (&$parcelsXml, $contractCode) {
-			$address = $order->address;
-			$ragioneSociale = $address->full_name;
-			$indirizzo = $address->address . ', ' . $address->number;
-			$localita = $address->city;
-			$zipCode = $address->zip;
-			$provincia = $address->region;
-			$email = $address->email;
-			$serviziAccessori = $order->exchange ? 24 : '';
-			$cellulare1 = $address->phone;
+        $orders->each(function ($order) use (&$parcelsXml, $contractCode) {
+            $address = $order->address;
+            $ragioneSociale = $address->full_name;
+            $indirizzo = $address->address . ', ' . $address->number;
+            $localita = $address->city;
+            $zipCode = $address->zip;
+            $provincia = $address->region;
+            $email = $address->email;
+            $serviziAccessori = $order->exchange ? 24 : '';
+            $cellulare1 = $address->phone;
 
-			// XML payload to send to the API
-			$parcelsXml .= "
+            // XML payload to send to the API
+            $parcelsXml .= "
             <Parcel>
 				<CodiceContrattoGls>$contractCode</CodiceContrattoGls>
 				<RagioneSociale>$ragioneSociale</RagioneSociale>
@@ -193,70 +193,70 @@ class GlsService {
 				<ServiziAccessori>$serviziAccessori</ServiziAccessori>
 			</Parcel>
         ";
-		});
+        });
 
-		return $parcelsXml;
-	}
+        return $parcelsXml;
+    }
 
-	/**
-	 * ~ Add Parcel Helper: Update Order
-	 * 
-	 * @param Collection $orders
-	 * @param stdClass $response
-	 * @return bool
-	 */
-	private function updateOrdersAfterAdd(Collection $orders, stdClass $response): bool {
-		$parcels = $response->Parcel;
+    /**
+     * ~ Add Parcel Helper: Update Order
+     * 
+     * @param Collection $orders
+     * @param stdClass $response
+     * @return bool
+     */
+    private function updateOrdersAfterAdd(Collection $orders, stdClass $response): bool {
+        $parcels = $response->Parcel;
 
-		if (!is_array($parcels)) {
-			$parcels = [$parcels];
-		}
+        if (!is_array($parcels)) {
+            $parcels = [$parcels];
+        }
 
-		foreach ($parcels as $parcelKey => $parcel) {
-			$order = $orders[$parcelKey];
-			$shippingNumber = $parcel->NumeroSpedizione ?? null;
+        foreach ($parcels as $parcelKey => $parcel) {
+            $order = $orders[$parcelKey];
+            $shippingNumber = $parcel->NumeroSpedizione ?? null;
 
-			if (!$shippingNumber) {
-				Log::error('Error adding a GLS parcel', ['Order' => $order->id, 'Response' => $response]);
+            if (!$shippingNumber) {
+                Log::error('Error adding a GLS parcel', ['Order' => $order->id, 'Response' => $response]);
 
-				return false;
-			}
+                return false;
+            }
 
-			$order->update([
-				'tracking' => $shippingNumber
-			]);
-		}
+            $order->update([
+                'tracking' => $shippingNumber
+            ]);
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * ~ Transmit Parcel Helper: Transmit Parcels Data
-	 * 
-	 * @param Collection $orders
-	 * @return string
-	 */
-	private function transmitParcelsData(Collection $orders): string {
-		$contractCode = config('services.gls.contract_code');
+    /**
+     * ~ Transmit Parcel Helper: Transmit Parcels Data
+     * 
+     * @param Collection $orders
+     * @return string
+     */
+    private function transmitParcelsData(Collection $orders): string {
+        $contractCode = config('services.gls.contract_code');
 
-		$parcelsXml = '';
+        $parcelsXml = '';
 
-		$orders->each(function ($order) use (&$parcelsXml, $contractCode) {
-			$shippingNumber = $order->tracking;
-			$address = $order->address;
-			$ragioneSociale = $address->full_name;
-			$indirizzo = $address->address . ', ' . $address->number;
-			$localita = $address->city;
-			$zipCode = $address->zip;
-			$provincia = $address->region;
-			$email = $address->email;
-			$serviziAccessori = $order->exchange ? 24 : '';
-			$cellulare1 = $address->phone;
-			$noteSpedizione = $cellulare1;
-			$noteAggiuntive = $order->courier_notes;
+        $orders->each(function ($order) use (&$parcelsXml, $contractCode) {
+            $shippingNumber = $order->tracking;
+            $address = $order->address;
+            $ragioneSociale = $address->full_name;
+            $indirizzo = $address->address . ', ' . $address->number;
+            $localita = $address->city;
+            $zipCode = $address->zip;
+            $provincia = $address->region;
+            $email = $address->email;
+            $serviziAccessori = $order->exchange ? 24 : '';
+            $cellulare1 = $address->phone;
+            $noteSpedizione = $cellulare1;
+            $noteAggiuntive = $order->courier_notes;
 
-			// XML payload to send to the API
-			$parcelsXml .= "<Parcel>
+            // XML payload to send to the API
+            $parcelsXml .= "<Parcel>
 				<NumeroDiSpedizioneGLSDaConfermare>$shippingNumber</NumeroDiSpedizioneGLSDaConfermare>
 				<CodiceContrattoGls>$contractCode</CodiceContrattoGls>
 				<RagioneSociale>$ragioneSociale</RagioneSociale>
@@ -274,127 +274,127 @@ class GlsService {
 				<NoteAggiuntive>$noteAggiuntive</NoteAggiuntive>
 				<ServiziAccessori>$serviziAccessori</ServiziAccessori>
 			</Parcel>";
-		});
+        });
 
-		return $parcelsXml;
-	}
+        return $parcelsXml;
+    }
 
-	/**
-	 * ~ Transmit Parcel Helper: Update Orders
-	 * 
-	 * @param Collection $orders
-	 * @param stdClass $response
-	 * @return bool
-	 */
-	private function updateOrdersAfterTransmit(stdClass $response): array {
-		$parcels = $response->Parcel ?? null;
+    /**
+     * ~ Transmit Parcel Helper: Update Orders
+     * 
+     * @param Collection $orders
+     * @param stdClass $response
+     * @return bool
+     */
+    private function updateOrdersAfterTransmit(stdClass $response): array {
+        $parcels = $response->Parcel ?? null;
 
-		if (!$parcels) {
-			Log::error('Error transmitting bulk GLS parcel', ['Response' => $response]);
+        if (!$parcels) {
+            Log::error('Error transmitting bulk GLS parcel', ['Response' => $response]);
 
-			return [
-				'success' => false,
-				'error' => 'Errore di trasmissione non specificato'
-			];
-		}
+            return [
+                'success' => false,
+                'error' => 'Errore di trasmissione non specificato'
+            ];
+        }
 
-		if ($parcels && !is_array($parcels)) {
-			$parcels = [$parcels];
-		}
+        if ($parcels && !is_array($parcels)) {
+            $parcels = [$parcels];
+        }
 
-		foreach ($parcels as $parcel) {
-			if (!$parcel || !isset($parcel->NumeroDiSpedizioneGLSDaConfermare)) {
-				Log::error('Error transmitting a GLS parcel', ['Response' => $response]);
+        foreach ($parcels as $parcel) {
+            if (!$parcel || !isset($parcel->NumeroDiSpedizioneGLSDaConfermare)) {
+                Log::error('Error transmitting a GLS parcel', ['Response' => $response]);
 
-				return [
-					'success' => false,
-					'error' => 'Errore di trasmissione non specificato'
-				];
-			}
+                return [
+                    'success' => false,
+                    'error' => 'Errore di trasmissione non specificato'
+                ];
+            }
 
-			Order::where('tracking', $parcel->NumeroDiSpedizioneGLSDaConfermare)
-				->first()
-				->update([
-					'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),
-				]);
-		}
+            Order::where('tracking', $parcel->NumeroDiSpedizioneGLSDaConfermare)
+                ->first()
+                ->update([
+                    'status' => EcommerceHelper::status('awaiting-shipping'),
+                ]);
+        }
 
-		return [
-			'success' => true,
-			'error' => false
-		];
-	}
+        return [
+            'success' => true,
+            'error' => false
+        ];
+    }
 
-	/**
-	 * ~ Track Parcel Helper: Orders
-	 * 
-	 * @return Collection
-	 */
-	private function trackParcelOrders(): Collection {
-		return Order::whereIn('status', [EcommerceHelper::statusFromTag('awaiting-shipping'), EcommerceHelper::statusFromTag('shipped')])
-			->whereNotNull('tracking')
-			->get();
-	}
+    /**
+     * ~ Track Parcel Helper: Orders
+     * 
+     * @return Collection
+     */
+    private function trackParcelOrders(): Collection {
+        return Order::whereIn('status', [EcommerceHelper::status('awaiting-shipping'), EcommerceHelper::status('shipped')])
+            ->whereNotNull('tracking')
+            ->get();
+    }
 
-	/**
-	 * ~ Track Parcel Helper: Track Parcel
-	 * 
-	 * @param Order $order
-	 * @return bool
-	 */
-	public function trackParcel(Order $order): bool {
-		$headquarters = config('services.gls.headquarters');
-		$contractCode = config('services.gls.contract_code');
+    /**
+     * ~ Track Parcel Helper: Track Parcel
+     * 
+     * @param Order $order
+     * @return bool
+     */
+    public function trackParcel(Order $order): bool {
+        $headquarters = config('services.gls.headquarters');
+        $contractCode = config('services.gls.contract_code');
 
-		$response = Http::get($this->trackParcelEndpoint, [
-			'locpartenza' => $headquarters,
-			'NumSped' => $order->tracking,
-			'CodCli' => $contractCode,
-		]);
+        $response = Http::get($this->trackParcelEndpoint, [
+            'locpartenza' => $headquarters,
+            'NumSped' => $order->tracking,
+            'CodCli' => $contractCode,
+        ]);
 
-		if ($response->successful()) {
-			$response = $response->getBody()->getContents();
+        if ($response->successful()) {
+            $response = $response->getBody()->getContents();
 
-			// If the order hasn't been shipped yet, stop here
-			if (strpos($response, 'Spedizione non trovata') !== false) {
-				return false;
-			}
+            // If the order hasn't been shipped yet, stop here
+            if (strpos($response, 'Spedizione non trovata') !== false) {
+                return false;
+            }
 
-			// Get the status
-			$status = explode('<StatoSpedizione><![CDATA[', $response)[1] ?? '';
-			$status = explode(']]></StatoSpedizione>', $status)[0] ?? null;
+            // Get the status
+            $status = explode('<StatoSpedizione><![CDATA[', $response)[1] ?? '';
+            $status = explode(']]></StatoSpedizione>', $status)[0] ?? null;
 
-			// Handle errors
-			if (!$status) {
-				Log::error('Error tracking a GLS parcel', ['Order' => $order->id, 'Response' => $response]);
+            // Handle errors
+            if (!$status) {
+                Log::error('Error tracking a GLS parcel', ['Order' => $order->id, 'Response' => $response]);
 
-				return false;
-			}
+                return false;
+            }
 
-			// Update the order status
-			switch ($status) {
-				case 'Non consegnato':
-					$order->update([
-						'status' => EcommerceHelper::statusFromTag('shipped'),
-					]);
-					$order->sendStatusEmail();
-					return true;
+            // Update the order status
+            switch ($status) {
+                case 'Non consegnato':
+                    $order->update([
+                        'status' => EcommerceHelper::status('shipped'),
+                    ]);
+                    $order->sendStatusEmail();
+                    return true;
 
-				case 'Consegnato':
-					$order->update([
-						'status' => EcommerceHelper::statusFromTag('delivered'),
-					]);
-					$order->sendStatusEmail();
-					return true;
+                case 'Consegnato':
+                    $order->update([
+                        'status' => EcommerceHelper::status('delivered'),
+                    ]);
+                    $order->sendStatusEmail();
+                    return true;
 
-				default:
-					Log::error('GLS parcel status not recognized', ['Order' => $order->id, 'Status' => $status]);
-					return false;
-			}
-		}
+                default:
+                    Log::error('GLS parcel status not recognized', ['Order' => $order->id, 'Status' => $status]);
+                    return false;
+            }
+        }
 
-		Log::error('Error while sending a tracking request to GLS', ['Order' => $order->id, 'Response' => $response]);
+        Log::error('Error while sending a tracking request to GLS', ['Order' => $order->id, 'Response' => $response]);
 
-		return false;
-	}
+        return false;
+    }
 }

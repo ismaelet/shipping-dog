@@ -46,12 +46,14 @@
 	:$locationTag
 >
 
-	<div
-		id="slider"
-		class="center-content full-width grid"
-	>
+	<div class="center-content fill-width light relative grid bg-white px-8 py-20 sm:py-40">
+		<img
+			class="absolute h-full w-full object-cover opacity-70"
+			src="{{ Vite::image('support/contacts-background.webp') }}"
+		/>
 
-		<x-typography.main-heading class="text-center">Conta<span class="text-primary">tt</span>i</x-typography.main-heading>
+		<x-typography.main-heading class="relative text-center">Conta<span
+				class="text-primary">tt</span>i</x-typography.main-heading>
 
 	</div>
 
@@ -88,15 +90,15 @@
 					>
 						<a
 							href="<?= config('custom.contacts.whatsapp.url') ?>"
-							class="hover:text-primary w-5 text-neutral-700 transition-colors"
+							class="hover:text-primary text-neutral-700 transition-colors"
 						>
-							<?= embed_icon('whatsapp') ?>
+							<x-icon-whatsapp class="h-5 w-5" />
 						</a>
 						<a
 							href="<?= config('custom.contacts.instagram.url') ?>"
-							class="hover:text-primary w-5 text-neutral-700 transition-colors"
+							class="hover:text-primary text-neutral-700 transition-colors"
 						>
-							<?= embed_icon('instagram') ?>
+							<x-icon-instagram class="h-5 w-5" />
 						</a>
 					</section>
 

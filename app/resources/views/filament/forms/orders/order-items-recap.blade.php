@@ -53,7 +53,7 @@
 			<p class="">Articoli</p>
 			<span></span>
 			<span></span>
-			<p class="text-right">{{ format_price($getRecord()->orderItemsPrice()) }}</p>
+			<p class="text-right">{{ price($getRecord()->orderItemsPrice()) }}</p>
 		</div>
 
 		@if ($getRecord()->coupon)

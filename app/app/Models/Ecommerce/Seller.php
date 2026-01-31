@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,11 +28,6 @@ class Seller extends Model {
     use HasFactory, SoftDeletes;
 
     /**
-     * The table associated with the model.
-     */
-    protected $table = 'stores';
-
-    /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
@@ -43,6 +39,7 @@ class Seller extends Model {
         'earned',
         'payed',
         'status',
+        'activation_request_sent',
         'request',
         'custom'
     ];
@@ -59,46 +56,49 @@ class Seller extends Model {
     }
 
     /**
-     * Get the seller's user
-     * 
-     * @return HasOne
+     * Relationship: The user account that owns the seller
      */
-    public function user(): HasOne {
-        return $this->hasOne(User::class, 'id', 'user_id');
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
     }
 
     /**
-     * Get the seller's designs
-     * 
-     * @return HasMany
+     * Relationship: The the seller's designs
      */
     public function designs(): HasMany {
         return $this->hasMany(Design::class, 'user_id', 'user_id');
     }
 
     /**
-     * Get the seller's order_items
+     * Relationship: The the seller's products
+     */
+    public function products(): HasMany {
+        return $this->hasMany(Product::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Relationship: The order items sold by the seller
      */
     public function order_items(): HasMany {
         return $this->hasMany(OrderItem::class);
     }
 
     /**
-     * Get the seller's followers
+     * Relationship: The the seller's followers
      */
     public function followers(): HasMany {
         return $this->hasMany(Follower::class, 'follower_id', 'user_id');
     }
 
     /**
-     * Get the seller's prices
+     * Relationship: The the seller's prices
      */
     public function prices(): HasMany {
         return $this->hasMany(SellerPrice::class, 'seller_id', 'id');
     }
 
     /**
-     * Get the seller's payments
+     * Relationship: The the seller's payments
      */
     public function payments(): HasMany {
         return $this->hasMany(Payment::class)->where('other', false);
@@ -224,7 +224,7 @@ class Seller extends Model {
 
     public function updateEarned(): self {
         $this->update([
-            'earned' => $this->order_items->where('status', '>=', EcommerceHelper::statusFromTag('confirmed'))->sum('gain')
+            'earned' => $this->order_items->where('status', '>=', EcommerceHelper::status('confirmed'))->sum('gain')
         ]);
 
         return $this;
@@ -262,7 +262,7 @@ class Seller extends Model {
         $usedOrderCredit = $this->order_items()
             ->where('user_id', '=', $this->user_id)
             ->where('credit', '=', 1)
-            ->where('status', '!=', EcommerceHelper::statusFromTag('cancelled'))
+            ->where('status', '!=', EcommerceHelper::status('cancelled'))
             ->selectRaw('SUM((fullProductPrice - price_disc) * quantity) as usedCredit')
             ->value('usedCredit');
 
@@ -274,7 +274,7 @@ class Seller extends Model {
             $query->where('user_id', '=', $this->user_id);
         })
             ->where('credit_ship', '=', 1)
-            ->where('status', '!=', EcommerceHelper::statusFromTag('cancelled'))
+            ->where('status', '!=', EcommerceHelper::status('cancelled'))
             ->selectRaw('
 			SUM(shipping) AS usedCredit
 		')

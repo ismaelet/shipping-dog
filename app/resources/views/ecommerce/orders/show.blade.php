@@ -47,7 +47,7 @@
 			</x-heading.component>
 		</div>
 
-		@if (in_array($order->status, [EcommerceHelper::statusFromTag('received')]))
+		@if (in_array($order->status, [EcommerceHelper::status('received')]))
 			<form
 				class="grid justify-items-center gap-6"
 				method="POST"
@@ -93,10 +93,10 @@
 				</div>
 			</form>
 		@elseif (in_array($order->status, [
-				EcommerceHelper::statusFromTag('confirmed'),
-				EcommerceHelper::statusFromTag('awaiting-shipping'),
-				EcommerceHelper::statusFromTag('confirmed'),
-				EcommerceHelper::statusFromTag('shipped'),
+				EcommerceHelper::status('confirmed'),
+				EcommerceHelper::status('awaiting-shipping'),
+				EcommerceHelper::status('confirmed'),
+				EcommerceHelper::status('shipped'),
 			]))
 			<p>
 				Il tuo ordine verrà spedito entro <span
@@ -155,7 +155,7 @@
 						<?= $order->address?->phone ?? '' ?>
 					</p>
 
-					{{-- @if (in_array($order->status, [EcommerceHelper::statusFromTag('received'), EcommerceHelper::statusFromTag('confirmed')]))
+					{{-- @if (in_array($order->status, [EcommerceHelper::status('received'), EcommerceHelper::status('confirmed')]))
 						<p class="text-neutral-700">
 							<a href="<?= client_url('/orders/' . $order->id . '/address?token=' . $order->token) ?>">
 								Modifica l'indirizzo

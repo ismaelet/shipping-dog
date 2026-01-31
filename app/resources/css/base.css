@@ -39,9 +39,7 @@ h3,
 h4,
 h5,
 h6 {
-	color: var(--color-neutral-950);
 	font-family: var(--font-heading);
-	line-height: 1.1;
 }
 
 body {
@@ -129,13 +127,6 @@ body {
 	body {
 		color: var(--color-neutral-400);
 		background-color: var(--color-background);
-	}
-
-	h1,
-	h2,
-	h3 {
-		color: var(--color-neutral-700);
-		font-family: var(--font-heading);
 	}
 
 	svg {

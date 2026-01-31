@@ -4,39 +4,22 @@ use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
 
 /**
- * Get the ID of the active cart.
- *
- * @return int|null The ID of the active cart, or null if no active cart exists
+ * Get the ID of the active cart
  */
-function order_id(): ?int {
-	return EcommerceHelper::cartId();
+function cart_id(): ?int {
+    return EcommerceHelper::cartId();
 }
 
 /**
- * Get the active cart.
- *
- * @return Order|null The active cart object, or null if no active cart exists.
+ * Get the active cart
  */
 function cart(): ?Order {
-	return EcommerceHelper::cart();
+    return EcommerceHelper::cart();
 }
 
 /**
- * Get the number of items in the cart.
- *
- * @return int The number of items in the cart
+ * Formats the given price value as a string
  */
-function cart_quantity(): int {
-	return EcommerceHelper::cartQuantity();
-}
-
-/**
- * Formats the given price value as a string.
- *
- * @param float $value The price value to format.
- * @param bool $forceNumber (optional) Whether to force the value to be treated as a number or show "free" when the value is 0.
- * @return string The formatted price value as a string.
- */
-function format_price(float $value, bool $forceNumber = true): string {
-	return EcommerceHelper::formatPrice($value);
+function price(float $value, bool $forceNumber = true): string {
+    return EcommerceHelper::formatPrice($value, $forceNumber);
 }

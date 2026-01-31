@@ -25,18 +25,18 @@ class HomeController extends Controller {
         $fanPicsCount = 7;
 
         // products
-        $popular = Product::join('stores', 'products.user_id', '=', 'stores.user_id')
+        $popular = Product::join('sellers', 'products.user_id', '=', 'sellers.user_id')
             ->where('products.status', true)
-            ->where('stores.status', true)
+            ->where('sellers.status', true)
             ->with('design', 'design_with_trashed', 'design.seller', 'seller', 'seller.prices', 'design.logo_group', 'color', 'type', 'position', 'specific_price', 'base_price')
             ->orderBy('products.recent_sales', 'desc')
             ->limit($productN)
             ->get('products.*');
 
         // designs
-        $popularDesigns = Design::join('stores', 'designs.user_id', '=', 'stores.user_id')
+        $popularDesigns = Design::join('sellers', 'designs.user_id', '=', 'sellers.user_id')
             ->where('designs.status', true)
-            ->where('stores.status', true)
+            ->where('sellers.status', true)
             ->with('main_product', 'products', 'seller')
             ->orderBy('designs.recent_sales', 'desc')
             ->limit($popularDesignCount)

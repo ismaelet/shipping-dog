@@ -114,7 +114,7 @@ class SellerResource extends Resource {
      */
     public static function getEloquentQuery(): Builder {
         return self::$model::query()
-            ->select('stores.*')
+            ->select('sellers.*')
             ->selectRaw('earned - payed + other_transfers as to_be_paid');
     }
 

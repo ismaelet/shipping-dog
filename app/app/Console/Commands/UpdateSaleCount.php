@@ -8,29 +8,29 @@ use Illuminate\Support\Facades\DB;
 
 class UpdateSaleCount extends Command {
 
-	/**
-	 * The name and signature of the console command.
-	 *
-	 * @var string
-	 */
-	protected $signature = 'update:sale-count';
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'update:sale-count';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Command description';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
 
-	/**
-	 * Track parcels
-	 */
-	public function handle() {
-		// * Products
-		DB::table('products')->update(['sales' => 0, 'recent_sales' => 0]);
+    /**
+     * Track parcels
+     */
+    public function handle() {
+        // * Products
+        DB::table('products')->update(['sales' => 0, 'recent_sales' => 0]);
 
-		// Total sales
-		DB::update('UPDATE products
+        // Total sales
+        DB::update('UPDATE products
 		JOIN (
 			SELECT products.id, SUM(order_items.quantity) AS total_sales
 			FROM products
@@ -40,8 +40,8 @@ class UpdateSaleCount extends Command {
 		) AS sales_table ON products.id = sales_table.id
 		SET products.sales = sales_table.total_sales');
 
-		// Recent sales
-		DB::update('UPDATE products
+        // Recent sales
+        DB::update('UPDATE products
 		JOIN (
 			SELECT products.id, SUM(order_items.quantity) AS total_sales
 			FROM products
@@ -51,11 +51,11 @@ class UpdateSaleCount extends Command {
 		) AS sales_table ON products.id = sales_table.id
 		SET products.recent_sales = sales_table.total_sales');
 
-		// * Designs
-		DB::table('designs')->update(['sales' => 0, 'recent_sales' => 0]);
+        // * Designs
+        DB::table('designs')->update(['sales' => 0, 'recent_sales' => 0]);
 
-		// Total sales
-		DB::update('UPDATE designs
+        // Total sales
+        DB::update('UPDATE designs
 		JOIN (
 			SELECT designs.id, SUM(order_items.quantity) AS total_sales
 			FROM designs
@@ -65,8 +65,8 @@ class UpdateSaleCount extends Command {
 		) AS sales_table ON designs.id = sales_table.id
 		SET designs.sales = sales_table.total_sales');
 
-		// Recent sales
-		DB::update('UPDATE designs
+        // Recent sales
+        DB::update('UPDATE designs
 		JOIN (
 			SELECT designs.id, SUM(order_items.quantity) AS total_sales
 			FROM designs
@@ -76,29 +76,29 @@ class UpdateSaleCount extends Command {
 		) AS sales_table ON designs.id = sales_table.id
 		SET designs.recent_sales = sales_table.total_sales');
 
-		// * Sellers
-		DB::table('stores')->update(['sales' => 0, 'recent_sales' => 0]);
+        // * Sellers
+        DB::table('sellers')->update(['sales' => 0, 'recent_sales' => 0]);
 
-		// Total sales
-		DB::update('UPDATE stores
+        // Total sales
+        DB::update('UPDATE sellers
 		JOIN (
-			SELECT stores.id, SUM(order_items.quantity) AS total_sales
-			FROM stores
-			JOIN order_items ON stores.id = order_items.seller_id
+			SELECT sellers.id, SUM(order_items.quantity) AS total_sales
+			FROM sellers
+			JOIN order_items ON sellers.id = order_items.seller_id
 			WHERE order_items.status >= 2
-			GROUP BY stores.id
-		) AS sales_table ON stores.id = sales_table.id
-		SET stores.sales = sales_table.total_sales');
+			GROUP BY sellers.id
+		) AS sales_table ON sellers.id = sales_table.id
+		SET sellers.sales = sales_table.total_sales');
 
-		// Recent sales
-		DB::update('UPDATE stores
+        // Recent sales
+        DB::update('UPDATE sellers
 		JOIN (
-			SELECT stores.id, SUM(order_items.quantity) AS total_sales
-			FROM stores
-			JOIN order_items ON stores.id = order_items.seller_id
+			SELECT sellers.id, SUM(order_items.quantity) AS total_sales
+			FROM sellers
+			JOIN order_items ON sellers.id = order_items.seller_id
 			WHERE order_items.status >= 2 AND order_items.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
-			GROUP BY stores.id
-		) AS sales_table ON stores.id = sales_table.id
-		SET stores.recent_sales = sales_table.total_sales');
-	}
+			GROUP BY sellers.id
+		) AS sales_table ON sellers.id = sales_table.id
+		SET sellers.recent_sales = sales_table.total_sales');
+    }
 }

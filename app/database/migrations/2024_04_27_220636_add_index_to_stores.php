@@ -5,21 +5,21 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-	/**
-	 * Run the migrations.
-	 */
-	public function up(): void {
-		Schema::table('stores', function (Blueprint $table) {
-			$table->unique('user_id');
-		});
-	}
+    /**
+     * Run the migrations.
+     */
+    public function up(): void {
+        Schema::table('sellers', function (Blueprint $table) {
+            $table->unique('user_id');
+        });
+    }
 
-	/**
-	 * Reverse the migrations.
-	 */
-	public function down(): void {
-		Schema::table('stores', function (Blueprint $table) {
-			$table->dropUnique('stores_user_id_unique');
-		});
-	}
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void {
+        Schema::table('sellers', function (Blueprint $table) {
+            $table->dropUnique('sellers_user_id_unique');
+        });
+    }
 };

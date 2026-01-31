@@ -11,24 +11,24 @@ use Illuminate\Http\Response;
 
 class UnconfirmedOrder {
 
-	/**
-	 * Handle an incoming request.
-	 */
-	public function handle(Request $request, Closure $next): Response|RedirectResponse {
-		$order = null;
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next): Response|RedirectResponse {
+        $order = null;
 
-		if ($request->route('order')) {
-			$order = $request->route('order');
-		}
+        if ($request->route('order')) {
+            $order = $request->route('order');
+        }
 
-		if ($request->order_id) {
-			$order = Order::find($request->order_id);
-		}
+        if ($request->order_id) {
+            $order = Order::find($request->order_id);
+        }
 
-		if ($order && in_array($order->status, [EcommerceHelper::statusFromTag('open'), EcommerceHelper::statusFromTag('received')])) {
-			return $next($request);
-		}
+        if ($order && in_array($order->status, [EcommerceHelper::status('open'), EcommerceHelper::status('received')])) {
+            return $next($request);
+        }
 
-		return redirect()->route('cart');
-	}
+        return redirect()->route('cart');
+    }
 }

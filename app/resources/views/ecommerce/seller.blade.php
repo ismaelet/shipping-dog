@@ -109,20 +109,9 @@
 						><?= $legacySeller->description ?></p>
 					@endif
 
-					@if (!$seller->status)
-						<p
-							id="wip"
-							class="mar-v-2"
-						>Il negozio ancora non è pubblico. Ti senti pronto? Il tuo negozio può essere reso pubblico? Faccelo sapere
-							scrivendoci a <a
-								href="<?= config('custom.contacts.email.url') ?>"
-								class="hover:text-primary font-bold transition-colors"
-							><?= config('custom.contacts.email.label') ?></a> o su WhatsApp a <a
-								href="<?= config('custom.contacts.whatsapp.url') ?>"
-								class="hover:text-primary font-bold transition-colors"
-							><?= config('custom.contacts.whatsapp.label') ?></a>.</p>
-					@endif
-
+					<div class="my-8">
+						<livewire:seller.activation-request :$seller />
+					</div>
 				</div>
 			</div>
 		</form>

@@ -67,4 +67,15 @@ return [
         'whatsapp' => ['url' => 'https://wa.me/3517419263', 'label' => '351 7419263',],
         'phone' => ['url' => 'tel:0462230218', 'label' => '0462 230218',],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Notification Emails
+    |--------------------------------------------------------------------------
+    |
+    | The email addresses to be notified on certain events.
+    |
+	*/
+    'notification_emails' => config('app.env') === 'production'
+        ? ['giebapromotion@gmail.com'] : ['ismaele.tuffanelli@gmail.com'],
 ];

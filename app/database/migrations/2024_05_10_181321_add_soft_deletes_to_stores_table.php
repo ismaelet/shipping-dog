@@ -5,37 +5,37 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-	/**
-	 * Run the migrations.
-	 */
-	public function up(): void {
-		Schema::table('stores', function (Blueprint $table) {
-			$table->softDeletes();
-		});
+    /**
+     * Run the migrations.
+     */
+    public function up(): void {
+        Schema::table('sellers', function (Blueprint $table) {
+            $table->softDeletes();
+        });
 
-		Schema::table('designs', function (Blueprint $table) {
-			$table->softDeletes();
-		});
+        Schema::table('designs', function (Blueprint $table) {
+            $table->softDeletes();
+        });
 
-		Schema::table('products', function (Blueprint $table) {
-			$table->softDeletes();
-		});
-	}
+        Schema::table('products', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+    }
 
-	/**
-	 * Reverse the migrations.
-	 */
-	public function down(): void {
-		Schema::table('stores', function (Blueprint $table) {
-			$table->dropSoftDeletes();
-		});
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void {
+        Schema::table('sellers', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
 
-		Schema::table('designs', function (Blueprint $table) {
-			$table->dropSoftDeletes();
-		});
+        Schema::table('designs', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
 
-		Schema::table('products', function (Blueprint $table) {
-			$table->dropSoftDeletes();
-		});
-	}
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+    }
 };
