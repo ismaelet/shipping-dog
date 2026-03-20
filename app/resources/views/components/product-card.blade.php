@@ -12,7 +12,10 @@
 			<p class="price blu">{{ $product->customerPriceString() }}</p>
 		</a>
 
-		<livewire:wishlist-button :product="$product" />
+		<livewire:wishlist-button
+			:product="$product"
+			:key="'wishlist-button-' . $product->id"
+		/>
 	</div>
 
 	<div class="item-box-body">

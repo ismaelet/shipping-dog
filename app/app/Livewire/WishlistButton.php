@@ -97,22 +97,24 @@ class WishlistButton extends Component {
      * Event listener: Update color
      */
     #[On('change-color')]
-    public function changeColor(int $id): void {
-        $this->colorId = $id;
-        $this->wishlistRecordId = $this->user?->wishlist_items()
-            ->where('product_id', $this->product->id)
-            ->where('color_id', $this->colorId)
-            ->where('position_id', $this->positionId)
-            ->value('id');
-        $this->wishlisted = (bool) $this->wishlistRecordId;
+    public function changeColor(int|array $id): void {
+        $this->colorId = is_array($id) ? (int) ($id['id'] ?? 0) : (int) $id;
+        $this->refreshWishlistState();
     }
 
     /**
      * Event listener: Update position
      */
     #[On('change-position')]
-    public function changePosition(int $id): void {
-        $this->positionId = $id;
+    public function changePosition(int|array $id): void {
+        $this->positionId = is_array($id) ? (int) ($id['id'] ?? 0) : (int) $id;
+        $this->refreshWishlistState();
+    }
+
+    /**
+     * Helper method: Refresh the wishlist state based on the current color and position
+     */
+    private function refreshWishlistState(): void {
         $this->wishlistRecordId = $this->user?->wishlist_items()
             ->where('product_id', $this->product->id)
             ->where('color_id', $this->colorId)

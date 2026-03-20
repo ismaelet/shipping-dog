@@ -71,7 +71,10 @@
 				</div>
 
 				{{-- Wishlist button --}}
-				<livewire:wishlist-button :product="$product" />
+				<livewire:wishlist-button
+					:product="$product"
+					:key="'wishlist-button-' . $product->id"
+				/>
 
 			</div>
 

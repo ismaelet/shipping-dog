@@ -43,6 +43,6 @@ class Position extends Component {
      * Event listener: Update position
      */
     public function updatedSelectedPositionId(): void {
-        $this->dispatch('change-position', $this->selectedPositionId);
+        $this->dispatch('change-position', id: $this->selectedPositionId);
     }
 }

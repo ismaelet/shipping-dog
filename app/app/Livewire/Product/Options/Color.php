@@ -33,6 +33,6 @@ class Color extends Component {
     }
 
     public function updatedSelectedColorId(): void {
-        $this->dispatch('change-color', $this->selectedColorId);
+        $this->dispatch('change-color', id: $this->selectedColorId);
     }
 }
