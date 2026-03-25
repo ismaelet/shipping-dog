@@ -24,7 +24,10 @@ class PreviewHelper {
     private ProductColor $color;
     private ProductPosition $position;
 
-    function __construct(Product $product, ProductColor $color, ProductPosition $position, ?int $imageSize = self::SMALL_IMAGE_SIZE) {
+    function __construct(Product $product, ProductColor $color, ?ProductPosition $position, ?int $imageSize = self::SMALL_IMAGE_SIZE) {
+        // Position fallback
+        $position = $position ?? $product->product_type->unique_positions()->first();
+
         // Set the image size
         $this->imageSize = in_array($imageSize, self::ALLOWED_IMAGE_SIZES) ? $imageSize : self::DEFAULT_IMAGE_SIZE;
 
