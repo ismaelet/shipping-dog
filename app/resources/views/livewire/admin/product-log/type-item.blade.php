@@ -14,12 +14,15 @@
 			@if ($position->id !== 1)
 				- {{ $position->name }}
 			@endif
+
+			{{ $suffix }}
 		</a>
 	@else
 		<p class="js-to-copy">
 			{{ $quantity }}
 			x
 			{{ $color->name . ' ' . $size->name }}
+			{{ $suffix }}
 		</p>
 	@endif
 

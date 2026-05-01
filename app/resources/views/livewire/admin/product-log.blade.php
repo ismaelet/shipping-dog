@@ -286,6 +286,15 @@
 		.text-sm {
 			font-size: 0.875rem;
 		}
+
+		.w-12 {
+			width: 3rem;
+		}
+
+		.mx-auto {
+			margin-left: auto;
+			margin-right: auto;
+		}
 	</style>
 @endpushOnce
 
@@ -297,65 +306,69 @@
 		:$firstOrder
 	/>
 
-	{{-- Logs --}}
-	<div class="grid gap-8 lg:grid-cols-2">
-		{{-- Designs --}}
-		<div class="">
-			<h3 class="dashboard-panel-title">Design</h3>
-			<div class="dashboard-panel">
+	<x-icon-loading
+		class="mx-auto w-12"
+		wire:loading
+	/>
 
-				@if ($orderItems?->count())
+	{{-- Logs --}}
+	<div
+		class="grid gap-8 lg:grid-cols-2"
+		wire:loading.class="opacity-30 pointer-events-none"
+	>
+
+		{{-- Designs --}}
+		<div>
+			<h3 class="dashboard-panel-title">Design</h3>
+
+			<div class="dashboard-panel">
+				@if ($this->hasOrderItems())
 					<div class="columns-3">
-						{{-- Filter by seller --}}
-						@foreach ($orderItems->pluck('seller')->unique() as $seller)
+						@foreach ($designGroups as $sellerGroup)
 							<div class="seller js-seller mt-4 block">
-								<h3 class="text-primary js-title">{{ strtoupper($seller->name) }}</h3>
+								<h3 class="text-primary js-title">
+									{{ strtoupper($sellerGroup['seller']->name) }}
+								</h3>
 
 								<div class="designs grid gap-4">
-									{{-- Filter by design --}}
-									@foreach ($orderItems->where('seller_id', $seller->id)->pluck('design')->unique() as $design)
+									@foreach ($sellerGroup['designs'] as $designGroup)
 										<div class="design js-design">
 											<p class="js-title text-neutral-700">
-												@if ($design?->originalImage())
+												@if ($designGroup['imageUrl'])
 													<a
-														href="{{ $design->originalImage() }}"
+														href="{{ $designGroup['imageUrl'] }}"
 														download
 													>
-														--- {{ ($design ? $design->id . ' - ' : '') . $design?->name }} ---
+														--- {{ $designGroup['title'] }} ---
 													</a>
 												@else
-													@if ($design)
-														--- {{ ($design ? $design->id . ' - ' : '') . $design->name }} ---
-													@else
-														@php
-															$customProduct = $orderItems->where('design_id', null)->where('seller_id', $seller->id)->first();
-														@endphp
-														--- {{ $customProduct?->product?->name ?: ' Prodotto non trovato ' }} ---
-													@endif
+													--- {{ $designGroup['title'] }} ---
 												@endif
 											</p>
 
 											<div class="mt-2 grid grid-cols-1 gap-2">
-												{{-- Filter by type --}}
-												@foreach ($orderItems->where('design_id', $design?->id)->pluck('type')->unique() as $type)
-													{{-- Filter by color --}}
-													@foreach ($orderItems->where('design_id', $design?->id)->where('type_id', $type->id)->sortBy('color_id')->pluck('color')->unique() as $color)
-														{{-- Filter by size --}}
-														@foreach ($orderItems->where('design_id', $design?->id)->where('type_id', $type->id)->where('color_id', $color->id)->sortBy('size_id')->pluck('size')->unique() as $size)
-															{{-- Filter by position --}}
-															@foreach ($orderItems->where('design_id', $design?->id)->where('type_id', $type->id)->where('color_id', $color->id)->where('size_id', $size->id)->sortBy('position')->pluck('position')->unique() as $position)
-																<livewire:admin.product-log.type-item
-																	:key="`type-item-{{ $type->id }}-color-{{ $color->id }}-size-{{ $size->id }}`"
-																	:order-items="$orderItems"
-																	:type="$type"
-																	:color="$color"
-																	:size="$size"
-																	:position="$position"
-																	:design="$design"
-																/>
-															@endforeach
-														@endforeach
-													@endforeach
+												@foreach ($designGroup['items'] as $item)
+													<livewire:admin.product-log.type-item
+														:key="'design-type-item-' .
+														    ($designGroup['design']?->id ?? 'custom') .
+														    '-' .
+														    $item['type']->id .
+														    '-' .
+														    $item['color']->id .
+														    '-' .
+														    $item['size']->id .
+														    '-' .
+														    ($item['position']?->id ?? 'no-position') .
+														    '-' .
+														    ($item['isLocalDelivery'] ? 'local-delivery' : 'shipping')"
+														:order-items="$item['orderItems']"
+														:type="$item['type']"
+														:color="$item['color']"
+														:size="$item['size']"
+														:position="$item['position']"
+														:design="$item['design']"
+														:suffix="$item['suffix']"
+													/>
 												@endforeach
 											</div>
 										</div>
@@ -373,31 +386,33 @@
 		{{-- Products --}}
 		<div class="js-products">
 			<h3 class="dashboard-panel-title">Prodotti</h3>
+
 			<div class="dashboard-panel">
-
-				@if ($orderItems?->count())
-					@php
-						$productTypes = $orderItems->sortBy('type_id')->pluck('type')->unique('id');
-					@endphp
-
+				@if ($this->hasOrderItems())
 					<div class="columns-3">
-						@foreach ($productTypes as $productType)
+						@foreach ($productGroups as $productGroup)
 							<div class="product-type js-product mt-4 block">
-								<h3 class="text-primary js-title">{{ strtoupper($productType->name) }}</h3>
+								<h3 class="text-primary js-title">
+									{{ strtoupper($productGroup['type']->name) }}
+								</h3>
 
 								<div class="mt-2 grid grid-cols-1 gap-2">
-									{{-- Filter by color --}}
-									@foreach ($orderItems->where('type_id', $productType->id)->sortBy('color_id')->pluck('color')->unique() as $color)
-										{{-- Filter by size --}}
-										@foreach ($orderItems->where('type_id', $productType->id)->where('color_id', $color->id)->sortBy('size_id')->pluck('size')->unique() as $size)
-											<livewire:admin.product-log.type-item
-												:key="`type-item-{{ $productType->id }}-color-{{ $color->id }}-size-{{ $size->id }}`"
-												:order-items="$orderItems"
-												:type="$productType"
-												:color="$color"
-												:size="$size"
-											/>
-										@endforeach
+									@foreach ($productGroup['items'] as $item)
+										<livewire:admin.product-log.type-item
+											:key="'product-type-item-' .
+											    $item['type']->id .
+											    '-' .
+											    $item['color']->id .
+											    '-' .
+											    $item['size']->id .
+											    '-' .
+											    ($item['isLocalDelivery'] ? 'local-delivery' : 'shipping')"
+											:order-items="$item['orderItems']"
+											:type="$item['type']"
+											:color="$item['color']"
+											:size="$item['size']"
+											:suffix="$item['suffix']"
+										/>
 									@endforeach
 								</div>
 							</div>
@@ -406,24 +421,23 @@
 				@else
 					<p class="py-12">Nessun prodotto da stampare</p>
 				@endif
-
 			</div>
 		</div>
 
 		{{-- Inventory --}}
-		@if ($inventoryItems?->count())
-			<div class="">
+		@if ($this->hasInventoryItems())
+			<div>
 				<h3 class="dashboard-panel-title">In inventario</h3>
-				<div class="dashboard-panel">
 
+				<div class="dashboard-panel">
 					<div class="grid grid-cols-1 gap-4">
 						@foreach ($inventoryItems as $item)
 							<p>{{ $item->full_name }}</p>
 						@endforeach
 					</div>
-
 				</div>
 			</div>
 		@endif
+
 	</div>
 </div>

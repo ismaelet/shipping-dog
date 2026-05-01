@@ -15,125 +15,102 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ShippingResource extends Resource {
 
-	/**
-	 * The model the resource corresponds to.
-	 * 
-	 * @var string
-	 */
-	protected static ?string $model = Order::class;
+    /**
+     * The model the resource corresponds to.
+     */
+    protected static ?string $model = Order::class;
 
-	/**
-	 * The icon of the resource.
-	 * 
-	 * @var string
-	 */
-	protected static string | \UnitEnum | null $navigationGroup = 'Vendite';
+    /**
+     * The icon of the resource.
+     */
+    protected static string | \UnitEnum | null $navigationGroup = 'Vendite';
 
-	/**
-	 * The label of a singular resource.
-	 * 
-	 * @var string
-	 */
-	protected static ?string $label = 'Spedizione';
+    /**
+     * The label of a singular resource.
+     */
+    protected static ?string $label = 'Spedizione';
 
-	/**
-	 * The label of a plural resource.
-	 * 
-	 * @var string
-	 */
-	protected static ?string $pluralLabel = 'Spedizioni';
+    /**
+     * The label of a plural resource.
+     */
+    protected static ?string $pluralLabel = 'Spedizioni';
 
-	/**
-	 * The icon of the resource.
-	 * 
-	 * @var string
-	 */
-	protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-truck';
+    /**
+     * The icon of the resource
+     */
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-truck';
 
-	/**
-     * Get the query for the resource.
-     *
-     * @return Builder
+    /**
+     * Get the query for the resource
      */
     public static function getEloquentQuery(): Builder {
-		return self::getModel()::hasNoLabel();
-	}
+        return self::getModel()::hasNoLabel();
+    }
 
-	/**
-	 * Get the badge value for the resource.
-	 * 
-	 * @return string|null
-	 */
-	public static function getNavigationBadge(): ?string {
-		return static::getEloquentQuery()->count();
-	}
+    /**
+     * Get the badge value for the resource
+     */
+    public static function getNavigationBadge(): ?string {
+        return static::getEloquentQuery()->count();
+    }
 
-	/**
-	 * Get the badge color for the resource.
-	 * 
-	 * @return string|null
-	 */
-	public static function getNavigationBadgeColor(): ?string {
-		return static::getNavigationBadge() > 0 ? 'primary' : 'neutral';
-	}
+    /**
+     * Get the badge color for the resource
+     */
+    public static function getNavigationBadgeColor(): ?string {
+        return static::getNavigationBadge() > 0 ? 'primary' : 'neutral';
+    }
 
-	/**
-	 * Determine whether the resource can be created.
-	 * 
-	 * @return bool
-	 */
-	public static function canCreate(): bool {
-		return false;
-	}
+    /**
+     * Determine whether the resource can be created
+     */
+    public static function canCreate(): bool {
+        return false;
+    }
 
-	/**
-     * Get the table schema for the resource.
-     *
-     * @param Table $table
-     * @return Table
+    /**
+     * Get the table schema for the resource
      */
     public static function table(Table $table): Table {
-		return $table
+        return $table
 
-			// The columns displayed in the table
-			->columns([
-				TextColumn::make('order_id')
-					->searchable()
-					->label('ID')
-					->sortable(),
-				TextColumn::make('full_name')
-					->label('Destinatario')
-					->placeholder('-')
-					->searchable()
-					->sortable(),
-				TextColumn::make('created_at')
-					->dateTime('d-m-Y')
-					->label('Ricevuto il')
-					->sortable(),
-			])
+            // The columns displayed in the table
+            ->columns([
+                TextColumn::make('order_id')
+                    ->searchable()
+                    ->label('ID')
+                    ->sortable(),
+                TextColumn::make('full_name')
+                    ->label('Destinatario')
+                    ->placeholder('-')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->dateTime('d-m-Y')
+                    ->label('Ricevuto il')
+                    ->sortable(),
+            ])
 
-			// The actions that can be performed on the records
-			->recordActions([
-				AddParcel::make(),
-				TransmitParcel::make(),
-				RemoveLabeling::make(),
-			])
+            // The actions that can be performed on the records
+            ->recordActions([
+                AddParcel::make(),
+                TransmitParcel::make(),
+                RemoveLabeling::make(),
+            ])
 
-			// The bulk actions that can be performed on the selected records
-			->toolbarActions([BulkTransmitParcels::make()])
+            // The bulk actions that can be performed on the selected records
+            ->toolbarActions([BulkTransmitParcels::make()])
 
-			// Remove pagination
-			->paginated(false);
-	}
+            // Remove pagination
+            ->paginated(false);
+    }
 
-	/**
-	 * Get the pages for the resource.
-	 * 
-	 * @return array
-	 */
-	public static function getPages(): array {
-		return [
-			'index' => ListShippings::route('/'),
-		];
-	}
+    /**
+     * Get the pages for the resource
+     */
+    public static function getPages(): array {
+        return [
+            'index' => ListShippings::route('/'),
+        ];
+    }
 }

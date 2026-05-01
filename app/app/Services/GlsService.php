@@ -60,8 +60,6 @@ class GlsService {
      * * Transmit Parcel
      *	
      * CloseWorkDayByShipmentNumber in the GLS API
-     * 
-     * @return bool
      */
     public function transmitParcels(Collection|Order $orders): array {
         // If a single order is passed, convert it to a collection
@@ -281,10 +279,6 @@ class GlsService {
 
     /**
      * ~ Transmit Parcel Helper: Update Orders
-     * 
-     * @param Collection $orders
-     * @param stdClass $response
-     * @return bool
      */
     private function updateOrdersAfterTransmit(stdClass $response): array {
         $parcels = $response->Parcel ?? null;
