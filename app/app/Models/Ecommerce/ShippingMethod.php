@@ -138,10 +138,18 @@ class ShippingMethod extends Model {
 
     /**
      * Get the shipping methods that require labels
-     * 
-     * @return array
      */
     public static function shippingMethodsWithLabels(): array {
         return self::SHIPPING_METHODS_WITH_LABELS;
+    }
+
+    /**
+     * Get the default shipping method ID
+     */
+    public static function defaultShppingMethodId(): int {
+        return ShippingMethod::whereRaw('FIND_IN_SET(tag, "sta,pre,rit") > 0')
+            ->orderByDesc('tier')
+            ->first()
+            ->id ?? 0;
     }
 }

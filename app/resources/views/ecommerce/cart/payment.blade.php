@@ -57,7 +57,7 @@ $cart = cart();
 									/>
 								@endif
 
-								<p class="pay_desc">{{ $paymentMethod['desc'] }}</p>
+								<p class="pay_desc">{!! $paymentMethod['desc'] !!}</p>
 							</div>
 						</label>
 					@endforeach

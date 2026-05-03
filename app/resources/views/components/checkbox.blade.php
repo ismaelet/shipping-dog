@@ -1,4 +1,5 @@
 @props([
+    'type' => 'checkbox',
     'name' => null,
     'value' => null,
     'checked' => false,
@@ -74,7 +75,7 @@
 <label {{ $attributes->class(['checkbox']) }}>
 
 	<input
-		type="checkbox"
+		type="{{ $type }}"
 		name="{{ $name }}"
 		value="{{ $value ?? 1 }}"
 		@checked($checked)

@@ -38,16 +38,14 @@ $cart = cart();
 					elaborazione dell'ordine.
 				</p>
 
-				<!-- <p class="error-warning mt-4">A del grande afflusso di ordini e della pressione sui corrieri durante questo periodo, NON garantiamo la consegna per Natale per nessun ordine effettuato dopo l'12 dicembre e ci potrebbero essere ritardi, anche consistenti, rispetto alla data di consegna stimata. Le spedizioni riprenderanno regolarmente a partire dal 26 dicembre. Grazie per la comprensione.</p> -->
-
 
 				<!-- Shipping method -->
 				<div>
 
 					@foreach ($shippingMethods as $shippingMethod)
-						<x-cart.shipping-method
-							:$shippingMethod
+						<livewire:cart.shipping-method
 							:$cart
+							:$shippingMethod
 						/>
 
 						@if ($cart->shipping_method_id == $shippingMethod->id)
@@ -58,143 +56,8 @@ $cart = cart();
 				</div>
 			</section>
 
-			<!-- Shipping address -->
-			<section
-				id="address"
-				class="address-form cart-panel surface <?= $cart->shipping_method->isLocalDelivery() ? 'address-form--local-delivery' : '' ?>"
-			>
-				<x-heading.component>Indirizzo</x-heading.component>
-
-				<?php if ($error == 'address') { ?>
-				<p class="text-error">* tutti campi sono necessari</p>
-				<?php } ?>
-
-				<div class="gap1 grid">
-
-					<x-input
-						name="full_name"
-						placeholder="Nominativo di spedizione"
-						:value="$address->full_name ?? ''"
-						:required="true"
-						:trim="true"
-					/>
-
-					<div
-						class="field <?= $cart->shipping_method->isLocalDelivery() ? 'hidden' : '' ?> grid gap-[inherit] md:grid-cols-2"
-						data-shipping-field
-					>
-						<input
-							type="text"
-							id="inp_addr"
-							class="input delivery-input"
-							name="address"
-							placeholder="Indirizzo"
-							value="<?= $address->address ?? '' ?>"
-							maxlength="255"
-							autocomplete="address-line1"
-							<?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>
-						>
-
-						<input
-							type="text"
-							id="inp_num"
-							class="input delivery-input"
-							name="number"
-							placeholder="Numero civico"
-							value="<?= $address->number ?? '' ?>"
-							maxlength="10"
-							<?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>
-						>
-					</div>
-
-					<div
-						data-shipping-field
-						class="<?= $cart->shipping_method->isLocalDelivery() ? 'hidden' : '' ?>"
-					>
-						<input
-							type="text"
-							class="input delivery-input w-full"
-							name="city"
-							placeholder="Città"
-							value="<?= $address->city ?? '' ?>"
-							maxlength="255"
-							autocomplete="address-level2"
-							<?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>
-						>
-					</div>
-
-					<div
-						class="field <?= $cart->shipping_method->isLocalDelivery() ? 'hidden' : '' ?> grid gap-[inherit] md:grid-cols-2"
-						data-shipping-field
-					>
-						<input
-							type="text"
-							class="input delivery-input"
-							name="zip"
-							placeholder="Codice postale"
-							value="<?= trim($address->zip ?? '') ?>"
-							maxlength="5"
-							autocomplete="postal-code"
-							<?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>
-						>
-
-						<select
-							name="region"
-							class="input delivery-input"
-							placeholder="Provincia"
-							<?= !$cart->shipping_method->isLocalDelivery() ? 'required' : '' ?>
-						>
-							<option
-								value=""
-								disabled
-								<?= empty($address) ? 'selected' : '' ?>
-							>Provincia</option>
-
-							@foreach ($provinces as $province)
-								<option
-									value="{{ $province->tag }}"
-									@selected($address?->region == $province->tag)
-								>{{ $province->name . ' (' . $province->tag . ')' }}</option>
-							@endforeach
-
-						</select>
-					</div>
-
-					<input
-						type="email"
-						class="input"
-						name="email"
-						placeholder="Indirizzo e-mail"
-						value="<?= $address->email ?? '' ?>"
-						maxlength="50"
-						required
-						autocomplete="email"
-					>
-					<input
-						type="text"
-						class="input js-input-no-space"
-						name="phone"
-						placeholder="Numero di telefono"
-						value="<?= $address->phone ?? '' ?>"
-						maxlength="30"
-						autocomplete="tel"
-						required
-					>
-
-					<div
-						class="<?= $cart->shipping_method->isLocalDelivery() ? 'hidden' : '' ?>"
-						data-shipping-field
-					>
-						<textarea
-						 class="input w-full"
-						 name="courier_notes"
-						 placeholder="Note per il corriere (opzionale)"
-						 maxlength="250"
-						><?= $cart->courier_notes ?? '' ?></textarea>
-					</div>
-
-				</div>
-			</section>
+			{{-- Shipping address --}}
+			<livewire:cart.shipping-address :$cart />
 		</div>
 
 		<div

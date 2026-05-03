@@ -7,90 +7,91 @@ use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\OrderItem;
 use App\Models\Ecommerce\Product;
+use App\Models\Ecommerce\ShippingMethod;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Legacy\Ecommerce\Order as LegacyOrder;
 
 class OrderItemController extends Controller {
 
-	/**
-	 * Store a new order item in the cart.
-	 *
-	 * @param Request $request
-	 * @return RedirectResponse
-	 */
-	public function store(Request $request): RedirectResponse {
-		// Fetch the product
-		$product = Product::find($request->product_id);
+    /**
+     * Resource action: Store a new order item in the cart
+     */
+    public function store(Request $request): RedirectResponse {
+        // Fetch the product
+        $product = Product::find($request->product_id);
 
-		// Set the default position ID
-		if (!$request->position_id) {
-			$request->merge(['position_id', $product->type->positions()->first()->id]);
-		}
+        // Set the default position ID
+        if (!$request->position_id) {
+            $request->merge(['position_id', $product->type->positions()->first()->id]);
+        }
 
-		// Set the default quantity
-		if (!$request->quantity) {
-			$request->merge(['quantity', 1]);
-		}
+        // Set the default quantity
+        if (!$request->quantity) {
+            $request->merge(['quantity', 1]);
+        }
 
-		// Validate the request
-		$request->validate([
-			'product_id' => ['required', 'integer'],
-			'color_id' => ['required', 'integer'],
-			'size_id' => ['required', 'integer'],
-			'position_id' => ['integer'],
-			'logo_id' => ['integer'],
-			'quantity' => ['integer'],
-		]);
+        // Validate the request
+        $request->validate([
+            'product_id' => ['required', 'integer'],
+            'color_id' => ['required', 'integer'],
+            'size_id' => ['required', 'integer'],
+            'position_id' => ['integer'],
+            'logo_id' => ['integer'],
+            'quantity' => ['integer'],
+        ]);
 
-		// Set the logo and size to calculate an accurate price
-		$product->logo_id = $request->logo_id ?: 0;
-		$product->size_id = $request->size_id;
+        // Set the logo and size to calculate an accurate price
+        $product->logo_id = $request->logo_id ?: 0;
+        $product->size_id = $request->size_id;
 
-		// Get the cart
-		if (cart()) {
-			$order = cart();
-			if ($order->step > EcommerceHelper::stepFromTag('address')) {
-				$order->step = EcommerceHelper::stepFromTag('address');
-				$order->save();
-			}
-		} else {
-			if (Auth::check()) {
-				// If the user is logged in
-				$order = Order::create(['user_id' => Auth::id()]);
-			} else {
-				// If the user is a guest
-				$order = Order::create();
+        // Get the cart
+        if (cart()) {
+            $order = cart();
 
-				session(['cart_id' => $order->id]);
-			}
-		}
+            if ($order->step > EcommerceHelper::stepFromTag('address')) {
+                $order->step = EcommerceHelper::stepFromTag('address');
+                $order->save();
+            }
+        } else {
+            if (Auth::check()) {
+                // If the user is logged in
+                $order = Order::create(['user_id' => Auth::id()]);
+            } else {
+                // If the user is a guest
+                $order = Order::create();
 
-		// Create the order
-		OrderItem::create([
-			...$request->all(),
-			'user_id' => Auth::id(),
-			'order_id' => $order->id,
-			'seller_id' => $product->seller->id,
-			'design_id' => $product->design_id,
-			'type_id' => $product->type->id,
-			'fullProductPrice' => $product->fullPrice(),
-			'price_disc' => $product->customerDiscount(),
-			'productGain' => $product->sellerGain(),
-			'gain' => $product->sellerGain() * $request->quantity,
-		]);
+                session(['cart_id' => $order->id]);
+            }
 
-		// Update the cart data
-		$order->updateOrderItems();
+            $order->shipping_method_id = ShippingMethod::defaultShppingMethodId();
+            $order->save();
+        }
 
-		// Update the discount
-		if ($order->coupon?->code) {
-			$couponId = $order->coupon->code;
-			$order->removeCoupon();
-			$order->applyCoupon($couponId);
-		}
+        // Create the order
+        OrderItem::create([
+            ...$request->all(),
+            'user_id' => Auth::id(),
+            'order_id' => $order->id,
+            'seller_id' => $product->seller->id,
+            'design_id' => $product->design_id,
+            'type_id' => $product->type->id,
+            'fullProductPrice' => $product->fullPrice(),
+            'price_disc' => $product->customerDiscount(),
+            'productGain' => $product->sellerGain(),
+            'gain' => $product->sellerGain() * $request->quantity,
+        ]);
 
-		return to_route('cart');
-	}
+        // Update the cart data
+        $order->updateOrderItems();
+
+        // Update the discount
+        if ($order->coupon?->code) {
+            $couponId = $order->coupon->code;
+            $order->removeCoupon();
+            $order->applyCoupon($couponId);
+        }
+
+        return to_route('cart');
+    }
 }

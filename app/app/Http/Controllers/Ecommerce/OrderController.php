@@ -14,7 +14,7 @@ class OrderController extends Controller {
     /**
      * Resource action: Show
      */
-    public function show(Order $order, Request $request): View {
+    public function show(Order $order): View {
         $order->load(
             'order_items',
             'order_items.color',

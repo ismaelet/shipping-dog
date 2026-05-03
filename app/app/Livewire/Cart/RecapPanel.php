@@ -9,50 +9,43 @@ use Livewire\Component;
 
 class RecapPanel extends Component {
 
-	public Order $order;
+    /**
+     * Property: The order associated with the recap panel
+     */
+    public Order $order;
 
-	/**
-	 * Initialize the component.
-	 * 
-	 * @return void
-	 */
-	public function boot(?Order $order = null): void {
-		$this->order = $order->id ?: cart();
-	}
+    /**
+     * Lifecycle hook: Initialize the component
+     */
+    public function boot(?Order $order = null): void {
+        $this->order = $order->id ?: cart();
+    }
 
-	/**
-	 * Refresh the order items when the 'orderItemsUpdated' event is dispatched.
-	 * 
-	 * @return void
-	 */
-	#[On('orderItemsUpdated')]
-	public function refreshOrderItems(): void {
-	}
-
-	/**
-	 * Refresh the shipping details when the 'shippingUpdated' event is dispatched.
-	 * 
-	 * @return void
-	 */
-	#[On('shippingUpdated')]
-	public function refreshShipping(): void {
-	}
-
-	/**
-	 * Refresh the credit used when the 'usedCreditUpdated' event is dispatched.
-	 * 
-	 * @return void
-	 */
-	#[On('usedCreditUpdated')]
-	public function usedCreditUpdated(): void {
-	}
-
-	/**
-     * Render the component view.
-     *
-     * @return View
+    /**
+     * Lifecycle hook: Render the component view
      */
     public function render(): View {
-		return view('livewire.cart.recap-panel');
-	}
+        return view('livewire.cart.recap-panel');
+    }
+
+    /**
+     * Event listener: Refresh the order items when the 'orderItemsUpdated' event is dispatched
+     */
+    #[On('orderItemsUpdated')]
+    public function refreshOrderItems(): void {
+    }
+
+    /**
+     * Event listener: Refresh the shipping information when the 'shippingUpdated' event is dispatched
+     */
+    #[On('shippingUpdated')]
+    public function refreshShipping(): void {
+    }
+
+    /**
+     * Event listener: Refresh the used credit information when the 'usedCreditUpdated' event is dispatched
+     */
+    #[On('usedCreditUpdated')]
+    public function usedCreditUpdated(): void {
+    }
 }
