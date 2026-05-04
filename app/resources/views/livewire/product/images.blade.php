@@ -73,7 +73,7 @@
 				{{-- Wishlist button --}}
 				<livewire:wishlist-button
 					:product="$product"
-					:key="'wishlist-button-' . $product->id"
+					:key="'wishlist-button-' . $product->id . '-' . $product->color_id . '-' . $product->position_id"
 				/>
 
 			</div>

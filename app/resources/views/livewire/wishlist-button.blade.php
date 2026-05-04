@@ -8,11 +8,11 @@
 		>
 			<x-dynamic-component
 				:component="$wishlisted ? 'icon-love' : 'icon-love-stroke'"
-				class="w-1/2 transition-opacity group-hover:opacity-0"
+				class="h-1/2 w-1/2 transition-opacity group-hover:opacity-0"
 			/>
 			<x-dynamic-component
 				:component="$wishlisted ? 'icon-love-stroke' : 'icon-love'"
-				class="w-1/2 opacity-0 transition-opacity group-hover:opacity-100"
+				class="h-1/2 w-1/2 opacity-0 transition-opacity group-hover:opacity-100"
 			/>
 		</div>
 	@else
@@ -24,11 +24,11 @@
 		>
 			<x-dynamic-component
 				:component="$wishlisted ? 'icon-love' : 'icon-love-stroke'"
-				class="w-1/2 transition-opacity group-hover:opacity-0"
+				class="h-1/2 w-1/2 transition-opacity group-hover:opacity-0"
 			/>
 			<x-dynamic-component
 				:component="$wishlisted ? 'icon-love-stroke' : 'icon-love'"
-				class="w-1/2 opacity-0 transition-opacity group-hover:opacity-100"
+				class="h-1/2 w-1/2 opacity-0 transition-opacity group-hover:opacity-100"
 			/>
 		</a>
 	@endif
