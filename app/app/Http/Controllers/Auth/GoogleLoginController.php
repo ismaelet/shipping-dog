@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
 
 class GoogleLoginController extends Controller {
 
@@ -28,8 +29,18 @@ class GoogleLoginController extends Controller {
      * Obtain the user information from Google
      */
     public function callback(Request $request): RedirectResponse {
-        $intendedUrl = session()->pull('url.intended', route('user-dashboard'));
-        $googleUser = Socialite::driver('google')->user();
+        try {
+            $intendedUrl = session()->pull('url.intended', route('user-dashboard'));
+            $googleUser = Socialite::driver('google')->user();
+        } catch (InvalidStateException $e) {
+            report($e);
+
+            return redirect()
+                ->route('login')
+                ->withErrors([
+                    'google' => 'The Google login session expired. Please try again.',
+                ]);
+        }
 
         $email = $googleUser->getEmail();
 
