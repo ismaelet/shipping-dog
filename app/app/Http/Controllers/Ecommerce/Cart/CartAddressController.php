@@ -34,7 +34,10 @@ class CartAddressController extends Controller {
         if (!$address && Auth::check()) {
             // retrieve the latest address of the user and save it to the cart
             $address = Address::where('user_id', Auth::id())->latest()->first();
-            $cart->address()->save($address);
+
+            if ($address) {
+                $cart->address()->save($address);
+            }
         }
 
         if (!in_array($cart->shipping_method_id, ShippingMethod::FREE_SHIPPING_METHODS)) {
