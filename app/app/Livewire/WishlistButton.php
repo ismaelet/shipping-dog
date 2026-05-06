@@ -18,11 +18,6 @@ class WishlistButton extends Component {
     public Product $product;
 
     /**
-     * Property: The authenticated user ID
-     */
-    public ?int $userId = null;
-
-    /**
      * Property: The wishlist record ID if wishlisted
      */
     public ?int $wishlistRecordId = null;
@@ -46,7 +41,6 @@ class WishlistButton extends Component {
      * Lifecycle method: Mount the component
      */
     public function mount(): void {
-        $this->userId = Auth::id();
         $this->colorId = $this->product->color_id;
         $this->positionId = $this->product->position_id;
 
@@ -64,12 +58,14 @@ class WishlistButton extends Component {
      * Action: Add the product to the wishlist
      */
     public function store(): void {
-        if (!$this->userId) {
+        $userId = $this->userId();
+
+        if (!$userId) {
             return;
         }
 
         $like = Like::create([
-            'user_id' => $this->userId,
+            'user_id' => $userId,
             'product_id' => $this->product->id,
             'color_id' => $this->colorId,
             'position_id' => $this->positionId,
@@ -83,11 +79,13 @@ class WishlistButton extends Component {
      * Action: Remove the product from the wishlist
      */
     public function destroy(): void {
-        if (!$this->userId) {
+        $userId = $this->userId();
+
+        if (!$userId) {
             return;
         }
 
-        Like::where('user_id', $this->userId)
+        Like::where('user_id', $userId)
             ->where('product_id', $this->product->id)
             ->where('color_id', $this->colorId)
             ->where('position_id', $this->positionId)
@@ -119,19 +117,28 @@ class WishlistButton extends Component {
      * Helper method: Refresh the wishlist state based on the current color and position
      */
     private function refreshWishlistState(): void {
-        if (!$this->userId) {
+        $userId = $this->userId();
+
+        if (!$userId) {
             $this->wishlistRecordId = null;
             $this->wishlisted = false;
 
             return;
         }
 
-        $this->wishlistRecordId = Like::where('user_id', $this->userId)
+        $this->wishlistRecordId = Like::where('user_id', $userId)
             ->where('product_id', $this->product->id)
             ->where('color_id', $this->colorId)
             ->where('position_id', $this->positionId)
             ->value('id');
 
         $this->wishlisted = (bool) $this->wishlistRecordId;
+    }
+
+    /**
+     * Helper method: Get the authenticated user ID
+     */
+    private function userId(): ?int {
+        return Auth::id();
     }
 }
