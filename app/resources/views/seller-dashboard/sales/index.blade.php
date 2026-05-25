@@ -227,15 +227,17 @@
 				@if ($sales->count())
 
 					@if ($sort == 'designs')
-						@include('seller-dashboard.sales.designs')
+						<x-sales.items :sales="$sales" />
 					@elseif ($sort == 'time')
 						<div class="list-cont surface px-(--content-spacing)">
-							@include('seller-dashboard.sales.history')
+							<x-sales.history
+								:sales="$sales"
+								:selected-year="$currentYear"
+							/>
 						</div>
 					@endif
 				@else
 					<p class="pad-t-3 text-center">Ancora non hai realizzato nessuna vendita</p>
-
 				@endif
 
 			</div>

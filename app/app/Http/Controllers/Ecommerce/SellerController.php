@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Ecommerce;
 use App\Http\Controllers\Controller;
 use App\Legacy\Ecommerce\Product as LegacyProduct;
 use App\Legacy\System\DB;
-use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Seller;
 use App\Models\User\Like;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -17,11 +15,8 @@ class SellerController extends Controller {
 
     /**
      * Display the seller page.
-     *
-     * @param Request $request
-     * @return View
      */
-    public function index(Request $request): View|RedirectResponse {
+    public function index(): View|RedirectResponse {
 
         // get variabiles
         $id = request()->seller ? (int) request()->seller : (int) request()->id;

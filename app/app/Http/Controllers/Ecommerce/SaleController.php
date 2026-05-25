@@ -23,7 +23,7 @@ class SaleController extends Controller {
             ->where('status', '>=', EcommerceHelper::status('confirmed'))
             ->select('*')
             ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
-            ->with('product', 'product.type', 'color', 'order')
+            ->with('product', 'product.type', 'color', 'order', 'design_with_trashed')
             ->latest()
             ->get();
 

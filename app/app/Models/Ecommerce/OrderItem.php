@@ -57,54 +57,49 @@ class OrderItem extends Model {
     }
 
     /**
-     * Get the order that the order item belongs to.
-     *
-     * @return BelongsTo
+     * Get the order that the order item belongs to
      */
     public function order(): BelongsTo {
         return $this->belongsTo(Order::class);
     }
 
     /**
-     * Get the order's seller.
-     *
-     * @return BelongsTo
+     * Get the order's seller
      */
     public function seller(): BelongsTo {
         return $this->belongsTo(Seller::class);
     }
 
     /**
-     * Get the order's design.
-     *
-     * @return BelongsTo
+     * Get the order's design
      */
     public function design(): BelongsTo {
         return $this->belongsTo(Design::class);
     }
 
     /**
-     * Get the order's product.
-     *
-     * @return BelongsTo
+     * Get the order's design including deleted designs
+     */
+    public function design_with_trashed(): BelongsTo {
+        return $this->design()->withTrashed();
+    }
+
+    /**
+     * Get the order's product
      */
     public function product(): BelongsTo {
         return $this->belongsTo(Product::class);
     }
 
     /**
-     * Get the order's product including trashed products.
-     *
-     * @return BelongsTo
+     * Get the order's product including trashed products
      */
     public function product_with_trashed(): BelongsTo {
         return $this->product()->withTrashed();
     }
 
     /**
-     * Get the order's type.
-     *
-     * @return BelongsTo
+     * Get the order's type
      */
     public function type(): BelongsTo {
         return $this->belongsTo(ProductType::class, 'type_id');
