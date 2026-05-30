@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Contracts\User as ContractsUser;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
 
@@ -30,10 +32,14 @@ class GoogleLoginController extends Controller {
      */
     public function callback(Request $request): RedirectResponse {
         try {
-            $intendedUrl = session()->pull('url.intended', route('user-dashboard'));
             $googleUser = Socialite::driver('google')->user();
         } catch (InvalidStateException $e) {
-            report($e);
+            Log::info('Invalid Google OAuth state.', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'has_code' => $request->has('code'),
+                'has_state' => $request->has('state'),
+            ]);
 
             return redirect()
                 ->route('login')
@@ -41,6 +47,8 @@ class GoogleLoginController extends Controller {
                     'google' => 'The Google login session expired. Please try again.',
                 ]);
         }
+
+        $intendedUrl = session()->pull('url.intended', route('user-dashboard'));
 
         $email = $googleUser->getEmail();
 
@@ -70,7 +78,7 @@ class GoogleLoginController extends Controller {
         return redirect()->intended($intendedUrl);
     }
 
-    private function registerUser($googleUser): User {
+    private function registerUser(ContractsUser $googleUser): User {
         $password = Hash::make(uniqid());
 
         $user = new User();
@@ -84,7 +92,7 @@ class GoogleLoginController extends Controller {
         return $user;
     }
 
-    private function linkGoogleAccount(User $user, $googleUser): User {
+    private function linkGoogleAccount(User $user, ContractsUser $googleUser): User {
         $user->google_id = $googleUser->getId();
         $user->avatar = $googleUser->getAvatar();
         $user->save();
