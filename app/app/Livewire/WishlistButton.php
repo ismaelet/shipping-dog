@@ -3,10 +3,10 @@
 namespace App\Livewire;
 
 use App\Models\Ecommerce\Product;
-use App\Models\User;
 use App\Models\User\Like;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -30,11 +30,13 @@ class WishlistButton extends Component {
     /**
      * Property: The color ID of the product
      */
+    #[Locked]
     public ?int $colorId = null;
 
     /**
      * Property: The position ID of the product
      */
+    #[Locked]
     public ?int $positionId = null;
 
     /**
@@ -99,8 +101,8 @@ class WishlistButton extends Component {
      * Event listener: Update color
      */
     #[On('change-color')]
-    public function changeColor(int|array $id): void {
-        $this->colorId = is_array($id) ? (int) ($id['id'] ?? 0) : (int) $id;
+    public function changeColor(int|string|array|null $id): void {
+        $this->colorId = $this->normalizeId($id);
         $this->refreshWishlistState();
     }
 
@@ -108,8 +110,8 @@ class WishlistButton extends Component {
      * Event listener: Update position
      */
     #[On('change-position')]
-    public function changePosition(int|array $id): void {
-        $this->positionId = is_array($id) ? (int) ($id['id'] ?? 0) : (int) $id;
+    public function changePosition(int|string|array|null $id): void {
+        $this->positionId = $this->normalizeId($id);
         $this->refreshWishlistState();
     }
 
@@ -140,5 +142,20 @@ class WishlistButton extends Component {
      */
     private function userId(): ?int {
         return Auth::id();
+    }
+
+    /**
+     * Helper method: Normalize an ID
+     */
+    private function normalizeId(int|string|array|null $value): ?int {
+        if (is_array($value)) {
+            $value = $value['id'] ?? null;
+        }
+
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return is_numeric($value) ? (int) $value : null;
     }
 }
