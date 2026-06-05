@@ -6,7 +6,6 @@ use App\Models\Ecommerce\Product;
 use App\Models\User\Like;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -30,14 +29,12 @@ class WishlistButton extends Component {
     /**
      * Property: The color ID of the product
      */
-    #[Locked]
-    public ?int $colorId = null;
+    public int|array|null $colorId = null;
 
     /**
      * Property: The position ID of the product
      */
-    #[Locked]
-    public ?int $positionId = null;
+    public int|array|null $positionId = null;
 
     /**
      * Lifecycle method: Mount the component
@@ -61,16 +58,18 @@ class WishlistButton extends Component {
      */
     public function store(): void {
         $userId = $this->userId();
+        $colorId = $this->normalizeId($this->colorId);
+        $positionId = $this->normalizeId($this->positionId);
 
-        if (!$userId) {
+        if (!$userId || !$colorId || !$positionId) {
             return;
         }
 
         $like = Like::create([
             'user_id' => $userId,
             'product_id' => $this->product->id,
-            'color_id' => $this->colorId,
-            'position_id' => $this->positionId,
+            'color_id' => $colorId,
+            'position_id' => $positionId,
         ]);
 
         $this->wishlistRecordId = $like->id;
@@ -82,15 +81,17 @@ class WishlistButton extends Component {
      */
     public function destroy(): void {
         $userId = $this->userId();
+        $colorId = $this->normalizeId($this->colorId);
+        $positionId = $this->normalizeId($this->positionId);
 
-        if (!$userId) {
+        if (!$userId || !$colorId || !$positionId) {
             return;
         }
 
         Like::where('user_id', $userId)
             ->where('product_id', $this->product->id)
-            ->where('color_id', $this->colorId)
-            ->where('position_id', $this->positionId)
+            ->where('color_id', $colorId)
+            ->where('position_id', $positionId)
             ->delete();
 
         $this->wishlistRecordId = null;
@@ -102,7 +103,7 @@ class WishlistButton extends Component {
      */
     #[On('change-color')]
     public function changeColor(int|string|array|null $id): void {
-        $this->colorId = $this->normalizeId($id);
+        $this->colorId = $id;
         $this->refreshWishlistState();
     }
 
@@ -111,7 +112,7 @@ class WishlistButton extends Component {
      */
     #[On('change-position')]
     public function changePosition(int|string|array|null $id): void {
-        $this->positionId = $this->normalizeId($id);
+        $this->positionId = $id;
         $this->refreshWishlistState();
     }
 
@@ -120,8 +121,10 @@ class WishlistButton extends Component {
      */
     private function refreshWishlistState(): void {
         $userId = $this->userId();
+        $colorId = $this->normalizeId($this->colorId);
+        $positionId = $this->normalizeId($this->positionId);
 
-        if (!$userId) {
+        if (!$userId || !$colorId || !$positionId) {
             $this->wishlistRecordId = null;
             $this->wishlisted = false;
 
@@ -130,8 +133,8 @@ class WishlistButton extends Component {
 
         $this->wishlistRecordId = Like::where('user_id', $userId)
             ->where('product_id', $this->product->id)
-            ->where('color_id', $this->colorId)
-            ->where('position_id', $this->positionId)
+            ->where('color_id', $colorId)
+            ->where('position_id', $positionId)
             ->value('id');
 
         $this->wishlisted = (bool) $this->wishlistRecordId;
