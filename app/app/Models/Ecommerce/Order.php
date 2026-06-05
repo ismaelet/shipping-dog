@@ -643,6 +643,8 @@ class Order extends Model {
                 'other' => true,
                 'description' => 'Credito utilizzato per acquisto',
             ]);
+
+            $this->user->seller?->updateOtherTransfers();
         }
 
         // Destroy used coupons

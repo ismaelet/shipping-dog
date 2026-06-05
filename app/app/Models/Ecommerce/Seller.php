@@ -38,6 +38,7 @@ class Seller extends Model {
         'credit',
         'earned',
         'payed',
+        'other_transfers',
         'status',
         'activation_request_sent',
         'request',
@@ -126,9 +127,6 @@ class Seller extends Model {
     }
 
     /**
-     * * Get methods
-     */
-    /**
      * Get the formatted time string
      */
     public function createdAtString(): string {
@@ -171,6 +169,9 @@ class Seller extends Model {
         return public_asset('users/icons/0.jpg');
     }
 
+    /**
+     * Get the seller's cover
+     */
     public function cover(int $size = 1920): string {
         if (!$this->user) {
             Log::error('Seller user not found', ['seller' => $this->id]);
@@ -178,10 +179,6 @@ class Seller extends Model {
 
         return $this->user->cover($size);
     }
-
-    /**
-     * ~ Attributes: Seller balance
-     */
 
     /**
      * Get the amount to be payed
@@ -241,8 +238,12 @@ class Seller extends Model {
         return $this;
     }
 
-    public function updateOtherTransfers(): float {
-        return round($this->all_transfers->where('other', 1)->sum('value'), 2);
+    public function updateOtherTransfers(): static {
+        $this->update([
+            'other_transfers' =>  round($this->all_transfers->where('other', 1)->sum('value'), 2)
+        ]);
+
+        return $this;
     }
 
     /**
