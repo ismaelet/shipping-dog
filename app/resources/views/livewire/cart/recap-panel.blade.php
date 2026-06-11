@@ -1,3 +1,11 @@
+@pushOnce('styles')
+	<style>
+		.chck_item:not(:last-child) {
+			border-bottom: var(--border-width) solid var(--color-surface-500);
+		}
+	</style>
+@endpushOnce
+
 <div class="cart-panel surface">
 	<x-heading.component>Riepilogo</x-heading.component>
 	<div class="grid grid-cols-1 gap-4">

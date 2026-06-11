@@ -11,78 +11,80 @@ use Livewire\Component;
 
 class OrderItemCreditButton extends Component {
 
-	/**
-	 * Property: The order item for which the credit button is displayed
-	 */
-	public OrderItem $orderItem;
+    /**
+     * Property: The order item for which the credit button is displayed
+     */
+    public OrderItem $orderItem;
 
-	/**
-	 * Property: Whether the credit has been used for the order item
-	 */
-	public bool $usedCredit;
+    /**
+     * Property: Whether the credit has been used for the order item
+     */
+    public bool $usedCredit;
 
-	/**
-	 * Property: Whether the seller is elegible to use credit for the order item
-	 */
-	public bool $elegible;
+    /**
+     * Property: Whether the seller is elegible to use credit for the order item
+     */
+    public bool $elegible;
 
-	/**
-	 * Lifecycle hook: Mount the component
-	 */
-	public function mount(): void {
-		$order = cart();
-		$this->usedCredit = $this->orderItem->usedCredit();
+    /**
+     * Lifecycle hook: Mount the component
+     */
+    public function mount(): void {
+        $order = cart();
+        $this->usedCredit = $this->orderItem->usedCredit();
 
-		$price = $this->orderItem->priceBeforeCredit();
-		$couponUsed = $order->coupon;
-		$usableCredit = (float) Auth::user()?->seller?->usableCredit();
-		$hasSufficientCredit = $usableCredit >= $price;
+        $price = $this->orderItem->priceBeforeCredit();
+        $couponUsed = $order->coupon;
+        $usableCredit = (float) Auth::user()?->seller?->usableCredit();
+        $hasSufficientCredit = $usableCredit >= $price;
 
-		$this->elegible = is_seller() && $price && $hasSufficientCredit && !$couponUsed;
-	}
+        $this->elegible = is_seller() && $price && $hasSufficientCredit && !$couponUsed;
+    }
 
-	/**
-	 * Lifecycle hook: Render the component view
-	 */
-	public function render(): View {
-		return view('livewire.cart.order-item-credit-button');
-	}
+    /**
+     * Lifecycle hook: Render the component view
+     */
+    public function render(): View {
+        return view('livewire.cart.order-item-credit-button');
+    }
 
-	/**
-	 * Event handler: Use the credit for the order item
-	 */
-	public function useCredit(): void {
-		$this->orderItem->update([
-			'credit' => true,
-		]);
+    /**
+     * Event handler: Use the credit for the order item
+     */
+    public function useCredit(): void {
+        $this->orderItem->update([
+            'credit' => true,
+        ]);
 
-		$this->orderItem->order->updatePrice();
+        $this->orderItem->updatePrices();
+        $this->orderItem->order->updatePrice();
 
-		$this->usedCredit = true;
+        $this->usedCredit = true;
 
-		$this->dispatch('usedCreditUpdated');
-	}
+        $this->dispatch('usedCreditUpdated');
+    }
 
 
-	/**
-	 * Event handler: Remove the credit used for the order item
-	 */
-	public function removeCredit(): void {
-		$this->orderItem->update([
-			'credit' => false,
-		]);
+    /**
+     * Event handler: Remove the credit used for the order item
+     */
+    public function removeCredit(): void {
+        $this->orderItem->update([
+            'credit' => false,
+        ]);
 
-		$this->orderItem->order->updatePrice();
+        $this->orderItem->updatePrices();
+        $this->orderItem->order->updatePrice();
 
-		$this->usedCredit = false;
+        $this->usedCredit = false;
 
-		$this->dispatch('usedCreditUpdated');
-	}
+        $this->dispatch('usedCreditUpdated');
+    }
 
-	/**
-	 * Event handler: Refresh the credit used when the 'usedCreditUpdated' event is dispatched
-	 */
-	#[On('usedCreditUpdated')]
-	public function usedCreditUpdated(): void {
-	}
+    /**
+     * Event handler: Refresh the credit used when the 'usedCreditUpdated' event is dispatched
+     */
+    #[On('usedCreditUpdated')]
+    public function usedCreditUpdated(): void {
+    }
 }

@@ -33,10 +33,12 @@ class CartAddressController extends Controller {
 
         if (!$address && Auth::check()) {
             // retrieve the latest address of the user and save it to the cart
-            $address = Address::where('user_id', Auth::id())->latest()->first();
+            $oldAddress = Address::where('user_id', Auth::id())->latest()->first();
+            $address = $oldAddress ? $oldAddress->replicate(['order_id'])->fill(['order_id' => $cart->id]) : null;
 
             if ($address) {
                 $cart->address()->save($address);
+                $cart->refresh();
             }
         }
 

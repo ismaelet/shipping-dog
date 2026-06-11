@@ -577,7 +577,7 @@ class Order extends Model {
             }
 
             $orderItem->update([
-                'price_disc' => $totalDiscount,
+                'total_discount' => $totalDiscount,
                 'gain_disc' => $gainReduction,
             ]);
 
@@ -608,7 +608,7 @@ class Order extends Model {
         // Reset the order items discount
         foreach ($this->order_items as $orderItem) {
             $orderItem->update([
-                'price_disc' => 0,
+                'total_discount' => 0,
                 'gain_disc' => 0,
             ]);
         }
@@ -643,8 +643,6 @@ class Order extends Model {
                 'other' => true,
                 'description' => 'Credito utilizzato per acquisto',
             ]);
-
-            $this->user->seller?->updateOtherTransfers();
         }
 
         // Destroy used coupons
@@ -660,6 +658,9 @@ class Order extends Model {
 
         // Confirm the individual order_items
         $this->confirmOrderItems();
+
+        // Update the sellers balance
+        $this->updateSellersBalance();
 
         // Send the confirmation email
         if ($sendNotification) {
@@ -687,18 +688,22 @@ class Order extends Model {
                 $orderItem->update(['inventory' => 1]);
                 $inventoryItem->delete();
             }
-
-            // Update the seller's data
-            if ($orderItem->seller) {
-                // Update the amount earned by the seller
-                $orderItem->seller->updateEarned();
-
-                // Update the seller's credit
-                // if ($orderItem->credit) {
-                // 	$orderItem->seller->updateCredit();
-                // }
-            }
         }
+    }
+
+    /**
+     * Update the sellers balance after an order is confirmed or cancelled
+     */
+    private function updateSellersBalance(): void {
+        $this->order_items->loadMissing('seller');
+
+        $this->order_items
+            ->pluck('seller')
+            ->filter()
+            ->unique('id')
+            ->each(function ($seller) {
+                $seller->updateBalance();
+            });
     }
 
     /**
@@ -717,12 +722,7 @@ class Order extends Model {
         }
 
         // Update the seller's earnings
-        $this->order_items->each(function ($orderItem) {
-            if ($orderItem->seller) {
-                $orderItem->seller->updateEarned();
-                $orderItem->seller->updateCredit();
-            }
-        });
+        $this->updateSellersBalance();
     }
 
     /**

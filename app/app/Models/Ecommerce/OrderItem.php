@@ -20,8 +20,14 @@ class OrderItem extends Model {
      * The attributes that are mass assignable
      */
     protected $fillable = [
-        'fullProductPrice',
-        'price_disc',
+        'unit_amount_before_discount',
+        'total_amount_before_discount',
+        'unit_discount',
+        'total_discount',
+        'total_amount_to_pay',
+        'total_amount_after_discount',
+        'unit_amount_to_pay',
+        'unit_amount_after_discount',
         'gain',
         'productGain',
         'gain_disc',
@@ -46,9 +52,7 @@ class OrderItem extends Model {
     ];
 
     /**
-     * Get the the name of the order, including the design's name and id.
-     *
-     * @return Attribute
+     * Get the the name of the order, including the design's name and id
      */
     protected function fullName(): Attribute {
         return Attribute::make(
@@ -164,9 +168,7 @@ class OrderItem extends Model {
     }
 
     /**
-     * Get the description of the order.
-     *
-     * @return string
+     * Get the description of the order
      */
     public function description(): string {
         $description = $this->type?->name;
@@ -179,9 +181,7 @@ class OrderItem extends Model {
     }
 
     /**
-     * Get the full description of the order.
-     *
-     * @return string
+     * Get the full description of the order
      */
     public function multilineDescription(): string {
         if (!$this->product_with_trashed) {
@@ -198,9 +198,7 @@ class OrderItem extends Model {
     }
 
     /**
-     * Returns the image of the order.
-     *
-     * @return string
+     * Returns the image of the order
      */
     public function image(): string {
         return $this->product_with_trashed ? $this->product_with_trashed->image(
@@ -210,134 +208,135 @@ class OrderItem extends Model {
     }
 
     /**
-     * Get the creation date of the order as a string.
-     *
-     * @return string
+     * Get the creation date of the order as a string
      */
     public function createdAtString(): string {
         return date('d/m/Y', strtotime($this->created_at));
     }
 
     /**
-     * Get the gross price of a single product.
-     *
-     * @return float
+     * Get the gross price of a single product
      */
     public function grossProductPrice(): float {
-        return $this->fullProductPrice;
+        return $this->total_amount_before_discount;
     }
 
     /**
-     * Get the discount of a single product.
-     *
-     * @return float
+     * Get the discount of a single product
      */
     public function productDiscount(): float {
-        return $this->price_disc;
+        return $this->total_discount;
     }
 
     /**
-     * Get the price of a single product.
-     *
-     * @return float
+     * Get the price of a single product
      */
     public function productPrice(): float {
         return $this->grossProductPrice() - $this->productDiscount();
     }
 
     /**
-     * Get the total gross price of the order.
-     *
-     * @return float
+     * Get the total gross price of the order
      */
     public function grossPrice(): float {
         return $this->grossProductPrice() * $this->quantity;
     }
 
     /**
-     * Get the total price of the order before applying credit (that would bring it to 0).
-     *
-     * @return float
+     * Get the total price of the order before applying credit (that would bring it to 0)
      */
     public function priceBeforeCredit(): float {
         return $this->productPrice() * $this->quantity;
     }
 
     /**
-     * Get the total discount.
-     *
-     * @return float
+     * Get the total discount
      */
     public function discount(): float {
         return $this->credit ? $this->grossProductPrice() : $this->productDiscount() * $this->quantity;
     }
 
     /**
-     * Get the used credit for the order item.
-     * 
-     * @return float
+     * Get the used credit for the order item
      */
     public function usedCredit(): float {
         return $this->credit ? $this->priceBeforeCredit() : 0;
     }
 
     /**
-     * Get the total price of the order.
-     *
-     * @return float
+     * Get the total price of the order
      */
     public function price(): float {
         return $this->credit ? 0 : round($this->grossPrice() - $this->discount(), 2);
     }
 
     /**
-     * The total show price of the order.
-     *
-     * @return float
+     * The total show price of the order
      */
     public function shownPrice(): float {
         return $this->priceBeforeCredit();
     }
 
     /**
-     * Get the price of the order as a formatted string.
-     *
-     * @return string
+     * Get the price of the order as a formatted string
      */
     public function priceString(): string {
         return EcommerceHelper::formatPrice($this->price());
     }
 
     /**
-     * Get the gross price of the order as a formatted string.
-     *
-     * @return string
+     * Get the gross price of the order as a formatted string
      */
     public function grossPriceString(): string {
         return EcommerceHelper::formatPrice($this->grossPrice());
     }
 
     /**
-     * Get the seller's total gain for the order as a formatted string.
-     *
-     * @return string
+     * Get the seller's total gain for the order as a formatted string
      */
     public function gainString(): string {
         return EcommerceHelper::formatPrice($this->gain, true);
     }
 
     /**
-     * Updates the gain of the order.
+     * Update the prices of the order item
      */
-    public function updateGain(): void {
-        $this->gain = ($this->productGain * $this->quantity) - $this->gain_disc;
-        $this->save();
+    public function updatePrices(): self {
+        $unitAmountBeforeDiscount = $this->product->fullPrice();
+        $totalAmountBeforeDiscount = $unitAmountBeforeDiscount * $this->quantity;
+        $unitDiscount = $this->product->customerDiscount();
+        $totalDiscount = $unitDiscount * $this->quantity;
+        $unitAmountAfterDiscount = $unitAmountBeforeDiscount - $unitDiscount;
+        $totalAmountAfterDiscount = $unitAmountAfterDiscount * $this->quantity;
+        $unitAmountToPay = $this->credit ? 0 : $unitAmountAfterDiscount;
+        $totalAmountToPay = $unitAmountToPay * $this->quantity;
+
+        $this->update([
+            'unit_amount_before_discount' => $unitAmountBeforeDiscount,
+            'total_amount_before_discount' => $totalAmountBeforeDiscount,
+            'unit_discount' => $unitDiscount,
+            'total_discount' => $totalDiscount,
+            'unit_amount_after_discount' => $unitAmountAfterDiscount,
+            'total_amount_after_discount' => $totalAmountAfterDiscount,
+            'unit_amount_to_pay' => $unitAmountToPay,
+            'total_amount_to_pay' => $totalAmountToPay,
+        ]);
+
+        return $this;
     }
 
     /**
-     * Deletes the order.
-     *
-     * @return bool|null
+     * Updates the gain of the order
+     */
+    public function updateGain(): self {
+        $this->gain = ($this->productGain * $this->quantity) - $this->gain_disc;
+        $this->save();
+
+        return $this;
+    }
+
+    /**
+     * Deletes the order
      */
     public function delete(): bool|null {
         $result = parent::delete();
@@ -353,9 +352,7 @@ class OrderItem extends Model {
     }
 
     /**
-     * Scope a query to only include orders that have been paid.
-     *
-     * @return Builder
+     * Scope a query to only include orders that have been paid
      */
     public static function hasBeenPaid(): Builder {
         return self::where('status', '>=', EcommerceHelper::status('confirmed'));

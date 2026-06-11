@@ -12,7 +12,7 @@
 	        ->whereYear('created_at', $year)
 	        ->groupBy('month')
 	        ->orderBy('month')
-	        ->selectRaw('MONTH(created_at) as month, SUM(fullProductPrice) as total_sales')
+	        ->selectRaw('MONTH(created_at) as month, SUM(total_amount_before_discount) as total_sales')
 	        ->get();
 
 	    foreach ($months as $key => $month) {

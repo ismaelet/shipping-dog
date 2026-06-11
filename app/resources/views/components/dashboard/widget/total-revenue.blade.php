@@ -4,12 +4,12 @@
 	$newRevenue = OrderItem::where('status', '>', 0)
 	    ->where('created_at', '>=', now()->subMonth())
 	    ->where('created_at', '<=', now())
-	    ->sum('fullProductPrice');
+	    ->sum('total_amount_before_discount');
 
 	$oldRevenue = OrderItem::where('status', '>', 0)
 	    ->where('created_at', '>=', now()->subMonth()->subMonth())
 	    ->where('created_at', '<', now()->subMonth())
-	    ->sum('fullProductPrice');
+	    ->sum('total_amount_before_discount');
 
 	$difference = $newRevenue - $oldRevenue;
 	$differencePercentage = $oldRevenue > 0 ? ($difference / $oldRevenue) * 100 : 0;

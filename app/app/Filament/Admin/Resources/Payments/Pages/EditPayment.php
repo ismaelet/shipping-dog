@@ -9,15 +9,15 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditPayment extends EditRecord {
 
-	protected static string $resource = PaymentResource::class;
+    protected static string $resource = PaymentResource::class;
 
-	protected function getHeaderActions(): array {
-		return [
-			DeleteAction::make(),
-		];
-	}
+    protected function getHeaderActions(): array {
+        return [
+            DeleteAction::make(),
+        ];
+    }
 
-	protected function afterSave(): void {
-		$this->record->seller->updatePaid();
-	}
+    protected function afterSave(): void {
+        $this->record->seller->updateBalance();
+    }
 }

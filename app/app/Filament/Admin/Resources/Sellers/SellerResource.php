@@ -242,7 +242,7 @@ class SellerResource extends Resource {
                                 'other' => false,
                             ]);
 
-                            $record->updatePaid();
+                            $record->updateBalance();
                             $record->update([
                                 'request' => false
                             ]);

@@ -26,7 +26,7 @@
 
 	<div class="bg-surface-500 full-width justify-items-center py-20 text-center">
 		<x-typography.section-heading>
-			Ordine <span class="text-primary"><?= $order->idCode() ?></span>
+			Ordine <span class="text-primary">{{ $order->idCode() }}</span>
 		</x-typography.section-heading>
 	</div>
 
@@ -43,7 +43,7 @@
 			</span>
 
 			<x-heading.component>
-				<?= $order->statusName() ?>
+				{{ $order->statusName() }}
 			</x-heading.component>
 		</div>
 
@@ -75,7 +75,7 @@
 				<div class="flex flex-wrap justify-center gap-4">
 					<x-button
 						href="{{ $order->paymentUrl() }}"
-						class="flex-grow sm:flex-grow-0"
+						class="grow sm:grow-0"
 					>
 						{!! embed_icon('credit-card') !!}
 						Procedi al pagamento
@@ -85,7 +85,7 @@
 						type="submit"
 						variant="secondary"
 						color="error"
-						class="flex-grow sm:flex-grow-0"
+						class="grow sm:grow-0"
 					>
 						{!! embed_icon('close') !!}
 						Cancella l'ordine
@@ -149,101 +149,18 @@
 					<x-heading.component>Indirizzo</x-heading.component>
 
 					<p>
-						<?= implode('<br>', $order->address?->full_address) ?><br>
+						{!! implode('<br>', $order->address->full_address ?? []) !!}<br>
 						-<br>
-						<?= $order->address?->email ?? '' ?><br>
-						<?= $order->address?->phone ?? '' ?>
+						{!! $order->address?->email ?? '' !!}<br>
+						{!! $order->address?->phone ?? '' !!}
 					</p>
-
-					{{-- @if (in_array($order->status, [EcommerceHelper::status('received'), EcommerceHelper::status('confirmed')]))
-						<p class="text-neutral-700">
-							<a href="<?= client_url('/orders/' . $order->id . '/address?token=' . $order->token) ?>">
-								Modifica l'indirizzo
-							</a>
-						</p>
-					@endif --}}
-
 				</article>
 			</div>
 
 			<div class="grid gap-6 sm:gap-8">
-				<article class="page-panel surface">
-					<x-heading.component>Articoli</x-heading.component>
+				<livewire:cart.order-items-panel :order="$order" />
 
-					@foreach ($order->order_items as $orderItem)
-						<div class="grid grid-cols-2 items-center gap-4 md:grid-cols-4">
-							<!--Image-->
-							@if ($orderItem->product_with_trashed)
-								<a
-									href="<?= $orderItem->product ? $orderItem->product->url() : '' ?>"
-									class="img_cont"
-								>
-									<img
-										src="<?= $orderItem->image() ?>"
-										class="rounded"
-									>
-								</a>
-							@else
-								<div>
-									<img
-										src="<?= public_asset(PreviewHelper::PLACEHOLDER_IMAGE) ?>"
-										class="rounded"
-									>
-								</div>
-							@endif
-
-							<!--Data-->
-							<div class="md:col-span-3">
-								<a href="<?= $orderItem->product ? $orderItem->product->url() : null ?>">
-									<h3 class="art_name"><?= $orderItem->name() ?></h3>
-								</a>
-
-								<p class="font-semibold">
-									<?= $orderItem->discount() ? '<span class="price-old">' . $orderItem->grossPriceString() . '</span>' : $orderItem->priceString() ?>
-								</p>
-
-								<?php if ($orderItem->discount()) { ?>
-
-								<p class="price-promo font-semibold"><?= $orderItem->priceString() ?></p>
-
-								<?php } ?>
-
-								<p class="order-list__description">
-									<?= $orderItem->multilineDescription() ?>
-								</p>
-							</div>
-						</div>
-					@endforeach
-
-				</article>
-
-				<article class="page-panel surface">
-					<x-heading.component>Riepilogo</x-heading.component>
-
-					<div>
-						<div class="flex justify-between gap-4 py-3">
-							<p class="">Articoli</p>
-							<p class="font-medium text-neutral-700"><?= $order->fullOrderItemsPriceString() ?></p>
-						</div>
-
-						<div class="border-border flex justify-between gap-4 border-t py-3">
-							<p class="">Spedizione</p>
-							<p class="font-medium text-neutral-700"><?= $order->shippingFeeString() ?></p>
-						</div>
-
-						@if ($order->orderItemsDiscount())
-							<div class="border-border flex justify-between gap-4 border-t py-3">
-								<p class="">Sconto</p>
-								<p class="font-medium text-neutral-700">- <?= $order->orderItemsDiscountString() ?></p>
-							</div>
-						@endif
-
-						<div class="border-border flex justify-between gap-4 border-t py-3 text-lg">
-							<p class="">Totale</p>
-							<p class="font-medium text-neutral-700"><?= $order->priceString() ?></p>
-						</div>
-					</div>
-				</article>
+				<livewire:cart.recap-panel :order="$order" />
 			</div>
 		</div>
 	</div>

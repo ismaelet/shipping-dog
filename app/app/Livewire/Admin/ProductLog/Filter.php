@@ -20,170 +20,180 @@ use Livewire\Component;
 
 class Filter extends Component implements HasSchemas {
 
-	use InteractsWithSchemas;
+    use InteractsWithSchemas;
 
-	/**
-	 * Property: The orders collection
-	 */
-	#[Reactive]
-	public ?Collection $orderItems = null;
+    /**
+     * Property: The orders collection
+     */
+    #[Reactive]
+    public ?Collection $orderItems = null;
 
-	/**
-	 * Property: The first order in the current log
-	 */
-	public ?Order $firstOrder = null;
+    /**
+     * Property: The first order in the current log
+     */
+    public ?Order $firstOrder = null;
 
-	/**
-	 * Filament property: The data for the form
-	 */
-	public ?array $data = [];
+    /**
+     * Filament property: The data for the form
+     */
+    public ?array $data = [];
 
-	/**
-	 * Lifecycle hook: Mount the component
-	 */
-	public function mount(): void {
-		$this->form->fill();
-	}
+    /**
+     * Lifecycle hook: Mount the component
+     */
+    public function mount(): void {
+        $this->form->fill();
+    }
 
-	/**
-	 * Lifecycle hook: Render the component
-	 */
-	public function render(): View {
-		return view('livewire.admin.order-log.filter');
-	}
+    /**
+     * Lifecycle hook: Render the component
+     */
+    public function render(): View {
+        return view('livewire.admin.product-log.filter');
+    }
 
-	/**
-	 * Filament method: Define the form schema
-	 */
-	public function form(Schema $schema): Schema {
-		return $schema
-			->components([
-				Fieldset::make('body')
-					->label('Mostrando ' . ($this->orderItems?->count() ?: 0) . " " . ($this->orderItems?->count() == 1 ? 'articolo' : 'articoli'))
-					->schema([
-						Select::make('first_order_id')
-							->label('Carica da')
-							->getSearchResultsUsing(fn(string $search): array => Order::query()
-								->where('orders.id', 'like', "%{$search}%")
-								->orWhereHas('address', fn($query) => $query->where('full_name', 'like', "%{$search}%"))
-								->limit(20)
-								->orderBy('orders.id', 'desc')
-								->with('address')
-								->get()
-								->mapWithKeys(fn($order) => [
-									$order->id => $order->idCode() . ' - ' . $order->address?->full_name
-								])
-								->all())
-							->getOptionLabelUsing(fn($value): ?string => Order::find($value)?->idCode() . ' - ' . Order::find($value)?->address?->full_name ?: null)
-							->searchable()
-							->default(fn(): ?int => $this->firstOrder?->id ?: null)
-							->required(),
-						Action::make('load')
-							->label('Carica')
-							->action('load')
-							->color('info')
-							->button(),
-						Grid::make(3)
-							->schema([
-								Checkbox::make('include_ready')
-									->label('Includi ordini pronti o spediti')
-									->default(false)
-									->reactive(),
-								Checkbox::make('show_printed')
-									->label('Mostra articoli in coda di stampa')
-									->default(false)
-									->reactive(),
-								Checkbox::make('show_in_cart')
-									->label('Mostra articoli in carrello')
-									->default(false)
-									->reactive(),
-							])
-							->columnSpanFull(),
-						Grid::make(2)
-							->visible(fn(): bool => $this->orderItems?->count() > 0)
-							->schema([
-								Action::make('copy')
-									->label('Copia tutto')
-									->color('primary')
-									->outlined()
-									->icon('heroicon-o-clipboard-document')
-									->action('copy')
-									->button(),
-								Action::make('clean')
-									->label('Pulisci log')
-									->color('danger')
-									->action('clean')
-									->outlined()
-									->icon('heroicon-o-trash')
-									->button(),
-							])
-							->columnSpanFull(),
-					]),
-			])
-			->statePath('data');
-	}
+    /**
+     * Filament method: Define the form schema
+     */
+    public function form(Schema $schema): Schema {
+        return $schema
+            ->components([
+                Fieldset::make('body')
+                    ->label('Mostrando ' . ($this->orderItems?->count() ?: 0) . " " . ($this->orderItems?->count() == 1 ? 'articolo' : 'articoli'))
+                    ->schema([
+                        Select::make('first_order_id')
+                            ->label('Carica da')
+                            ->getSearchResultsUsing(fn(string $search): array => Order::query()
+                                ->where('orders.id', 'like', "%{$search}%")
+                                ->orWhereHas('address', fn($query) => $query->where('full_name', 'like', "%{$search}%"))
+                                ->limit(20)
+                                ->orderBy('orders.id', 'desc')
+                                ->with('address')
+                                ->get()
+                                ->mapWithKeys(fn($order) => [
+                                    $order->id => $order->idCode() . ' - ' . $order->address?->full_name
+                                ])
+                                ->all())
 
-	/**
-	 * Filament method: Load orders starting from the selected order ID
-	 */
-	public function load(): void {
-		$firstOrderId = $this->form->getState()['first_order_id'];
-		$firstOrder = Order::find($firstOrderId);
+                            ->getOptionLabelUsing(function ($value): ?string {
+                                $order = Order::with('address')->find($value);
 
-		if ($firstOrder) {
-			Configuration::where('name', 'product_log_start_from')->first()->update([
-				'value' => $firstOrder->id,
-			]);
-		}
+                                if (!$order) {
+                                    return null;
+                                }
 
-		$this->firstOrder = $firstOrder;
-		$this->form->fill();
-		$this->dispatch('firstOrderUpdated', ['first_order_id' => $firstOrderId]);
-	}
+                                return $order->idCode() . ' - ' . $order->address?->full_name;
+                            })
 
-	/**
-	 * Filament method: Copy data from the selected order ID
-	 */
-	public function copy(): void {
-		$this->dispatch('copyAll');
-	}
+                            ->searchable()
+                            ->default(fn(): ?int => $this->firstOrder?->id ?: null)
+                            ->required(),
+                        Action::make('load')
+                            ->label('Carica')
+                            ->action('load')
+                            ->color('info')
+                            ->button(),
+                        Grid::make(3)
+                            ->schema([
+                                Checkbox::make('include_ready')
+                                    ->label('Includi ordini pronti o spediti')
+                                    ->default(false)
+                                    ->reactive(),
+                                Checkbox::make('show_printed')
+                                    ->label('Mostra articoli in coda di stampa')
+                                    ->default(false)
+                                    ->reactive(),
+                                Checkbox::make('show_in_cart')
+                                    ->label('Mostra articoli in carrello')
+                                    ->default(false)
+                                    ->reactive(),
+                            ])
+                            ->columnSpanFull(),
+                        Grid::make(2)
+                            ->visible(fn(): bool => $this->orderItems?->count() > 0)
+                            ->schema([
+                                Action::make('copy')
+                                    ->label('Copia tutto')
+                                    ->color('primary')
+                                    ->outlined()
+                                    ->icon('heroicon-o-clipboard-document')
+                                    ->action('copy')
+                                    ->button(),
+                                Action::make('clean')
+                                    ->label('Pulisci log')
+                                    ->color('danger')
+                                    ->action('clean')
+                                    ->outlined()
+                                    ->icon('heroicon-o-trash')
+                                    ->button(),
+                            ])
+                            ->columnSpanFull(),
+                    ]),
+            ])
+            ->statePath('data');
+    }
 
-	/**
-	 * Filament method: Clean the order log
-	 */
-	public function clean(): void {
-		$lastOrder = Order::orderBy('id', 'desc')
-			->first();
+    /**
+     * Filament method: Load orders starting from the selected order ID
+     */
+    public function load(): void {
+        $firstOrderId = $this->form->getState()['first_order_id'];
+        $firstOrder = Order::find($firstOrderId);
 
-		Configuration::where('name', 'product_log_start_from')
-			->first()
-			->update([
-				'value' => $lastOrder?->id + 1,
-			]);
+        if ($firstOrder) {
+            Configuration::updateOrCreate(
+                ['name' => 'product_log_start_from'],
+                ['value' => $firstOrder->id],
+            );
+        }
 
-		$this->firstOrder = null;
-		$this->form->fill();
-		$this->dispatch('cleanOrderLog');
-	}
+        $this->firstOrder = $firstOrder;
+        $this->form->fill();
+        $this->dispatch('firstOrderUpdated', ['first_order_id' => $firstOrderId]);
+    }
 
-	/**
-	 * Update handler: Handle changes to the 'include_ready' checkbox
-	 */
-	public function updatedDataIncludeReady($value): void {
-		$this->dispatch('includeReadyUpdated', ['include_ready' => $value]);
-	}
+    /**
+     * Filament method: Copy data from the selected order ID
+     */
+    public function copy(): void {
+        $this->dispatch('copyAll');
+    }
 
-	/**
-	 * Update handler: Handle changes to the 'show_printed' checkbox
-	 */
-	public function updatedDataShowPrinted($value): void {
-		$this->dispatch('showPrintedUpdated', ['show_printed' => $value]);
-	}
+    /**
+     * Filament method: Clean the order log
+     */
+    public function clean(): void {
+        $lastOrder = Order::orderBy('id', 'desc')
+            ->first();
 
-	/**
-	 * Update handler: Handle changes to the 'show_in_cart' checkbox
-	 */
-	public function updatedDataShowInCart($value): void {
-		$this->dispatch('showInCartUpdated', ['show_in_cart' => $value]);
-	}
+        Configuration::updateOrCreate(
+            ['name' => 'product_log_start_from'],
+            ['value' => ($lastOrder?->id ?? 0) + 1],
+        );
+
+        $this->firstOrder = null;
+        $this->form->fill();
+        $this->dispatch('cleanOrderLog');
+    }
+
+    /**
+     * Update handler: Handle changes to the 'include_ready' checkbox
+     */
+    public function updatedDataIncludeReady(bool $value): void {
+        $this->dispatch('includeReadyUpdated', ['include_ready' => $value]);
+    }
+
+    /**
+     * Update handler: Handle changes to the 'show_printed' checkbox
+     */
+    public function updatedDataShowPrinted(bool $value): void {
+        $this->dispatch('showPrintedUpdated', ['show_printed' => $value]);
+    }
+
+    /**
+     * Update handler: Handle changes to the 'show_in_cart' checkbox
+     */
+    public function updatedDataShowInCart(bool $value): void {
+        $this->dispatch('showInCartUpdated', ['show_in_cart' => $value]);
+    }
 }

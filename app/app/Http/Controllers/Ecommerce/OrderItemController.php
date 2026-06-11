@@ -68,6 +68,15 @@ class OrderItemController extends Controller {
             $order->save();
         }
 
+        $unitAmountBeforeDiscount = $product->fullPrice();
+        $totalAmountBeforeDiscount = $unitAmountBeforeDiscount * $request->quantity;
+        $unitDiscount = $product->customerDiscount();
+        $totalDiscount = $unitDiscount * $request->quantity;
+        $unitAmountAfterDiscount = $unitAmountBeforeDiscount - $unitDiscount;
+        $totalAmountAfterDiscount = $unitAmountAfterDiscount * $request->quantity;
+        $unitAmountToPay = $unitAmountAfterDiscount;
+        $totalAmountToPay = $unitAmountToPay * $request->quantity;
+
         // Create the order
         OrderItem::create([
             ...$request->all(),
@@ -76,8 +85,14 @@ class OrderItemController extends Controller {
             'seller_id' => $product->seller->id,
             'design_id' => $product->design_id,
             'type_id' => $product->type->id,
-            'fullProductPrice' => $product->fullPrice(),
-            'price_disc' => $product->customerDiscount(),
+            'unit_amount_before_discount' => $unitAmountBeforeDiscount,
+            'total_amount_before_discount' => $totalAmountBeforeDiscount,
+            'unit_amount_after_discount' => $unitAmountAfterDiscount,
+            'total_amount_after_discount' => $totalAmountAfterDiscount,
+            "unit_amount_to_pay" => $unitAmountToPay,
+            "total_amount_to_pay" => $totalAmountToPay,
+            'unit_discount' => $unitDiscount,
+            'total_discount' => $totalDiscount,
             'productGain' => $product->sellerGain(),
             'gain' => $product->sellerGain() * $request->quantity,
         ]);

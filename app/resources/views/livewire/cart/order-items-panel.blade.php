@@ -1,5 +1,74 @@
 @use('App\Helpers\PreviewHelper')
 
+@pushOnce('styles')
+	<style>
+		.cart-panel {
+			display: grid;
+			gap: 1.5rem;
+			padding: 1.5rem;
+		}
+
+		#items_panel {
+			display: grid;
+			gap: 1rem;
+		}
+
+		#items .row {
+			grid-template-columns: 7rem auto 1rem;
+			align-items: center;
+			gap: 1rem;
+		}
+
+		#items .row img {
+			display: block;
+			border-radius: var(--border-radius-400);
+		}
+
+		.art_name {
+			font-size: 0.9rem;
+			letter-spacing: 0.01em;
+		}
+
+		.order-list__description {
+			padding-top: 3px;
+			font-size: var(--font-size-300);
+		}
+
+		.price {
+			margin-top: 10px;
+			font-size: 0.9rem;
+			letter-spacing: 0.03em;
+		}
+
+		.price-old {
+			color: #999;
+			text-decoration: line-through;
+		}
+
+		.price-promo {
+			color: #bb0e0e;
+		}
+
+		.art_warn {
+			margin-top: 5px;
+			color: #b90002;
+		}
+
+		#items_panel .remove {
+			opacity: 0.4;
+			background-color: transparent;
+			border: none;
+			aspect-ratio: 1 / 1;
+			cursor: pointer;
+			transition: opacity 0.4s;
+		}
+
+		#items_panel .remove:hover {
+			opacity: 1;
+		}
+	</style>
+@endpushOnce
+
 <section
 	id="items"
 	class="cart-panel surface"
@@ -66,7 +135,9 @@
 
 			</div>
 
-			<livewire:cart.order-item-credit-button :$orderItem />
+			@if (!$isCompleted)
+				<livewire:cart.order-item-credit-button :$orderItem />
+			@endif
 		@endforeach
 
 	</div>

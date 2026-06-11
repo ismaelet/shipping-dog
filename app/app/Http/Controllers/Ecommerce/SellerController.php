@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ecommerce;
 use App\Http\Controllers\Controller;
 use App\Legacy\Ecommerce\Product as LegacyProduct;
 use App\Legacy\System\DB;
+use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Seller;
 use App\Models\User\Like;
 use Illuminate\Http\RedirectResponse;
@@ -49,7 +50,7 @@ class SellerController extends Controller {
 
         // select links
         $hasItems = DB::exists('products WHERE user_id = ? AND status > 0', [$sellerUserId]);
-        $productCount = DB::count(LegacyProduct::TABLE . ' WHERE user_id = ? AND status > 0', [$sellerUserId]);
+        $productCount = Product::where('user_id', $sellerUserId)->where('status', '>', 0)->count();
 
         $likeN = Like::whereIn('product_id', function ($query) use ($sellerUserId) {
             $query->select('id')

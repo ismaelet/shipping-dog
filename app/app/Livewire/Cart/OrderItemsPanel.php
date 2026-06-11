@@ -15,10 +15,16 @@ class OrderItemsPanel extends Component {
     public ?Order $order = null;
 
     /**
+     * Property: Whether the order has been completed
+     */
+    public bool $isCompleted = false;
+
+    /**
      * Lifecycle hook: Mount the component
      */
     public function mount(): void {
         $this->order = $this->order ?: cart();
+        $this->isCompleted = (bool) $this->order?->status;
     }
 
     /**

@@ -10,7 +10,7 @@ class CreatePayment extends CreateRecord {
     protected static string $resource = PaymentResource::class;
 
     protected function afterCreate(): void {
-        $this->record->seller->updatePaid();
+        $this->record->seller->updateBalance();
         $this->record->seller->update([
             'request' => false
         ]);

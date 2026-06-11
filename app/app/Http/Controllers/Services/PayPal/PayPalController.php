@@ -54,7 +54,13 @@ class PayPalController extends Controller {
      */
     public function create(Request $request): RedirectResponse {
         // Get the order
-        $order = Order::find($request->order_id);
+        $order = Order::with([
+            'address',
+            'shipping_method',
+            'order_items.product_with_trashed',
+            'order_items.seller',
+            'order_items.type',
+        ])->findOrFail($request->order_id);
 
         // Set the headers
         $headers = [

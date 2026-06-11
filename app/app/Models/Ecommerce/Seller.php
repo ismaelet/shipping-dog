@@ -219,7 +219,7 @@ class Seller extends Model {
         return EcommerceHelper::formatPrice($this->toBePayed(), true);
     }
 
-    public function updateEarned(): self {
+    private function updateEarned(): self {
         $this->update([
             'earned' => $this->order_items->where('status', '>=', EcommerceHelper::status('confirmed'))->sum('gain')
         ]);
@@ -230,7 +230,7 @@ class Seller extends Model {
     /**
      * Update the seller's paid amount
      */
-    public function updatePaid(): static {
+    private function updatePaid(): static {
         $this->update([
             'payed' => round($this->payments()->sum('value'), 2)
         ]);
@@ -238,7 +238,7 @@ class Seller extends Model {
         return $this;
     }
 
-    public function updateOtherTransfers(): static {
+    private function updateOtherTransfers(): static {
         $this->update([
             'other_transfers' =>  round($this->all_transfers->where('other', 1)->sum('value'), 2)
         ]);
@@ -249,8 +249,22 @@ class Seller extends Model {
     /**
      * Update the seller's credit
      */
-    public function updateCredit(): self {
+    private function updateCredit(): self {
         $this->update(['credit' => round($this->earnedCredit() - $this->usedOrderCredit() - $this->usedShippingCredit(), 2)]);
+
+        return $this;
+    }
+
+    /**
+     * Update the seller's balance (earned, paid, other transfers and credit)
+     */
+    public function updateBalance(): self {
+        $this->loadMissing('order_items', 'payments', 'all_transfers');
+
+        $this->updateEarned();
+        $this->updatePaid();
+        $this->updateOtherTransfers();
+        $this->updateCredit();
 
         return $this;
     }
@@ -264,7 +278,7 @@ class Seller extends Model {
             ->where('user_id', '=', $this->user_id)
             ->where('credit', '=', 1)
             ->where('status', '!=', EcommerceHelper::status('cancelled'))
-            ->selectRaw('SUM((fullProductPrice - price_disc) * quantity) as usedCredit')
+            ->selectRaw('SUM((total_amount_before_discount - total_discount) * quantity) as usedCredit')
             ->value('usedCredit');
 
         return $usedOrderCredit ? round($usedOrderCredit, 2) : 0;
