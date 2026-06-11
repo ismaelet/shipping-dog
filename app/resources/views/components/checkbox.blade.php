@@ -72,9 +72,10 @@
 	</style>
 @endPushOnce
 
-<label {{ $attributes->class(['checkbox']) }}>
+<label class="checkbox">
 
 	<input
+		{{ $attributes->merge() }}
 		type="{{ $type }}"
 		name="{{ $name }}"
 		value="{{ $value ?? 1 }}"

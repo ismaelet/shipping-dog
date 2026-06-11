@@ -1,15 +1,3 @@
-<?php
-
-use Illuminate\Support\Facades\Auth;
-use Legacy\Classes\Ecommerce\ViewManager;
-use Legacy\Classes\ViewManager\Ecommerce\CartFlowBar;
-use Legacy\Classes\ViewManager\Ecommerce\CartRecap;
-use Legacy\View\Components\Form\Input;
-
-$cart = cart();
-
-?>
-
 <x-layouts.cart :title="$title . ' | Carrello'">
 	<form
 		id="content"
@@ -40,20 +28,10 @@ $cart = cart();
 
 
 				<!-- Shipping method -->
-				<div>
-
-					@foreach ($shippingMethods as $shippingMethod)
-						<livewire:cart.shipping-method
-							:$cart
-							:$shippingMethod
-						/>
-
-						@if ($cart->shipping_method_id == $shippingMethod->id)
-							<livewire:cart.shipping-credit-button />
-						@endif
-					@endforeach
-
-				</div>
+				<livewire:cart.shipping-methods
+					:$cart
+					:$shippingMethods
+				/>
 			</section>
 
 			{{-- Shipping address --}}
@@ -66,7 +44,7 @@ $cart = cart();
 		>
 
 			{{-- Order items --}}
-			<livewire:cart.order-items-panel />
+			<livewire:cart.order-items-panel :order="$cart" />
 
 			{{-- Credit panel --}}
 			<livewire:cart.credit-panel />

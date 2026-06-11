@@ -55,6 +55,7 @@ class CartAddressController extends Controller {
                 'title' => 'Indirizzo',
                 'shippingMethods' => $shippingMethods,
                 'address' => $address,
+                'cart' => $cart,
             ]);
     }
 

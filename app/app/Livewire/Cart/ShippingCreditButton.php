@@ -10,77 +10,77 @@ use Livewire\Component;
 
 class ShippingCreditButton extends Component {
 
-	/**
-	 * Property: The open order
-	 */
-	public Order $order;
+    /**
+     * Property: The open order
+     */
+    public Order $order;
 
-	/**
-	 * Property: Whether the seller is elegible to use shipping credit
-	 */
-	public bool $elegible;
+    /**
+     * Property: Whether the seller is elegible to use shipping credit
+     */
+    public bool $elegible;
 
-	/**
-	 * Property: Whether the shipping credit has been used
-	 */
-	public bool $usedCredit;
+    /**
+     * Property: Whether the shipping credit has been used
+     */
+    public bool $usedCredit;
 
-	/**
-	 * Lifecycle hook: Mount the component
-	 */
-	public function mount(): void {
-		$this->order = cart();
-		$this->usedCredit = $this->order->credit_ship;
+    /**
+     * Lifecycle hook: Mount the component
+     */
+    public function mount(): void {
+        $this->order = cart();
+        $this->usedCredit = $this->order->credit_ship;
 
-		$shippingFeed = (bool) $this->order->shipping_method->price($this->order->quantity);
-		$couponUsed = $this->order->coupon;
-		$usableCredit = (float) Auth::user()?->seller?->usableCredit();
-		$hasSufficientCredit = $usableCredit >= $shippingFeed;
+        $shippingFee = $this->order->shipping_method->price($this->order->quantity);
+        $couponUsed = $this->order->coupon;
+        $usableCredit = (float) Auth::user()?->seller?->usableCredit();
+        $hasSufficientCredit = $usableCredit >= $shippingFee;
 
-		$this->elegible = is_seller() && $shippingFeed && $hasSufficientCredit && !$couponUsed;
-	}
+        $this->elegible = is_seller() && $shippingFee && $hasSufficientCredit && !$couponUsed;
+    }
 
-	/**
-	 * Lifecycle hook: Render the component view
-	 */
-	public function render(): View {
-		return view('livewire.cart.shipping-credit-button');
-	}
+    /**
+     * Lifecycle hook: Render the component view
+     */
+    public function render(): View {
+        return view('livewire.cart.shipping-credit-button');
+    }
 
-	/**
-	 * Use the shipping credit
-	 */
-	public function useCredit(): void {
-		$this->order->update([
-			'credit_ship' => true,
-		]);
+    /**
+     * Use the shipping credit
+     */
+    public function useCredit(): void {
+        $this->order->update([
+            'credit_ship' => true,
+        ]);
 
-		$this->usedCredit = true;
+        $this->usedCredit = true;
 
-		$this->order->updatePrice();
+        $this->order->updatePrice();
 
-		$this->dispatch('usedCreditUpdated');
-	}
+        $this->dispatch('usedCreditUpdated');
+    }
 
-	/**
-	 * Remove the shipping credit
-	 */
-	public function removeCredit(): void {
-		$this->order->update([
-			'credit_ship' => false,
-		]);
+    /**
+     * Remove the shipping credit
+     */
+    public function removeCredit(): void {
+        $this->order->update([
+            'credit_ship' => false,
+        ]);
 
-		$this->usedCredit = false;
+        $this->usedCredit = false;
 
-		$this->order->updatePrice();
+        $this->order->updatePrice();
 
-		$this->dispatch('usedCreditUpdated');
-	}
+        $this->dispatch('usedCreditUpdated');
+    }
 
-	/**
-	 * Refresh the credit used when the 'usedCreditUpdated' event is dispatched
-	 */
-	#[On('usedCreditUpdated')]
-	public function usedCreditUpdated(): void {
-	}
+    /**
+     * Refresh the credit used when the 'usedCreditUpdated' event is dispatched
+     */
+    #[On('usedCreditUpdated')]
+    public function usedCreditUpdated(): void {
+    }
 }

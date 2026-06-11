@@ -12,13 +12,15 @@ class RecapPanel extends Component {
     /**
      * Property: The order associated with the recap panel
      */
-    public Order $order;
+    public ?Order $order = null;
 
     /**
      * Lifecycle hook: Initialize the component
      */
-    public function boot(?Order $order = null): void {
-        $this->order = $order->id ?: cart();
+    public function mount(): void {
+        if (!$this->order || !$this->order->exists) {
+            $this->order = cart();
+        }
     }
 
     /**
@@ -33,6 +35,7 @@ class RecapPanel extends Component {
      */
     #[On('orderItemsUpdated')]
     public function refreshOrderItems(): void {
+        $this->refreshOrder();
     }
 
     /**
@@ -40,6 +43,7 @@ class RecapPanel extends Component {
      */
     #[On('shippingUpdated')]
     public function refreshShipping(): void {
+        $this->refreshOrder();
     }
 
     /**
@@ -47,5 +51,14 @@ class RecapPanel extends Component {
      */
     #[On('usedCreditUpdated')]
     public function usedCreditUpdated(): void {
+        $this->refreshOrder();
+    }
+
+    /**
+     * Helper method: Refresh the order data from the database to ensure the recap panel displays the most up-to-date information
+     */
+    private function refreshOrder(): void {
+        $this->order->updatePrice();
+        $this->order = $this->order->fresh() ?: cart();
     }
 }
