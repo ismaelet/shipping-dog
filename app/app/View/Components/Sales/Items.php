@@ -45,7 +45,7 @@ class Items extends Component {
                 'image_url' => $lastSale->design_image_url,
                 'last_sale_time' => $lastSale->time,
                 'total_sales' => $salesGroup->count(),
-                'total_revenue' => price($salesGroup->sum('gain')),
+                'total_revenue' => price($salesGroup->sum('total_seller_earnings_after_reduction')),
                 'lastOrderCreatedAtString' => (new DateTime($lastSale->created_at))->format('Y-m-d'),
                 'createdAtString' => (new DateTime($lastSale->design_with_trashed?->created_at))->format('Y-m-d'),
             ]);

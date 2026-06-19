@@ -24,13 +24,16 @@ class OrderItem extends Model {
         'total_amount_before_discount',
         'unit_discount',
         'total_discount',
-        'total_amount_to_pay',
+        'unit_amount_after_discount',
         'total_amount_after_discount',
         'unit_amount_to_pay',
-        'unit_amount_after_discount',
-        'gain',
-        'productGain',
-        'gain_disc',
+        'total_amount_to_pay',
+        'unit_seller_earnings_before_reduction',
+        'total_seller_earnings_before_reduction',
+        'unit_seller_earnings_after_reduction',
+        'total_seller_earnings_after_reduction',
+        'unit_seller_reduction',
+        'total_seller_reduction',
         'credit',
         'inventory',
         'quantity',
@@ -243,13 +246,6 @@ class OrderItem extends Model {
     }
 
     /**
-     * Get the total price of the order before applying credit (that would bring it to 0)
-     */
-    public function priceBeforeCredit(): float {
-        return $this->productPrice() * $this->quantity;
-    }
-
-    /**
      * Get the total discount
      */
     public function discount(): float {
@@ -260,7 +256,7 @@ class OrderItem extends Model {
      * Get the used credit for the order item
      */
     public function usedCredit(): float {
-        return $this->credit ? $this->priceBeforeCredit() : 0;
+        return $this->credit ? $this->total_amount_after_discount : 0;
     }
 
     /**
@@ -274,7 +270,7 @@ class OrderItem extends Model {
      * The total show price of the order
      */
     public function shownPrice(): float {
-        return $this->priceBeforeCredit();
+        return $this->total_amount_after_discount;
     }
 
     /**
@@ -295,22 +291,45 @@ class OrderItem extends Model {
      * Get the seller's total gain for the order as a formatted string
      */
     public function gainString(): string {
-        return EcommerceHelper::formatPrice($this->gain, true);
+        return EcommerceHelper::formatPrice($this->total_seller_earnings_after_reduction, true);
+    }
+
+    /**
+     * Check if the order has a discount
+     */
+    public function hasDiscount(): bool {
+        return $this->unit_discount > 0 || $this->total_discount > 0;
+    }
+
+    /**
+     * Check if the order is free (total amount to pay is 0 or less)
+     */
+    public function isFree(): bool {
+        return $this->total_amount_to_pay <= 0;
     }
 
     /**
      * Update the prices of the order item
      */
     public function updatePrices(): self {
+        // Anchor values to calculate the amounts and discounts
         $unitAmountBeforeDiscount = $this->product->fullPrice();
-        $totalAmountBeforeDiscount = $unitAmountBeforeDiscount * $this->quantity;
+
+        // ! Right not this only depends on if the user is the owner of the product, but in the future it should depend on the coupon applied to the order or general promotions
         $unitDiscount = $this->product->customerDiscount();
+
+        // Dependent values
+        $totalAmountBeforeDiscount = $unitAmountBeforeDiscount * $this->quantity;
+
         $totalDiscount = $unitDiscount * $this->quantity;
+
         $unitAmountAfterDiscount = $unitAmountBeforeDiscount - $unitDiscount;
         $totalAmountAfterDiscount = $unitAmountAfterDiscount * $this->quantity;
+
         $unitAmountToPay = $this->credit ? 0 : $unitAmountAfterDiscount;
         $totalAmountToPay = $unitAmountToPay * $this->quantity;
 
+        // Update the order item with the new calculated values
         $this->update([
             'unit_amount_before_discount' => $unitAmountBeforeDiscount,
             'total_amount_before_discount' => $totalAmountBeforeDiscount,
@@ -322,15 +341,38 @@ class OrderItem extends Model {
             'total_amount_to_pay' => $totalAmountToPay,
         ]);
 
+        // Update the seller earnings of the order
+        $this->updateSellerEarnings();
+
         return $this;
     }
 
     /**
-     * Updates the gain of the order
+     * Updates the seller earnings of the order
      */
-    public function updateGain(): self {
-        $this->gain = ($this->productGain * $this->quantity) - $this->gain_disc;
-        $this->save();
+    public function updateSellerEarnings(): self {
+        // Anchor values to calculate the earnings and reductions
+        $unitSellerEarningsBeforeReduction = $this->product->sellerEarningBeforeReduction($this->color);
+
+        // ! Right not this only depends on if the user is the owner of the product, but in the future it should depend on the coupon applied to the order or general promotions
+        $unitDiscount = $this->product->userIsOwner() ? $unitSellerEarningsBeforeReduction : 0;
+
+        // Dependent values
+        $totalSellerEarningsBeforeReduction = $unitSellerEarningsBeforeReduction * $this->quantity;
+
+        $totalSellerReduction = $unitDiscount * $this->quantity;
+
+        $unitSellerEarningsAfterReduction = $unitSellerEarningsBeforeReduction - $unitDiscount;
+        $totalSellerEarningsAfterReduction = $unitSellerEarningsAfterReduction * $this->quantity;
+
+        $this->update([
+            'unit_seller_earnings_before_reduction' => $unitSellerEarningsBeforeReduction,
+            'total_seller_earnings_before_reduction' => $totalSellerEarningsBeforeReduction,
+            'unit_seller_reduction' => $unitDiscount,
+            'total_seller_reduction' => $totalSellerReduction,
+            'unit_seller_earnings_after_reduction' => $unitSellerEarningsAfterReduction,
+            'total_seller_earnings_after_reduction' => $totalSellerEarningsAfterReduction,
+        ]);
 
         return $this;
     }

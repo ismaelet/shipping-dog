@@ -113,7 +113,7 @@
 						@endif
 
 						@if ($orderItem->discount())
-							<span class="text-error-500 font-bold">{{ price($orderItem->priceBeforeCredit()) }}</span>
+							<span class="text-error-500 font-bold">{{ price($orderItem->total_amount_after_discount) }}</span>
 						@endif
 					</p>
 

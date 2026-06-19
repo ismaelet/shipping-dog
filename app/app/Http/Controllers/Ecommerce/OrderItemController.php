@@ -68,14 +68,30 @@ class OrderItemController extends Controller {
             $order->save();
         }
 
+        // Calculate the amounts and discounts
         $unitAmountBeforeDiscount = $product->fullPrice();
         $totalAmountBeforeDiscount = $unitAmountBeforeDiscount * $request->quantity;
+
         $unitDiscount = $product->customerDiscount();
         $totalDiscount = $unitDiscount * $request->quantity;
+
         $unitAmountAfterDiscount = $unitAmountBeforeDiscount - $unitDiscount;
         $totalAmountAfterDiscount = $unitAmountAfterDiscount * $request->quantity;
+
         $unitAmountToPay = $unitAmountAfterDiscount;
         $totalAmountToPay = $unitAmountToPay * $request->quantity;
+
+        // Calculate the seller's earnings and reductions
+        $color = $product->colors()->find($request->color_id) ?? null;
+
+        $unitSellerEarningBeforeReduction = $product->sellerEarningBeforeReduction($color);
+        $totalSellerEarningBeforeReduction = $unitSellerEarningBeforeReduction * $request->quantity;
+
+        $unitSellerReduction = $product->userIsOwner() ? $product->sellerReduction() : 0;
+        $totalSellerReduction = $unitSellerReduction * $request->quantity;
+
+        $unitSellerEarningAfterReduction = $unitSellerEarningBeforeReduction - $unitSellerReduction;
+        $totalSellerEarningAfterReduction = $unitSellerEarningAfterReduction * $request->quantity;
 
         // Create the order
         OrderItem::create([
@@ -93,8 +109,12 @@ class OrderItemController extends Controller {
             "total_amount_to_pay" => $totalAmountToPay,
             'unit_discount' => $unitDiscount,
             'total_discount' => $totalDiscount,
-            'productGain' => $product->sellerGain(),
-            'gain' => $product->sellerGain() * $request->quantity,
+            'unit_seller_earnings_before_reduction' => $unitSellerEarningBeforeReduction,
+            'total_seller_earnings_before_reduction' => $totalSellerEarningBeforeReduction,
+            'unit_seller_earnings_after_reduction' => $unitSellerEarningAfterReduction,
+            'total_seller_earnings_after_reduction' => $totalSellerEarningAfterReduction,
+            'unit_seller_reduction' => $unitSellerReduction,
+            'total_seller_reduction' => $totalSellerReduction,
         ]);
 
         // Update the cart data

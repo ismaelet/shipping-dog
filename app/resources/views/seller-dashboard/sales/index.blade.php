@@ -159,22 +159,6 @@
 									>
 								</div>
 
-								{{-- <div class="rec_cell">
-								<div class="align-center flex gap-4">
-									<p class="rec_lbl inlb">Bonus: </p>
-									<x-help.info>Per ogni capo venduto riceverai un ulteriore <strong>10%</strong> del guadagno come bonus. Puoi
-										usare
-										questo bonus per pagare le spese di spedizione quando acquisti sul nostro sito, oppure per comprare prodotti
-										del
-										tuo negozio senza pagarli.</x-help.info>
-								</div>
-								<input
-									type="text"
-									class="input wid-100"
-									value="<?= $seller->creditString() ?>"
-									disabled
-								>
-							</div> --}}
 								<div class="rec_cell">
 									<p class="rec_lbl">PAGATO:</p>
 									<input

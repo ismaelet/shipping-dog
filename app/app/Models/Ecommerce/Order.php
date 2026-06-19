@@ -27,8 +27,6 @@ class Order extends Model {
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array
      */
     protected $fillable = [
         'user_id',
@@ -52,15 +50,7 @@ class Order extends Model {
     ];
 
     /**
-     * * Events
-     */
-
-    /**
      * Update the order's order_items status when the order is updated.
-     * 
-     * @param array $attributes
-     * @param array $options
-     * @return bool
      */
     public function update(array $attributes = [], array $options = []): bool {
         // Synchronize the order_items status with the order status
@@ -202,8 +192,6 @@ class Order extends Model {
 
     /**
      * Get the order's order_items as a string.
-     *
-     * @return string
      */
     public function orderItemsString(): string {
         $orderItemsString = '';
@@ -221,12 +209,7 @@ class Order extends Model {
 
 
     /**
-     * ~ Attributes: Steps
-     */
-    /**
      * Get the order's step data.
-     *
-     * @return array
      */
     public function stepData(): array {
         return config('ecommerce.cart.steps')[$this->step];
@@ -234,8 +217,6 @@ class Order extends Model {
 
     /**
      * Get the order's step tag.
-     *
-     * @return string
      */
     public function stepTag(): string {
         return $this->stepData()['tag'];
@@ -243,8 +224,6 @@ class Order extends Model {
 
     /**
      * Get the order's status data.
-     *
-     * @return string
      */
     public function statusData(): array {
         return config('ecommerce.order.statuses')[$this->status];
@@ -252,8 +231,6 @@ class Order extends Model {
 
     /**
      * Get the order's status tag.
-     *
-     * @return string
      */
     public function statusTag(): string {
         return $this->statusData()['tag'];
@@ -261,8 +238,6 @@ class Order extends Model {
 
     /**
      * Get the order's status name.
-     *
-     * @return string
      */
     public function statusName(): string {
         return $this->statusData()['label'];
@@ -270,8 +245,6 @@ class Order extends Model {
 
     /**
      * Get the order's status color.
-     *
-     * @return string
      */
     public function statusColor(): string {
         return $this->statusData()['color'];
@@ -279,8 +252,6 @@ class Order extends Model {
 
     /**
      * Get the status icon.
-     *
-     * @return string
      */
     public function statusIcon(): string {
         return $this->statusData()['icon'];
@@ -337,7 +308,7 @@ class Order extends Model {
 
         foreach ($this->order_items as $orderItem) {
             if ($orderItem->credit) {
-                $credit += $orderItem->priceBeforeCredit();
+                $credit += $orderItem->total_amount_after_discount;
             }
         }
 
@@ -530,8 +501,8 @@ class Order extends Model {
 
             // Calculate the discount amount
             if ($coupon->nogain) {
-                $totalDiscount = $orderItem->gain;
-                $gainReduction = $orderItem->gain;
+                $totalDiscount = $orderItem->unit_seller_earnings_before_reduction;
+                $gainReduction = $orderItem->unit_seller_earnings_before_reduction;
             } else {
                 // Precentage discount
                 if ($coupon->mod_us3 && $this->quantity > 2) {
@@ -577,8 +548,10 @@ class Order extends Model {
             }
 
             $orderItem->update([
+                'unit_discount' => $totalDiscount / $orderItem->quantity,
                 'total_discount' => $totalDiscount,
-                'gain_disc' => $gainReduction,
+                'unit_seller_reduction' => $gainReduction / $orderItem->quantity,
+                'total_seller_reduction' => $gainReduction,
             ]);
 
             // Break the loop if the coupon is only valid for one item
@@ -692,7 +665,7 @@ class Order extends Model {
     }
 
     /**
-     * Update the sellers balance after an order is confirmed or cancelled
+     * Update the selle5rs balance after an order is confirmed or cancelled
      */
     private function updateSellersBalance(): void {
         $this->order_items->loadMissing('seller');

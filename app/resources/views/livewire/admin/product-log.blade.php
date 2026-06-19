@@ -327,7 +327,7 @@
 						@foreach ($designGroups as $sellerGroup)
 							<div class="seller js-seller mt-4 block">
 								<h3 class="text-primary js-title">
-									{{ strtoupper($sellerGroup['seller']->name) }}
+									{{ strtoupper($sellerGroup['sellerName']) }}
 								</h3>
 
 								<div class="designs grid gap-4">

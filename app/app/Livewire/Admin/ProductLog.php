@@ -226,12 +226,37 @@ class ProductLog extends Component {
     protected function getDesignGroups(): SupportCollection {
         return collect($this->orderItems ?? [])
             ->filter(fn(OrderItem $item) => $item->seller)
-            ->groupBy('seller_id')
-            ->map(function (SupportCollection $sellerItems) {
-                $seller = $sellerItems->first()?->seller;
+            ->groupBy(function (OrderItem $item) {
+                if ($item->isFree()) {
+                    return 'free';
+                }
+
+                if ($item->hasDiscount()) {
+                    return 'discounted';
+                }
+
+                return 'seller-' . $item->seller_id;
+            })
+            ->map(function (SupportCollection $sellerItems, string $groupKey) {
+                if ($groupKey === 'free') {
+                    return [
+                        'seller' => null,
+                        'sellerName' => '!! Gratis !!',
+                        'designs' => $this->getDesignsForSeller($sellerItems),
+                    ];
+                }
+
+                if ($groupKey === 'discounted') {
+                    return [
+                        'seller' => null,
+                        'sellerName' => '!! Scontati !!',
+                        'designs' => $this->getDesignsForSeller($sellerItems),
+                    ];
+                }
 
                 return [
-                    'seller' => $seller,
+                    'seller' => $sellerItems->first()?->seller,
+                    'sellerName' => $sellerItems->first()?->seller?->name,
                     'designs' => $this->getDesignsForSeller($sellerItems),
                 ];
             })

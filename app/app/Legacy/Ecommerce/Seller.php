@@ -97,14 +97,6 @@ class Seller {
         return price($this->toPay);
     }
 
-    private function getCredit() {
-        return NewSeller::find($this->id)->credit;
-    }
-
-    private function getCreditString() {
-        return price($this->credit);
-    }
-
     private function getDesigns() {
         return rows_to_objects(DB::select(Design::INDEX . ' FROM ' . Design::TABLE . ' WHERE ' . Design::SELLER_INDEX . ' = ?', [$this->id]), Design::class);
     }

@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Ecommerce\Cart;
 
-use Legacy\System\Classes\LegacyDB;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Address;
 use App\Models\Ecommerce\ShippingMethod;
-use App\Models\Shipping\Province;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -105,60 +103,5 @@ class CartAddressController extends Controller {
         cart()->advance();
 
         return redirect()->route('cart.' . cart()->stepTag());
-    }
-
-    /**
-     * 
-     */
-    public function addressMethods() {
-
-        // add code
-        if (isset($_POST['add_code']) || !empty($_POST['code'])) {
-            $coupon = Coupon::generateFromCode($_POST['code']);
-            $error = $legacyCart->addCoupon($coupon->id);
-
-            if (!$error) {
-                redirect_old('#code-anch');
-            } else {
-                redirect_old('?step-id=2&error=' . $error . '#code-anch');
-            }
-        }
-
-        // remove code
-        if (isset($_POST['del_code'])) {
-            $legacyCart->removeCoupon();
-
-            redirect_old('#code-anch');
-        }
-
-        if (isset($_POST['item_credit'])) {
-            LegacyDB::update('order_items SET credit=1 WHERE id = ?', [$_POST['item_credit']]);
-
-            $legacyCart->update();
-
-            redirect_old('#items');
-        }
-
-        if (isset($_POST['item_no_credit'])) {
-            LegacyDB::update('order_items SET credit=0 WHERE id = ?', [$_POST['item_no_credit']]);
-
-            $legacyCart->update();
-
-            redirect_old('#items');
-        }
-
-        if (isset($_POST['ship_credit'])) {
-            $legacyCart->updateShippingMethodId(1);
-            $legacyCart->updateShippingWithCredit(true);
-
-            redirect_old('#shipping');
-        }
-
-        if (isset($_POST['ship_no_credit'])) {
-            $legacyCart->updateShippingMethodId(2);
-            $legacyCart->updateShippingWithCredit(false);
-
-            redirect_old('#shipping');
-        }
     }
 }

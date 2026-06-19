@@ -116,8 +116,6 @@ class ChangeRequest extends Model {
                     ->fill([
                         'order_id' => $this->new_order_id,
                         'size_id' => $item->new_size_id ?? $oldOrderItem->size_id,
-                        'gain' => 0,
-                        'gain_disc' => 0,
                         'inventory' => false,
                         'credit' => false,
                         'is_printed' => false,
@@ -130,7 +128,12 @@ class ChangeRequest extends Model {
                         'total_amount_after_discount' => 0,
                         'unit_amount_to_pay' => 0,
                         'total_amount_to_pay' => 0,
-                        'productGain' => 0,
+                        'unit_seller_earnings_before_reduction' => 0,
+                        'total_seller_earnings_before_reduction' => 0,
+                        'unit_seller_earnings_after_reduction' => 0,
+                        'total_seller_earnings_after_reduction' => 0,
+                        'unit_seller_reduction' => 0,
+                        'total_seller_reduction' => 0,
                         'status' => 2,
                     ]);
 

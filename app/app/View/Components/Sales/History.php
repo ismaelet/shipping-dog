@@ -73,7 +73,7 @@ class History extends Component {
 
             $monthTotGain = $sales?->sum(function ($orderItem) use ($selectedYear, $month) {
                 if ($orderItem->year == $selectedYear && $orderItem->month == $month) {
-                    return $orderItem->gain;
+                    return $orderItem->total_seller_earnings_after_reduction;
                 }
             });
 

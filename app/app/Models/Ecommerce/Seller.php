@@ -221,7 +221,7 @@ class Seller extends Model {
 
     private function updateEarned(): self {
         $this->update([
-            'earned' => $this->order_items->where('status', '>=', EcommerceHelper::status('confirmed'))->sum('gain')
+            'earned' => $this->order_items->where('status', '>=', EcommerceHelper::status('confirmed'))->sum('total_seller_earnings_after_reduction')
         ]);
 
         return $this;
@@ -247,15 +247,6 @@ class Seller extends Model {
     }
 
     /**
-     * Update the seller's credit
-     */
-    private function updateCredit(): self {
-        $this->update(['credit' => round($this->earnedCredit() - $this->usedOrderCredit() - $this->usedShippingCredit(), 2)]);
-
-        return $this;
-    }
-
-    /**
      * Update the seller's balance (earned, paid, other transfers and credit)
      */
     public function updateBalance(): self {
@@ -264,7 +255,6 @@ class Seller extends Model {
         $this->updateEarned();
         $this->updatePaid();
         $this->updateOtherTransfers();
-        $this->updateCredit();
 
         return $this;
     }
