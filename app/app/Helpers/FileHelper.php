@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-use function PHPUnit\Framework\isString;
-
 class FileHelper {
 
     private const SVG_PATH = '/resources/svg';
@@ -32,9 +30,6 @@ class FileHelper {
 
     /**
      * Download a file from the public storage directory
-     *
-     * @param string $path The path to the file in the public storage directory
-     * @return BinaryFileResponse
      */
     public static function download(string $path): BinaryFileResponse {
         $path = storage_path('app/public/' . $path);

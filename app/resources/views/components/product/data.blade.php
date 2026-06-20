@@ -77,7 +77,7 @@
 				</div>
 
 				{{-- Colors --}}
-				@if ($product->colors()->count())
+				@if ($product->colors->count())
 					<livewire:product.options.color :$product />
 				@endif
 

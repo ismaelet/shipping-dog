@@ -48,7 +48,7 @@ class ProductController extends Controller {
         $relatedGarments = $sameDesignProducts->where('type.category', 'c')->sortBy('type.sort');
         $relatedAccessories = $sameDesignProducts->where('type.category', 'm')->sortBy('type.sort');
 
-        $productColors = $product->colors();
+        $productColors = $product->colors;
 
         $warning = Warning::currentWarning();
 

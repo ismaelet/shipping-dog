@@ -82,12 +82,12 @@ class OrderItemController extends Controller {
         $totalAmountToPay = $unitAmountToPay * $request->quantity;
 
         // Calculate the seller's earnings and reductions
-        $color = $product->colors()->find($request->color_id) ?? null;
+        $color = $product->colors->where('id', $request->color_id)->first() ?? null;
 
         $unitSellerEarningBeforeReduction = $product->sellerEarningBeforeReduction($color);
         $totalSellerEarningBeforeReduction = $unitSellerEarningBeforeReduction * $request->quantity;
 
-        $unitSellerReduction = $product->userIsOwner() ? $product->sellerReduction() : 0;
+        $unitSellerReduction = $product->userIsOwner() ? $unitSellerEarningBeforeReduction : 0;
         $totalSellerReduction = $unitSellerReduction * $request->quantity;
 
         $unitSellerEarningAfterReduction = $unitSellerEarningBeforeReduction - $unitSellerReduction;

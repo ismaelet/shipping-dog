@@ -60,7 +60,7 @@
 					name="colors[]"
 					value="{{ $color->tag }}"
 					data-active-color="{{ $color->id }}"
-					@checked($product->colors()->contains('id', $color->id))
+					@checked($product->colors->contains('id', $color->id))
 					@input="updateDefaultColor($event.target); showSaveButton($event.target)"
 				>
 			</label>

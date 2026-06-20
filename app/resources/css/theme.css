@@ -1,157 +1,170 @@
 /* Assets */
 @font-face {
-	font-family: 'Open Sans';
-	font-weight: 300 900;
-	font-display: auto;
-	src:
-		local('Open Sans'),
-		url('../../public/fonts/OpenSans/OpenSans.ttf') format('truetype');
+  font-family: "Open Sans";
+  font-weight: 300 900;
+  font-display: auto;
+  src:
+    local("Open Sans"),
+    url("../../public/fonts/OpenSans/OpenSans.ttf") format("truetype");
 }
 
 @font-face {
-	font-family: 'Open Sans';
-	font-weight: 300 900;
-	font-display: auto;
-	font-style: italic;
-	src:
-		local('Open Sans'),
-		url('../../public/fonts/OpenSans/OpenSans-Italic.ttf') format('truetype');
+  font-family: "Open Sans";
+  font-weight: 300 900;
+  font-display: auto;
+  font-style: italic;
+  src:
+    local("Open Sans"),
+    url("../../public/fonts/OpenSans/OpenSans-Italic.ttf") format("truetype");
 }
 
 @font-face {
-	font-family: 'Poppins';
-	font-weight: 300;
-	font-display: auto;
-	src:
-		local('Poppins'),
-		url('../../public/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+  font-family: "Poppins";
+  font-weight: 300;
+  font-display: auto;
+  src:
+    local("Poppins"),
+    url("../../public/fonts/Poppins/Poppins-Light.ttf") format("truetype");
 }
 
 @font-face {
-	font-family: 'Poppins';
-	font-weight: 400;
-	font-display: auto;
-	src:
-		local('Poppins'),
-		url('../../public/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+  font-family: "Poppins";
+  font-weight: 400;
+  font-display: auto;
+  src:
+    local("Poppins"),
+    url("../../public/fonts/Poppins/Poppins-Regular.ttf") format("truetype");
 }
 
 @font-face {
-	font-family: 'Poppins';
-	font-weight: 500;
-	font-display: auto;
-	src:
-		local('Poppins'),
-		url('../../public/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+  font-family: "Poppins";
+  font-weight: 500;
+  font-display: auto;
+  src:
+    local("Poppins"),
+    url("../../public/fonts/Poppins/Poppins-Medium.ttf") format("truetype");
 }
 
 @font-face {
-	font-family: 'Poppins';
-	font-weight: 600;
-	font-display: auto;
-	src:
-		local('Poppins'),
-		url('../../public/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+  font-family: "Poppins";
+  font-weight: 600;
+  font-display: auto;
+  src:
+    local("Poppins"),
+    url("../../public/fonts/Poppins/Poppins-SemiBold.ttf") format("truetype");
 }
 
 @font-face {
-	font-family: 'Poppins';
-	font-weight: 700;
-	font-display: auto;
-	src:
-		local('Poppins'),
-		url('../../public/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+  font-family: "Poppins";
+  font-weight: 700;
+  font-display: auto;
+  src:
+    local("Poppins"),
+    url("../../public/fonts/Poppins/Poppins-Bold.ttf") format("truetype");
 }
 
 /* Theme */
 @theme {
-	/* Theme: Colors */
-	--theme-h: 34deg;
-	--theme-light-s: 0%;
-	--theme-dark-s: 28%;
-	--color-background-s: 0%;
-	--color-background-l: 100%;
+  /* Theme: Colors */
+  --theme-h: 34deg;
+  --theme-light-s: 0%;
+  --theme-dark-s: 28%;
+  --color-background-s: 0%;
+  --color-background-l: 100%;
 
-	--color-neutral-light-50: hsl(var(--theme-h) var(--theme-light-s) 100%);
-	--color-neutral-light-100: hsl(var(--theme-h) var(--theme-light-s) 100%);
-	--color-neutral-light-200: hsl(var(--theme-h) var(--theme-light-s) 93%);
-	--color-neutral-light-250: hsl(var(--theme-h) var(--theme-light-s) 85%);
-	--color-neutral-light-300: hsl(var(--theme-h) var(--theme-light-s) 50%);
-	--color-neutral-light-400: hsl(var(--theme-h) var(--theme-light-s) 25%);
-	--color-neutral-light-700: hsl(var(--theme-h) var(--theme-light-s) 13%);
-	--color-neutral-light-900: hsl(var(--theme-h) var(--theme-light-s) 0%);
-	--color-neutral-light-950: hsl(var(--theme-h) var(--theme-light-s) 0%);
+  --color-neutral-light-50: hsl(var(--theme-h) var(--theme-light-s) 100%);
+  --color-neutral-light-100: hsl(var(--theme-h) var(--theme-light-s) 100%);
+  --color-neutral-light-200: hsl(var(--theme-h) var(--theme-light-s) 93%);
+  --color-neutral-light-250: hsl(var(--theme-h) var(--theme-light-s) 85%);
+  --color-neutral-light-300: hsl(var(--theme-h) var(--theme-light-s) 50%);
+  --color-neutral-light-400: hsl(var(--theme-h) var(--theme-light-s) 25%);
+  --color-neutral-light-700: hsl(var(--theme-h) var(--theme-light-s) 13%);
+  --color-neutral-light-900: hsl(var(--theme-h) var(--theme-light-s) 0%);
+  --color-neutral-light-950: hsl(var(--theme-h) var(--theme-light-s) 0%);
 
-	--color-neutral-dark-50: hsl(var(--theme-h) var(--theme-dark-s) 0%);
-	--color-neutral-dark-100: hsl(var(--theme-h) var(--theme-dark-s) 0%);
-	--color-neutral-dark-150: hsl(var(--theme-h) var(--theme-dark-s) 7%);
-	--color-neutral-dark-200: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.8) 13%);
-	--color-neutral-dark-250: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.65) 22%);
-	--color-neutral-dark-300: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.5) 50%);
-	--color-neutral-dark-400: hsl(var(--theme-h) calc(var(--theme-dark-s) * 0.35) 70%);
-	--color-neutral-dark-700: hsl(var(--theme-h) var(--theme-dark-s) 95%);
-	--color-neutral-dark-900: hsl(var(--theme-h) var(--theme-dark-s) 100%);
-	--color-neutral-dark-950: hsl(var(--theme-h) var(--theme-dark-s) 100%);
+  --color-neutral-dark-50: hsl(var(--theme-h) var(--theme-dark-s) 0%);
+  --color-neutral-dark-100: hsl(var(--theme-h) var(--theme-dark-s) 0%);
+  --color-neutral-dark-150: hsl(var(--theme-h) var(--theme-dark-s) 7%);
+  --color-neutral-dark-200: hsl(
+    var(--theme-h) calc(var(--theme-dark-s) * 0.8) 13%
+  );
+  --color-neutral-dark-250: hsl(
+    var(--theme-h) calc(var(--theme-dark-s) * 0.65) 22%
+  );
+  --color-neutral-dark-300: hsl(
+    var(--theme-h) calc(var(--theme-dark-s) * 0.5) 50%
+  );
+  --color-neutral-dark-400: hsl(
+    var(--theme-h) calc(var(--theme-dark-s) * 0.35) 70%
+  );
+  --color-neutral-dark-700: hsl(var(--theme-h) var(--theme-dark-s) 95%);
+  --color-neutral-dark-900: hsl(var(--theme-h) var(--theme-dark-s) 100%);
+  --color-neutral-dark-950: hsl(var(--theme-h) var(--theme-dark-s) 100%);
 
-	--color-neutral-50: var(--color-neutral-light-50);
-	--color-neutral-100: var(--color-neutral-light-100);
-	--color-neutral-200: var(--color-neutral-light-200);
-	--color-neutral-250: var(--color-neutral-light-250);
-	--color-neutral-300: var(--color-neutral-light-300);
-	--color-neutral-400: var(--color-neutral-light-400);
-	--color-neutral-700: var(--color-neutral-light-700);
-	--color-neutral-900: var(--color-neutral-light-900);
-	--color-neutral-950: var(--color-neutral-light-950);
+  --color-neutral-50: var(--color-neutral-light-50);
+  --color-neutral-100: var(--color-neutral-light-100);
+  --color-neutral-200: var(--color-neutral-light-200);
+  --color-neutral-250: var(--color-neutral-light-250);
+  --color-neutral-300: var(--color-neutral-light-300);
+  --color-neutral-400: var(--color-neutral-light-400);
+  --color-neutral-700: var(--color-neutral-light-700);
+  --color-neutral-900: var(--color-neutral-light-900);
+  --color-neutral-950: var(--color-neutral-light-950);
 
-	--color-neutral-border: var(--color-gray-300);
-	--color-neutral-heading: var(--color-neutral-400);
-	--color-neutral-text: var(--color-slate-600);
+  --color-neutral-border: var(--color-gray-300);
+  --color-neutral-heading: var(--color-neutral-400);
+  --color-neutral-text: var(--color-slate-600);
 
-	--color-primary-300: hsl(247deg 70% 78%);
-	--color-primary-400: hsl(35deg 100% 50%);
-	--color-primary-500: hsl(27deg 100% 45%);
-	--color-primary: var(--color-primary-400);
+  --color-primary-300: hsl(247deg 70% 78%);
+  --color-primary-400: hsl(35deg 100% 50%);
+  --color-primary-500: hsl(27deg 100% 45%);
+  --color-primary: var(--color-primary-400);
 
-	--color-secondary-400: hsl(220, 75%, 68%);
-	--color-secondary-500: hsl(220, 75%, 50%);
-	--color-secondary: var(--color-secondary-400);
+  --color-secondary-400: hsl(220, 75%, 68%);
+  --color-secondary-500: hsl(220, 75%, 50%);
+  --color-secondary: var(--color-secondary-400);
 
-	--color-success-400: hsl(145deg 63% 50%);
-	--color-success-500: hsl(145deg 63% 40%);
-	--color-error-500: hsl(0deg 100% 40%);
-	--color-error-400: hsl(0deg 100% 50%);
+  --color-success-400: hsl(145deg 63% 50%);
+  --color-success-500: hsl(145deg 63% 40%);
+  --color-error-500: hsl(0deg 100% 40%);
+  --color-error-400: hsl(0deg 100% 50%);
 
-	--color-background: hsl(var(--theme-h), var(--theme-dark-s), var(--color-background-l));
+  --color-background: hsl(
+    var(--theme-h),
+    var(--theme-dark-s),
+    var(--color-background-l)
+  );
 
-	--color-surface-200: var(--color-neutral-light-200);
-	--color-surface-400: var(--color-neutral-light-100);
-	--color-surface-500: var(--color-neutral-light-200);
-	--color-surface-600: var(--color-neutral-light-250);
-	--color-surface: var(--color-surface-400);
+  --color-surface-200: var(--color-neutral-light-200);
+  --color-surface-400: var(--color-neutral-light-100);
+  --color-surface-500: var(--color-neutral-light-200);
+  --color-surface-600: var(--color-neutral-light-250);
+  --color-surface: var(--color-surface-400);
 
-	--color-border: var(--color-neutral-200);
+  --color-border: var(--color-neutral-200);
 
-	/* Theme: Fonts */
-	--font-sans: 'Open Sans', system-ui, sans-serif;
-	--font-heading: 'Poppins', system-ui, sans-serif;
+  /* Theme: Fonts */
+  --font-sans: "Open Sans", system-ui, sans-serif;
+  --font-heading: "Poppins", system-ui, sans-serif;
 
-	--text-600: min(1.5rem, 6vw);
-	--text-700: min(2rem, 7vw);
-	--text-750: min(3rem, 10vw);
-	--text-800: min(3.5rem, 12vw);
-	--text-850: min(4rem, 13.5vw);
-	--text-900: min(5rem, 15vw);
+  --text-600: min(1.5rem, 6vw);
+  --text-700: min(2rem, 7vw);
+  --text-750: min(3rem, 10vw);
+  --text-800: min(3.5rem, 12vw);
+  --text-850: min(4rem, 13.5vw);
+  --text-900: min(5rem, 15vw);
 
-	/* Theme: Spacing */
-	--content-spacing: 1.5rem;
+  /* Theme: Spacing */
+  --content-spacing: 1.5rem;
 }
 
 .dark {
-	--color-neutral-heading: #fff;
+  --color-neutral-heading: #fff;
+  --color-neutral-border: var(--color-neutral-dark-300);
 }
 
 .light {
-	--color-neutral-heading: #202020;
+  --color-neutral-heading: #202020;
 }
 
 h1,
@@ -160,19 +173,19 @@ h3,
 h4,
 h5,
 h6 {
-	color: var(--color-neutral-heading);
+  color: var(--color-neutral-heading);
 }
 
 @media (min-width: 640px) {
-	:root {
-		--content-spacing: 2rem;
-	}
+  :root {
+    --content-spacing: 2rem;
+  }
 }
 
 /*
 * Utility Classes
 */
 .text-highlight {
-	color: var(--color-neutral-heading);
-	font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-heading);
+  font-weight: var(--font-weight-semibold);
 }

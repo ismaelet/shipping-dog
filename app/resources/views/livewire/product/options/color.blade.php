@@ -2,13 +2,13 @@
 
 <section
 	id="color"
-	class="field {{ $product->colors()->count() < 2 ? 'hide' : '' }}"
+	class="field {{ $product->colors->count() < 2 ? 'hide' : '' }}"
 >
 	<x-label class="field-label text-sm">Colore</x-label>
 
 	<div class="grid">
 
-		@foreach ($product->colors() as $color)
+		@foreach ($product->colors as $color)
 			<label
 				class="color-box"
 				title="{{ $color->name }}"

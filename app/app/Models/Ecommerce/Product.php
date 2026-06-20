@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -41,7 +42,6 @@ class Product extends Model {
         'user_id',
         'type_id',
         'color_id',
-        'colors',
         'status',
         'positions'
     ];
@@ -203,11 +203,13 @@ class Product extends Model {
     /**
      * Get the product's colors
      */
-    public function colors(): ?Collection {
-        return ProductColor::whereIn('tag', explode(',', $this->colors))
-            ->orderBy('reorder')
-            ->orderBy('id')
-            ->get();
+    public function colors(): BelongsToMany {
+        return $this->belongsToMany(
+            ProductColor::class,
+            'product_product_color',
+            'product_id',
+            'product_color_id'
+        );
     }
 
     /**
@@ -468,8 +470,9 @@ class Product extends Model {
     /**
      * Get custom images array
      */
-    public function customImages(): SupportCollection {
-        $prefix = 'products/custom/' . $this->id . '-more-';
+    public function customImages(?int $positionId = null): SupportCollection {
+        $positionSlug = $positionId ? $positionId : 'more';
+        $prefix = 'products/custom/' . $this->id . '-' . $positionSlug;
 
         $files = Storage::disk('public')->files('products/custom');
 

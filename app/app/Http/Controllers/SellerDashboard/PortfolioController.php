@@ -21,7 +21,7 @@ class PortfolioController extends Controller {
     /**
      * Action: Index, display the seller's portfolio page
      */
-    public function index(Request $request): View {
+    public function index(): View {
         $seller = Auth::user()->seller;
 
         $designs = Design::where('user_id', Auth::id())
@@ -60,7 +60,7 @@ class PortfolioController extends Controller {
     /**
      * Display the page to add a new design to the portfolio.
      */
-    public function add(Request $request): View {
+    public function add(): View {
         // setup errors
         $error = false;
 
@@ -142,19 +142,24 @@ class PortfolioController extends Controller {
      * Display the form to add a custom product
      */
     public function create(): View {
-        $productId = $_GET['id'] ?? null;
-        $product = Product::find($productId);
+        $tempId = uniqid('temp_');
 
         // Fetch types
-        $types = ProductType::where('id', '<>', 16)->orderBy('sort')->get();
+        $types = ProductType::where('id', '<>', 16)
+            ->with('positions')
+            ->orderBy('id')
+            ->get();
+
+        $imagePositionTypes = $types->first()?->positions;
 
         // Fetch colors
         $colors = ProductColor::orderBy('reorder')->get();
 
         return view('seller-dashboard.portfolio.products.show', [
-            'product' => $product,
+            'tempId' => $tempId,
             'types' => $types,
             'colors' => $colors,
+            'imagePositionTypes' => $imagePositionTypes,
         ]);
     }
 
@@ -172,6 +177,7 @@ class PortfolioController extends Controller {
             'product' => $product,
             'types' => $types,
             'colors' => $colors,
+            'imagePositionTypes' => $product->type?->positions,
         ]);
     }
 
@@ -208,7 +214,7 @@ class PortfolioController extends Controller {
             'status' => true,
         ]);
 
-        // Upload product images
+        // Description
         ProductDescription::updateOrCreate(
             ['product_id' => $product->id],
             ['description' => $description]
@@ -247,27 +253,15 @@ class PortfolioController extends Controller {
             'type_id' => 'required|integer|exists:product_types,id',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'default-color-id' => 'required|integer|exists:product_colors,id',
-            'colors' => 'array',
-            'cover-image' => 'nullable|image|max:5120',
-            'more-images.*' => 'nullable|image',
         ]);
 
         $name = $request->input('name');
-        $typeId = $request->input('type_id');
-        $type = ProductType::find($typeId);
         $price = str_replace(',', '.', $request->input('price'));
         $description = $request->input('description');
-        $defaultColor = ProductColor::find($request->input('default-color-id'));
-        $newColors = implode(',', $request->input('colors', [$defaultColor->tag]));
-        $positionId = $type->positions ? explode(',', $type->positions)[0] : null;
 
         // edit
         $product->update([
-            'name' => $name,
-            'type_id' => $typeId,
-            'color_id' => $defaultColor->id,
-            'colors' => $newColors
+            'name' => $name
         ]);
 
         ProductDescription::updateOrCreate(
@@ -285,49 +279,7 @@ class PortfolioController extends Controller {
             ]
         );
 
-        // Update cover image
-        if ($_FILES['cover-image']['name']) {
-            ImageHelper::upload(
-                file: request()->file('cover-image'),
-                path: 'products/custom/' . $product->id . '-cover.webp',
-                size: 1920,
-                mode: 'width',
-                quality: 80
-            );
-        }
-
-        // Upload more images
-        if ($request->file('more-images')) {
-            $this->uploadMoreImages($request, $product);
-        }
-
         return redirect()->route('seller-dashboard.portfolio.products.show', $product)->with('success', 'Il prodotto è stato aggiornato con successo.');
-    }
-
-    /**
-     * Upload product image for a specific color
-     */
-    public function uploadProductImage(Request $request, Product $product, ProductColor $color): RedirectResponse {
-        $request->validate([
-            'file-' . $color->id => 'required|image|max:10240',
-        ]);
-
-        $files = [
-            ['size' => 1024, 'quality' => 90],
-            ['size' => 400, 'quality' => 80],
-        ];
-
-        foreach ($files as $file) {
-            ImageHelper::upload(
-                file: $request->file('file-' . $color->id),
-                path: 'products/custom/' . $product->id . '-' . $color->tag . '-1-' . $file['size'] . '.webp',
-                size: $file['size'],
-                mode: 'largest',
-                quality: $file['quality']
-            );
-        }
-
-        return redirect()->back()->with('success', 'Immagine caricata con successo.');
     }
 
     /**

@@ -64,57 +64,26 @@
 	</style>
 @endpushOnce
 
-@pushOnce('scripts')
-	<script defer>
-		document.addEventListener('DOMContentLoaded', function() {
-			document.querySelectorAll('.js-default-color-label').forEach(function(label) {
-				label.addEventListener('click', function() {
-					label.closest('.js-color').querySelector('.js-default-color').click();
-				});
-			});
-
-			document.querySelectorAll('.js-active-color').forEach(function(checkbox) {
-				checkbox.addEventListener('click', function() {
-					if (document.querySelectorAll('.js-active-color:checked').length < 1) {
-						checkbox.checked = true;
-					}
-				});
-			});
-
-			document.querySelectorAll('.js-active-color-label').forEach(function(label) {
-				label.addEventListener('click', function() {
-					label.closest('.js-color').querySelector('.js-active-color').click();
-				});
-			});
-
-			document.querySelectorAll('.js-upload').forEach(function(upload) {
-				upload.addEventListener('click', function() {
-					upload.nextElementSibling.click();
-				});
-			});
-
-			document.querySelectorAll('.js-submit-upload').forEach(function(input) {
-				input.addEventListener('change', function() {
-					input.nextElementSibling.click();
-				});
-			});
-		});
-	</script>
-@endpushOnce
-
 <x-layouts.seller-dashboard>
 
 	<form
 		class="form pad-v-2 grid gap-8"
 		method="POST"
 		enctype="multipart/form-data"
-		action="{{ $product ? route('seller-dashboard.portfolio.products.update', $product) : route('seller-dashboard.portfolio.products.store') }}"
+		action="{{ isset($product) ? route('seller-dashboard.portfolio.products.update', $product) : route('seller-dashboard.portfolio.products.store') }}"
 	>
 		@csrf
+
+		<input
+			type="hidden"
+			name="id"
+			value="{{ isset($product) ? $product->id : $tempId }}"
+		>
+
 		<div class="grid gap-4">
 			<h1 class="txt-2rem">
 				<span class="txt-sbold">
-					{!! $product ? '<span class="txt-light">Modifica:</span> ' . $product->name : 'Aggiungi un prodotto' !!}
+					{!! isset($product) ? '<span class="txt-light">Modifica:</span> ' . $product->name : 'Aggiungi un prodotto' !!}
 				</span>
 			</h1>
 
@@ -124,7 +93,7 @@
 		</div>
 
 		<div class="grid gap-8">
-			@if ($product && !$product->status)
+			@if (isset($product) && !$product->status)
 				<p class="error">Il prodotto non è ancora pubblico, ma verrà attivato al più presto</p>
 			@endif
 
@@ -135,7 +104,7 @@
 					type="text"
 					class="input"
 					name="name"
-					value="{{ $product ? $product->name : '' }}"
+					value="{{ isset($product) ? $product->name : '' }}"
 					placeholder="Nome"
 					required
 				>
@@ -157,7 +126,7 @@
 						@foreach ($types as $type)
 							<option
 								value="{{ $type->id }}"
-								{{ $product && $product->type_id == $type->id ? 'selected' : '' }}
+								{{ isset($product) && $product->type_id == $type->id ? 'selected' : '' }}
 							>
 								{{ $type->name }}
 							</option>
@@ -174,7 +143,7 @@
 							type="text"
 							class="input grow"
 							name="price"
-							value="{{ $product ? $product->fullPrice() : '0.00' }}"
+							value="{{ isset($product) ? $product->fullPrice() : '0.00' }}"
 							placeholder="Prezzo"
 						>
 					</div>
@@ -195,7 +164,7 @@
 					name="description"
 					maxlength="500"
 					placeholder="Descrizione"
-				>{{ $product ? $product->description() : '' }}</x-textarea>
+				>{{ isset($product) ? $product->description() : '' }}</x-textarea>
 
 				@error('description')
 					<x-alerts.error>{{ $message }}</x-alerts.error>
@@ -212,102 +181,25 @@
 				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
 
-			<div class="form-field">
-				<div>
-					<x-label>Colore predefinito:</x-label>
-					<p>Il colore che viene mostrato di base nell'anteprima del prodotto</p>
-				</div>
+			<div class="surface grid grid-cols-1 gap-8 p-4">
+				<livewire:portfolio.product.active-colors :product="isset($product) ? $product : null" />
 
-				<div class="colors mt-4">
+				<span class="border-neutral-250 border-b"></span>
 
-					@foreach ($colors as $color)
-						<label class="color js-color">
-							<div class="">
-								<input
-									type="radio"
-									class="color__checkbox js-default-color"
-									name="default-color-id"
-									value="{{ $color->id }}"
-									@checked(($product && $product->color_id == $color->id) || (!$product && $color->id == 1))
-									required
-								>
-								<div
-									class="color__icon"
-									style="--_color-1: {{ $color->primary_color_hex }}; --_color-2: {{ $color->secondary_color_hex ?: $color->primary_color_hex }}"
-								></div>
-							</div>
-
-							<p class="color__label js-default-color-label">
-								{{ $color->name }}
-							</p>
-						</label>
-					@endforeach
-
-				</div>
+				<livewire:portfolio.product.default-color :product="isset($product) ? $product : null" />
 			</div>
 
-			<div class="form-field">
-				<div>
-					<x-label>Colori attivi:</x-label>
-					<p>Tutte le varianti di colore possibili per il prodotto</p>
+			@foreach ($imagePositionTypes->where('base_of', null) ?? [] as $position)
+				<div class="surface grid grid-cols-1 gap-8 p-4">
+					<h3>Stampa {{ strtolower($position->name) }}</h3>
+
+					<livewire:portfolio.product.upload-image
+						:positionId="$position->id"
+						:product="isset($product) ? $product : null"
+						:tempId="$tempId ?? null"
+					/>
 				</div>
-
-				<div
-					class="colors mt-4"
-					id="active-colors"
-				>
-
-					@foreach ($colors as $color)
-						<div class="color js-color">
-							<label class="">
-								<input
-									id="active-color-{{ $color->id }}"
-									type="checkbox"
-									class="color__checkbox js-active-color"
-									name="colors[]"
-									value="{{ $color->tag }}"
-									{{ $product && $product->colors()->where('tag', $color->tag)->count() ? 'checked' : '' }}
-								>
-								<div
-									class="color__icon"
-									style="--_color-1: {{ $color->primary_color_hex }}; --_color-2: {{ $color->secondary_color_hex ?: $color->primary_color_hex }}"
-								></div>
-							</label>
-
-							<div class="color__content">
-								<label for="active-color-{{ $color->id }}">
-									<p class="color__label js-active-color-label">
-										{{ $color->name }}
-									</p>
-								</label>
-
-								@if ($product)
-									@php
-										$preview = $product ? $product->previewImage(color: $color) : null;
-										$imageExists = $product ? $preview?->exists() : false;
-									@endphp
-
-									<p class="color__upload {{ !$imageExists ? 'text-red-500' : 'text-blue-400' }} js-upload text-sm">
-										{{ $imageExists ? 'Ricarica' : 'Carica' }} immagine</p>
-									<input
-										type="file"
-										class="color__input js-file-input {{ $product ? 'js-submit-upload' : '' }}"
-										name="file-{{ $color->id }}"
-									>
-									<button
-										type="submit"
-										class="color__button js-color-button"
-										name="upload"
-										formaction="{{ route('seller-dashboard.portfolio.products.upload-image', ['product' => $product, 'color' => $color]) }}"
-										value="{{ $color->id }}"
-									></button>
-								@endif
-							</div>
-						</div>
-					@endforeach
-
-				</div>
-			</div>
+			@endforeach
 
 			<div class="form-field">
 				<div>
@@ -315,7 +207,7 @@
 					<p>Apparirà di fianco alla descrizione del prodotto</p>
 				</div>
 
-				@if ($product && $product->hasSpecificCoverImage)
+				@if (isset($product) && $product->hasSpecificCoverImage)
 					<label class="replace-image">
 						<input
 							type="file"
@@ -337,7 +229,7 @@
 
 			</div>
 
-			@if ($product)
+			@if (isset($product))
 				<div class="form-field">
 					<div>
 						<x-label>Altre immagini (opzionali):</x-label>
@@ -360,10 +252,10 @@
 		>
 			<x-button
 				type="submit"
-				name="{{ $product ? 'edit' : 'add' }}"
+				name="{{ isset($product) ? 'edit' : 'add' }}"
 				class="js-submit"
 			>
-				{{ $product ? 'Salva' : 'Aggiungi' }}
+				{{ isset($product) ? 'Salva' : 'Aggiungi' }}
 			</x-button>
 
 			<x-button
@@ -373,7 +265,7 @@
 				Indietro
 			</x-button>
 
-			@if ($product)
+			@if (isset($product))
 				<x-button
 					type="submit"
 					name="delete"

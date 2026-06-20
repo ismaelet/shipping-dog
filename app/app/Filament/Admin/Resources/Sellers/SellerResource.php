@@ -177,7 +177,7 @@ class SellerResource extends Resource {
                     ->toggledHiddenByDefault()
                     ->sortable(),
 
-                // To be paid
+                // PayPal address
                 TextColumn::make('payment_request.paypal')
                     ->label('PayPal')
                     ->default('-')
@@ -187,6 +187,11 @@ class SellerResource extends Resource {
                 // Status
                 ToggleColumn::make('status')
                     ->label('Attivo')
+                    ->sortable(),
+
+                // Custom
+                ToggleColumn::make('custom')
+                    ->label('Personalizzato')
                     ->sortable(),
 
             ])

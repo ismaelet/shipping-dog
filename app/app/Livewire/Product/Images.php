@@ -72,6 +72,7 @@ class Images extends Component {
     public function changeColor(int $id): void {
         $this->selectedColorId = $id;
         $this->mainImageUrl = $this->getMainImageUrl();
+        $this->imagesUrls = $this->getImagesUrls();
     }
 
     /**
@@ -89,6 +90,18 @@ class Images extends Component {
      * Get main image URL
      */
     public function getMainImageUrl(): string {
+        if ($this->product->isCustom()) {
+            $customImage = $this->product->image(
+                imageSize: 1024,
+                color: $this->selectedColorId,
+                position: $this->previewPositionId
+            );
+
+            if ($customImage) {
+                return $customImage;
+            }
+        }
+
         if ($this->selectedPosition->id != $this->previewPositionId) {
             return $this->product->type->rasterizedImage(
                 color: $this->selectedColorId,
@@ -122,6 +135,19 @@ class Images extends Component {
         foreach ($positions as $position) {
             if ($position->id == $this->selectedPosition->id || $position->id == $this->selectedPosition->base_of) {
                 continue;
+            }
+
+            if ($this->product->isCustom()) {
+                $customImage = $this->product->image(
+                    imageSize: 1024,
+                    color: $this->selectedColorId,
+                    position: $position->id
+                );
+
+                if ($customImage) {
+                    $urls[$position->id] = $customImage;
+                    continue;
+                }
             }
 
             $urls[$position->id] = $this->product->type->rasterizedImage(color: $this->selectedColorId, position: $position->id);
