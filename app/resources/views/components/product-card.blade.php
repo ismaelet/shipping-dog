@@ -9,7 +9,7 @@
 				alt=""
 				loading="lazy"
 			>
-			<p class="price blu">{{ $product->customerPriceString() }}</p>
+			<p class="price blu">{{ price($product->price()->price) }}</p>
 		</a>
 
 		<livewire:wishlist-button
