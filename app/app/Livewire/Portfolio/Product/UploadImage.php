@@ -39,7 +39,7 @@ class UploadImage extends Component {
      * Lifecycle hook: initialize the component
      */
     public function mount() {
-        $this->colors =  $this->product?->colors;
+        $this->colors = $this->product?->colors()->orderBy('reorder')->orderBy('id')->get();
         $this->images = $this->genImageData();
     }
 

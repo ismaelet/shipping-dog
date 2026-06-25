@@ -28,7 +28,7 @@ class ActiveColors extends Component {
      * Lifecycle Method: Mount the component
      */
     public function mount() {
-        $this->availableColors = ProductColor::all();
+        $this->availableColors = ProductColor::orderBy('reorder')->orderBy('id')->get();
 
         $this->activeColorIds = $this->product
             ? $this->product->colors->pluck('id')->toArray()

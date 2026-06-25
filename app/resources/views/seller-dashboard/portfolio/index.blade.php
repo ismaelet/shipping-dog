@@ -178,7 +178,7 @@
 										</a>
 
 										<div>
-											<p class="fc-titles">{{ $product->name }}</p>
+											<h4 class="text-neutral-heading text-lg">{{ $product->name }}</h4>
 											<p class="">{{ $product->type->name }}</p>
 
 											@if (!$product->status)

@@ -24,21 +24,23 @@
 				$relatedProduct = $variant->products->where('design_id', $product->design_id)->first();
 			@endphp
 
-			<div class="">
-				<input
-					type="radio"
-					name="variant_id"
-					class="hidden"
-					@checked($product->type->id == $variant->id)
-				>
+			@if ($relatedProduct)
+				<div class="">
+					<input
+						type="radio"
+						name="variant_id"
+						class="hidden"
+						@checked($product->type->id == $variant->id)
+					>
 
-				<a
-					href="{{ $relatedProduct->url() }}"
-					class="gend_lbl"
-				>
-					<p class="gend_txt">{{ $variant->name }}</p>
-				</a>
-			</div>
+					<a
+						href="{{ $relatedProduct->url() }}"
+						class="gend_lbl"
+					>
+						<p class="gend_txt">{{ $variant->name }}</p>
+					</a>
+				</div>
+			@endif
 		@endforeach
 
 	</div>

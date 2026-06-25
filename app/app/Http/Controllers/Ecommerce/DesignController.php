@@ -123,7 +123,7 @@ class DesignController extends Controller {
     }
 
     /**
-     * * Custom action: upload image
+     * Custom action: upload image
      */
     public function uploadImage(Design $design, Request $request): RedirectResponse {
         // Validate the request
@@ -141,9 +141,6 @@ class DesignController extends Controller {
                     'file_vector.mimes' => 'Il file deve essere un PDF o AI',
                 ]
             );
-
-            // Upload the vector image
-            $response = $this->uploadVectorImage($design, $request->file('file_vector'));
         } else {
             // Validate the file type
             $inputName = $request->type == 'light' ? 'file_light' : 'file_dark';
@@ -162,7 +159,7 @@ class DesignController extends Controller {
     }
 
     /**
-     * * Custom action: update tags
+     * Custom action: update tags
      */
     public function updateTags(Design $design, Request $request): RedirectResponse {
         $request->validate([
@@ -176,7 +173,7 @@ class DesignController extends Controller {
     }
 
     /**
-     * * Custom action: update background color
+     * Custom action: update background color
      */
     public function updateBackgroundColor(Design $design, Request $request): RedirectResponse {
         $request->validate([
@@ -191,12 +188,14 @@ class DesignController extends Controller {
     }
 
     /**
-     * * Custom action: update default color
+     * Custom action: update default color
      */
     public function updateDefaultColor(Design $design, Request $request): RedirectResponse {
         $request->validate([
             'default_color_id' => ['required', 'integer', 'exists:product_colors,id'],
         ]);
+
+        $design->load('products.type', 'products.type.colors', 'products.colors');
 
         $design->update([
             'default_color_id' => $request->default_color_id,
@@ -214,7 +213,7 @@ class DesignController extends Controller {
     }
 
     /**
-     * ~ Helper method: upload image
+     * Helper method: upload image
      */
     private function uploadImageHelper(Design $design, UploadedFile $file, string $variant = 'light'): bool {
         $design->load('products', 'products.color', 'products.type', 'products.position');

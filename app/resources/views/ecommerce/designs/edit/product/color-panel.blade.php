@@ -2,7 +2,6 @@
 @use('App\Models\Ecommerce\Product\ProductTypeMockupSize')
 
 @php
-	$function = 'saveColorChange';
 	$productTypeMockup = ProductTypeMockupSize::firstByTypeId($product->type_id, $product->position_id);
 
 	$productMockup = ProductMockup::where('product_id', $product->id)
@@ -30,18 +29,6 @@
 
 	@pushOnce('scripts')
 		<script>
-			function saveColorChange(button) {
-				const colorPanel = button.closest('[data-panel]');
-				const productId = button.closest('[data-product-id]').dataset.productId;
-				const activeColors = colorPanel.querySelectorAll('[data-active-color]:checked');
-				const defaultColor = colorPanel.querySelector('[data-default-color]:checked');
-				const colors = Array.from(activeColors).map(activeColor => activeColor.value);
-				const colorId = defaultColor.value ?? 1;
-				const colorTag = defaultColor.dataset.defaultColorTag;
-
-				return updateProduct(productId, colorId, colors, colorTag)
-			}
-
 			function updateProduct(productId, colorId, colors, colorTag) {
 				return axios.patch(`/api/products/${productId}`, {
 						color_id: colorId,
@@ -88,40 +75,16 @@
 	@endpushOnce
 
 	<section
-		class="section<?= $key + 1 ?> section colors <?= $key == 0 ? 'active' : '' ?> grid grid-cols-1 lg:grid-cols-2"
+		class="section<?= $key + 1 ?> section colors <?= $key == 0 ? 'active' : '' ?>"
 		data-image-position="<?= $product->position->basicPositionId() ?>"
 		data-panel
 	>
 
-		{{-- Preview image --}}
-		@include('ecommerce.designs.edit.product.static-preview')
-
-		<div class="data">
-
-			<input
-				type="hidden"
-				name="product_id"
-				value="<?= $product->id ?>"
-			>
-
-			<div class="item-colors-field colors-pan grid gap-8">
-				<x-heading.component class="text-center">Seleziona i colori disponibili</x-heading.component>
-
-				<p class="">Qui puoi selezionare i vari colori disponibili per questo capo e il colore principale,
-					che verrà mostrato in tutte le anteprime.</p>
-
-				<div class="colors-pan grid gap-8">
-
-					{{-- Active colors --}}
-					@include('ecommerce.designs.edit.product.active-colors')
-
-					<!-- Default color -->
-					@include('ecommerce.designs.edit.product.default-color')
-				</div>
-
-				@include('ecommerce.designs.edit.product.save-button')
-			</div>
-		</div>
+		<livewire:ecommerce.designs.edit.product-colors
+			:product="$product"
+			:position-id="$product->position_id"
+			:key="'product-colors-' . $product->id"
+		/>
 
 	</section>
 @endif

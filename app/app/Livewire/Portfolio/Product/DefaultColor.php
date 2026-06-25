@@ -29,7 +29,7 @@ class DefaultColor extends Component {
      * Lifecycle Method: Mount the component
      */
     public function mount() {
-        $this->colors =  $this->product?->colors;
+        $this->colors = $this->product?->colors()->orderBy('reorder')->orderBy('id')->get();
         $this->defaultColorId = $this->product?->color_id;
     }
 

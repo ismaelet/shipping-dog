@@ -85,10 +85,15 @@ class FileHelper {
 
         // Get image data
         $srcImg = is_a($file, TemporaryUploadedFile::class) ? $file->getRealPath() : $file->getPathname();
-        $srcType = exif_imagetype($srcImg);
         $srcResolution = getimagesize($srcImg);
-        $srcWidth = $srcResolution[0] ?? 0;
-        $srcHeight = $srcResolution[1] ?? 0;
+
+        if ($srcResolution === false) {
+            throw new Exception('The uploaded file is not a valid image.');
+        }
+
+        $srcType = $srcResolution[2];
+        $srcWidth = $srcResolution[0];
+        $srcHeight = $srcResolution[1];
 
         // Create the storage directory if it doesn't exist
         if (!Storage::directoryExists('public/' . $fileDirectory)) {

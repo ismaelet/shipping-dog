@@ -191,7 +191,7 @@
 
 			@foreach ($imagePositionTypes->where('base_of', null) ?? [] as $position)
 				<div class="surface grid grid-cols-1 gap-8 p-4">
-					<h3>Stampa {{ strtolower($position->name) }}</h3>
+					<h3>Immagine {{ strtolower($position->name) }}</h3>
 
 					<livewire:portfolio.product.upload-image
 						:positionId="$position->id"

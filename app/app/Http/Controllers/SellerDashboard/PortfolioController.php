@@ -177,7 +177,7 @@ class PortfolioController extends Controller {
             'product' => $product,
             'types' => $types,
             'colors' => $colors,
-            'imagePositionTypes' => $product->type?->positions,
+            'imagePositionTypes' => $product->type?->all_positions,
         ]);
     }
 
