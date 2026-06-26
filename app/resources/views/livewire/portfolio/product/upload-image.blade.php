@@ -4,7 +4,7 @@
 			<h4>{{ $colorName }}</h4>
 
 			<livewire:upload-image
-				:key="'upload-' . $colorName"
+				:key="'upload-' . $positionId . '-' . $colorName"
 				:url="$image['url']"
 				:quality="$image['quality']"
 				:size="$image['size']"

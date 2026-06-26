@@ -3,6 +3,7 @@
 use App\Http\Controllers\Ecommerce\DesignController;
 use App\Http\Controllers\Ecommerce\PaymentRequestController;
 use App\Http\Controllers\Ecommerce\SaleController;
+use App\Http\Controllers\SellerDashboard\CustomProductController;
 use App\Http\Controllers\SellerDashboard\PortfolioController;
 use App\Http\Controllers\SellerDashboard\PricingController;
 use App\Http\Controllers\SellerDashboard\SellerDashboardController;
@@ -25,12 +26,11 @@ Route::prefix('/seller')->middleware(Seller::class)->name('seller-dashboard')->g
     Route::post('/portfolio/sort', [PortfolioController::class, 'sort'])->name('.portfolio.sort');
 
     // Custom products
-    Route::get('/portfolio/products/add', [PortfolioController::class, 'create'])->name('.portfolio.products.add');
-    Route::get('/portfolio/products/{product}', [PortfolioController::class, 'show'])->name('.portfolio.products.show');
-    Route::post('/portfolio/products/store', [PortfolioController::class, 'store'])->name('.portfolio.products.store');
-    Route::post('/portfolio/products/{product}/update', [PortfolioController::class, 'update'])->name('.portfolio.products.update');
-    Route::post('/portfolio/products/{product}/upload-image/{color}', [PortfolioController::class, 'uploadProductImage'])->name('.portfolio.products.upload-image');
-    Route::post('/portfolio/products/{product}/delete', [PortfolioController::class, 'delete'])->name('.portfolio.products.delete');
+    Route::get('/portfolio/products/add', [CustomProductController::class, 'create'])->name('.portfolio.products.add');
+    Route::get('/portfolio/products/{product}', [CustomProductController::class, 'show'])->name('.portfolio.products.show');
+    Route::post('/portfolio/products/store', [CustomProductController::class, 'store'])->name('.portfolio.products.store');
+    Route::post('/portfolio/products/{product}/update', [CustomProductController::class, 'update'])->name('.portfolio.products.update');
+    Route::post('/portfolio/products/{product}/delete', [CustomProductController::class, 'delete'])->name('.portfolio.products.delete');
 
     // Sales
     Route::get('/sales', [SaleController::class, 'index'])->name('.sales');

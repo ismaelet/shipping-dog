@@ -7,7 +7,6 @@ use App\Legacy\Ecommerce\Product\Type;
 use App\Legacy\System\DB;
 use App\Models\Ecommerce\Seller\SellerPrice;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -15,11 +14,8 @@ class PricingController extends Controller {
 
     /**
      * Display the pricing page for the seller.
-     * 
-     * @param Request $request
-     * @return View
      */
-    public function index(Request $request): View {
+    public function index(): View {
         $seller = Auth::user()->seller;
 
         $res_cloth = DB::select('id FROM product_types WHERE category=? AND hidden = 0 ORDER BY id ASC', ['c']);

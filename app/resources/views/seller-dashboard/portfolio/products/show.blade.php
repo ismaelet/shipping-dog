@@ -1,3 +1,9 @@
+@php
+	$initialTypeId = old('type_id', isset($product) ? $product->type_id : $types->first()?->id);
+
+	$initialPrice = old('price', isset($product) ? number_format($product->price()->price, 2, '.', '') : null);
+@endphp
+
 @pushOnce('styles')
 	<style>
 		.colors {
@@ -64,6 +70,110 @@
 	</style>
 @endpushOnce
 
+@pushOnce('scripts')
+	<script>
+		document.addEventListener('alpine:init', () => {
+			Alpine.data('productPricing', (
+				references,
+				initialTypeId,
+				initialPrice = null,
+			) => ({
+				references,
+				typeId: Number(initialTypeId),
+				price: initialPrice,
+				gainW: 0,
+				gainC: 0,
+				minimumPrice: 0,
+
+				init() {
+					const reference = this.currentReference();
+
+					if (this.price === null || this.price === '') {
+						this.price = reference.price;
+					}
+
+					this.calculate();
+				},
+
+				currentReference() {
+					return this.references[this.typeId] ?? {
+						price: 0,
+						gain_w: 0,
+						gain_c: 0,
+						minimum_price: 0,
+					};
+				},
+
+				changeType() {
+					const reference = this.currentReference();
+
+					/*
+					 * Reset to the standard price of the newly selected type.
+					 * This avoids carrying a price from one product type to
+					 * another product type with different underlying costs.
+					 */
+					this.price = reference.price;
+
+					this.calculate();
+				},
+
+				calculate() {
+					const reference = this.currentReference();
+
+					let price = this.parseNumber(this.price);
+					const referencePrice = this.parseNumber(reference.price);
+					const referenceGainW = this.parseNumber(reference.gain_w);
+					const referenceGainC = this.parseNumber(reference.gain_c);
+
+					const baseW = referencePrice - referenceGainW / 0.75;
+					const baseC = referencePrice - referenceGainC / 0.75;
+
+					this.minimumPrice = this.parseNumber(
+						reference.minimum_price
+					);
+
+					if (price < 0) {
+						price = 0;
+					}
+
+					this.gainW = Math.max(
+						0,
+						(price - baseW) *
+						0.75,
+					).toFixed(2);
+
+					this.gainC = Math.max(
+						0,
+						(price - baseC) * 0.75,
+					).toFixed(2);
+				},
+
+				normalizePrice() {
+					let price = this.parseNumber(this.price);
+
+					if (price < this.minimumPrice) {
+						price = this.minimumPrice;
+					}
+
+					this.price = price.toFixed(2);
+
+					this.calculate();
+				},
+
+				parseNumber(value) {
+					const normalized = String(value ?? '')
+						.replace(',', '.')
+						.replace(/[^\d.-]/g, '');
+
+					const number = Number.parseFloat(normalized);
+
+					return Number.isFinite(number) ? number : 0;
+				},
+			}));
+		});
+	</script>
+@endpushOnce
+
 <x-layouts.seller-dashboard>
 
 	<form
@@ -74,11 +184,13 @@
 	>
 		@csrf
 
-		<input
-			type="hidden"
-			name="id"
-			value="{{ isset($product) ? $product->id : $tempId }}"
-		>
+		@if (!isset($product))
+			<input
+				type="hidden"
+				name="temp_id"
+				value="{{ $tempId }}"
+			>
+		@endif
 
 		<div class="grid gap-4">
 			<h1 class="txt-2rem">
@@ -114,37 +226,80 @@
 				@enderror
 			</div>
 
-			<div class="grid gap-4 md:grid-cols-4">
-				<div class="form-field md:col-span-3">
+			<div
+				class="grid gap-4 md:grid-cols-5"
+				x-data="productPricing(
+	    @js($priceReferences),
+	    @js($initialTypeId),
+	    @js($initialPrice)
+	)"
+			>
+				<div class="form-field md:col-span-2">
 					<x-label>Tipo di prodotto:</x-label>
 
 					<select
-						class="select"
+						class="select self-end"
 						name="type_id"
+						x-model.number="typeId"
+						x-on:change="changeType"
+						required
 					>
-
 						@foreach ($types as $type)
 							<option
 								value="{{ $type->id }}"
-								{{ isset($product) && $product->type_id == $type->id ? 'selected' : '' }}
+								@selected((int) $initialTypeId === $type->id)
 							>
 								{{ $type->name }}
 							</option>
 						@endforeach
-
 					</select>
 				</div>
 
 				<div class="form-field">
 					<x-label>Prezzo:</x-label>
 
+					<div class="price-input flex self-end">
+						<input
+							type="number"
+							class="input grow"
+							name="price"
+							x-model="price"
+							x-on:input="calculate"
+							x-on:blur="normalizePrice"
+							x-bind:min="minimumPrice"
+							step="0.01"
+							placeholder="Prezzo"
+							required
+						>
+					</div>
+				</div>
+
+				<div class="form-field">
+					<x-label>Guadagno capi chiari:</x-label>
+					<p>Calcolato automaticamente</p>
+
 					<div class="price-input flex">
 						<input
 							type="text"
 							class="input grow"
-							name="price"
-							value="{{ isset($product) ? $product->fullPrice() : '0.00' }}"
-							placeholder="Prezzo"
+							x-bind:value="`${gainW} €`"
+							placeholder="Guadagno capi chiari"
+							readonly
+						>
+					</div>
+				</div>
+
+				<div class="form-field">
+					<x-label>Guadagno capi scuri:</x-label>
+					<p>Calcolato automaticamente</p>
+
+					<div class="price-input flex">
+						<input
+							type="text"
+							class="input grow"
+							x-bind:value="`${gainC} €`"
+							placeholder="Guadagno capi scuri"
+							readonly
 						>
 					</div>
 				</div>
@@ -272,6 +427,7 @@
 					variant="secondary"
 					color="danger"
 					formaction="{{ route('seller-dashboard.portfolio.products.delete', $product) }}"
+					onclick="return confirm('Sei sicuro di voler eliminare questo prodotto? Questa azione non può essere annullata.')"
 				>
 					{!! embed_icon('delete') !!}
 					Elimina il prodotto

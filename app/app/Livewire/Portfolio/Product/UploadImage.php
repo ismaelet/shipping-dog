@@ -66,20 +66,25 @@ class UploadImage extends Component {
      * Helper method: generate the image data for the product
      */
     private function genImageData(): array {
-        $productId = $this->product ? $this->product->id : $this->tempId;
         $positionId = $this->positionId;
-        $colors = $this->colors ? $this->colors->toArray() : [];
+        $colors = $this->colors?->toArray() ?? [];
 
         $images = [];
 
         foreach ($colors as $color) {
+            if ($this->product) {
+                $basePath = "products/custom/{$this->product->id}-{$color['tag']}-{$positionId}";
+            } else {
+                $basePath = "products/temp/{$this->tempId}/{$color['tag']}-{$positionId}";
+            }
+
             $images[$color['name']] = [
                 'size' => [1024, 400],
                 'quality' => [90, 80],
                 'url' => [
-                    "products/custom/{$productId}-{$color['tag']}-{$positionId}-1024.webp",
-                    "products/custom/{$productId}-{$color['tag']}-{$positionId}-400.webp"
-                ]
+                    "{$basePath}-1024.webp",
+                    "{$basePath}-400.webp",
+                ],
             ];
         }
 
