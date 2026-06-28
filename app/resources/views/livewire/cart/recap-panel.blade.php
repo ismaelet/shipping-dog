@@ -11,21 +11,21 @@
 	<div class="grid grid-cols-1 gap-4">
 		<div class="chck_item flex justify-between">
 			<p class="">Articoli</p>
-			<p class="js-cart-products-price font-semibold text-neutral-700"><?= $order->fullOrderItemsPriceString() ?></p>
+			<p class="js-cart-products-price font-semibold text-neutral-700">{{ price($order->fullOrderItemsPrice()) }}</p>
 		</div>
 
 		<div class="chck_item flex justify-between">
 			<p>Spedizione</p>
 			<p
 				class="js-cart-shipping-price-string js-recap-shipping-price font-semibold text-neutral-700"
-				data-shipping-method-id="<?= $order->shippingMethodId ?>"
-			><?= $order->shippingFeeString() ?></p>
+				data-shipping-method-id="{{ $order->shippingMethodId }}"
+			>{{ price($order->shippingFee()) }}</p>
 		</div>
 
 		@if ($order->discount())
 			<div class="chck_item flex justify-between">
 				<p>Sconto</p>
-				<p class="font-semibold text-neutral-700">- <?= $order->discountString() ?></p>
+				<p class="font-semibold text-neutral-700">- {{ price($order->discount()) }}</p>
 			</div>
 		@endif
 

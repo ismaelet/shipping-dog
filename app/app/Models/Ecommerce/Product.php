@@ -209,7 +209,7 @@ class Product extends Model {
             'product_product_color',
             'product_id',
             'product_color_id'
-        );
+        )->orderBy('reorder');
     }
 
     /**

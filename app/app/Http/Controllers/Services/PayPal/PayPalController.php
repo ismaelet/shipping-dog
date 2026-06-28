@@ -310,7 +310,7 @@ class PayPalController extends Controller {
                 'name' => $orderItem->product_with_trashed->name,
                 'unit_amount' => [
                     'currency_code' => 'EUR',
-                    'value' => number_format($orderItem->price(), 2),
+                    'value' => number_format($orderItem->unit_amount_to_pay, 2),
                 ],
                 'quantity' => $orderItem->quantity,
                 'category' => 'PHYSICAL_GOODS',

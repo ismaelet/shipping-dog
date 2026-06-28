@@ -16,16 +16,6 @@ class CartAddressController extends Controller {
      */
     public function index(): View {
         $cart = cart();
-        $cart->load(
-            'order_items.color',
-            'order_items.position',
-            'order_items.size',
-            'order_items.product',
-            'order_items.product.type',
-            'order_items.product_with_trashed',
-            'order_items.product_with_trashed.design_with_trashed',
-            'order_items.product_with_trashed.type',
-        );
 
         $address = $cart->address;
 
@@ -49,6 +39,17 @@ class CartAddressController extends Controller {
             // if the shipping is free, fetch only the free shipping method
             $shippingMethods = ShippingMethod::where('id', ShippingMethod::FREE_SHIPPING_METHODS[0])->get();
         }
+
+        $cart->load(
+            'order_items.color',
+            'order_items.position',
+            'order_items.size',
+            'order_items.product',
+            'order_items.product.type',
+            'order_items.product_with_trashed',
+            'order_items.product_with_trashed.design_with_trashed',
+            'order_items.product_with_trashed.type',
+        );
 
         return view('ecommerce.cart.address')
             ->with([

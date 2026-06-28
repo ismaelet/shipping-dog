@@ -10,7 +10,7 @@
 			<x-icon-close />
 			Non usare il credito
 		</x-button>
-	@elseif ($elegible)
+	@elseif ($eligible)
 		<x-button
 			class="full-width"
 			variant="secondary"

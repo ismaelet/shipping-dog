@@ -106,11 +106,11 @@ class FeedEntry {
 
             case 2:
                 $text = $this->orderItem->product ?
-                    'Hai venduto <span class="font-semibold text-neutral-700">' . $this->orderItem->quantity . ' x</span> <a class="design" href="' . $this->orderItem->product->url() . '">' . $this->orderItem->product->name . '</a> per <span class="font-semibold text-neutral-700">' . $this->orderItem->gainString() . '</span>'
+                    'Hai venduto <span class="font-semibold text-neutral-700">' . $this->orderItem->quantity . ' x</span> <a class="design" href="' . $this->orderItem->product->url() . '">' . $this->orderItem->product->name . '</a> per <span class="font-semibold text-neutral-700">' . price($this->orderItem->total_seller_earnings_after_reduction) . '</span>'
 
                     :
 
-                    'Hai venduto <span class="font-semibold text-neutral-700">' . $this->orderItem->quantity . ' x</span> <span class="design">prodotto rimosso</span> per <span class="font-semibold text-neutral-700">' . $this->orderItem->gainString() . '</span>';
+                    'Hai venduto <span class="font-semibold text-neutral-700">' . $this->orderItem->quantity . ' x</span> <span class="design">prodotto rimosso</span> per <span class="font-semibold text-neutral-700">' . price($this->orderItem->total_seller_earnings_after_reduction) . '</span>';
                 break;
 
             case 3:

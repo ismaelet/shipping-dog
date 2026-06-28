@@ -14,7 +14,12 @@ class Position extends Component {
     public Product $product;
 
     /**
-     * Property: The selected color ID
+     * Property: The default position ID
+     */
+    public int $defaultPositionId;
+
+    /**
+     * Property: The selected position ID
      */
     public int $selectedPositionId;
 
@@ -26,10 +31,9 @@ class Position extends Component {
     /**
      * Lifecycle method: Mount the component
      */
-    public function mount(Product $product) {
-        $this->product = $product;
-        $this->selectedPositionId = $product?->position->id ?: 0;
-        $this->positions = $product->positions();
+    public function mount() {
+        $this->selectedPositionId = $this->defaultPositionId;
+        $this->positions = $this->product->positions();
     }
 
     /**

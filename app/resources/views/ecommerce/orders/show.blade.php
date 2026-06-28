@@ -158,7 +158,14 @@
 			</div>
 
 			<div class="grid gap-6 sm:gap-8">
-				<livewire:cart.order-items-panel :order="$order" />
+				<section
+					id="items"
+					class="cart-panel surface"
+				>
+					<x-heading.component>Articoli</x-heading.component>
+
+					<livewire:cart.order-items-list :order="$order" />
+				</section>
 
 				<livewire:cart.recap-panel :order="$order" />
 			</div>

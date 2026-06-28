@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class ProductController extends Controller {
 
     /**
-     * * Action: show
+     * Resource action: Display the specified product
      */
     public function show(Product $product, Request $request): View|RedirectResponse {
         if (
@@ -50,6 +50,10 @@ class ProductController extends Controller {
 
         $productColors = $product->colors;
 
+        $defaultColor = $productColors->firstWhere('id', $product->color_id) ?? $productColors->first();
+        $defaultSize = $product->type->sizes->first();
+        $defaultPosition = $product->type->positions->first();
+
         $warning = Warning::currentWarning();
 
         return view('ecommerce.product', [
@@ -58,6 +62,9 @@ class ProductController extends Controller {
             'title' => $title,
             'thumbnail' => $thumbnail,
             'productColors' => $productColors,
+            'defaultColor' => $defaultColor,
+            'defaultSize' => $defaultSize,
+            'defaultPosition' => $defaultPosition,
             'relatedGarments' => $relatedGarments,
             'relatedAccessories' => $relatedAccessories,
             'warning' => $warning,
@@ -65,7 +72,7 @@ class ProductController extends Controller {
     }
 
     /**
-     * * Custom action: Change the status
+     * Custom action: Change the status
      */
     public function changeStatus(Product $product, Request $request): RedirectResponse {
         $request->validate([

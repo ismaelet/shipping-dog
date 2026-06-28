@@ -146,7 +146,7 @@ class ShippingMethod extends Model {
     /**
      * Get the default shipping method ID
      */
-    public static function defaultShppingMethodId(): int {
+    public static function defaultShippingMethodId(): int {
         return ShippingMethod::whereRaw('FIND_IN_SET(tag, "sta,pre,rit") > 0')
             ->orderByDesc('tier')
             ->first()

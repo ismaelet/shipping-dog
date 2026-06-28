@@ -23,7 +23,7 @@ class OrderStatusMail extends Mailable {
      * Create a new message instance
      */
     public function __construct(Order $order) {
-        $this->order = $order;
+        $this->order = $order->loadMissing(['order_items', 'order_items.product']);
         $this->subject = 'Aggiornamento dell\'ordine ' . $order->idCode() . ': ' . $order->statusName();
     }
 

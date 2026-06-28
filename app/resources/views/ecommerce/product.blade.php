@@ -25,14 +25,20 @@
 		<x-product.data
 			:$product
 			:$productColors
+			:$defaultColor
+			:$defaultSize
+			:$defaultPosition
 			:$warning
 		/>
+
 		<x-product.tags :$product />
+
 		<x-product.other-types
 			:$product
 			:$relatedGarments
 			:$relatedAccessories
 		/>
+
 		<x-product.related-products :$product />
 	</div>
 </x-layouts.legacy-main>

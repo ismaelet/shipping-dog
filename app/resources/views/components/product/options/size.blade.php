@@ -10,6 +10,7 @@
 <section
 	id="size"
 	class="field"
+	x-data
 >
 	<x-label class="field-label text-sm">
 
@@ -34,6 +35,7 @@
 					name="size_id"
 					value="{{ $size->id }}"
 					@checked($loop->first)
+					@click="$dispatch('change-size', { id: {{ $size->id }} })"
 				>
 				{{ $size->name }}
 			</label>

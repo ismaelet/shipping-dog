@@ -3,6 +3,7 @@
 namespace App\Livewire\Product\Options;
 
 use App\Models\Ecommerce\Product;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class Color extends Component {
@@ -10,7 +11,14 @@ class Color extends Component {
     /**
      * Property: The product instance
      */
+    #[Locked]
     public Product $product;
+
+    /**
+     * Property: The default color ID
+     */
+    #[Locked]
+    public int $defaultColorId;
 
     /**
      * Property: The selected color ID
@@ -20,9 +28,8 @@ class Color extends Component {
     /**
      * Lifecycle method: Mount the component
      */
-    public function mount(Product $product) {
-        $this->product = $product;
-        $this->selectedColorId = $product->color_id;
+    public function mount() {
+        $this->selectedColorId = $this->defaultColorId;
     }
 
     /**

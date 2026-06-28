@@ -18,8 +18,6 @@ use App\Http\Middleware\Cart;
 use App\Http\Middleware\EmptyCart;
 use App\Http\Middleware\HasChangeRequestAccess;
 use App\Http\Middleware\OrderRecap;
-use App\Http\Middleware\Refund;
-use App\Http\Middleware\RefundSkip;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -60,9 +58,6 @@ Route::prefix('cart')->name('cart')->group(function () {
     // Redirect to the current cart step
     Route::get('', [CartController::class, 'index'])->middleware(Cart::class)->name('');
 
-    // Remove an item from the cart
-    Route::post('/remove/{orderItem}', [CartController::class, 'removeOrderItem'])->name('.remove');
-
     // Cart step: Access
     Route::get('/access', [CartAccessController::class, 'index'])->middleware(Cart::class)->name('.access');
     Route::post('/access/guest', [CartAccessController::class, 'guestLogin'])->name('.access.guest');
@@ -79,21 +74,15 @@ Route::prefix('cart')->name('cart')->group(function () {
     Route::post('/payment', [CartPaymentController::class, 'update'])->middleware(Cart::class)->name('.payment');
 });
 
-/**
- *  * Payment
- */
-Route::get('cart/pay/free', [FreeController::class, 'process'])->name('cart.payment.free');
-
-/**
- * * Order Item
- */
-// Create an order
-Route::resource('order-items', OrderItemController::class)->only(['store']);
-
 // Empty cart
 Route::get('/cart/empty', function () {
     return view('ecommerce.cart.empty');
 })->middleware(EmptyCart::class)->name('cart.empty');
+
+/**
+ *  * Payment
+ */
+Route::get('cart/pay/free', [FreeController::class, 'process'])->name('cart.payment.free');
 
 /**
  * * Order

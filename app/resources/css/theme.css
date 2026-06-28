@@ -129,6 +129,9 @@
   --color-error-500: hsl(0deg 100% 40%);
   --color-error-400: hsl(0deg 100% 50%);
 
+  --color-background-300: hsl(0deg, 0% 100%);
+  --color-background-400: hsl(0deg, 0% 100%);
+
   --color-background: hsl(
     var(--theme-h),
     var(--theme-dark-s),
@@ -161,6 +164,9 @@
 .dark {
   --color-neutral-heading: #fff;
   --color-neutral-border: var(--color-neutral-dark-300);
+
+  --color-background-300: hsl(220deg 28% 16%);
+  --color-background-400: hsl(220deg 28% 10%);
 }
 
 .light {

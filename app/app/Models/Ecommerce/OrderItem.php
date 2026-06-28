@@ -9,6 +9,7 @@ use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPosition;
 use App\Models\Ecommerce\Product\ProductSize;
 use App\Models\Ecommerce\Product\ProductType;
+use App\Services\Ecommerce\OrderItemAmountCalculator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -218,80 +219,10 @@ class OrderItem extends Model {
     }
 
     /**
-     * Get the gross price of a single product
-     */
-    public function grossProductPrice(): float {
-        return $this->total_amount_before_discount;
-    }
-
-    /**
-     * Get the discount of a single product
-     */
-    public function productDiscount(): float {
-        return $this->total_discount;
-    }
-
-    /**
-     * Get the price of a single product
-     */
-    public function productPrice(): float {
-        return $this->grossProductPrice() - $this->productDiscount();
-    }
-
-    /**
-     * Get the total gross price of the order
-     */
-    public function grossPrice(): float {
-        return $this->grossProductPrice() * $this->quantity;
-    }
-
-    /**
-     * Get the total discount
-     */
-    public function discount(): float {
-        return $this->credit ? $this->grossProductPrice() : $this->productDiscount() * $this->quantity;
-    }
-
-    /**
      * Get the used credit for the order item
      */
     public function usedCredit(): float {
         return $this->credit ? $this->total_amount_after_discount : 0;
-    }
-
-    /**
-     * Get the total price of the order
-     */
-    public function price(): float {
-        return $this->credit ? 0 : round($this->grossPrice() - $this->discount(), 2);
-    }
-
-    /**
-     * The total show price of the order
-     */
-    public function shownPrice(): float {
-        return $this->total_amount_after_discount;
-    }
-
-    /**
-     * Get the price of the order as a formatted string
-     */
-    public function priceString(): string {
-        return EcommerceHelper::formatPrice($this->price());
-    }
-
-    /**
-     * Get the gross price of the order as a formatted string
-     */
-    public function grossPriceString(): string {
-        return EcommerceHelper::formatPrice($this->grossPrice());
-    }
-
-    /**
-     * Get the seller's total gain for the order as a formatted string
-     */
-    public function gainString(): string {
-        return EcommerceHelper::formatPrice($this->total_seller_earnings_after_reduction, true);
     }
 
     /**
@@ -310,87 +241,21 @@ class OrderItem extends Model {
 
     /**
      * Update the prices of the order item
+     * 
+     * ! Right not this only depends on if the user is the owner of the product,
+     * ! but in the future it should depend on the coupon applied to the order or general promotions
      */
     public function updatePrices(): self {
-        // Anchor values to calculate the amounts and discounts
-        $unitAmountBeforeDiscount = $this->product->fullPrice();
+        $amounts = app(OrderItemAmountCalculator::class)->calculate(
+            product: $this->product,
+            color: $this->color,
+            quantity: $this->quantity,
+            credit: (bool) $this->credit,
+        );
 
-        // ! Right not this only depends on if the user is the owner of the product, but in the future it should depend on the coupon applied to the order or general promotions
-        $unitDiscount = $this->product->customerDiscount();
-
-        // Dependent values
-        $totalAmountBeforeDiscount = $unitAmountBeforeDiscount * $this->quantity;
-
-        $totalDiscount = $unitDiscount * $this->quantity;
-
-        $unitAmountAfterDiscount = $unitAmountBeforeDiscount - $unitDiscount;
-        $totalAmountAfterDiscount = $unitAmountAfterDiscount * $this->quantity;
-
-        $unitAmountToPay = $this->credit ? 0 : $unitAmountAfterDiscount;
-        $totalAmountToPay = $unitAmountToPay * $this->quantity;
-
-        // Update the order item with the new calculated values
-        $this->update([
-            'unit_amount_before_discount' => $unitAmountBeforeDiscount,
-            'total_amount_before_discount' => $totalAmountBeforeDiscount,
-            'unit_discount' => $unitDiscount,
-            'total_discount' => $totalDiscount,
-            'unit_amount_after_discount' => $unitAmountAfterDiscount,
-            'total_amount_after_discount' => $totalAmountAfterDiscount,
-            'unit_amount_to_pay' => $unitAmountToPay,
-            'total_amount_to_pay' => $totalAmountToPay,
-        ]);
-
-        // Update the seller earnings of the order
-        $this->updateSellerEarnings();
+        $this->update($amounts);
 
         return $this;
-    }
-
-    /**
-     * Updates the seller earnings of the order
-     */
-    public function updateSellerEarnings(): self {
-        // Anchor values to calculate the earnings and reductions
-        $unitSellerEarningsBeforeReduction = $this->product->sellerEarningBeforeReduction($this->color);
-
-        // ! Right not this only depends on if the user is the owner of the product, but in the future it should depend on the coupon applied to the order or general promotions
-        $unitDiscount = $this->product->userIsOwner() ? $unitSellerEarningsBeforeReduction : 0;
-
-        // Dependent values
-        $totalSellerEarningsBeforeReduction = $unitSellerEarningsBeforeReduction * $this->quantity;
-
-        $totalSellerReduction = $unitDiscount * $this->quantity;
-
-        $unitSellerEarningsAfterReduction = $unitSellerEarningsBeforeReduction - $unitDiscount;
-        $totalSellerEarningsAfterReduction = $unitSellerEarningsAfterReduction * $this->quantity;
-
-        $this->update([
-            'unit_seller_earnings_before_reduction' => $unitSellerEarningsBeforeReduction,
-            'total_seller_earnings_before_reduction' => $totalSellerEarningsBeforeReduction,
-            'unit_seller_reduction' => $unitDiscount,
-            'total_seller_reduction' => $totalSellerReduction,
-            'unit_seller_earnings_after_reduction' => $unitSellerEarningsAfterReduction,
-            'total_seller_earnings_after_reduction' => $totalSellerEarningsAfterReduction,
-        ]);
-
-        return $this;
-    }
-
-    /**
-     * Deletes the order
-     */
-    public function delete(): bool|null {
-        $result = parent::delete();
-        $order = $this->order;
-
-        if ($order->order_items->isEmpty()) {
-            $order->delete();
-        } else {
-            $order->updateOrderItems();
-        }
-
-        return $result;
     }
 
     /**

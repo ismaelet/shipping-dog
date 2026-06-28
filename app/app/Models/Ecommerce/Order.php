@@ -77,9 +77,6 @@ class Order extends Model {
     }
 
     /**
-     * * Relationships
-     */
-    /**
      * Get the order's user.
      *
      * @return BelongsTo
@@ -154,6 +151,13 @@ class Order extends Model {
      */
     public function createdAtString(): string {
         return date('d/m/Y', strtotime($this->created_at));
+    }
+
+    /**
+     * Check if the order is empty (has no order items)
+     */
+    public function isEmpty(): bool {
+        return !$this->order_items()->exists();
     }
 
     /**
@@ -271,7 +275,7 @@ class Order extends Model {
         $orderItemsPrice = 0;
 
         foreach ($this->order_items as $orderItem) {
-            $orderItemsPrice += $orderItem->price();
+            $orderItemsPrice += $orderItem->total_amount_to_pay;
         }
 
         return $orderItemsPrice;
@@ -284,7 +288,7 @@ class Order extends Model {
         $price = 0;
 
         foreach ($this->order_items as $orderItem) {
-            $price += $orderItem->grossPrice();
+            $price += $orderItem->total_amount_before_discount;
         }
 
         return $price;
@@ -343,7 +347,7 @@ class Order extends Model {
         $orderItemsDiscount = 0;
 
         foreach ($this->order_items as $orderItem) {
-            $orderItemsDiscount += $orderItem->discount();
+            $orderItemsDiscount += $orderItem->total_discount;
         }
 
         return $orderItemsDiscount;
@@ -361,13 +365,6 @@ class Order extends Model {
      */
     public function priceString(): string {
         return EcommerceHelper::formatPrice($this->price);
-    }
-
-    /**
-     * ~ Attribute: Full Order Items Price String
-     */
-    public function fullOrderItemsPriceString(): string {
-        return EcommerceHelper::formatPrice($this->fullOrderItemsPrice());
     }
 
     /**
@@ -436,12 +433,8 @@ class Order extends Model {
      * Update the order's quantity.
      */
     public function updateQuantity(): self {
-        $this->quantity = $this->order_items->sum('quantity');
+        $this->quantity = $this->order_items()->sum('quantity');
         $this->save();
-
-        if (!$this->quantity) {
-            $this->delete();
-        }
 
         return $this;
     }

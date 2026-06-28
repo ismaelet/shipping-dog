@@ -31,9 +31,9 @@ class RecapPanel extends Component {
     }
 
     /**
-     * Event listener: Refresh the order items when the 'orderItemsUpdated' event is dispatched
+     * Event listener: Refresh the order items when the 'order-items-updated' event is dispatched
      */
-    #[On('orderItemsUpdated')]
+    #[On('order-items-updated')]
     public function refreshOrderItems(): void {
         $this->refreshOrder();
     }

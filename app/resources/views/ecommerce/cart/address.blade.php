@@ -44,7 +44,14 @@
 		>
 
 			{{-- Order items --}}
-			<livewire:cart.order-items-panel :order="$cart" />
+			<section
+				id="items"
+				class="cart-panel surface"
+			>
+				<x-heading.component>Articoli</x-heading.component>
+
+				<livewire:cart.order-items-list :order="$cart" />
+			</section>
 
 			{{-- Credit panel --}}
 			<livewire:cart.credit-panel />

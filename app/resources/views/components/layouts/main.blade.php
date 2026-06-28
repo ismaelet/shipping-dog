@@ -36,4 +36,5 @@
 	</div>
 
 	<x-navigation.footer />
+	<livewire:cart.sidebar />
 </x-layouts.app>

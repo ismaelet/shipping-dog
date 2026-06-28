@@ -810,18 +810,7 @@
 					@endif
 
 					<!-- Cart icon -->
-					<a
-						class="h-icon relative justify-center"
-						href="{{ route('cart') }}"
-					>
-
-						<?= embed_icon('bag') ?>
-
-						@if ($cartQuantity)
-							<h1 id="h-cart-num">{{ $cartQuantity }}</h1>
-						@endif
-
-					</a>
+					<livewire:header.cart-icon />
 				</div>
 
 				<!-- Login bar -->
