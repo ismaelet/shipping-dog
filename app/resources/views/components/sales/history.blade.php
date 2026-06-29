@@ -43,7 +43,7 @@
 							</p>
 						</div>
 						<div class="grid-item">
-							<p class="list-inp">{{ $orderItem->gainString() }}</p>
+							<p class="list-inp">{{ price($orderItem->total_seller_earnings_after_reduction) }}</p>
 						</div>
 						<div class="grid-item">
 							<p class="list-inp">{{ $orderItem->product->type->name ?? '' }}</p>
