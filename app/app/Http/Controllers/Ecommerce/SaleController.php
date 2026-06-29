@@ -20,7 +20,7 @@ class SaleController extends Controller {
         $currentYear = $request->year;
 
         $sales = OrderItem::where('seller_id', $seller->id)
-            ->where('status', '>=', EcommerceHelper::status('confirmed'))
+            ->where('status', '>=', EcommerceHelper::statusFromTag('confirmed'))
             ->select('*')
             ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
             ->with('product', 'product.type', 'color', 'order', 'design_with_trashed')

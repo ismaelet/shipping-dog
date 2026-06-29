@@ -302,7 +302,7 @@ class GlsService {
             Order::where('tracking', $parcel->NumeroDiSpedizioneGLSDaConfermare)
                 ->first()
                 ->update([
-                    'status' => EcommerceHelper::status('awaiting-shipping'),
+                    'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),
                 ]);
         }
 
@@ -318,7 +318,7 @@ class GlsService {
      * @return Collection
      */
     private function trackParcelOrders(): Collection {
-        return Order::whereIn('status', [EcommerceHelper::status('awaiting-shipping'), EcommerceHelper::status('shipped')])
+        return Order::whereIn('status', [EcommerceHelper::statusFromTag('awaiting-shipping'), EcommerceHelper::statusFromTag('shipped')])
             ->whereNotNull('tracking')
             ->get();
     }
@@ -394,9 +394,9 @@ class GlsService {
 
         switch ($status) {
             case 'Non consegnato':
-                if ($order->status !== EcommerceHelper::status('shipped')) {
+                if ($order->status !== EcommerceHelper::statusFromTag('shipped')) {
                     $order->update([
-                        'status' => EcommerceHelper::status('shipped'),
+                        'status' => EcommerceHelper::statusFromTag('shipped'),
                     ]);
 
                     $order->sendStatusEmail();
@@ -405,9 +405,9 @@ class GlsService {
                 return true;
 
             case 'Consegnato':
-                if ($order->status !== EcommerceHelper::status('delivered')) {
+                if ($order->status !== EcommerceHelper::statusFromTag('delivered')) {
                     $order->update([
-                        'status' => EcommerceHelper::status('delivered'),
+                        'status' => EcommerceHelper::statusFromTag('delivered'),
                     ]);
 
                     $order->sendStatusEmail();

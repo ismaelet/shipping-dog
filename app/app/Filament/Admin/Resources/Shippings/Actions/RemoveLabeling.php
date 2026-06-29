@@ -27,7 +27,7 @@ class RemoveLabeling {
             ->color('danger')
             ->action(function (Order $record): bool {
                 $response = $record->update([
-                    'status' => EcommerceHelper::status('awaiting-shipping'),
+                    'status' => EcommerceHelper::statusFromTag('awaiting-shipping'),
                 ]);
 
                 // Success

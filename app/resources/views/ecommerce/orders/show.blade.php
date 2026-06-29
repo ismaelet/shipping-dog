@@ -1,5 +1,4 @@
 @use('App\Helpers\EcommerceHelper')
-@use('App\Helpers\PreviewHelper')
 
 @pushOnce('styles')
 	<style>
@@ -47,7 +46,7 @@
 			</x-heading.component>
 		</div>
 
-		@if (in_array($order->status, [EcommerceHelper::status('received')]))
+		@if (in_array($order->status, [EcommerceHelper::statusFromTag('received')]))
 			<form
 				class="grid justify-items-center gap-6"
 				method="POST"
@@ -93,10 +92,10 @@
 				</div>
 			</form>
 		@elseif (in_array($order->status, [
-				EcommerceHelper::status('confirmed'),
-				EcommerceHelper::status('awaiting-shipping'),
-				EcommerceHelper::status('confirmed'),
-				EcommerceHelper::status('shipped'),
+				EcommerceHelper::statusFromTag('confirmed'),
+				EcommerceHelper::statusFromTag('awaiting-shipping'),
+				EcommerceHelper::statusFromTag('confirmed'),
+				EcommerceHelper::statusFromTag('shipped'),
 			]))
 			<p>
 				Il tuo ordine verrà spedito entro <span

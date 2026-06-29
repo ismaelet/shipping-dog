@@ -43,9 +43,9 @@ class OrderController extends Controller {
         ]);
 
         if ($request->has('status')) {
-            if ($request->status == EcommerceHelper::status('cancelled')) {
+            if ($request->status == EcommerceHelper::statusFromTag('cancelled')) {
                 $order->cancel();
-            } else if ($request->status == EcommerceHelper::status('confirmed')) {
+            } else if ($request->status == EcommerceHelper::statusFromTag('confirmed')) {
                 $order->confirm(false, false);
             } else {
                 $order->update($request->only('status'));

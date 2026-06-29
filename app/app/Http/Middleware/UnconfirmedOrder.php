@@ -25,7 +25,7 @@ class UnconfirmedOrder {
             $order = Order::find($request->order_id);
         }
 
-        if ($order && in_array($order->status, [EcommerceHelper::status('open'), EcommerceHelper::status('received')])) {
+        if ($order && in_array($order->status, [EcommerceHelper::statusFromTag('open'), EcommerceHelper::statusFromTag('received')])) {
             return $next($request);
         }
 

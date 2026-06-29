@@ -12,7 +12,7 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        $confirmed = EcommerceHelper::status('confirmed');
+        $confirmed = EcommerceHelper::statusFromTag('confirmed');
 
         Seller::query()
             ->whereHas('order_items')

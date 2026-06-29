@@ -3,7 +3,7 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
-use App\Helpers\PreviewHelper;
+use App\Services\Files\ProductPreviewProcessor;
 use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPosition;
@@ -208,7 +208,7 @@ class OrderItem extends Model {
         return $this->product_with_trashed ? $this->product_with_trashed->image(
             color: $this->color,
             position: $this->position,
-        ) : public_asset(PreviewHelper::PLACEHOLDER_IMAGE);
+        ) : public_asset(ProductPreviewProcessor::PLACEHOLDER_IMAGE);
     }
 
     /**
@@ -262,6 +262,6 @@ class OrderItem extends Model {
      * Scope a query to only include orders that have been paid
      */
     public static function hasBeenPaid(): Builder {
-        return self::where('status', '>=', EcommerceHelper::status('confirmed'));
+        return self::where('status', '>=', EcommerceHelper::statusFromTag('confirmed'));
     }
 }

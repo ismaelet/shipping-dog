@@ -58,7 +58,7 @@ class UserDashboardController extends Controller {
         $orderDirection = request()->query('order_direction', 'desc');
 
         $confirmedOrders = Order::where('user_id', $user->id)
-            ->where('status', '!=', EcommerceHelper::status('open'))
+            ->where('status', '!=', EcommerceHelper::statusFromTag('open'))
             ->with(
                 'order_items',
                 'order_items.type',

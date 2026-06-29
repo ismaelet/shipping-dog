@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * Check if the user is an admin
- * 
- * @return bool True if the user is an admin, false otherwise
  */
 function is_admin(): bool {
     return Auth::check() && Auth::user()->is_admin;

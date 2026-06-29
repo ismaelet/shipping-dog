@@ -1,11 +1,11 @@
-@use('App\Helpers\ArrayHelper')
+@use('App\Helpers\StringHelper')
 
 @props(['title', 'type'])
 
 @php
     $routeParameters = request()->route()->parameters ?? null;
     $action = $routeParameters ? 'update' : 'store';
-    $actionRouteName = ArrayHelper::explodeLast('.', request()->route()->getName())[0] . '.' . $action;
+    $actionRouteName = StringHelper::explodeLast('.', request()->route()->getName())[0] . '.' . $action;
     $actionRoute = $routeParameters ? route($actionRouteName, $routeParameters) : route($actionRouteName);
 @endphp
 

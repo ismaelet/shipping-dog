@@ -1,4 +1,4 @@
-@use ('App\Helpers\PreviewHelper')
+@use ('App\Services\Files\ProductPreviewProcessor')
 
 @php
 	$clothing = $product->type->image($product->color_id, $position->basicPositionId());
@@ -18,7 +18,7 @@
 			></div>
 		@elseif (!$clothing)
 			<img
-				src="{{ asset('storage/' . PreviewHelper::PLACEHOLDER_IMAGE) }}"
+				src="{{ asset('storage/' . ProductPreviewProcessor::PLACEHOLDER_IMAGE) }}"
 				alt=""
 				class="w-full"
 			>

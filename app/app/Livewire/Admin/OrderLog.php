@@ -88,11 +88,11 @@ class OrderLog extends Component {
         $orders = Order::where('created_at', '>=', $this->firstOrder?->created_at)->where(
             'status',
             '>=',
-            EcommerceHelper::status('confirmed'),
+            EcommerceHelper::statusFromTag('confirmed'),
         );
 
         if (!$this->showAll) {
-            $orders = $orders->where('status', EcommerceHelper::status('confirmed'));
+            $orders = $orders->where('status', EcommerceHelper::statusFromTag('confirmed'));
         }
 
         return $orders

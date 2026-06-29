@@ -1,5 +1,3 @@
-@use ('App\Helpers\PreviewHelper')
-
 @php
 	$mockup = $getRecord();
 	$productType = $getRecord()->type;

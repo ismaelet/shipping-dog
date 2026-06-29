@@ -1,9 +1,9 @@
-@use('App\Helpers\ArrayHelper')
+@use('App\Helpers\StringHelper')
 
 @props(['title'])
 
 @php
-	$backRouteName = ArrayHelper::explodeLast('.', request()->route()->getName())[0] . '.index';
+	$backRouteName = StringHelper::explodeLast('.', request()->route()->getName())[0] . '.index';
 	$backRouteParameters = request()->index_parameters ? json_decode(request()->index_parameters, true) : null;
 	$backRoute = Route::has($backRouteName)
 	    ? ($backRouteParameters

@@ -1,4 +1,4 @@
-@use('App\Helpers\PreviewHelper')
+@use('App\Services\Files\ProductPreviewProcessor')
 
 <div class="grid gap-4">
 	@if (!$order || $order->order_items->isEmpty())
@@ -23,7 +23,7 @@
 				@else
 					<div>
 						<img
-							src="{{ public_asset(PreviewHelper::PLACEHOLDER_IMAGE) }}"
+							src="{{ public_asset(ProductPreviewProcessor::PLACEHOLDER_IMAGE) }}"
 							class="rounded"
 						>
 					</div>

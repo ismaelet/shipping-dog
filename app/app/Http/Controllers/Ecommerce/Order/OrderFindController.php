@@ -52,7 +52,7 @@ class OrderFindController extends Controller {
         $order = Order::join('addresses', 'addresses.order_id', 'orders.id')
             ->where('orders.id', $id)
             ->where('email', $email)
-            ->where('status', '!=', EcommerceHelper::status('open'))
+            ->where('status', '!=', EcommerceHelper::statusFromTag('open'))
             ->select('orders.*', 'addresses.email')
             ->first();
 

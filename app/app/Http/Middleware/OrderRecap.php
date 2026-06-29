@@ -23,7 +23,7 @@ class OrderRecap {
         }
 
         // If the order is open, redirect to the cart route
-        if ($order->status == EcommerceHelper::status('open')) {
+        if ($order->status == EcommerceHelper::statusFromTag('open')) {
             return to_route('cart');
         }
 

@@ -598,7 +598,7 @@ class Order extends Model {
         }
 
         $this->update([
-            'status' => EcommerceHelper::status('confirmed'),
+            'status' => EcommerceHelper::statusFromTag('confirmed'),
         ]);
 
         // Remove the used credit from the seller's credit
@@ -679,7 +679,7 @@ class Order extends Model {
 
         // Update the order
         $this->update([
-            'status' => EcommerceHelper::status('cancelled'),
+            'status' => EcommerceHelper::statusFromTag('cancelled'),
         ]);
 
         // Send the status email
@@ -731,12 +731,12 @@ class Order extends Model {
     }
 
     public static function hasBeenPaid(): Builder {
-        return self::where('status', '>=', EcommerceHelper::status('confirmed'));
+        return self::where('status', '>=', EcommerceHelper::statusFromTag('confirmed'));
     }
 
     public static function hasNoLabel(): Builder {
         return self::join('addresses', 'orders.id', '=', 'addresses.order_id')
-            ->where('status', EcommerceHelper::status('confirmed'))
+            ->where('status', EcommerceHelper::statusFromTag('confirmed'))
             ->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
             ->oldest('orders.created_at')
             ->select('orders.*', 'orders.id as order_id', 'addresses.full_name');
@@ -753,7 +753,7 @@ class Order extends Model {
      */
     public static function unlabelled(): Collection {
         return self::join('addresses', 'orders.id', '=', 'addresses.order_id')
-            ->where('status', EcommerceHelper::status('confirmed'))
+            ->where('status', EcommerceHelper::statusFromTag('confirmed'))
             ->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
             ->oldest()
             ->select('orders.*', 'addresses.full_name')

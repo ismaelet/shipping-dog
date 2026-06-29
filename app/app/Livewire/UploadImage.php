@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Helpers\FileHelper;
-use App\Helpers\ImageHelper;
+use App\Services\Files\ImageProcessor;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -12,6 +12,11 @@ use Livewire\WithFileUploads;
 class UploadImage extends Component {
 
     use WithFileUploads;
+
+    /**
+     * Property: the image processor service
+     */
+    private ImageProcessor $imageProcessor;
 
     /**
      * Property: the URL of the image to be uploaded
@@ -64,6 +69,13 @@ class UploadImage extends Component {
     }
 
     /**
+     * Lifecycle hook: boot the component.
+     */
+    public function boot(ImageProcessor $imageProcessor): void {
+        $this->imageProcessor = $imageProcessor;
+    }
+
+    /**
      * lifecycle hook: render the component
      */
     public function render() {
@@ -89,7 +101,7 @@ class UploadImage extends Component {
     }
 
     private function uploadImage(string $url, int $size, int $quality, string $mode): void {
-        ImageHelper::upload(
+        $this->imageProcessor->upload(
             file: $this->image,
             path: $url,
             size: $size,

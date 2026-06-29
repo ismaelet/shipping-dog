@@ -4,17 +4,27 @@ namespace App\Helpers;
 
 class StringHelper {
 
-	/**
-	 * Format a number with dot
-	 */
-	public static function formatWithDot(float $number): string {
-		return number_format($number, 2, '.', '');
-	}
+    /**
+     * Split a string at the last occurrence of a separator.
+     */
+    public static function explodeLast(string $separator, ?string $string): array {
+        if ($string === null) {
+            return [];
+        }
 
-	/**
-	 * Format a number with comma
-	 */
-	public static function formatWithComma(float $number): string {
-		return number_format($number, 2, ',', '');
-	}
+        if ($separator === '') {
+            return [$string];
+        }
+
+        $position = strrpos($string, $separator);
+
+        if ($position === false) {
+            return [$string];
+        }
+
+        return [
+            substr($string, 0, $position),
+            substr($string, $position + strlen($separator)),
+        ];
+    }
 }

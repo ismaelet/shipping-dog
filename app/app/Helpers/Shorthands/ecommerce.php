@@ -2,19 +2,20 @@
 
 use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
+use App\Services\Ecommerce\CartResolver;
 
 /**
  * Get the ID of the active cart
  */
 function cart_id(): ?int {
-    return EcommerceHelper::cartId();
+    return app(CartResolver::class)->cartId();
 }
 
 /**
  * Get the active cart
  */
 function cart(): ?Order {
-    return EcommerceHelper::cart();
+    return app(CartResolver::class)->cart();
 }
 
 /**

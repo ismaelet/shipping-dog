@@ -221,7 +221,7 @@ class Seller extends Model {
 
     private function updateEarned(): self {
         $this->update([
-            'earned' => $this->order_items->where('status', '>=', EcommerceHelper::status('confirmed'))->sum('total_seller_earnings_after_reduction')
+            'earned' => $this->order_items->where('status', '>=', EcommerceHelper::statusFromTag('confirmed'))->sum('total_seller_earnings_after_reduction')
         ]);
 
         return $this;
@@ -267,7 +267,7 @@ class Seller extends Model {
         $usedOrderCredit = $this->order_items()
             ->where('user_id', '=', $this->user_id)
             ->where('credit', '=', 1)
-            ->where('status', '!=', EcommerceHelper::status('cancelled'))
+            ->where('status', '!=', EcommerceHelper::statusFromTag('cancelled'))
             ->selectRaw('SUM((total_amount_before_discount - total_discount) * quantity) as usedCredit')
             ->value('usedCredit');
 
@@ -279,7 +279,7 @@ class Seller extends Model {
             $query->where('user_id', '=', $this->user_id);
         })
             ->where('credit_ship', '=', 1)
-            ->where('status', '!=', EcommerceHelper::status('cancelled'))
+            ->where('status', '!=', EcommerceHelper::statusFromTag('cancelled'))
             ->selectRaw('
 			SUM(shipping) AS usedCredit
 		')

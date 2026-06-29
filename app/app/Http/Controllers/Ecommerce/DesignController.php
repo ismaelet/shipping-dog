@@ -10,6 +10,7 @@ use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Tag;
+use App\Services\Files\ImageProcessor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -17,6 +18,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class DesignController extends Controller {
+
+    public function __construct(
+        private ImageProcessor $imageProcessor,
+    ) {
+    }
 
     /**
      * * Index action
@@ -39,7 +45,7 @@ class DesignController extends Controller {
                     $fail('Hai già una grafica con questo nome.');
                 }
             }],
-            'file' => ['required', 'mimes:jpeg,png,gif,webp'],
+            'file' => ['required', 'mimes:jpeg,png,webp'],
             'file_vector' => ['mimes:pdf,ai'],
             'tags' => ['nullable', 'string', 'max:255'],
         ]);
@@ -226,16 +232,16 @@ class DesignController extends Controller {
 
         // Store the original file
         if (
-            !FileHelper::uploadFile($file, 'designs_originals/' . $fileName . '.png')
+            !FileHelper::upload($file, 'designs_originals/' . $fileName . '.png')
         ) {
             return false;
         }
 
         // Store the resized HD file
         if (
-            !FileHelper::uploadImage(
+            !$this->imageProcessor->upload(
                 file: $file,
-                filePath: 'designs/' . $fileName . '.png',
+                path: 'designs/' . $fileName . '.png',
                 size: 1024,
             )
         ) {
@@ -244,9 +250,9 @@ class DesignController extends Controller {
 
         // Store the resized LD file
         if (
-            !FileHelper::uploadImage(
+            !$this->imageProcessor->upload(
                 file: $file,
-                filePath: 'designs/' . $fileName . '_m.png',
+                path: 'designs/' . $fileName . '_m.png',
                 size: 512,
             )
         ) {
@@ -256,7 +262,7 @@ class DesignController extends Controller {
         // Delete the old product images
         if (!$design->custom) {
             $design->products->each(function ($product) {
-                $product->previewImage()?->deleteImages();
+                $product->deletePreviewImages();
             });
         }
 

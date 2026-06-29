@@ -3,7 +3,7 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
-use App\Helpers\PreviewHelper;
+use App\Services\Files\ProductPreviewProcessor;
 use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Product\ProductColor;
@@ -235,48 +235,57 @@ class Product extends Model {
     }
 
     /**
-     * Get the product's preview
+     * Get the product preview image URL
      */
-    public function previewImage(?int $imageSize = null, ProductColor|int|null $color = null, ProductPosition|int|null $position = null): ?PreviewHelper {
-        // Set the product
-        $product = $this;
-
-        // Set the color
-        if ($color === null) {
-            $color = $this->color;
-        } else if (is_int($color)) {
-            $color = ProductColor::find($color);
-        } else if (!is_object($color)) {
-            $color = null;
-        }
-
-        // Set the position
-        if ($position === null) {
-            $position = $product->position;
-        } else if (is_int($position)) {
-            $position = ProductPosition::find($position);
-        } else if (!is_object($position)) {
-            $position = null;
-        }
-
-        // Return null if any of the required data is missing
-        if (!$product || !$color || !$position) {
-            Log::warning('Preview image missing data', [
-                'product_id' => $product?->id,
-                'color_id' => $color?->id,
-                'position_id' => $position?->id,
-            ]);
-
-            return null;
-        }
-
-        // Return the preview
-        return new PreviewHelper(
-            product: $product,
+    public function previewImage(
+        ?int $imageSize = null,
+        ProductColor|int|null $color = null,
+        ProductPosition|int|null $position = null,
+    ): string {
+        return app(ProductPreviewProcessor::class)->image(
+            product: $this,
             color: $color,
             position: $position,
             imageSize: $imageSize,
         );
+    }
+
+    /**
+     * Get the product's image
+     */
+    public function image(
+        ?int $imageSize = null,
+        ProductColor|int|null $color = null,
+        ProductPosition|int|null $position = null,
+    ): string {
+        return $this->previewImage(
+            imageSize: $imageSize,
+            color: $color,
+            position: $position,
+        );
+    }
+
+    /**
+     * Check whether the product preview image exists.
+     */
+    public function previewImageExists(
+        ?int $imageSize = null,
+        ProductColor|int|null $color = null,
+        ProductPosition|int|null $position = null,
+    ): bool {
+        return app(ProductPreviewProcessor::class)->exists(
+            product: $this,
+            color: $color,
+            position: $position,
+            imageSize: $imageSize,
+        );
+    }
+
+    /**
+     * Delete the generated preview images for this product.
+     */
+    public function deletePreviewImages(): void {
+        app(ProductPreviewProcessor::class)->deleteProductPreview($this);
     }
 
     public function positions(): ?Collection {
@@ -321,15 +330,6 @@ class Product extends Model {
             ->where('user_id', 1)
             ->oldest()
             ->first();
-    }
-
-    /**
-     * Get the product's image
-     */
-    public function image(?int $imageSize = null, ProductColor|int|null $color = null, ProductPosition|int|null $position = null): string {
-        $preview = $this->previewImage($imageSize, $color, $position);
-
-        return $preview ? $preview->image() : public_asset(PreviewHelper::PLACEHOLDER_IMAGE);
     }
 
     /**

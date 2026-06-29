@@ -138,7 +138,7 @@ class ProductLog extends Component {
             ->join('products', 'products.id', '=', 'order_items.product_id')
             ->join('product_types', 'product_types.id', '=', 'order_items.type_id')
             ->where('orders.created_at', '>=', $this->firstOrder->created_at)
-            ->where('orders.status', '>=', EcommerceHelper::status('confirmed'))
+            ->where('orders.status', '>=', EcommerceHelper::statusFromTag('confirmed'))
             ->select(
                 'orders.id as order_id',
                 'orders.created_at as confirmedTime',
@@ -167,7 +167,7 @@ class ProductLog extends Component {
             ]);
 
         if (!$this->showAll) {
-            $query->where('orders.status', EcommerceHelper::status('confirmed'));
+            $query->where('orders.status', EcommerceHelper::statusFromTag('confirmed'));
         }
 
         $this->applyPrintedAndCartFilters($query);

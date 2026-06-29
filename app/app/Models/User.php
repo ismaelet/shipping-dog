@@ -88,7 +88,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
      * Get the user's active cart
      */
     public function cart(): HasOne {
-        return $this->hasOne(Order::class, 'user_id', 'id')->where('status', EcommerceHelper::status('open'));
+        return $this->hasOne(Order::class, 'user_id', 'id')->where('status', EcommerceHelper::statusFromTag('open'));
     }
 
     /**

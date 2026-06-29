@@ -144,10 +144,10 @@ class PayPalExchangeController extends Controller {
         $requestToken = $request->token;
 
         // Set the order status to received if the order is in the correct status and the tokens match
-        if ($order->status == EcommerceHelper::status('open') && $order->token == $requestToken) {
+        if ($order->status == EcommerceHelper::statusFromTag('open') && $order->token == $requestToken) {
             // Reopen the order
             $order->update([
-                'status' => EcommerceHelper::status('received'),
+                'status' => EcommerceHelper::statusFromTag('received'),
             ]);
         }
 

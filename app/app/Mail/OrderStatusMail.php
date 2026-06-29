@@ -45,7 +45,7 @@ class OrderStatusMail extends Mailable {
      */
     public function content(): Content {
         $content = $this->generateContent();
-        $showRecap = in_array($this->order->status, [EcommerceHelper::status('received'), EcommerceHelper::status('confirmed')]);
+        $showRecap = in_array($this->order->status, [EcommerceHelper::statusFromTag('received'), EcommerceHelper::statusFromTag('confirmed')]);
 
         if (!$content) {
             Log::error('OrderStatusMail: Status content not found', ['order' => $this->order, 'status' => $this->order->statusName()]);
@@ -68,15 +68,15 @@ class OrderStatusMail extends Mailable {
      */
     private function generateContent(): string|false {
         switch ($this->order->status) {
-            case EcommerceHelper::status('cancelled'):
+            case EcommerceHelper::statusFromTag('cancelled'):
                 return 'L\'ordine è stato annullato. Se non hai richiesto tu l\'annullamento, contatta il nostro servizio clienti a <a href="' . config('custom.contacts.email.url') . '">' . config('custom.contacts.email.label') . '</a>.';
-            case EcommerceHelper::status('received'):
+            case EcommerceHelper::statusFromTag('received'):
                 return 'L\'ordine è in fase di elaborazione del pagamento. Se entro un ora non riceverai una mail di conferma, conferma che il pagamento sia andato in porto.<br><br>In caso contrario puoi usare il bottone qui sotto per tornare al riepilogo dell\'ordine ed effettuarlo.<br><br>Se hai già pagato, ma l\'ordine continua a non essere confermato, contatta il nostro servizio clienti a <a href="' . config('custom.contacts.email.url') . '">' . config('custom.contacts.email.label') . '</a>.';
-            case EcommerceHelper::status('confirmed'):
+            case EcommerceHelper::statusFromTag('confirmed'):
                 return 'Abbiamo confermato il pagameto dell\'ordine. I prodotti verranno spediti entro <strong>' . $this->order->shipping_method->minimumWorkingDays($this->order->hasLongDelivery()) . '-' . $this->order->shipping_method->maximumWorkingDays($this->order->hasLongDelivery()) . ' giorni lavorativi</strong>.<br><br>Ti ringraziamo per aver scelto di acquistare da noi.';
-            case EcommerceHelper::status('shipped'):
+            case EcommerceHelper::statusFromTag('shipped'):
                 return 'L\'ordine è stato spedito e verrà consegnato entro <strong>48h larovative</strong>.';
-            case EcommerceHelper::status('delivered'):
+            case EcommerceHelper::statusFromTag('delivered'):
                 return 'L\'ordine è stato consegnato. Se per caso non lo avessi ricevuto, contatta il nostro servizio clienti a <a href="' . config('custom.contacts.email.url') . '">' . config('custom.contacts.email.label') . '</a>.';
             default:
                 return false;
