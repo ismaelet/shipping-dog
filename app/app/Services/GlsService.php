@@ -377,7 +377,11 @@ class GlsService {
 
         libxml_clear_errors();
 
-        $status = trim((string) ($xml->StatoSpedizione ?? ''));
+        $status = trim((string) $xml->StatoSpedizione);
+
+        if (!$status && isset($xml->SPEDIZIONE)) {
+            $status = trim((string) $xml->SPEDIZIONE->StatoSpedizione);
+        }
 
         if (!$status) {
             Log::error('GLS tracking status missing', [
