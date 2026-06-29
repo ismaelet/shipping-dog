@@ -205,20 +205,25 @@ class ProductType extends Model {
     }
 
     /**
-     * Get the rasterized type's image
-     * 
-     * @param ProductColor|int $color
-     * @param ProductPosition|int $position
-     * @return string|null
+     * Get the rasterized type's image.
      */
     public function rasterizedImage(ProductColor|int $color, ProductPosition|int $position): ?string {
-        $color = $color instanceof ProductColor ? $color : ProductColor::find($color);
-        $position = $position instanceof ProductPosition ? $position : ProductPosition::find($position);
+        $color = $color instanceof ProductColor
+            ? $color
+            : ProductColor::find($color);
+
+        $position = $position instanceof ProductPosition
+            ? $position
+            : ProductPosition::find($position);
+
+        if (!$color || !$position) {
+            return null;
+        }
 
         return app(ProductPreviewProcessor::class)->emptyImage(
             type: $this,
             color: $color,
-            position: $position
+            position: $position,
         );
     }
 }

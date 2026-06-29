@@ -424,7 +424,7 @@ class ProductPreviewProcessor {
             imagedestroy($out);
 
             return null;
-        };
+        }
 
         // Add the clothing image
         if (
@@ -464,14 +464,16 @@ class ProductPreviewProcessor {
         // Generate the image
         $saved = $this->saveWebp(
             image: $out,
-            path: $this->fileServerPath(),
-            quality: $this->imageSize >= 1000 ? 90 : 70,
+            path: $filePath,
+            quality: $imageSize >= 1000 ? 90 : 70,
         );
 
         if (!$saved) {
-            Log::error('Could not save product preview image', [
-                'path' => $this->fileServerPath(),
-                'product_id' => $this->product->id,
+            Log::error('Could not save empty product preview image', [
+                'path' => $filePath,
+                'type_id' => $type->id,
+                'color_id' => $color->id,
+                'position_id' => $position->id,
             ]);
 
             imagedestroy($out);

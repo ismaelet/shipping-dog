@@ -25,7 +25,7 @@
 			position: absolute;
 			right: 0;
 			translate: 100% 0;
-			min-width: 20rem;
+			min-width: min(25rem, 100%);
 			height: 100%;
 			padding: 1rem;
 			background-color: var(--color-background-400);
