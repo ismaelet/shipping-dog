@@ -89,7 +89,7 @@
 									<p style="line-height: 3">{{ $orderItem->name() }}</p>
 								</td>
 								<td>
-									<p style="text-align: right">{{ $orderItem->priceString() }}</p>
+									<p style="text-align: right">{{ price($orderItem->total_amount_to_pay) }}</p>
 								</td>
 							</tr>
 						@endforeach

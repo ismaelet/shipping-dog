@@ -396,7 +396,7 @@ class Product extends Model {
      * Get a collection of related products
      */
     public function relatedProducts(int $quantity = 8): Collection {
-        $relatedProducts = Product::where('user_id', $this->seller->id)
+        $relatedProducts = Product::where('user_id', $this->seller->user_id)
             ->where(function ($query) {
                 $query->where('design_id', '<>', $this->design_id)
                     ->orWhere('design_id', false);
@@ -414,12 +414,15 @@ class Product extends Model {
         }
 
         return $relatedProducts->merge(
-            Product::where('user_id', $this->seller->id)
+            Product::where('user_id', $this->seller->user_id)
                 ->where(function ($query) {
                     $query->where('design_id', '<>', $this->design_id)
                         ->orWhere('design_id', false);
                 })
-                ->where('type_id', '<>', $this->type->shownType()->id)
+                ->whereHas('type', function ($query) {
+                    $query->where('type_id', '<>', $this->type->shownType()->id)
+                        ->whereNull('variant_of');
+                })
                 ->where('status', true)
                 ->with('design', 'design_with_trashed', 'type', 'color', 'position', 'type')
                 ->orderBy('sales', 'desc')

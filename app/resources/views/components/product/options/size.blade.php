@@ -2,7 +2,7 @@
 
 @php
 	$sizes = $product->type->sizes;
-	$showTable = $product->type->measures?->count() && $product->type->category == 'c' && !$product->isCustom();
+	$showTable = $product->type->measures?->count() && $product->type->category == 'c';
 
 	$label = $product->type->category == 'c' ? 'Taglia' : 'Dimensione';
 @endphp

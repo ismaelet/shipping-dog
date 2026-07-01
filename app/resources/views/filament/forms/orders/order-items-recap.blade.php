@@ -64,26 +64,6 @@
 			</div>
 		@endif
 
-		{{-- @foreach ($getRecord()->order_items as $orderItem)
-		<div class="order-row grid-cols-subgrid col-span-full grid items-center border-b py-4">
-
-			<img
-				src="{{ $orderItem->image() }}"
-				alt=""
-				class="bg-surface-400 aspect-square w-24 rounded"
-			>
-			<p class="">{{ $orderItem->idCode() }}</p>
-
-			<p class="">
-				<a href="{{ $orderItem->product->fullUrl($orderItem->color_id, $orderItem->position_id) }}">
-					{{ $orderItem->full_name }}
-				</a>
-			</p>
-
-			<p class="">{{ $orderItem->priceString() }}</p>
-		</div>
-	@endforeach --}}
-
 		@if ($getRecord()->discount())
 			<div class="order-row col-span-full grid grid-cols-subgrid border-b py-4 dark:border-white/10">
 				<p class="">Sconto</p>

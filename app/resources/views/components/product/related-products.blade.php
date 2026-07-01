@@ -49,7 +49,6 @@ use Legacy\View\Components\Interactions\FollowButton;
 	id="more-sec"
 	class=""
 >
-
 	@if ($product->relatedProducts()->count())
 		<div class="main-wrap pad-t-3 pad-b-4 text-center">
 			<p class="more-title">Altro di questo negozio</p>
