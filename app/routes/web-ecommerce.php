@@ -8,7 +8,6 @@ use App\Http\Controllers\Ecommerce\Cart\CartPromotionsController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\Order\OrderFindController;
 use App\Http\Controllers\Ecommerce\OrderController;
-use App\Http\Controllers\Ecommerce\OrderItemController;
 use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\RefundController;
 use App\Http\Controllers\Ecommerce\SellerController;
@@ -41,7 +40,28 @@ Route::get('/artist', function () {
     }
 });
 
+/**
+ * Seller
+ */
 Route::get('/artist/{seller}', [SellerController::class, 'index'])->name('seller.show');
+
+Route::post('/seller/{seller}/collection/add', [SellerController::class, 'addCollection'])
+    ->name('seller.collection.add');
+
+Route::get('/seller/{seller}/collection/{collection}', [SellerController::class, 'showCollection'])
+    ->name('seller.show.collection');
+
+Route::post('/seller/{seller}/collection/{collection}/designs', [SellerController::class, 'addDesignsToCollection'])
+    ->name('seller.collection.designs.add');
+
+Route::delete('/seller/{seller}/collection/{collection}/designs', [SellerController::class, 'removeDesignsFromCollection'])
+    ->name('seller.collection.designs.remove');
+
+Route::post('/seller/{seller}/collection/{collection}/cover', [SellerController::class, 'updateCollectionCover'])
+    ->name('seller.collection.cover.update');
+
+Route::delete('/seller/{seller}/collection/{collection}', [SellerController::class, 'deleteCollection'])
+    ->name('seller.collection.delete');
 
 /**
  * * Product

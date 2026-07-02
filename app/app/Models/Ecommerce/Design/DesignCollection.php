@@ -6,42 +6,78 @@ use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Seller;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class DesignCollection extends Model {
 
-	protected $table = 'collections';
-	protected $fillable = [];
+    /**
+     * Property: The table associated with the model
+     */
+    protected $table = 'collections';
 
-	/*
-	 * * Relationship instances
-	 */
-	// Get the collection's seller
-	public function seller(): BelongsTo {
-		return $this->belongsTo(Seller::class, 'user_id');
-	}
+    /**
+     * Property: The attributes that are mass assignable
+     */
+    protected $fillable = [
+        'user_id',
+        'name',
+    ];
 
-	// Get the collection's main design
-	public function mainDesign(): HasOne {
-		return $this->hasOne(Design::class, 'collection', 'id')->oldest();
-	}
+    /**
+     * Relationship: Get the seller that owns the collection
+     */
+    public function seller(): BelongsTo {
+        return $this->belongsTo(Seller::class, 'user_id');
+    }
 
-	/*
-	 * * Utility methods
-	 */
-	// Get the collection's URL
-	public function url(): string {
-		return '/artist/collection?id=' . $this->id;
-	}
+    /**
+     * Relationship: Get the designs in the collection
+     */
+    public function designs(): HasMany {
+        return $this->hasMany(Design::class, 'collection', 'id');
+    }
 
-	// Get the collection's image
-	public function image(int $size = 400): ?string {
-		$image = $size == 400 ? '/shops/collections/' . $this->id . '_m.jpg' : '/shops/collections/' . $this->id . '.jpg';
+    /**
+     * Relationship: Get the main design of the collection
+     */
+    public function mainDesign(): HasOne {
+        return $this->hasOne(Design::class, 'collection', 'id')->oldest();
+    }
 
-		if (file_exists(public_storage($image))) {
-			return $image;
-		}
+    /**
+     * Check whether the collection belongs to the given seller.
+     */
+    public function belongsToSeller(Seller $seller): bool {
+        return $this->user_id === $seller->user_id;
+    }
 
-		return null;
-	}
+    /**
+     * Get the URL for the collection
+     */
+    public function url(): string {
+        return route('seller.show.collection', [
+            'seller' => $this->user_id,
+            'collection' => $this->id,
+        ]);
+    }
+
+    /**
+     * Get the image URL for the collection
+     */
+    public function image(int $size = 400): ?string {
+        $image = $size === 400
+            ? '/shops/collections/' . $this->id . '_m.jpg'
+            : '/shops/collections/' . $this->id . '.jpg';
+
+        if (file_exists(public_storage($image))) {
+            return storage_asset($image);
+        }
+
+        if ($this->mainDesign) {
+            return $this->mainDesign->image($size);
+        }
+
+        return null;
+    }
 }

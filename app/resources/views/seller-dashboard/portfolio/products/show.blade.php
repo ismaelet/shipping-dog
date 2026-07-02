@@ -329,9 +329,11 @@
 			@error('default-color-id')
 				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
+
 			@error('colors')
 				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
+
 			@error('cover-image')
 				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
@@ -381,7 +383,6 @@
 						name="cover-image"
 					>
 				@endif
-
 			</div>
 
 			@if (isset($product))
@@ -399,7 +400,6 @@
 				</div>
 			@endif
 		</div>
-
 
 		<div
 			class="flex-group center-content"

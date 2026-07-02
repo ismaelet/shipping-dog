@@ -5,14 +5,12 @@ namespace App\Models\Ecommerce;
 use App\Models\Ecommerce\Design\CustomerPhoto;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Design\DesignTag;
-use App\Models\User\Like;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 
 class Design extends Model {
 
@@ -20,8 +18,6 @@ class Design extends Model {
 
     /**
      * The attributes that are mass assignable.
-     * 
-     * @var array
      */
     protected $fillable = [
         'id',
@@ -74,13 +70,6 @@ class Design extends Model {
             ->where('status', true)
             ->orderBy('type_id');
     }
-
-    /**
-     * Get the design's likes
-     */
-    // public function likes(): HasMany {
-    //     return $this->hasMany(Like::class);
-    // }
 
     /**
      * Get the design's tags
@@ -147,24 +136,24 @@ class Design extends Model {
         }
 
         if (file_exists(public_storage($file))) {
-            return public_asset($file);
+            return storage_asset($file);
         }
 
-        return public_asset('product_types/mockups/no-image.webp');
+        return storage_asset('product_types/mockups/no-image.webp');
     }
 
     public function originalImage(): ?string {
 
         if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '.ai'))) {
-            return public_asset($file);
+            return storage_asset($file);
         }
 
         if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '.pdf'))) {
-            return public_asset($file);
+            return storage_asset($file);
         }
 
         if (file_exists(public_storage($file = 'designs_originals/' . $this->id . '.png'))) {
-            return public_asset($file);
+            return storage_asset($file);
         }
 
         return null;
@@ -173,15 +162,15 @@ class Design extends Model {
     public function originalDarkImage(): ?string {
 
         if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '_dark.ai'))) {
-            return public_asset($file);
+            return storage_asset($file);
         }
 
         if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '_dark.pdf'))) {
-            return public_asset($file);
+            return storage_asset($file);
         }
 
         if (file_exists(public_storage($file = 'designs_originals/' . $this->id . '_dark.png'))) {
-            return public_asset($file);
+            return storage_asset($file);
         }
 
         return null;

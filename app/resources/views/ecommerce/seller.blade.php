@@ -178,10 +178,9 @@
 
 							<?php } ?>
 
-							<x-shop.collections
-								:$vip
-								:$id
-								:$collBlock
+							<x-seller.collections
+								:seller="$seller"
+								:visible-collections="$collBlock"
 							/>
 
 						</div>
@@ -218,10 +217,10 @@
 					id="coll-add-lbox"
 					class="modal lbox"
 				>
-
 					<form
 						class="modal-form"
 						method="POST"
+						action="{{ route('seller.collection.add', ['seller' => $seller]) }}"
 					>
 						@csrf
 
@@ -232,7 +231,7 @@
 							<input
 								type="text"
 								name="name"
-								class="input"
+								class="input w-full"
 								placeholder="Nome della collezione"
 								required
 							>
@@ -272,10 +271,6 @@
 					</a>
 				</div>
 			</div>
-
 		@endif
-
 	</div>
-
-
 </x-layouts.legacy-main>

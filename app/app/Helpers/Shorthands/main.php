@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\App;
+use App\Helpers\FileHelper;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -22,4 +23,11 @@ function is_superadmin(): bool {
  */
 function is_seller(): bool {
     return App::isSeller();
+}
+
+/**
+ * Get the path to a file in the public storage disk
+ */
+function storage_asset(string $path): string {
+    return FileHelper::storageAsset($path);
 }
