@@ -368,6 +368,7 @@
 														:position="$item['position']"
 														:design="$item['design']"
 														:suffix="$item['suffix']"
+														category="design"
 													/>
 												@endforeach
 											</div>
@@ -412,6 +413,7 @@
 											:color="$item['color']"
 											:size="$item['size']"
 											:suffix="$item['suffix']"
+											category="product"
 										/>
 									@endforeach
 								</div>

@@ -147,8 +147,6 @@ class ProductColors extends Component {
 
     /**
      * Return the IDs of the colors available for the product type.
-     *
-     * @return array<int>
      */
     private function availableColorIds(): array {
         return $this->product->type->colors

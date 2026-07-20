@@ -72,7 +72,7 @@ class TypeItem extends Component {
     /**
      * Property: The design (optional)
      */
-    public string $category;
+    public string $category = 'product';
 
     /**
      * Property: The quantity of items
@@ -88,17 +88,15 @@ class TypeItem extends Component {
      * Lifecycle hook: Mount the component
      */
     public function mount(): void {
-        $this->category = $this->design ? 'design' : 'product';
-
         $this->updateCounts();
 
         $this->quantity = $this->orderItems->sum('quantity');
 
-        if ($this->design) {
-            $this->product = Product::where('design_id', $this->design->id)
-                ->where('type_id', $this->type->id)
-                ->first();
-        }
+        $firstItem = $this->orderItems->first();
+
+        $this->product =
+            $firstItem?->product
+            ?? $firstItem?->product_with_trashed;
     }
 
     /**

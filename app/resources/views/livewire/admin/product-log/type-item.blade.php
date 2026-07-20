@@ -21,7 +21,8 @@
 		<p class="js-to-copy">
 			{{ $quantity }}
 			x
-			{{ $color->name . ' ' . $size->name }}
+			{{ $color->name }}
+			{{ $size->name }}
 			{{ $suffix }}
 		</p>
 	@endif

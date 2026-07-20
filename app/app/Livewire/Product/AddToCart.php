@@ -174,6 +174,7 @@ class AddToCart extends Component {
                 'seller_id' => $this->product->seller->id,
                 'design_id' => $this->product->design_id,
                 'type_id' => $this->product->type->id,
+                'gender_id' => $this->product->type->gender->id,
 
                 ...$amounts,
             ]);
