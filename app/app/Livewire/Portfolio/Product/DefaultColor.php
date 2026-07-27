@@ -50,7 +50,7 @@ class DefaultColor extends Component {
     /**
      * Event Listener: Handle the change of active colors
      */
-    #[On('changeActiveColors')]
+    #[On('change-active-colors')]
     public function handleChangeActiveColors(array $payload) {
         $activeColorIds = $payload['activeColorIds'] ?? [];
 

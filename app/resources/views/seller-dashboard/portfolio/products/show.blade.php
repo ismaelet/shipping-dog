@@ -234,26 +234,10 @@
 	    @js($initialPrice)
 	)"
 			>
-				<div class="form-field md:col-span-2">
-					<x-label>Tipo di prodotto:</x-label>
-
-					<select
-						class="select self-end"
-						name="type_id"
-						x-model.number="typeId"
-						x-on:change="changeType"
-						required
-					>
-						@foreach ($types as $type)
-							<option
-								value="{{ $type->id }}"
-								@selected((int) $initialTypeId === $type->id)
-							>
-								{{ $type->name }}
-							</option>
-						@endforeach
-					</select>
-				</div>
+				<livewire:portfolio.product.type-select
+					:types="$types"
+					:initial-type-id="$initialTypeId"
+				/>
 
 				<div class="form-field">
 					<x-label>Prezzo:</x-label>

@@ -3,11 +3,17 @@
 namespace App\Livewire\Portfolio\Product;
 
 use App\Models\Ecommerce\Product;
-use App\Models\Ecommerce\Product\ProductColor;
+use App\Models\Ecommerce\Product\ProductType;
 use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ActiveColors extends Component {
+
+    /**
+     * Currently selected product type
+     */
+    public ?ProductType $productType = null;
 
     /**
      * Property: The product instance
@@ -17,7 +23,7 @@ class ActiveColors extends Component {
     /**
      * Property: The available colors
      */
-    public Collection $availableColors;
+    public ?Collection $availableColors = null;
 
     /**
      * Property: The active colors
@@ -28,11 +34,13 @@ class ActiveColors extends Component {
      * Lifecycle Method: Mount the component
      */
     public function mount() {
-        $this->availableColors = ProductColor::orderBy('reorder')->orderBy('id')->get();
+        $this->productType = $this->product?->type ?: ProductType::find(1);
 
         $this->activeColorIds = $this->product
-            ? $this->product->colors->pluck('id')->toArray()
+            ? $this->product->colors->pluck('id')->all()
             : [];
+
+        $this->loadAvailableColors();
     }
 
     /**
@@ -64,6 +72,48 @@ class ActiveColors extends Component {
             }
         }
 
-        $this->dispatch('changeActiveColors', ['activeColorIds' => $this->activeColorIds]);
+        $this->dispatch('change-active-colors', ['activeColorIds' => $this->activeColorIds]);
+    }
+
+    /**
+     * Event listener: Update the product type and adjust active colors accordingly
+     */
+    #[On('product-type-updated')]
+    public function updateProductType(int $typeId): void {
+        $this->productType = ProductType::find($typeId);
+
+        $this->loadAvailableColors();
+
+        $availableColorIds = $this->availableColors
+            ->pluck('id')
+            ->all();
+
+        $this->activeColorIds = array_values(
+            array_intersect(
+                $this->activeColorIds,
+                $availableColorIds,
+            ),
+        );
+
+        $this->dispatch(
+            'change-active-colors',
+            ['activeColorIds' => $this->activeColorIds],
+        );
+    }
+
+    /**
+     * Helper method: Load available colors based on the current product type
+     */
+    private function loadAvailableColors(): void {
+        if (!$this->productType) {
+            $this->availableColors = null;
+
+            return;
+        }
+
+        $this->availableColors = $this->productType?->colors()
+            ->orderBy('reorder')
+            ->orderBy('id')
+            ->get();
     }
 }

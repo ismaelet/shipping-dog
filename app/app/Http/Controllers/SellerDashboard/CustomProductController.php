@@ -28,8 +28,10 @@ class CustomProductController extends Controller {
         $tempId = uniqid('temp_');
 
         // Fetch types
-        $types = ProductType::where('id', '<>', 16)
+        $types = ProductType::where('hidden', false)
             ->with('positions')
+            ->orderBy('category')
+            ->orderBy('sort')
             ->orderBy('id')
             ->get();
 
@@ -55,7 +57,11 @@ class CustomProductController extends Controller {
      */
     public function show(Product $product): View {
         // Fetch types
-        $types = ProductType::where('id', '<>', 16)->orderBy('sort')->get();
+        $types = ProductType::where('hidden', false)
+            ->orderBy('category')
+            ->orderBy('sort')
+            ->orderBy('id')
+            ->get();
 
         // Fetch colors
         $colors = ProductColor::orderBy('reorder')->get();
