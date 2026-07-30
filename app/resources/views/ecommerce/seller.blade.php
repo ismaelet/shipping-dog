@@ -15,13 +15,13 @@
 	<section
 		id="head"
 		class="breakout"
-		data-seller-id="<?= $seller->id ?>"
+		data-seller-id="{{ $seller->id }}"
 	>
 
 		<!-- Cover -->
 		<img
 			id="cover"
-			src="<?= $seller->cover() ?>"
+			src="{{ $seller->cover() }}"
 		/>
 
 		<form
@@ -37,12 +37,12 @@
 				<div id="icon-box">
 					<img
 						id="icon"
-						src="<?= $seller->icon() ?>"
+						src="{{ $seller->icon() }}"
 					/>
 				</div>
 
 				<!-- Edit button -->
-				@if ($vip)
+				@if ($owner)
 					<a
 						href="{{ route('seller-dashboard') }}"
 						class="relative"
@@ -68,46 +68,42 @@
 					<h1
 						id="title"
 						class="txt-3rem mt-4"
-					><?= $seller->name ?></h1>
+					>{{ $seller->name }}</h1>
 
 					<!-- Statistics -->
-					<p
-						id="store-data"
-						class="mar-b-1 mt-2"
-					>
-						<?= $productCount ?> Prodotti &middot;
-						<?= $likeN ?> Like &middot;
-						<?= $follN ?> Follower
-					</p>
+					<div class="grid grid-cols-1 gap-2">
+						<p class="mt-2">
+							{{ $productCount }} Prodotti &middot;
+							{{ $likeN }} Like &middot;
+							{{ $follN }} Follower
+						</p>
 
-					@if ($user->contacts)
-						{{-- Contacts --}}
-						<div class="flex flex-wrap justify-center gap-4">
+						@if ($user->contacts)
+							{{-- Contacts --}}
+							<div class="flex flex-wrap justify-center gap-4">
 
-							@foreach ($contacts as $contactName => $contact)
-								@if ($user->$contact())
-									<a
-										href="{{ $user->$contact() }}"
-										class="hover:text-primary text-secondary transition-colors"
-										target="_blank"
-									>
-										<x-dynamic-component
-											:component="'icon-' . $contact"
-											class="h-5 w-5"
-										/>
-									</a>
-								@endif
-							@endforeach
+								@foreach ($contacts as $contactName => $contact)
+									@if ($user->$contact())
+										<a
+											href="{{ $user->$contact() }}"
+											class="hover:text-primary text-secondary transition-colors"
+											target="_blank"
+										>
+											<x-dynamic-component
+												:component="'icon-' . $contact"
+												class="h-5 w-5"
+											/>
+										</a>
+									@endif
+								@endforeach
 
-						</div>
-					@endif
+							</div>
+						@endif
 
-					@if (!empty($legacySeller->description))
-						<p
-							id="desc"
-							class="mar-t-2"
-						><?= $legacySeller->description ?></p>
-					@endif
+						@if (!empty($seller->description))
+							<p id="desc">{{ $seller->description }}</p>
+						@endif
+					</div>
 
 					<div class="my-8">
 						<livewire:seller.activation-request :$seller />
@@ -168,7 +164,7 @@
 
 										<div class="coll-add-box cen wid-100 text-center">
 											<div class="coll-add-ico text-neutral-700">
-												<?= embed_icon('add') ?>
+												{!! embed_icon('add') !!}
 											</div>
 											<p class="coll-add-txt txt-wht">Aggiungi collezione</p>
 										</div>
@@ -189,17 +185,17 @@
 						<input
 							type="hidden"
 							id="collN"
-							value="<?= $collN ?>"
+							value="{{ $collN }}"
 						>
 						<input
 							type="hidden"
 							id="collBlock"
-							value="<?= $collBlock ?>"
+							value="{{ $collBlock }}"
 						>
 						<input
 							type="hidden"
 							id="collPos"
-							value="<?= $collBlock ?>"
+							value="{{ $collBlock }}"
 						>
 						<?php } ?>
 
@@ -211,7 +207,7 @@
 				</section>
 			@endif
 
-			@if ($vip)
+			@if ($owner)
 				<!-- New collection lbox -->
 				<div
 					id="coll-add-lbox"

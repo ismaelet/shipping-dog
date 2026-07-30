@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Follower extends Model {
 
-
-	protected $table = 'followers';
-	protected $fillable = ['user_id', 'follower_id'];
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'user_id',
+        'follower_id'
+    ];
 }

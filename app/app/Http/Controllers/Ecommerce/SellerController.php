@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
-use App\Legacy\System\DB;
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Design\DesignCollection;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Seller;
+use App\Models\Ecommerce\Seller\Follower;
 use App\Models\User\Like;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +18,7 @@ use Illuminate\View\View;
 class SellerController extends Controller {
 
     /**
-     * Display the seller page.
+     * Display the seller page
      */
     public function index(): View|RedirectResponse {
 
@@ -39,12 +39,11 @@ class SellerController extends Controller {
 
         // special status
         $owner = Auth::id() == $sellerUserId ? true : false;
-        $vip = $owner || is_admin() ? true : false;
 
         // check if shop hasn't been approved yet
         $public = $seller->status;
 
-        if (!$public && !$vip) {
+        if (!$public && !$owner && !is_admin()) {
             return redirect('shop');
         }
 
@@ -52,8 +51,8 @@ class SellerController extends Controller {
         $collBlock = 10;
 
         // select links
-        $hasItems = DB::exists('products WHERE user_id = ? AND status > 0', [$sellerUserId]);
-        $productCount = Product::where('user_id', $sellerUserId)->where('status', '>', 0)->count();
+        $products = $seller->products->where('status', true);
+        $productCount = $products->count();
 
         $likeN = Like::whereIn('product_id', function ($query) use ($sellerUserId) {
             $query->select('id')
@@ -61,10 +60,18 @@ class SellerController extends Controller {
                 ->where('user_id', $sellerUserId);
         })->count();
 
-        $follN = DB::count('followers WHERE follower_id = ?', [$sellerUserId]);
+        $follN = Follower::where('user_id', $sellerUserId)->count();
 
-        if ($vip) $collN = DB::count('collections WHERE user_id = ?', [$sellerUserId]);
-        else $collN = DB::count('collections WHERE user_id = ? AND ID IN (SELECT collection FROM designs)', [$sellerUserId]);
+        if ($owner) {
+            $collN = DesignCollection::where('user_id', $sellerUserId)->count();
+        } else {
+            $collN = DesignCollection::where('user_id', $sellerUserId)
+                ->whereIn('id', function ($query) use ($sellerUserId) {
+                    $query->select('collection')
+                        ->from('designs')
+                        ->where('user_id', $sellerUserId);
+                })->count();
+        }
 
         // add folder
         if (isset($_POST['add_folder'])) {
@@ -72,7 +79,10 @@ class SellerController extends Controller {
 
             if (!empty($name)) {
 
-                $collID = DB::add('collections (user_id, name) VALUES (?, ?)', [$sellerUserId, $name]);
+                $collID = DesignCollection::create([
+                    'user_id' => $sellerUserId,
+                    'name' => $name,
+                ])->id;
 
                 redirect_old('/artist/collection?id=' . $collID);
             } else redirect_old();
@@ -87,7 +97,6 @@ class SellerController extends Controller {
             'locationTag' => 'shop',
             'seller' => $seller,
             'user' => $user,
-            'vip' => $vip,
             'owner' => $owner,
             'id' => $id,
             'contacts' => $contacts,
@@ -95,7 +104,7 @@ class SellerController extends Controller {
             'likeN' => $likeN,
             'follN' => $follN,
             'collN' => $collN,
-            'hasItems' => $hasItems,
+            'hasItems' => $productCount > 0,
             'collBlock' => $collBlock,
         ]);
     }
