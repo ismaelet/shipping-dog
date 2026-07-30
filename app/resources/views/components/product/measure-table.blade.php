@@ -1,10 +1,10 @@
-<?php
+@php
 
-use App\Legacy\System\DB;
+	$measures = $product->type->measures->sortBy('id');
+	$sizes = $product->type->sizes;
+	$material = $measures->where('size', 'mat')->first();
 
-$measures = $product->type->measures->sortBy('id');
-$sizes = $product->type->sizes;
-?>
+@endphp
 
 @pushOnce('styles')
 	<link
@@ -19,9 +19,7 @@ $sizes = $product->type->sizes;
 >
 	<div class="modal-form measure-table">
 
-		<div class="modal_close lbox-close">
-			{!! embed_icon('close') !!}
-		</div>
+		<x-icon-close class="modal_close lbox-close" />
 
 		<h3 class="txt-15rem txt-semibold mar-b-1 brb2 br-blk">Taglie:</h3>
 		<p class="">Se non vedi tutte le taglie scorri verso il basso.</p>
@@ -54,11 +52,8 @@ $sizes = $product->type->sizes;
 
 		</div>
 
-		<?php if (DB::exists('items_types_measures WHERE type_id=? AND size=?', [$product->type->id, 'mat'])) { ?>
-		<p class="">Composizione:
-			<?= DB::find('val FROM items_types_measures WHERE type_id=? AND size=?', [$product->type->id, 'mat']) ?>
-		</p>
-		<?php } ?>
-
+		@if ($material)
+			<p class="">Composizione: {{ $material->val }}</p>
+		@endif
 	</div>
 </div>
