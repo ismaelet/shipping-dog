@@ -64,7 +64,14 @@ $cart = cart();
 				</div>
 
 				<!-- Recap -->
-				<livewire:cart.recap-panel />
+				<section
+					id="recap"
+					class="cart-panel surface"
+				>
+					<x-heading.component>Riepilogo</x-heading.component>
+
+					<livewire:cart.recap-panel />
+				</section>
 			</form>
 		</div>
 	</div>

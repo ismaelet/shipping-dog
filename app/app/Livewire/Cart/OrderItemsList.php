@@ -28,7 +28,7 @@ class OrderItemsList extends Component {
      * Lifecycle hook: Mount the component
      */
     public function mount(): void {
-        $this->orderId ??= cart()?->id;
+        $this->orderId = $this->order ? $this->order->id : cart()?->id;
 
         $this->loadOrderItems();
     }

@@ -60,7 +60,14 @@
 			<livewire:cart.coupon-panel />
 
 			{{-- Recap panel --}}
-			<livewire:cart.recap-panel />
+			<section
+				id="recap"
+				class="cart-panel surface"
+			>
+				<x-heading.component>Riepilogo</x-heading.component>
+
+				<livewire:cart.recap-panel />
+			</section>
 
 		</div>
 	</form>

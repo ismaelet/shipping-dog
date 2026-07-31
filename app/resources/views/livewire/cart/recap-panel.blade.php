@@ -6,8 +6,7 @@
 	</style>
 @endpushOnce
 
-<div class="cart-panel surface">
-	<x-heading.component>Riepilogo</x-heading.component>
+<div class="">
 	<div class="grid grid-cols-1 gap-4">
 		<div class="chck_item flex justify-between">
 			<p class="">Articoli</p>
@@ -44,7 +43,7 @@
 			</div>
 		@endif
 
-		@if (in_array($order->statusTag(), ['open', 'received']))
+		@if ($order->statusTag() === 'open')
 			<div
 				id="chck_btn_box"
 				class="gap1 grid"
@@ -62,6 +61,5 @@
 				>Continua con gli acquisti</x->
 			</div>
 		@endif
-
 	</div>
 </div>

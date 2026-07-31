@@ -157,16 +157,17 @@
 			</div>
 
 			<div class="grid gap-6 sm:gap-8">
-				<section
-					id="items"
-					class="cart-panel surface"
-				>
+				<section class="page-panel surface">
 					<x-heading.component>Articoli</x-heading.component>
 
 					<livewire:cart.order-items-list :order="$order" />
 				</section>
 
-				<livewire:cart.recap-panel :order="$order" />
+				<section class="page-panel surface">
+					<x-heading.component>Riepilogo</x-heading.component>
+
+					<livewire:cart.recap-panel :order="$order" />
+				</section>
 			</div>
 		</div>
 	</div>
