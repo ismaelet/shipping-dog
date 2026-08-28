@@ -3,6 +3,7 @@
 namespace App\Livewire\Header;
 
 use Illuminate\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -11,6 +12,7 @@ class CartIcon extends Component {
     /**
      * Property: The quantity of items in the cart
      */
+    #[Locked]
     public int $quantity = 0;
 
     /**

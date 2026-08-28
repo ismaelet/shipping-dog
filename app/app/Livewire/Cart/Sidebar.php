@@ -5,6 +5,7 @@ namespace App\Livewire\Cart;
 use App\Models\Ecommerce\Order;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -33,6 +34,7 @@ class Sidebar extends Component {
     /**
      * Property: Whether the cart is empty
      */
+    #[Locked]
     public bool $isEmpty = true;
 
     /**
