@@ -125,7 +125,7 @@ class AddToCart extends Component {
         $color = $this->product->colors->firstWhere('id', $this->colorId);
 
         if (!$color) {
-            throw new \RuntimeException('Il colore selezionato non è valido per questo prodotto.');
+            throw new \RuntimeException('Il colore selezionato non è valido per questo prodotto. Prodotto: ' . $this->product->id . '. Colore selezionato: ' . $this->colorId);
         }
 
         // Check if the order item already exists in the cart
