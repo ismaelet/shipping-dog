@@ -13,43 +13,24 @@ use Filament\Actions\DeleteBulkAction;
 use App\Filament\Admin\Resources\ProductTypes\Pages\ListProductTypes;
 use App\Filament\Admin\Resources\ProductTypes\Pages\CreateProductType;
 use App\Filament\Admin\Resources\ProductTypes\Pages\EditProductType;
-use App\Filament\Admin\Resources\ProductTypeResource\Pages;
-use App\Filament\Admin\Resources\ProductTypeResource\RelationManagers;
 use App\Filament\Admin\Resources\ProductTypes\RelationManagers\ColorsRelationManager;
 use App\Filament\Admin\Resources\ProductTypes\RelationManagers\MeasuresRelationManager;
 use App\Filament\Admin\Resources\ProductTypes\RelationManagers\MockupSizesRelationManager;
 use App\Filament\Admin\Resources\ProductTypes\RelationManagers\PositionsRelationManager;
 use App\Models\Ecommerce\Product;
-use App\Models\Ecommerce\Product\ProductColor;
-use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
-use BladeUI\Icons\Components\Icon;
-use ColorRepeater;
-use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
-use Filament\Forms;
-use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Get;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\HtmlString;
-use MockupUploader;
 
 class ProductTypeResource extends Resource {
 
@@ -136,6 +117,13 @@ class ProductTypeResource extends Resource {
                                             ->multiple()
                                             ->preload()
                                             ->relationship('sizes', 'name'),
+
+                                        Select::make('gender_id')
+                                            ->label('Genere')
+                                            ->required()
+                                            ->preload()
+                                            ->nullable(true)
+                                            ->relationship('gender', 'name'),
 
                                         Select::make('variant_of')
                                             ->label('Variante di')
