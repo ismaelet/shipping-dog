@@ -266,15 +266,19 @@ class GlsService {
      * Track Parcel Helper: Orders
      */
     private function trackParcelOrders(): Collection {
-        return Order::whereIn('status', [EcommerceHelper::statusFromTag('awaiting-shipping'), EcommerceHelper::statusFromTag('shipped')])
+        return Order::whereIn('status', [
+            EcommerceHelper::statusFromTag('awaiting-shipping'),
+            EcommerceHelper::statusFromTag('shipped'),
+        ])
             ->whereNotNull('tracking')
+            ->where('created_at', '>=', now()->subDays(90))
             ->get();
     }
 
     /**
      * Track Parcel Helper: Track Parcel
      */
-    public function trackParcel(Order $order): bool {
+    public function trackParcel(Order $order, bool $sendEmail = true): bool {
         $shippedStatus = EcommerceHelper::statusFromTag('shipped');
         $deliveredStatus = EcommerceHelper::statusFromTag('delivered');
 
@@ -313,11 +317,27 @@ class GlsService {
         }
 
         if (str_contains($body, 'Spedizione non trovata')) {
+            Log::warning('GLS shipment not found', [
+                'Order' => $order->id,
+                'Tracking' => $order->tracking,
+            ]);
+
             return false;
         }
 
-        // GLS may return non-UTF8 content
-        $body = mb_convert_encoding($body, 'UTF-8', 'UTF-8, ISO-8859-1, Windows-1252');
+        // GLS may return ISO-8859-1 encoded XML.
+        // Convert the content to UTF-8 and update the XML declaration.
+        $body = mb_convert_encoding(
+            $body,
+            'UTF-8',
+            'UTF-8, ISO-8859-1, Windows-1252'
+        );
+
+        $body = preg_replace(
+            '/(<\?xml[^>]*encoding=["\'])[^"\']+(["\'])/i',
+            '$1UTF-8$2',
+            $body
+        );
 
         $previousLibxmlSetting = libxml_use_internal_errors(true);
 
@@ -373,7 +393,9 @@ class GlsService {
                         'status' => $shippedStatus,
                     ]);
 
-                    $order->sendStatusEmail();
+                    if ($sendEmail) {
+                        $order->sendStatusEmail();
+                    }
                 }
 
                 return true;
@@ -384,7 +406,9 @@ class GlsService {
                         'status' => $deliveredStatus,
                     ]);
 
-                    $order->sendStatusEmail();
+                    if ($sendEmail) {
+                        $order->sendStatusEmail();
+                    }
                 }
 
                 return true;
