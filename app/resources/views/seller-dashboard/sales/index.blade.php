@@ -213,7 +213,7 @@
 					@if ($sort == 'designs')
 						<x-sales.items :sales="$sales" />
 					@elseif ($sort == 'time')
-						<div class="list-cont surface px-(--content-spacing)">
+						<div class="list-cont surface px-(--spacing-content)">
 							<x-sales.history
 								:sales="$sales"
 								:selected-year="$currentYear"

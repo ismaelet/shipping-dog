@@ -2,37 +2,33 @@
 	@auth
 		<button
 			type="button"
-			class="like-button text-neutral-light-400 stack-content hover:text-primary group absolute right-2 top-2 grid h-7 w-7 cursor-pointer place-items-center rounded-full bg-white shadow transition-colors"
+			@class([
+				'like-button group grid size-10 cursor-pointer place-items-center rounded-full backdrop-blur transition-colors',
+				'bg-orange-500 text-white' => $wishlisted,
+				'bg-white/90 text-slate-900 hover:bg-white' => !$wishlisted,
+			])
 			title="{{ $wishlisted ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti' }}"
+			aria-label="{{ $wishlisted ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti' }}"
+			aria-pressed="{{ $wishlisted ? 'true' : 'false' }}"
 			data-wishlisted="{{ $wishlisted ? 'true' : 'false' }}"
 			wire:click="{{ $wishlisted ? 'destroy' : 'store' }}"
+			wire:loading.attr="disabled"
+			wire:target="store,destroy"
 		>
 			<x-dynamic-component
 				:component="$wishlisted ? 'icon-love' : 'icon-love-stroke'"
-				class="h-1/2 w-1/2 transition-opacity group-hover:opacity-0"
-			/>
-
-			<x-dynamic-component
-				:component="$wishlisted ? 'icon-love-stroke' : 'icon-love'"
-				class="h-1/2 w-1/2 opacity-0 transition-opacity group-hover:opacity-100"
+				class="size-4"
 			/>
 		</button>
 	@else
 		<a
-			class="like-button text-neutral-light-400 stack-content hover:text-primary group absolute right-2 top-2 grid h-7 w-7 cursor-pointer place-items-center rounded-full bg-white shadow transition-colors"
 			href="{{ route('login', ['url' => request()->url()]) }}"
-			data-wishlisted="false"
+			class="like-button grid size-10 cursor-pointer place-items-center rounded-full bg-white/90 text-slate-900 backdrop-blur transition-colors hover:bg-white"
 			title="Aggiungi ai preferiti"
+			aria-label="Aggiungi ai preferiti"
+			data-wishlisted="false"
 		>
-			<x-dynamic-component
-				component="icon-love-stroke"
-				class="h-1/2 w-1/2 transition-opacity group-hover:opacity-0"
-			/>
-
-			<x-dynamic-component
-				component="icon-love"
-				class="h-1/2 w-1/2 opacity-0 transition-opacity group-hover:opacity-100"
-			/>
+			<x-icon-love-stroke class="size-4" />
 		</a>
 	@endauth
 </div>

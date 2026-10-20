@@ -1,6 +1,6 @@
 <x-layouts.form
 	:$title
-	:$locationTag
+	:$location
 >
 
 	<x-slot name="body">

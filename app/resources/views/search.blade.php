@@ -7,7 +7,7 @@
 
 <x-layouts.legacy-main
 	:$title
-	:$locationTag
+	:$location
 >
 	<section
 		id="page-header"

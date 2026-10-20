@@ -11,7 +11,7 @@
 @endpushOnce
 
 <x-layouts.legacy-main
-	:$locationTag
+	:$location
 	:$title
 >
 

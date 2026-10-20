@@ -1,46 +1,52 @@
-@pushOnce('styles')
-	<link
-		rel="stylesheet"
-		href="{{ asset('css/legacy/home-popular.css') }}"
-	>
-@endpushOnce
+{{-- Popular products --}}
+<section
+	id="novita"
+	class="full-width bg-white py-20 transition-colors dark:bg-slate-950"
+>
+	<div class="mx-auto max-w-7xl px-5 lg:px-8">
+		{{-- Heading --}}
+		<div class="mb-10 flex items-end justify-between gap-4">
+			<div>
+				<p class="text-xs font-bold uppercase tracking-[0.2em] text-orange-600">
+					Scelti per te
+				</p>
 
-<section id="popular">
-	<div class="content-grid">
-		<div class="section-heading-box">
-			<h2 class="section-heading">Articoli popolari</h2>
-			<a href="<?= client_url('/shop') ?>">
-				<p class="more txt-rig">Esplora tutti</p>
+				<h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
+					I più amati
+				</h2>
+			</div>
+
+			<a
+				href="{{ route('shop') }}"
+				class="hidden items-center gap-2 text-sm font-bold transition-colors hover:text-orange-600 sm:inline-flex"
+			>
+				Vedi tutto
+
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-4"
+					aria-hidden="true"
+				>
+					<path d="M5 12h14" />
+					<path d="m13 6 6 6-6 6" />
+				</svg>
 			</a>
 		</div>
 
-		<section class="relative">
-			<div
-				id="carousel-popular"
-				class="carousel mob-fluid"
-				data-pos="1"
-				data-loop="1"
-			>
-
-				@foreach ($products as $product)
-					<div class="carousel-box">
-						<x-product-card :$product />
-					</div>
-				@endforeach
-
-			</div>
-
-			<div
-				class="carousel-dots"
-				data-tar="#carousel-popular"
-			>
-				<?php for ($i = 1; $i <= 5; $i++) { ?>
-				<div
-					class="carousel-dot <?= $i == 1 ? 'active' : '' ?>"
-					data-page="<?= $i ?>"
-				></div>
-				<?php } ?>
-			</div>
-		</section>
+		{{-- Products --}}
+		<div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+			@foreach ($products as $product)
+				<x-product-card
+					:$product
+					:badge="$loop->index < 2 ? 'Bestseller' : 'Novità'"
+				/>
+			@endforeach
+		</div>
 	</div>
 </section>

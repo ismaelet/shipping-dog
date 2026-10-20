@@ -2,7 +2,7 @@
     'title' => null,
     'description' => null,
     'thumbnail' => null,
-    'locationTag' => null,
+    'location' => null,
     'colorScheme' => null,
     'headerConfig' => [],
 ])
@@ -45,9 +45,9 @@
 	:$colorScheme
 >
 	<div class="main-content">
-		<x-navigation.header
+		<x-header
 			:config="$headerConfig"
-			:$locationTag
+			:$location
 		/>
 
 		<main>

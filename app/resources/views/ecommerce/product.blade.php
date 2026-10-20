@@ -13,7 +13,7 @@
 <x-layouts.legacy-main
 	:$title
 	:$thumbnail
-	:$locationTag
+	:$location
 >
 	<div class="full-width">
 		<input

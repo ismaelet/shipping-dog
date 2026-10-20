@@ -1,150 +1,154 @@
 /* Page header */
 #slider {
-	background-color: #111;
-	height: 25rem;
+  background-color: #111;
+  height: 25rem;
 }
 
 #bgr {
-	opacity: 0.3;
+  opacity: 0.3;
 }
 
 #title_cont {
-	display: table;
-	width: 100%;
-	height: 100%;
+  display: table;
+  width: 100%;
+  height: 100%;
 }
 
 #title-box {
-	display: table-cell;
-	text-align: center;
-	vertical-align: middle;
-	cursor: default;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  cursor: default;
 }
 
 #main_title {
-	color: #fff;
-	font-size: 6rem;
-	line-height: 1.2rem;
-	letter-spacing: 2rem;
-	margin-right: -2rem;
+  color: #fff;
+  font-size: 6rem;
+  line-height: 1.2rem;
+  letter-spacing: 2rem;
+  margin-right: -2rem;
 }
 
 /* Body */
 .sections {
-	padding-top: 2rem;
+  padding-top: 2rem;
 }
 
 .title-box {
-	margin-bottom: 5em;
-	text-align: center;
+  margin-bottom: 5em;
+  text-align: center;
 }
 
 .title {
-	display: inline-block;
-	position: relative;
-	background: var(--color-background);
-	max-width: 50vw;
-	padding: 0 1em;
-	font-size: 32px;
+  display: inline-block;
+  position: relative;
+  background: var(--color-background-400);
+  max-width: 50vw;
+  padding: 0 1em;
+  font-size: 32px;
 }
 
 .title_line {
-	background-color: var(--color-neutral-300);
-	width: 100%;
-	height: 1px;
-	position: absolute;
-	top: 50%;
+  background-color: var(--color-neutral-300);
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  top: 50%;
 }
 
 @media (max-width: 480px) {
-	.title-box {
-		margin-bottom: 3rem;
-	}
+  .title-box {
+    margin-bottom: 3rem;
+  }
 
-	.title {
-		font-size: 25px;
-	}
+  .title {
+    font-size: 25px;
+  }
 }
 
 /* Infos */
 .info_chck {
-	opacity: 0;
-	position: absolute;
+  opacity: 0;
+  position: absolute;
 }
 
 .info_ico {
-	display: inline-block;
-	background-position: center;
-	background-size: contain;
-	background-repeat: no-repeat;
-	width: 20px;
-	height: 20px;
-	margin-right: 8px;
-	vertical-align: middle;
+  display: inline-block;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
 #section1 .info_ico svg {
-	fill: orange;
+  fill: orange;
 }
 #section2 .info_ico svg {
-	fill: dodgerblue;
+  fill: dodgerblue;
 }
 #section3 .info_ico svg {
-	fill: green;
+  fill: green;
 }
 
 .info_title {
-	padding: 0.8em 0.9rem;
-	font-size: 20px;
-	transition: background 0.3s, color 0.3s;
-	cursor: pointer;
+  padding: 0.8em 0.9rem;
+  font-size: 20px;
+  transition:
+    background 0.3s,
+    color 0.3s;
+  cursor: pointer;
 }
 
 .info_title_txt {
-	vertical-align: middle;
+  vertical-align: middle;
 }
 
 .info_title:hover {
-	background-color: var(--surface-secondary);
+  background-color: var(--surface-secondary);
 }
 
 .info_chck:checked + .info_lbl .info_title {
-	color: var(--color-primary-400);
+  color: var(--color-primary-400);
 }
 
 .info_txt {
-	opacity: 0;
-	padding-left: 0.9rem;
-	margin: 10px 0 10px 0;
-	font-size: 0.9rem;
-	line-height: 0;
-	text-align: justify;
-	overflow: hidden;
-	transition: opacity 0.3s, line-height 0.3s;
+  opacity: 0;
+  padding-left: 0.9rem;
+  margin: 10px 0 10px 0;
+  font-size: 0.9rem;
+  line-height: 0;
+  text-align: justify;
+  overflow: hidden;
+  transition:
+    opacity 0.3s,
+    line-height 0.3s;
 }
 
 .info_txt a {
-	color: var(--secondary);
-	font-weight: bold;
+  color: var(--secondary);
+  font-weight: bold;
 }
 
 .info_chck:checked ~ .info_txt {
-	opacity: 1;
-	line-height: 1.6;
+  opacity: 1;
+  line-height: 1.6;
 }
 
 @media (max-width: 480px) {
-	.info_title {
-		font-size: 1rem;
-	}
+  .info_title {
+    font-size: 1rem;
+  }
 }
 
 /* SECTION 1 */
 #section1 {
-	padding-top: 7em;
+  padding-top: 7em;
 }
 
 /* SECTION 3 */
 #section3 {
-	padding-bottom: 6em;
+  padding-bottom: 6em;
 }

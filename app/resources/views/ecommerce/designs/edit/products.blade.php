@@ -158,7 +158,7 @@
 
 
 		.item-panel .tab.active {
-			background-color: var(--color-background);
+			background-color: var(--color-background-400);
 			cursor: default;
 			color: var(--color-neutral-700);
 			border-bottom: 0;

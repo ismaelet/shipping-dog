@@ -12,7 +12,7 @@ class LogoutController extends Controller {
      */
     public function index() {
         return view('auth.logout')
-            ->with('locationTag', 'logout')
+            ->with('location', 'logout')
             ->with('title', 'Logout');
     }
 

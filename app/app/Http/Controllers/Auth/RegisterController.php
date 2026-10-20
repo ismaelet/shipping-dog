@@ -10,33 +10,33 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller {
-	public function index() {
-		return view('auth.register')
-			->with('locationTag', 'login')
-			->with('title', 'Registrati');
-	}
+    public function index() {
+        return view('auth.register')
+            ->with('location', 'login')
+            ->with('title', 'Registrati');
+    }
 
-	public function store(Request $request) {
-		// Validation
-		$this->validate($request, [
-			'password' => ['required', 'confirmed'],
-			'email' => [
-				'required',
-				'email',
-				Rule::unique('users', 'email'),
-			],
-		]);
+    public function store(Request $request) {
+        // Validation
+        $this->validate($request, [
+            'password' => ['required', 'confirmed'],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email'),
+            ],
+        ]);
 
-		// Store the user
-		User::create([
-			'password' => Hash::make($request->password),
-			'email' => $request->email,
-		]);
+        // Store the user
+        User::create([
+            'password' => Hash::make($request->password),
+            'email' => $request->email,
+        ]);
 
-		// Sign in the user
-		Auth::attempt($request->only('email', 'password'));
+        // Sign in the user
+        Auth::attempt($request->only('email', 'password'));
 
-		// Redirect
-		return redirect('/user-dashboard');
-	}
+        // Redirect
+        return redirect('/user-dashboard');
+    }
 }

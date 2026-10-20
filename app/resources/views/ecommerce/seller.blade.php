@@ -10,7 +10,7 @@
 	</style>
 @endpushOnce
 
-<x-layouts.legacy-main :$locationTag>
+<x-layouts.legacy-main :$location>
 
 	<section
 		id="head"

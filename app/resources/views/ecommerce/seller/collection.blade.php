@@ -74,7 +74,7 @@
 	:title="$title"
 	:description="$description"
 	:thumbnail="$thumbnail"
-	:location-tag="$locationTag"
+	:location-tag="$location"
 >
 	<div class="">
 		@if ($collection->image(1024))
@@ -100,7 +100,7 @@
 		<div class="w-full">
 			<div class="relative z-10 mx-auto -mt-12 w-20">
 				<a
-					class="border-(--color-background) bg-(--surface-secondary) block aspect-square rounded-[10px] border-[0.4rem] bg-cover bg-center"
+					class="border-(--color-background-400) bg-(--surface-secondary) block aspect-square rounded-[10px] border-[0.4rem] bg-cover bg-center"
 					href="{{ $seller->url() }}"
 					@style([
 					    'background-image: url(' . asset(ltrim($seller->icon(), '/')) . ')' => $seller->icon(),

@@ -19,11 +19,11 @@ class OpenShopController extends Controller {
      */
     public function index(Request $request): View {
         $title = 'Apri un negozio';
-        $locationTag = 'open-shop';
+        $location = 'open-shop';
 
         return view('open-shop', [
             'title' => $title,
-            'locationTag' => $locationTag,
+            'location' => $location,
         ]);
     }
 

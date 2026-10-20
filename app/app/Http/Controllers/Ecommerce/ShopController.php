@@ -9,16 +9,16 @@ use Illuminate\View\View;
 
 class ShopController extends Controller {
 
-	/**
-	 * Display the shop page
-	 */
-	public function index(Request $request): View {
-		$highlightedDesign = Design::with('seller', 'main_product')->find(1612);
+    /**
+     * Display the shop page
+     */
+    public function index(Request $request): View {
+        $highlightedDesign = Design::with('seller', 'main_product')->find(1612);
 
-		return view('ecommerce.shop', [
-			'title' => 'Negozio',
-			'locationTag' => 'shop',
-			'highlightedDesign' => $highlightedDesign,
-		]);
-	}
+        return view('ecommerce.shop', [
+            'title' => 'Negozio',
+            'location' => 'shop',
+            'highlightedDesign' => $highlightedDesign,
+        ]);
+    }
 }

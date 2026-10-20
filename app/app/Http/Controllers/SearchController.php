@@ -17,7 +17,7 @@ class SearchController extends Controller {
      */
     public function index(Request $request): View {
         $search = $_GET['search'] ?? '';
-        $locationTag = 'search';
+        $location = 'search';
         $title = 'Cerca: ' . $search;
 
         $resultCount = 0;
@@ -63,7 +63,7 @@ class SearchController extends Controller {
 
         return view('search', [
             'title' => $title,
-            'locationTag' => $locationTag,
+            'location' => $location,
             'search' => $search,
             'designs' => $designs ?? collect(),
             'sellers' => $sellers ?? collect(),

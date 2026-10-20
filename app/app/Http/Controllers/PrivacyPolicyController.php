@@ -7,19 +7,19 @@ use Illuminate\View\View;
 
 class PrivacyPolicyController extends Controller {
 
-	/**
+    /**
      * Display the upload terms page.
      *
      * @param Request $request
      * @return View
      */
     public function index(Request $request): View {
-		$title = 'Privacy Policy';
-		$locationTag = 'support';
+        $title = 'Privacy Policy';
+        $location = 'support';
 
-		return view('support.privacy-policy', [
-			'title' => $title,
-			'locationTag' => $locationTag,
-		]);
-	}
+        return view('support.privacy-policy', [
+            'title' => $title,
+            'location' => $location,
+        ]);
+    }
 }

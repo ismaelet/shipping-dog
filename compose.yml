@@ -48,8 +48,10 @@ services:
       GOOGLE_CLIENT_ID: 31403388119-i2vlmbkk8cp8fbhrrbhusdb5g1qb1nbj.apps.googleusercontent.com
       GOOGLE_CLIENT_SECRET: REMOVED_SECRET
       GOOGLE_REDIRECT_URI: http://localhost:8000/auth/google/callback
+
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   vite:
     build:
@@ -63,14 +65,19 @@ services:
       - 5173:5173
 
   db:
-    image: mysql:latest
+    image: mariadb:12.3
     environment:
-      MYSQL_DATABASE: project_database
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MARIADB_DATABASE: project_database
+      MARIADB_ROOT_PASSWORD: rootpassword
     volumes:
       - db:/var/lib/mysql
     ports:
       - 3306:3306
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   db:

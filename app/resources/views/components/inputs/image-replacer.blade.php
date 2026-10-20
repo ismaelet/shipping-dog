@@ -23,7 +23,7 @@
 	<div
 		class="stack-content group grid h-full w-full cursor-pointer justify-items-center opacity-0 transition-opacity hover:opacity-100"
 	>
-		<div class="bg-background h-full w-full opacity-70"></div>
+		<div class="bg-background-400 h-full w-full opacity-70"></div>
 
 		<div class="relative w-12 translate-y-4 text-neutral-700 transition-transform group-hover:translate-y-0">
 			<?= embed_icon('upload') ?></div>

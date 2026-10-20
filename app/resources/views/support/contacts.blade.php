@@ -30,7 +30,7 @@
 
 		.form-inp:-webkit-autofill,
 		.form-textarea:-webkit-autofill {
-			-webkit-box-shadow: 0 0 0 1000vw var(--color-background) inset;
+			-webkit-box-shadow: 0 0 0 1000vw var(--color-background-400) inset;
 			-webkit-text-fill-color: var(--color-neutral-700);
 		}
 
@@ -43,7 +43,7 @@
 
 <x-layouts.legacy-main
 	:$title
-	:$locationTag
+	:$location
 >
 
 	<div class="center-content fill-width light relative grid bg-white px-8 py-20 sm:py-40">

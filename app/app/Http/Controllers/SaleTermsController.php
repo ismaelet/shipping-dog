@@ -7,19 +7,19 @@ use Illuminate\View\View;
 
 class SaleTermsController extends Controller {
 
-	/**
+    /**
      * Display the sale terms page.
      *
      * @param Request $request
      * @return View
      */
     public function index(Request $request): View {
-		$title = 'Condizioni di vendita';
-		$locationTag = 'support';
+        $title = 'Condizioni di vendita';
+        $location = 'support';
 
-		return view('support.sale-terms', [
-			'title' => $title,
-			'locationTag' => $locationTag,
-		]);
-	}
+        return view('support.sale-terms', [
+            'title' => $title,
+            'location' => $location,
+        ]);
+    }
 }

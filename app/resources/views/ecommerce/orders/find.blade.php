@@ -1,6 +1,6 @@
 <x-layouts.form
 	:$title
-	:$locationTag
+	:$location
 	method="POST"
 	action="{{ route('orders.find') }}"
 >

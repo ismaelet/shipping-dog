@@ -1,4 +1,34 @@
-@props(['title' => null, 'theme' => null, 'headerConfig' => [], 'locationTag' => null])
+@props([
+    'title' => null,
+    'description' => null,
+    'thumbnail' => null,
+    'location' => null,
+    'colorScheme' => null,
+])
+
+<x-layouts.app
+	:$title
+	:$description
+	:$location
+	:$thumbnail
+	:$colorScheme
+>
+	{{-- Page content --}}
+	<div class="main-content min-h-svh">
+		{{-- Header --}}
+		<x-header />
+
+		{{-- Main --}}
+		<main>
+			<div class="content-grid min-h-full">
+				{{ $slot }}
+			</div>
+		</main>
+	</div>
+
+	{{-- Footer --}}
+	<x-footer />
+</x-layouts.app>
 
 @push('styles')
 	<style>
@@ -12,29 +42,12 @@
 			min-height: 100svh;
 		}
 
+		.header-container {
+			grid-area: header;
+		}
+
 		main {
 			grid-area: main;
 		}
 	</style>
 @endpush
-
-<x-layouts.app
-	:$title
-	:$theme
->
-	<div class="main-content">
-		<x-navigation.header
-			:config="$headerConfig"
-			:$locationTag
-		/>
-
-		<main>
-			<div class="content-grid min-h-full">
-				{{ $slot }}
-			</div>
-		</main>
-	</div>
-
-	<x-navigation.footer />
-	<livewire:cart.sidebar />
-</x-layouts.app>

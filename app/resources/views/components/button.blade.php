@@ -29,7 +29,7 @@
 				background-color: var(--color-primary-400);
 				box-shadow: 0px 1rem 4rem -1rem color-mix(in hsl, var(--color-primary-400), transparent 60%);
 				color: #fff;
-				transition: opacity 0.2s;
+				transition: opacity 0.2s, background-color 0.2s;
 
 				&::before {
 					content: "";
@@ -39,6 +39,10 @@
 					background-image: linear-gradient(to right, var(--color-primary-400), var(--color-primary-500));
 					border-radius: inherit;
 					transition: inherit;
+				}
+
+				&:hover {
+					background-color: var(--color-primary-300);
 				}
 
 				/* Primary button: Hover state */
@@ -53,6 +57,22 @@
 
 					&::before {
 						background-image: linear-gradient(to right, var(--color-secondary-400), var(--color-secondary-500));
+					}
+
+				}
+
+				/* Primary button: Neutral color */
+				&[data-color="neutral"] {
+					color: var(--color-background-400);
+					background-color: var(--color-neutral-heading);
+					box-shadow: 0px 1rem 4rem -1rem color-mix(in hsl, var(--color-neutral-400), transparent 60%);
+
+					&:hover {
+						background-color: color-mix(in hsl, var(--color-neutral-heading), var(--color-primary-400) 20%);
+					}
+
+					&::before {
+						background: var(--color-neutral-heading);
 					}
 
 				}

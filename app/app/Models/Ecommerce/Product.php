@@ -42,7 +42,8 @@ class Product extends Model {
         'type_id',
         'color_id',
         'status',
-        'positions'
+        'positions',
+        'recent_sales'
     ];
 
     /**

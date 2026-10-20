@@ -170,7 +170,7 @@
 			@endif
 
 			<div
-				class="bg-background/90 absolute inset-0 flex items-start justify-center"
+				class="bg-background-400/90 absolute inset-0 flex items-start justify-center"
 				wire:loading.flex
 			>
 				<x-icon-loading class="mt-[30vh] w-20" />

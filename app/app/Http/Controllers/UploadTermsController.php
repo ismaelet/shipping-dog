@@ -7,19 +7,19 @@ use Illuminate\View\View;
 
 class UploadTermsController extends Controller {
 
-	/**
+    /**
      * Display the upload terms page.
      *
      * @param Request $request
      * @return View
      */
     public function index(Request $request): View {
-		$title = 'Condizioni di invio';
-		$locationTag = 'support';
+        $title = 'Condizioni di invio';
+        $location = 'support';
 
-		return view('support.upload-terms', [
-			'title' => $title,
-			'locationTag' => $locationTag,
-		]);
-	}
+        return view('support.upload-terms', [
+            'title' => $title,
+            'location' => $location,
+        ]);
+    }
 }

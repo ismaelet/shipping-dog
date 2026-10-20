@@ -5,7 +5,7 @@
 		.replace-image-overlay {
 			background-image: linear-gradient(135deg,
 					rgba(0, 0, 0, 0.3),
-					var(--color-background));
+					var(--color-background-400));
 		}
 	</style>
 @endpushOnce

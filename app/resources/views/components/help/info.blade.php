@@ -47,7 +47,7 @@
 	</div>
 
 	<p
-		class="info-text surface-2 bg-background w-120 pointer-events-none absolute left-1/2 z-10 max-w-[70vw] -translate-y-2 p-3 text-sm italic opacity-0 shadow transition-all group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
+		class="info-text surface-2 bg-background-400 w-120 pointer-events-none absolute left-1/2 z-10 max-w-[70vw] -translate-y-2 p-3 text-sm italic opacity-0 shadow transition-all group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
 		style="transform: translateX(calc(-50% + var(--tooltip-shift, 0px))) translateY(-0.5rem);"
 		data-tooltip
 	>

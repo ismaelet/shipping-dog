@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Design\CustomerPhoto;
 use App\Models\Ecommerce\Product;
-use App\Models\Ecommerce\Seller;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -18,37 +16,48 @@ class HomeController extends Controller {
      * @return View
      */
     public function index(Request $request): View {
+        $fanPicsCount = 5;
 
-        $productN = 20;
-        $popularDesignCount = 20;
-        $sellerCount = 12;
-        $fanPicsCount = 7;
+        // Products
+        $productRelations = [
+            'design',
+            'design_with_trashed',
+            'design.seller',
+            'seller',
+            'seller.prices',
+            'design.logo_group',
+            'color',
+            'type',
+            'position',
+            'specific_price',
+            'base_price',
+        ];
 
-        // products
-        $popular = Product::join('sellers', 'products.user_id', '=', 'sellers.user_id')
+        $productQuery = fn() => Product::query()
+            ->join('sellers', 'products.user_id', '=', 'sellers.user_id')
             ->where('products.status', true)
             ->where('sellers.status', true)
-            ->with('design', 'design_with_trashed', 'design.seller', 'seller', 'seller.prices', 'design.logo_group', 'color', 'type', 'position', 'specific_price', 'base_price')
-            ->orderBy('products.recent_sales', 'desc')
-            ->limit($productN)
-            ->get('products.*');
+            ->with($productRelations)
+            ->select('products.*');
 
-        // designs
-        $popularDesigns = Design::join('sellers', 'designs.user_id', '=', 'sellers.user_id')
-            ->where('designs.status', true)
-            ->where('sellers.status', true)
-            ->with('main_product', 'products', 'seller')
-            ->orderBy('designs.recent_sales', 'desc')
-            ->limit($popularDesignCount)
-            ->get('designs.*');
-
-        // sellers
-        $sellers = Seller::where('status', true)
-            ->orderByDesc('recent_sales', 'desc')
-            ->orderBy('user_id')
-            ->with('user')
-            ->limit($sellerCount)
+        // Top 2 bestselling products
+        $bestSellers = $productQuery()
+            ->orderByDesc('products.recent_sales')
+            ->orderByDesc('products.id')
+            ->limit(2)
             ->get();
+
+        // Top 2 newest products with at least one recent sale
+        $recentProducts = $productQuery()
+            ->where('products.recent_sales', '>=', 1)
+            ->whereNotIn('products.id', $bestSellers->pluck('id'))
+            ->orderByDesc('products.created_at')
+            ->orderByDesc('products.id')
+            ->limit(2)
+            ->get();
+
+        // Combine both collections, preserving their order
+        $popular = $bestSellers->concat($recentProducts);
 
         // customer pics
         $customerPhotos = CustomerPhoto::inRandomOrder()
@@ -57,37 +66,29 @@ class HomeController extends Controller {
             ->get();
 
         // categories
-        $categories = [
-            ['Abbigliamento Donna', 'Tantissimi colori disponibili', 'shop?gender=f'],
-            ['Felpe & Hoodie', 'Calde e confortevoli', 'shop?type=hodf'],
-            ['Abbigliamento<br>Uomo', 'T-shirt, canotte e molto altro', 'shop?gender=m'],
-            ['Zaini & Accessori', 'Sacche, astucci, maschere...', 'shop?group=m'],
-            ['Mouse Pad', '', 'shop?type=pad'],
-        ];
-
         $features = [
             [
-                "Spedizioni rapide in Italia",
-                "Riceverai il tuo ordine entro 24 ore dal momento della spedizione in Italia, 48 ore per le isole."
+                "title" => "Creato da artisti",
+                "description" => "Design originali da creativi indipendenti.",
+                "icon" => "artist"
             ],
             [
-                "Nuovi sconti ogni mese",
-                "Ogni mese troverai offerte per i prodotti selezionati o per tutti gli articoli presenti nel nostro shop."
+                "title" => "Stampato in Italia",
+                "description" => "Produzione responsabile e di qualità.",
+                "icon" => "shirt"
             ],
             [
-                "Servizio di cambio taglia e rimborso",
-                "Voi cambiare taglia? Basta seguire la nostra procedura online, facile e veloce."
+                "title" => "Resi semplici",
+                "description" => "Hai 30 giorni per cambiare idea.",
+                "icon" => "return"
             ],
         ];
 
         return view('home', [
             'products' => $popular,
-            'designs' => $popularDesigns,
-            'sellers' => $sellers,
             'customerPhotos' => $customerPhotos,
-            'categories' => $categories,
             'features' => $features,
-            'locationTag' => 'home',
+            'location' => 'home',
         ]);
     }
 }

@@ -32,7 +32,7 @@ class RefundController extends Controller {
 
         return view('support.refund.search', [
             'title' => 'Cambio/Reso',
-            'locationTag' => 'support',
+            'location' => 'support',
         ]);
     }
 
@@ -91,7 +91,7 @@ class RefundController extends Controller {
 
         return view('support.refund.select', [
             'title' => 'Cambio/Reso',
-            'locationTag' => 'support',
+            'location' => 'support',
             'changeRequest' => $changeRequest,
             'order' => $order,
         ]);
@@ -150,7 +150,7 @@ class RefundController extends Controller {
 
         return view('support.refund.confirm', [
             'title' => 'Cambio/Reso',
-            'locationTag' => 'support',
+            'location' => 'support',
             'changeRequest' => $changeRequest,
         ]);
     }

@@ -58,7 +58,7 @@ class ProductController extends Controller {
 
         return view('ecommerce.product', [
             'product' => $product,
-            'locationTag' => 'shop',
+            'location' => 'shop',
             'title' => $title,
             'thumbnail' => $thumbnail,
             'productColors' => $productColors,

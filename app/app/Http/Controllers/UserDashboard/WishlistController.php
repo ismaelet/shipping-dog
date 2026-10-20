@@ -22,7 +22,7 @@ class WishlistController extends Controller {
         $wishlistItems = Auth::user()->wishlist_items;
 
         return view('user-dashboard.wishlist', [
-            'locationTag' => 'user-dashboard',
+            'location' => 'user-dashboard',
             'title' => $title,
             'likes' => $wishlistItems,
         ]);

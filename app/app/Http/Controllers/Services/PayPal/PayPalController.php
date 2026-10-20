@@ -113,7 +113,7 @@ class PayPalController extends Controller {
      * Action: Capture
      */
     public function capture(Order $order): RedirectResponse {
-        $order->load('order_items.type');
+        $order->load('order_items.type', 'order_items.product.type');
 
         // Set the headers
         $headers = [

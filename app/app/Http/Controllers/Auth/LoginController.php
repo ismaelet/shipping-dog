@@ -19,7 +19,7 @@ class LoginController extends Controller {
      */
     public function index(): View {
         return view('auth.login')
-            ->with('locationTag', 'login')
+            ->with('location', 'login')
             ->with('title', 'Login');
     }
 

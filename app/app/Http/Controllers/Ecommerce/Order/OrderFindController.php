@@ -19,7 +19,7 @@ class OrderFindController extends Controller {
      */
     public function index(Request $request): View {
         $title = 'Stato ordine';
-        $locationTag = 'support';
+        $location = 'support';
 
         $inputs = [
             [
@@ -34,7 +34,7 @@ class OrderFindController extends Controller {
         return view('ecommerce.orders.find', compact(
             'title',
             'inputs',
-            'locationTag'
+            'location'
         ));
     }
 

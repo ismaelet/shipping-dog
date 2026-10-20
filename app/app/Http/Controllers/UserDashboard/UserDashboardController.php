@@ -38,7 +38,7 @@ class UserDashboardController extends Controller {
         }
 
         return view('user-dashboard.recap', [
-            'locationTag' => 'user-dashboard',
+            'location' => 'user-dashboard',
             'title' => $title,
             'feedEntries' => $feedEntries,
         ]);
@@ -89,7 +89,7 @@ class UserDashboardController extends Controller {
         ];
 
         return view('user-dashboard.orders', [
-            'locationTag' => 'user-dashboard',
+            'location' => 'user-dashboard',
             'title' => $title,
             'confirmedOrders' => $confirmedOrders,
             'columns' => $columns,
@@ -104,7 +104,7 @@ class UserDashboardController extends Controller {
      */
     public function settings(Request $request): View {
         return view('user-dashboard.settings', [
-            'locationTag' => 'user-dashboard',
+            'location' => 'user-dashboard',
             'title' => 'Impostazioni',
         ]);
     }
