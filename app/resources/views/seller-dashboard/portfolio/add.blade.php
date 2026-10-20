@@ -27,7 +27,7 @@
 
 			<div
 				id="upload-box"
-				class="center-items clickable inlb mar-v-2 mar-h-auto bg-surface-400 text-neutral-700 transition-colors hover:text-neutral-950"
+				class="center-items clickable inlb mar-v-2 mar-h-auto bg-surface-400 text-neutral-heading transition-colors hover:text-neutral-950"
 			>
 
 				<div class="grid-flow center-content">

@@ -163,7 +163,7 @@
 									<div class="center-items hei-100">
 
 										<div class="coll-add-box cen wid-100 text-center">
-											<div class="coll-add-ico text-neutral-700">
+											<div class="coll-add-ico text-neutral-heading">
 												{!! embed_icon('add') !!}
 											</div>
 											<p class="coll-add-txt txt-wht">Aggiungi collezione</p>

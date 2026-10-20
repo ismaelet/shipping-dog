@@ -90,10 +90,10 @@
 
 			/* Secondary button */
 			&[data-variant="secondary"] {
-				padding-block: calc(var(--_padding-y) - var(--border-width));
-				padding-inline: calc((var(--_padding-y) - var(--border-width)) * 2);
-				border: var(--border-width) solid var(--color-neutral-400);
-				color: var(--color-neutral-700);
+				padding-block: calc(var(--_padding-y) - var(--spacing-border));
+				padding-inline: calc((var(--_padding-y) - var(--spacing-border)) * 2);
+				border: var(--spacing-border) solid var(--color-neutral-400);
+				color: var(--color-neutral-heading);
 				transition: border 0.2s, color 0.2s;
 
 				/* Secondary button: Dark color scheme */
@@ -127,8 +127,8 @@
 
 				/* Secondary button: Hover state */
 				&:hover {
-					color: var(--color-neutral-700);
-					border-color: var(--color-neutral-700);
+					color: var(--color-neutral-heading);
+					border-color: var(--color-neutral-heading);
 				}
 			}
 

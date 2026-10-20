@@ -22,7 +22,7 @@
 				transition: grid-template-columns 0.4s, color .3s;
 
 				.category:has(:checked) & {
-					color: var(--color-neutral-700);
+					color: var(--color-neutral-heading);
 				}
 			}
 

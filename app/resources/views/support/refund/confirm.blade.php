@@ -30,10 +30,10 @@
 						<div class="item-cell item-new_cell">
 
 							@if ($item->is_change)
-								<h4 class="font-semibold text-neutral-700">Nuova taglia:</h4>
+								<h4 class="text-neutral-heading font-semibold">Nuova taglia:</h4>
 								<p class="">{{ $item->new_size->name }}</p>
 							@else
-								<p class="font-semibold text-neutral-700">RESO</p>
+								<p class="text-neutral-heading font-semibold">RESO</p>
 							@endif
 
 						</div>
@@ -49,10 +49,11 @@
 					istruzioni sottostanti.</x-alert>
 			@endif
 
-			<h3 class="mb-2 mt-8 text-lg font-semibold text-neutral-700">Istruzioni</h3>
+			<h3 class="text-neutral-heading mb-2 mt-8 text-lg font-semibold">Istruzioni</h3>
 			<p class="txt info">
 				@if ($changeRequest->isRefundOnly())
-					<span class="font-semibold text-neutral-700">1.</span> Spedisci il pacco con il reso con il metodo di spedizione
+					<span class="text-neutral-heading font-semibold">1.</span> Spedisci il pacco con il reso con il metodo di
+					spedizione
 					che
 					preferisci (tramite Poste o
 					qualsiasi corriere) all'indirizzo:<br><br>
@@ -61,36 +62,41 @@
 					Piazza Scopoli, 9<br>
 					38033 Cavalese (TN)<br><br>
 
-					<span class="font-semibold text-neutral-700">2.</span> Il costo degli articoli sarà rimborsato entro <span
-						class="font-semibold text-neutral-700"
+					<span class="text-neutral-heading font-semibold">2.</span> Il costo degli articoli sarà rimborsato entro <span
+						class="text-neutral-heading font-semibold"
 					>un giorno lavorativo</span> dalla
 					ricezione del reso.
 				@else
-					<span class="font-semibold text-neutral-700">1.</span> Grazie per aver terminato la procedura di cambio. Metteremo
+					<span class="text-neutral-heading font-semibold">1.</span> Grazie per aver terminato la procedura di cambio.
+					Metteremo
 					in produzione il nuovo capo, che
 					sarà spedito in
 					{{ $changeRequest->new_order->shipping_method->minimumWorkingDays(false) }}-{{ $changeRequest->new_order->shipping_method->maximumWorkingDays(false) }}
 					giorni
-					lavorativi tramite <span class="font-semibold text-neutral-700">corriere
+					lavorativi tramite <span class="text-neutral-heading font-semibold">corriere
 						GLS</span>.<br><br>
-					<span class="font-semibold text-neutral-700">2.</span> Quando il nuovo capo sarà spedito riceverai una e-email da
+					<span class="text-neutral-heading font-semibold">2.</span> Quando il nuovo capo sarà spedito riceverai una e-email
+					da
 					parte del corriere la data di
 					consegna stimata.<br><br>
-					<span class="font-semibold text-neutral-700">3.</span> Per rendere il capo vecchio è sufficiente darlo al corriere
+					<span class="text-neutral-heading font-semibold">3.</span> Per rendere il capo vecchio è sufficiente darlo al
+					corriere
 					quando ti consegnerà il capo nuovo.
 				@endif
 			</p>
 
-			<h3 class="mb-2 mt-8 text-lg font-semibold text-neutral-700">Note</h3>
+			<h3 class="text-neutral-heading mb-2 mt-8 text-lg font-semibold">Note</h3>
 			<p class="txt info">
 				@if ($changeRequest->isRefundOnly())
-					<span class="font-semibold text-neutral-700">-</span> Gli articoli da rendere possono essere messi in una scatola o
+					<span class="text-neutral-heading font-semibold">-</span> Gli articoli da rendere possono essere messi in una
+					scatola o
 					in una busta. Non è necessario
 					usare la confezione originale.<br><br>
-					<span class="font-semibold text-neutral-700">-</span> Verrà rimborsato <span
-						class="font-semibold text-neutral-700">SOLO</span> il costo degli articoli, non delle spese di spedizione
+					<span class="text-neutral-heading font-semibold">-</span> Verrà rimborsato <span
+						class="text-neutral-heading font-semibold"
+					>SOLO</span> il costo degli articoli, non delle spese di spedizione
 					pagate al momento dell'acquisto o per effettuare il reso.<br><br>
-					<span class="font-semibold text-neutral-700">-</span> Se vuoi effettuare il reso perché il prodotto presenta
+					<span class="text-neutral-heading font-semibold">-</span> Se vuoi effettuare il reso perché il prodotto presenta
 					qualche
 					difetto o non corrisponde a ciò
 					che hai ordinato, invece di seguire questa procedura contattaci su <a
@@ -98,7 +104,8 @@
 					>{{ config('custom.contacts.email.label') }}</a> e cercheremo di risolvere il
 					problema.
 				@else
-					<span class="font-semibold text-neutral-700">-</span> Gli articoli da rendere possono essere messi in una scatola o
+					<span class="text-neutral-heading font-semibold">-</span> Gli articoli da rendere possono essere messi in una
+					scatola o
 					in una busta. Non è necessario
 					usare la confezione originale.<br><br>
 				@endif

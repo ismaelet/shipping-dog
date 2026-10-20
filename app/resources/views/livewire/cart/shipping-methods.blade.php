@@ -29,7 +29,7 @@
 
 				<p class="order-list__description">{!! $shippingMethod->desc !!}</p>
 
-				<p class="text-lg font-semibold text-neutral-700">
+				<p class="text-neutral-heading text-lg font-semibold">
 					{{ $shippingMethod->priceString($cart->quantity) }}
 				</p>
 			</div>

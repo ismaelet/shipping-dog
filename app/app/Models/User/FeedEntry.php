@@ -101,16 +101,16 @@ class FeedEntry {
     public function text() {
         switch ($this->type_id) {
             case 1:
-                $text = '<span class="font-semibold text-neutral-700"><span class="text-primary">Shipping Dog</span></span>: ' . $this->news()->text;
+                $text = '<span class="font-semibold text-neutral-heading"><span class="text-primary">Shipping Dog</span></span>: ' . $this->news()->text;
                 break;
 
             case 2:
                 $text = $this->orderItem->product ?
-                    'Hai venduto <span class="font-semibold text-neutral-700">' . $this->orderItem->quantity . ' x</span> <a class="design" href="' . $this->orderItem->product->url() . '">' . $this->orderItem->product->name . '</a> per <span class="font-semibold text-neutral-700">' . price($this->orderItem->total_seller_earnings_after_reduction) . '</span>'
+                    'Hai venduto <span class="font-semibold text-neutral-heading">' . $this->orderItem->quantity . ' x</span> <a class="design" href="' . $this->orderItem->product->url() . '">' . $this->orderItem->product->name . '</a> per <span class="font-semibold text-neutral-heading">' . price($this->orderItem->total_seller_earnings_after_reduction) . '</span>'
 
                     :
 
-                    'Hai venduto <span class="font-semibold text-neutral-700">' . $this->orderItem->quantity . ' x</span> <span class="design">prodotto rimosso</span> per <span class="font-semibold text-neutral-700">' . price($this->orderItem->total_seller_earnings_after_reduction) . '</span>';
+                    'Hai venduto <span class="font-semibold text-neutral-heading">' . $this->orderItem->quantity . ' x</span> <span class="design">prodotto rimosso</span> per <span class="font-semibold text-neutral-heading">' . price($this->orderItem->total_seller_earnings_after_reduction) . '</span>';
                 break;
 
             case 3:
@@ -129,7 +129,7 @@ class FeedEntry {
                 $text = '';
         }
 
-        $text = '<span class="font-semibold text-neutral-700">' . $this->created_at->format('d-m-Y') . ':</span> ' . $text;
+        $text = '<span class="font-semibold text-neutral-heading">' . $this->created_at->format('d-m-Y') . ':</span> ' . $text;
 
         return $text;
     }

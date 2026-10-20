@@ -55,7 +55,7 @@
 
 	@isset($searchText)
 		<div
-			class="cursor-pointer transition-colors hover:text-neutral-700"
+			class="hover:text-neutral-heading cursor-pointer transition-colors"
 			x-data
 			@click="empty_table_search"
 		>

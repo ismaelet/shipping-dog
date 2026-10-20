@@ -30,7 +30,7 @@
 						</span>
 
 						<div class="ml-4 grid gap-1">
-							<p class="font-heading text-base font-medium leading-none text-neutral-700">
+							<p class="font-heading text-neutral-heading text-base font-medium leading-none">
 								{{ $seller->name }}</p>
 
 							<div class="flex items-center gap-2">
@@ -54,7 +54,7 @@
 						</div>
 
 						<div class="ml-auto text-base">
-							<span class="font-medium text-neutral-700">{{ $seller->designs->count() }}</span> design
+							<span class="text-neutral-heading font-medium">{{ $seller->designs->count() }}</span> design
 						</div>
 					</form>
 				@endforeach

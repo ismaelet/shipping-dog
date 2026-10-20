@@ -80,8 +80,9 @@
 								Se vuoi che i tuoi clienti vedano i prodotti in quest'ordine, vai nelle <a
 									class="text-link"
 									href="{{ route('seller-dashboard') }}"
-								>impostazioni generali</a> e scegli <span class="font-semibold text-neutral-700">"ordine personalizzato"</span>
-								sotto la voce <span class="font-semibold text-neutral-700">"ordina
+								>impostazioni generali</a> e scegli <span class="text-neutral-heading font-semibold">"ordine
+									personalizzato"</span>
+								sotto la voce <span class="text-neutral-heading font-semibold">"ordina
 									prodotti"</span>.
 							</p>
 

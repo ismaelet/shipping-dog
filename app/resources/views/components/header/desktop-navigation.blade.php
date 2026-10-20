@@ -12,7 +12,7 @@
 			<a
 				href="{{ $link['url'] }}"
 				@class([
-					'relative flex h-20 items-center gap-2 font-semibold text-neutral-700 transition-colors duration-100 hover:text-primary-500',
+					'relative flex h-20 items-center gap-2 font-semibold text-neutral-heading transition-colors duration-100 hover:text-primary-500',
 					'text-primary-400' => isset($link['loc']) && $location === $link['loc'],
 					'text-neutral-heading' =>
 						!isset($link['loc']) || $location !== $link['loc'],
@@ -34,7 +34,7 @@
 
 			@if (isset($link['dropdown']))
 				<div
-					class="bg-primary-400 w-57.5 group-hover:max-h-75 group-focus-within:max-h-75 light absolute left-1/2 top-full z-10 max-h-0 -translate-x-1/2 overflow-hidden transition-[max-height]"
+					class="header-dropdown bg-primary-400 w-57.5 group-hover:max-h-75 group-focus-within:max-h-75 light absolute left-1/2 z-10 max-h-0 -translate-x-1/2 overflow-hidden transition-[max-height]"
 				>
 					@foreach ($link['dropdown'] as $dropdownLink)
 						<a
@@ -49,3 +49,11 @@
 		</div>
 	@endforeach
 </nav>
+
+@pushOnce('styles')
+	<style>
+		.header-dropdown {
+			top: calc(100% + 1px);
+		}
+	</style>
+@endpushOnce

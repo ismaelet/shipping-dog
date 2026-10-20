@@ -233,7 +233,7 @@
 						@csrf
 
 						<div class="grid grid-cols-1 justify-items-center gap-4">
-							<p class="font-heading text-lg text-neutral-700">Immagine di profilo:</p>
+							<p class="font-heading text-neutral-heading text-lg">Immagine di profilo:</p>
 
 							<img
 								class="w-40 rounded"
@@ -277,7 +277,7 @@
 					>
 						@csrf
 
-						<p class="font-heading text-lg text-neutral-700">Immagine di copertina:</p>
+						<p class="font-heading text-neutral-heading text-lg">Immagine di copertina:</p>
 
 						@if (!$noCover)
 							<img

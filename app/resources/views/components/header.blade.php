@@ -9,9 +9,9 @@
 
 {{-- <x-header.banner /> --}}
 
-<div class="header-placeholder hidden"></div>
+<div class="header-placeholder"></div>
 
-<header class="header z-100 sticky top-0">
+<header class="header z-100">
 	<div class="border-neutral-border bg-background-400/85 px-content-padding border-b backdrop-blur-xl">
 		<div class="mx-auto flex h-20 w-full max-w-7xl items-center justify-between">
 			{{-- Left bar --}}
@@ -55,14 +55,14 @@
 			height: var(--header-height);
 		}
 
-		.header:has(.header-mobile-toggle-input:checked) {
+		.header {
 			position: fixed;
+			top: 0;
 			left: 0;
 			width: 100%;
 		}
 
-		.header-placeholder:has(+ .header .header-mobile-toggle-input:checked) {
-			display: block;
+		.header-placeholder {
 			height: var(--header-height);
 		}
 

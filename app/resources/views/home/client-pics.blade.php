@@ -2,7 +2,7 @@
 <section
 	id="community"
 	aria-label="La community Shipping Dog"
-	class="breakout py-16 text-center"
+	class="breakout mb-12 py-16 text-center"
 >
 	{{-- Heading --}}
 	<p class="text-primary-500 text-xs font-bold uppercase tracking-[0.2em]">

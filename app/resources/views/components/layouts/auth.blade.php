@@ -25,19 +25,16 @@
 <x-layouts.main>
 	<div class="page-content fill-width grid">
 		<!-- Welcome panel -->
-		<section
-			class="welcome-section stack-content relative grid items-center justify-items-center"
-			data-local-color-scheme="dark"
-		>
+		<section class="welcome-section stack-content dark relative grid items-center justify-items-center">
 			<div
-				class="background"
+				class="absolute inset-0 bg-cover bg-center"
 				style="background-image: url({{ Vite::image($welcomeImage) }}"
 			>
 			</div>
 
-			<div class="grid max-w-2xl gap-8 px-8 py-16">
+			<div class="relative grid max-w-2xl gap-8 px-8 py-16">
 				<x-typography.main-heading>{!! $welcomeTitle !!}</x-typography.main-heading>
-				<x-typography.paragraph class="text-neutral-700">{!! $welcomeDescription !!}</x-typography.paragraph>
+				<x-typography.paragraph class="text-neutral-heading">{!! $welcomeDescription !!}</x-typography.paragraph>
 			</div>
 		</section>
 

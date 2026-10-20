@@ -25,7 +25,7 @@
 	>
 		<div class="bg-background-400 h-full w-full opacity-70"></div>
 
-		<div class="relative w-12 translate-y-4 text-neutral-700 transition-transform group-hover:translate-y-0">
+		<div class="text-neutral-heading relative w-12 translate-y-4 transition-transform group-hover:translate-y-0">
 			<?= embed_icon('upload') ?></div>
 	</div>
 </div>

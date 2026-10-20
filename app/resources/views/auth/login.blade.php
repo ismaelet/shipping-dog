@@ -2,7 +2,7 @@
 	<style>
 		main .input {
 			padding-inline: 1.5em;
-			border-radius: var(--border-radius-1000)
+			border-radius: 100vw
 		}
 	</style>
 @endpushOnce
@@ -65,7 +65,7 @@
 
 			<a
 				href="{{ route('password.request') }}"
-				class="text-right transition-colors hover:text-neutral-700"
+				class="hover:text-neutral-heading text-right transition-colors"
 			>
 				<p class="">Hai dimenticato la password?</p>
 			</a>

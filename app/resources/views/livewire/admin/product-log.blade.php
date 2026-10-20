@@ -333,7 +333,7 @@
 								<div class="designs grid gap-4">
 									@foreach ($sellerGroup['designs'] as $designGroup)
 										<div class="design js-design">
-											<p class="js-title text-neutral-700">
+											<p class="js-title text-neutral-heading">
 												@if ($designGroup['imageUrl'])
 													<a
 														href="{{ $designGroup['imageUrl'] }}"

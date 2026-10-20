@@ -602,7 +602,7 @@ body.fixed {
 .ajax-search-box {
   overflow: hidden;
   background-color: var(--color-surface);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--color-neutral-border);
   border-radius: var(--border-radius-400);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   text-align: left;
@@ -859,7 +859,7 @@ body.fixed {
 }
 
 .form-lbl {
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -919,7 +919,7 @@ p.error {
   right: 0.5rem;
   translate: 0 -50%;
   font-family: var(--font-text);
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
 }
 
 .inp-price .input {
@@ -2326,7 +2326,7 @@ p.error {
 
 .cookies-warning_link {
   font-weight: bold;
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
 }
 
 .cookies-warning_btn {
@@ -2549,7 +2549,7 @@ body {
 }
 
 .lbl {
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
   font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: 0.03em;
@@ -2623,7 +2623,7 @@ p.error {
 .tip-box .icon-box {
   display: grid;
   border-radius: 50%;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--color-neutral-border);
   fill: var(--color-primary-400);
   width: 1.5rem;
   aspect-ratio: 1;
@@ -2670,7 +2670,7 @@ p.error {
 }
 
 .dark .carousel-arrow {
-  background-color: var(--color-neutral-700);
+  background-color: var(--color-neutral-heading);
 }
 
 [data-color-scheme="light"] .carousel-arrow:hover,
@@ -2684,17 +2684,17 @@ p.error {
 
 .dark .carousel-arrow.disabled,
 .dark .carousel-arrow.disabled:hover {
-  background-color: var(--color-neutral-700);
+  background-color: var(--color-neutral-heading);
 }
 
 p .txt-bold,
 p strong {
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
 }
 
 .list {
   background-color: var(--color-background-400);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--color-neutral-border);
 }
 
 #news {
@@ -2737,7 +2737,7 @@ p strong {
 .sbtn {
   --inp-border: 2px;
   border-color: var(--color-neutral-300);
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
 }
 
 .pbtn.sqr,
@@ -3037,17 +3037,17 @@ p strong {
 }
 
 .bgr-c900 {
-  background-color: var(--color-neutral-700);
+  background-color: var(--color-neutral-heading);
 }
 .bgr-c-bgr {
   background-color: var(--color-background-400);
 }
 .bgr-c-title {
-  background-color: var(--color-neutral-700);
+  background-color: var(--color-neutral-heading);
 }
 
 .txt-c-title {
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
 }
 
 .bgr-c1,
@@ -3521,7 +3521,7 @@ p strong {
 
 .item-box .name {
   font-weight: 500;
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
   line-height: 1.2;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -3620,14 +3620,14 @@ p strong {
 }
 
 .list-tbl-head {
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--color-neutral-border);
 }
 
 .list-name {
   display: table-cell;
   padding: 1rem 1rem;
   overflow: hidden;
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
   font-size: 1rem;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -4814,7 +4814,7 @@ body.fixed {
   border: none;
   outline: none;
   background-color: transparent;
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
   font-size: 0.8rem;
   font-family: var(--font-text);
   line-height: 4;
@@ -4834,7 +4834,7 @@ body.fixed {
   background-color: var(--color-surface);
   border: 1px solid var(--color-background-400);
   margin-top: -1px;
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
   font-weight: 500;
   font-size: var(--font-size-300);
   line-height: 3.5;
@@ -4885,7 +4885,7 @@ body.fixed {
 .type-title:hover,
 .type-selector:has(:checked) .type-title {
   background-color: var(--color-secondary);
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-heading);
 }
 
 .category-selector:has(:checked) .gender-title {
@@ -6360,7 +6360,7 @@ body.fixed {
 .error-warning {
   padding: 0.5em;
   border-radius: var(--inp-border-radius);
-  border: var(--border-width) solid;
+  border: var(--spacing-border) solid;
   font-weight: var(--fw-medium);
   text-align: center;
 }
@@ -6724,9 +6724,9 @@ body.fixed {
     /*
 		* 2.2. Border_items
 		*/
-    --border-width: 1px;
+    --spacing-border: 1px;
     --border-color: var(--color-neutral-200);
-    --border: var(--border-width) solid var(--border-color);
+    --border: var(--spacing-border) solid var(--color-neutral-border);
     --border-radius-100: 0.125rem;
     --border-radius-200: 0.25rem;
     --border-radius-400: 0.5rem;
@@ -6780,7 +6780,7 @@ body.fixed {
     /*
 		* 2.6. Forms
 		*/
-    --input-border-width: var(--border-width);
+    --input-border-width: var(--spacing-border);
     --input-border-radius: var(--border-radius-200);
   }
 
@@ -6794,7 +6794,7 @@ body.fixed {
     --color-neutral-250-hsl: var(--color-neutral-light-250-hsl);
     --color-neutral-300-hsl: var(--color-neutral-light-300-hsl);
     --color-neutral-400-hsl: var(--color-neutral-light-400-hsl);
-    --color-neutral-700-hsl: var(--color-neutral-light-700-hsl);
+    --color-neutral-heading-hsl: var(--color-neutral-light-700-hsl);
     --color-neutral-900-hsl: var(--color-neutral-light-900-hsl);
 
     --border-color: var(--color-neutral-250);
@@ -6814,7 +6814,7 @@ body.fixed {
     --color-neutral-300-hsl: var(--color-neutral-dark-300-hsl);
     --color-neutral-350-hsl: var(--color-neutral-dark-350-hsl);
     --color-neutral-400-hsl: var(--color-neutral-dark-400-hsl);
-    --color-neutral-700-hsl: var(--color-neutral-dark-700-hsl);
+    --color-neutral-heading-hsl: var(--color-neutral-dark-700-hsl);
     --color-neutral-900-hsl: var(--color-neutral-dark-900-hsl);
 
     --color-background-s: var(--theme-dark-s);
@@ -6850,7 +6850,7 @@ body.fixed {
   :where(.surface-2) {
     border-radius: var(--border-radius-700);
     background-color: transparent;
-    border: var(--border-width) solid var(--color-neutral-300);
+    border: var(--spacing-border) solid var(--color-neutral-300);
     box-shadow: none;
   }
 }

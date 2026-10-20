@@ -5,17 +5,18 @@
 	            'title' => 'Esplora',
 	            'links' => [
 	                ['label' => 'Home', 'url' => route('home')],
-	                ['label' => 'Prodotti', 'url' => route('shop')],
+	                ['label' => 'Area riservata', 'url' => route('user-dashboard')],
+	                ['label' => 'Shop', 'url' => route('shop')],
 	                ['label' => 'Vendi', 'url' => route('open-shop')],
 	            ],
 	        ],
 	        [
-	            'title' => 'Supporto',
+	            'title' => 'Assistenza',
 	            'links' => [
 	                ['label' => 'Contatti', 'url' => route('contacts')],
-	                ['label' => 'FAQ', 'url' => route('support.faq')],
 	                ['label' => 'Cambio taglia', 'url' => route('support.refund.search')],
 	                ['label' => 'Stato ordine', 'url' => route('orders.find')],
+	                ['label' => 'FAQ', 'url' => route('support.faq')],
 	            ],
 	        ],
 	        [
@@ -31,7 +32,7 @@
 	];
 @endphp
 
-<footer class="mt-12 bg-slate-950 px-5 py-14 text-white">
+<footer class="bg-slate-950 px-5 py-14 text-white">
 	<div class="mx-auto grid max-w-7xl gap-12 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:px-8">
 		{{-- Brand --}}
 		<div>

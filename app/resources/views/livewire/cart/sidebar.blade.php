@@ -127,7 +127,7 @@
 				<div class="cart-sidebar__recap flex-group">
 					<p>Subtotale:</p>
 
-					<p class="font-semibold text-neutral-700">
+					<p class="text-neutral-heading font-semibold">
 						{{ price($subtotal) }}
 					</p>
 				</div>

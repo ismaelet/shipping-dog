@@ -111,7 +111,9 @@
 <div class="dashboard-navigation">
 
 	{{-- Mobile toggler --}}
-	<label class="font-heading dashboard-mobile-toggler flex justify-center gap-4 py-6 text-lg text-neutral-700 lg:hidden">
+	<label
+		class="font-heading dashboard-mobile-toggler text-neutral-heading flex justify-center gap-4 py-6 text-lg lg:hidden"
+	>
 		<input
 			type="checkbox"
 			class="mobile-toggler hidden"
@@ -129,7 +131,7 @@
 		@foreach ($navigation as $category)
 			<div class="navigation-category group grid last:pb-8 lg:last:pb-0">
 				<label
-					class="navigation-title relative grid cursor-pointer gap-4 pl-8 pr-8 text-neutral-300 transition-colors group-[:has(:checked)]:text-neutral-700 lg:pr-0"
+					class="navigation-title group-[:has(:checked)]:text-neutral-heading relative grid cursor-pointer gap-4 pl-8 pr-8 text-neutral-300 transition-colors lg:pr-0"
 				>
 					<input
 						type="radio"
@@ -156,7 +158,7 @@
 						<li class="navigation-link text-sm first:pt-3">
 							<label>
 								<a
-									class="transition-colors hover:text-neutral-700 has-[:checked]:text-neutral-700"
+									class="hover:text-neutral-heading has-[:checked]:text-neutral-heading transition-colors"
 									href="{{ route($linkSlug == 'index' ? 'seller-dashboard' : 'seller-dashboard.' . $linkSlug) }}"
 								>
 									<input

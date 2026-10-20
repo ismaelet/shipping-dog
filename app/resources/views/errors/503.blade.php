@@ -1270,9 +1270,9 @@
 		</svg>
 
 		<div class="mt-8 grid justify-items-center gap-4">
-			<x-typography.section-heading class="text-neutral-700">Manutenzione</x-typography.section-heading>
+			<x-typography.section-heading class="text-neutral-heading">Manutenzione</x-typography.section-heading>
 
-			<x-typography.main-subheading class="text-lg text-neutral-700">Stiamo aggiornando il sito web. Torneremo
+			<x-typography.main-subheading class="text-neutral-heading text-lg">Stiamo aggiornando il sito web. Torneremo
 				operativi al più presto</x-typography.main-subheading>
 
 			@if (!$fullMaintenance)

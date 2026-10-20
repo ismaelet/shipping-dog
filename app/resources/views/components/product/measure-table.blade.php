@@ -35,9 +35,9 @@
 
 			<div class="_empty"></div>
 
-			<p class="txt-line font-semibold text-neutral-700">Larghezza:</p>
+			<p class="txt-line text-neutral-heading font-semibold">Larghezza:</p>
 
-			<p class="txt-line font-semibold text-neutral-700">Altezza:</p>
+			<p class="txt-line text-neutral-heading font-semibold">Altezza:</p>
 
 
 			@foreach ($sizes as $size)
@@ -45,7 +45,7 @@
 					$measure = $measures->where('size', $size->tag)->first();
 				@endphp
 
-				<p class="size-table-tag font-semibold text-neutral-700">{{ strtoupper($measure->name) }}:</p>
+				<p class="size-table-tag text-neutral-heading font-semibold">{{ strtoupper($measure->name) }}:</p>
 				<p class="">{{ $measure->width }} cm</p>
 				<p class="">{{ $measure->height }} cm</p>
 			@endforeach

@@ -29,7 +29,7 @@
 				spam.
 			</p>
 
-			<p class="text-center text-lg font-bold text-neutral-700">{{ old('email') }}</p>
+			<p class="text-neutral-heading text-center text-lg font-bold">{{ old('email') }}</p>
 		@endif
 
 	</x-slot>

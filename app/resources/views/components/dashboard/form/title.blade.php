@@ -17,7 +17,7 @@
 
 	@if (Route::has($backRouteName))
 		<a
-			class="aspect-square w-10 rounded border transition-colors hover:text-neutral-700"
+			class="hover:text-neutral-heading aspect-square w-10 rounded border transition-colors"
 			href="{{ $backRoute }}"
 		>
 			{!! embed_icon('previous', ['fill-none', 'h-1/3']) !!}

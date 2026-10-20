@@ -14,7 +14,7 @@
 			border-radius: 0;
 			padding: 0;
 			margin: 0;
-			color: var(--color-neutral-700);
+			color: var(--color-neutral-heading);
 			font-size: 0.9rem;
 			box-sizing: border-box;
 			outline: none !important;
@@ -31,7 +31,7 @@
 		.form-inp:-webkit-autofill,
 		.form-textarea:-webkit-autofill {
 			-webkit-box-shadow: 0 0 0 1000vw var(--color-background-400) inset;
-			-webkit-text-fill-color: var(--color-neutral-700);
+			-webkit-text-fill-color: var(--color-neutral-heading);
 		}
 
 		.contact-form-field:has(:focus) .form-inp,
@@ -90,13 +90,13 @@
 					>
 						<a
 							href="<?= config('custom.contacts.whatsapp.url') ?>"
-							class="hover:text-primary text-neutral-700 transition-colors"
+							class="hover:text-primary text-neutral-heading transition-colors"
 						>
 							<x-icon-whatsapp class="h-5 w-5" />
 						</a>
 						<a
 							href="<?= config('custom.contacts.instagram.url') ?>"
-							class="hover:text-primary text-neutral-700 transition-colors"
+							class="hover:text-primary text-neutral-heading transition-colors"
 						>
 							<x-icon-instagram class="h-5 w-5" />
 						</a>

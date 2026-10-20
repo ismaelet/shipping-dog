@@ -92,7 +92,7 @@
 
 			<div class="wrapper surface bg-background-400 py-6">
 
-				<div class="close-icon item-panel-close icon cursor-pointer text-neutral-700"><?= embed_icon('close') ?></div>
+				<div class="close-icon item-panel-close icon text-neutral-heading cursor-pointer"><?= embed_icon('close') ?></div>
 
 				<div class="content px-6">
 

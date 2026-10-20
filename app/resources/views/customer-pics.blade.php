@@ -24,12 +24,12 @@
 
 				<x-typography.main-subheading class="mx-auto mt-8 max-w-[55ch]">Mandaci una foto con un nostro capo indossato
 					su <a
-						class="hover:text-primary font-semibold text-neutral-700 transition-colors"
+						class="hover:text-primary text-neutral-heading font-semibold transition-colors"
 						href="{{ config('custom.contacts.instagram.url') }}"
 					>Instagram</a> o per <a
-						class="hover:text-primary font-semibold text-neutral-700 transition-colors"
+						class="hover:text-primary text-neutral-heading font-semibold transition-colors"
 						href="{{ config('custom.contacts.email.url') }}"
-					>e-email</a> e ottieni subito un <span class="font-semibold text-neutral-700">codice sconto del
+					>e-email</a> e ottieni subito un <span class="text-neutral-heading font-semibold">codice sconto del
 						15%</span></x-typography.main-subheading>
 			</div>
 		</div>

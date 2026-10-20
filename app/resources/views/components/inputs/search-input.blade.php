@@ -29,7 +29,7 @@
 			z-index: 10;
 			overflow: hidden;
 			background-color: var(--color-surface-400);
-			border: 1px solid var(--border-color);
+			border: 1px solid var(--color-neutral-border);
 			border-radius: var(--border-radius-400);
 			box-shadow: var(--shadow-400);
 			text-align: left;
@@ -60,7 +60,7 @@
 		function highlight_search_result(text, search) {
 			let pattern = new RegExp('(' + search + ')', 'ig')
 
-			return text.replace(pattern, '<span class="font-bold text-neutral-700">$1</span>')
+			return text.replace(pattern, '<span class="font-bold text-neutral-heading">$1</span>')
 		}
 
 		document.addEventListener('DOMContentLoaded', function() {

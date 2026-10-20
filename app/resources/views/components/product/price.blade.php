@@ -17,7 +17,7 @@
 		</div>
 	@else
 		{{-- Normal price --}}
-		<p class="price price-def font-heading js-price font-semibold text-neutral-700">
+		<p class="price price-def font-heading js-price text-neutral-heading font-semibold">
 			{{ $product->customerPriceString() }}</p>
 
 	@endif

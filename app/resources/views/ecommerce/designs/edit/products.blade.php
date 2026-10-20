@@ -149,7 +149,7 @@
 			line-height: var(--tabs-height);
 			text-align: center;
 			cursor: pointer;
-			translate: 0 var(--border-width);
+			translate: 0 var(--spacing-border);
 
 			.dark & {
 				background-color: var(--color-surface-400);
@@ -160,7 +160,7 @@
 		.item-panel .tab.active {
 			background-color: var(--color-background-400);
 			cursor: default;
-			color: var(--color-neutral-700);
+			color: var(--color-neutral-heading);
 			border-bottom: 0;
 		}
 
@@ -217,7 +217,7 @@
 		}
 
 		.item-panel .inp p {
-			color: var(--color-neutral-700);
+			color: var(--color-neutral-heading);
 		}
 
 		.item-panel .inp-box {

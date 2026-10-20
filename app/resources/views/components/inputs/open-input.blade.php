@@ -11,7 +11,7 @@
 		.open-input {
 			padding-inline: 1em;
 			border: none;
-			border-bottom: var(--border-width) solid var(--color-neutral-300, #DDD);
+			border-bottom: var(--spacing-border) solid var(--color-neutral-300, #DDD);
 			outline: none;
 			color: var(--color-neutral-400);
 

@@ -3,8 +3,6 @@
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\CustomerPicsController;
 use App\Http\Controllers\DownloadController;
-use App\Http\Controllers\Ecommerce\DesignController;
-use App\Http\Controllers\Ecommerce\RefundController;
 use App\Http\Controllers\EmergencyEmail;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
@@ -15,7 +13,6 @@ use App\Http\Controllers\UploadTermsController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\NotSeller;
-use App\Models\Ecommerce\Seller as EcommerceSeller;
 use Illuminate\Support\Facades\Route;
 
 /*

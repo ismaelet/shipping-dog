@@ -50,7 +50,7 @@
 				@if (!$order->status)
 					<button
 						type="button"
-						class="remove hover:text-error-400 w-4 cursor-pointer text-neutral-700 opacity-70 transition-all hover:opacity-100"
+						class="remove hover:text-error-400 text-neutral-heading w-4 cursor-pointer opacity-70 transition-all hover:opacity-100"
 						wire:click="removeItem({{ $orderItem->id }})"
 						wire:loading.attr="disabled"
 						aria-label="Rimuovi articolo"

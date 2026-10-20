@@ -1,7 +1,7 @@
 @pushOnce('styles')
 	<style>
 		.chck_item:not(:last-child) {
-			border-bottom: var(--border-width) solid var(--color-surface-500);
+			border-bottom: var(--spacing-border) solid var(--color-surface-500);
 		}
 	</style>
 @endpushOnce
@@ -10,13 +10,13 @@
 	<div class="grid grid-cols-1 gap-4">
 		<div class="chck_item flex justify-between">
 			<p class="">Articoli</p>
-			<p class="js-cart-products-price font-semibold text-neutral-700">{{ price($order->fullOrderItemsPrice()) }}</p>
+			<p class="js-cart-products-price text-neutral-heading font-semibold">{{ price($order->fullOrderItemsPrice()) }}</p>
 		</div>
 
 		<div class="chck_item flex justify-between">
 			<p>Spedizione</p>
 			<p
-				class="js-cart-shipping-price-string js-recap-shipping-price font-semibold text-neutral-700"
+				class="js-cart-shipping-price-string js-recap-shipping-price text-neutral-heading font-semibold"
 				data-shipping-method-id="{{ $order->shippingMethodId }}"
 			>{{ price($order->shippingFee()) }}</p>
 		</div>
@@ -24,7 +24,7 @@
 		@if ($order->discount())
 			<div class="chck_item flex justify-between">
 				<p>Sconto</p>
-				<p class="font-semibold text-neutral-700">- {{ price($order->discount()) }}</p>
+				<p class="text-neutral-heading font-semibold">- {{ price($order->discount()) }}</p>
 			</div>
 		@endif
 
@@ -33,7 +33,7 @@
 			class="chck_item flex justify-between"
 		>
 			<p class="chck_name">Totale</p>
-			<p class="chck_pric js-cart-price-string font-semibold text-neutral-700">{{ price($order->price) }}</p>
+			<p class="chck_pric js-cart-price-string text-neutral-heading font-semibold">{{ price($order->price) }}</p>
 		</div>
 
 		@if ($order->usedCredit())

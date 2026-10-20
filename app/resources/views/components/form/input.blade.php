@@ -9,12 +9,11 @@
 @pushOnce('styles')
 	<style>
 		.input {
-			--input-background: var(--color-surface-400);
 			padding-inline: .6em;
-			background-color: var(--input-background);
+			background-color: var(--color-surface-400);
 			border-radius: var(--input-border-radius);
 			outline: var(--border);
-			color: var(--color-neutral-700);
+			color: var(--color-neutral-heading);
 			line-height: 2.8;
 			transition: outline-color 0.2s ease-in-out;
 
@@ -30,15 +29,15 @@
 
 			/* Autofill resets */
 			&:-webkit-autofill {
-				outline: var(--border-width) solid var(--border-color) !important;
-				-webkit-box-shadow: 0 0 0 100vw var(--input-background) inset !important;
-				box-shadow: 0 0 0 100vw var(--input-background) inset !important;
-				-webkit-text-fill-color: var(--color-neutral-700) !important;
+				outline: var(--spacing-border) solid var(--color-neutral-border) !important;
+				-webkit-box-shadow: 0 0 0 100vw var(--color-surface-400) inset !important;
+				box-shadow: 0 0 0 100vw var(--color-surface-400) inset !important;
+				-webkit-text-fill-color: var(--color-neutral-heading) !important;
 				transition: none !important;
 			}
 
 			&:focus:-webkit-autofill {
-				outline: var(--border-width) solid var(--color-primary-400) !important;
+				outline: var(--spacing-border) solid var(--color-primary-400) !important;
 			}
 		}
 	</style>
