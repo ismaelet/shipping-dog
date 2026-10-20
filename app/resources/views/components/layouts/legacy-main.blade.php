@@ -57,6 +57,6 @@
 		</main>
 	</div>
 
-	<x-navigation.footer />
+	<x-footer />
 	<livewire:cart.sidebar />
 </x-layouts.app>
