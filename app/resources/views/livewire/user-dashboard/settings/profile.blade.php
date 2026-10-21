@@ -1,48 +1,52 @@
-<form
-	class="grid grid-cols-1 gap-8"
-	method="POST"
-	wire:submit="save"
+<x-user-dashboard.settings-section
+	title="Dati profilo"
+	text="Le informazioni associate al tuo account."
+	icon="user"
+	tone="primary"
 >
-	<x-heading.component-small class="dashboard-heading">Dati profilo</x-heading.component-small>
-
-	<div class="form-fields">
+	<form
+		class="grid gap-5 md:grid-cols-2"
+		wire:submit="save"
+	>
 		@session('success')
-			<x-alerts.success>{{ session('success') }}</x-alerts.success>
+			<x-alerts.success class="md:col-span-2">{{ session('success') }}</x-alerts.success>
 		@endsession
 
-		<div class="form-field">
-			<x-label>Nome e cognome:</x-label>
-			<div class="grid gap-[inherit] md:grid-cols-2">
-				<x-input
-					type="text"
-					wire:model="firstName"
-					value="{{ $firstName }}"
-					placeholder="Nome"
-				/>
-				<x-input
-					type="text"
-					wire:model="lastName"
-					value="{{ $lastName }}"
-					placeholder="Cognome"
-				/>
-			</div>
+		<div class="grid content-start gap-2">
+			<x-label>Nome</x-label>
+			<x-input
+				class="w-full"
+				type="text"
+				wire:model="firstName"
+				placeholder="Nome"
+			/>
 
 			@error('firstName')
 				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
+		</div>
+
+		<div class="grid content-start gap-2">
+			<x-label>Cognome</x-label>
+			<x-input
+				class="w-full"
+				type="text"
+				wire:model="lastName"
+				placeholder="Cognome"
+			/>
 
 			@error('lastName')
 				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
 		</div>
 
-		<div class="form-field">
-			<x-label>E-mail:</x-label>
+		<div class="grid content-start gap-2 md:col-span-2">
+			<x-label>E-mail</x-label>
 			<x-input
+				class="w-full"
 				type="email"
 				wire:model="email"
-				value="{{ $email }}"
-				placeholder="email"
+				placeholder="E-mail"
 				required
 			/>
 
@@ -50,9 +54,12 @@
 				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
 		</div>
-	</div>
 
-	<div class="footer flex justify-center">
-		<x-button type="submit">Modifica</x-button>
-	</div>
-</form>
+		<div class="md:col-span-2">
+			<x-button
+				type="submit"
+				size="small"
+			>Salva modifiche</x-button>
+		</div>
+	</form>
+</x-user-dashboard.settings-section>

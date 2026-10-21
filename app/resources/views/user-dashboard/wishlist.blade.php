@@ -5,6 +5,7 @@
 			title="La tua wishlist"
 			subtitle="Preferiti"
 			text="Consulta i prodotti che hai aggiunto alla tua wishlist."
+			:metatext="$likes->count() . ' prodotti'"
 		/>
 
 		<div class="mt-6">

@@ -1,1 +1,1 @@
-<p {{ $attributes->merge(['class' => 'error-warning text-error-400']) }}>* {{ $slot }}</p>
+<p {{ $attributes->merge(['class' => 'error-warning text-danger-400']) }}>* {{ $slot }}</p>

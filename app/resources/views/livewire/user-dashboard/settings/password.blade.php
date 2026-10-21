@@ -1,22 +1,24 @@
-<form
-	class="grid grid-cols-1 gap-8"
-	method="POST"
-	wire:submit="save"
+<x-user-dashboard.settings-section
+	title="Modifica la password"
+	text="Scegli una password unica e difficile da indovinare."
+	icon="lock"
+	tone="detail-1"
 >
-	<x-heading.component-small class="dashboard-heading">Modifica la
-		password</x-heading.component-small>
-
-	<div class="form-fields">
+	<form
+		class="grid gap-5 md:grid-cols-2"
+		wire:submit="save"
+	>
 		@session('success')
-			<x-alerts.success>{{ session('success') }}</x-alerts.success>
+			<x-alerts.success class="md:col-span-2">{{ session('success') }}</x-alerts.success>
 		@endsession
 
-		<div class="form-field">
-			<x-label>Password attuale:</x-label>
+		<div class="grid content-start gap-2 md:col-span-2">
+			<x-label>Password attuale</x-label>
 			<x-input
+				class="w-full"
 				type="password"
 				wire:model="current_password"
-				placeholder="Password attuale"
+				placeholder="Inserisci la password attuale"
 				required
 			/>
 
@@ -25,34 +27,41 @@
 			@enderror
 		</div>
 
-		<div class="form-field">
-			<x-label>Nuova password:</x-label>
-			<div class="grid gap-[inherit] md:grid-cols-2">
-				<x-input
-					type="password"
-					wire:model="new_password"
-					placeholder="Nuova password"
-					required
-				/>
-				<x-input
-					type="password"
-					wire:model="new_password_confirmation"
-					placeholder="Conferma nuova password"
-					required
-				/>
-			</div>
+		<div class="grid content-start gap-2">
+			<x-label>Nuova password</x-label>
+			<x-input
+				class="w-full"
+				type="password"
+				wire:model="new_password"
+				placeholder="Almeno 8 caratteri"
+				required
+			/>
 
 			@error('new_password')
 				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
+		</div>
+
+		<div class="grid content-start gap-2">
+			<x-label>Conferma password</x-label>
+			<x-input
+				class="w-full"
+				type="password"
+				wire:model="new_password_confirmation"
+				placeholder="Ripeti la nuova password"
+				required
+			/>
 
 			@error('new_password_confirmation')
 				<x-alerts.error>{{ $message }}</x-alerts.error>
 			@enderror
 		</div>
-	</div>
 
-	<div class="footer flex justify-center">
-		<x-button type="submit">Modifica</x-button>
-	</div>
-</form>
+		<div class="md:col-span-2">
+			<x-button
+				type="submit"
+				size="small"
+			>Aggiorna password</x-button>
+		</div>
+	</form>
+</x-user-dashboard.settings-section>

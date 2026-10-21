@@ -1,51 +1,45 @@
 <x-user-dashboard :$title>
-	<x-user-dashboard.panel
-		:icon="'settings'"
-		:$title
-	>
+	<section class="border-neutral-border bg-surface-400 rounded-3xl border p-5 sm:p-8">
 
-		<div class="grid gap-12">
-			{{-- Profile settings --}}
+		<x-user-dashboard.panel-header
+			title="Il tuo profilo"
+			subtitle="Impostazioni"
+			text="Aggiorna i dati personali, l'indirizzo e le preferenze dell'account."
+		/>
+
+		<div class="mt-8 grid gap-8">
 			<livewire:user-dashboard.settings.profile />
 
-			{{-- Password settings --}}
 			<livewire:user-dashboard.settings.password />
 
-			{{-- Profile icon --}}
 			<livewire:user-dashboard.settings.upload-icon />
 
 			{{-- Delete account --}}
 			<form
-				class="grid grid-cols-1 gap-8"
+				class="border-danger-400/20 bg-danger-400/10 rounded-2xl border p-6"
 				method="POST"
 				action="{{ route('user.destroy') }}"
 			>
 				@csrf
 				@method('DELETE')
 
-				<x-heading.component-small class="dashboard-heading">Elimina
-					l'account</x-heading.component-small>
+				<h3 class="font-heading text-danger-300 text-xl font-semibold">Elimina l'account</h3>
+				<p class="text-danger-200/60 mt-2 text-sm leading-6">Questa operazione elimina definitivamente dati, ordini salvati e
+					preferenze. Non può essere annullata.</p>
 
-				<div class="grid grid-cols-1 gap-4">
-					<p>Clicca qui sotto se vuoi cancellare definitivamente il tuo account. <span
-							class="text-strong text-error-400">L'operazione NON
-							può essere
-							annullata.</span></p>
-				</div>
-
-				<div class="footer flex justify-center">
-					<x-button
-						type="submit"
-						confirmation="Sei sicuro di voler eliminare il profilo? Non potrà essere ripristinato."
-						color="danger"
-						variant="secondary"
-					>
-						{!! embed_icon('delete') !!}
-						Elimina l'account
-					</x-button>
-				</div>
+				<x-button
+					class="mt-6"
+					type="submit"
+					size="small"
+					color="danger"
+					variant="secondary"
+					confirmation="Sei sicuro di voler eliminare il profilo? Non potrà essere ripristinato."
+				>
+					Elimina l'account
+					<x-icon-delete />
+				</x-button>
 			</form>
 		</div>
 
-	</x-user-dashboard.panel>
+	</section>
 </x-user-dashboard>

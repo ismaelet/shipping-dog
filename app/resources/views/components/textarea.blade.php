@@ -36,11 +36,11 @@
 
 			/* Has a warning */
 			:has(> .error-warning) & {
-				outline-color: var(--color-error-400);
+				outline-color: var(--color-danger-400);
 
 				&:-webkit-autofill,
 				&:focus:-webkit-autofill {
-					outline-color: var(--color-error-400) !important;
+					outline-color: var(--color-danger-400) !important;
 				}
 			}
 		}

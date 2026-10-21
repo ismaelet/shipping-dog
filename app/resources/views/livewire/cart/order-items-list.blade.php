@@ -37,7 +37,7 @@
 
 					@if ($orderItem->total_discount > 0)
 						<p class="font-semibold line-through opacity-50">{{ price($orderItem->total_amount_before_discount) }}</p>
-						<p class="text-error-500 font-bold">{{ price($orderItem->total_amount_after_discount) }}</p>
+						<p class="text-danger-500 font-bold">{{ price($orderItem->total_amount_after_discount) }}</p>
 					@else
 						<p class="text-neutral-heading font-semibold">{{ price($orderItem->total_amount_after_discount) }}</p>
 					@endif
@@ -50,7 +50,7 @@
 				@if (!$order->status)
 					<button
 						type="button"
-						class="remove hover:text-error-400 text-neutral-heading w-4 cursor-pointer opacity-70 transition-all hover:opacity-100"
+						class="remove hover:text-danger-400 text-neutral-heading w-4 cursor-pointer opacity-70 transition-all hover:opacity-100"
 						wire:click="removeItem({{ $orderItem->id }})"
 						wire:loading.attr="disabled"
 						aria-label="Rimuovi articolo"

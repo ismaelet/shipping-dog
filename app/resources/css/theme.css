@@ -64,13 +64,18 @@
   --color-primary-400: var(--color-orange-500);
   --color-primary-500: var(--color-orange-600);
 
-  --color-secondary-400: hsl(220 75 68);
-  --color-secondary-500: hsl(220 75 50);
+  --color-detail-1-300: #c4b4ff;
+  --color-detail-1-400: #8e51ff;
+
+  --color-detail-2-300: #74d4ff;
+  --color-detail-2-400: #00a6f4;
 
   --color-success-400: hsl(145 63 50);
   --color-success-500: hsl(145 63 40);
-  --color-error-500: hsl(0 100 40);
-  --color-error-400: hsl(0 100 50);
+  --color-danger-200: #ffccd3;
+  --color-danger-300: #ffa1ad;
+  --color-danger-400: #ff2056;
+  --color-danger-500: hsl(0 100 40);
 
   --color-background-300: #fff;
   --color-background-400: var(--color-stone-50);
@@ -140,7 +145,6 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
-  color: var(--color-neutral-heading);
 }
 
 /*

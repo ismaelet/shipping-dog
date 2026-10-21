@@ -24,7 +24,7 @@
 	></div>
 
 	<x-icon-upload
-		class="group-hover:translate-0 w-1/2 max-w-12 translate-y-4 text-white opacity-0 transition-all group-hover:opacity-100"
+		class="group-hover:translate-0 w-1/3 max-w-12 translate-y-4 text-white opacity-0 transition-all group-hover:opacity-100"
 		wire:loading.remove
 	/>
 

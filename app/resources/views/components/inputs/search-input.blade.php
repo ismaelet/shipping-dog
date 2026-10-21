@@ -16,7 +16,7 @@
 
 			&:not(:has(.search-input__dropdown.active)):not([data-searching="true"]) {
 				input:placeholder-shown+input:not(:placeholder-shown) {
-					outline-color: var(--color-error-400);
+					outline-color: var(--color-danger-400);
 				}
 			}
 		}

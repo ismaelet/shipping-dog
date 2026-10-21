@@ -34,7 +34,7 @@
 			<button
 				type="submit"
 				formaction="{{ route('support.refund.cancel', $changeRequest) }}"
-				class="text-error-400 cursor-pointer"
+				class="text-danger-400 cursor-pointer"
 			>Cancella cambio/reso</button>
 		</p>
 	</x-slot>

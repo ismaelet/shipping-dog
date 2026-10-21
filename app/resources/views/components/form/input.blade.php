@@ -24,7 +24,7 @@
 
 			/* Has a warning */
 			:has(> .input-warning) & {
-				outline-color: var(--color-error-400);
+				outline-color: var(--color-danger-400);
 			}
 
 			/* Autofill resets */
