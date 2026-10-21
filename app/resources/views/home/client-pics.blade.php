@@ -30,7 +30,7 @@
 		>
 			e-mail
 		</a>
-		e ricevi un codice <span class="text-primary-500">sconto del 15%</span>.
+		e ricevi un codice <span class="text-primary-400 font-semibold">sconto del 15%</span>.
 	</p>
 
 	{{-- Photo gallery --}}

@@ -1,7 +1,7 @@
 <section
 	id="design"
 	aria-label="Apri il tuo shop"
-	class="px-5 py-20 lg:px-8"
+	class="py-20 sm:px-8"
 >
 	<div class="rounded-4xl mx-auto grid max-w-7xl overflow-hidden bg-slate-950 text-white lg:grid-cols-2">
 		{{-- Content --}}
@@ -32,7 +32,7 @@
 		</div>
 
 		{{-- Image --}}
-		<div class="min-h-112.5">
+		<div class="lg:min-h-112.5 h-120 lg:h-auto">
 			<img
 				src="{{ Vite::image('home/open-shop.webp') }}"
 				alt="Apri il tuo negozio su Shipping Dog"

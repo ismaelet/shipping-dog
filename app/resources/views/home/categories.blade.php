@@ -2,7 +2,7 @@
 <section
 	id="categorie"
 	aria-label="Categorie di prodotti"
-	class="mx-auto max-w-7xl px-5 py-16 lg:px-8"
+	class="py-16"
 >
 	{{-- Heading --}}
 	<div class="mb-8 flex items-end justify-between">

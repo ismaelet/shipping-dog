@@ -1,35 +1,45 @@
 @props(['product', 'badge' => null])
 
-<article class="group min-w-0 text-slate-950 dark:text-stone-100">
+@pushOnce('styles')
+	<style>
+		.product-card-img-wrapper {
+			border-radius: clamp(var(--radius-xl), 8cqi, var(--radius-3xl));
+		}
+	</style>
+@endpushOnce
+
+<article class="product-card group min-w-0 text-slate-950 dark:text-stone-100">
 	{{-- Product image --}}
-	<div class="aspect-4/5 relative overflow-hidden rounded-3xl bg-slate-100 dark:bg-slate-800">
-		<a
-			href="{{ $product->url() }}"
-			class="block size-full"
-		>
-			<img
-				src="{{ $product->image() }}"
-				alt="{{ $product->name }}"
-				loading="lazy"
-				class="size-full object-cover"
-			/>
-		</a>
-
-		{{-- Badge --}}
-		@if ($badge)
-			<span
-				class="pointer-events-none absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-950"
+	<div class="@container">
+		<div class="product-card-img-wrapper aspect-4/5 relative overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
+			<a
+				href="{{ $product->url() }}"
+				class="block size-full"
 			>
-				{{ $badge }}
-			</span>
-		@endif
+				<img
+					src="{{ $product->image() }}"
+					alt="{{ $product->name }}"
+					loading="lazy"
+					class="size-full origin-center transform-gpu object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-105"
+				/>
+			</a>
 
-		{{-- Wishlist --}}
-		<div class="absolute right-4 top-4 z-10">
-			<livewire:wishlist-button
-				:product="$product"
-				:key="'wishlist-button-' . $product->id . '-' . $product->color_id . '-' . $product->position_id"
-			/>
+			{{-- Badge --}}
+			@if ($badge)
+				<span
+					class="pointer-events-none absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-950"
+				>
+					{{ $badge }}
+				</span>
+			@endif
+
+			{{-- Wishlist --}}
+			<div class="absolute right-4 top-4 z-10">
+				<livewire:wishlist-button
+					:product="$product"
+					:key="'wishlist-button-' . $product->id . '-' . $product->color_id . '-' . $product->position_id"
+				/>
+			</div>
 		</div>
 	</div>
 

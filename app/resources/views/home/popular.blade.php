@@ -3,7 +3,7 @@
 	id="novita"
 	class="full-width bg-white py-20 transition-colors dark:bg-slate-950"
 >
-	<div class="mx-auto max-w-7xl px-5 lg:px-8">
+	<div class="mx-auto w-full">
 		{{-- Heading --}}
 		<div class="mb-10 flex items-end justify-between gap-4">
 			<div>
@@ -40,7 +40,7 @@
 		</div>
 
 		{{-- Products --}}
-		<div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="xs:grid-cols-2 grid grid-cols-1 gap-x-5 gap-y-10 lg:grid-cols-4">
 			@foreach ($products as $product)
 				<x-product-card
 					:$product

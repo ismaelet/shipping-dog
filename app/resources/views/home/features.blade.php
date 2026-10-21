@@ -1,7 +1,24 @@
-<section class="mx-auto grid max-w-7xl grid-cols-1 gap-3 px-5 py-8 md:grid-cols-3 lg:px-8">
+@pushOnce('styles')
+	<style>
+		.features {
+			--td: 500ms;
+			--tf: cubic-bezier(0.34, 1.28, 0.82, 1);
+		}
+
+		.feature {
+			transition: translate var(--td) var(--tf);
+
+			&:hover {
+				translate: 0 -0.25rem;
+			}
+		}
+	</style>
+@endpushOnce
+
+<section class="features mx-auto grid grid-cols-1 gap-3 py-8 md:grid-cols-3">
 	@foreach ($features as $key => $feature)
 		<div
-			class="flex items-center gap-4 rounded-2xl border border-slate-950/10 bg-white p-5 dark:border-white/10 dark:bg-slate-800"
+			class="feature flex items-center gap-4 rounded-2xl border border-slate-950/10 bg-white p-5 dark:border-white/10 dark:bg-slate-800"
 		>
 			{{-- Icon --}}
 			<div
