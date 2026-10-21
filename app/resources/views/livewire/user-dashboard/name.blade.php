@@ -8,11 +8,11 @@
 
 <div class="text-center">
 	@if ($name)
-		<x-heading.component class="break-all text-center">{{ $name }}</x-heading.component>
+		<x-heading.component class="break-all text-center text-lg">Ciao, {{ $name }}</x-heading.component>
 	@endif
 
 	@if ($username || $fullName)
-		<p class="">
+		<p class="text-neutral-text text-sm">
 			{{ $email }}
 		</p>
 	@endif

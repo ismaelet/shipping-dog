@@ -7,6 +7,7 @@ use App\Models\Ecommerce\OrderItem;
 use App\Models\Ecommerce\Seller;
 use App\Models\News;
 use App\Models\User;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\Vite;
 
@@ -98,40 +99,58 @@ class FeedEntry {
         return null;
     }
 
-    public function text() {
+    public function title(): string {
         switch ($this->type_id) {
             case 1:
-                $text = '<span class="font-semibold text-neutral-heading"><span class="text-primary">Shipping Dog</span></span>: ' . $this->news()->text;
-                break;
-
+                return 'Novità da Shipping Dog';
             case 2:
-                $text = $this->orderItem->product ?
-                    'Hai venduto <span class="font-semibold text-neutral-heading">' . $this->orderItem->quantity . ' x</span> <a class="design" href="' . $this->orderItem->product->url() . '">' . $this->orderItem->product->name . '</a> per <span class="font-semibold text-neutral-heading">' . price($this->orderItem->total_seller_earnings_after_reduction) . '</span>'
-
-                    :
-
-                    'Hai venduto <span class="font-semibold text-neutral-heading">' . $this->orderItem->quantity . ' x</span> <span class="design">prodotto rimosso</span> per <span class="font-semibold text-neutral-heading">' . price($this->orderItem->total_seller_earnings_after_reduction) . '</span>';
-                break;
-
+                return 'Hai venduto ' . (int) $this->orderItem->quantity . ' x ' . $this->link($this->orderItem->product?->url(), $this->orderItem->product?->name ?: 'prodotto rimosso');
             case 3:
-                $text = '<span class="user">' . $this->profile->name . '</span> ha aggiunto <a class="design" href="' . $this->design->clientUrl . '">' . ($this->design->name ?: 'design rimosso') . '</a> ai preferiti';
-                break;
-
+                return e($this->profile->name) . ' ha aggiunto un design ai preferiti';
             case 4:
-                $text = '<span class="user">' . $this->profile->name . '</span> ha iniziato a seguirti';
-                break;
-
+                return e($this->profile->name) . ' ha iniziato a seguirti';
             case 5:
-                $text = '<a class="user" href="' . $this->seller->clientUrl . '">' . $this->seller->name . '</a> ha caricato un nuovo design: <a class="design" href="' . $this->design->clientUrl . '">' . ($this->design->name ?: 'design rimosso') . '</a>';
-                break;
-
+                return $this->link($this->seller->clientUrl, $this->seller->name) . ' ha caricato un nuovo design';
             default:
-                $text = '';
+                return '';
+        }
+    }
+
+    public function subtitle(): string {
+        switch ($this->type_id) {
+            case 1:
+                return (string) $this->news()?->text;
+            case 2:
+                return 'Guadagno: ' . price($this->orderItem->total_seller_earnings_after_reduction);
+            case 3:
+            case 5:
+                return $this->link($this->design->clientUrl, $this->design->name ?: 'design rimosso');
+            default:
+                return '';
+        }
+    }
+
+    /**
+     * Relative date: "Oggi", "Ieri", "2 giorni fa"...
+     */
+    public function date(): string {
+        $date = Carbon::instance($this->created_at)->locale('it');
+
+        if ($date->isToday()) {
+            return 'Oggi';
         }
 
-        $text = '<span class="font-semibold text-neutral-heading">' . $this->created_at->format('d-m-Y') . ':</span> ' . $text;
+        if ($date->isYesterday()) {
+            return 'Ieri';
+        }
 
-        return $text;
+        return $date->diffForHumans(now(), ['parts' => 1]);
+    }
+
+    private function link(?string $url, string $label): string {
+        $label = e($label);
+
+        return $url ? '<a class="text-secondary-400 hover:underline" href="' . e($url) . '">' . $label . '</a>' : $label;
     }
 
     public function image() {

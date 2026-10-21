@@ -2,7 +2,15 @@
 
 use App\Helpers\App;
 use App\Helpers\FileHelper;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+
+/**
+ * Get the currently authenticated user
+ */
+function user(): User|null {
+    return Auth::user();
+}
 
 /**
  * Check if the user is an admin

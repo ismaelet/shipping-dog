@@ -10,13 +10,13 @@
 	        'title' => 'Wishlist',
 	        'dashboard_location' => 'wishlist',
 	        'url' => route('user-dashboard.wishlist'),
-	        'icon' => 'love',
+	        'icon' => 'heart',
 	    ],
 	    [
 	        'title' => 'Lista ordini',
 	        'dashboard_location' => 'orders',
 	        'url' => route('user-dashboard.orders'),
-	        'icon' => 'cart',
+	        'icon' => 'orders',
 	    ],
 	    [
 	        'title' => 'Il mio negozio',
@@ -45,14 +45,6 @@
 		.user-dashboard-navigation {
 			position: sticky;
 			top: 2rem;
-
-			.dark & {
-				border: none;
-			}
-		}
-
-		.user-dashboard-navigation ul {
-			overflow: hidden;
 		}
 
 		@media (max-width: 768px) {
@@ -72,7 +64,8 @@
 	x-data="{ open: false }"
 	:data-open="open ? 'true' : 'false'"
 >
-	<div class="user-dashboard-navigation bg-surface-400 surface grid overflow-clip rounded-lg">
+	<div
+		class="user-dashboard-navigation surface border-neutral-border bg-surface-400 grid overflow-clip rounded-xl border">
 		{{-- Title --}}
 		<label
 			class="bg-surface-500 md:hidden"
@@ -80,21 +73,23 @@
 		>
 			<h3 class="flex items-center gap-4 px-4 py-4 text-xl">
 				<span class="w-5">
-					{!! embed_icon('list') !!}
+					<x-icon-list />
 				</span>
 				Profilo
 			</h3>
 		</label>
 
 		{{-- Navigation link --}}
-		<ul class="">
+		<div class="overflow-hidden">
+			<ul class="grid grid-cols-1 gap-2 p-2">
 
-			@foreach ($links as $link)
-				@if (!isset($link['condition']) || $link['condition'])
-					<x-user-dashboard.link :$link />
-				@endif
-			@endforeach
+				@foreach ($links as $link)
+					@if (!isset($link['condition']) || $link['condition'])
+						<x-user-dashboard.link :$link />
+					@endif
+				@endforeach
 
-		</ul>
+			</ul>
+		</div>
 	</div>
 </nav>

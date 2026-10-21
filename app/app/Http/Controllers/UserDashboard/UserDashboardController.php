@@ -6,6 +6,7 @@ use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
 use App\Legacy\System\DB;
 use App\Models\Ecommerce\Order;
+use App\Models\Ecommerce\Seller\Follower;
 use App\Models\User\FeedEntry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,7 @@ class UserDashboardController extends Controller {
      */
     public function index(Request $request): View {
         $title = 'Attività recenti';
+        $user = user();
 
         $feedEntries = [];
         $feedEntryRows = DB::select(
@@ -30,7 +32,7 @@ class UserDashboardController extends Controller {
 	ORDER BY created_at DESC
 	LIMIT 15
 	',
-            [Auth::id()]
+            [$user->id]
         );
 
         while ($feedEntryRow = $feedEntryRows->fetch_assoc()) {
@@ -41,6 +43,11 @@ class UserDashboardController extends Controller {
             'location' => 'user-dashboard',
             'title' => $title,
             'feedEntries' => $feedEntries,
+            'orderCount' => $user->orders()
+                ->where('status', '!=', EcommerceHelper::statusFromTag('open'))
+                ->count(),
+            'wishlistCount' => $user->wishlist_items()->count(),
+            'followedShopCount' => Follower::where('follower_id', $user->id)->count(),
         ]);
     }
 
@@ -50,7 +57,7 @@ class UserDashboardController extends Controller {
     public function orders(Request $request): View {
         $title = 'Ordini';
 
-        $user = Auth::user();
+        $user = user();
         $pageSize = 10;
         $page = request()->query('page', 1);
 
