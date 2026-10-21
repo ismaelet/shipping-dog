@@ -43,13 +43,11 @@
 		</section>
 
 		<section class="surface border-neutral-border bg-surface-400 rounded-2xl border p-5 sm:p-8">
-			<header class="border-neutral-border border-b pb-6">
-				<p class="text-primary text-xs font-bold uppercase tracking-[0.2em]">Bentornato</p>
-				<h2 class="font-heading text-neutral-heading mt-1 text-2xl font-semibold">La tua attività</h2>
-				<p class="text-neutral-text mt-2 text-sm">
-					Tutto quello che è successo nel tuo mondo ShippingDOG, in un solo posto.
-				</p>
-			</header>
+			<x-user-dashboard.panel-header
+				title="La tua attività"
+				subtitle="Bentornato"
+				text="Tutto quello che è successo nel tuo mondo ShippingDOG, in un solo posto."
+			/>
 
 			<div class="mt-6 grid grid-cols-1 gap-3">
 				@forelse ($feedEntries as $feedEntry)

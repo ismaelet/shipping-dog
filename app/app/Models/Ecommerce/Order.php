@@ -8,6 +8,7 @@ use App\Models\Ecommerce\Seller\Payment;
 use App\Models\SentEmail;
 use App\Models\User;
 use App\Services\GlsService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -151,6 +152,46 @@ class Order extends Model {
      */
     public function createdAtString(): string {
         return date('d/m/Y', strtotime($this->created_at));
+    }
+
+    /**
+     * Get the order's created at date in a human readable Italian format (e.g. "13 settembre 2025")
+     */
+    public function humanDate(): string {
+        return Carbon::parse($this->created_at)->locale('it')->isoFormat('D MMMM YYYY');
+    }
+
+    /**
+     * Get the main title of the order: the first item's name, plus the number of other items
+     */
+    public function mainTitle(): string {
+        $first = $this->order_items->first();
+
+        if (!$first) {
+            return 'Nessun prodotto';
+        }
+
+        $title = $first->product_with_trashed?->name ?: 'Articolo rimosso';
+        $others = $this->order_items->count() - 1;
+
+        return $others > 0 ? $title . ' +' . $others : $title;
+    }
+
+    /**
+     * Get the order's sub-title (e.g. "Taglia S · 2 articoli")
+     */
+    public function subTitle(): string {
+        $first = $this->order_items->first();
+        $count = (int) $this->order_items->sum('quantity');
+        $parts = [];
+
+        if ($first && $this->order_items->count() === 1) {
+            $parts[] = $first->size && $first->type?->sizes->count() > 1 ? 'Taglia ' . $first->size->name : 'Taglia unica';
+        }
+
+        $parts[] = $count . ($count === 1 ? ' articolo' : ' articoli');
+
+        return implode(' · ', $parts);
     }
 
     /**

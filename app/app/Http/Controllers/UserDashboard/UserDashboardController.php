@@ -8,7 +8,11 @@ use App\Legacy\System\DB;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Seller\Follower;
 use App\Models\User\FeedEntry;
+use Carbon\Carbon;
+use Dompdf\Dompdf;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -55,52 +59,58 @@ class UserDashboardController extends Controller {
      * Display the orders tab
      */
     public function orders(Request $request): View {
-        $title = 'Ordini';
-
-        $user = user();
         $pageSize = 10;
-        $page = request()->query('page', 1);
+        $page = max(1, (int) $request->query('page', 1));
 
-        $orderBy = request()->query('order_by', 'id');
-        $orderDirection = request()->query('order_direction', 'desc');
+        $query = $this->confirmedOrdersQuery();
+        $totalCount = (clone $query)->count();
 
-        $confirmedOrders = Order::where('user_id', $user->id)
+        return view('user-dashboard.orders', [
+            'location' => 'user-dashboard',
+            'title' => 'Ordini',
+            'confirmedOrders' => $query->forPage($page, $pageSize)->get(),
+            'totalCount' => $totalCount,
+            'pageSize' => $pageSize,
+        ]);
+    }
+
+    /**
+     * Download the list of the user's orders as a PDF
+     */
+    public function downloadOrders(Request $request): Response {
+        $user = user();
+
+        $html = view('user-dashboard.orders-pdf', [
+            'user' => $user,
+            'orders' => $this->confirmedOrdersQuery()->get(),
+            'generatedAt' => Carbon::now()->locale('it')->isoFormat('D MMMM YYYY'),
+        ])->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        return response($dompdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="storico-ordini.pdf"',
+        ]);
+    }
+
+    /**
+     * The user's confirmed orders, newest first
+     */
+    private function confirmedOrdersQuery(): Builder {
+        return Order::where('user_id', user()->id)
             ->where('status', '!=', EcommerceHelper::statusFromTag('open'))
             ->with(
                 'order_items',
                 'order_items.type',
                 'order_items.type.sizes',
-                'order_items.type.colors',
-                'order_items.color',
                 'order_items.size',
-                'order_items.position',
-                'order_items.logo',
-                'order_items.product',
-                'order_items.product.type',
                 'order_items.product_with_trashed',
-            );
-        $confirmedOrders =
-            $orderDirection == 'asc' ? $confirmedOrders->orderBy($orderBy) : $confirmedOrders->orderByDesc($orderBy);
-
-        $confirmedOrders = $confirmedOrders->get();
-
-        $confirmedOrders = $confirmedOrders->forPage($page, $pageSize);
-
-        $columns = ['Ordine', 'Prodotti', 'Totale', 'Stato', 'Data', ''];
-        $columns = [
-            ['label' => 'Ordine', 'name' => 'id', 'type' => 'method', 'method' => 'idCode'],
-            ['label' => 'Articoli', 'type' => 'method', 'method' => 'orderItemsString'],
-            ['label' => 'Totale', 'name' => 'price', 'type' => 'price'],
-            ['label' => 'Stato', 'name' => 'status', 'type' => 'method', 'method' => 'statusLabel'],
-            ['label' => 'Data', 'name' => 'created_at', 'type' => 'date'],
-        ];
-
-        return view('user-dashboard.orders', [
-            'location' => 'user-dashboard',
-            'title' => $title,
-            'confirmedOrders' => $confirmedOrders,
-            'columns' => $columns,
-        ]);
+            )
+            ->orderByDesc('id');
     }
 
     /**

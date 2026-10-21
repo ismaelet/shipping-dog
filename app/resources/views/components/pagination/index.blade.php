@@ -1,53 +1,66 @@
 @props(['recordCount', 'pageSize' => 50])
 
 @php
-    $currentPage = request()->page ?? 1;
-    $pageCount = ceil($recordCount / $pageSize);
-    $continuousStart = $currentPage < 5;
-    $countinuousEnd = $currentPage > $pageCount - 4;
-    $dynamicStart = $continuousStart ? 2 : $currentPage - 1;
-    $dynamicEnd = $countinuousEnd ? $pageCount - 1 : max($currentPage + 1, 5);
+	$currentPage = max(1, (int) request()->input('page', 1));
+	$pageCount = (int) ceil($recordCount / $pageSize);
+
+	$currentPage = min($currentPage, max(1, $pageCount));
+
+	$dynamicStart = max(2, $currentPage - 1);
+	$dynamicEnd = min($pageCount - 1, $currentPage + 1);
+
+	if ($currentPage <= 3) {
+	    $dynamicEnd = min($pageCount - 1, 4);
+	}
+
+	if ($currentPage >= $pageCount - 2) {
+	    $dynamicStart = max(2, $pageCount - 3);
+	}
 @endphp
 
 @if ($pageCount > 1)
-    <nav class="pagination flex justify-center items-center gap-1">
+	<nav
+		class="pagination flex flex-wrap items-center justify-center gap-2"
+		aria-label="Pagination"
+	>
+		{{-- Previous --}}
+		@if ($currentPage > 1)
+			<x-pagination.previous :page="$currentPage - 1" />
+		@endif
 
-        @if ($currentPage > 1)
-            {{-- Skit to the first page --}}
-            <x-pagination.first page="1" />
+		{{-- First page --}}
+		<x-pagination.page-number
+			:page="1"
+			:current-page="$currentPage"
+		/>
 
-            {{-- Go back one --}}
-            <x-pagination.previous :page="$currentPage - 1" />
-        @endif
+		{{-- Start ellipsis --}}
+		@if ($dynamicStart > 2)
+			<x-pagination.ellipsis />
+		@endif
 
-        {{-- First page --}}
-        <x-pagination.page-number :page="1" :current-page="$currentPage" />
+		{{-- Dynamic pages --}}
+		@for ($i = $dynamicStart; $i <= $dynamicEnd; $i++)
+			<x-pagination.page-number
+				:page="$i"
+				:current-page="$currentPage"
+			/>
+		@endfor
 
-        {{-- Ellipsis --}}
-        @if (!$continuousStart)
-            <x-pagination.ellipsis />
-        @endif
+		{{-- End ellipsis --}}
+		@if ($dynamicEnd < $pageCount - 1)
+			<x-pagination.ellipsis />
+		@endif
 
-        {{-- Dynamic pages --}}
-        @for ($i = $dynamicStart; $i <= $dynamicEnd; $i++)
-            <x-pagination.page-number :page="$i" :current-page="$currentPage" />
-        @endfor
+		{{-- Last page --}}
+		<x-pagination.page-number
+			:page="$pageCount"
+			:current-page="$currentPage"
+		/>
 
-        {{-- Ellipsis --}}
-        @if (!$countinuousEnd)
-            <x-pagination.ellipsis />
-        @endif
-
-        {{-- Last page --}}
-        <x-pagination.page-number :page="$pageCount" :current-page="$currentPage" />
-
-        @if ($currentPage < $pageCount)
-            {{-- Go forward one --}}
-            <x-pagination.next :page="$currentPage + 1" />
-
-            {{-- Skit to the last page --}}
-            <x-pagination.last :page="$pageCount" />
-        @endif
-
-    </nav>
+		{{-- Next --}}
+		@if ($currentPage < $pageCount)
+			<x-pagination.next :page="$currentPage + 1" />
+		@endif
+	</nav>
 @endif

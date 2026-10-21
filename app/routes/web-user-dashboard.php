@@ -18,6 +18,7 @@ Route::prefix('user-dashboard')->name('user-dashboard')->group(function () {
 
     // Order list
     Route::get('/orders', [UserDashboardController::class, 'orders'])->name('.orders');
+    Route::get('/orders/download', [UserDashboardController::class, 'downloadOrders'])->name('.orders.download');
 
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('.wishlist');

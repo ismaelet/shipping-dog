@@ -8,7 +8,7 @@
 		style="background-image: url({{ $user->cover() }})"
 	>
 		<div class="bg-linear-to-r absolute inset-0 from-slate-950/80 via-slate-950/45 to-transparent"></div>
-		<p class="absolute bottom-8 left-8 hidden max-w-lg text-sm leading-6 text-white sm:bottom-12 sm:left-16 sm:block">
+		<p class="absolute bottom-8 left-8 hidden max-w-96 text-sm leading-6 text-white sm:bottom-12 sm:left-16 sm:block">
 			Il tuo spazio personale per seguire ordini, collezionare design e far crescere le tue idee.
 		</p>
 	</div>
