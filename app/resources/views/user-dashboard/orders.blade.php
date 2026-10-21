@@ -4,11 +4,11 @@
 			title="I tuoi ordini"
 			subtitle="Acquisti"
 			text="Controlla lo stato delle spedizioni e consulta gli acquisti passati."
-			:buttonLabel="$totalCount ? 'Scarica storico' : null"
-			:buttonUrl="$totalCount ? route('user-dashboard.orders.download') : null"
+			:buttonLabel="$confirmedOrders->total() ? 'Scarica storico' : null"
+			:buttonUrl="$confirmedOrders->total() ? route('user-dashboard.orders.download') : null"
 		/>
 
-		@if ($confirmedOrders->count())
+		@if ($confirmedOrders->total() > 0)
 			<div class="overflow-x-auto">
 				<table class="min-w-160 w-full text-left text-sm">
 					<thead>
@@ -29,16 +29,9 @@
 				</table>
 			</div>
 
-			<form
-				action=""
-				method="GET"
-				class="mt-6"
-			>
-				<x-pagination
-					:record-count="$totalCount"
-					:page-size="$pageSize"
-				/>
-			</form>
+			<div class="mt-6">
+				{{ $confirmedOrders->onEachSide(1)->links('pagination.default') }}
+			</div>
 		@else
 			<p class="text-neutral-text py-10 text-center text-sm">Nessun ordine effettuato</p>
 		@endif

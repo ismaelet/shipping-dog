@@ -1,16 +1,4 @@
-@pushOnce('styles')
-	<link
-		rel="stylesheet"
-		href="{{ asset('css/legacy/shop.css') }}"
-	>
-	<style>
-		main {
-			--breakout-width: 1600px;
-		}
-	</style>
-@endpushOnce
-
-<x-layouts.legacy-main
+<x-layouts.main
 	:$location
 	:$title
 >
@@ -31,9 +19,10 @@
 
 			<div class="relative grid justify-items-center gap-8 px-4 text-center">
 				<h1
-					id="title"
-					class="txt-wht"
-				>SHO<span style="letter-spacing: 0;">P</span></h1>
+					class="text-[min(7rem,20vw)] font-normal tracking-[0.3em] text-[#202020] [text-shadow:0.07em_0.04em_0_var(--color-primary-400)]"
+				>
+					SHO<span class="tracking-normal">P</span>
+				</h1>
 
 				<!-- Search box -->
 				<form
@@ -95,5 +84,4 @@
 		<livewire:shop.product-list />
 
 	</div>
-
-</x-layouts.legacy-main>
+</x-layouts.main>

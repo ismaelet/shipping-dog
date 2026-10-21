@@ -1,78 +1,47 @@
 # Project Instructions
 
-## Tech Stack
+## Stack and layout
 
-- Backend: Laravel / PHP
-- Templates: Laravel Blade
-- Reactive components: Livewire
-- Styling: Tailwind CSS v4
-- Build tool: Vite
-- Development environment: Docker
+- Laravel 12.48.1 (Composer constraint `^12.0`), PHP `^8.2` (Docker uses PHP 8.4), Livewire 3.7.6, Filament 4, Tailwind CSS 4, and Vite.
+- The Laravel project root is `app/`; run Artisan, Composer, and npm commands there locally. Docker commands below run from the repository root.
+- Follow the existing Laravel architecture and keep business logic out of Blade views.
 
-## General Guidelines
+## Architecture
 
-- Follow the existing project architecture and conventions.
-- Prefer simple, maintainable solutions.
-- Reuse existing components and utilities.
-- Avoid adding dependencies unless necessary.
-- Keep changes focused on the requested task.
-- Do not refactor unrelated code.
-- Do not introduce Vue, React, or Inertia.
+- HTTP routes are grouped by concern in `app/routes/`: auth, ecommerce, services, user dashboard, seller dashboard, and general web routes. `App\Providers\RouteServiceProvider` assigns middleware to these groups.
+- Keep request handling in controllers, persistence/domain behavior in Eloquent models, and reusable workflows/calculations in `app/app/Services/`. Ecommerce models are grouped under `App\Models\Ecommerce`.
+- Livewire 3 components live under `app/app/Livewire/` with corresponding templates under `app/resources/views/livewire/`. Use component methods for server-side actions, validate input, and follow existing event/attribute patterns.
+- Filament admin functionality is under `app/app/Filament/`. Check the existing legacy integration and Composer autoload mappings before changing legacy behavior.
 
-## Laravel
+## Blade and reusable UI
 
-- Use Laravel conventions and existing project patterns.
-- Prefer Eloquent relationships and query scopes where appropriate.
-- Follow existing validation and authorization patterns.
-- Avoid unnecessary database queries.
-- Do not modify migrations unless required.
-- Keep business logic out of Blade templates.
-- Can update controllers if needed.
-- Can update models if needed.
+- Anonymous Blade components live under `app/resources/views/components/` and are invoked as `<x-...>`; reusable class-backed components live under `app/app/View/Components/`.
+- Before creating UI, look for existing components: layouts, forms and inputs, alerts, buttons, typography, tables, pagination, headers, product cards, and dashboard/ecommerce components.
+- Configure anonymous components with `@props`; forward caller attributes with `$attributes->class(...)` or the existing merge pattern, and preserve slots and component attributes.
+- The app layout renders the `styles` and `scripts` stacks. Follow existing `@pushOnce` patterns for component-specific CSS or scripts.
+- Shared helpers are in `app/app/Helpers/`: `App`, `EcommerceHelper`, `FileHelper`, and `StringHelper`. Global shorthand functions are loaded from `Helpers/Shorthands/` by `AppServiceProvider`; check for existing helpers such as `user()`, `cart()`, and `price()` before adding another.
 
-## Blade
+## Styling and JavaScript
 
-- Prefer Blade components for reusable UI elements.
-- Reuse existing components before creating new ones.
-- Use @props for component configuration.
-- Keep templates readable and avoid complex inline PHP.
-- Preserve existing component attributes and slots.
-- Use escaped output unless trusted HTML is required.
-- Can create new components if needed.
+- Vite inputs are `app/resources/css/app.css` and `app/resources/js/app.js`. `app.css` imports Tailwind, `base.css`, and `theme.css`, and scans Blade views.
+- Tailwind v4 design tokens (colors, fonts, spacing, breakpoints, and light/dark values) are defined in `app/resources/css/theme.css`; shared layout utilities are in `base.css`. Reuse these tokens and patterns rather than adding duplicate values.
+- Keep frontend behavior in the existing vanilla JavaScript modules or Alpine.js where appropriate. Do not introduce Vue, React, or Inertia.
 
-## Livewire
+## Docker, build, and tests
 
-- Use Livewire for server-driven interactive features.
-- Follow the project's existing Livewire conventions.
-- Keep component state minimal.
-- Validate user input on the server.
-- Avoid unnecessary requests and re-renders.
-- Use Alpine.js for lightweight client-side interactions
-  where appropriate and already supported.
+From the repository root:
 
-## Styling
+```bash
+docker compose up --build -d
+docker compose logs -f app vite db
+docker compose exec vite npm run build
+docker compose exec app php artisan test
+```
 
-- Use Tailwind CSS v4 utility classes.
-- Reuse existing design tokens and CSS variables.
-- Follow existing responsive breakpoints.
-- Preserve light and dark mode support.
-- Avoid arbitrary values when existing utilities suffice.
-- Prefer CSS via the @pushOnce('styles') tag for complex or repeated styling patterns.
-- Avoid introducing new CSS files unnecessarily.
+Compose provides the Laravel app on port 8000, Vite on 5173, and MariaDB. The Vite service starts the development server automatically. Tests are PHPUnit/Pest tests under `app/tests/`; use `php artisan test` for the suite or pass a test path/filter when targeting specific tests.
 
-## JavaScript
+## Working practices
 
-- Prefer vanilla JavaScript for simple interactions.
-- Use Alpine.js where it fits existing patterns.
-- Avoid unnecessary frontend frameworks.
-- Preserve progressive enhancement where possible.
-
-## Workflow
-
-- Inspect relevant files before changing code.
-- Check for existing reusable components.
-- Make minimal, targeted modifications.
-- Run relevant tests or builds when possible.
-- Do not modify unrelated files.
-- Do not modify environment files or secrets.
-- Ask before destructive operations.
+- Inspect nearby code and reuse existing components, helpers, validation, authorization, and test patterns.
+- Keep changes focused; do not modify migrations, dependencies, or environment configuration unless required.
+- Run the narrowest relevant tests and build after application changes.

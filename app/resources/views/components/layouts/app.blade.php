@@ -1,6 +1,5 @@
 @props([
     'title' => null,
-    'colorScheme' => null,
     'description' => null,
     'thumbnail' => null,
 ])
@@ -12,22 +11,14 @@
 	$thumbnail = $thumbnail ?: Vite::image('thumbnail.jpg');
 
 	$title = $title ? $title . ' | ' . $appName : $appName . ' | ' . config('custom.meta_data.short_description');
-
-	$colorScheme =
-	    $colorScheme ?:
-	    (isset($_COOKIE['color-scheme']) && in_array($_COOKIE['color-scheme'], ['light', 'dark'])
-	        ? $_COOKIE['color-scheme']
-	        : config('custom.meta_data.default_color_scheme'));
 @endphp
 
 <!DOCTYPE html>
-<html
-	class="{{ $colorScheme }}"
-	lang="{{ str_replace('_', '-', app()->getLocale()) }}"
->
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
 	<meta charset="utf-8">
+
 	<meta
 		name="viewport"
 		content="width=device-width, initial-scale=1"
@@ -48,9 +39,23 @@
 		{{ $title }}
 	</title>
 
+	<script>
+		(() => {
+			const theme = localStorage.getItem('theme') || 'light';
+
+			const isDark = theme === 'dark' ||
+				(theme === 'system' &&
+					window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+			document.documentElement.classList.toggle('dark', isDark);
+			document.documentElement.classList.toggle('light', !isDark);
+			document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+		})();
+	</script>
+
 	<livewire:styles />
 
-	@vite(['resources/css/app.css', 'resources/js/app.js'])
+	@vite(['resources/css/app.css', 'resources/js/app.ts'])
 	@stack('styles')
 	@stack('scripts')
 
@@ -59,7 +64,6 @@
 <body>
 	{{ $slot }}
 
-	{{-- <x-warnings.wip /> --}}
 	<livewire:scripts />
 </body>
 

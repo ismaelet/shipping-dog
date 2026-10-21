@@ -58,19 +58,11 @@ class UserDashboardController extends Controller {
     /**
      * Display the orders tab
      */
-    public function orders(Request $request): View {
-        $pageSize = 10;
-        $page = max(1, (int) $request->query('page', 1));
-
-        $query = $this->confirmedOrdersQuery();
-        $totalCount = (clone $query)->count();
-
+    public function orders(): View {
         return view('user-dashboard.orders', [
             'location' => 'user-dashboard',
             'title' => 'Ordini',
-            'confirmedOrders' => $query->forPage($page, $pageSize)->get(),
-            'totalCount' => $totalCount,
-            'pageSize' => $pageSize,
+            'confirmedOrders' => $this->confirmedOrdersQuery()->paginate(10),
         ]);
     }
 

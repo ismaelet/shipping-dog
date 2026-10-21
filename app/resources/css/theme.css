@@ -154,3 +154,20 @@ h6 {
   color: var(--color-neutral-heading);
   font-weight: var(--font-weight-semibold);
 }
+
+/*
+* Components
+*/
+@layer components {
+  .pagination-page {
+    @apply flex size-8 shrink-0 cursor-pointer items-center justify-center
+            rounded-full text-sm font-semibold
+            transition-colors duration-200
+            hover:text-primary-500
+            disabled:cursor-default disabled:opacity-50;
+  }
+
+  .pagination-page.is-active {
+    @apply bg-primary-400 text-white hover:bg-primary-500;
+  }
+}

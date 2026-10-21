@@ -93,18 +93,23 @@
 		@endforeach
 	</div>
 
+
 	{{-- Bottom notes --}}
 	<div
-		class="mx-auto mt-12 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-sm leading-5 text-slate-500 sm:flex-row lg:px-8"
+		class="mx-auto mt-12 flex max-w-7xl flex-col items-center justify-between gap-6 border-t border-white/10 pt-6 text-sm leading-5 text-slate-500 sm:flex-row lg:px-8"
 	>
-		<p>
-			© {{ date('Y') }}
-			{{ config('custom.meta_data.full_name') }}.
-			Tutti i diritti riservati.
-		</p>
+		<div class="text-center sm:text-left">
+			<p>
+				© {{ date('Y') }}
+				{{ config('custom.meta_data.full_name') }}.
+				Tutti i diritti riservati.
+			</p>
 
-		<p class="sm:text-right">
-			Il copyright © di ogni grafica appartiene al rispettivo proprietario.
-		</p>
+			<p class="mt-1">
+				Il copyright © di ogni grafica appartiene al rispettivo proprietario.
+			</p>
+		</div>
+
+		<x-theme-switcher />
 	</div>
 </footer>
