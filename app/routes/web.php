@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Community;
 use App\Http\Controllers\ContactsController;
-use App\Http\Controllers\CustomerPicsController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\EmergencyEmail;
 use App\Http\Controllers\FaqController;
@@ -32,6 +32,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 /**
+ * Community
+ */
+Route::get('/community', [Community::class, 'index'])->name('community');
+
+/**
  * Open shop
  */
 Route::get('/open-shop', [OpenShopController::class, 'index'])->middleware([NotSeller::class, Authenticate::class])->name('open-shop');
@@ -53,8 +58,6 @@ Route::get('/support/privacy-policy', [PrivacyPolicyController::class, 'index'])
 Route::get('/download/{filename}', [DownloadController::class, 'download'])->name('download')->where('filename', '.*');
 
 /**
- * Misc
+ * Utility routes
  */
-Route::get('/customer-pics', [CustomerPicsController::class, 'index'])->name('customer-pics');
-
 Route::get('/emergency-email', [EmergencyEmail::class, 'sendEmail'])->middleware(Admin::class);

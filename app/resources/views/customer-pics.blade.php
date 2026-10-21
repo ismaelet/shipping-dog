@@ -9,7 +9,7 @@
 @pushOnce('styles')
 	<link
 		rel="stylesheet"
-		href="{{ asset('css/legacy/customer-pics.css') }}"
+		href="{{ asset('css/legacy/community.css') }}"
 	>
 @endpushOnce
 

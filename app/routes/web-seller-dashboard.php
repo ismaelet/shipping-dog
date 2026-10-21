@@ -44,8 +44,6 @@ Route::prefix('/seller')->middleware(Seller::class)->name('seller-dashboard')->g
     Route::get('/payment/edit', [PaymentRequestController::class, 'edit'])->name('.payment.edit');
     Route::post('/payment/update', [PaymentRequestController::class, 'update'])->name('.payment.update');
     Route::post('/payment/download', [PaymentRequestController::class, 'download'])->name('.payment.download');
-
-    // Customer photos
 });
 
 

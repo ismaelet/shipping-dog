@@ -5,15 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class CustomerPicsController extends Controller {
+class Community extends Controller {
 
-	/**
-     * Display the customer pictures page.
+    /**
+     * Display the community page.
      *
      * @param Request $request
      * @return View
      */
     public function index(Request $request): View {
-		return view('customer-pics', []);
-	}
+        return view('community', []);
+    }
 }

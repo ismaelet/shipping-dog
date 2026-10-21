@@ -37,7 +37,7 @@
 	<div class="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
 		@foreach ($customerPhotos as $customerPhoto)
 			<a
-				href="{{ $customerPhoto->design?->url() ?? route('customer-pics') }}"
+				href="{{ $customerPhoto->design?->url() ?? route('community') }}"
 				class="group relative aspect-square overflow-hidden rounded-2xl bg-slate-100 last:hidden lg:last:block dark:bg-slate-800"
 				aria-label="Foto di {{ $customerPhoto->full_name }}"
 			>
@@ -70,7 +70,7 @@
 
 	{{-- View all --}}
 	<a
-		href="{{ route('customer-pics') }}"
+		href="{{ route('community') }}"
 		class="hover:text-primary-500 mt-8 inline-flex items-center gap-2 text-sm font-bold transition-colors"
 	>
 		Guarda tutte le foto
