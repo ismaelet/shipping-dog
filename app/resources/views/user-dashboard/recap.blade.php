@@ -28,7 +28,7 @@
 			class="grid grid-cols-1 gap-3 sm:grid-cols-3"
 		>
 			@foreach ($stats as $stat)
-				<article class="surface border-neutral-border bg-surface-400 rounded-xl border p-5">
+				<article class="border-neutral-border bg-surface-400 rounded-xl border p-5">
 					<div class="flex items-center justify-between">
 						<span class="{{ $stat['iconClass'] }} grid size-10 place-items-center rounded-full p-2.5">
 							{!! embed_icon($stat['icon']) !!}

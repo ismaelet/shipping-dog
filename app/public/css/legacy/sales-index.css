@@ -28,7 +28,7 @@
   background-color: var(--color-background-400);
   border: 1px solid var(--color-neutral-border);
   border-radius: 0.5rem;
-  padding: var(--spacing-content);
+  padding: var(--spacing-content-padding);
   margin: 1rem 0;
 }
 

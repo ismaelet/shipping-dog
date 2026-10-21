@@ -23,7 +23,10 @@ class Wishlist extends Component {
             'product.position',
             'product.design_with_trashed',
             'product.type',
-            'product.seller'
+            'product.seller',
+            'product.seller.prices',
+            'product.base_price',
+            'product.specific_price'
         );
     }
 
@@ -52,7 +55,8 @@ class Wishlist extends Component {
                 'product.position',
                 'product.design_with_trashed',
                 'product.type',
-                'product.seller'
+                'product.seller',
+                'product.specific_price'
             );
         }
     }

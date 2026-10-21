@@ -4,7 +4,7 @@
 			type="button"
 			@class([
 				'like-button group grid size-10 cursor-pointer place-items-center rounded-full backdrop-blur transition-colors',
-				'bg-orange-500 text-white' => $wishlisted,
+				'bg-primary-400 hover:bg-primary-500 text-white' => $wishlisted,
 				'bg-white/90 text-slate-900 hover:bg-white' => !$wishlisted,
 			])
 			title="{{ $wishlisted ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti' }}"
@@ -16,7 +16,7 @@
 			wire:target="store,destroy"
 		>
 			<x-dynamic-component
-				:component="$wishlisted ? 'icon-love' : 'icon-love-stroke'"
+				:component="$wishlisted ? 'icon-heart-filled' : 'icon-heart'"
 				class="size-4"
 			/>
 		</button>
@@ -28,7 +28,7 @@
 			aria-label="Aggiungi ai preferiti"
 			data-wishlisted="false"
 		>
-			<x-icon-love-stroke class="size-4" />
+			<x-icon-heart class="size-4" />
 		</a>
 	@endauth
 </div>
