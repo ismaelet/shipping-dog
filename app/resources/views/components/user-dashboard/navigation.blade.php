@@ -44,7 +44,7 @@
 	<style>
 		.user-dashboard-navigation {
 			position: sticky;
-			top: 2rem;
+			top: calc(var(--header-height) + 2rem);
 		}
 
 		@media (max-width: 768px) {
