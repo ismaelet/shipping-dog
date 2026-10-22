@@ -4,7 +4,6 @@ namespace App\Http\Controllers\UserDashboard;
 
 use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
-use App\Legacy\System\DB;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Seller\Follower;
 use App\Models\User\FeedEntry;
@@ -14,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class UserDashboardController extends Controller {
@@ -25,23 +25,17 @@ class UserDashboardController extends Controller {
         $title = 'Attività recenti';
         $user = user();
 
-        $feedEntries = [];
-        $feedEntryRows = DB::select(
-            '
-	order_items.id as event_id, 2 AS type, orders.created_at
-		FROM order_items INNER JOIN orders ON order_items.order_id = orders.id WHERE seller_id = ? AND orders.status > 1
-	UNION ALL
-	SELECT id as event_id, 1 AS type, created_at
-		FROM news
-	ORDER BY created_at DESC
-	LIMIT 15
-	',
-            [$user->id]
-        );
-
-        while ($feedEntryRow = $feedEntryRows->fetch_assoc()) {
-            $feedEntries[] = new FeedEntry($feedEntryRow);
-        }
+        $feedEntries = DB::table('order_items')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->where('order_items.seller_id', $user->id)
+            ->where('orders.status', '>', 1)
+            ->selectRaw('order_items.id as event_id, 2 as type, orders.created_at')
+            ->unionAll(DB::table('news')->selectRaw('id as event_id, 1 as type, created_at'))
+            ->orderByDesc('created_at')
+            ->limit(15)
+            ->get()
+            ->map(fn ($row) => new FeedEntry((array) $row))
+            ->all();
 
         return view('user-dashboard.recap', [
             'location' => 'user-dashboard',

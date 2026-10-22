@@ -1,73 +1,106 @@
 # Project Instructions
 
-## Stack and structure
+## Stack and architecture
 
-- Laravel 12 (`^12.0`), PHP `^8.2` (Docker: 8.4), Livewire 3, Filament 4, Tailwind CSS 4, and Vite.
-- Laravel root: `app/`. Run Artisan, Composer, and npm commands there locally; Docker commands run from the repository root.
-- Follow existing Laravel conventions. Keep business logic out of Blade views.
-- Routes are organized by concern in `app/routes/`, with middleware assigned by `App\Providers\RouteServiceProvider`.
-- Controllers handle HTTP requests, Eloquent models handle persistence/domain behavior, and `app/app/Services/` contains reusable workflows and calculations.
-- Ecommerce models live in `App\Models\Ecommerce`; Livewire components in `app/app/Livewire/`; Filament resources in `app/app/Filament/`.
-- Livewire views live in `app/resources/views/livewire/`. Handle server-side actions in component methods, validate inputs, and reuse existing event/attribute patterns.
-- Check legacy integration and Composer autoload mappings before modifying legacy code.
+- Laravel 12, PHP 8.2+ (Docker: 8.4), Livewire 3, Filament 4, Tailwind CSS 4, and Vite.
+- Laravel root: `app/`. Run Artisan, Composer, and npm commands there; Docker commands run from the repository root.
+- Follow existing architecture. Controllers handle HTTP, models handle persistence/domain behavior, and `app/app/Services/` contains reusable business logic. Keep business logic out of Blade.
+- Routes: `app/routes/`, with middleware assigned by `App\Providers\RouteServiceProvider`.
+- Ecommerce models: `App\Models\Ecommerce`; Livewire: `app/app/Livewire/`; Filament: `app/app/Filament/`; Livewire views: `app/resources/views/livewire/`.
+- Follow existing validation, authorization, Livewire events, and component patterns.
+- Check legacy integration and Composer autoload mappings before changing legacy code.
+
+## Agent efficiency and scope
+
+- **Minimize unnecessary tool calls, file reads, output, and changes without sacrificing correctness.**
+- Use targeted searches (`rg`, `rg --files`). Read relevant files only; expand investigation when necessary.
+- Avoid repeated file reads, commands, repository-wide searches, and unrelated audits.
+- Implement straightforward changes directly. Plan briefly only for complex tasks.
+- Make the smallest change that fully addresses the request. Do not refactor unrelated code.
+- Preserve existing APIs, routes, events, component props, and database schemas unless requested otherwise.
+- Prefer existing solutions over new abstractions. Avoid speculative fallbacks, defensive code, compatibility layers, and premature optimization.
+- Remove obsolete code only after verifying it is unused.
+- Do not modify dependencies, migrations, environment configuration, generated files, or build output unless necessary.
+- Never generate images or unsolicited documentation.
+- **Match validation effort to the scope and risk of the change.**
 
 ## Blade components and helpers
 
-- Reuse existing Blade components before creating new ones, especially layouts, forms, buttons, typography, cards, tables, and pagination.
-- Anonymous components live in `app/resources/views/components/` (`<x-...>`); class-backed components in `app/app/View/Components/`.
-- Use `@props` for anonymous components and `$attributes->class(...)` or existing merge patterns to forward attributes. Preserve slots and caller attributes.
-- Use `@pushOnce('styles')` and `@pushOnce('scripts')` for component-specific assets when needed; the app layout renders both stacks.
-- Reuse helpers in `app/app/Helpers/` (`App`, `EcommerceHelper`, `FileHelper`, `StringHelper`) and global shorthands loaded by `AppServiceProvider` (e.g. `user()`, `cart()`, `price()`).
-- For normal form elements try to use `<x-input/>`, `<x-select/>`,`<x-textarea/>` and `<x-button/>` when possible, instead of styling a native HTML component.
+- Reuse existing Blade components before writing new markup, especially layouts, forms, buttons, typography, cards, tables, and pagination.
+- Anonymous components: `app/resources/views/components/`; class-backed: `app/app/View/Components/`.
+- Prefer `<x-input>`, `<x-select>`, `<x-textarea>`, and `<x-button>` when their APIs support the requirement.
+- Inspect component props and existing usages before modifying or reusing shared components. Never invent props or component names.
+- Use `@props`, `$attributes->class(...)`, and established attribute-merging patterns. Preserve slots and caller attributes.
+- Use `@pushOnce('styles')` and `@pushOnce('scripts')` for component-specific assets when needed.
+- Reuse helpers in `app/app/Helpers/` and global shorthands loaded by `AppServiceProvider` (e.g. `user()`, `cart()`, `price()`).
+- Avoid duplicating styling or behavior already provided by components.
 
 ## Styling and design tokens
 
-- Tailwind v4 configuration and design tokens are in `app/resources/css/theme.css`. Shared layout utilities are in `base.css`; `app.css` imports Tailwind and both files.
-- **Always use semantic color tokens defined in `theme.css`. Never use Tailwind's default color palette or hardcoded/custom colors in components.**
-- **Always use the exact token names, including their numeric suffixes.** Examples:
+- Tailwind v4 tokens: `app/resources/css/theme.css`. Shared layout utilities: `base.css`. Both are imported by `app.css`.
+- **ALWAYS use semantic color tokens defined in `theme.css`. NEVER use Tailwind's default color palette, hardcoded colors, or invented color tokens.**
+- **Use exact token names, including numeric suffixes:**
   - `text-primary-400`, NOT `text-primary` or `text-orange-500`.
   - `bg-surface-400`, NOT `bg-surface` or `bg-slate-800`.
   - `bg-background-400`, NOT `bg-background`.
   - `text-neutral-heading`, NOT `text-slate-950`.
-- These tokens automatically support light and dark themes. Do not add redundant `dark:` color overrides when the existing token already handles both.
-- Check `theme.css` for the correct available token instead of inventing a new color or token name.
-- **Define gradients in CSS inside `@pushOnce('styles')`, never with Tailwind gradient utility classes.**
-- Reuse existing fonts, spacing tokens, breakpoints, and utility classes.
+- Check `theme.css` for available tokens. They already support light/dark themes; avoid redundant `dark:` color overrides.
+- Reuse existing fonts, spacing tokens, breakpoints, and utilities.
+- Prefer Tailwind utilities over custom CSS. Avoid arbitrary values when existing tokens suffice.
+- Use component-specific CSS only when necessary; avoid inline styles and unnecessary global rules.
+- Define gradients in CSS via `@pushOnce('styles')`, never Tailwind gradient utilities. Put shared gradients in shared stylesheets.
 
 ## Layout and Figma fidelity
 
-- **Do not add horizontal padding, width constraints, or centering utilities to page sections unless explicitly present in the Figma design.**
-- **Never add `max-w-*`, `mx-auto`, or extra `px-*` to sections or their outer wrappers just to constrain or center content.**
-- Page width, horizontal spacing, and alignment are already handled externally by the grid in `base.css`.
-- The grid uses `.content-grid`, `.full-width`, `.breakout`, and `.fill-width`. Respect their existing behavior instead of recreating container layouts.
-- Do not introduce unnecessary wrapper elements or nested containers that interfere with the grid.
-- Match Figma spacing exactly. Only add padding or width constraints when explicitly required by the design or component's internal layout.
-- Internal component spacing (e.g. card padding, button padding, grid gaps) is allowed when required by the design.
+- **NEVER add horizontal padding, width constraints, or centering utilities to page sections unless explicitly required by the Figma design.**
+- **Do NOT add `max-w-*`, `mx-auto`, or extra `px-*` to sections or their outer wrappers merely to constrain or center content.**
+- Page width, spacing, and alignment are already managed by the grid in `base.css`.
+- Respect `.content-grid`, `.full-width`, `.breakout`, and `.fill-width`. Do not recreate their behavior with nested containers or unnecessary wrappers.
+- Match Figma spacing accurately. Add padding or width constraints only where the design requires them.
+- Internal component spacing (card/button padding, gaps, etc.) is allowed when required by the design.
 
 ## JavaScript
 
 - Use existing vanilla JavaScript modules or Alpine.js.
 - Do not introduce Vue, React, or Inertia.
 
-## Docker, build, and tests
+## Docker and validation
 
 Run Docker commands from the repository root:
 
 ```bash
-docker compose up --build -d
-docker compose logs -f app vite db
-docker compose exec vite npm run build
+# Start only if needed
+docker compose up -d
+
+# Inspect recent logs
+docker compose logs --tail=100 app vite db
+
+# Run targeted PHP tests
+docker compose exec -e APP_ENV=testing app php artisan test --filter=TestName
+
+# Run full suite when justified
 docker compose exec -e APP_ENV=testing app php artisan test
+
+# Build frontend assets
+docker compose exec vite npm run build
 ```
 
-- Compose exposes Laravel on port 8000, Vite on 5173, and MariaDB. Vite starts its dev server automatically.
-- Tests use PHPUnit/Pest and live in `app/tests/`.
-- **Always run tests with `docker compose exec -e APP_ENV=testing app php artisan test`**, optionally passing a test path or filter.
-- Add or update relevant tests for every code change, even when not explicitly requested.
-- Run the narrowest relevant tests and build after application changes.
+- Assume containers are already running. Do not restart, rebuild, or install dependencies unnecessarily.
+- Laravel runs on port 8000; Vite on 5173. Vite starts automatically.
+- Tests use PHPUnit/Pest in `app/tests/`. Always use `APP_ENV=testing` for PHP tests.
+- Always run the tests relative to edited Laravel routes if a Controller or Model was edited or deleted.
+- Add or update tests for new behavior, bug fixes, or meaningful logic changes when existing coverage is insufficient.
+- Styling, markup-only, and documentation changes do not require new tests.
+- Run frontend builds only when relevant to modified assets or compilation behavior.
+- Avoid repeated validation unless changes or failures justify it.
+- Never run destructive database commands without explicit approval.
+- Report validation failures or checks that could not be performed.
 
-## Working practices
+## Communication
 
-- Inspect nearby code before editing. Reuse established architecture, components, helpers, validation, authorization, and tests.
-- Keep changes focused. Avoid modifying migrations, dependencies, or environment configuration unless necessary.
-- Never generate images.
+- Be concise, technical, and action-oriented.
+- Skip introductory explanations and detailed plans for straightforward tasks.
+- Do not explain basic Laravel, PHP, Blade, or Tailwind concepts unless requested.
+- Do not repeat code already visible in modified files.
+- After changes, briefly summarize what changed, validation performed, and any remaining issues.
+- Resolve minor ambiguities using existing conventions. Ask only when missing information materially affects correctness.

@@ -1,5 +1,4 @@
 @php
-	use App\Legacy\System\DB;
 
 	$navigationGroups = [];
 @endphp
@@ -22,7 +21,7 @@
 
 				<?php
 
-	if (DB::find('request FROM sellers WHERE user_id = ?', [$seller->id])) { ?>
+	if ($seller->request) { ?>
 
 				<div class="request">
 

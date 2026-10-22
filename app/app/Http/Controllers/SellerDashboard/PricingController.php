@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\SellerDashboard;
 
 use App\Http\Controllers\Controller;
-use App\Legacy\Ecommerce\Product\Type;
-use App\Legacy\System\DB;
+use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Seller\SellerPrice;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +17,8 @@ class PricingController extends Controller {
     public function index(): View {
         $seller = Auth::user()->seller;
 
-        $res_cloth = DB::select('id FROM product_types WHERE category=? AND hidden = 0 ORDER BY id ASC', ['c']);
-        $res_acc = DB::select('id FROM product_types WHERE category=? AND hidden = 0 ORDER BY id ASC', ['m']);
+        $res_cloth = ProductType::where('category', 'c')->where('hidden', false)->with('gender', 'price')->orderBy('id')->get();
+        $res_acc = ProductType::where('category', 'm')->where('hidden', false)->with('price')->orderBy('id')->get();
 
         return view('seller-dashboard.pricing', [
             'seller' => $seller,
@@ -31,19 +30,16 @@ class PricingController extends Controller {
     public function update(): RedirectResponse {
         $seller = Auth::user()->seller;
 
-        $res = DB::select('id FROM product_types WHERE hidden = 0 ORDER BY id ASC');
+        foreach (ProductType::where('hidden', false)->with('price')->get() as $type) {
+            $price = request()->input('price_' . $type->tag);
+            if ($price === null) continue;
 
-        while ($row = $res->fetch_assoc()) {
+            $row_price = $seller->prices()->where('type_id', $type->id)->first() ?? $type->price;
+            if (! $row_price) continue;
 
-            $type = new Type($row['id']);
-
-            $price = $_POST['price_' . $type->slug];
-
-            $row_price = DB::row('* FROM prices_sellers WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
-
-            $price_old = $row_price['price'];
-            $gain_w_old = $row_price['gain_w'];
-            $gain_c_old = $row_price['gain_c'];
+            $price_old = $row_price->price;
+            $gain_w_old = $row_price->gain_w;
+            $gain_c_old = $row_price->gain_c;
 
             $gain_w = round(($price - $price_old) * .75 + $gain_w_old, 2);
             $gain_c = round(($price - $price_old) * .75 + $gain_c_old, 2);

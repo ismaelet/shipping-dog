@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Legacy\System\DB;
 use App\Models\Ecommerce\Seller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

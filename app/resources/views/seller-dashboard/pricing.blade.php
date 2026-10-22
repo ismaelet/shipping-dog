@@ -1,10 +1,4 @@
-<?php
-
-use App\Legacy\Ecommerce\Product\Gender;
-use App\Legacy\Ecommerce\Product\Type as LegacyProductType;
-use App\Legacy\System\DB;
-
-?>
+<?php ?>
 
 @pushOnce('styles')
 	<link
@@ -124,16 +118,13 @@ use App\Legacy\System\DB;
 							</div>
 						</div>
 
-						<?php while ($row = $res_cloth->fetch_assoc()) {
+						<?php foreach ($res_cloth as $type) {
+				$gender = $type->gender;
+				$row_price = $seller->prices->firstWhere('type_id', $type->id) ?? $type->price;
 
-				$type = new LegacyProductType($row['id']);
-				$gender = new Gender($type->genderId);
-
-				$row_price = DB::row('* FROM prices_sellers WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
-
-				$price = $row_price['price'];
-				$gain_w = $row_price['gain_w'];
-				$gain_c = $row_price['gain_c'];
+				$price = $row_price->price;
+				$gain_w = $row_price->gain_w;
+				$gain_c = $row_price->gain_c;
 				$min = round($price - max($gain_w, $gain_c) / .75, 2);
 
 			?>
@@ -155,13 +146,13 @@ use App\Legacy\System\DB;
 								value="<?= $gain_c ?>"
 							>
 
-							<p class="price_item"><?= $type->name . ' ' . $gender->name ?></p>
+							<p class="price_item"><?= $type->name . ' ' . ($gender?->name ?? '') ?></p>
 
 							<div class="price_cell">
 								<input
 									type="number"
 									class="price price_inp price_edit"
-									name="price_<?= $type->slug ?>"
+									name="price_<?= $type->tag ?>"
 									value="<?= number_format((float) $price, 2, '.', '') ?>"
 									min="<?= $min ?>"
 									data-min="<?= $min ?>"
@@ -214,15 +205,12 @@ use App\Legacy\System\DB;
 							</div>
 						</div>
 
-						<?php while ($row = $res_acc->fetch_assoc()) {
+						<?php foreach ($res_acc as $type) {
+				$row_price = $seller->prices->firstWhere('type_id', $type->id) ?? $type->price;
 
-				$type = new LegacyProductType($row['id']);
-
-				$row_price = DB::row('* FROM prices_sellers WHERE seller_id = ? AND type_id = ?', [$seller->id, $type->id]) ?: DB::row('* FROM prices_default WHERE type_id = ?', [$type->id]);
-
-				$price = $row_price['price'];
-				$gain_w = $row_price['gain_w'];
-				$gain_c = $row_price['gain_c'];
+				$price = $row_price->price;
+				$gain_w = $row_price->gain_w;
+				$gain_c = $row_price->gain_c;
 				$min = round($price - max($gain_w, $gain_c) / .75, 2);
 			?>
 
@@ -243,7 +231,7 @@ use App\Legacy\System\DB;
 								<input
 									type="number"
 									class="price price_inp price_edit"
-									name="price_<?= $type->slug ?>"
+									name="price_<?= $type->tag ?>"
 									value="<?= number_format((float) $price, 2, '.', '') ?>"
 									min="<?= $min ?>"
 									data-min="<?= $min ?>"
