@@ -1,181 +1,129 @@
+@props(['seller'])
+
 @php
-
-	$currentLocation = explode('seller-dashboard.', request()->route()->getName())[1] ?? 'index';
-
 	$navigation = [
 	    [
 	        'title' => 'Impostazioni',
+	        'subtitle' => 'Generali',
+	        'route' => 'seller-dashboard',
+	        'activeRoutes' => ['seller-dashboard'],
 	        'icon' => 'settings',
-	        'links' => [
-	            'index' => 'Generali',
-	        ],
 	    ],
 	    [
 	        'title' => 'Grafiche',
-	        'icon' => 'portfolio',
-	        'links' => [
-	            'portfolio' => 'Lista grafiche',
-	            'portfolio.add' => 'Carica una grafica',
-	        ],
+	        'subtitle' => 'Prodotti e design',
+	        'route' => 'seller-dashboard.portfolio',
+	        'activeRoutes' => ['seller-dashboard.portfolio*'],
+	        'icon' => 'shirt',
 	    ],
 	    [
 	        'title' => 'Vendite',
-	        'icon' => 'graph',
-	        'links' => [
-	            'sales' => 'Lista vendite',
-	            'prices' => 'Modifica prezzi',
-	        ],
+	        'subtitle' => 'Ordini e guadagni',
+	        'route' => 'seller-dashboard.sales',
+	        'activeRoutes' => ['seller-dashboard.sales'],
+	        'icon' => 'shop',
 	    ],
-	    // [
-	    //     'title' => 'Foto clienti',
-	    //     'icon' => 'pic',
-	    //     'links' => [
-	    //         'photos' => 'Lista foto',
-	    //         'photos.add' => 'Carica una foto',
-	    //     ],
-	    // ],
+	    [
+	        'title' => 'Prezzi',
+	        'subtitle' => 'Listino e margini',
+	        'route' => 'seller-dashboard.prices',
+	        'activeRoutes' => ['seller-dashboard.prices'],
+	        'icon' => 'discount',
+	    ],
 	];
-
 @endphp
 
 @pushOnce('styles')
 	<style>
-		.navigation-category {
-			grid-template-rows: max-content 0fr;
-			transition: grid-template-rows 0.3s;
-		}
-
-		.navigation-title {
-			grid-template-columns: max-content minmax(0, 1fr) max-content;
-			align-items: center;
-		}
-
-		.navigation-title::before {
-			content: '';
-			opacity: 0;
-			background-color: var(--color-primary-400);
-			box-shadow: -5px 0 1rem 0 var(--color-primary-400), -5px 0 2rem 0 var(--color-primary-400);
-			width: 3px;
-			height: 2rem;
-			position: absolute;
-			top: 50%;
-			left: 0;
-			transform: translateY(-50%);
-			transition: opacity 0.2s;
-		}
-
-		.navigation-dropdown {
-			overflow: hidden;
-			opacity: 0;
-			transition: opacity 0.3s;
-		}
-
-		.navigation-category:has(:checked) {
-			grid-template-rows: max-content 1fr;
-
-			.navigation-title {
-				/* cursor: default; */
-			}
-
-			.navigation-title::before {
-				opacity: 1;
-			}
-
-			.navigation-arrow {
-				transform: rotate(180deg);
-			}
-
-			.navigation-dropdown {
-				opacity: 1;
-			}
+		.seller-dashboard-navigation {
+			top: calc(var(--header-height) + 1rem);
 		}
 
 		@media (max-width: 1023px) {
-			.dashboard-navigation {
+			.seller-dashboard-navigation {
 				display: grid;
 				grid-template-rows: max-content 0fr;
 				transition: grid-template-rows 0.3s;
 			}
 
-			.dashboard-categories {
+			.seller-dashboard-categories {
+				max-height: 0;
 				overflow: hidden;
+				transition: max-height 0.4s;
 			}
 
-			.dashboard-navigation:has(.mobile-toggler:checked) {
+			.seller-dashboard-navigation:has(.seller-dashboard-mobile-toggle:checked) {
 				grid-template-rows: max-content 1fr;
+			}
+
+			.seller-dashboard-navigation:has(.seller-dashboard-mobile-toggle:checked) .seller-dashboard-categories {
+				max-height: 32rem;
 			}
 		}
 	</style>
-@endpushOnce
+@endPushOnce
 
-<div class="dashboard-navigation">
-
-	{{-- Mobile toggler --}}
+<aside class="seller-dashboard-navigation sticky lg:mt-12 lg:self-start">
 	<label
-		class="font-heading dashboard-mobile-toggler text-neutral-heading flex justify-center gap-4 py-6 text-lg lg:hidden"
+		class="text-neutral-heading font-heading flex cursor-pointer items-center justify-center gap-3 py-5 text-lg lg:hidden"
 	>
 		<input
 			type="checkbox"
-			class="mobile-toggler hidden"
+			class="seller-dashboard-mobile-toggle sr-only"
 		>
-		<span class="w-5 shrink-0">
-			<x-icon-list /></span>
-		Menu Gestione
+		<x-icon-list class="size-5" />
+		<span>Menu gestione</span>
 	</label>
 
-	{{-- Categories --}}
-	<div
-		class="dashboard-categories border-surface-500 grid grid-cols-1 gap-6 border-b lg:sticky lg:top-8 lg:mt-8 lg:border-b-0"
-	>
-
-		@foreach ($navigation as $category)
-			<div class="navigation-category group grid last:pb-8 lg:last:pb-0">
-				<label
-					class="navigation-title group-[:has(:checked)]:text-neutral-heading relative grid cursor-pointer gap-4 pl-8 pr-8 text-neutral-300 transition-colors lg:pr-0"
-				>
-					<input
-						type="radio"
-						class="hidden"
-						name="nav-category"
-					>
-
-					<div class="h-4 w-4">
-						<x-dynamic-component :component="'icon-' . $category['icon']" />
-					</div>
-
-					<p class="font-heading font-semibold">{{ $category['title'] }}</p>
-
-					<span class="navigation-arrow w-3 transition-transform">
-						<x-icon-arrow-simple-down />
-					</span>
-
-				</label>
-
-				<!-- Dropdown menu -->
-				<ul class="navigation-dropdown grid gap-4 pl-16">
-
-					@foreach ($category['links'] as $linkSlug => $linkLabel)
-						<li class="navigation-link text-sm first:pt-3">
-							<label>
-								<a
-									class="hover:text-neutral-heading has-[:checked]:text-neutral-heading transition-colors"
-									href="{{ route($linkSlug == 'index' ? 'seller-dashboard' : 'seller-dashboard.' . $linkSlug) }}"
-								>
-									<input
-										type="radio"
-										class="hidden"
-										name="nav-link"
-										{{ $currentLocation == $linkSlug ? 'checked' : '' }}
-									>
-									{{ $linkLabel }}
-								</a>
-							</label>
-						</li>
-					@endforeach
-
-				</ul>
+	<div class="seller-dashboard-categories">
+		<nav
+			aria-label="Menu gestione negozio"
+			class="border-neutral-border bg-surface-400 grid gap-2 rounded-2xl border p-2 shadow-sm"
+		>
+			<div class="px-4 pb-1 pt-2">
+				<x-eyebrow>Dashboard negozio</x-eyebrow>
+				<x-heading variant="article-small">{{ $seller->name }}</x-heading>
 			</div>
-		@endforeach
 
+			@foreach ($navigation as $item)
+				@php
+					$active = request()->routeIs(...$item['activeRoutes']);
+				@endphp
+
+				<a
+					href="{{ route($item['route']) }}"
+					@class([
+						'flex items-center gap-3 rounded-xl px-4 py-3 transition-colors',
+						'bg-primary-400 text-white' => $active,
+						'text-neutral-heading hover:bg-surface-500' => !$active,
+					])
+					@if ($active) aria-current="page" @endif
+				>
+					<x-dynamic-component
+						:component="'icon-' . $item['icon']"
+						@class([
+							'size-5 shrink-0',
+							'fill-current' => $item['icon'] === 'discount',
+						])
+					/>
+					<span class="min-w-0">
+						<span class="block text-sm font-bold leading-5">{{ $item['title'] }}</span>
+						<span @class([
+							'block text-xs leading-4',
+							'text-white/80' => $active,
+							'text-neutral-text' => !$active,
+						])>{{ $item['subtitle'] }}</span>
+					</span>
+				</a>
+			@endforeach
+
+			<a
+				href="{{ route('seller.show', $seller) }}"
+				class="text-neutral-text hover:text-neutral-heading flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-colors"
+			>
+				<x-icon-keyboard-arrow-right class="mr-2 size-3 shrink-0 rotate-180" />
+				<span>Torna al profilo</span>
+			</a>
+		</nav>
 	</div>
-</div>
+</aside>

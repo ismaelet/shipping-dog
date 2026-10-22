@@ -1,42 +1,71 @@
-<div>
-	<div
-		class="stack-content group relative grid aspect-square cursor-pointer place-items-center rounded bg-neutral-200"
-		x-data
-		x-on:click="$el.querySelector('input[type=file]').click()"
+@php
+	$aspectClass = match ($aspect) {
+	    'cover' => 'aspect-[2.5/1]',
+	    'portrait' => 'aspect-[3/4]',
+	    default => 'aspect-square',
+	};
+@endphp
+
+<div
+	x-data
+	class="bg-background-400 group relative cursor-pointer"
+	@class([$aspectClass])
+	x-on:click="$refs.file.click()"
+>
+	<input
+		x-ref="file"
+		type="file"
+		accept="image/*"
+		aria-label="Carica immagine"
+		class="sr-only"
+		wire:model="image"
+		wire:loading.attr="disabled"
+		wire:target="image"
+		tabindex="-1"
 	>
-		<input
-			type="file"
-			name="images[]"
-			accept="image/*"
-			class="absolute h-0 w-0 opacity-0"
-			wire:model.live="image"
-			wire:loading.attr="disabled"
+
+	{{-- Existing image --}}
+	@if ($this->imageSrc)
+		<img
+			src="{{ $this->imageSrc }}"
+			alt="Uploaded image"
+			class="{{ $aspectClass }} w-full object-cover"
 		>
-
-		@if ($imageExists)
-			<img
-				src="{{ FileHelper::storageAsset($imageUrl) }}"
-				alt="Uploaded image"
-				class="h-full w-full rounded-[inherit] object-cover"
-			>
-		@endif
-
-		<div @class([
-			'h-full w-full rounded-[inherit] bg-neutral-100/50    transition-opacity group-hover:opacity-100',
-			'opacity-100' => !$imageExists,
-			'opacity-0' => $imageExists,
-		])>
+	@else
+		<div class="text-neutral-text flex h-full w-full items-center justify-center">
 		</div>
+	@endif
 
+	{{-- Hover overlay --}}
+	<div @class([
+		'absolute size-full inset-0 bg-black/40 transition-opacity',
+		'opacity-0 group-hover:opacity-100' => $this->imageExists,
+		'opacity-100' => !$this->imageExists,
+	])></div>
+
+	{{-- Upload icon --}}
+	<button
+		wire:loading.remove
+		wire:target="image"
+		@class([
+			'absolute cursor-pointer inset-0 z-10 text-neutral-heading transition-opacity grid place-items-center group-hover:opacity-100',
+			'opacity-0' => $this->imageExists,
+			'opacity-50' => !$this->imageExists,
+		])
+	>
 		<x-icon-upload @class([
-			'relative h-8 w-8 transition-all group-hover:translate-y-0 group-hover:opacity-100',
-			'opacity-100' => !$imageExists,
-			'opacity-0 translate-y-4' => $imageExists,
+			'size-1/3 max-w-10 max-h-10',
+			'translate-y-2 transition-transform group-hover:translate-y-0' =>
+				$this->imageExists,
 		]) />
+	</button>
+
+	{{-- Loading state --}}
+	<div
+		wire:loading.flex
+		wire:target="image"
+		class="absolute inset-0 z-20 items-center justify-center bg-black/50 text-white"
+	>
+		<x-icon-loading class="size-8" />
 	</div>
-
-	@error('image')
-		<span class="error">{{ $message }}</span>
-	@enderror
-
 </div>

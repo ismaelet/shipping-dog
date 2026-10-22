@@ -154,20 +154,17 @@ class Seller extends Model {
     }
 
     /**
+     * Get the path to the seller's icon
+     */
+    public function iconPath(): string {
+        return $this->user->iconPath();
+    }
+
+    /**
      * Get the seller's icon
      */
     public function icon(): string {
-        $icon = 'users/icons/' . $this->user_id;
-
-        if (FileHelper::exists($icon . '.webp')) {
-            return FileHelper::storageAsset($icon . '.webp');
-        }
-
-        if (FileHelper::exists($icon . '.jpg')) {
-            return FileHelper::storageAsset($icon . '.jpg');
-        }
-
-        return FileHelper::storageAsset('users/icons/0.jpg');
+        return $this->user->icon();
     }
 
     /**
@@ -179,6 +176,11 @@ class Seller extends Model {
         }
 
         return $this->user->cover($size);
+    }
+
+    // Seller.php
+    public function coverPath(int $size = 1920): string {
+        return $this->user->coverPath($size);
     }
 
     /**

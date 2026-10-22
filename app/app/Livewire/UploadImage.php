@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Helpers\FileHelper;
 use App\Services\Files\ImageProcessor;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -39,19 +40,19 @@ class UploadImage extends Component {
     public string|array $mode = 'largest';
 
     /**
+     * Property: the aspect ratio of the image to be uploaded
+     */
+    public string $aspect = 'square';
+
+    /**
      * Property: the URL of the existing image (if any)
      */
     public ?string $imageUrl = null;
 
     /**
-     * Property: indicates whether the image already exists
-     */
-    public bool $imageExists = false;
-
-    /**
      * Property: the image file to be uploaded
      */
-    #[Validate('image')]
+    #[Validate('required|image|max:102400')]
     public ?TemporaryUploadedFile $image = null;
 
     /**
@@ -64,8 +65,6 @@ class UploadImage extends Component {
         $this->mode = is_array($this->mode) ? $this->mode : [$this->mode];
 
         $this->imageUrl = $this->url[0];
-
-        $this->imageExists = FileHelper::exists($this->imageUrl);
     }
 
     /**
@@ -89,15 +88,19 @@ class UploadImage extends Component {
         $this->validateOnly('image');
 
         foreach ($this->url as $index => $url) {
-            $size = $this->size[$index] ?? 1024;
-            $quality = $this->quality[$index] ?? 90;
-            $mode = $this->mode[$index] ?? 'largest';
-
-            $this->uploadImage($url, $size, $quality, $mode);
+            $this->uploadImage(
+                $url,
+                $this->size[$index] ?? 1024,
+                $this->quality[$index] ?? 90,
+                $this->mode[$index] ?? 'largest',
+            );
         }
 
-        $this->imageExists = FileHelper::exists($this->imageUrl);
         $this->imageUrl = $this->url[0];
+
+        unset($this->imageExists, $this->imageSrc);
+
+        $this->image = null;
     }
 
     private function uploadImage(string $url, int $size, int $quality, string $mode): void {
@@ -108,5 +111,18 @@ class UploadImage extends Component {
             mode: $mode,
             quality: $quality
         );
+    }
+
+    #[Computed]
+    public function imageExists(): bool {
+        return $this->imageUrl !== null
+            && FileHelper::exists($this->imageUrl);
+    }
+
+    #[Computed]
+    public function imageSrc(): ?string {
+        return $this->imageExists
+            ? FileHelper::storageAsset($this->imageUrl)
+            : null;
     }
 }

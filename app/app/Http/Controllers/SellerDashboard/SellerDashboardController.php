@@ -62,8 +62,7 @@ class SellerDashboardController extends Controller {
      * @return RedirectResponse The redirect response.
      */
     public function updateContacts(Seller $seller, Request $request): RedirectResponse {
-        // Validate the request data for social media contacts
-        $request->validate([
+        $data = $request->validate([
             'website' => 'nullable|url|max:255',
             'facebook' => 'nullable|string|max:255',
             'instagram' => 'nullable|string|max:255',
@@ -73,30 +72,18 @@ class SellerDashboardController extends Controller {
             'bluesky' => 'nullable|string|max:255',
         ]);
 
-        // Format the URLs for social media contacts
         foreach (['facebook', 'instagram', 'twitter', 'youtube', 'tiktok', 'bluesky'] as $type) {
-            if ($request->$type) {
-                $request[$type] = $this->formatContactUrl($request[$type], $type);
+            if (!empty($data[$type])) {
+                $data[$type] = $this->formatContactUrl($data[$type], $type);
             }
         }
 
-        // Update or create the user contact information
         UserContact::updateOrCreate(
             ['user_id' => $seller->user_id],
-            $request->only(
-                'website',
-                'facebook',
-                'instagram',
-                'twitter',
-                'youtube',
-                'tiktok',
-                'bluesky'
-            )
+            $data,
         );
 
-        return redirect()
-            ->back()
-            ->with('success_socials', 'Contatti aggiornati con successo');
+        return back()->with('success_socials', 'Contatti aggiornati con successo');
     }
 
     /**
@@ -106,7 +93,7 @@ class SellerDashboardController extends Controller {
      * @param string $type The type of social media platform.
      * @return string The formatted URL.
      */
-    private function formatContactUrl(string $url, string $type): string {
+    private function formatContactUrl(string $value, string $type): string {
         $baseUrls = [
             'facebook' => 'https://facebook.com/',
             'instagram' => 'https://instagram.com/',
@@ -116,12 +103,19 @@ class SellerDashboardController extends Controller {
             'bluesky' => 'https://bsky.app/profile/',
         ];
 
-        if (str_starts_with($url, $baseUrls[$type])) {
-            return $url;
+        $value = trim($value);
+
+        // Extract path from full URLs
+        if (str_contains($value, '://')) {
+            $path = parse_url($value, PHP_URL_PATH);
+            $value = $path ?: '';
         }
 
-        $username = trim($url, "/@");
-        $username = basename(rtrim($username, '/'));
+        // Remove query parameters and fragments
+        $value = strtok($value, '?#') ?: '';
+
+        // Extract username
+        $username = basename(trim($value, '/@'));
 
         return $baseUrls[$type] . $username;
     }

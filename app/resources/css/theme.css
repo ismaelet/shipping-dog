@@ -141,15 +141,6 @@ body {
   color: var(--color-neutral-text);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-heading);
-}
-
 /*
 * Utility Classes
 */
@@ -166,6 +157,58 @@ h6 {
 * Components
 */
 @layer components {
+  /* Inputs */
+  .input-style {
+    padding-inline: 1em;
+    background-color: alpha(from var(--color-background-400) / 70%);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-neutral-border);
+    color: var(--color-neutral-heading);
+    font-size: var(--text-sm);
+    transition:
+      background-color 150ms,
+      border-color 150ms;
+
+    @media (min-width: 40rem) {
+      font-size: var(--text-base);
+    }
+
+    /* Focus state */
+    &:focus-visible {
+      outline: 2px solid var(--color-primary-500);
+      outline-offset: 2px;
+    }
+
+    &::placeholder {
+      color: var(--color-neutral-text);
+    }
+
+    /* Autofill resets */
+    &:-webkit-autofill {
+      outline: var(--spacing-border) solid
+        alpha(from var(--color-neutral-border) / 20%) !important;
+      -webkit-box-shadow: 0 0 0 100vw var(--color-surface-400) inset !important;
+      box-shadow: 0 0 0 100vw var(--color-surface-400) inset !important;
+      -webkit-text-fill-color: var(--color-neutral-heading) !important;
+      transition: none !important;
+    }
+
+    &:focus:-webkit-autofill {
+      border: var(--spacing-border) solid var(--color-primary-400) !important;
+    }
+
+    /* Has a warning */
+    :has(> .error-warning) & {
+      border-color: var(--color-danger-400);
+
+      &:-webkit-autofill,
+      &:focus:-webkit-autofill {
+        border-color: var(--color-danger-400) !important;
+      }
+    }
+  }
+
+  /* Pagination */
   .pagination-page {
     display: flex;
     width: 2.75rem;

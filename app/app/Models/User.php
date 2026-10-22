@@ -218,10 +218,13 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
         return $this->contacts?->bluesky;
     }
 
+    /**
+     * Get the user's cover image.
+     */
     public function cover(?int $size = 1920) {
         $sizeConversion = [
             1920 => '',
-            400 => '_m',
+            400 => '',
         ];
 
         $sizeSlug = $sizeConversion[$size] ?? '';
@@ -240,6 +243,16 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
         return Vite::image('user/cover.webp');
     }
 
+    /**
+     * Get the path to the user's cover image.
+     */
+    public function coverPath(int $size = 1920): string {
+        return "shops/covers/{$this->id}.webp";
+    }
+
+    /**
+     * Get the path to the user's icon image.
+     */
     public function icon(): string {
         $icon = 'users/icons/' . $this->id;
 
@@ -256,5 +269,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
         }
 
         return Vite::image('user/icon.webp');
+    }
+
+    /**
+     * Get the path to the user's icon image.
+     */
+    public function iconPath(): string {
+        return 'users/icons/' . $this->id . '.webp';
     }
 }

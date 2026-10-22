@@ -1,51 +1,73 @@
 # Project Instructions
 
-## Stack and layout
+## Stack and structure
 
-- Laravel 12.48.1 (Composer constraint `^12.0`), PHP `^8.2` (Docker uses PHP 8.4), Livewire 3.7.6, Filament 4, Tailwind CSS 4, and Vite.
-- The Laravel project root is `app/`; run Artisan, Composer, and npm commands there locally. Docker commands below run from the repository root.
-- Follow the existing Laravel architecture and keep business logic out of Blade views.
+- Laravel 12 (`^12.0`), PHP `^8.2` (Docker: 8.4), Livewire 3, Filament 4, Tailwind CSS 4, and Vite.
+- Laravel root: `app/`. Run Artisan, Composer, and npm commands there locally; Docker commands run from the repository root.
+- Follow existing Laravel conventions. Keep business logic out of Blade views.
+- Routes are organized by concern in `app/routes/`, with middleware assigned by `App\Providers\RouteServiceProvider`.
+- Controllers handle HTTP requests, Eloquent models handle persistence/domain behavior, and `app/app/Services/` contains reusable workflows and calculations.
+- Ecommerce models live in `App\Models\Ecommerce`; Livewire components in `app/app/Livewire/`; Filament resources in `app/app/Filament/`.
+- Livewire views live in `app/resources/views/livewire/`. Handle server-side actions in component methods, validate inputs, and reuse existing event/attribute patterns.
+- Check legacy integration and Composer autoload mappings before modifying legacy code.
 
-## Architecture
+## Blade components and helpers
 
-- HTTP routes are grouped by concern in `app/routes/`: auth, ecommerce, services, user dashboard, seller dashboard, and general web routes. `App\Providers\RouteServiceProvider` assigns middleware to these groups.
-- Keep request handling in controllers, persistence/domain behavior in Eloquent models, and reusable workflows/calculations in `app/app/Services/`. Ecommerce models are grouped under `App\Models\Ecommerce`.
-- Livewire 3 components live under `app/app/Livewire/` with corresponding templates under `app/resources/views/livewire/`. Use component methods for server-side actions, validate input, and follow existing event/attribute patterns.
-- Filament admin functionality is under `app/app/Filament/`. Check the existing legacy integration and Composer autoload mappings before changing legacy behavior.
+- Reuse existing Blade components before creating new ones, especially layouts, forms, buttons, typography, cards, tables, and pagination.
+- Anonymous components live in `app/resources/views/components/` (`<x-...>`); class-backed components in `app/app/View/Components/`.
+- Use `@props` for anonymous components and `$attributes->class(...)` or existing merge patterns to forward attributes. Preserve slots and caller attributes.
+- Use `@pushOnce('styles')` and `@pushOnce('scripts')` for component-specific assets when needed; the app layout renders both stacks.
+- Reuse helpers in `app/app/Helpers/` (`App`, `EcommerceHelper`, `FileHelper`, `StringHelper`) and global shorthands loaded by `AppServiceProvider` (e.g. `user()`, `cart()`, `price()`).
+- For normal form elements try to use `<x-input/>`, `<x-select/>`,`<x-textarea/>` and `<x-button/>` when possible, instead of styling a native HTML component.
 
-## Blade and reusable UI
+## Styling and design tokens
 
-- Anonymous Blade components live under `app/resources/views/components/` and are invoked as `<x-...>`; reusable class-backed components live under `app/app/View/Components/`.
-- Before creating UI, look for existing components: layouts, forms and inputs, alerts, buttons, typography, tables, pagination, headers, product cards, and dashboard/ecommerce components.
-- Configure anonymous components with `@props`; forward caller attributes with `$attributes->class(...)` or the existing merge pattern, and preserve slots and component attributes.
-- The app layout renders the `styles` and `scripts` stacks. Follow existing `@pushOnce` patterns for component-specific CSS or scripts.
-- Shared helpers are in `app/app/Helpers/`: `App`, `EcommerceHelper`, `FileHelper`, and `StringHelper`. Global shorthand functions are loaded from `Helpers/Shorthands/` by `AppServiceProvider`; check for existing helpers such as `user()`, `cart()`, and `price()` before adding another.
+- Tailwind v4 configuration and design tokens are in `app/resources/css/theme.css`. Shared layout utilities are in `base.css`; `app.css` imports Tailwind and both files.
+- **Always use semantic color tokens defined in `theme.css`. Never use Tailwind's default color palette or hardcoded/custom colors in components.**
+- **Always use the exact token names, including their numeric suffixes.** Examples:
+  - `text-primary-400`, NOT `text-primary` or `text-orange-500`.
+  - `bg-surface-400`, NOT `bg-surface` or `bg-slate-800`.
+  - `bg-background-400`, NOT `bg-background`.
+  - `text-neutral-heading`, NOT `text-slate-950`.
+- These tokens automatically support light and dark themes. Do not add redundant `dark:` color overrides when the existing token already handles both.
+- Check `theme.css` for the correct available token instead of inventing a new color or token name.
+- **Define gradients in CSS inside `@pushOnce('styles')`, never with Tailwind gradient utility classes.**
+- Reuse existing fonts, spacing tokens, breakpoints, and utility classes.
 
-## Styling and JavaScript
+## Layout and Figma fidelity
 
-- Vite inputs are `app/resources/css/app.css` and `app/resources/js/app.js`. `app.css` imports Tailwind, `base.css`, and `theme.css`, and scans Blade views.
-- Tailwind v4 design tokens (colors, fonts, spacing, breakpoints, and light/dark values) are defined in `app/resources/css/theme.css`; shared layout utilities are in `base.css`. Reuse these tokens and patterns rather than adding duplicate values.
-- Keep frontend behavior in the existing vanilla JavaScript modules or Alpine.js where appropriate. Do not introduce Vue, React, or Inertia.
-- Alway place grandient inside `@pushOnce('styles')` tags instead of using Tailwind classes.
+- **Do not add horizontal padding, width constraints, or centering utilities to page sections unless explicitly present in the Figma design.**
+- **Never add `max-w-*`, `mx-auto`, or extra `px-*` to sections or their outer wrappers just to constrain or center content.**
+- Page width, horizontal spacing, and alignment are already handled externally by the grid in `base.css`.
+- The grid uses `.content-grid`, `.full-width`, `.breakout`, and `.fill-width`. Respect their existing behavior instead of recreating container layouts.
+- Do not introduce unnecessary wrapper elements or nested containers that interfere with the grid.
+- Match Figma spacing exactly. Only add padding or width constraints when explicitly required by the design or component's internal layout.
+- Internal component spacing (e.g. card padding, button padding, grid gaps) is allowed when required by the design.
+
+## JavaScript
+
+- Use existing vanilla JavaScript modules or Alpine.js.
+- Do not introduce Vue, React, or Inertia.
 
 ## Docker, build, and tests
 
-From the repository root:
+Run Docker commands from the repository root:
 
 ```bash
 docker compose up --build -d
 docker compose logs -f app vite db
 docker compose exec vite npm run build
-docker compose exec app php artisan test
+docker compose exec -e APP_ENV=testing app php artisan test
 ```
 
-Compose provides the Laravel app on port 8000, Vite on 5173, and MariaDB. The Vite service starts the development server automatically. Tests are PHPUnit/Pest tests under `app/tests/`; use `php artisan test` for the suite or pass a test path/filter when targeting specific tests.
+- Compose exposes Laravel on port 8000, Vite on 5173, and MariaDB. Vite starts its dev server automatically.
+- Tests use PHPUnit/Pest and live in `app/tests/`.
+- **Always run tests with `docker compose exec -e APP_ENV=testing app php artisan test`**, optionally passing a test path or filter.
+- Add or update relevant tests for every code change, even when not explicitly requested.
+- Run the narrowest relevant tests and build after application changes.
 
 ## Working practices
 
-- Inspect nearby code and reuse existing components, helpers, validation, authorization, and test patterns.
-- Keep changes focused; do not modify migrations, dependencies, or environment configuration unless required.
-- Run the narrowest relevant tests and build after application changes.
+- Inspect nearby code before editing. Reuse established architecture, components, helpers, validation, authorization, and tests.
+- Keep changes focused. Avoid modifying migrations, dependencies, or environment configuration unless necessary.
 - Never generate images.
-- Add or update tests relative to the changes you make even when nobody asks
-- To run tests always use `docker compose exec -e APP_ENV=testing app php artisan test`

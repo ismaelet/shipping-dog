@@ -1,7 +1,7 @@
 @pushOnce('styles')
 	<style>
 		.product-list-filters-wrapper {
-			top: calc(var(--header-height) + 2rem);
+			top: calc(var(--header-height) + 1rem);
 		}
 
 		.product-list-filters {
