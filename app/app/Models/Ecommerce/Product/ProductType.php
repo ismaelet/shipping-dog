@@ -2,9 +2,10 @@
 
 namespace App\Models\Ecommerce\Product;
 
-use App\Services\Files\ProductPreviewProcessor;
+use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\Type\Measure;
+use App\Services\Files\ProductPreviewProcessor;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,12 +25,10 @@ class ProductType extends Model {
     protected $fillable = [
         'tag',
         'name',
-        'name',
         'names',
         'gender_id',
         'sibling_id',
         'variant_of',
-        'unisex',
         'sizes',
         'positions',
         'category',
@@ -43,7 +42,7 @@ class ProductType extends Model {
      * Relationship: Get the type's gender
      */
     public function gender(): BelongsTo {
-        return $this->belongsTo(ProductGender::class);
+        return $this->belongsTo(ProductGender::class, 'gender_id');
     }
 
     /**
@@ -181,19 +180,19 @@ class ProductType extends Model {
         $color = $color_id ? ProductColor::find($color_id) : $this->colorCollection()->first();
         $position = $position_id ? ProductPosition::find($position_id) : $this->positions->first();
 
-        if (!$color) {
+        if (! $color) {
             Log::error('ProductType::image() - No color found for type: ' . $this->tag . ' and color_id: ' . $color_id);
         }
 
-        if (file_exists(public_storage($file = 'product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.webp'))) {
+        if (FileHelper::exists($file = 'product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.webp')) {
             return $file;
         }
 
-        if (file_exists(public_storage($file = 'product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.png'))) {
+        if (FileHelper::exists($file = 'product_types/mockups/' . $this->tag . '/' . $color->tag . '-' . $position->basicPositionId() . $suffix . '.png')) {
             return $file;
         }
 
-        if (file_exists(public_storage($file = 'product_types/mockups/' . $this->tag . '/' . $color->tag . $suffix . '.png'))) {
+        if (FileHelper::exists($file = 'product_types/mockups/' . $this->tag . '/' . $color->tag . $suffix . '.png')) {
             return $file;
         }
 
@@ -219,7 +218,7 @@ class ProductType extends Model {
             ? $position
             : ProductPosition::find($position);
 
-        if (!$color || !$position) {
+        if (! $color || ! $position) {
             return null;
         }
 

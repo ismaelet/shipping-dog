@@ -10,7 +10,7 @@
 	</style>
 @endpushOnce
 
-<x-layouts.legacy-main
+<x-layouts.main
 	:$title
 	:$thumbnail
 	:$location
@@ -41,4 +41,4 @@
 
 		<x-product.related-products :$product />
 	</div>
-</x-layouts.legacy-main>
+</x-layouts.main>

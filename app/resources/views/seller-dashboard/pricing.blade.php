@@ -162,7 +162,7 @@ use App\Legacy\System\DB;
 									type="number"
 									class="price price_inp price_edit"
 									name="price_<?= $type->slug ?>"
-									value="<?= format($price) ?>"
+									value="<?= number_format((float) $price, 2, '.', '') ?>"
 									min="<?= $min ?>"
 									data-min="<?= $min ?>"
 									step="0.01"
@@ -173,13 +173,13 @@ use App\Legacy\System\DB;
 							<div class="price_cell"><input
 									type="text"
 									class="gain_w price_inp"
-									value="<?= format($gain_w) ?> €"
+									value="<?= number_format((float) $gain_w, 2, '.', '') ?> €"
 									readonly
 								></div>
 							<div class="price_cell"><input
 									type="text"
 									class="gain_c price_inp"
-									value="<?= format($gain_c) ?> €"
+									value="<?= number_format((float) $gain_c, 2, '.', '') ?> €"
 									readonly
 								></div>
 						</div>
@@ -244,7 +244,7 @@ use App\Legacy\System\DB;
 									type="number"
 									class="price price_inp price_edit"
 									name="price_<?= $type->slug ?>"
-									value="<?= format($price) ?>"
+									value="<?= number_format((float) $price, 2, '.', '') ?>"
 									min="<?= $min ?>"
 									data-min="<?= $min ?>"
 									step="0.01"
@@ -255,7 +255,7 @@ use App\Legacy\System\DB;
 							<div class="price_cell"><input
 									type="text"
 									class="gain_w price_inp"
-									value="<?= format($gain_w) ?> €"
+									value="<?= number_format((float) $gain_w, 2, '.', '') ?> €"
 									readonly
 								></div>
 						</div>

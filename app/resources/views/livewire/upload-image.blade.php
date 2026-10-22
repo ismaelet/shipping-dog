@@ -15,7 +15,7 @@
 
 		@if ($imageExists)
 			<img
-				src="{{ public_asset($imageUrl) }}"
+				src="{{ FileHelper::storageAsset($imageUrl) }}"
 				alt="Uploaded image"
 				class="h-full w-full rounded-[inherit] object-cover"
 			>

@@ -306,7 +306,9 @@ class Order extends Model {
      * Attribute: Status Label
      */
     public function statusLabel(): string {
-        return '<span class="order-label px-4 py-1 gap-2 border rounded whitespace-nowrap flex" style=" border-color: ' . $this->statusColor() . '; color: ' . $this->statusColor() . ';">' . embed_icon($this->statusIcon(), ['shrink-0', 'w-[1em]']) . ' ' . $this->statusName() . '</span>';
+        return view('components.ecommerce.order-status-label', [
+            'order' => $this,
+        ])->render();
     }
 
     /**

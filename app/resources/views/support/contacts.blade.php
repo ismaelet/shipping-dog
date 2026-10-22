@@ -41,7 +41,7 @@
 	</style>
 @endpushOnce
 
-<x-layouts.legacy-main
+<x-layouts.main
 	:$title
 	:$location
 >
@@ -185,4 +185,4 @@
 		</div>
 	</div>
 
-</x-layouts.legacy-main>
+</x-layouts.main>

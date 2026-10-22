@@ -2,9 +2,22 @@
 	$slides = [Vite::image('home/slide-1.webp'), Vite::image('home/slide-2.webp'), Vite::image('home/slide-3.webp')];
 @endphp
 
+@pushOnce('styles')
+	<style>
+		.home-slider .home-slider-gradient {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(to right,
+					rgb(2 6 23 / 80%),
+					rgb(2 6 23 / 25%) 50%,
+					transparent 70%);
+		}
+	</style>
+@endPushOnce
+
 <section
 	aria-label="Shipping Dog"
-	class="home-slider fill-width max-w-420 px-spacing-padding mx-auto w-full p-3 sm:p-5"
+	class="home-slider fill-width max-w-420 px-spacing-padding dark mx-auto w-full p-3 sm:p-5"
 >
 	<div class="min-h-162.5 rounded-4xl sm:min-h-180 relative overflow-hidden bg-slate-900">
 		{{-- Background images --}}
@@ -26,7 +39,7 @@
 			@endforeach
 
 			{{-- Gradient overlay --}}
-			<div class="bg-linear-to-r absolute inset-0 from-slate-950/80 via-slate-950/25 to-transparent"></div>
+			<div class="home-slider-gradient"></div>
 		</div>
 
 		{{-- Content --}}
@@ -37,7 +50,7 @@
 					<span>Nuove grafiche ogni settimana</span>
 				</div>
 
-				<h1 class="text-5xl font-bold leading-[0.94] tracking-[-0.055em] sm:text-7xl lg:text-8xl">
+				<h1 class="lg:text-900 text-5xl font-bold leading-[0.94] tracking-[-0.055em] sm:text-7xl">
 					Indossa ciò<br>
 					che ti distingue.
 				</h1>
@@ -48,7 +61,7 @@
 
 				<x-button
 					:href="route('shop')"
-					class="mt-8 w-fit"
+					class="mt-8 block w-fit"
 				>
 					Scopri le collezioni
 					<x-icon-arrow />

@@ -17,7 +17,7 @@
 						value="0"
 						checked
 					>
-					{!! embed_icon('close') !!}
+					<x-icon-close />
 				</label>
 			@endif
 

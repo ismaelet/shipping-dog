@@ -1,4 +1,13 @@
-{{-- Categories --}}
+@pushOnce('styles')
+	<style>
+		#categorie .category-gradient {
+			background: linear-gradient(to top,
+					rgb(2 6 23 / 75%),
+					transparent 50%);
+		}
+	</style>
+@endPushOnce
+
 <section
 	id="categorie"
 	aria-label="Categorie di prodotti"
@@ -11,7 +20,7 @@
 				Trova il tuo stile
 			</p>
 
-			<h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
+			<h2 class="text-neutral-heading mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
 				Esplora le categorie
 			</h2>
 		</div>
@@ -31,7 +40,7 @@
 				class="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-105"
 			/>
 
-			<div class="bg-linear-to-t absolute inset-0 from-slate-950/70 to-transparent"></div>
+			<div class="category-gradient absolute inset-0"></div>
 
 			<div class="absolute bottom-8 left-8 right-8 text-white">
 				<p class="text-sm text-white/70">
@@ -58,7 +67,7 @@
 					class="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-105"
 				/>
 
-				<div class="bg-linear-to-t absolute inset-0 from-slate-950/70 to-transparent"></div>
+				<div class="category-gradient absolute inset-0"></div>
 
 				<div class="absolute bottom-6 left-6 right-6 text-white">
 					<p class="text-sm text-white/70">

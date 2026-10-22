@@ -35,7 +35,7 @@
 						id="upload-icon"
 						class="icon-box img"
 					>
-						{!! embed_icon('upload') !!}
+						<x-icon-upload />
 					</div>
 
 					<p class="text-600 font-heading font-semibold">Carica una nuova grafica</p>
@@ -105,7 +105,7 @@
 									id="prev-icon"
 									class="place-center"
 								>
-									{!! embed_icon('upload') !!}
+									<x-icon-upload />
 								</div>
 							</div>
 						</div>
@@ -128,11 +128,11 @@
 							name="submit"
 							class="file-submit"
 						>
-							{!! embed_icon('upload') !!}
+							<x-icon-upload />
 							Carica la grafica
 						</x-button>
 
-						<div class="file-load">{!! embed_icon('loading') !!}</div>
+						<div class="file-load"><x-icon-loading /></div>
 
 					</div>
 

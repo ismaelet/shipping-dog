@@ -2,7 +2,7 @@
 	<div class="grid grid-cols-1 gap-8">
 		<livewire:seller.activation-request :$seller />
 
-		<div class="columns-30rem grid items-start gap-8 lg:gap-20">
+		<div class="grid columns-[30rem] items-start gap-8 lg:gap-20">
 			<div class="grid gap-[inherit]">
 				<form
 					class="form surface dashboard-panel grid grid-cols-1 content-center"
@@ -44,7 +44,10 @@
 									<x-label>Ordina prodotti:</x-label>
 
 									<span class="inlb mt-2">
-										{{ info_box('Puoi scegliere se ordinare i prodotti dal più poplare o dal più recente al meno, oppure seleziona "ordine personalizzato" per seguire l\'ordine della tua lista dei lavori. Questo campo influenza solo l\'ordine predefinito, i clienti potranno comunque riordinare i prodotti in ordine di popolarità o di data di creazione.') }}
+										<x-help.info>Puoi scegliere se ordinare i prodotti dal più poplare o dal più recente al meno, oppure seleziona
+											"ordine personalizzato" per seguire l\'ordine della tua lista dei lavori. Questo campo influenza solo
+											l\'ordine predefinito, i clienti potranno comunque riordinare i prodotti in ordine di popolarità o di data di
+											creazione.</x-help.info>
 									</span>
 								</div>
 
@@ -249,11 +252,11 @@
 								variant="secondary"
 								onclick="$(this).parent().find('.file-inp').click();"
 							>
-								{!! embed_icon('upload') !!}
+								<x-icon-upload />
 								Cambia la foto
 							</x-button>
 
-							<div class="file-load">{!! embed_icon('loading') !!}</div>
+							<div class="file-load"><x-icon-loading /></div>
 
 							<input
 								type="file"
@@ -296,11 +299,11 @@
 							variant="secondary"
 							onclick="$(this).parent().find('.file-inp').click();"
 						>
-							{!! embed_icon('upload') !!}
+							<x-icon-upload />
 							{{ $noCover ? 'Carica copertina' : 'Cambia copertina' }}
 						</x-button>
 
-						<div class="file-load">{!! embed_icon('loading') !!}</div>
+						<div class="file-load"><x-icon-loading /></div>
 
 						<input
 							type="file"

@@ -12,38 +12,38 @@ use Illuminate\Database\Eloquent\Model;
 
 class EditProductColor extends EditRecord {
 
-	protected static string $resource = ProductColorResource::class;
+    protected static string $resource = ProductColorResource::class;
 
-	/**
-	 * Handle the form submission for updating a record.
-	 * 
-	 * @param Model $record The record to update.
-	 * @param array $data The data to update the record with.
-	 * @return Model The updated record.
-	 */
-	protected function handleRecordUpdate(Model $record, array $data): Model {
-		$record->update($data);
+    /**
+     * Handle the form submission for updating a record.
+     * 
+     * @param Model $record The record to update.
+     * @param array $data The data to update the record with.
+     * @return Model The updated record.
+     */
+    protected function handleRecordUpdate(Model $record, array $data): Model {
+        $record->update($data);
 
-		ProductType::all()->each(
-			function (ProductType $productType) use ($record) {
-				$files = glob(public_storage('products/' . $productType->tag . '/*-' . $record->tag . '-*'));
+        ProductType::all()->each(
+            function (ProductType $productType) use ($record) {
+                $files = glob(FileHelper::storagePath('products/' . $productType->tag . '/*-' . $record->tag . '-*'));
 
-				array_map(
-					function ($file) {
-						$file = str_replace(public_storage(), '', $file);
-						FileHelper::delete($file);
-					},
-					$files
-				);
-			}
-		);
+                array_map(
+                    function ($file) {
+                        $file = str_replace(FileHelper::storagePath(), '', $file);
+                        FileHelper::delete($file);
+                    },
+                    $files
+                );
+            }
+        );
 
-		return $record;
-	}
+        return $record;
+    }
 
-	protected function getHeaderActions(): array {
-		return [
-			DeleteAction::make(),
-		];
-	}
+    protected function getHeaderActions(): array {
+        return [
+            DeleteAction::make(),
+        ];
+    }
 }

@@ -13,6 +13,7 @@ class ProductSearchQuery {
         ?int $typeId = null,
         ?int $genderId = null,
         string $sort = 'popular',
+        bool $diversify = false,
     ): Builder {
         $products = Product::query()
             ->select('products.*')
@@ -76,11 +77,35 @@ class ProductSearchQuery {
                 break;
 
             default:
-                $products
-                    ->orderByDesc('products.recent_sales')
-                    ->orderByDesc('products.sales')
-                    ->orderByDesc('products.design_id')
-                    ->orderBy('products.type_id');
+                if ($diversify) {
+                    // Rank each product within its type by popularity
+                    $products->selectRaw('
+                ROW_NUMBER() OVER (
+                    PARTITION BY products.type_id
+                    ORDER BY
+                        products.recent_sales DESC,
+                        products.sales DESC,
+                        products.design_id DESC,
+                        products.id ASC
+                ) AS type_rank
+            ');
+
+                    // Alternate between product types,
+                    // prioritizing more popular products in each round
+                    $products
+                        ->orderBy('type_rank')
+                        ->orderByDesc('products.recent_sales')
+                        ->orderByDesc('products.sales')
+                        ->orderByDesc('products.design_id')
+                        ->orderBy('products.type_id');
+                } else {
+                    // Original popularity sorting
+                    $products
+                        ->orderByDesc('products.recent_sales')
+                        ->orderByDesc('products.sales')
+                        ->orderByDesc('products.design_id')
+                        ->orderBy('products.type_id');
+                }
                 break;
         }
 

@@ -37,11 +37,11 @@
 	    }
 	}
 
-	$designLight = public_asset('/designs/' . $design->id . '.png');
+	$designLight = FileHelper::storageAsset('/designs/' . $design->id . '.png');
 
 	$designDarkPath = 'designs/' . $design->id . '_dark.png';
 	$designDark = file_exists(base_path() . '/public/storage/' . $designDarkPath)
-	    ? public_asset($designDarkPath)
+	    ? FileHelper::storageAsset($designDarkPath)
 	    : $designLight;
 @endphp
 
@@ -92,7 +92,7 @@
 
 			<div class="wrapper surface bg-background-400 py-6">
 
-				<div class="close-icon item-panel-close icon text-neutral-heading cursor-pointer"><?= embed_icon('close') ?></div>
+				<div class="close-icon item-panel-close icon text-neutral-heading cursor-pointer"><x-icon-close /></div>
 
 				<div class="content px-6">
 

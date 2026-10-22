@@ -44,7 +44,7 @@
 				SHIPPING<span class="text-orange-500">DOG</span>
 			</a>
 
-			<p class="mt-4 max-w-sm leading-6 text-slate-400">
+			<p class="mt-4 max-w-sm leading-6">
 				Design indipendente, produzione responsabile,
 				stile senza regole.
 			</p>
@@ -58,7 +58,7 @@
 						aria-label="{{ ucfirst($socialMediaTag) }}"
 						title="{{ ucfirst($socialMediaTag) }}"
 					>
-						{!! embed_icon($socialMediaTag) !!}
+						<x-dynamic-component :component="'icon-' . $socialMediaTag" />
 					</a>
 				@endforeach
 			</div>
@@ -71,13 +71,13 @@
 					{{ $column['title'] }}
 				</h3>
 
-				<ul class="mt-4 flex flex-col gap-3 text-slate-400">
+				<ul class="mt-4 flex flex-col gap-3">
 					@foreach ($column['links'] as $link)
 						<li>
 							@if (isset($link['url']))
 								<a
 									href="{{ $link['url'] }}"
-									class="transition-colors hover:text-orange-400"
+									class="hover:text-primary-300 transition-colors"
 								>
 									{{ $link['label'] }}
 								</a>
@@ -96,7 +96,7 @@
 
 	{{-- Bottom notes --}}
 	<div
-		class="mx-auto mt-12 flex max-w-7xl flex-col items-center justify-between gap-6 border-t border-white/10 pt-6 text-sm leading-5 text-slate-500 sm:flex-row lg:px-8"
+		class="mx-auto mt-12 flex max-w-7xl flex-col items-center justify-between gap-6 border-t border-white/10 pt-6 text-sm leading-5 sm:flex-row lg:px-8"
 	>
 		<div class="text-center sm:text-left">
 			<p>

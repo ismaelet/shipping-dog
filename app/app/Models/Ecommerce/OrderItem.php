@@ -208,7 +208,7 @@ class OrderItem extends Model {
         return $this->product_with_trashed ? $this->product_with_trashed->image(
             color: $this->color,
             position: $this->position,
-        ) : public_asset(ProductPreviewProcessor::PLACEHOLDER_IMAGE);
+        ) : FileHelper::storageAsset(ProductPreviewProcessor::PLACEHOLDER_IMAGE);
     }
 
     /**

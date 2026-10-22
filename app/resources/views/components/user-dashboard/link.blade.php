@@ -9,7 +9,7 @@
 		href="{{ $link['url'] }}"
 		@class([
 			'block rounded-lg px-4 py-3 transition-colors',
-			'bg-primary-400 text-slate-950' => $checked,
+			'bg-primary-400 text-neutral-heading' => $checked,
 			'text-neutral-text hover:bg-surface-500 hover:text-neutral-heading' => !$checked,
 		])
 	>

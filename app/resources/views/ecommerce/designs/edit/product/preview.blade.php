@@ -14,7 +14,7 @@
 			<!-- If it's a custom static image -->
 			<div
 				class="h-full w-full bg-cover bg-center"
-				style="background-image: url({{ public_asset($design->image(1024)) }});"
+				style="background-image: url({{ storage_asset($design->image(1024)) }});"
 			></div>
 		@elseif (!$clothing)
 			<img
@@ -26,12 +26,12 @@
 			<!-- If it's a normal image -->
 			<div
 				class="background h-full w-full bg-cover bg-center"
-				style="background-image: url({{ public_asset('product_types/mockups/bgr/grey.png') }});"
+				style="background-image: url({{ FileHelper::storageAsset('product_types/mockups/bgr/grey.png') }});"
 			></div>
 
 			<img
 				class="clothing h-full w-full object-cover"
-				src="{{ public_asset($clothing) }}"
+				src="{{ FileHelper::storageAsset($clothing) }}"
 				data-type="{{ $product->type->id }}"
 				data-position="{{ $position->id }}"
 				data-suffix=""
@@ -69,7 +69,7 @@
 			@if ($details)
 				<img
 					class="clothing-details relative z-10"
-					src="{{ public_asset($details) }}"
+					src="{{ FileHelper::storageAsset($details) }}"
 					data-type="{{ $product->type->id }}"
 					data-position="{{ $position->id }}"
 					data-suffix="-det"

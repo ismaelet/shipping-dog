@@ -200,7 +200,7 @@ class PaymentRequestController extends Controller {
                     Storage::makeDirectory('public/' . $fileDirectory);
                 }
 
-                $result = file_put_contents(public_storage($document), $output);
+                $result = file_put_contents(FileHelper::storagePath($document), $output);
 
                 if (!$result) {
                     return redirect()->back()->with('error', 'Errore durante la generazione dei documenti');

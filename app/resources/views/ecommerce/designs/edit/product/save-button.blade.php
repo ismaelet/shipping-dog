@@ -29,12 +29,12 @@
 	x-data
 >
 	<x-alerts.success class="hidden group-data-[status=saved]:flex">
-		{!! embed_icon('correct') !!}
+		<x-icon-correct />
 		Impostazioni salvate
 	</x-alerts.success>
 
 	<x-alerts.error class="hidden group-data-[status=error]:flex">
-		{!! embed_icon('close') !!}
+		<x-icon-close />
 		Errore di salvataggio
 	</x-alerts.error>
 
@@ -43,9 +43,9 @@
 		data-save-button
 		@click="updateSaveButton($event.target, {{ $function }}($event.target))"
 	>
-		{!! embed_icon('save') !!}
+		<x-icon-save />
 		Salva
 	</x-button>
 
-	<span class="hidden w-12 justify-self-center group-data-[status=loading]:block">{!! embed_icon('loading') !!}</span>
+	<span class="hidden w-12 justify-self-center group-data-[status=loading]:block"><x-icon-loading /></span>
 </div>

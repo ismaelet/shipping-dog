@@ -1,272 +1,148 @@
-@pushOnce('styles')
-	<link
-		rel="stylesheet"
-		href="{{ asset('css/legacy/seller.css') }}"
-	>
-	<style>
-		main {
-			--breakout-width: 1400px;
-		}
-	</style>
-@endpushOnce
+<x-layouts.main
+	:title="$seller->name"
+	location-tag="shop"
+>
+	<div class="full-width">
+		{{-- Seller profile --}}
+		<section class="breakout pt-4">
+			<div class="relative">
+				{{-- Cover --}}
+				<img
+					src="{{ $seller->cover() }}"
+					alt=""
+					class="bg-primary-400 lg:h-120 h-64 w-full rounded-3xl object-cover sm:h-80"
+				/>
 
-<x-layouts.legacy-main :$location>
-
-	<section
-		id="head"
-		class="breakout"
-		data-seller-id="{{ $seller->id }}"
-	>
-
-		<!-- Cover -->
-		<img
-			id="cover"
-			src="{{ $seller->cover() }}"
-		/>
-
-		<form
-			id="head-sec"
-			method="POST"
-			enctype="multipart/form-data"
-		>
-			@csrf
-
-			<div id="head-cont">
-
-				<!-- Profile icon -->
-				<div id="icon-box">
-					<img
-						id="icon"
-						src="{{ $seller->icon() }}"
-					/>
-				</div>
-
-				<!-- Edit button -->
+				{{-- Edit profile --}}
 				@if ($owner)
 					<a
 						href="{{ route('seller-dashboard') }}"
-						class="relative"
+						class="hover:bg-surface-400/50 absolute right-4 top-4 rounded-full border border-white/20 bg-black/50 px-5 py-2 text-sm font-semibold text-white backdrop-blur-md transition-colors"
 					>
-						<p
-							id="edit"
-							class="bgr-c1-h"
-						>modifica</p>
+						Modifica negozio
 					</a>
 				@endif
+			</div>
 
-				<!-- Follow button -->
-				<div class="mb-4 mt-8 flex justify-center">
-					<livewire:follow-button :$seller />
-				</div>
+			{{-- Profile information --}}
+			<div class="relative text-center">
+				<div class="grid w-full sm:grid-cols-[1fr_auto_1fr]">
+					<div class=""></div>
 
-				<div
-					id="title-box"
-					class="text-center"
-				>
+					<div class="">
+						{{-- Avatar --}}
+						<img
+							src="{{ $seller->icon() }}"
+							alt="Logo di {{ $seller->name }}"
+							class="border-background-400 bg-surface-500 relative mx-auto -mt-12 size-24 rounded-full border-8 object-cover shadow-lg sm:-mt-16 sm:size-32"
+						/>
 
-					<!-- Name -->
-					<h1
-						id="title"
-						class="txt-3rem mt-4"
-					>{{ $seller->name }}</h1>
-
-					<!-- Statistics -->
-					<div class="grid grid-cols-1 gap-2">
-						<p class="mt-2">
-							{{ $productCount }} Prodotti &middot;
-							{{ $likeN }} Like &middot;
-							{{ $follN }} Follower
-						</p>
-
-						@if ($user->contacts)
-							{{-- Contacts --}}
-							<div class="flex flex-wrap justify-center gap-4">
-
-								@foreach ($contacts as $contactName => $contact)
-									@if ($user->$contact())
-										<a
-											href="{{ $user->$contact() }}"
-											class="hover:text-primary text-secondary transition-colors"
-											target="_blank"
-										>
-											<x-dynamic-component
-												:component="'icon-' . $contact"
-												class="h-5 w-5"
-											/>
-										</a>
-									@endif
-								@endforeach
-
+						<div class="grid grid-cols-1 gap-4">
+							{{-- Statistics --}}
+							<div class="text-neutral-text mt-4 flex flex-wrap justify-center gap-x-3 gap-y-1 text-sm">
+								<span>{{ $productCount }} Prodotti</span>
+								<span aria-hidden="true">·</span>
+								<span>{{ $likeN }} Like</span>
+								<span aria-hidden="true">·</span>
+								<span>{{ $follN }} Follower</span>
 							</div>
-						@endif
 
-						@if (!empty($seller->description))
-							<p id="desc">{{ $seller->description }}</p>
-						@endif
-					</div>
+							{{-- Seller name --}}
+							<h1 class="text-neutral-heading text-trim text-3xl font-bold tracking-tight sm:text-5xl">
+								{{ $seller->name }}
+							</h1>
 
-					<div class="my-8">
-						<livewire:seller.activation-request :$seller />
-					</div>
-				</div>
-			</div>
-		</form>
-	</section>
-
-	<div
-		id="body"
-		class="full-width"
-	>
-
-		<!-- Official shop -->
-		@if ($hasItems)
-
-			<!-- Shop -->
-			<div
-				id="store-pan"
-				class="breakout"
-			>
-				<div class="">
-					{{-- Products --}}
-					<livewire:shop.product-list :$seller />
-				</div>
-			</div>
-
-			@if ($collN || $owner)
-				<!-- Collections -->
-				<section
-					id="collections"
-					class="full-width"
-				>
-
-					<div
-						class="sort-pan breakout"
-						data-type="coll"
-					>
-						<h3
-							id="coll-title"
-							class="txt-med mar-b-2"
-						>Collezioni</h3>
-
-						<div
-							id="collections-grid"
-							class="sortable"
-						>
-
-							<?php if ($owner) { ?>
-
-							<div class="coll-ele add">
-								<div
-									class="collection clickable lbox-open"
-									data-tar="#coll-add-lbox"
-								>
-									<div class="center-items hei-100">
-
-										<div class="coll-add-box cen wid-100 text-center">
-											<div class="coll-add-ico text-neutral-heading">
-												{!! embed_icon('add') !!}
-											</div>
-											<p class="coll-add-txt txt-wht">Aggiungi collezione</p>
-										</div>
-									</div>
+							{{-- Social links --}}
+							@if ($user?->contacts)
+								<div class="flex flex-wrap justify-center gap-5">
+									@foreach ($contacts as $contact)
+										@if ($url = $user->$contact())
+											<a
+												href="{{ $url }}"
+												target="_blank"
+												rel="noopener noreferrer"
+												aria-label="{{ ucfirst($contact) }}"
+												class="text-neutral-text hover:text-primary-400 transition-colors"
+											>
+												<x-dynamic-component
+													:component="'icon-' . $contact"
+													class="size-5"
+												/>
+											</a>
+										@endif
+									@endforeach
 								</div>
-							</div>
+							@endif
 
-							<?php } ?>
+							{{-- Description --}}
+							@if (filled($seller->description))
+								<p class="text-neutral-text mx-auto max-w-2xl leading-relaxed">
+									{{ $seller->description }}
+								</p>
+							@endif
 
-							<x-seller.collections
-								:seller="$seller"
-								:visible-collections="$collBlock"
-							/>
-
-						</div>
-
-						<?php if ($collN > $collBlock) { ?>
-						<input
-							type="hidden"
-							id="collN"
-							value="{{ $collN }}"
-						>
-						<input
-							type="hidden"
-							id="collBlock"
-							value="{{ $collBlock }}"
-						>
-						<input
-							type="hidden"
-							id="collPos"
-							value="{{ $collBlock }}"
-						>
-						<?php } ?>
-
-						<div class="sort-load bgr">
-							<div class="sort-load-icon cen img cont">{!! embed_icon('loading') !!}</div>
+							{{-- Activation request --}}
+							@if ($owner && !$seller->isActive())
+								<div class="">
+									<livewire:seller.activation-request :$seller />
+								</div>
+							@endif
 						</div>
 					</div>
 
-				</section>
-			@endif
+					{{-- Follow button --}}
+					<div class="mt-4 sm:justify-self-end">
+						<livewire:follow-button :$seller />
+					</div>
+				</div>
+			</div>
+		</section>
 
-			@if ($owner)
-				<!-- New collection lbox -->
-				<div
-					id="coll-add-lbox"
-					class="modal lbox"
-				>
-					<form
-						class="modal-form"
-						method="POST"
-						action="{{ route('seller.collection.add', ['seller' => $seller]) }}"
-					>
-						@csrf
+		{{-- Products --}}
+		@if ($hasItems)
+			<section
+				aria-label="Prodotti del negozio"
+				class=""
+			>
+				<livewire:shop.product-list :$seller />
+			</section>
 
-						<div class="modal-form-header">
-							<h3 class="lbox-title">Aggiungi una collezione</h3>
-						</div>
-						<div class="lbox-body">
-							<input
-								type="text"
-								name="name"
-								class="input w-full"
-								placeholder="Nome della collezione"
-								required
-							>
-						</div>
-						<div class="modal-form-footer">
-							<x-button
-								type="submit"
-								name="add_folder"
-								class="w-full"
-							>Aggiungi</x-button>
-							<x-button
-								type="button"
-								variant="secondary"
-								class="lbox-close w-full"
-							>Annulla</x-button>
-						</div>
-					</form>
+			{{-- Collections --}}
+			@if ($collN > 0 || $owner)
+				<div class="full-width bg-surface-400">
+					<x-seller.collections-section
+						:$seller
+						:$owner
+						:$collN
+						:$collBlock
+					/>
 				</div>
 			@endif
 		@else
-			<!-- If the shop is empty -->
-			<div
-				id="empty"
-				class="pb-40 pt-20 text-center"
-			>
-				<div id="empty-box">
-					<p
-						id="empty-title"
-						class="uppercase"
-					>Ancora nessun lavoro caricato</p>
+			{{-- Empty shop --}}
+			<section class="mx-auto max-w-3xl px-5 py-20 text-center">
+				<div class="bg-surface-500/30 rounded-3xl border border-dashed border-neutral-300 px-6 py-16 dark:border-white/10">
+					<div class="bg-surface-500 mx-auto mb-6 grid size-16 place-items-center rounded-full">
+						<x-icon-add class="text-neutral-text size-7" />
+					</div>
 
-					<a href="{{ route('seller-dashboard.portfolio.add') }}">
-						<x-button
-							type="button"
-							class="mt-8 w-full"
-						>Carica un lavoro</x-button>
-					</a>
+					<h2 class="text-neutral-heading text-2xl font-bold">
+						Ancora nessun lavoro caricato
+					</h2>
+
+					@if ($owner)
+						<p class="text-neutral-text mx-auto mt-3 max-w-md">
+							Inizia a personalizzare il tuo negozio caricando la tua prima grafica.
+						</p>
+
+						<div class="mt-8">
+							<x-button :href="route('seller-dashboard.portfolio.add')">
+								Carica un lavoro
+							</x-button>
+						</div>
+					@endif
 				</div>
-			</div>
+			</section>
 		@endif
 	</div>
-</x-layouts.legacy-main>
+</x-layouts.main>

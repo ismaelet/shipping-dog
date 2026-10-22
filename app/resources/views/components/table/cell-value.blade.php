@@ -19,7 +19,7 @@
 
 	@case('bool')
 		<span class="h-4">
-			{!! embed_icon($record->{$column['name']} ? 'correct' : 'wrong') !!}
+			<x-dynamic-component :component="'icon-' . ($record->{$column['name']} ? 'correct' : 'wrong')" />
 		</span>
 	@break
 

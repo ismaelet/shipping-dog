@@ -1,4 +1,11 @@
-@props(['title', 'types', 'genderId' => null, 'selectedTypeId' => null, 'selectedGenderId' => null])
+@props([
+    'title',
+    'types',
+    'genderId' => null,
+    'selectedTypeId' => null,
+    'selectedGenderId' => null,
+    'defaultOpen' => false,
+])
 
 @php
 	$genderId = $genderId !== null ? (int) $genderId : null;
@@ -10,8 +17,8 @@
 @endphp
 
 <div
-	x-data="{ open: @js($isSelected) }"
-	class="border-surface-500 overflow-hidden rounded-lg border"
+	x-data="{ open: @js($isSelected || $defaultOpen) }"
+	class="border-b border-white/10 last:border-0"
 >
 	{{-- Category heading --}}
 	<button
@@ -19,17 +26,17 @@
 		@click="open = !open"
 		:aria-expanded="open.toString()"
 		@class([
-			'flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium transition-colors',
-			'bg-primary-400 text-white' => $isSelected,
-			'bg-surface text-neutral-heading hover:bg-background-400' => !$isSelected,
+			'flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-sm font-bold transition-colors',
+			'text-primary-300' => $isSelected,
+			'text-neutral-heading hover:bg-slate-700' => !$isSelected,
 		])
 	>
+		<span>{{ $title }}</span>
+
 		<x-icon-arrow-simple-down
 			class="size-3 shrink-0 -rotate-90 transition-transform duration-300"
 			x-bind:class="{ 'rotate-0!': open }"
 		/>
-
-		<span>{{ $title }}</span>
 	</button>
 
 	{{-- Product types --}}

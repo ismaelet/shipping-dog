@@ -23,7 +23,7 @@
 				@else
 					<div>
 						<img
-							src="{{ public_asset(ProductPreviewProcessor::PLACEHOLDER_IMAGE) }}"
+							src="{{ FileHelper::storageAsset(ProductPreviewProcessor::PLACEHOLDER_IMAGE) }}"
 							class="rounded"
 						>
 					</div>

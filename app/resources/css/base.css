@@ -1,55 +1,14 @@
 /* Layout */
-.grid {
-  &.columns-10rem {
-    grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr));
-  }
-
-  &.columns-15rem {
-    grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
-  }
-
-  &.columns-20rem {
-    grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
-  }
-
-  &.columns-25rem {
-    grid-template-columns: repeat(auto-fill, minmax(min(25rem, 100%), 1fr));
-  }
-
-  &.columns-30rem {
-    grid-template-columns: repeat(auto-fill, minmax(min(30rem, 100%), 1fr));
-  }
-
-  &.columns-40rem {
-    grid-template-columns: repeat(auto-fill, minmax(min(40rem, 100%), 1fr));
-  }
+@utility columns-* {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(--value([length]), 100%), 1fr)
+  );
 }
 
-.flex {
-  &.columns-15rem {
-    flex-grow: 1;
-    width: min(15rem, 100%);
-  }
-
-  &.columns-20rem {
-    flex-grow: 1;
-    width: min(20rem, 100%);
-  }
-
-  &.columns-25rem {
-    flex-grow: 1;
-    width: min(25rem, 100%);
-  }
-
-  &.columns-30rem {
-    flex-grow: 1;
-    width: min(30rem, 100%);
-  }
-
-  &.columns-40rem {
-    flex-grow: 1;
-    width: min(40rem, 100%);
-  }
+@utility flex-columns-* {
+  flex-grow: 1;
+  width: min(--value([length]), 100%);
 }
 
 .grid.stack-content,

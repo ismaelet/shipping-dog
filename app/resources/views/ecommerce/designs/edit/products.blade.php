@@ -391,7 +391,7 @@
 	</script>
 @endpushOnce
 
-<div class="columns-15rem grid gap-8">
+<div class="grid columns-[15rem] gap-8">
 	@foreach ($products as $productData)
 		@include('ecommerce.designs.edit.product', ['productData' => $productData])
 	@endforeach

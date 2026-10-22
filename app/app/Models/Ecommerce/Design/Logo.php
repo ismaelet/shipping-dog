@@ -6,27 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Logo extends Model {
 
-	protected $fillable = [];
+    protected $fillable = [];
 
-	/**
-	 * Get the image path for the logo
-	 */
-	public function image(): string {
-		if (file_exists(public_storage($url = 'shops/logos/' . $this->id . '.webp'))) {
-			return public_asset($url);
-		}
+    /**
+     * Get the image path for the logo
+     */
+    public function image(): string {
+        if (FileHelper::exists($url = 'shops/logos/' . $this->id . '.webp')) {
+            return FileHelper::storageAsset($url);
+        }
 
-		return public_asset('shops/logos/' . $this->id . '.png');
-	}
+        return FileHelper::storageAsset('shops/logos/' . $this->id . '.png');
+    }
 
-	/**
-	 * Get the custom preview image path for the logo
-	 */
-	public function customPreview(int $typeId): ?string {
-		if (file_exists(public_storage($url = 'shops/logos/' . $typeId . '-' . $this->id . '.jpg'))) {
-			return public_asset($url);
-		}
+    /**
+     * Get the custom preview image path for the logo
+     */
+    public function customPreview(int $typeId): ?string {
+        if (FileHelper::exists($url = 'shops/logos/' . $typeId . '-' . $this->id . '.jpg')) {
+            return FileHelper::storageAsset($url);
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

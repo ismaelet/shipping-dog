@@ -12,7 +12,7 @@
 			</x-typography.section-heading>
 
 			<a
-				href="{{ client_url('/shop') }}"
+				href="{{ route('shop') }}"
 				class="text-secondary text-base font-medium sm:text-right"
 			>
 				Esplora tutti

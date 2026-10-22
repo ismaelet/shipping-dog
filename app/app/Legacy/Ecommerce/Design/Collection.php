@@ -6,61 +6,61 @@ use App\Legacy\System\DB;
 
 class Collection {
 
-	public $id;
-	public $seller_id;
-	public $name;
-	public $img;
-	public $img_m;
-	public $img_cust = true;
-	public $color;
-	public $url;
-	public $status;
+    public $id;
+    public $seller_id;
+    public $name;
+    public $img;
+    public $img_m;
+    public $img_cust = true;
+    public $color;
+    public $url;
+    public $status;
 
-	function __construct($id) {
+    function __construct($id) {
 
-		$row = DB::row('* FROM collections WHERE id=' . $id);
+        $row = DB::row('* FROM collections WHERE id=' . $id);
 
-		$this->id = $id;
+        $this->id = $id;
 
-		//get name
-		$this->name = $row['name'];
+        //get name
+        $this->name = $row['name'];
 
-		//get the seller ID
-		$this->seller_id = $row['user_id'];
+        //get the seller ID
+        $this->seller_id = $row['user_id'];
 
-		//get the status
-		$this->status = $row['status'];
+        //get the status
+        $this->status = $row['status'];
 
-		//get the images
-		$this->img();
+        //get the images
+        $this->img();
 
-		//get the urls
-		$this->url =  '/artist/collection?id=' . $this->id;
-	}
+        //get the urls
+        $this->url =  '/artist/collection?id=' . $this->id;
+    }
 
-	function img() {
+    function img() {
 
-		$color = '#aaa';
+        $color = '#aaa';
 
-		$img = '/shops/collections/' . $this->id . '.jpg';
+        $img = '/shops/collections/' . $this->id . '.jpg';
 
-		if (!file_exists(public_storage($img))) {
+        if (!FileHelper::exists($img)) {
 
-			$this->img_cust = false;
+            $this->img_cust = false;
 
-			$res = DB::select('id, color FROM designs WHERE collection=? ORDER BY id DESC LIMIT 1', [$this->id]);
+            $res = DB::select('id, color FROM designs WHERE collection=? ORDER BY id DESC LIMIT 1', [$this->id]);
 
-			if ($res->num_rows) {
+            if ($res->num_rows) {
 
-				$row = $res->fetch_assoc();
+                $row = $res->fetch_assoc();
 
-				$color = $row['color'];
-				$img = '/designs/' . $row['id'] . '.png';
-			} else $img = false;
-		}
+                $color = $row['color'];
+                $img = '/designs/' . $row['id'] . '.png';
+            } else $img = false;
+        }
 
-		$this->img = $img;
-		$this->img_m = str_replace('.', '_m.', $img);
-		$this->color = $color;
-	}
+        $this->img = $img;
+        $this->img_m = str_replace('.', '_m.', $img);
+        $this->color = $color;
+    }
 }

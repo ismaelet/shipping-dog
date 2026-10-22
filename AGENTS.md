@@ -26,6 +26,7 @@
 - Vite inputs are `app/resources/css/app.css` and `app/resources/js/app.js`. `app.css` imports Tailwind, `base.css`, and `theme.css`, and scans Blade views.
 - Tailwind v4 design tokens (colors, fonts, spacing, breakpoints, and light/dark values) are defined in `app/resources/css/theme.css`; shared layout utilities are in `base.css`. Reuse these tokens and patterns rather than adding duplicate values.
 - Keep frontend behavior in the existing vanilla JavaScript modules or Alpine.js where appropriate. Do not introduce Vue, React, or Inertia.
+- Alway place grandient inside `@pushOnce('styles')` tags instead of using Tailwind classes.
 
 ## Docker, build, and tests
 
@@ -45,3 +46,6 @@ Compose provides the Laravel app on port 8000, Vite on 5173, and MariaDB. The Vi
 - Inspect nearby code and reuse existing components, helpers, validation, authorization, and test patterns.
 - Keep changes focused; do not modify migrations, dependencies, or environment configuration unless required.
 - Run the narrowest relevant tests and build after application changes.
+- Never generate images.
+- Add or update tests relative to the changes you make even when nobody asks
+- To run tests always use `docker compose exec -e APP_ENV=testing app php artisan test`

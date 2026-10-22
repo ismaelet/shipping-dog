@@ -2,6 +2,6 @@
 	type="submit"
 	name="add"
 >
-	{!! embed_icon('add') !!}
+	<x-icon-add />
 	Aggiungi
 </x-button>

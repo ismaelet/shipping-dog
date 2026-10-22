@@ -53,13 +53,13 @@
 						class="category-header categorys-center cursor-pointer"
 						href="{{ $category['url'] }}"
 					>
-						{!! embed_icon($category['icon']) !!}
+						<x-dynamic-component :component="'icon-' . $category['icon']" />
 						<p class="category-title font-heading ml-4">{{ $category['name'] }}</p>
 					</a>
 				@else
 					<div class="category-header categorys-center cursor-pointer">
 						{{-- <input type="checkbox" name="navigation_category" class="hidden js-radio-checkbox"> --}}
-						{!! embed_icon($category['icon']) !!}
+						<x-dynamic-component :component="'icon-' . $category['icon']" />
 						<p class="category-title font-heading ml-4">{{ $category['name'] }}</p>
 					</div>
 

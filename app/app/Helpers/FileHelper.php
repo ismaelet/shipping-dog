@@ -10,9 +10,18 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 class FileHelper {
 
     /**
+     * Get the absolute filesystem path of a file in the public storage disk.
+     */
+    public static function storagePath(?string $path = null): string {
+        return Storage::disk('public')->path(ltrim($path ?? '', '/'));
+    }
+
+    /**
      * Get the versioned URL of a file in the public storage disk.
      */
     public static function storageAsset(string $path): string {
+        $path = ltrim($path, '/');
+
         if (!self::exists($path)) {
             throw new FileNotFoundException($path);
         }

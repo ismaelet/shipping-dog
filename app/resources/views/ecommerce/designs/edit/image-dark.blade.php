@@ -28,7 +28,7 @@
 		{{-- If it has a dark image --}}
 		<div class="bg-neutral-dark-200 grid aspect-square grid-rows-1 border">
 			<x-inputs.image-replacer
-				:image="public_asset('designs/' . $design->id . '_dark.png')"
+				:image="FileHelper::storageAsset('designs/' . $design->id . '_dark.png')"
 				name="file_dark"
 				auto-submit="true"
 			/>
@@ -44,7 +44,7 @@
 				size="small"
 				@click="$el.closest('form').querySelector('input').click()"
 			>
-				{!! embed_icon('upload') !!}
+				<x-icon-upload />
 				Ricarica grafica
 			</x-button>
 		</div>

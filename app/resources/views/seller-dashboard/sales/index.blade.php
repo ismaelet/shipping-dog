@@ -61,7 +61,7 @@
 							class="button--auto-width"
 							name="request-payment"
 						>
-							{!! embed_icon('dollar') !!}
+							<x-icon-dollar />
 							Richiedi il pagamento
 						</x-button>
 					</div>
@@ -84,7 +84,7 @@
 						class="button--auto-width"
 						disabled
 					>
-						{!! embed_icon('dollar') !!}
+						<x-icon-dollar />
 						Richiedi il pagamento
 					</x-button>
 

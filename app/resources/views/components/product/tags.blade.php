@@ -1,23 +1,29 @@
 <!-- Tags -->
 <?php if ($product->design?->tags?->tags) { ?>
 
-	<section id="tag-sec" class="">
-		<div id="tag-block" class="main-wrap text-center pad-t-3">
+<section
+	id="tag-sec"
+	class=""
+>
+	<div
+		id="tag-block"
+		class="main-wrap pad-t-3 text-center"
+	>
 
-			<?php
+		<?php
 			$tags = explode(',', $product->design->tags->tags);
 
 			foreach ($tags as $tag) {
 				$tag = str_replace('#', '', $tag);
 			?>
 
-				<a href="<?= client_url('/search?search=' . $tag) ?>">
-					<p class="tag inlb"><?= $tag ?></p>
-				</a>
+		<a href="{{ route('search', ['search' => $tag]) }}">
+			<p class="tag inlb"><?= $tag ?></p>
+		</a>
 
-			<?php } ?>
+		<?php } ?>
 
-		</div>
-	</section>
+	</div>
+</section>
 
 <?php } ?>

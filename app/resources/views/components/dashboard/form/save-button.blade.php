@@ -2,6 +2,6 @@
 	type="submit"
 	name="update"
 >
-	{!! embed_icon('save') !!}
+	<x-icon-save />
 	Salva
 </x-button>

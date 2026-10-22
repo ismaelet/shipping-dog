@@ -6,6 +6,7 @@ use App\Legacy\System\DB;
 use App\Legacy\Traits\DatabaseObject;
 use App\Models\Ecommerce\Seller as NewSeller;
 use App\Legacy\User as LegacyUser;
+use App\Models\Ecommerce\Product;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -46,7 +47,7 @@ class Seller {
     }
 
     private function getClientUrl() {
-        return public_client_url($this->url);
+        return $this->url;
     }
 
     private function getFollowed() {
@@ -98,11 +99,35 @@ class Seller {
     }
 
     private function getDesigns() {
-        return rows_to_objects(DB::select(Design::INDEX . ' FROM ' . Design::TABLE . ' WHERE ' . Design::SELLER_INDEX . ' = ?', [$this->id]), Design::class);
+        $rows = DB::select(
+            Design::INDEX . ' FROM ' . Design::TABLE .
+                ' WHERE ' . Design::SELLER_INDEX . ' = ?',
+            [$this->id]
+        );
+
+        $designs = [];
+
+        while ($row = $rows->fetch_assoc()) {
+            $designs[] = new Design($row[Design::INDEX]);
+        }
+
+        return $designs;
     }
 
     private function getProducts() {
-        return rows_to_objects(DB::select(Product::INDEX . ' FROM ' . Product::TABLE . ' WHERE ' . Product::SELLER_INDEX . ' = ?', [$this->id]), Product::class);
+        $rows = DB::select(
+            Product::INDEX . ' FROM ' . Product::TABLE .
+                ' WHERE ' . Product::SELLER_INDEX . ' = ?',
+            [$this->id]
+        );
+
+        $products = [];
+
+        while ($row = $rows->fetch_assoc()) {
+            $products[] = new Product($row[Product::INDEX]);
+        }
+
+        return $products;
     }
 
     private function getStatusId() {

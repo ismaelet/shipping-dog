@@ -2,6 +2,7 @@
 
 namespace App\Models\Ecommerce\Design;
 
+use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Seller;
 use Illuminate\Database\Eloquent\Model;
@@ -70,7 +71,7 @@ class DesignCollection extends Model {
             ? '/shops/collections/' . $this->id . '_m.jpg'
             : '/shops/collections/' . $this->id . '.jpg';
 
-        if (file_exists(public_storage($image))) {
+        if (FileHelper::exists($image)) {
             return storage_asset($image);
         }
 

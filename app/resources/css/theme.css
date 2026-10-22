@@ -56,10 +56,6 @@
 /* Theme */
 @theme {
   /* Theme: Colors */
-  --color-neutral-heading: var(--color-slate-950);
-  --color-neutral-text: var(--color-slate-600);
-  --color-neutral-border: alpha(from var(--color-slate-950) / 10%);
-
   --color-primary-300: var(--color-orange-400);
   --color-primary-400: var(--color-orange-500);
   --color-primary-500: var(--color-orange-600);
@@ -80,10 +76,17 @@
   --color-background-300: #fff;
   --color-background-400: var(--color-stone-50);
 
-  --color-surface-200: var(--color-neutral-light-200);
-  --color-surface-400: var(--color-neutral-light-100);
-  --color-surface-500: var(--color-neutral-light-200);
-  --color-surface-600: var(--color-neutral-light-250);
+  --color-surface-200: #fff;
+  --color-surface-400: #fff;
+  --color-surface-500: var(--color-stone-100);
+  --color-surface-600: var(--color-stone-200);
+
+  --color-neutral-heading: var(--color-slate-950);
+  --color-neutral-text: var(--color-slate-600);
+  --color-neutral-border: alpha(from var(--color-slate-950) / 10%);
+
+  --color-white: #fff;
+  --color-black: #000;
 
   /* Theme: Fonts */
   --font-sans: "Manrope", system-ui, sans-serif;
@@ -155,19 +158,50 @@ h6 {
   font-weight: var(--font-weight-semibold);
 }
 
+@utility text-trim {
+  text-box: trim-both cap alphabetic;
+}
+
 /*
 * Components
 */
 @layer components {
   .pagination-page {
-    @apply flex size-8 shrink-0 cursor-pointer items-center justify-center
-            rounded-full text-sm font-semibold
-            transition-colors duration-200
-            hover:text-primary-500
-            disabled:cursor-default disabled:opacity-50;
+    display: flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-surface-400);
+    border: 1px solid var(--color-neutral-border);
+    border-radius: 9999px;
+    color: var(--color-neutral-heading);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    transition-property:
+      color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-duration: 200ms;
+  }
+
+  .pagination-page:not(:disabled):not(.is-active):hover {
+    background-color: var(--color-surface-500);
+  }
+
+  .pagination-page:disabled {
+    cursor: default;
   }
 
   .pagination-page.is-active {
-    @apply bg-primary-400 text-white hover:bg-primary-500;
+    background-color: var(--color-primary-400);
+    border-color: var(--color-primary-400);
+    color: #fff;
+
+    &:hover {
+      background-color: var(--color-primary-500);
+      border-color: var(--color-primary-500);
+    }
   }
 }

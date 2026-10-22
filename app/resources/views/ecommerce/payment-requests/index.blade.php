@@ -33,7 +33,7 @@
 	<x-slot name="footer">
 
 		<x-button type="submit">
-			{!! embed_icon('download') !!}
+			<x-icon-download />
 			Scarica il <strong>PDF</strong>
 		</x-button>
 
@@ -42,7 +42,7 @@
 			:href="route('seller-dashboard.payment.edit')"
 			variant="secondary"
 		>
-			{!! embed_icon('edit') !!}
+			<x-icon-edit />
 			Modifica i dati di fatturazione
 		</x-button>
 	</x-slot>

@@ -36,7 +36,7 @@
 			title="Modifica"
 			@class($classes)
 		>
-			{!! embed_icon('edit') !!}
+			<x-icon-edit />
 		</a>
 	@break
 
@@ -49,7 +49,7 @@
 			value="{{ $record->id }}"
 			x-data
 		>
-			{!! embed_icon('delete') !!}
+			<x-icon-delete />
 		</button>
 	@break
 
@@ -65,7 +65,7 @@
 				@class($classes)
 				download
 			>
-				{!! embed_icon('download') !!}
+				<x-icon-download />
 			</a>
 		@endif
 	@break
@@ -88,7 +88,8 @@
 				value="{{ $button['value'] ?? '' }}"
 				@class($classes)
 			>
-				{!! embed_icon($button['icon']) !!}
+
+				<x-dynamic-component :component="'icon-' . $button['icon']" />
 			</button>
 		</form>
 @endswitch

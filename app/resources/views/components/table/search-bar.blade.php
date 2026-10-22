@@ -42,7 +42,7 @@
 		x-data
 		@click="table_search"
 	>
-		{!! embed_icon('search') !!}
+		<x-icon-search />
 	</div>
 
 	<x-input
@@ -59,7 +59,7 @@
 			x-data
 			@click="empty_table_search"
 		>
-			{!! embed_icon('close') !!}
+			<x-icon-close />
 		</div>
 	@endisset
 </search>

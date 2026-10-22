@@ -28,7 +28,7 @@ class DesignController extends Controller {
      * * Index action
      */
     public function index() {
-        redirect_old('/seller/portfolio');
+        return redirect('/seller/portfolio');
     }
 
     /**

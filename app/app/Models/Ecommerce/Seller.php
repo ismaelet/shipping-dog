@@ -3,6 +3,7 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
+use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Seller\Follower;
 use App\Models\Ecommerce\Seller\Payment;
@@ -158,15 +159,15 @@ class Seller extends Model {
     public function icon(): string {
         $icon = 'users/icons/' . $this->user_id;
 
-        if (file_exists(public_storage($icon . '.webp'))) {
-            return public_asset($icon . '.webp');
+        if (FileHelper::exists($icon . '.webp')) {
+            return FileHelper::storageAsset($icon . '.webp');
         }
 
-        if (file_exists(public_storage($icon . '.jpg'))) {
-            return public_asset($icon . '.jpg');
+        if (FileHelper::exists($icon . '.jpg')) {
+            return FileHelper::storageAsset($icon . '.jpg');
         }
 
-        return public_asset('users/icons/0.jpg');
+        return FileHelper::storageAsset('users/icons/0.jpg');
     }
 
     /**
@@ -227,6 +228,10 @@ class Seller extends Model {
         return $this;
     }
 
+    public function isActive(): bool {
+        return $this->status;
+    }
+
     /**
      * Update the seller's paid amount
      */
@@ -257,35 +262,6 @@ class Seller extends Model {
         $this->updateOtherTransfers();
 
         return $this;
-    }
-
-    private function earnedCredit(): float {
-        return round($this->earned * .1, 2);
-    }
-
-    private function usedOrderCredit(): float {
-        $usedOrderCredit = $this->order_items()
-            ->where('user_id', '=', $this->user_id)
-            ->where('credit', '=', 1)
-            ->where('status', '!=', EcommerceHelper::statusFromTag('cancelled'))
-            ->selectRaw('SUM((total_amount_before_discount - total_discount) * quantity) as usedCredit')
-            ->value('usedCredit');
-
-        return $usedOrderCredit ? round($usedOrderCredit, 2) : 0;
-    }
-
-    private function usedShippingCredit(): float {
-        $usedShippingCredit = Order::whereHas('order_items', function ($query) {
-            $query->where('user_id', '=', $this->user_id);
-        })
-            ->where('credit_ship', '=', 1)
-            ->where('status', '!=', EcommerceHelper::statusFromTag('cancelled'))
-            ->selectRaw('
-			SUM(shipping) AS usedCredit
-		')
-            ->value('usedCredit');
-
-        return $usedShippingCredit ? round($usedShippingCredit, 2) : 0;
     }
 
     /**

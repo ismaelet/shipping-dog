@@ -154,7 +154,6 @@
 
 			/* If contains icons */
 			:where(&:has(svg)) {
-
 				svg {
 					display: inline-block;
 					margin-left: 0.5em;

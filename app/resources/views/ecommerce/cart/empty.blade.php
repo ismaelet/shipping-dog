@@ -17,7 +17,7 @@
 		data-spacing="700"
 	>
 		<div class="cart-icon border-primary text-primary grid aspect-square place-items-center rounded-full border">
-			{!! embed_icon('empty-cart', ['w-1/2']) !!}
+			<x-icon-empty-cart class="w-1/2" />
 		</div>
 
 		<div class="grid gap-6">

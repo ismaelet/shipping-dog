@@ -74,7 +74,7 @@ class CartAddressController extends Controller {
         $city = ucwords(strtolower(trim($city)));
         $email = strtolower(trim($_POST['email']));
         $phone = trim($_POST['phone']);
-        $security = random_string();
+        $security = \Illuminate\Support\Str::random(10);
         $courierNotes = $_POST['courier_notes'] ?? '';
         $reg = $_POST['region'] ?? '';
 

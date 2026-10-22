@@ -3,6 +3,7 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
+use App\Helpers\FileHelper;
 use App\Services\Files\ProductPreviewProcessor;
 use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Design\LogoGroup;
@@ -228,7 +229,7 @@ class Product extends Model {
     }
 
     /**
-     * Get the product's description
+     * Relationship: Get the product's mockups
      */
     public function mockup(): HasMany {
         return $this->hasMany(ProductMockup::class);
@@ -299,6 +300,20 @@ class Product extends Model {
      */
     public function slug(): string {
         return $this->id . '-' . Str::slug($this->name);
+    }
+
+    /**
+     * Check if the product is popular based on recent sales.
+     */
+    public function isPopular(): bool {
+        return $this->recent_sales > 5;
+    }
+
+    /**
+     * Check if the product is new based on its creation date.
+     */
+    public function isNew(): bool {
+        return $this->created_at >= now()->subDays(30);
     }
 
     /**
@@ -449,14 +464,14 @@ class Product extends Model {
 
     public function coverImage(): ?string {
         switch (true) {
-            case file_exists(public_storage($this->specificCoverImage())):
+            case FileHelper::exists($this->specificCoverImage()):
                 return $this->specificCoverImage();
 
-            case !$this->isCustom() && file_exists(public_storage($file = '/product_types/covers/' . $this->type->tag . '.webp')):
-                return public_asset($file);
+            case !$this->isCustom() && FileHelper::exists($file = '/product_types/covers/' . $this->type->tag . '.webp'):
+                return FileHelper::storageAsset($file);
 
-            case !$this->isCustom() && file_exists(public_storage($file = '/product_types/covers/' . $this->type->tag . '.jpg')):
-                return public_asset($file);
+            case !$this->isCustom() && FileHelper::exists($file = '/product_types/covers/' . $this->type->tag . '.jpg'):
+                return FileHelper::storageAsset($file);
 
             default:
                 return null;
@@ -467,7 +482,7 @@ class Product extends Model {
      * Get the specific cover image path
      */
     public function specificCoverImage(): string {
-        return public_asset('/products/' . $this->id . '-cover.webp');
+        return FileHelper::storageAsset('/products/' . $this->id . '-cover.webp');
     }
 
     /**
@@ -481,6 +496,6 @@ class Product extends Model {
 
         $matchingFiles = array_filter($files, fn($file) => str_starts_with($file, $prefix));
 
-        return collect($matchingFiles)->map(fn($file) => public_asset($file));
+        return collect($matchingFiles)->map(fn($file) => FileHelper::storageAsset($file));
     }
 }

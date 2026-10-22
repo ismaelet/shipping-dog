@@ -357,7 +357,7 @@
 						>
 						<img
 							class="product-cover-image"
-							src="{{ client_path($product->coverImage) }}"
+							src="{{ asset($product->coverImage) }}"
 						>
 					</label>
 				@else
@@ -413,7 +413,7 @@
 					formaction="{{ route('seller-dashboard.portfolio.products.delete', $product) }}"
 					onclick="return confirm('Sei sicuro di voler eliminare questo prodotto? Questa azione non può essere annullata.')"
 				>
-					{!! embed_icon('delete') !!}
+					<x-icon-delete />
 					Elimina il prodotto
 				</x-button>
 			@endif

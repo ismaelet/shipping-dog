@@ -25,7 +25,7 @@
 		data-color-background
 	>
 		<x-inputs.image-replacer
-			:image="public_asset('designs/' . $design->id . '.png')"
+			:image="FileHelper::storageAsset('designs/' . $design->id . '.png')"
 			auto-submit="true"
 			name="file_light"
 		/>
@@ -42,7 +42,7 @@
 				size="small"
 				@click="$el.closest('form').querySelector('input').click()"
 			>
-				{!! embed_icon('upload') !!}
+				<x-icon-upload />
 				Ricarica grafica
 			</x-button>
 		</div>

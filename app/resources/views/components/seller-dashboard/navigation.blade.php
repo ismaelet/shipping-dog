@@ -119,7 +119,7 @@
 			class="mobile-toggler hidden"
 		>
 		<span class="w-5 shrink-0">
-			{!! embed_icon('list') !!}</span>
+			<x-icon-list /></span>
 		Menu Gestione
 	</label>
 
@@ -140,13 +140,13 @@
 					>
 
 					<div class="h-4 w-4">
-						{!! embed_icon($category['icon']) !!}
+						<x-dynamic-component :component="'icon-' . $category['icon']" />
 					</div>
 
 					<p class="font-heading font-semibold">{{ $category['title'] }}</p>
 
 					<span class="navigation-arrow w-3 transition-transform">
-						{!! embed_icon('arrow-simple-down') !!}
+						<x-icon-arrow-simple-down />
 					</span>
 
 				</label>

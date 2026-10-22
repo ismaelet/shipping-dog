@@ -76,7 +76,7 @@
 						href="{{ $order->paymentUrl() }}"
 						class="grow sm:grow-0"
 					>
-						{!! embed_icon('credit-card') !!}
+						<x-icon-credit-card />
 						Procedi al pagamento
 					</x-button>
 
@@ -86,7 +86,7 @@
 						color="error"
 						class="grow sm:grow-0"
 					>
-						{!! embed_icon('close') !!}
+						<x-icon-close />
 						Cancella l'ordine
 					</x-button>
 				</div>

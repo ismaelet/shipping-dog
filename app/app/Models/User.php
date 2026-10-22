@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\EcommerceHelper;
+use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Order;
 use App\Models\Ecommerce\Seller;
 use App\Models\User\Like;
@@ -228,12 +229,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
         // Get the HD cover image
         $cover = 'shops/covers/' . $this->id . $sizeSlug;
 
-        if (file_exists(public_storage($cover . '.webp'))) {
-            return public_asset($cover . '.webp');
+        if (FileHelper::exists($cover . '.webp')) {
+            return FileHelper::storageAsset($cover . '.webp');
         }
 
-        if (file_exists(public_storage($cover . '.jpg'))) {
-            return public_asset($cover . '.jpg');
+        if (FileHelper::exists($cover . '.jpg')) {
+            return FileHelper::storageAsset($cover . '.jpg');
         }
 
         return Vite::image('user/cover.webp');
@@ -242,12 +243,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar {
     public function icon(): string {
         $icon = 'users/icons/' . $this->id;
 
-        if (file_exists(public_storage($icon . '.webp'))) {
-            return public_asset($icon . '.webp');
+        if (FileHelper::exists($icon . '.webp')) {
+            return FileHelper::storageAsset($icon . '.webp');
         }
 
-        if (file_exists(public_storage($icon . '.jpg'))) {
-            return public_asset($icon . '.jpg');
+        if (FileHelper::exists($icon . '.jpg')) {
+            return FileHelper::storageAsset($icon . '.jpg');
         }
 
         if ($this->avatar) {

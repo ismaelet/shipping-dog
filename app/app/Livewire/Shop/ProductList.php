@@ -6,6 +6,7 @@ use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Seller;
 use App\Queries\Shop\ProductSearchQuery;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -27,7 +28,7 @@ class ProductList extends Component {
     #[Url]
     public ?string $sort = null;
 
-    public int $pageSize = 40;
+    public int $pageSize = 36;
 
     public ?Seller $seller = null;
 
@@ -45,21 +46,52 @@ class ProductList extends Component {
     public function render(ProductSearchQuery $productSearch) {
         $this->resolveFilters();
 
+        $sort = ($this->sort === 'custom' && !$this->seller)
+            ? 'popular'
+            : ($this->sort ?? 'popular');
+
+        $shouldDiversify =
+            $sort === 'popular' &&
+            !$this->selectedTypeId &&
+            !$this->selectedGenderId &&
+            trim($this->search) === '';
+
+        // Filtered products
         $query = $productSearch->build(
             seller: $this->seller,
             search: trim($this->search),
             typeId: $this->selectedType?->id,
             genderId: $this->selectedGender?->id,
-            sort: $this->sort ?? 'popular',
+            sort: $sort,
+            diversify: $shouldDiversify,
         );
 
         $products = $query->paginate($this->pageSize);
 
+        // Total products (cached for 10 minutes)
+        $cacheKey = $this->seller
+            ? "shop.products.total.seller.{$this->seller->getKey()}"
+            : 'shop.products.total.all';
+
+        $totalProducts = Cache::remember(
+            $cacheKey,
+            now()->addMinutes(10),
+            fn() => $productSearch->build(
+                seller: $this->seller,
+                search: '',
+                typeId: null,
+                genderId: null,
+                sort: 'popular',
+            )->count(),
+        );
+
         return view('livewire.shop.product-list', [
             'products' => $products,
+            'totalProducts' => $totalProducts,
             'productCount' => $products->total(),
             'womenTypes' => $this->getCategoryTypes('c', 2),
             'menTypes' => $this->getCategoryTypes('c', 1),
+            'unisexTypes' => $this->getCategoryTypes('c'),
             'accessoryTypes' => $this->getCategoryTypes('m'),
         ]);
     }
@@ -82,7 +114,11 @@ class ProductList extends Component {
     }
 
     public function changeSort(string $sort): void {
-        if (!in_array($sort, ['new', 'popular', 'custom'], true)) {
+        $allowedSorts = $this->seller
+            ? ['new', 'popular', 'custom']
+            : ['new', 'popular'];
+
+        if (!in_array($sort, $allowedSorts, true)) {
             return;
         }
 
@@ -129,7 +165,11 @@ class ProductList extends Component {
             ][$this->seller->sort - 1] ?? null;
         }
 
-        if (!in_array($this->sort, ['new', 'popular', 'custom'], true)) {
+        $allowedSorts = $this->seller
+            ? ['new', 'popular', 'custom']
+            : ['new', 'popular'];
+
+        if (!in_array($this->sort, $allowedSorts, true)) {
             $this->sort = 'popular';
         }
     }
@@ -143,23 +183,18 @@ class ProductList extends Component {
             ->where('hidden', false)
             ->doesntHave('main_type');
 
-        if ($category === 'c' && $genderId !== null) {
-            $query->where(function ($query) use ($genderId) {
-                $query
-                    ->whereHas('gender', function ($query) use ($genderId) {
-                        $query->whereKey($genderId);
-                    })
-                    ->orWhere('unisex', true);
-            });
+        if ($category === 'c') {
+            $query->where('gender_id', $genderId ?? 3);
         }
 
-        if ($this->seller) {
-            $query->whereHas('products', function ($query) {
-                $query
-                    ->where('user_id', $this->seller->user_id)
-                    ->where('status', true);
-            });
-        }
+        // Only show types with at least one active product
+        $query->whereHas('products', function ($query) {
+            $query->where('status', true);
+
+            if ($this->seller) {
+                $query->where('user_id', $this->seller->user_id);
+            }
+        });
 
         return $query->orderBy('sort')->get();
     }

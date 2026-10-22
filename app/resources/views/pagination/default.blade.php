@@ -12,7 +12,7 @@
 				aria-label="Pagina precedente"
 				rel="prev"
 			>
-				<x-icon-previous class="size-4" />
+				<x-icon-keyboard-arrow-left class="size-4" />
 			</a>
 		@endif
 
@@ -48,7 +48,7 @@
 				aria-label="Pagina successiva"
 				rel="next"
 			>
-				<x-icon-next class="size-4" />
+				<x-icon-keyboard-arrow-right class="size-4" />
 			</a>
 		@endif
 	</nav>

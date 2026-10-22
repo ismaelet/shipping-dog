@@ -20,86 +20,76 @@ class SellerController extends Controller {
     /**
      * Display the seller page
      */
+
     public function index(): View|RedirectResponse {
+        $id = request()->route('seller')
+            ?? request()->query('seller')
+            ?? request()->query('id');
 
-        // get variabiles
-        $id = request()->seller ? (int) request()->seller : (int) request()->id;
-        $seller = Seller::find($id);
-        $user = $seller?->user;
-        $sellerUserId = $seller?->user_id;
+        $seller = Seller::query()
+            ->with('user')
+            ->find($id);
 
-        // redirect to user's shop if no ID is specified
         if (!$seller) {
-            return redirect('shop');
+            return redirect()->route('shop');
         }
 
-        $title = $seller->name;
-        $thumbnail = $seller->hasCover ? $seller->cover[0] : null;
-        $description = $seller->description ?: null;
+        $owner = Auth::id() !== null
+            && Auth::id() === (int) $seller->user_id;
 
-        // special status
-        $owner = Auth::id() == $sellerUserId ? true : false;
-
-        // check if shop hasn't been approved yet
-        $public = $seller->status;
-
-        if (!$public && !$owner && !is_admin()) {
-            return redirect('shop');
+        if (!$seller->status && !$owner && !is_admin()) {
+            return redirect()->route('shop');
         }
 
-        // get products data
+        $sellerUserId = $seller->user_id;
         $collBlock = 10;
 
-        // select links
-        $products = $seller->products->where('status', true);
-        $productCount = $products->count();
+        // Statistics
+        $productCount = $seller->products()
+            ->where('status', 1)
+            ->count();
 
-        $likeN = Like::whereIn('product_id', function ($query) use ($sellerUserId) {
-            $query->select('id')
-                ->from('products')
-                ->where('user_id', $sellerUserId);
-        })->count();
+        $likeN = Like::query()
+            ->whereIn('product_id', Product::query()
+                ->select('id')
+                ->where('user_id', $sellerUserId))
+            ->count();
 
-        $follN = Follower::where('user_id', $sellerUserId)->count();
+        $follN = Follower::query()
+            ->where('user_id', $sellerUserId)
+            ->count();
 
-        if ($owner) {
-            $collN = DesignCollection::where('user_id', $sellerUserId)->count();
-        } else {
-            $collN = DesignCollection::where('user_id', $sellerUserId)
-                ->whereIn('id', function ($query) use ($sellerUserId) {
-                    $query->select('collection')
-                        ->from('designs')
-                        ->where('user_id', $sellerUserId);
-                })->count();
+        // Collections
+        $collections = DesignCollection::query()
+            ->where('user_id', $sellerUserId);
+
+        if (!$owner) {
+            $collections->whereIn(
+                'id',
+                Design::query()
+                    ->select('collection')
+                    ->where('user_id', $sellerUserId)
+            );
         }
 
-        // add folder
-        if (isset($_POST['add_folder'])) {
-            $name = trim($_POST['name']);
-
-            if (!empty($name)) {
-
-                $collID = DesignCollection::create([
-                    'user_id' => $sellerUserId,
-                    'name' => $name,
-                ])->id;
-
-                redirect_old('/artist/collection?id=' . $collID);
-            } else redirect_old();
-        }
-
-        $contacts = ['website', 'facebook', 'instagram', 'twitter', 'youtube', 'tiktok', 'bluesky'];
+        $collN = $collections->count();
 
         return view('ecommerce.seller', [
-            'title' => $title,
-            'description' => $description,
-            'thumbnail' => $thumbnail,
-            'location' => 'shop',
+            'title' => $seller->name,
+            'description' => $seller->description,
+            'locationTag' => 'shop',
             'seller' => $seller,
-            'user' => $user,
+            'user' => $seller->user,
             'owner' => $owner,
-            'id' => $id,
-            'contacts' => $contacts,
+            'contacts' => [
+                'website',
+                'facebook',
+                'instagram',
+                'twitter',
+                'youtube',
+                'tiktok',
+                'bluesky',
+            ],
             'productCount' => $productCount,
             'likeN' => $likeN,
             'follN' => $follN,
@@ -108,6 +98,7 @@ class SellerController extends Controller {
             'collBlock' => $collBlock,
         ]);
     }
+
 
     /**
      * Add a new collection for the seller

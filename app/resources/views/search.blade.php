@@ -5,7 +5,7 @@
 	>
 @endpushOnce
 
-<x-layouts.legacy-main
+<x-layouts.main
 	:$title
 	:$location
 >
@@ -38,7 +38,7 @@
 				id="srch-btn"
 				class="center-content self-stretch"
 			>
-				<span class="icon txt-wht"><?= embed_icon('search') ?></span>
+				<span class="icon txt-wht"><x-icon-search /></span>
 			</button>
 		</form>
 	</section>
@@ -142,4 +142,4 @@
 		<?php } ?>
 
 	</div>
-</x-layouts.legacy-main>
+</x-layouts.main>

@@ -11,7 +11,7 @@
 					Scelti per te
 				</p>
 
-				<h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
+				<h2 class="text-neutral-heading mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
 					I più amati
 				</h2>
 			</div>

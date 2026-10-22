@@ -84,12 +84,12 @@
 
 	<img
 		class="fill-container"
-		src="{{ public_asset('product_types/mockups/bgr/grey.png') }}"
+		src="{{ FileHelper::storageAsset('product_types/mockups/bgr/grey.png') }}"
 	>
 
 	<img
 		class="clothing-image fill-container"
-		src="{{ public_asset($clothing) }}"
+		src="{{ FileHelper::storageAsset($clothing) }}"
 	>
 
 	<div
@@ -113,7 +113,7 @@
 	@if ($details)
 		<img
 			class="clothing-overlay fill-container"
-			src="{{ public_asset($details) }}"
+			src="{{ FileHelper::storageAsset($details) }}"
 		>
 	@endif
 

@@ -1,5 +1,13 @@
 @props(['product', 'badge' => null])
 
+@php
+	if (!$badge && $product->isPopular()) {
+	    $badge = 'Bestseller';
+	} elseif (!$badge && $product->isNew()) {
+	    $badge = 'Novità';
+	}
+@endphp
+
 @pushOnce('styles')
 	<style>
 		.product-card-img-wrapper {
@@ -8,10 +16,10 @@
 	</style>
 @endpushOnce
 
-<article class="product-card group min-w-0 text-slate-950 dark:text-stone-100">
+<article class="product-card group min-w-0">
 	{{-- Product image --}}
 	<div class="@container">
-		<div class="product-card-img-wrapper aspect-4/5 relative overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
+		<div class="product-card-img-wrapper aspect-4/5 bg-surface-400 light relative overflow-hidden rounded-xl">
 			<a
 				href="{{ $product->url() }}"
 				class="block size-full"
@@ -27,7 +35,7 @@
 			{{-- Badge --}}
 			@if ($badge)
 				<span
-					class="pointer-events-none absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-950"
+					class="text-neutral-heading pointer-events-none absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider"
 				>
 					{{ $badge }}
 				</span>
@@ -46,7 +54,7 @@
 	{{-- Product details --}}
 	<div class="flex items-start justify-between gap-4 pt-4">
 		<div class="min-w-0">
-			<h3 class="font-semibold text-slate-950 dark:text-stone-100">
+			<h3 class="text-neutral-heading font-semibold">
 				<a
 					href="{{ $product->url() }}"
 					class="transition-colors hover:text-orange-600"
@@ -55,11 +63,11 @@
 				</a>
 			</h3>
 
-			<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+			<p class="mt-1 text-sm">
 				{{ $product->type->name }}
 			</p>
 
-			<p class="mt-1 text-xs text-slate-400 dark:text-slate-500">
+			<p class="mt-1 text-xs dark:text-slate-500">
 				by
 				<a
 					href="{{ $product->seller->url() }}"
@@ -70,7 +78,7 @@
 			</p>
 		</div>
 
-		<p class="shrink-0 whitespace-nowrap font-semibold text-slate-950 dark:text-stone-100">
+		<p class="dark:text-neutral-heading text-neutral-heading shrink-0 whitespace-nowrap font-semibold">
 			{{ price($product->price()->price) }}
 		</p>
 	</div>

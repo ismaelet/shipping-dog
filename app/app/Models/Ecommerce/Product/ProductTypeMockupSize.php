@@ -7,75 +7,75 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductTypeMockupSize extends Model {
 
-	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'items_mockups';
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'items_mockups';
 
-	/**
-	 * The attributes that are mass assignable.
-	 * 
-	 * @var array<int, string>
-	 */
-	protected $fillable = [
-		'type_id',
-		'position_id',
-		'pos_x_min',
-		'pos_x_def',
-		'pos_y_min',
-		'pos_y_def',
-		'siz_x_max',
-		'siz_x_def',
-		'siz_y_max'
-	];
+    /**
+     * The attributes that are mass assignable.
+     * 
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'type_id',
+        'position_id',
+        'pos_x_min',
+        'pos_x_def',
+        'pos_y_min',
+        'pos_y_def',
+        'siz_x_max',
+        'siz_x_def',
+        'siz_y_max'
+    ];
 
-	/**
-	 * Get the type of the mockup
-	 */
-	public function type(): BelongsTo {
-		return $this->belongsTo(ProductType::class, 'type_id', 'id');
-	}
+    /**
+     * Get the type of the mockup
+     */
+    public function type(): BelongsTo {
+        return $this->belongsTo(ProductType::class, 'type_id', 'id');
+    }
 
-	public function position(): BelongsTo {
-		return $this->belongsTo(ProductPosition::class, 'position_id', 'id');
-	}
+    public function position(): BelongsTo {
+        return $this->belongsTo(ProductPosition::class, 'position_id', 'id');
+    }
 
 
-	/**
-	 * Get mockup by type ID
-	 */
-	public static function firstByTypeId(int $type_id, ?int $position_id = null): ?self {
-		if ($position_id) {
-			return self::where('type_id', $type_id)->where('position_id', $position_id)->first();
-		} else {
-			return self::where('type_id', $type_id)->orderBy('position_id')->first();
-		}
+    /**
+     * Get mockup by type ID
+     */
+    public static function firstByTypeId(int $type_id, ?int $position_id = null): ?self {
+        if ($position_id) {
+            return self::where('type_id', $type_id)->where('position_id', $position_id)->first();
+        } else {
+            return self::where('type_id', $type_id)->orderBy('position_id')->first();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Get the clothing image path
-	 */
-	public function clothingImage(?int $color_id = null, ?int $position_id = null): string {
-		$color_id = $color_id ?: $this->type->colorCollection()->first()->id;
-		$position_id = $position_id ?: 1;
-		$color = ProductColor::find($color_id);
-		$position = ProductPosition::find($position_id);
-		$imageSlug = $color->tag . '-' . $position->basicPositionId();
+    /**
+     * Get the clothing image path
+     */
+    public function clothingImage(?int $color_id = null, ?int $position_id = null): string {
+        $color_id = $color_id ?: $this->type->colorCollection()->first()->id;
+        $position_id = $position_id ?: 1;
+        $color = ProductColor::find($color_id);
+        $position = ProductPosition::find($position_id);
+        $imageSlug = $color->tag . '-' . $position->basicPositionId();
 
-		return '/product_types/mockups/' . $this->type->tag . '/' . $imageSlug . '.webp';
-	}
+        return '/product_types/mockups/' . $this->type->tag . '/' . $imageSlug . '.webp';
+    }
 
-	/**
-	 * Get the overlay image path
-	 */
-	public function overlayImage(): ?string {
-		$file = str_replace('.', '-det.', $this->clothingImage());
-		$serverFile = public_storage($file);
+    /**
+     * Get the overlay image path
+     */
+    public function overlayImage(): ?string {
+        $file = str_replace('.', '-det.', $this->clothingImage());
+        $serverFile = FileHelper::storagePath($file);
 
-		return file_exists($serverFile) ? $file : null;
-	}
+        return file_exists($serverFile) ? $file : null;
+    }
 }

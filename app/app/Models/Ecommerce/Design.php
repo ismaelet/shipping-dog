@@ -2,6 +2,7 @@
 
 namespace App\Models\Ecommerce;
 
+use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Design\CustomerPhoto;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Design\DesignTag;
@@ -131,11 +132,11 @@ class Design extends Model {
     public function image(int $size = 400): string {
         $file = $size == 400 ? 'designs/previews/' . $this->id . '_m.webp' : 'designs/previews/' . $this->id . '.webp';
 
-        if (!file_exists(public_storage($file))) {
+        if (!FileHelper::exists($file)) {
             des_img_gen($this->id);
         }
 
-        if (file_exists(public_storage($file))) {
+        if (FileHelper::exists($file)) {
             return storage_asset($file);
         }
 
@@ -144,15 +145,15 @@ class Design extends Model {
 
     public function originalImage(): ?string {
 
-        if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '.ai'))) {
+        if (FileHelper::exists($file = 'designs_vector/' . $this->id . '.ai')) {
             return storage_asset($file);
         }
 
-        if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '.pdf'))) {
+        if (FileHelper::exists($file = 'designs_vector/' . $this->id . '.pdf')) {
             return storage_asset($file);
         }
 
-        if (file_exists(public_storage($file = 'designs_originals/' . $this->id . '.png'))) {
+        if (FileHelper::exists($file = 'designs_originals/' . $this->id . '.png')) {
             return storage_asset($file);
         }
 
@@ -161,15 +162,15 @@ class Design extends Model {
 
     public function originalDarkImage(): ?string {
 
-        if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '_dark.ai'))) {
+        if (FileHelper::exists($file = 'designs_vector/' . $this->id . '_dark.ai')) {
             return storage_asset($file);
         }
 
-        if (file_exists(public_storage($file = 'designs_vector/' . $this->id . '_dark.pdf'))) {
+        if (FileHelper::exists($file = 'designs_vector/' . $this->id . '_dark.pdf')) {
             return storage_asset($file);
         }
 
-        if (file_exists(public_storage($file = 'designs_originals/' . $this->id . '_dark.png'))) {
+        if (FileHelper::exists($file = 'designs_originals/' . $this->id . '_dark.png')) {
             return storage_asset($file);
         }
 

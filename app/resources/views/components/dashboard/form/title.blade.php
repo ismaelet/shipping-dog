@@ -20,7 +20,7 @@
 			class="hover:text-neutral-heading aspect-square w-10 rounded border transition-colors"
 			href="{{ $backRoute }}"
 		>
-			{!! embed_icon('previous', ['fill-none', 'h-1/3']) !!}
+			<x-icon-previous class="h-1/3 fill-none" />
 		</a>
 	@endif
 

@@ -3,10 +3,10 @@
 	aria-label="Apri il tuo shop"
 	class="py-20 sm:px-8"
 >
-	<div class="rounded-4xl mx-auto grid max-w-7xl overflow-hidden bg-slate-950 text-white lg:grid-cols-2">
+	<div class="rounded-4xl dark mx-auto grid max-w-7xl overflow-hidden bg-slate-950 text-white lg:grid-cols-2">
 		{{-- Content --}}
 		<div class="flex flex-col justify-center p-8 sm:p-14 lg:p-20">
-			<p class="text-xs font-bold uppercase tracking-[0.2em] text-orange-400">
+			<p class="text-primary-300 text-xs font-bold uppercase tracking-[0.2em]">
 				Open call
 			</p>
 
@@ -15,7 +15,7 @@
 				La tua vetrina.
 			</h2>
 
-			<p class="mt-6 max-w-md leading-7 text-slate-400">
+			<p class="mt-6 max-w-md leading-7">
 				Trasforma le tue idee in prodotti e raggiungi una community
 				che cerca qualcosa di autentico.
 			</p>

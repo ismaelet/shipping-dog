@@ -43,7 +43,7 @@
 						href="{{ route('seller-dashboard.portfolio.add') }}"
 						class="button--auto-width"
 					>
-						{!! embed_icon('upload') !!}
+						<x-icon-upload />
 						Carica una grafica
 					</x-button>
 
@@ -53,7 +53,7 @@
 							class="button--auto-width"
 							variant="secondary"
 						>
-							{!! embed_icon('upload') !!}
+							<x-icon-upload />
 							Carica un prodotto
 						</x-button>
 					@endif
@@ -70,7 +70,7 @@
 							<div
 								id="sort-icon"
 								class="icon inlb"
-							>{!! embed_icon('move') !!}</div>
+							><x-icon-move /></div>
 
 							<p
 								id="sort-txt"

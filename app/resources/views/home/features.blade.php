@@ -18,11 +18,11 @@
 <section class="features mx-auto grid grid-cols-1 gap-3 py-8 md:grid-cols-3">
 	@foreach ($features as $key => $feature)
 		<div
-			class="feature flex items-center gap-4 rounded-2xl border border-slate-950/10 bg-white p-5 dark:border-white/10 dark:bg-slate-800"
+			class="feature text-neutral-heading flex items-center gap-4 rounded-2xl border border-slate-950/10 bg-white p-5 dark:border-white/10 dark:bg-slate-800"
 		>
 			{{-- Icon --}}
 			<div
-				class="grid size-12 shrink-0 place-items-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-500/15 dark:text-orange-400 [&_svg]:size-6"
+				class="dark:text-primary-300 grid size-12 shrink-0 place-items-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-500/15 [&_svg]:size-6"
 			>
 				<x-dynamic-component :component="'icon-' . $feature['icon']" />
 			</div>
@@ -39,7 +39,7 @@
 					</span>
 				</div>
 
-				<p class="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">
+				<p class="mt-1 text-sm leading-6">
 					{{ $feature['description'] }}
 				</p>
 			</div>

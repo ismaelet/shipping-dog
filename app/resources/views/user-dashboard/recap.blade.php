@@ -31,7 +31,7 @@
 				<article class="border-neutral-border bg-surface-400 rounded-xl border p-5">
 					<div class="flex items-center justify-between">
 						<span class="{{ $stat['iconClass'] }} grid size-10 place-items-center rounded-full p-2.5">
-							{!! embed_icon($stat['icon']) !!}
+							<x-dynamic-component :component="'icon-' . $stat['icon']" />
 						</span>
 						<span class="font-heading text-neutral-heading text-2xl font-bold leading-none">
 							{{ str_pad((string) $stat['value'], 2, '0', STR_PAD_LEFT) }}

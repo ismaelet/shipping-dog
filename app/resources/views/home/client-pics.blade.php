@@ -9,11 +9,11 @@
 		La community
 	</p>
 
-	<h2 class="mx-auto mt-4 max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
+	<h2 class="text-neutral-heading t mx-auto mt-4 max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
 		Fatto per essere vissuto.
 	</h2>
 
-	<p class="max-w-120 mx-auto mt-5 leading-7 text-slate-500 dark:text-slate-400">
+	<p class="max-w-120 mx-auto mt-5 leading-7">
 		Tagga
 		<a
 			href="{{ config('custom.contacts.instagram.url') }}"

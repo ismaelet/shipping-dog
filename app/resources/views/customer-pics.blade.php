@@ -13,7 +13,7 @@
 	>
 @endpushOnce
 
-<x-layouts.legacy-main>
+<x-layouts.main>
 
 	<section id="client-pics">
 		<div class="header">
@@ -67,4 +67,4 @@
 	</section>
 
 
-</x-layouts.legacy-main>
+</x-layouts.main>

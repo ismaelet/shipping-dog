@@ -28,7 +28,7 @@
 
 		@if ($product->status)
 			<x-button class="edit-btn switch-btn item-panel-open">
-				{!! embed_icon('settings') !!}
+				<x-icon-settings />
 				Modifica
 			</x-button>
 
@@ -39,7 +39,7 @@
 				class="off-btn switch-btn"
 				variant="secondary"
 			>
-				{!! embed_icon('close') !!}
+				<x-icon-close />
 				Disattiva
 			</x-button>
 		@else
@@ -50,7 +50,7 @@
 				class="on-btn switch-btn"
 				variant="secondary"
 			>
-				{!! embed_icon('add') !!}
+				<x-icon-add />
 				Attiva
 			</x-button>
 		@endif

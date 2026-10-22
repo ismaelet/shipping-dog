@@ -13,7 +13,7 @@
 		color="danger"
 		onclick="return confirm('Sei sicuro di voler eliminare definitivamente la grafica e tutti i prodotti associati?')"
 	>
-		{!! embed_icon('delete') !!}
+		<x-icon-delete />
 		Elimina la grafica
 	</x-button>
 </form>

@@ -1,4 +1,4 @@
-<div class="columns-15rem grid gap-8">
+<div class="grid columns-[15rem] gap-8">
 	@foreach ($images as $colorName => $image)
 		<div class="">
 			<h4>{{ $colorName }}</h4>

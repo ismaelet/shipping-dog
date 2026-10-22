@@ -17,7 +17,7 @@
 			{{-- Icon --}}
 			@isset($icon)
 				<span class="h-4 w-4">
-					{!! embed_icon($icon) !!}
+					<x-dynamic-component :component="'icon-' . $icon" />
 				</span>
 			@endisset
 		</div>

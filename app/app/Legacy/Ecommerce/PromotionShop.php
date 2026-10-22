@@ -2,6 +2,7 @@
 
 namespace App\Legacy\Ecommerce;
 
+use Illuminate\Support\Facades\DB;
 use LegacyDB;
 use \Legacy\System\Traits\DynamicProperties;
 use Legacy\Classes\ViewManager\Ecommerce\PromotionShopTemplate;
@@ -13,34 +14,45 @@ use Legacy\Classes\ViewManager\Ecommerce\PromotionShopTemplate;
  */
 class PromotionShop {
 
-	use DynamicProperties;
+    use DynamicProperties;
 
-	private const LIMIT = 40;
-	private const ALLOWED_SORT_TYPES = ['new', 'price'];
-	private const DEFAULT_SORT_TYPES = 'new';
+    private const LIMIT = 40;
+    private const ALLOWED_SORT_TYPES = ['new', 'price'];
+    private const DEFAULT_SORT_TYPES = 'new';
 
-	function __construct() {
-	}
+    function __construct() {
+    }
 
-	private function getPromotions() {
-		return rows_to_objects(DB::select(Promotion::INDEX . ' FROM ' . Promotion::TABLE . ' LIMIT ?', [self::LIMIT]), Promotion::class);
-	}
+    private function getPromotions() {
+        $rows = DB::select(
+            Promotion::INDEX . ' FROM ' . Promotion::TABLE . ' LIMIT ?',
+            [self::LIMIT]
+        );
 
-	private function getPromotionCount() {
-		return DB::count(Promotion::TABLE);
-	}
+        $promotions = [];
 
-	private function getSortBy() {
-		$sortBy = $_GET['sort'] ?? self::DEFAULT_SORT_TYPES;
-		$sortBy = in_array($sortBy, self::ALLOWED_SORT_TYPES) ? $sortBy : self::DEFAULT_SORT_TYPES;
+        while ($row = $rows->fetch_assoc()) {
+            $promotions[] = new Promotion($row[Promotion::INDEX]);
+        }
 
-		return $sortBy;
-	}
+        return $promotions;
+    }
 
-	/**
-	 * Render methods
-	 */
-	public function render() {
-		return (new PromotionShopTemplate())->render($this);
-	}
+    private function getPromotionCount() {
+        return DB::count(Promotion::TABLE);
+    }
+
+    private function getSortBy() {
+        $sortBy = $_GET['sort'] ?? self::DEFAULT_SORT_TYPES;
+        $sortBy = in_array($sortBy, self::ALLOWED_SORT_TYPES) ? $sortBy : self::DEFAULT_SORT_TYPES;
+
+        return $sortBy;
+    }
+
+    /**
+     * Render methods
+     */
+    public function render() {
+        return (new PromotionShopTemplate())->render($this);
+    }
 }

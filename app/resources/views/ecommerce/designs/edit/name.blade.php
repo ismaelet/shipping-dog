@@ -44,7 +44,7 @@
 		>
 
 		<span class="js-change-name-confirmation text-primary pointer-events-none w-6 opacity-0 transition-opacity">
-			{!! embed_icon('correct') !!}
+			<x-icon-correct />
 		</span>
 	</div>
 </form>

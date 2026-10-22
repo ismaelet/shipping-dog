@@ -70,7 +70,7 @@
 	</script>
 @endpushOnce
 
-<x-layouts.legacy-main
+<x-layouts.main
 	:title="$title"
 	:description="$description"
 	:thumbnail="$thumbnail"
@@ -426,4 +426,4 @@
 			</div>
 		</div>
 	@endif
-</x-layouts.legacy-main>
+</x-layouts.main>

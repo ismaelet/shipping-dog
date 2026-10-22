@@ -19,7 +19,7 @@
 		<x-label class="field-label text-sm">Modello</x-label>
 	</div>
 
-	<div class="columns-10rem grid gap-2">
+	<div class="grid columns-[10rem] gap-2">
 
 		@foreach ($genders as $key => $gender)
 			@php

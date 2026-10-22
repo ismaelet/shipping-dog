@@ -27,7 +27,7 @@
 
 				@if (!empty($link['new']))
 					<span class="absolute right-0 top-1/2 -translate-y-full translate-x-[70%] text-red-500 [&_svg]:size-[1.2rem]">
-						{!! embed_icon('discount') !!}
+						<x-icon-discount />
 					</span>
 				@endif
 			</a>
