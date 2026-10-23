@@ -7,7 +7,7 @@
 >
 	<div
 		id="tag-block"
-		class="main-wrap pad-t-3 text-center"
+		class="main-wrap pt-12 text-center"
 	>
 
 		<?php
@@ -18,7 +18,7 @@
 			?>
 
 		<a href="{{ route('search', ['search' => $tag]) }}">
-			<p class="tag inlb"><?= $tag ?></p>
+			<p class="mx-2 my-1 inline-block cursor-pointer rounded-[3px] bg-surface-500 px-4 py-2.5 font-medium text-neutral-heading transition-colors hover:bg-primary-400"><?= $tag ?></p>
 		</a>
 
 		<?php } ?>

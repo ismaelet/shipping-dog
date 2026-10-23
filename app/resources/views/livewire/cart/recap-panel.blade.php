@@ -52,7 +52,6 @@
 					type="submit"
 					id="checkout"
 					class="btn button--full-width"
-					onclick="$('#submit').click();"
 				>Prosegui</x-button>
 				<x-button
 					class="btn btn--secondary button--full-width"

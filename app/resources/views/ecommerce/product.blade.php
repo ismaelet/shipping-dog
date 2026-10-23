@@ -1,14 +1,8 @@
 @pushOnce('styles')
-	<link
-		rel="stylesheet"
-		href="{{ asset('css/legacy/product.css') }}"
-	>
 	<style>
-		main {
-			--breakout-width: 1400px;
-		}
+		main { --breakout-width: 1400px; }
 	</style>
-@endpushOnce
+@endPushOnce
 
 <x-layouts.main
 	:$title

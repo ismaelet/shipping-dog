@@ -7,10 +7,12 @@
 @endphp
 
 @pushOnce('styles')
-	<link
-		rel="stylesheet"
-		href="{{ asset('css/legacy/product-measure-table.css') }}"
-	>
+	<style>
+		.measure-table { max-height: 100vh; overflow-y: auto; }
+		.size-table-grid { display: grid; grid-template-columns: 0.5fr repeat(2, minmax(0, 1fr)); text-align: center; }
+		.size-table-grid > * { padding: 0.5rem 0.3rem; border: 1px solid #ebebeb; border-width: 0 0 1px; font-size: 0.8rem; }
+		.size-table-tag { text-align: left; }
+	</style>
 @endpushOnce
 
 <div

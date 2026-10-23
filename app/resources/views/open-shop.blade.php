@@ -4,7 +4,7 @@
 >
 
 	<x-slot name="body">
-		<p class="txt-jus pad-t-1">Iniziare a vendere le tue grafiche su <span class="text-strong">Shipping Dog</span> è facile,
+		<p class="pt-4 text-justify">Iniziare a vendere le tue grafiche su <span class="text-strong">Shipping Dog</span> è facile,
 			veloce,
 			completamente gratuito e non è necessario avere partita IVA o nessun altro requisito.<br><br>Compila i campi qui
 			sotto

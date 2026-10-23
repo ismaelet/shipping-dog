@@ -2,6 +2,7 @@
 	<form
 		id="content"
 		method="POST"
+		class="grid grid-cols-1 gap-12 min-[1025px]:grid-cols-[3fr_2fr]"
 	>
 		@csrf
 

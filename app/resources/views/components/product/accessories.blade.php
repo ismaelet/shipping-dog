@@ -13,6 +13,11 @@
 @endphp
 
 <div class="mt-12">
+	@pushOnce('styles')
+		<style>
+			.desc_stitle { padding-bottom: 1rem; font-size: 1rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+		</style>
+	@endPushOnce
 	<h3 class="desc_stitle">{{ $typeTag == 'patch' ? 'Cappellino per la toppa' : 'Toppe ricambiabili' }}</h3>
 	<p>
 		{{ $typeTag == 'patch' ? 'La toppa è da applicare su uno dei nostri cappellini. Se non ne hai già uno, puoi acquistare quello qui sotto, o qualsiasi altro cappellino presente sul nostro shop per usare la toppa' : 'Il cappellino arriverà già con la toppa con il design desiderato, ma puoi acquistare altre toppe con la stessa grafica, ma di un colore diverso, oppure con una grafica diversa, per cambiare il look del tuo cappellino quando vuoi.' }}

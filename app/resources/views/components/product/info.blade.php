@@ -4,10 +4,10 @@
 @endphp
 
 @pushOnce('styles')
-	<link
-		rel="stylesheet"
-		href="{{ asset('css/legacy/product-info.css') }}"
-	>
+	<style>
+		.desc_stitle { padding-bottom: 1rem; font-size: 1rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+		.desc_txt { max-width: 550px; }
+	</style>
 @endpushOnce
 
 @if ($description || $details)

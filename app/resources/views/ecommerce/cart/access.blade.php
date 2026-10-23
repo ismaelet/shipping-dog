@@ -260,12 +260,6 @@
 			text-align: center;
 		}
 
-		@media (max-width: 1024px) {
-			#content {
-				grid-template-columns: 1fr;
-			}
-		}
-
 		@media (max-width: 480px) {
 			#flow-bar {
 				margin-inline: 1rem;
