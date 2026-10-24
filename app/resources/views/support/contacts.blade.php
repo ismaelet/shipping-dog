@@ -1,12 +1,38 @@
 @pushOnce('styles')
 	<style>
-		#body { padding-top: 8rem; padding-bottom: 7rem; }
-		#grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem; align-items: start; }
-		.data-txt { margin-bottom: 10px; }
-		.form-label { padding-top: 1rem; transform-origin: left; transform: translateY(2rem) scale(1); line-height: 1rem; pointer-events: none; z-index: 1; transition: transform 0.2s, color 0.2s; }
+		#body {
+			padding-top: 8rem;
+			padding-bottom: 7rem;
+		}
+
+		#grid {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 3rem;
+			align-items: start;
+		}
+
+		.data-txt {
+			margin-bottom: 10px;
+		}
+
+		.form-label {
+			padding-top: 1rem;
+			transform-origin: left;
+			transform: translateY(2rem) scale(1);
+			line-height: 1rem;
+			pointer-events: none;
+			z-index: 1;
+			transition: transform 0.2s, color 0.2s;
+		}
+
 		.contact-form-field:has(:focus) .form-label,
 		.contact-form-field:has(input:not(:placeholder-shown)) .form-label,
-		.contact-form-field:has(textarea:not(:placeholder-shown)) .form-label { color: var(--color-primary-400); transform: translateY(0.5rem) scale(0.9); }
+		.contact-form-field:has(textarea:not(:placeholder-shown)) .form-label {
+			color: var(--color-primary-400);
+			transform: translateY(0.5rem) scale(0.9);
+		}
+
 		.form-inp,
 		.form-textarea {
 			display: inline-block;
@@ -24,20 +50,51 @@
 			transition: border-color 0.2s;
 			line-height: 3rem;
 		}
-		.form-textarea { height: 11rem; padding-top: 1rem; resize: none; }
+
+		.form-textarea {
+			height: 11rem;
+			padding-top: 1rem;
+			resize: none;
+		}
+
 		.form-inp:-webkit-autofill,
 		.form-textarea:-webkit-autofill {
 			-webkit-box-shadow: 0 0 0 1000vw var(--color-background-400) inset;
 			-webkit-text-fill-color: var(--color-neutral-heading);
 		}
+
 		.contact-form-field:has(:focus) .form-inp,
-		.contact-form-field:has(:focus) .form-textarea { border-color: var(--color-primary); }
+		.contact-form-field:has(:focus) .form-textarea {
+			border-color: var(--color-primary);
+		}
+
 		@media (max-width: 1024px) {
-		  #body { padding: 0; }
-		  #grid { display: flex; flex-direction: column; gap: 0; }
-		  .grid-cell { width: 600px; max-width: 100%; margin: 0 auto; }
-		  #form { order: 1; padding: 4rem 0; border-bottom: 2px solid #999; }
-		  #data { order: 2; padding: 4rem 0; }
+			#body {
+				padding: 0;
+			}
+
+			#grid {
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			.grid-cell {
+				width: 600px;
+				max-width: 100%;
+				margin: 0 auto;
+			}
+
+			#form {
+				order: 1;
+				padding: 4rem 0;
+				border-bottom: 2px solid #999;
+			}
+
+			#data {
+				order: 2;
+				padding: 4rem 0;
+			}
 		}
 	</style>
 @endpushOnce
@@ -75,7 +132,7 @@
 				>
 
 					<div class="">
-						<x-typography.section-heading>Shipping Dog</x-typography.section-heading>
+						<x-heading variant="section">Shipping Dog</x-heading>
 						<p class="data-txt">Andrea Trentini</p>
 					</div>
 
@@ -126,7 +183,10 @@
 					>
 						@csrf
 
-						<x-typography.section-heading class="text-center">Scrivici</x-typography.section-heading>
+						<x-heading
+							variant="section"
+							class="text-center"
+						>Scrivici</x-heading>
 
 						@if (session('success'))
 							<x-alerts.success>{{ session('success') }}</x-alerts.success>

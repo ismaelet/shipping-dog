@@ -3,23 +3,19 @@
 @push('styles')
 	<style>
 		main {
-			--content-width: 60ch;
+			--spacing-content: 60ch;
 
 			&:has(.form[data-size="lg"]) {
-				--content-width: 80ch;
+				--spacing-content: 80ch;
 			}
 
 			&:has(.form[data-size="xl"]) {
-				--content-width: 100ch;
+				--spacing-content: 100ch;
 			}
 		}
 
-		.form-title {
-			font-size: var(--text-750)
-		}
-
 		.form-body {
-			border-block: var(--border);
+			border-block: 1px solid var(--color-neutral-border);
 		}
 	</style>
 @endpush
@@ -35,7 +31,10 @@
 
 	@csrf
 
-	<x-typography.section-heading class="form-title text-center">{{ $title }}</x-typography.section-heading>
+	<x-heading
+		variant="section"
+		class="form-title text-center"
+	>{{ $title }}</x-heading>
 
 	<div class="form-body grid gap-4 py-4">
 		{{ $body }}

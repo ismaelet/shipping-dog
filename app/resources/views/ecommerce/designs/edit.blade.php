@@ -59,7 +59,7 @@
 		{{-- Product list --}}
 		<section class="grid grid-cols-1 gap-8">
 			<div class="grid gap-2 text-center">
-				<x-typography.section-heading>Prodotti collegati</x-typography.section-heading>
+				<x-heading variant="section">Prodotti collegati</x-heading>
 
 				<x-typography.section-subheading>Qui puoi modificare il colore dei capi e la dimensione di stampa nei prodotti con
 					questa grafica.</x-typography.section-subheading>

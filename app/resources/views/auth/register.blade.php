@@ -55,12 +55,18 @@
 			/>
 		</x-form.field>
 
-		<x-checkbox
-			name="privacy"
-			text="Ho letto e acconsento al <a class='text-neutral-heading font-bold' href='{{ route('support.privacy-policy') }}'>trattamento
-                dei dati</a>"
-			required
-		/>
+		<div class="flex flex-wrap items-center gap-1">
+			<x-checkbox
+				name="privacy"
+				text="Ho letto e acconsento al"
+				required
+			/>
+			<a
+				class='text-link'
+				href='{{ route('support.privacy-policy') }}'
+			>trattamento
+				dei dati</a>
+		</div>
 	</x-slot>
 
 	<x-slot name="formFooter">
@@ -80,6 +86,14 @@
 				<x-icon-google />
 				Registrati con Google
 			</x-button>
+
+			<a
+				href="{{ route('login') }}"
+				variant="secondary"
+				class="hover:text-neutral-heading text-center transition-colors"
+			>
+				Hai già un account? Accedi
+			</a>
 		</div>
 	</x-slot>
 </x-layouts.auth>

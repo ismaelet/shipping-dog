@@ -209,8 +209,9 @@ body {
       transition: none !important;
     }
 
-    &:focus:-webkit-autofill {
-      border: var(--spacing-border) solid var(--color-primary-400) !important;
+    &:focus-visible:-webkit-autofill {
+      outline: 2px solid var(--color-primary-500) !important;
+      outline-offset: 2px;
     }
 
     /* Has a warning */

@@ -11,7 +11,7 @@
 	<div class="border-neutral-border grid justify-items-center gap-4 border-b pb-6 text-center">
 		<div class="">
 			<x-eyebrow>Nuovo design</x-eyebrow>
-			<x-heading variant="section">Carica una nuova grafica</x-heading>
+			<x-heading variant="section-small">Carica una nuova grafica</x-heading>
 		</div>
 		<p class="">Aggiungi un file pronto per la stampa al tuo portfolio.</p>
 	</div>

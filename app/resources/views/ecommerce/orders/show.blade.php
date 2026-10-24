@@ -24,9 +24,9 @@
 <x-layouts.main>
 
 	<div class="bg-surface-500 full-width justify-items-center py-20 text-center">
-		<x-typography.section-heading>
+		<x-heading variant="section">
 			Ordine <span class="text-primary">{{ $order->idCode() }}</span>
-		</x-typography.section-heading>
+		</x-heading>
 	</div>
 
 	<div class="mb-20 mt-12 grid gap-12">

@@ -46,7 +46,10 @@
 			@csrf
 
 			<div class="grid w-full max-w-xl grid-cols-1 gap-12 px-8 py-16">
-				<x-typography.section-heading class="text-center">{{ $title }}</x-typography.section-heading>
+				<x-heading
+					variant="section"
+					class="text-center"
+				>{{ $title }}</x-heading>
 
 				<div class="grid gap-4">
 					{{ $formBody }}

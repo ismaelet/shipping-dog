@@ -24,6 +24,6 @@
 		</a>
 	@endif
 
-	<x-typography.section-heading>{!! $title !!}</x-typography.section-heading>
+	<x-heading variant="section">{!! $title !!}</x-heading>
 
 </div>

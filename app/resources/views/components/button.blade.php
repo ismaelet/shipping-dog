@@ -154,10 +154,15 @@
 
 			/* If contains icons */
 			:where(&:has(svg)) {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				gap: 0.5em;
+				line-height: 0.7;
+
 				svg {
-					display: inline-block;
-					margin-left: 0.5em;
 					height: 1em;
+					margin-block: -0.5em;
 				}
 			}
 

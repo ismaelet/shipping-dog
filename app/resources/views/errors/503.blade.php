@@ -1270,7 +1270,10 @@
 		</svg>
 
 		<div class="mt-8 grid justify-items-center gap-4">
-			<x-typography.section-heading class="text-neutral-heading">Manutenzione</x-typography.section-heading>
+			<x-heading
+				variant="section"
+				class="text-neutral-heading"
+			>Manutenzione</x-heading>
 
 			<x-typography.main-subheading class="text-neutral-heading text-lg">Stiamo aggiornando il sito web. Torneremo
 				operativi al più presto</x-typography.main-subheading>

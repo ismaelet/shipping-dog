@@ -21,7 +21,7 @@
 		</div>
 
 		<div class="grid gap-6">
-			<x-typography.section-heading>Il tuo carrello è vuoto</x-typography.section-heading>
+			<x-heading variant="section">Il tuo carrello è vuoto</x-heading>
 
 			<p class="text--big">Puoi cercare dei prodotti da acquistare qui</p>
 		</div>
