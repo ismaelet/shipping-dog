@@ -7,14 +7,16 @@
 	},
 	"devDependencies": {
 		"@tailwindcss/forms": "^0.5.10",
-		"@tailwindcss/typography": "^0.5.16",
+		"@tailwindcss/typography": "^0.5.4",
 		"@types/alpinejs": "^3.17.0",
 		"@types/sortablejs": "^1.15.9",
 		"autoprefixer": "^10.4.21",
 		"axios": "^1.8.4",
 		"concurrently": "^9.1.2",
 		"laravel-vite-plugin": "^1.2.0",
-		"prettier": "^3.7.4",
+		"prettier": "^3.9.10",
+		"prettier-plugin-blade": "^3.3.3",
+		"prettier-plugin-tailwindcss": "^0.8.1",
 		"vite": "^6.2.3"
 	},
 	"dependencies": {

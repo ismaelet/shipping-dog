@@ -1,64 +1,54 @@
 @push('styles')
-	<style>
-		.page-content {
-			.main-heading {
-				font-size: min(4rem, 7vw);
-			}
+    <style>
+        .page-content {
+            .main-heading {
+                font-size: min(4rem, 7vw);
+            }
 
-			.button {
-				min-width: min(100%, 18rem);
-			}
+            .button {
+                min-width: min(100%, 18rem);
+            }
 
-			@media (max-width: 480px) {
-				.welcome-section {
-					display: none;
-				}
-			}
+            @media (max-width: 480px) {
+                .welcome-section {
+                    display: none;
+                }
+            }
 
-			@media (min-width: 1024px) {
-				grid-template-columns: minmax(0, 3fr) minmax(20rem, 2fr);
-			}
-		}
-	</style>
+            @media (min-width: 1024px) {
+                grid-template-columns: minmax(0, 3fr) minmax(20rem, 2fr);
+            }
+        }
+    </style>
 @endpush
 
 <x-layouts.main>
-	<div class="page-content fill-width grid">
-		<!-- Welcome panel -->
-		<section class="welcome-section stack-content dark relative grid items-center justify-items-center">
-			<div
-				class="absolute inset-0 bg-cover bg-center"
-				style="background-image: url({{ Vite::image($welcomeImage) }}"
-			>
-			</div>
+    <div class="page-content fill-width grid">
+        <!-- Welcome panel -->
+        <section class="welcome-section stack-content bg-surface-400 dark relative grid items-center justify-items-center">
+            <div
+                class="absolute inset-0 bg-cover bg-center opacity-90"
+                style="background-image: url({{ Vite::image($welcomeImage) }}"
+            ></div>
 
-			<div class="relative grid max-w-2xl gap-8 px-8 py-16">
-				<x-typography.main-heading>{!! $welcomeTitle !!}</x-typography.main-heading>
-				<x-typography.paragraph class="text-neutral-heading">{!! $welcomeDescription !!}</x-typography.paragraph>
-			</div>
-		</section>
+            <div class="relative grid max-w-2xl gap-8 px-8 py-16">
+                <x-heading variant="main">{!! $welcomeTitle !!}</x-heading>
+                <x-typography.paragraph class="text-neutral-heading">
+                    {!! $welcomeDescription !!}</x-typography.paragraph>
+            </div>
+        </section>
 
-		<!-- Form -->
-		<form
-			class="grid items-center justify-items-center"
-			method="POST"
-		>
-			@csrf
+        <!-- Form -->
+        <form class="grid items-center justify-items-center" method="POST">
+            @csrf
 
-			<div class="grid w-full max-w-xl grid-cols-1 gap-12 px-8 py-16">
-				<x-heading
-					variant="section"
-					class="text-center"
-				>{{ $title }}</x-heading>
+            <div class="grid w-full max-w-xl grid-cols-1 gap-12 px-8 py-16">
+                <x-heading variant="section" class="text-center">{{ $title }}</x-heading>
 
-				<div class="grid gap-4">
-					{{ $formBody }}
-				</div>
+                <div class="grid gap-4">{{ $formBody }}</div>
 
-				<div class="grid justify-items-center gap-2">
-					{{ $formFooter }}
-				</div>
-			</div>
-		</form>
-	</div>
+                <div class="grid justify-items-center gap-2">{{ $formFooter }}</div>
+            </div>
+        </form>
+    </div>
 </x-layouts.main>

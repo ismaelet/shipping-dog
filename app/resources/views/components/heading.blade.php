@@ -31,11 +31,14 @@
 			--font-progress: progress(100vw, var(--font-progress-min), var(--font-progress-max));
 			--font-size: calc(var(--font-size-min) + var(--font-progress) * (var(--font-size-max) - var(--font-size-min)));
 			font-family: var(--font-heading);
-			text-box: trim-both cap alphabetic;
 		}
 
 		.heading[data-variant="main"] {
-			font-size: var(--text-4xl);
+			--font-size-max: 4rem;
+			--font-size-min: 3rem;
+			font-size: var(--font-size);
+			font-weight: var(--font-weight-semibold);
+			line-height: 1;
 		}
 
 		.heading[data-variant="section"] {

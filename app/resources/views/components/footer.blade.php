@@ -32,13 +32,13 @@
 	];
 @endphp
 
-<footer class="bg-slate-950 px-5 py-14 text-white">
+<footer class="dark bg-slate-950 px-5 py-14">
 	<div class="mx-auto grid max-w-7xl gap-12 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:px-8">
 		{{-- Brand --}}
 		<div>
 			<a
 				href="{{ route('home') }}"
-				class="inline-block text-2xl font-black tracking-[-0.04em]"
+				class="text-neutral-heading inline-block text-2xl font-black tracking-[-0.04em]"
 				aria-label="Shipping Dog - Home"
 			>
 				SHIPPING<span class="text-orange-500">DOG</span>
@@ -54,7 +54,7 @@
 				@foreach (config('custom.contacts') as $socialMediaTag => $socialMedia)
 					<a
 						href="{{ $socialMedia['url'] }}"
-						class="grid size-10 place-items-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition-colors hover:border-orange-500 hover:bg-orange-500 hover:text-white [&_svg]:size-5"
+						class="text-neutral-heading grid size-10 place-items-center rounded-full border border-white/10 bg-white/5 transition-colors hover:border-orange-500 hover:bg-orange-500 hover:text-white [&_svg]:size-5"
 						aria-label="{{ ucfirst($socialMediaTag) }}"
 						title="{{ ucfirst($socialMediaTag) }}"
 					>
@@ -67,7 +67,7 @@
 		{{-- Footer links --}}
 		@foreach ($footer['columns'] as $column)
 			<div>
-				<h3 class="text-lg font-bold text-white">
+				<h3 class="text-neutral-heading text-lg font-bold">
 					{{ $column['title'] }}
 				</h3>
 
