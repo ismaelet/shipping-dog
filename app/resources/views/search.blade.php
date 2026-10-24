@@ -1,179 +1,159 @@
+@php
+    $tabs = [
+        'all' => ['label' => 'Tutti', 'count' => $designCount + $sellerCount],
+        'designs' => ['label' => 'Design', 'count' => $designCount],
+        'sellers' => ['label' => 'Negozi', 'count' => $sellerCount],
+    ];
+    $sorts = ['relevance' => 'Più rilevanti', 'popular' => 'Più popolari', 'recent' => 'Più recenti'];
+    $featuredSeller =
+        $type === 'all' && $sellers?->first() && mb_strtolower($sellers->first()->name) === mb_strtolower($search)
+            ? $sellers->first()
+            : null;
+    $otherSellers = $featuredSeller ? $sellers->skip(1) : $sellers;
+    $noResults = $isValid && $designCount + $sellerCount === 0;
+@endphp
+
 @pushOnce('styles')
-	<style>
-		#page-header { height: 15rem; }
-		#searcher {
-			display: grid;
-			grid-template-columns: minmax(0, 1fr) min(6rem, 20vw);
-			width: 100%;
-			max-width: 600px;
-			gap: 0.5rem;
-			font-size: min(1.25rem, 5vw);
-		}
-		#srch-inp {
-			--inp-color: #202020;
-			--inp-clr-bgr: #fff;
-			width: 100%;
-			border: none;
-			border-radius: 2rem 0 0 2rem;
-			padding-left: 1em;
-		}
-		#srch-btn {
-			width: 100%;
-			border: none;
-			border-radius: 0 30px 30px 0;
-			background-color: #c92528;
-			cursor: pointer;
-		}
-		#srch-btn .icon { display: block; height: 1.25em; aspect-ratio: 1; }
-		#shops .gallery { grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: 2rem; }
-		#items .gallery { grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 2rem 1rem; }
-		.shop .cover { aspect-ratio: 1.5; border-radius: 0.25rem 0.25rem 0 0; box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 40%); }
-		.shop .icon { width: 3rem; aspect-ratio: 1; border: 2px solid #eee; border-radius: 50%; }
-		.shop .name {
-			width: 100%; align-self: end; padding-inline: 0.5rem;
-			background: rgb(255 255 255 / 60%); color: #202020;
-			font-weight: 500; letter-spacing: 0.05em; line-height: 4; text-align: center;
-		}
-		.item .image { width: 100%; aspect-ratio: 1; border-radius: 0.25rem; object-fit: cover; }
-		.item .cta { transition: border 0.2s, color 0.2s; }
-	</style>
+    <style></style>
 @endpushOnce
 
-<x-layouts.main
-	:$title
-	:$location
->
-	<section
-		id="page-header"
-		class="full-width dark:bg-surface bg-surface-500 py-20"
-	>
+<x-layouts.main :$title :$location>
+    <div class="full-width search-page content-start pb-20">
+        <section class="full-width bg-surface-500 relative py-20 md:py-24">
+            <img
+                src="{{ Vite::image('search-banner.webp') }}"
+                alt="Search Banner"
+                class="fill-width absolute inset-0 h-full w-full object-cover"
+            />
+            <x-search.form :value="$search" class="relative" />
+        </section>
 
-		<form
-			method="GET"
-			id="searcher"
-			class="mx-auto w-full content-center justify-center"
-		>
-			<div
-				id="srch-inp-cell"
-				class=""
-			>
-				<input
-					type="search"
-					class="input"
-					id="srch-inp"
-					name="search"
-					placeholder="Cerca articolo, negozio o tag"
-					maxlength="30"
-				>
-			</div>
+        <div class="full-width pt-8">
+            @if (! $isValid)
+                <div class="mx-auto max-w-xl py-10 text-center">
+                    <h1 class="text-neutral-heading text-xl font-semibold">
+                        {{ $search === '' ? 'Cosa stai cercando?' : 'Ricerca troppo breve' }}
+                    </h1>
+                    <p class="mt-2">
+                        {{ $search === '' ? 'Cerca un design, un negozio o un tag.' : "Inserisci almeno {$minLength} caratteri per avviare la ricerca." }}
+                    </p>
+                </div>
+            @elseif ($noResults)
+                <div class="mx-auto max-w-xl py-10 text-center">
+                    <h1 class="text-neutral-heading text-xl font-semibold">Nessun risultato per "{{ $search }}"</h1>
+                    <p class="mt-2">Prova a utilizzare parole più semplici oppure cerca un altro design o negozio.</p>
+                </div>
+            @else
+                <div class="breakout">
+                    {{-- Results summary --}}
+                    <x-heading variant="article" class="text-neutral-heading text-xl font-semibold md:text-2xl">
+                        {{ $designCount }} design e {{ $sellerCount }} {{ $sellerCount === 1 ? 'negozio' : 'negozi' }} per
+                        "{{ $search }}"
+                    </x-heading>
 
-			<button
-				type="submit"
-				id="srch-btn"
-				class="center-content self-stretch"
-			>
-				<span class="icon txt-wht"><x-icon-search /></span>
-			</button>
-		</form>
-	</section>
+                    {{-- Tabs for filtering results --}}
+                    <div class="mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+                        <nav aria-label="Categorie di risultati">
+                            <ul class="flex flex-wrap gap-2">
+                                @foreach ($tabs as $key => $tab)
+                                    <li>
+                                        <a
+                                            href="{{ route('search', array_filter(['search' => $search, 'type' => $key === 'all' ? null : $key, 'sort' => $sort === 'relevance' ? null : $sort])) }}"
+                                            @class([
+                                                'focus-visible:outline-primary-400 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
+                                                'bg-primary-400 text-white' => $type === $key,
+                                                'bg-surface-400 text-neutral-heading hover:bg-surface-500' => $type !== $key,
+                                            ])
+                                            @if ($type === $key) aria-current="page" @endif
+                                        >
+                                            {{ $tab['label'] }}
+                                            <span class="text-sm opacity-80">{{ $tab['count'] }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </nav>
 
-	<div class="main-wrap pt-16 pb-20 breakout">
-		<p
-			id="title"
-			class="mb-12 text-lg"
-		>
-			Cerca: <span class="text-strong"><?= $search ?></span>
-		</p>
+                        {{-- Sorting options for designs --}}
+                        @if ($type !== 'sellers' && $designCount > 1)
+                            <nav aria-label="Ordinamento design">
+                                <ul class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                                    @foreach ($sorts as $key => $label)
+                                        <li>
+                                            <a
+                                                href="{{ route('search', array_filter(['search' => $search, 'type' => $type === 'all' ? null : $type, 'sort' => $key === 'relevance' ? null : $key])) }}"
+                                                @class([
+                                                    'focus-visible:outline-primary-400 transition-colors focus-visible:outline-2',
+                                                    'text-neutral-heading font-semibold underline underline-offset-4' => $sort === $key,
+                                                    'hover:text-neutral-heading' => $sort !== $key,
+                                                ])
+                                                @if ($sort === $key) aria-current="true" @endif
+                                            >{{ $label }}</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </nav>
+                        @endif
+                    </div>
 
-		<?php if ($resultCount) { ?>
+                    @if ($featuredSeller)
+                        <section class="mt-8" aria-label="Negozio corrispondente">
+                            <x-search.seller-card :seller="$featuredSeller" featured />
+                        </section>
+                    @endif
+                </div>
 
-		<?php if ($sellerCount) { ?>
+                @if ($type !== 'sellers')
+                    <section class="results-group full-width mt-8">
+                        <div class="breakout">
+                            <h2 class="text-neutral-heading text-lg font-semibold">
+                                Design <span class="text-neutral-text text-base font-normal">({{ $designCount }})</span>
+                            </h2>
 
-		<section
-			id="shops"
-			class="mb-16"
-		>
-			<x-heading.component>Negozi:</x-typography>
-				<div class="gallery mt-4 grid">
+                            @if ($designs->isEmpty())
+                                <p class="mt-4">Nessun design corrisponde a "{{ $search }}".</p>
+                            @else
+                                <div class="mt-4 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:gap-x-6 lg:grid-cols-4 2xl:grid-cols-5">
+                                    @foreach ($designs as $design)
+                                        <x-search.design-card :$design />
+                                    @endforeach
+                                </div>
 
-					<?php foreach ($sellers as $seller) { ?>
+                                <div class="mt-10">{{ $designs->onEachSide(1)->links('pagination.default') }}</div>
+                            @endif
+                        </div>
+                    </section>
+                @endif
 
-					<a
-						href="<?= $seller->url() ?>"
-						class="shop stack-items"
-					>
-						<img
-							src="<?= $seller->cover() ?>"
-							alt=""
-							loading="lazy"
-							class="cover img-fill"
-						>
-						<img
-							src="<?= $seller->icon() ?>"
-							alt=""
-							loading="lazy"
-							class="icon"
-						>
-						<p class="name overflow-hidden text-ellipsis whitespace-nowrap"><?= $seller->name ?></p>
-					</a>
+                @if ($type !== 'designs' && $otherSellers->isNotEmpty() || $type === 'sellers')
+                    <section class="results-group full-width mt-12">
+                        <div class="breakout">
+                            <h2 class="text-neutral-heading text-lg font-semibold">
+                                Negozi <span class="text-neutral-text text-base font-normal">({{ $sellerCount }})</span>
+                            </h2>
 
-					<?php } ?>
+                            @if ($sellers->isEmpty())
+                                <p class="mt-4">Nessun negozio corrisponde a "{{ $search }}".</p>
+                            @else
+                                <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
+                                    @foreach ($type === 'sellers' ? $sellers : $otherSellers as $seller)
+                                        <x-search.seller-card :$seller />
+                                    @endforeach
+                                </div>
 
-				</div>
-		</section>
-
-		<?php } ?>
-
-
-		<?php if ($designCount) { ?>
-
-		<section id="items">
-			<x-heading.component>Prodotti:</x-typography>
-				<div class="gallery mt-4 grid">
-
-					<?php foreach ($designs as $design) {
-						$product = $design->main_product;
-
-						if ($product) {
-					?>
-					<div class="item">
-						<a href="<?= $product->url() ?>">
-							<img
-								src="<?= $product->image() ?>"
-								alt=""
-								loading="lazy"
-								class="image"
-							>
-						</a>
-						<h3 class="overflow-hidden text-ellipsis whitespace-nowrap font-medium mt-4"><?= $product->name ?></h3>
-						<p class="mb-2 text-[0.8rem]">
-							by <a
-								class="link"
-								href="<?= $design->seller->url() ?>"
-							><?= $design->seller->name ?></a>
-						</p>
-						<p class="">Su t-shirt e altri <strong><?= $design->productCount() ?> articoli</strong></p>
-						<a
-							class=""
-							href="<?= $design->url() ?>"
-						>
-							<p class="cta inlb br-b-2 br-c2 br-c1-h txt-c2 txt-c1-h mt-2 font-semibold uppercase">Scopri</p>
-						</a>
-					</div>
-
-					<?php }
-					} ?>
-
-				</div>
-		</section>
-
-		<?php } ?>
-
-		<?php } else { ?>
-
-		<p class="py-16 text-center text-xl">Ci dispiace, la ricerca non ha prodotto risultati.</p>
-
-		<?php } ?>
-
-	</div>
+                                @if ($type === 'sellers')
+                                    <div class="mt-10">{{ $sellers->onEachSide(1)->links('pagination.default') }}</div>
+                                @elseif ($sellerCount > $sellers->count())
+                                    <a
+                                        href="{{ route('search', ['search' => $search, 'type' => 'sellers']) }}"
+                                        class="text-primary-400 hover:text-primary-500 mt-6 inline-block font-semibold"
+                                    >Vedi tutti i {{ $sellerCount }} negozi</a>
+                                @endif
+                            @endif
+                        </div>
+                    </section>
+                @endif
+            @endif
+        </div>
+    </div>
 </x-layouts.main>
