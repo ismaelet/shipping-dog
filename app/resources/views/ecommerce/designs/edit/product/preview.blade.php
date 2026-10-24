@@ -1,4 +1,5 @@
-@use ('App\Services\Files\ProductPreviewProcessor')
+@use('App\Helpers\FileHelper')
+@use('App\Services\Files\ProductPreviewProcessor')
 
 @php
 	$clothing = $product->type->image($product->color_id, $position->basicPositionId());

@@ -17,10 +17,7 @@
 
 				<div class="grid gap-5">
 					<div class="grid gap-2">
-						<label
-							for="seller-name"
-							class="text-neutral-heading text-sm font-semibold"
-						>Nome negozio</label>
+						<x-label for="seller-name">Nome negozio</x-label>
 						<x-input
 							id="seller-name"
 							type="text"
@@ -33,12 +30,8 @@
 					</div>
 
 					<div class="grid gap-2">
-						<label
-							for="seller-description"
-							class="text-neutral-heading text-sm font-semibold"
-						>
-							Descrizione <span class="text-neutral-text font-normal">(opzionale)</span>
-						</label>
+						<x-label for="seller-description">Descrizione <span
+								class="text-neutral-text font-normal">(opzionale)</span></x-label>
 						<x-textarea
 							id="seller-description"
 							class=""
@@ -50,10 +43,7 @@
 					</div>
 
 					<div class="grid gap-2">
-						<label
-							for="seller-sort"
-							class="text-neutral-heading text-sm font-semibold"
-						>Ordina prodotti</label>
+						<x-label for="seller-sort">Ordina prodotti</x-label>
 						<x-select
 							id="seller-sort"
 							name="sort"
@@ -112,12 +102,9 @@
 					>{{ session('success_socials') }}</p>
 				@endif
 
-				<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+				<div class="grid grid-cols-1 gap-5">
 					<div class="col-span-full grid gap-2">
-						<label
-							for="seller-website"
-							class="text-neutral-heading text-sm font-semibold"
-						>Sito web</label>
+						<x-label for="seller-website">Sito web</x-label>
 						<x-input
 							id="seller-website"
 							type="text"
@@ -131,10 +118,7 @@
 					</div>
 
 					<div class="col-span-full grid gap-2">
-						<label
-							for="seller-facebook"
-							class="text-neutral-heading text-sm font-semibold"
-						>Facebook</label>
+						<x-label for="seller-facebook">Facebook</x-label>
 						<x-input
 							id="seller-facebook"
 							type="text"
@@ -148,10 +132,7 @@
 					</div>
 
 					<div class="grid gap-2">
-						<label
-							for="seller-instagram"
-							class="text-neutral-heading text-sm font-semibold"
-						>Instagram</label>
+						<x-label for="seller-instagram">Instagram</x-label>
 						<x-input
 							id="seller-instagram"
 							type="text"
@@ -165,10 +146,7 @@
 					</div>
 
 					<div class="grid gap-2">
-						<label
-							for="seller-tiktok"
-							class="text-neutral-heading text-sm font-semibold"
-						>TikTok</label>
+						<x-label for="seller-tiktok">TikTok</x-label>
 						<x-input
 							id="seller-tiktok"
 							type="text"
@@ -182,10 +160,7 @@
 					</div>
 
 					<div class="grid gap-2">
-						<label
-							for="seller-youtube"
-							class="text-neutral-heading text-sm font-semibold"
-						>YouTube</label>
+						<x-label for="seller-youtube">YouTube</x-label>
 						<x-input
 							id="seller-youtube"
 							type="text"
@@ -199,10 +174,7 @@
 					</div>
 
 					<div class="grid gap-2">
-						<label
-							for="seller-bluesky"
-							class="text-neutral-heading text-sm font-semibold"
-						>Bluesky</label>
+						<x-label for="seller-bluesky">Bluesky</x-label>
 						<x-input
 							id="seller-bluesky"
 							type="text"
@@ -216,10 +188,7 @@
 					</div>
 
 					<div class="col-span-full grid gap-2">
-						<label
-							for="seller-twitter"
-							class="text-neutral-heading text-sm font-semibold"
-						>X (Twitter)</label>
+						<x-label for="seller-twitter">X (Twitter)</x-label>
 						<x-input
 							id="seller-twitter"
 							type="text"

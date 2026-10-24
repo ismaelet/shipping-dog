@@ -1,3 +1,4 @@
+@use('App\Helpers\FileHelper')
 @use('App\Models\Ecommerce\Product')
 @use('App\Models\Ecommerce\Product\ProductMockup')
 @use('App\Models\Ecommerce\Product\ProductTypeMockupSize')

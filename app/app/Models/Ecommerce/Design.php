@@ -3,6 +3,7 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\FileHelper;
+use App\Services\Files\DesignPreviewGenerator;
 use App\Models\Ecommerce\Design\CustomerPhoto;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Design\DesignTag;
@@ -133,7 +134,7 @@ class Design extends Model {
         $file = $size == 400 ? 'designs/previews/' . $this->id . '_m.webp' : 'designs/previews/' . $this->id . '.webp';
 
         if (!FileHelper::exists($file)) {
-            des_img_gen($this->id);
+            app(DesignPreviewGenerator::class)->generate($this);
         }
 
         if (FileHelper::exists($file)) {

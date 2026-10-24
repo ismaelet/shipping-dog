@@ -32,6 +32,7 @@
 
 		.heading-section {
 			font-size: var(--text-3xl);
+			line-height: 1;
 		}
 
 		.heading-article {

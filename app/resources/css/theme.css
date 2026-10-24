@@ -150,6 +150,17 @@ body {
   font-weight: var(--font-weight-semibold);
 }
 
+@utility text-link {
+  @apply transition-colors;
+  color: var(--color-neutral-heading);
+  font-weight: var(--font-weight-medium);
+  text-decoration: underline;
+
+  &:hover {
+    color: var(--color-primary-500);
+  }
+}
+
 @utility text-trim {
   text-box: trim-both cap alphabetic;
 }

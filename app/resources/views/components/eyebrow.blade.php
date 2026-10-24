@@ -5,7 +5,7 @@
 		}
 
 		.eyebrow {
-			margin-bottom: 0.75rem;
+			margin-bottom: 1rem;
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
 			letter-spacing: 0.18em;

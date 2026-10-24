@@ -1,3 +1,5 @@
+@use('App\Helpers\FileHelper')
+
 <form
 	id="upload-image-light"
 	action="{{ route('designs.upload-image', [$design, 'type' => 'light']) }}"

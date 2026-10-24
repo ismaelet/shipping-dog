@@ -1,3 +1,5 @@
+@use('App\Helpers\FileHelper')
+
 @php
 	$hasDarkVariant = file_exists(base_path() . '/public/storage/designs/' . $design->id . '_dark.png');
 @endphp

@@ -22,8 +22,7 @@ Route::prefix('/seller')->middleware(Seller::class)->name('seller-dashboard')->g
 
     // Portfolio
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('.portfolio');
-    Route::get('/portfolio/add', [PortfolioController::class, 'add'])->name('.portfolio.add');
-    Route::post('/portfolio/sort', [PortfolioController::class, 'sort'])->name('.portfolio.sort');
+    Route::get('/portfolio/add', [PortfolioController::class, 'index'])->name('.portfolio.add');
 
     // Custom products
     Route::get('/portfolio/products/add', [CustomProductController::class, 'create'])->name('.portfolio.products.add');
