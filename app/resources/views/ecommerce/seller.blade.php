@@ -48,7 +48,7 @@
 							</div>
 
 							{{-- Seller name --}}
-							<h1 class="text-neutral-heading text-trim text-3xl font-bold tracking-tight sm:text-5xl">
+							<h1 class="text-neutral-heading text-trim-start text-3xl font-bold tracking-tight sm:text-5xl">
 								{{ $seller->name }}
 							</h1>
 

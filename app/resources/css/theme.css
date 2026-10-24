@@ -56,9 +56,10 @@
 /* Theme */
 @theme {
   /* Theme: Colors */
-  --color-primary-300: var(--color-orange-400);
-  --color-primary-400: var(--color-orange-500);
-  --color-primary-500: var(--color-orange-600);
+  --color-primary-200: #ffb86a;
+  --color-primary-300: #ff8904;
+  --color-primary-400: #ff6900;
+  --color-primary-500: #f54900;
 
   --color-detail-1-300: #c4b4ff;
   --color-detail-1-400: #8e51ff;
@@ -151,6 +152,10 @@ body {
 
 @utility text-trim {
   text-box: trim-both cap alphabetic;
+}
+
+@utility text-trim-start {
+  text-box: trim-start cap alphabetic;
 }
 
 /*

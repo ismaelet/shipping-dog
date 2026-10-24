@@ -1,15 +1,157 @@
 @pushOnce('styles')
-	<link
-		rel="stylesheet"
-		href="{{ asset('css/legacy/portfolio-add.css') }}"
-	>
+	<style>
+		/* Errors */
+		#setup-sec .error {
+			display: none;
+		}
+
+		/* Setup */
+		#setup-sec {
+			display: none;
+		}
+
+		#upload-box {
+			box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.4);
+			width: 30rem;
+			max-width: 100%;
+			aspect-ratio: 1 / 1;
+			transition: background 0.2s;
+		}
+
+		#upload-box:hover {
+			background-color: var(--color-primary-400);
+		}
+
+		#upload-icon {
+			width: 7rem;
+			height: 7rem;
+			transition: transform 0.2s;
+		}
+
+		#upload-box:hover #upload-icon {
+			transform: translateY(-10px);
+		}
+
+		#upload-title {
+			letter-spacing: 0.2rem;
+			transition: color 0.2s;
+		}
+
+		#upload-box:hover #upload-title {
+			color: #fff;
+		}
+
+		/* Data */
+		#data-form {
+			display: none;
+		}
+
+		#data-form input[name='file'] {
+			display: none;
+		}
+
+		.error #data-form input[name='file'] {
+			display: block;
+		}
+
+		#preview {
+			box-shadow: 0 10px 30px -7px rgba(0, 0, 0, 0.2);
+			max-width: 100%;
+			max-height: 20rem;
+		}
+
+		#prev-over {
+			opacity: 0;
+			background-color: rgba(0, 0, 0, 0.6);
+			transition: opacity 0.1s;
+		}
+
+		#prev-over:hover {
+			opacity: 1;
+		}
+
+		#prev-icon {
+			background-size: contain;
+			width: 4rem;
+			height: 4rem;
+			transform: translate(0, 2rem);
+			transition: transform 0.2s;
+		}
+
+		#prev-over:hover #prev-icon {
+			transform: translate(0, 0);
+		}
+
+		/* Responsive */
+		@media (max-width: 480px) {
+			#setup-sec {
+				padding-top: 2rem !important;
+			}
+
+			#upload-title {
+				font-size: 1.5rem !important;
+			}
+		}
+	</style>
 @endpushOnce
 
 @pushOnce('scripts')
-	<script
-		defer
-		src="{{ asset('js/legacy/portfolio-add.js') }}"
-	></script>
+	<script defer>
+		$(document).ready(function() {
+			change($('#pan').data('stage'))
+
+			$('#upload-box').click(function() {
+				$('.file[name=file]').click()
+			})
+
+			$('#prev-over').click(function() {
+				$('.file[name=file]').click()
+			})
+
+			function get_path() {
+				var input = $('.file')[0]
+
+				if (input) {
+					if (input.files && input.files[0]) {
+						var reader = new FileReader()
+
+						$('#preview-box').removeClass('hide')
+
+						reader.onload = function(e) {
+							$('#preview').attr('src', e.target.result)
+						}
+
+						reader.readAsDataURL(input.files[0])
+					}
+				}
+			}
+
+			$('.file[name=file]').change(function() {
+				const acceptedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'png', 'webp']
+
+				const extension = $(this).val().split('.').pop().toLowerCase()
+
+				if (acceptedExtensions.includes(extension)) {
+					change(2)
+				} else {
+					$('p.error').show()
+					$('.wrong-extension').html(extension.toUpperCase())
+				}
+			})
+
+			function change(stage) {
+				if (stage == 1) {
+					$('#setup-sec').show()
+					$('#data-form').hide()
+				} else if (stage == 2) {
+					$('#setup-sec').hide()
+					$('#data-form').show()
+				}
+
+				get_path()
+			}
+		})
+	</script>
 @endpushOnce
 
 <x-layouts.seller-dashboard>

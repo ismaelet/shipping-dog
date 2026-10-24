@@ -34,7 +34,7 @@
 
 			@if (isset($link['dropdown']))
 				<div
-					class="header-dropdown bg-primary-400 w-57.5 group-hover:max-h-75 group-focus-within:max-h-75 light absolute left-1/2 z-10 max-h-0 -translate-x-1/2 overflow-hidden transition-[max-height]"
+					class="header-dropdown bg-primary-400 w-57.5 group-hover:max-h-75 group-focus-within:max-h-75 light absolute left-1/2 z-10 max-h-0 -translate-x-1/2 overflow-hidden rounded-b-lg transition-[max-height]"
 				>
 					@foreach ($link['dropdown'] as $dropdownLink)
 						<a

@@ -42,7 +42,7 @@ class PortfolioController extends Controller {
         $totalCount = $designs->count() + $customProducts->count();
         $isCustomSeller = (bool)($seller->custom || $customProducts->count());
 
-        return view('seller-dashboard.portfolio.index', [
+        return view('seller-dashboard.portfolio', [
             'seller' => $seller,
             'isCustomSeller' => $isCustomSeller,
             'designs' => $designs,

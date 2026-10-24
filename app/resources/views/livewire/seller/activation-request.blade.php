@@ -14,14 +14,14 @@
 			>
 				Richiesta di attivazione inviata
 			</p>
-			<p class="text-neutral-heading/50 text-sm">
+			<p class="text-primary-200 text-sm">
 				La tua richiesta verrà elaborata entro 24 ore.
 			</p>
 		@elseif ($seller->products->count())
 			<x-heading variant="article-small">
 				Il tuo negozio non è ancora attivo
 			</x-heading>
-			<p class="text-neutral-heading/50 max-w-140 text-sm">
+			<p class="text-primary-200 max-w-140 text-sm">
 				Controlla che le informazioni del negozio siano complete e invia la richiesta quando sei pronto per iniziare a
 				vendere.
 			</p>
@@ -35,7 +35,7 @@
 			<p class="font-heading text-neutral-heading text-lg font-semibold italic">
 				Il tuo negozio non è ancora attivo
 			</p>
-			<p class="text-neutral-heading/50 text-sm">
+			<p class="text-primary-200 text-sm">
 				Aggiungi almeno un design prima di richiedere l'attivazione del negozio.
 			</p>
 
