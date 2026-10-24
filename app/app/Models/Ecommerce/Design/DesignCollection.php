@@ -4,7 +4,9 @@ namespace App\Models\Ecommerce\Design;
 
 use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Design;
+use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Seller;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -47,6 +49,19 @@ class DesignCollection extends Model {
     }
 
     /**
+     * Purchasable products of the designs currently in the collection
+     */
+    public function purchasableProducts(): Builder {
+        return Product::query()
+            ->select('products.*')
+            ->where('products.status', 1)
+            ->where('products.deleted', 0)
+            ->whereHas('design', fn ($query) => $query
+                ->where('user_id', $this->user_id)
+                ->where('collection', $this->id));
+    }
+
+    /**
      * Check whether the collection belongs to the given seller.
      */
     public function belongsToSeller(Seller $seller): bool {
@@ -64,21 +79,45 @@ class DesignCollection extends Model {
     }
 
     /**
+     * Get the stored cover paths, newest format first (legacy covers are jpg)
+     */
+    public function coverPaths(int $size = 400): array {
+        $suffix = $size === 400 ? '_m' : '';
+
+        return [
+            'shops/collections/' . $this->id . $suffix . '.webp',
+            'shops/collections/' . $this->id . $suffix . '.jpg',
+        ];
+    }
+
+    /**
+     * Whether the collection has an uploaded cover
+     */
+    public function hasCover(): bool {
+        return collect($this->coverPaths(1024))->contains(fn (string $path) => FileHelper::exists($path));
+    }
+
+    /**
      * Get the image URL for the collection
      */
     public function image(int $size = 400): ?string {
-        $image = $size === 400
-            ? '/shops/collections/' . $this->id . '_m.jpg'
-            : '/shops/collections/' . $this->id . '.jpg';
-
-        if (FileHelper::exists($image)) {
-            return storage_asset($image);
+        foreach ($this->coverPaths($size) as $path) {
+            if (FileHelper::exists($path)) {
+                return storage_asset($path);
+            }
         }
 
-        if ($this->mainDesign) {
-            return $this->mainDesign->image($size);
-        }
+        return $this->mainDesign?->image($size);
+    }
 
-        return null;
+    /**
+     * Delete every stored cover file
+     */
+    public function deleteCover(): void {
+        foreach ([400, 1024] as $size) {
+            foreach ($this->coverPaths($size) as $path) {
+                FileHelper::delete($path);
+            }
+        }
     }
 }

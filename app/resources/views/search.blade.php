@@ -119,7 +119,7 @@
                                     @endforeach
                                 </div>
 
-                                <div class="mt-10">{{ $designs->onEachSide(1)->links('pagination.default') }}</div>
+                                <div class="mt-10"><x-pagination.default :paginator="$designs->onEachSide(1)" /></div>
                             @endif
                         </div>
                     </section>
@@ -142,7 +142,7 @@
                                 </div>
 
                                 @if ($type === 'sellers')
-                                    <div class="mt-10">{{ $sellers->onEachSide(1)->links('pagination.default') }}</div>
+                                    <div class="mt-10"><x-pagination.default :paginator="$sellers->onEachSide(1)" /></div>
                                 @elseif ($sellerCount > $sellers->count())
                                     <a
                                         href="{{ route('search', ['search' => $search, 'type' => 'sellers']) }}"

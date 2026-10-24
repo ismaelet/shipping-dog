@@ -51,11 +51,8 @@ Route::post('/seller/{seller}/collection/add', [SellerController::class, 'addCol
 Route::get('/seller/{seller}/collection/{collection}', [SellerController::class, 'showCollection'])
     ->name('seller.show.collection');
 
-Route::post('/seller/{seller}/collection/{collection}/designs', [SellerController::class, 'addDesignsToCollection'])
-    ->name('seller.collection.designs.add');
-
-Route::delete('/seller/{seller}/collection/{collection}/designs', [SellerController::class, 'removeDesignsFromCollection'])
-    ->name('seller.collection.designs.remove');
+Route::put('/seller/{seller}/collection/{collection}/designs', [SellerController::class, 'syncCollectionDesigns'])
+    ->name('seller.collection.designs.sync');
 
 Route::post('/seller/{seller}/collection/{collection}/cover', [SellerController::class, 'updateCollectionCover'])
     ->name('seller.collection.cover.update');

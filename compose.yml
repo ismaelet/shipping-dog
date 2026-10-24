@@ -59,8 +59,11 @@ services:
       target: base
     volumes:
       - ./app:/var/www/html
-      - ./app/.npm:/var/www/html/.npm
-    command: /bin/bash -c 'npm install && npm run dev -- . --host'
+      - node_modules:/var/www/html/node_modules
+      - pnpm_store:/pnpm/store
+    environment:
+      PNPM_STORE_DIR: /pnpm/store
+    command: /bin/bash -c "pnpm install --frozen-lockfile && pnpm run dev -- --host 0.0.0.0"
     ports:
       - 5173:5173
 
@@ -81,6 +84,8 @@ services:
 
 volumes:
   db:
+  node_modules:
+  pnpm_store:
 
 configs:
   caddy_config:

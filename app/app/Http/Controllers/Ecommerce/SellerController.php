@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
+use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Design\DesignCollection;
@@ -9,19 +10,24 @@ use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Seller;
 use App\Models\Ecommerce\Seller\Follower;
 use App\Models\User\Like;
+use App\Services\Files\ImageProcessor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
-class SellerController extends Controller {
+class SellerController extends Controller
+{
+    public function __construct(private ImageProcessor $imageProcessor) {}
 
     /**
      * Display the seller page
      */
-
-    public function index(): View|RedirectResponse {
+    public function index(): View|RedirectResponse
+    {
         $id = request()->route('seller')
             ?? request()->query('seller')
             ?? request()->query('id');
@@ -30,14 +36,14 @@ class SellerController extends Controller {
             ->with('user')
             ->find($id);
 
-        if (!$seller) {
+        if (! $seller) {
             return redirect()->route('shop');
         }
 
         $owner = Auth::id() !== null
             && Auth::id() === (int) $seller->user_id;
 
-        if (!$seller->status && !$owner && !is_admin()) {
+        if (! $seller->status && ! $owner && ! is_admin()) {
             return redirect()->route('shop');
         }
 
@@ -63,7 +69,7 @@ class SellerController extends Controller {
         $collections = DesignCollection::query()
             ->where('user_id', $sellerUserId);
 
-        if (!$owner) {
+        if (! $owner) {
             $collections->whereIn(
                 'id',
                 Design::query()
@@ -99,11 +105,11 @@ class SellerController extends Controller {
         ]);
     }
 
-
     /**
      * Add a new collection for the seller
      */
-    public function addCollection(Request $request, Seller $seller): RedirectResponse {
+    public function addCollection(Request $request, Seller $seller): RedirectResponse
+    {
         if (Auth::id() !== $seller->user_id) {
             abort(403);
         }
@@ -126,142 +132,102 @@ class SellerController extends Controller {
     /**
      * Display a collection of the seller.
      */
-    public function showCollection(Seller $seller, DesignCollection $collection): View|RedirectResponse {
+    public function showCollection(Seller $seller, DesignCollection $collection): View|RedirectResponse
+    {
         if ($collection->user_id !== $seller->user_id) {
             return redirect()->route('shop');
         }
 
         $userIsOwner = Auth::check() && Auth::id() === $seller->user_id;
-        $vip = $userIsOwner || is_admin();
 
-        if (!$seller->status && !$vip) {
+        if (! $seller->status && ! $userIsOwner && ! is_admin()) {
             return redirect()->route('shop');
         }
 
-        $products = Product::query()
-            ->where('status', 1)
-            ->where('deleted', 0)
-            ->whereHas('design', function ($query) use ($seller, $collection) {
-                $query->where('user_id', $seller->user_id)
-                    ->where('collection', $collection->id);
-            })
-            ->with('type', 'color', 'design_with_trashed', 'base_price', 'specific_price', 'seller')
-            ->orderByDesc('sales')
-            ->orderByDesc('design_id')
-            ->orderBy('id')
-            ->limit(100)
-            ->get();
-
-        $designsToAdd = collect();
-        $designsToRemove = collect();
+        $designs = collect();
+        $otherCollections = collect();
 
         if ($userIsOwner) {
-            $designsToAdd = Design::query()
+            $designs = Design::query()
                 ->where('user_id', $seller->user_id)
-                ->where('collection', '!=', $collection->id)
                 ->where('status', 1)
                 ->orderByDesc('id')
-                ->get();
+                ->get(['id', 'name', 'collection']);
 
-            $designsToRemove = Design::query()
+            $otherCollections = DesignCollection::query()
+                ->where('user_id', $seller->user_id)
+                ->where('id', '!=', $collection->id)
+                ->pluck('name', 'id');
+        }
+
+        if ($userIsOwner) {
+            $designCount = $designs->where('collection', $collection->id)->count();
+        } else {
+            $designCount = Design::query()
                 ->where('user_id', $seller->user_id)
                 ->where('collection', $collection->id)
                 ->where('status', 1)
-                ->orderByDesc('id')
-                ->get();
+                ->count();
         }
 
         return view('ecommerce.seller.collection', [
             'title' => $collection->name,
-            'description' => $collection->description,
             'thumbnail' => $collection->image(1024),
             'location' => 'shop',
             'seller' => $seller,
             'collection' => $collection,
-            'products' => $products,
-            'designsToAdd' => $designsToAdd,
-            'designsToRemove' => $designsToRemove,
+            'productCount' => $collection->purchasableProducts()->count(),
+            'designCount' => $designCount,
+            'designs' => $designs,
+            'otherCollections' => $otherCollections,
             'userIsOwner' => $userIsOwner,
-            'vip' => $vip,
         ]);
     }
 
     /**
-     * Add designs to a seller collection.
+     * Set the designs of a collection. Designs already in another collection are moved.
      */
-    public function addDesignsToCollection(
+    public function syncCollectionDesigns(
         Request $request,
         Seller $seller,
         DesignCollection $collection,
     ): RedirectResponse {
-        if (!$this->canManageCollection($seller, $collection)) {
+        if (! $this->canManageCollection($seller, $collection)) {
             abort(403);
         }
 
         $data = $request->validate([
             'designs' => ['nullable', 'array'],
-            'designs.*' => ['integer'],
+            'designs.*' => [
+                'integer',
+                'distinct',
+                Rule::exists('designs', 'id')->where('user_id', $seller->user_id)->whereNull('deleted_at'),
+            ],
         ]);
 
-        $designIds = $data['designs'] ?? [];
+        $selected = collect($data['designs'] ?? [])->map(fn ($id) => (int) $id);
 
-        if (!empty($designIds)) {
-            Design::query()
-                ->where('user_id', $seller->user_id)
-                ->whereIn('id', $designIds)
-                ->update([
-                    'collection' => $collection->id,
-                ]);
+        $designs = Design::query()->where('user_id', $seller->user_id);
 
-            if (!$collection->status) {
-                $collection->update([
-                    'status' => 2,
-                ]);
-            }
-        }
+        $previousCollections = (clone $designs)
+            ->whereIn('id', $selected)
+            ->where('collection', '>', 0)
+            ->where('collection', '!=', $collection->id)
+            ->pluck('collection')
+            ->unique();
 
-        return back();
-    }
-
-    /**
-     * Remove designs from a seller collection.
-     */
-    public function removeDesignsFromCollection(
-        Request $request,
-        Seller $seller,
-        DesignCollection $collection,
-    ): RedirectResponse {
-        if (!$this->canManageCollection($seller, $collection)) {
-            abort(403);
-        }
-
-        $data = $request->validate([
-            'designs' => ['nullable', 'array'],
-            'designs.*' => ['integer'],
-        ]);
-
-        $designIds = $data['designs'] ?? [];
-
-        if (!empty($designIds)) {
-            Design::query()
-                ->where('user_id', $seller->user_id)
-                ->where('collection', $collection->id)
-                ->whereIn('id', $designIds)
-                ->update([
-                    'collection' => 0,
-                ]);
-        }
-
-        $hasDesigns = Design::query()
-            ->where('user_id', $seller->user_id)
+        (clone $designs)
             ->where('collection', $collection->id)
-            ->exists();
+            ->whereNotIn('id', $selected)
+            ->update(['collection' => 0]);
 
-        if (!$hasDesigns) {
-            $collection->update([
-                'status' => 0,
-            ]);
-        }
+        (clone $designs)
+            ->whereIn('id', $selected)
+            ->update(['collection' => $collection->id]);
+
+        // status is not mass assignable on the model
+        DesignCollection::whereKey($collection->id)->update(['status' => $selected->isEmpty() ? 0 : 2]);
+        $this->closeEmptyCollections($seller, $previousCollections);
 
         return back();
     }
@@ -274,51 +240,77 @@ class SellerController extends Controller {
         Seller $seller,
         DesignCollection $collection,
     ): RedirectResponse {
-        if (!$this->canManageCollection($seller, $collection)) {
+        if (! $this->canManageCollection($seller, $collection)) {
             abort(403);
         }
 
         $request->validate([
-            'image' => ['required', 'image', 'max:8192'],
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:8192'],
         ]);
 
-        // Temporary simple version.
-        // You can replace this with your existing ImageHelper if you need resizing.
-        $request->file('image')->storeAs(
-            'shops/collections',
-            $collection->id . '.jpg',
-            'public'
-        );
+        $file = $request->file('image');
+        $width = getimagesize($file->getRealPath())[0] ?? 0;
+        $base = 'shops/collections/'.$collection->id;
+
+        // Never upscale: the processor resizes to the requested width exactly.
+        $uploaded = $this->imageProcessor->upload($file, $base.'.webp', min(2560, $width), 'width')
+            && $this->imageProcessor->upload($file, $base.'_m.webp', min(400, $width), 'width');
+
+        if (! $uploaded) {
+            return back()->withErrors(['image' => 'Impossibile elaborare l\'immagine. Prova con un altro file.']);
+        }
+
+        // Remove legacy jpg covers so the new one is always used.
+        FileHelper::delete($base.'.jpg');
+        FileHelper::delete($base.'_m.jpg');
 
         return back();
     }
 
     /**
-     * Delete a seller collection.
+     * Delete a seller collection. Its designs and products are kept.
      */
     public function deleteCollection(
         Seller $seller,
         DesignCollection $collection,
     ): RedirectResponse {
-        if (!$this->canManageCollection($seller, $collection)) {
+        if (! $this->canManageCollection($seller, $collection)) {
             abort(403);
         }
 
         Design::query()
+            ->where('user_id', $seller->user_id)
             ->where('collection', $collection->id)
-            ->update([
-                'collection' => 0,
-            ]);
+            ->update(['collection' => 0]);
 
+        $collection->deleteCover();
         $collection->delete();
 
         return redirect()->route('seller.show', $seller);
     }
 
     /**
+     * Set status to 0 for collections that no longer contain designs.
+     */
+    private function closeEmptyCollections(Seller $seller, Collection $collectionIds): void
+    {
+        $stillUsed = Design::query()
+            ->where('user_id', $seller->user_id)
+            ->whereIn('collection', $collectionIds)
+            ->distinct()
+            ->pluck('collection');
+
+        DesignCollection::query()
+            ->where('user_id', $seller->user_id)
+            ->whereIn('id', $collectionIds->diff($stillUsed))
+            ->update(['status' => 0]);
+    }
+
+    /**
      * Check whether the current user can manage the collection.
      */
-    private function canManageCollection(Seller $seller, DesignCollection $collection): bool {
+    private function canManageCollection(Seller $seller, DesignCollection $collection): bool
+    {
         if ($collection->user_id !== $seller->user_id) {
             return false;
         }
@@ -334,7 +326,7 @@ class SellerController extends Controller {
         Seller $seller,
         DesignCollection $collection,
     ): JsonResponse {
-        if (!$this->canManageCollection($seller, $collection)) {
+        if (! $this->canManageCollection($seller, $collection)) {
             abort(403);
         }
 

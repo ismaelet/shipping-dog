@@ -25,12 +25,13 @@ RUN install-php-extensions \
     @composer
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
-	apt-get update && \
-	apt-get install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install NPM
-RUN npm install npm -g
+# Install pnpm
+RUN npm install -g pnpm@12
 
 # Build step
 FROM base AS build
@@ -38,9 +39,9 @@ FROM base AS build
 # Copy application files
 COPY ./app /var/www/html
 
-# Install composer dependencies
+# Install Composer dependencies
 RUN composer install --no-interaction --prefer-dist --no-progress --optimize-autoloader
 
-# Install NPM dependencies
-RUN npm install\
-	&& npm run build
+# Install frontend dependencies and build
+RUN pnpm install --frozen-lockfile \
+    && pnpm run build

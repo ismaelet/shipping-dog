@@ -1,32 +1,33 @@
 {
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"build": "vite build",
-		"dev": "vite"
-	},
-	"devDependencies": {
-		"@tailwindcss/forms": "^0.5.10",
-		"@tailwindcss/typography": "^0.5.4",
-		"@types/alpinejs": "^3.17.0",
-		"@types/sortablejs": "^1.15.9",
-		"autoprefixer": "^10.4.21",
-		"axios": "^1.8.4",
-		"concurrently": "^9.1.2",
-		"laravel-vite-plugin": "^1.2.0",
-		"prettier": "^3.9.10",
-		"prettier-plugin-blade": "^3.3.3",
-		"prettier-plugin-tailwindcss": "^0.8.1",
-		"vite": "^6.2.3"
-	},
-	"dependencies": {
-		"@sentry/browser": "^9.10.1",
-		"@tailwindcss/vite": "^4.1.7",
-		"alpinejs": "^3.14.9",
-		"chart.js": "^4.4.8",
-		"glob": "^11.0.1",
-		"sortablejs": "^1.15.7",
-		"tailwindcss": "^4.1.7",
-		"ts-node": "^10.9.2"
-	}
+    "private": true,
+    "type": "module",
+    "packageManager": "pnpm@12.15.0",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "@tailwindcss/forms": "^0.5.10",
+        "@tailwindcss/typography": "^0.5.4",
+        "@types/alpinejs": "^3.17.0",
+        "@types/sortablejs": "^1.15.9",
+        "autoprefixer": "^10.4.21",
+        "axios": "^1.8.4",
+        "concurrently": "^9.1.2",
+        "laravel-vite-plugin": "^1.2.0",
+        "prettier": "^3.9.10",
+        "prettier-plugin-blade": "^3.3.3",
+        "prettier-plugin-tailwindcss": "^0.8.1",
+        "vite": "^6.2.3"
+    },
+    "dependencies": {
+        "@sentry/browser": "^9.10.1",
+        "@tailwindcss/vite": "^4.1.7",
+        "alpinejs": "^3.14.9",
+        "chart.js": "^4.4.8",
+        "glob": "^11.0.1",
+        "sortablejs": "^1.15.7",
+        "tailwindcss": "^4.1.7",
+        "ts-node": "^10.9.2"
+    }
 }

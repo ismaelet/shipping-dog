@@ -1,429 +1,207 @@
-@pushOnce('scripts')
-	<script defer>
-		document.addEventListener('DOMContentLoaded', () => {
-			initLightboxes();
-			initFileForms();
-		});
+@php
+    $cover = $collection->image(1024);
+@endphp
 
-		function initLightboxes() {
-			document.querySelectorAll('[data-lightbox-open]').forEach((button) => {
-				button.addEventListener('click', () => {
-					const name = button.dataset.lightboxOpen;
-					const lightbox = document.querySelector(`[data-lightbox="${name}"]`);
+<x-layouts.main :$title :$thumbnail :$location>
+    @if ($cover)
+        <div class="full-width bg-surface-500 relative h-48 overflow-hidden sm:h-72">
+            <img
+                src="{{ $cover }}"
+                alt=""
+                class="fill-width absolute inset-0 size-full object-cover blur-sm"
+                aria-hidden="true"
+            />
+            <img
+                src="{{ $cover }}"
+                alt="Copertina della collezione {{ $collection->name }}"
+                class="absolute h-full w-full object-cover"
+            />
+        </div>
+    @else
+        <div class="full-width bg-primary-400 h-32 sm:h-48"></div>
+    @endif
 
-					if (!lightbox) {
-						return;
-					}
+    <div x-data class="pt-6 pb-16 md:pt-8">
+        <nav aria-label="Breadcrumb" class="text-sm">
+            <ol class="flex flex-wrap items-center gap-x-2">
+                <li>
+                    <a href="{{ $seller->url() }}" class="hover:text-neutral-heading">{{ $seller->name }}</a>
+                </li>
+                <li aria-hidden="true">/</li>
+                <li aria-current="page" class="text-neutral-heading">{{ $collection->name }}</li>
+            </ol>
+        </nav>
 
-					lightbox.classList.remove('hidden');
-					lightbox.classList.add('flex');
-				});
-			});
+        <header class="mt-4 grid grid-cols-1 items-start justify-between gap-x-8 gap-y-4 lg:grid-cols-[1fr_1.5fr]">
+            <div class="min-w-0">
+                @if ($userIsOwner)
+                    <h1 class="sr-only">{{ $collection->name }}</h1>
+                    <livewire:ecommerce.seller.collection.name-input :seller="$seller" :collection="$collection" />
+                @else
+                    <h1 class="text-neutral-heading font-heading text-3xl md:text-4xl">{{ $collection->name }}</h1>
+                @endif
 
-			document.querySelectorAll('[data-lightbox-close]').forEach((button) => {
-				button.addEventListener('click', () => {
-					closeLightbox(button.closest('[data-lightbox]'));
-				});
-			});
+                <a href="{{ $seller->url() }}" class="mt-3 inline-flex items-center gap-2">
+                    <img src="{{ $seller->icon() }}" alt="" loading="lazy" class="size-10 rounded-full object-cover" />
+                    <span>di <span class="text-neutral-heading font-semibold">{{ $seller->name }}</span></span>
+                </a>
 
-			document.addEventListener('keydown', (event) => {
-				if (event.key !== 'Escape') {
-					return;
-				}
+                @if ($designCount || $productCount)
+                    <p class="mt-2 text-sm">
+                        {{ $designCount }} {{ $designCount === 1 ? 'grafica' : 'grafiche' }} · {{ $productCount }} {{ $productCount === 1 ? 'prodotto' : 'prodotti' }}
+                    </p>
+                @endif
+            </div>
 
-				document.querySelectorAll('[data-lightbox]').forEach(closeLightbox);
-			});
-		}
+            @if ($userIsOwner)
+                <div class="flex flex-wrap justify-end gap-2">
+                    <x-button
+                        type="button"
+                        size="small"
+                        width="auto"
+                        x-on:click="$dispatch('open-modal', { name: 'collection-designs' })"
+                    >
+                        <x-icon-add />
+                        Gestisci grafiche
+                    </x-button>
 
-		function closeLightbox(lightbox) {
-			if (!lightbox) {
-				return;
-			}
+                    <x-button
+                        type="button"
+                        variant="secondary"
+                        size="small"
+                        width="auto"
+                        x-on:click="$dispatch('open-modal', { name: 'change-cover' })"
+                    >
+                        <x-icon-gallery />
+                        Cambia copertina
+                    </x-button>
 
-			lightbox.classList.add('hidden');
-			lightbox.classList.remove('flex');
-		}
+                    <x-button
+                        type="button"
+                        variant="secondary"
+                        color="danger"
+                        size="small"
+                        width="auto"
+                        x-on:click="$dispatch('open-modal', { name: 'delete-collection' })"
+                    >
+                        <x-icon-delete />
+                        Elimina collezione
+                    </x-button>
+                </div>
+            @endif
+        </header>
 
-		function initFileForms() {
-			document.querySelectorAll('[data-file-form]').forEach((form) => {
-				const input = form.querySelector('[data-file-input]');
-				const loader = form.querySelector('[data-file-load]');
-				const submit = form.querySelector('[data-file-submit]');
+        <livewire:ecommerce.seller.collection.product-list :$seller :$collection :user-is-owner="$userIsOwner" />
+    </div>
 
-				if (!input || !submit) {
-					return;
-				}
+    @if ($userIsOwner)
+        <x-collection.design-picker
+            name="collection-designs"
+            title="Grafiche della collezione"
+            :action="route('seller.collection.designs.sync', [$seller, $collection])"
+            :designs="$designs"
+            :collection-id="$collection->id"
+            :collections="$otherCollections"
+        >
+            <x-slot:empty>
+                <a
+                    href="{{ route('seller-dashboard.portfolio.add') }}"
+                    class="text-primary-400 hover:text-primary-500 font-semibold"
+                >Carica una nuova grafica</a>
+            </x-slot:empty>
+        </x-collection.design-picker>
 
-				input.addEventListener('change', () => {
-					if (!input.files.length) {
-						return;
-					}
+        <x-modal name="change-cover" title="Cambia copertina" :open="$errors->has('image')">
+            <form
+                id="change-cover-form"
+                method="POST"
+                action="{{ route('seller.collection.cover.update', [$seller, $collection]) }}"
+                enctype="multipart/form-data"
+                x-data="{ preview: null, fileName: '' }"
+                class="flex flex-col gap-4"
+            >
+                @csrf
 
-					if (loader) {
-						loader.textContent = input.files[0].name;
-					}
+                @if ($cover)
+                    <div>
+                        <p class="mb-2 text-sm sm:text-base">Copertina attuale</p>
+                        <img
+                            src="{{ $cover }}"
+                            alt="Copertina attuale"
+                            class="bg-surface-500 aspect-16/7 w-full rounded-lg object-contain"
+                        />
+                    </div>
+                @endif
 
-					submit.click();
-				});
-			});
-		}
-	</script>
-@endpushOnce
+                <div x-show="preview" style="display: none">
+                    <p class="mb-2 text-sm sm:text-base">Anteprima nuova copertina</p>
+                    <img
+                        x-bind:src="preview"
+                        alt="Anteprima nuova copertina"
+                        class="bg-surface-500 aspect-16/7 w-full rounded-lg object-contain"
+                    />
+                </div>
 
-<x-layouts.main
-	:title="$title"
-	:description="$description"
-	:thumbnail="$thumbnail"
-	:location-tag="$location"
->
-	<div class="">
-		@if ($collection->image(1024))
-			<div
-				class="stack-content sm:h-120 grid h-56 justify-items-center overflow-hidden rounded-b-md bg-neutral-500 dark:bg-transparent"
-			>
-				<img
-					src="{{ $collection->image(1024) }}"
-					alt=""
-					class="h-[inherit] w-full object-cover blur-sm"
-				/>
+                <label class="block">
+                    <span class="text-neutral-heading mb-1 block text-sm font-medium">Nuova immagine (JPG, PNG o WebP, max 8 MB)</span>
+                    <input
+                        type="file"
+                        name="image"
+                        accept="image/jpeg,image/png,image/webp"
+                        required
+                        class="input input-style w-full"
+                        x-on:change="
+                            const file = $event.target.files[0];
+                            fileName = file ? file.name : '';
+                            preview = file ? URL.createObjectURL(file) : null;
+                        "
+                    />
+                </label>
+                <p x-show="fileName" x-text="fileName" style="display: none" class="truncate text-sm"></p>
 
-				<img
-					src="{{ $collection->image(1024) }}"
-					alt=""
-					class="relative h-[inherit]"
-				/>
-			</div>
-		@else
-			<div class="bg-primary-400 h-28 rounded-b-md sm:h-60"></div>
-		@endif
+                @error('image')
+                    <p class="text-danger-400 text-sm">{{ $message }}</p>
+                @enderror
+            </form>
 
-		<div class="w-full">
-			<div class="relative z-10 mx-auto -mt-12 w-20">
-				<a
-					class="border-(--color-background-400) bg-(--surface-secondary) block aspect-square rounded-[10px] border-[0.4rem] bg-cover bg-center"
-					href="{{ $seller->url() }}"
-					@style([
-					    'background-image: url(' . asset(ltrim($seller->icon(), '/')) . ')' => $seller->icon(),
-					])
-				></a>
-			</div>
+            <x-slot:footer>
+                <x-button
+                    type="button"
+                    variant="secondary"
+                    size="small"
+                    width="auto"
+                    x-on:click="$dispatch('close-modal')"
+                >Annulla</x-button>
+                <x-button type="submit" form="change-cover-form" size="small" width="auto">Salva copertina</x-button>
+            </x-slot:footer>
+        </x-modal>
 
-			<div class="mt-4 grid grid-cols-1 gap-4 text-center">
-				<div class="">
-					<p class="font-heading uppercase tracking-widest">
-						<a href="{{ $seller->url() }}">
-							{{ $seller->name }}
-						</a>
-					</p>
+        <x-modal name="delete-collection" :title="'Eliminare «'.$collection->name.'»?'" size="sm">
+            <p>
+                La collezione verrà eliminata definitivamente. Le grafiche e i prodotti associati resteranno nel tuo
+                portfolio.
+            </p>
 
-					@if ($userIsOwner)
-						<livewire:ecommerce.seller.collection.name-input
-							:seller="$seller"
-							:collection="$collection"
-						/>
-					@else
-						<h1 class="text-750 leading-none">
-							{{ $collection->name }}
-						</h1>
-					@endif
-				</div>
+            <form
+                id="delete-collection-form"
+                method="POST"
+                action="{{ route('seller.collection.delete', [$seller, $collection]) }}"
+            >
+                @csrf
+                @method('DELETE')
+            </form>
 
-				@if ($seller->description)
-					<p class="max-w-176 mx-auto">
-						{{ $seller->description }}
-					</p>
-				@endif
-			</div>
-		</div>
-	</div>
-
-	<div>
-		<div class="w-full">
-			<div class="py-12">
-				<div class="border-(--surface-secondary) flex flex-wrap items-center gap-3 border-b pb-3 max-[600px]:gap-2">
-					<h1 class="text-xl tracking-[0.02em] max-[600px]:text-[1.1rem]">
-						<a
-							class="txt-c1-h"
-							href="{{ $seller->url() }}"
-						>
-							{{ $seller->name }}
-						</a>
-					</h1>
-
-					<h1 class="text-xl tracking-[0.02em] max-[600px]:text-[1.1rem]">
-						&gt;
-					</h1>
-
-					<livewire:ecommerce.seller.collection.name-display :collection="$collection" />
-				</div>
-
-				@if ($userIsOwner)
-					<div
-						class="bg-background-400 mb-8 mt-4 flex flex-wrap gap-3 [--icon-size:1em] max-[600px]:flex-col max-[600px]:items-start"
-					>
-						<button
-							type="button"
-							class="inline-flex cursor-pointer items-center gap-[0.35rem] border-b-2 border-[#067e00] bg-transparent pb-[0.15em] pr-[0.2em] text-sm leading-[1.8] text-[#067e00] [&_svg]:fill-[#067e00]"
-							data-lightbox-open="add-designs"
-						>
-							<x-icon-add class="h-4 w-4" />
-							<span>Aggiungi una grafica</span>
-						</button>
-
-						@if ($designsToRemove->isNotEmpty())
-							<button
-								type="button"
-								class="inline-flex cursor-pointer items-center gap-[0.35rem] border-b-2 border-[#ffc845] bg-transparent pb-[0.15em] pr-[0.2em] text-sm leading-[1.8] text-[#ffc845] [&_svg]:fill-[#ffc845]"
-								data-lightbox-open="remove-designs"
-							>
-								<x-icon-delete class="h-4 w-4" />
-								<span>Rimuovi una grafica</span>
-							</button>
-						@endif
-
-						<button
-							type="button"
-							class="inline-flex cursor-pointer items-center gap-[0.35rem] border-b-2 border-[#0874a8] bg-transparent pb-[0.15em] pr-[0.2em] text-sm leading-[1.8] text-[#0874a8] [&_svg]:fill-[#0874a8]"
-							data-lightbox-open="change-cover"
-						>
-							<x-icon-gallery class="h-4 w-4" />
-							<span>Cambia copertina</span>
-						</button>
-
-						<form
-							method="POST"
-							action="{{ route('seller.collection.delete', [$seller, $collection]) }}"
-							onsubmit="return confirm('Sei sicuro di voler eliminare la collezione?')"
-						>
-							@csrf
-							@method('DELETE')
-
-							<button
-								type="submit"
-								class="inline-flex cursor-pointer items-center gap-[0.35rem] border-b-2 border-[#ff0000] bg-transparent pb-[0.15em] pr-[0.2em] text-sm leading-[1.8] text-[#ff0000] [&_svg]:fill-[#ff0000]"
-							>
-								<x-icon-delete class="h-4 w-4" />
-								<span>Elimina collezione</span>
-							</button>
-						</form>
-					</div>
-				@endif
-
-				<div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-					@foreach ($products as $product)
-						<x-product-card :product="$product" />
-					@endforeach
-				</div>
-			</div>
-		</div>
-	</div>
-
-	@if ($userIsOwner)
-		<div
-			class="z-1000 fixed inset-0 hidden items-center justify-center p-4"
-			data-lightbox="add-designs"
-		>
-			<div
-				class="absolute inset-0 bg-black/65"
-				data-lightbox-close
-			></div>
-
-			<div class="max-w-240 relative z-10 max-h-[min(90vh,60rem)] w-full overflow-auto">
-				<form
-					class="bg-background-400 rounded-xl p-6"
-					method="POST"
-					action="{{ route('seller.collection.designs.add', [$seller, $collection]) }}"
-				>
-					@csrf
-
-					<h1 class="mb-4 text-2xl">
-						Aggiungi una grafica
-					</h1>
-
-					<div class="mb-6">
-						<p class="">
-							Seleziona i lavori da aggiungere alla collezione:
-						</p>
-
-						<div class="my-8 grid grid-cols-[repeat(auto-fill,minmax(9rem,1fr))] gap-4 text-center">
-							@foreach ($designsToAdd as $design)
-								<label class="block">
-									<input
-										type="checkbox"
-										class="peer hidden"
-										name="designs[]"
-										value="{{ $design->id }}"
-									>
-
-									<div
-										class="cursor-pointer overflow-hidden rounded-[5px] border-4 border-[#ebebeb] transition-colors peer-checked:border-[#2ab800]"
-									>
-										<div
-											class="aspect-square bg-cover bg-center"
-											@style([
-											    'background-image: url(' . asset(ltrim($design->image(), '/')) . ')' => $design->image(),
-											])
-										></div>
-									</div>
-								</label>
-							@endforeach
-						</div>
-					</div>
-
-					<div class="flex flex-wrap justify-center gap-2">
-						<x-button type="submit">
-							<x-icon-add class="h-4 w-4" />
-							Aggiungi
-						</x-button>
-
-						<x-button
-							type="button"
-							variant="secondary"
-							data-lightbox-close
-						>
-							<x-icon-close class="h-4 w-4" />
-							Annulla
-						</x-button>
-					</div>
-				</form>
-			</div>
-		</div>
-
-		<div
-			class="z-1000 fixed inset-0 hidden items-center justify-center p-4"
-			data-lightbox="remove-designs"
-		>
-			<div
-				class="absolute inset-0 bg-black/65"
-				data-lightbox-close
-			></div>
-
-			<div class="max-w-240 relative z-10 max-h-[min(90vh,60rem)] w-full overflow-auto">
-				<form
-					class="bg-background-400 rounded-xl p-6"
-					method="POST"
-					action="{{ route('seller.collection.designs.remove', [$seller, $collection]) }}"
-				>
-					@csrf
-					@method('DELETE')
-
-					<h1 class="mb-4 text-2xl">
-						Rimuovi dalla collezione
-					</h1>
-
-					<div class="mb-6">
-						<p class="mb-4">
-							Seleziona le grafiche che vuoi rimuovere dalla collezione (saranno rimosse solo dalla collezione, non eliminate
-							dal tuo account):
-						</p>
-
-						<div class="grid grid-cols-[repeat(auto-fill,minmax(9rem,1fr))] gap-4">
-							@foreach ($designsToRemove as $design)
-								<label class="block">
-									<input
-										type="checkbox"
-										class="peer hidden"
-										name="designs[]"
-										value="{{ $design->id }}"
-									>
-
-									<div
-										class="cursor-pointer overflow-hidden rounded-[5px] border-4 border-[#ebebeb] transition-colors peer-checked:border-[#c71619]"
-									>
-										<div
-											class="aspect-square bg-contain bg-center bg-no-repeat"
-											@style([
-											    'background-image: url(' . asset(ltrim($design->image(), '/')) . ')' => $design->image(),
-											])
-										></div>
-									</div>
-								</label>
-							@endforeach
-						</div>
-					</div>
-
-					<div class="flex flex-wrap justify-center gap-2">
-						<x-button
-							type="submit"
-							color="danger"
-						>
-							<x-icon-delete class="h-4 w-4" />
-							Rimuovi
-						</x-button>
-
-						<x-button
-							type="button"
-							variant="secondary"
-							data-lightbox-close
-						>
-							<x-icon-close class="h-4 w-4" />
-							Annulla
-						</x-button>
-					</div>
-				</form>
-			</div>
-		</div>
-
-		<div
-			class="z-1000 fixed inset-0 hidden items-center justify-center p-4"
-			data-lightbox="change-cover"
-		>
-			<div
-				class="absolute inset-0 bg-black/65"
-				data-lightbox-close
-			></div>
-
-			<div class="max-w-136 relative z-10 max-h-[min(90vh,60rem)] w-full overflow-auto">
-				<form
-					class="bg-background-400 rounded-xl p-6"
-					method="POST"
-					action="{{ route('seller.collection.cover.update', [$seller, $collection]) }}"
-					enctype="multipart/form-data"
-					data-file-form
-				>
-					@csrf
-
-					<h1 class="mb-4 text-2xl">
-						Cambia immagine di copertina
-					</h1>
-
-					<div>
-						<p class="mb-4">
-							Seleziona l'immagine di copertina per questa collezione:
-						</p>
-
-						<input
-							type="file"
-							name="image"
-							class="input w-full"
-							accept="image/*"
-							data-file-input
-						>
-
-						<div
-							class="mt-3 text-sm opacity-75"
-							data-file-load
-						></div>
-
-						<button
-							type="submit"
-							class="hidden"
-							data-file-submit
-						></button>
-
-						<div class="flex justify-center">
-							<x-button
-								type="button"
-								variant="secondary"
-								data-lightbox-close
-							>
-								<x-icon-close class="h-4 w-4" />
-								Annulla
-							</x-button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	@endif
+            <x-slot:footer>
+                <x-button
+                    type="button"
+                    variant="secondary"
+                    size="small"
+                    width="auto"
+                    x-on:click="$dispatch('close-modal')"
+                >Annulla</x-button>
+                <x-button type="submit" form="delete-collection-form" color="danger" size="small" width="auto"
+                    >Elimina collezione</x-button>
+            </x-slot:footer>
+        </x-modal>
+    @endif
 </x-layouts.main>

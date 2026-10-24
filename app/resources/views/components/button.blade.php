@@ -124,18 +124,14 @@
 
                 /* Secondary button: Danger color */
                 &[data-color='danger'] {
-                    background-color: transparent;
+                    background-color: alpha(from var(--color-danger-400) / 5%);
                     border-color: var(--color-danger-400);
-                    color: var(--color-danger-300);
-
-                    svg {
-                        color: var(--color-danger-400);
-                    }
+                    color: var(--color-danger-400);
 
                     /* Secondary button: Danger color - hover state */
                     &:hover {
                         border-color: var(--color-danger-500);
-                        color: var(--color-danger-400);
+                        color: var(--color-danger-500);
                     }
                 }
 
