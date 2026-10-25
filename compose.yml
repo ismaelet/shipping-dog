@@ -38,7 +38,6 @@ services:
       MAIL_HOST: "smtp.titan.email"
       MAIL_PORT: 465
       MAIL_USERNAME: noreply@shippingdog.com
-      MAIL_PASSWORD: REDACTED_SMTP_PASSWORD_COMPOSE
       MAIL_ENCRYPTION: SSL
       MAIL_FROM_ADDRESS: noreply@shippingdog.com
       MAIL_FROM_NAME: "Shipping Dog"
@@ -47,7 +46,6 @@ services:
       SENTRY_TRACES_SAMPLE_RATE: 0
 
       GOOGLE_CLIENT_ID: 31403388119-i2vlmbkk8cp8fbhrrbhusdb5g1qb1nbj.apps.googleusercontent.com
-      GOOGLE_CLIENT_SECRET: REMOVED_SECRET
       GOOGLE_REDIRECT_URI: http://localhost:8000/auth/google/callback
 
     depends_on:
