@@ -45,7 +45,7 @@
             border-radius: 0;
             padding: 0;
             margin: 0;
-            color: var(--color-neutral-heading);
+            color: var(--color-heading-400);
             font-size: 0.9rem;
             box-sizing: border-box;
             outline: none !important;
@@ -62,7 +62,7 @@
         .form-inp:-webkit-autofill,
         .form-textarea:-webkit-autofill {
             -webkit-box-shadow: 0 0 0 1000vw var(--color-background-400) inset;
-            -webkit-text-fill-color: var(--color-neutral-heading);
+            -webkit-text-fill-color: var(--color-heading-400);
         }
 
         .contact-form-field:has(:focus) .form-inp,
@@ -132,19 +132,19 @@
                     <section id="contacts" class="flex gap-4">
                         <a
                             href="{{ config('custom.contacts.whatsapp.url') }}"
-                            class="hover:text-primary-500 text-neutral-heading transition-colors"
+                            class="hover:text-primary-500 text-heading-400 transition-colors"
                         >
                             <x-icon-whatsapp class="h-5 w-5" />
                         </a>
                         <a
                             href="{{ config('custom.contacts.instagram.url') }}"
-                            class="hover:text-primary-500 text-neutral-heading transition-colors"
+                            class="hover:text-primary-500 text-heading-400 transition-colors"
                         >
                             <x-icon-instagram class="h-5 w-5" />
                         </a>
                     </section>
 
-                    <div class="border-neutral-border my-4 border-b"></div>
+                    <div class="border-border-400 my-4 border-b"></div>
 
                     <p class="">
                         <a href="{{ route('support.refund.search') }}" class="text-link">Cambio taglia o reso</a>

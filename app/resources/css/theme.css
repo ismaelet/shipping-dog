@@ -56,6 +56,20 @@
 /* Theme */
 @theme {
   /* Theme: Colors */
+  --color-background-300: #fff;
+  --color-background-400: var(--color-stone-50);
+
+  --color-heading-400: var(--color-slate-950);
+
+  --color-text-400: var(--color-slate-600);
+
+  --color-border-400: alpha(from var(--color-slate-950) / 10%);
+
+  --color-surface-200: #fff;
+  --color-surface-400: #fff;
+  --color-surface-500: var(--color-stone-100);
+  --color-surface-600: var(--color-stone-200);
+
   --color-primary-200: #ffb86a;
   --color-primary-300: #ff8904;
   --color-primary-400: #ff6900;
@@ -69,36 +83,15 @@
 
   --color-success-400: hsl(145 63 50);
   --color-success-500: hsl(145 63 40);
+
   --color-danger-200: #ffccd3;
   --color-danger-300: #ffa1ad;
   --color-danger-400: #ff2056;
   --color-danger-500: hsl(0 100 40);
 
-  --color-background-300: #fff;
-  --color-background-400: var(--color-stone-50);
-
-  --color-surface-200: #fff;
-  --color-surface-400: #fff;
-  --color-surface-500: var(--color-stone-100);
-  --color-surface-600: var(--color-stone-200);
-
-  --color-neutral-heading: var(--color-slate-950);
-  --color-neutral-text: var(--color-slate-600);
-  --color-neutral-border: alpha(from var(--color-slate-950) / 10%);
-
-  --color-white: #fff;
-  --color-black: #000;
-
   /* Theme: Fonts */
   --font-sans: "Manrope", system-ui, sans-serif;
   --font-heading: "Poppins", system-ui, sans-serif;
-
-  --text-600: min(1.5rem, 6vw);
-  --text-700: min(2rem, 7vw);
-  --text-750: min(3rem, 10vw);
-  --text-800: min(3.5rem, 12vw);
-  --text-850: min(4rem, 13.5vw);
-  --text-900: min(5rem, 15vw);
 
   /* Theme: Spacing */
   --spacing-breakout: 1440px;
@@ -111,11 +104,9 @@
   --breakpoint-xs: 27rem;
 }
 
+/* Dark theme overrides */
 .dark {
-  --color-neutral-heading: var(--color-stone-100);
-  --color-neutral-text: var(--color-slate-400);
-  --color-neutral-border: alpha(from #fff / 10%);
-
+  /* Dark theme: Colors */
   --color-background-300: var(--color-slate-950);
   --color-background-400: var(--color-slate-900);
 
@@ -124,37 +115,42 @@
   --color-surface-500: var(--color-slate-700);
   --color-surface-600: var(--color-slate-600);
 
-  --shadow-400: 0 2rem 3rem -1rem hsl(0deg, 0%, 0%, 0.1);
-  --shadow-700: 0 4rem 6rem -2rem hsl(0deg, 0%, 0%, 0.1);
+  --color-heading-400: var(--color-stone-100);
 
+  --color-text-400: var(--color-slate-400);
+
+  --color-border-400: alpha(from #fff / 10%);
+
+  /* Dark theme: Fonts */
   --font-weight-semibold: 500;
   --font-weight-bold: 600;
 
-  color: var(--color-neutral-text);
+  /* Reset text color */
+  color: var(--color-text-400);
 }
 
-/* Theme: Dark */
+/* Light theme overrides */
 .light {
-  --color-neutral-heading: var(--color-slate-900);
+  --color-heading-400: var(--color-slate-900);
 }
 
 /* Base Styles */
 body {
   background-color: var(--color-background-400);
-  color: var(--color-neutral-text);
+  color: var(--color-text-400);
 }
 
 /*
 * Utility Classes
 */
 .text-highlight {
-  color: var(--color-neutral-heading);
+  color: var(--color-heading-400);
   font-weight: var(--font-weight-semibold);
 }
 
 @utility text-link {
   @apply transition-colors;
-  color: var(--color-neutral-heading);
+  color: var(--color-heading-400);
   font-weight: var(--font-weight-medium);
   text-decoration: underline;
 
@@ -180,8 +176,8 @@ body {
     padding-inline: 1em;
     background-color: alpha(from var(--color-background-400) / 70%);
     border-radius: var(--radius-lg);
-    border: 1px solid var(--color-neutral-border);
-    color: var(--color-neutral-heading);
+    border: 1px solid var(--color-border-400);
+    color: var(--color-heading-400);
     font-size: var(--text-sm);
     transition:
       background-color 150ms,
@@ -202,16 +198,16 @@ body {
     }
 
     &::placeholder {
-      color: var(--color-neutral-text);
+      color: var(--color-text-400);
     }
 
     /* Autofill resets */
     &:-webkit-autofill {
       outline: var(--spacing-border) solid
-        alpha(from var(--color-neutral-border) / 20%) !important;
+        alpha(from var(--color-border-400) / 20%) !important;
       -webkit-box-shadow: 0 0 0 100vw var(--color-surface-400) inset !important;
       box-shadow: 0 0 0 100vw var(--color-surface-400) inset !important;
-      -webkit-text-fill-color: var(--color-neutral-heading) !important;
+      -webkit-text-fill-color: var(--color-heading-400) !important;
       transition: none !important;
     }
 
@@ -241,9 +237,9 @@ body {
     align-items: center;
     justify-content: center;
     background-color: var(--color-surface-400);
-    border: 1px solid var(--color-neutral-border);
+    border: 1px solid var(--color-border-400);
     border-radius: 9999px;
-    color: var(--color-neutral-heading);
+    color: var(--color-heading-400);
     font-size: 0.875rem;
     line-height: 1.25rem;
     font-weight: var(--font-weight-semibold);

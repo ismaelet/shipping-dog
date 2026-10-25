@@ -25,7 +25,7 @@
 	>
 		<div class="bg-background-400 h-full w-full opacity-70"></div>
 
-		<div class="text-neutral-heading relative w-12 translate-y-4 transition-transform group-hover:translate-y-0">
+		<div class="text-heading-400 relative w-12 translate-y-4 transition-transform group-hover:translate-y-0">
 			<x-icon-upload />
 		</div>
 	</div>

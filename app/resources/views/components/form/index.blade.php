@@ -15,7 +15,7 @@
         }
 
         .form-body {
-            border-block: 1px solid var(--color-neutral-border);
+            border-block: 1px solid var(--color-border-400);
         }
     </style>
 @endpush

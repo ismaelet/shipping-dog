@@ -84,7 +84,7 @@
                                     x-model="selected"
                                     class="peer sr-only"
                                 />
-                                <span class="bg-surface-400 border-neutral-border peer-checked:border-primary-400 peer-focus-visible:outline-primary-400 relative block overflow-hidden rounded-lg border-2 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2">
+                                <span class="bg-surface-400 border-border-400 peer-checked:border-primary-400 peer-focus-visible:outline-primary-400 relative block overflow-hidden rounded-lg border-2 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2">
                                     <img
                                         src="{{ $design->image() }}"
                                         alt=""
@@ -99,7 +99,7 @@
                                         class="bg-primary-400 absolute top-2 right-2 grid size-6 place-items-center rounded-full text-white"
                                         aria-hidden="true"
                                     >✓</span>
-                                    <span class="text-neutral-heading block truncate px-2 pt-2 text-sm font-medium">{{ $design->name }}</span>
+                                    <span class="text-heading-400 block truncate px-2 pt-2 text-sm font-medium">{{ $design->name }}</span>
                                     @if ($collections->has($design->collection))
                                         <span class="block truncate px-2 pb-2 text-xs">In «{{ $collections[$design->collection] }}»</span>
                                     @else

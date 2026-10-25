@@ -35,7 +35,7 @@
 	>
 		<a
 			href="{{ route('home') }}"
-			class="text-neutral-heading block whitespace-nowrap text-[22px] uppercase tracking-widest max-[480px]:hidden"
+			class="text-heading-400 block whitespace-nowrap text-[22px] uppercase tracking-widest max-[480px]:hidden"
 		>
 			Shi<span class="text-primary">pp</span>ing Dog
 		</a>

@@ -1,12 +1,12 @@
 <section x-data class="relative mt-8">
     <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
-        <h2 class="text-neutral-heading text-lg font-semibold">
+        <h2 class="text-heading-400 text-lg font-semibold">
             Prodotti della collezione
-            <span class="text-neutral-text text-base font-normal">({{ $products->total() }})</span>
+            <span class="text-text-400 text-base font-normal">({{ $products->total() }})</span>
         </h2>
 
         @if ($products->total() > 1)
-            <label class="text-neutral-text flex items-center gap-2 text-sm">
+            <label class="text-text-400 flex items-center gap-2 text-sm">
                 <span class="text-trim">Ordina:</span>
 
                 <x-select

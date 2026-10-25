@@ -17,14 +17,14 @@
                     href="{{ config('custom.contacts.instagram.url') }}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="text-primary-500 dark:text-neutral-heading font-semibold transition-colors hover:text-orange-500"
+                    class="text-primary-500 dark:text-heading-400 font-semibold transition-colors hover:text-orange-500"
                 >
                     @shippingdog
                 </a>
                 o inviaci una foto del tuo look via
                 <a
                     href="{{ config('custom.contacts.email.url') }}"
-                    class="text-primary-500 dark:text-neutral-heading font-semibold transition-colors hover:text-orange-500"
+                    class="text-primary-500 dark:text-heading-400 font-semibold transition-colors hover:text-orange-500"
                 >
                     e-mail
                 </a>

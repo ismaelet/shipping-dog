@@ -32,7 +32,7 @@
 						</span>
 
 						<div class="ml-4 grid gap-1">
-							<p class="font-heading text-neutral-heading text-sm font-medium leading-none">
+							<p class="font-heading text-heading-400 text-sm font-medium leading-none">
 								{{ $user->fullName() ?: $user->email }}
 							</p>
 
@@ -42,7 +42,7 @@
 						</div>
 
 						<div class="ml-auto text-base">
-							<span class="text-neutral-heading text-sm">{!! $user->registrationDate() !!}</span>
+							<span class="text-heading-400 text-sm">{!! $user->registrationDate() !!}</span>
 						</div>
 					</form>
 				@endforeach

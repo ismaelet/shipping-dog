@@ -1,3 +1,3 @@
-<label {{ $attributes->class(['font-semibold text-neutral-heading']) }}>
+<label {{ $attributes->class(['font-semibold text-heading-400']) }}>
 	{{ $text ?? $slot }}
 </label>

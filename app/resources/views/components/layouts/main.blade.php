@@ -4,6 +4,7 @@
     'thumbnail' => null,
     'location' => null,
     'colorScheme' => null,
+    'pageClass' => null,
 ])
 
 @push('styles')
@@ -36,7 +37,7 @@
 	:$colorScheme
 >
 	{{-- Page content --}}
-	<div class="main-content min-h-svh">
+	<div @class(['main-content min-h-svh', $pageClass])>
 		{{-- Header --}}
 		<x-header />
 

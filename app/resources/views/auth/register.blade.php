@@ -90,7 +90,7 @@
 			<a
 				href="{{ route('login') }}"
 				variant="secondary"
-				class="hover:text-neutral-heading text-center transition-colors"
+				class="hover:text-heading-400 text-center transition-colors"
 			>
 				Hai già un account? Accedi
 			</a>

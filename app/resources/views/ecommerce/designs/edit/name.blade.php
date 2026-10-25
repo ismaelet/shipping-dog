@@ -35,7 +35,7 @@
 	<div class="stack-content center-content grid justify-items-end">
 		<input
 			type="text"
-			class="change-name focus:border-primary text-neutral-heading w-full border px-8 py-2 text-center text-4xl font-bold tracking-wider transition-colors"
+			class="change-name focus:border-primary text-heading-400 w-full border px-8 py-2 text-center text-4xl font-bold tracking-wider transition-colors"
 			name="name"
 			maxlength="25"
 			data-design-id="<?= $design->id ?>"

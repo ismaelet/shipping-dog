@@ -174,7 +174,7 @@
 			<p class="">{{ $getRecord()->shippingFeeString() }}</p>
 		</div>
 
-		<div class="order-row text-neutral-heading col-span-full grid grid-cols-subgrid text-lg">
+		<div class="order-row text-heading-400 col-span-full grid grid-cols-subgrid text-lg">
 			<p class="">Totale</p>
 			<p class="">{{ $getRecord()->priceString() }}</p>
 		</div>

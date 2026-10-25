@@ -419,7 +419,16 @@ class Product extends Model {
             })
             ->where('type_id', $this->type->shownType()->id)
             ->where('status', true)
-            ->with('design', 'design_with_trashed', 'type', 'color', 'position', 'type')
+            ->with(
+                'design',
+                'design_with_trashed',
+                'type',
+                'color',
+                'position',
+                'seller.prices',
+                'specific_price',
+                'base_price',
+            )
             ->orderBy('sales', 'desc')
             ->orderBy('id', 'desc')
             ->limit($quantity)
@@ -440,7 +449,16 @@ class Product extends Model {
                         ->whereNull('variant_of');
                 })
                 ->where('status', true)
-                ->with('design', 'design_with_trashed', 'type', 'color', 'position', 'type')
+                ->with(
+                    'design',
+                    'design_with_trashed',
+                    'type',
+                    'color',
+                    'position',
+                    'seller.prices',
+                    'specific_price',
+                    'base_price',
+                )
                 ->orderBy('sales', 'desc')
                 ->orderBy('id', 'desc')
                 ->limit($quantity - $relatedProducts->count())

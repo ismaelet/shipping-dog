@@ -56,14 +56,14 @@
                 x-transition:enter-end="translate-y-0 opacity-100"
                 class="modal-body {{ $maxWidth }} bg-background-400 relative flex w-full flex-col overflow-hidden rounded-t-xl sm:rounded-xl"
             >
-                <div class="border-neutral-border flex items-center justify-between gap-4 border-b px-5 py-4">
+                <div class="border-border-400 flex items-center justify-between gap-4 border-b px-5 py-4">
                     <x-heading variant="article" id="modal-title-{{ $name }}">{{ $title }}</x-heading>
 
                     <button
                         type="button"
                         x-on:click="open = false"
                         aria-label="Chiudi"
-                        class="text-neutral-text hover:text-neutral-heading focus-visible:outline-primary-400 grid size-9 shrink-0 cursor-pointer place-items-center rounded-full focus-visible:outline-2"
+                        class="text-text-400 hover:text-heading-400 focus-visible:outline-primary-400 grid size-9 shrink-0 cursor-pointer place-items-center rounded-full focus-visible:outline-2"
                     >
                         <x-icon-close class="size-4" />
                     </button>
@@ -72,7 +72,7 @@
                 <div class="min-h-0 flex-1 overflow-y-auto px-5 py-4">{{ $slot }}</div>
 
                 @isset($footer)
-                    <div class="border-neutral-border flex flex-wrap justify-end gap-2 border-t px-5 py-4">
+                    <div class="border-border-400 flex flex-wrap justify-end gap-2 border-t px-5 py-4">
                         {{ $footer }}
                     </div>
                 @endisset

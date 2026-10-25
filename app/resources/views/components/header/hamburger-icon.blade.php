@@ -14,13 +14,13 @@
 	class="header-mobile-toggle h-16.25 relative inline-block w-6 shrink-0 cursor-pointer xl:hidden"
 >
 	<span class="hamburger-top absolute right-0 top-1/2 h-0.5 w-full rounded-full">
-		<span class="bg-neutral-heading block size-full"></span>
+		<span class="bg-heading-400 block size-full"></span>
 	</span>
 
-	<span class="hamburger-middle bg-neutral-heading absolute right-0 top-1/2 h-0.5 w-full rounded-full"></span>
+	<span class="hamburger-middle bg-heading-400 absolute right-0 top-1/2 h-0.5 w-full rounded-full"></span>
 
 	<span class="hamburger-bottom absolute right-0 top-1/2 h-0.5 w-full rounded-full">
-		<span class="bg-neutral-heading block size-full"></span>
+		<span class="bg-heading-400 block size-full"></span>
 	</span>
 </label>
 

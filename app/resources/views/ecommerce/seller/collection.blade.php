@@ -25,10 +25,10 @@
         <nav aria-label="Breadcrumb" class="text-sm">
             <ol class="flex flex-wrap items-center gap-x-2">
                 <li>
-                    <a href="{{ $seller->url() }}" class="hover:text-neutral-heading">{{ $seller->name }}</a>
+                    <a href="{{ $seller->url() }}" class="hover:text-heading-400">{{ $seller->name }}</a>
                 </li>
                 <li aria-hidden="true">/</li>
-                <li aria-current="page" class="text-neutral-heading">{{ $collection->name }}</li>
+                <li aria-current="page" class="text-heading-400">{{ $collection->name }}</li>
             </ol>
         </nav>
 
@@ -38,12 +38,12 @@
                     <h1 class="sr-only">{{ $collection->name }}</h1>
                     <livewire:ecommerce.seller.collection.name-input :seller="$seller" :collection="$collection" />
                 @else
-                    <h1 class="text-neutral-heading font-heading text-3xl md:text-4xl">{{ $collection->name }}</h1>
+                    <h1 class="text-heading-400 font-heading text-3xl md:text-4xl">{{ $collection->name }}</h1>
                 @endif
 
                 <a href="{{ $seller->url() }}" class="mt-3 inline-flex items-center gap-2">
                     <img src="{{ $seller->icon() }}" alt="" loading="lazy" class="size-10 rounded-full object-cover" />
-                    <span>di <span class="text-neutral-heading font-semibold">{{ $seller->name }}</span></span>
+                    <span>di <span class="text-heading-400 font-semibold">{{ $seller->name }}</span></span>
                 </a>
 
                 @if ($designCount || $productCount)
@@ -143,7 +143,7 @@
                 </div>
 
                 <label class="block">
-                    <span class="text-neutral-heading mb-1 block text-sm font-medium">Nuova immagine (JPG, PNG o WebP, max 8 MB)</span>
+                    <span class="text-heading-400 mb-1 block text-sm font-medium">Nuova immagine (JPG, PNG o WebP, max 8 MB)</span>
                     <input
                         type="file"
                         name="image"

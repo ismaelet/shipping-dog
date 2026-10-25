@@ -32,7 +32,7 @@
 
         <p class="mar-t-2">
             Il numero dell'ordine è indicato nella email di conferma ricevuta dal nostro sito e
-            <span class="text-neutral-heading font-bold">NON</span> è il numero di ricevuta indicato nell'email ricevuta
+            <span class="text-heading-400 font-bold">NON</span> è il numero di ricevuta indicato nell'email ricevuta
             da PayPal. L'indirizzo email deve essere quello inizialmente utilizzato per effettuare l'ordine.
         </p>
     </x-slot:body>

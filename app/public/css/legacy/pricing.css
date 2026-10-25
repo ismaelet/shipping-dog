@@ -48,7 +48,7 @@
 }
 
 .price_head {
-  color: var(--color-neutral-heading);
+  color: var(--color-heading-400);
   font-weight: 500;
   font-size: 1.05rem;
   padding: 10px 0 0.9rem 0;

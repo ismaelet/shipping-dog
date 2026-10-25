@@ -31,7 +31,7 @@
 	<div class="grid gap-1">
 		{{-- Value --}}
 		@isset($value)
-			<div class="text-neutral-heading text-3xl font-bold">{{ $value }}</div>
+			<div class="text-heading-400 text-3xl font-bold">{{ $value }}</div>
 		@endisset
 
 		{{-- Content --}}

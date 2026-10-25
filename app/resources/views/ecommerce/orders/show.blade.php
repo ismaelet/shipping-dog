@@ -58,7 +58,7 @@
 
 				<p class="text-center">
 					Siamo in attesa della conferma del pagamento. Se hai già pagato, per favore contattaci a <span
-						class="text-neutral-heading font-bold"
+						class="text-heading-400 font-bold"
 					><a href="{{ config('custom.contacts.email.url') }}">{{ config('custom.contacts.email.label') }}</a></span>
 					e
 					provvederemo a sbloccare l'ordine.<br><br>Se invece non hai ancora completato il pagamento, puoi farlo qui, oppure
@@ -99,19 +99,19 @@
 			]))
 			<p>
 				Il tuo ordine verrà spedito entro <span
-					class="text-neutral-heading font-bold">{{ $order->shipping_method->minimumWorkingDays($order->hasLongDelivery()) . '-' . $order->shipping_method->maximumWorkingDays($order->hasLongDelivery()) }}
+					class="text-heading-400 font-bold">{{ $order->shipping_method->minimumWorkingDays($order->hasLongDelivery()) . '-' . $order->shipping_method->maximumWorkingDays($order->hasLongDelivery()) }}
 					giorni lavorativi</span> dal momento della conferma.
 				Riceverai una
-				email dal <span class="text-neutral-heading font-bold">corriere GLS</span> con codice e istruzioni di <span
-					class="text-neutral-heading font-bold"
+				email dal <span class="text-heading-400 font-bold">corriere GLS</span> con codice e istruzioni di <span
+					class="text-heading-400 font-bold"
 				>tracciamento</span> intorno alle
-				<span class="text-neutral-heading font-bold">20:00</span> del giorno di spedizione.<br><br>Abbiamo mandato una email
+				<span class="text-heading-400 font-bold">20:00</span> del giorno di spedizione.<br><br>Abbiamo mandato una email
 				di
 				conferma
 				al tuo indirizzo
 				email. Nel
 				caso non appaia entro 5 minuti dal momento del pagamento, consigliamo di controllare la <span
-					class="text-neutral-heading font-bold"
+					class="text-heading-400 font-bold"
 				>cartella di
 					spam</span>.
 			</p>

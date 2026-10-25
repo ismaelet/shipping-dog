@@ -10,7 +10,7 @@
     <div class="inline-flex items-center">
         <input
             type="text"
-            class="text-750 font-heading text-neutral-heading"
+            class="text-750 font-heading text-heading-400"
             name="name"
             placeholder="Nome collezione"
             wire:model.live.debounce.500ms="name"

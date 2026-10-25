@@ -31,7 +31,7 @@
         <div class="full-width pt-8">
             @if (! $isValid)
                 <div class="mx-auto max-w-xl py-10 text-center">
-                    <h1 class="text-neutral-heading text-xl font-semibold">
+                    <h1 class="text-heading-400 text-xl font-semibold">
                         {{ $search === '' ? 'Cosa stai cercando?' : 'Ricerca troppo breve' }}
                     </h1>
                     <p class="mt-2">
@@ -40,13 +40,13 @@
                 </div>
             @elseif ($noResults)
                 <div class="mx-auto max-w-xl py-10 text-center">
-                    <h1 class="text-neutral-heading text-xl font-semibold">Nessun risultato per "{{ $search }}"</h1>
+                    <h1 class="text-heading-400 text-xl font-semibold">Nessun risultato per "{{ $search }}"</h1>
                     <p class="mt-2">Prova a utilizzare parole più semplici oppure cerca un altro design o negozio.</p>
                 </div>
             @else
                 <div class="breakout">
                     {{-- Results summary --}}
-                    <x-heading variant="article" class="text-neutral-heading text-xl font-semibold md:text-2xl">
+                    <x-heading variant="article" class="text-heading-400 text-xl font-semibold md:text-2xl">
                         {{ $designCount }} design e {{ $sellerCount }} {{ $sellerCount === 1 ? 'negozio' : 'negozi' }} per
                         "{{ $search }}"
                     </x-heading>
@@ -62,7 +62,7 @@
                                             @class([
                                                 'focus-visible:outline-primary-400 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
                                                 'bg-primary-400 text-white' => $type === $key,
-                                                'bg-surface-400 text-neutral-heading hover:bg-surface-500' => $type !== $key,
+                                                'bg-surface-400 text-heading-400 hover:bg-surface-500' => $type !== $key,
                                             ])
                                             @if ($type === $key) aria-current="page" @endif
                                         >
@@ -84,8 +84,8 @@
                                                 href="{{ route('search', array_filter(['search' => $search, 'type' => $type === 'all' ? null : $type, 'sort' => $key === 'relevance' ? null : $key])) }}"
                                                 @class([
                                                     'focus-visible:outline-primary-400 transition-colors focus-visible:outline-2',
-                                                    'text-neutral-heading font-semibold underline underline-offset-4' => $sort === $key,
-                                                    'hover:text-neutral-heading' => $sort !== $key,
+                                                    'text-heading-400 font-semibold underline underline-offset-4' => $sort === $key,
+                                                    'hover:text-heading-400' => $sort !== $key,
                                                 ])
                                                 @if ($sort === $key) aria-current="true" @endif
                                             >{{ $label }}</a>
@@ -106,8 +106,8 @@
                 @if ($type !== 'sellers')
                     <section class="results-group full-width mt-8">
                         <div class="breakout">
-                            <h2 class="text-neutral-heading text-lg font-semibold">
-                                Design <span class="text-neutral-text text-base font-normal">({{ $designCount }})</span>
+                            <h2 class="text-heading-400 text-lg font-semibold">
+                                Design <span class="text-text-400 text-base font-normal">({{ $designCount }})</span>
                             </h2>
 
                             @if ($designs->isEmpty())
@@ -128,8 +128,8 @@
                 @if ($type !== 'designs' && $otherSellers->isNotEmpty() || $type === 'sellers')
                     <section class="results-group full-width mt-12">
                         <div class="breakout">
-                            <h2 class="text-neutral-heading text-lg font-semibold">
-                                Negozi <span class="text-neutral-text text-base font-normal">({{ $sellerCount }})</span>
+                            <h2 class="text-heading-400 text-lg font-semibold">
+                                Negozi <span class="text-text-400 text-base font-normal">({{ $sellerCount }})</span>
                             </h2>
 
                             @if ($sellers->isEmpty())
@@ -142,7 +142,9 @@
                                 </div>
 
                                 @if ($type === 'sellers')
-                                    <div class="mt-10"><x-pagination.default :paginator="$sellers->onEachSide(1)" /></div>
+                                    <div class="mt-10">
+                                        <x-pagination.default :paginator="$sellers->onEachSide(1)" />
+                                    </div>
                                 @elseif ($sellerCount > $sellers->count())
                                     <a
                                         href="{{ route('search', ['search' => $search, 'type' => 'sellers']) }}"

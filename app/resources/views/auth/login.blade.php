@@ -65,7 +65,7 @@
 
 			<a
 				href="{{ route('password.request') }}"
-				class="hover:text-neutral-heading text-right transition-colors"
+				class="hover:text-heading-400 text-right transition-colors"
 			>
 				<p class="">Hai dimenticato la password?</p>
 			</a>

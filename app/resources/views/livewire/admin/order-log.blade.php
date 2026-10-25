@@ -209,8 +209,8 @@
 			<x-dashboard.form.panel>
 				<p class="py-8">
 					Nessun ordine registrato dopo <span
-						class="text-neutral-heading font-bold">{{ $previousOrder?->address->full_name }}</span>
-					del <span class="text-neutral-heading font-bold">{{ $previousOrder?->created_at->format('d/m/Y') }}</span>
+						class="text-heading-400 font-bold">{{ $previousOrder?->address->full_name }}</span>
+					del <span class="text-heading-400 font-bold">{{ $previousOrder?->created_at->format('d/m/Y') }}</span>
 				</p>
 			</x-dashboard.form.panel>
 		@endif

@@ -10,7 +10,7 @@
 		@if ($seller->activation_request_sent)
 			<p
 				role="status"
-				class="font-heading text-neutral-heading text-lg font-semibold italic"
+				class="font-heading text-heading-400 text-lg font-semibold italic"
 			>
 				Richiesta di attivazione inviata
 			</p>
@@ -32,7 +32,7 @@
 				size="small"
 			>Richiedi attivazione</x-button>
 		@else
-			<p class="font-heading text-neutral-heading text-lg font-semibold italic">
+			<p class="font-heading text-heading-400 text-lg font-semibold italic">
 				Il tuo negozio non è ancora attivo
 			</p>
 			<p class="text-primary-200 text-sm">

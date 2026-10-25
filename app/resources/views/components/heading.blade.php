@@ -21,7 +21,7 @@
 	<style>
 		@layer utilities {
 			:where(.heading) {
-				color: var(--color-neutral-heading);
+				color: var(--color-heading-400);
 			}
 		}
 

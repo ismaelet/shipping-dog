@@ -8,7 +8,7 @@
 				La collezione
 			</p>
 
-			<h2 class="font-heading text-neutral-heading mt-2 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+			<h2 class="font-heading text-heading-400 mt-2 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
 				{{ $seller ? $seller->name : 'Tutti i prodotti' }}
 			</h2>
 
@@ -23,7 +23,7 @@
 		>
 			<button
 				type="submit"
-				class="hover:text-neutral-heading grid size-5 shrink-0 cursor-pointer place-items-center transition-colors"
+				class="hover:text-heading-400 grid size-5 shrink-0 cursor-pointer place-items-center transition-colors"
 				aria-label="Cerca"
 			>
 				<x-icon-search class="size-4" />
@@ -35,7 +35,7 @@
 				placeholder="Cerca nella collezione..."
 				maxlength="30"
 				autocomplete="off"
-				class="text-neutral-heading placeholder: min-w-0 flex-1 border-0 bg-transparent p-0 text-sm outline-none focus:ring-0"
+				class="text-heading-400 placeholder: min-w-0 flex-1 border-0 bg-transparent p-0 text-sm outline-none focus:ring-0"
 			>
 		</form>
 	</header>

@@ -7,7 +7,7 @@
 			problemi, potete contattarci tramite email a
 			<a
 				href="{{ config('custom.contacts.email.url') }}"
-				class="text-neutral-heading underline"
+				class="text-heading-400 underline"
 			>
 				{{ config('custom.contacts.email.label') }}
 			</a>. Ci scusiamo per il disagio e vi ringraziamo per la comprensione.

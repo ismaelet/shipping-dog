@@ -1,5 +1,5 @@
-<div class="logo-field field">
-	<x-label class="field-label text-sm">{{ $product->logoGroup()->name }}</x-label>
+<div class="logo-field field !mt-6">
+	<x-label class="field-label !mb-3 !border-0 !p-0 !font-sans !text-sm !tracking-normal !text-heading-400 !normal-case">{{ $product->logoGroup()->name }}</x-label>
 
 	<div
 		class="grid-flow"

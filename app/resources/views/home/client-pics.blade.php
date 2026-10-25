@@ -3,7 +3,7 @@
     {{-- Heading --}}
     <p class="text-primary-500 text-xs font-bold tracking-[0.2em] uppercase">La community</p>
 
-    <h2 class="text-neutral-heading t mx-auto mt-4 max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
+    <h2 class="text-heading-400 t mx-auto mt-4 max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
         Fatto per essere vissuto.
     </h2>
 
@@ -13,14 +13,14 @@
             href="{{ config('custom.contacts.instagram.url') }}"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-primary-500 dark:text-neutral-heading font-semibold transition-colors hover:text-orange-500"
+            class="text-primary-500 dark:text-heading-400 font-semibold transition-colors hover:text-orange-500"
         >
             @shippingdog
         </a>
         o inviaci una foto del tuo look via
         <a
             href="{{ config('custom.contacts.email.url') }}"
-            class="text-primary-500 dark:text-neutral-heading font-semibold transition-colors hover:text-orange-500"
+            class="text-primary-500 dark:text-heading-400 font-semibold transition-colors hover:text-orange-500"
         >
             e-mail
         </a>

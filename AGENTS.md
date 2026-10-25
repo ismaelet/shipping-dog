@@ -22,15 +22,12 @@
 - Remove obsolete code only after verifying it is unused.
 - Do not modify dependencies, migrations, environment configuration, generated files, or build output unless necessary.
 - Never generate images or unsolicited documentation.
-- **Match validation effort to the scope and risk of the change.**
 
 ## Blade components and helpers
 
 - Reuse existing Blade components before writing new markup, especially layouts, forms, buttons, typography, cards, tables, and pagination.
 - Anonymous components: `app/resources/views/components/`; class-backed: `app/app/View/Components/`.
-- Prefer `<x-input>`, `<x-select>`, `<x-textarea>`, and `<x-button>` when their APIs support the requirement.
-- Inspect component props and existing usages before modifying or reusing shared components. Never invent props or component names.
-- Use `@props`, `$attributes->class(...)`, and established attribute-merging patterns. Preserve slots and caller attributes.
+- Prefer `<x-input>`, `<x-select>`, `<x-textarea>`, and `<x-button>` when their APIs support the requirement over HTML elements.
 - Use `@pushOnce('styles')` and `@pushOnce('scripts')` for component-specific assets when needed.
 - Reuse helpers in `app/app/Helpers/` and global shorthands loaded by `AppServiceProvider` (e.g. `user()`, `cart()`, `price()`).
 - Avoid duplicating styling or behavior already provided by components.
@@ -43,21 +40,14 @@
   - `text-primary-400`, NOT `text-primary` or `text-orange-500`.
   - `bg-surface-400`, NOT `bg-surface` or `bg-slate-800`.
   - `bg-background-400`, NOT `bg-background`.
-  - `text-neutral-heading`, NOT `text-slate-950`.
+  - `text-heading-400`, NOT `text-slate-950`.
 - Check `theme.css` for available tokens. They already support light/dark themes; avoid redundant `dark:` color overrides.
-- Reuse existing fonts, spacing tokens, breakpoints, and utilities.
-- Prefer Tailwind utilities over custom CSS. Avoid arbitrary values when existing tokens suffice.
-- Use component-specific CSS only when necessary; avoid inline styles and unnecessary global rules.
-- Define gradients in CSS via `@pushOnce('styles')`, never Tailwind gradient utilities. Put shared gradients in shared stylesheets.
 
 ## Layout and Figma fidelity
 
 - **NEVER add horizontal padding, width constraints, or centering utilities to page sections unless explicitly required by the Figma design.**
 - **Do NOT add `max-w-*`, `mx-auto`, or extra `px-*` to sections or their outer wrappers merely to constrain or center content.**
-- Page width, spacing, and alignment are already managed by the grid in `base.css`.
 - Respect `.content-grid`, `.full-width`, `.breakout`, and `.fill-width`. Do not recreate their behavior with nested containers or unnecessary wrappers.
-- Match Figma spacing accurately. Add padding or width constraints only where the design requires them.
-- Internal component spacing (card/button padding, gaps, etc.) is allowed when required by the design.
 
 ## JavaScript
 
@@ -87,14 +77,21 @@ docker compose exec vite npm run build
 
 - Assume containers are already running. Do not restart, rebuild, or install dependencies unnecessarily.
 - Laravel runs on port 8000; Vite on 5173. Vite starts automatically.
-- Tests use PHPUnit/Pest in `app/tests/`. Always use `APP_ENV=testing` for PHP tests.
-- Always run the tests relative to edited Laravel routes if a Controller or Model was edited or deleted.
+- Tests use Pest in `app/tests/` or Playwright in app/e2e. Always use `APP_ENV=testing` for PHP tests.
 - Add or update tests for new behavior, bug fixes, or meaningful logic changes when existing coverage is insufficient.
 - Styling, markup-only, and documentation changes do not require new tests.
 - Run frontend builds only when relevant to modified assets or compilation behavior.
 - Avoid repeated validation unless changes or failures justify it.
 - Never run destructive database commands without explicit approval.
 - Report validation failures or checks that could not be performed.
+
+## Browser and visual testing
+
+- Minimize browser interactions and screenshot analysis
+  to reduce AI credit consumption.
+- Prefer inspecting HTML, CSS, and component code first.
+- Use browser screenshots only when visual verification
+  is necessary.
 
 ## Communication
 

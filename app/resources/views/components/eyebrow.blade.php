@@ -1,20 +1,21 @@
-@pushOnce('styles')
-	<style>
-		:where(.eyebrow) {
-			color: var(--color-primary-300);
-		}
+@props(['variant' => 'default'])
 
-		.eyebrow {
-			margin-bottom: 1rem;
-			font-size: var(--text-xs);
-			font-weight: var(--font-weight-bold);
-			letter-spacing: 0.18em;
-			text-transform: uppercase;
-			text-box: trim-both cap alphabetic;
-		}
-	</style>
+@pushOnce('styles')
+    <style>
+        .eyebrow {
+            margin-bottom: 0.75rem;
+            color: var(--color-primary-300);
+            font-size: var(--text-xs);
+            font-weight: var(--font-weight-bold);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            text-box: trim-both cap alphabetic;
+        }
+
+        .eyebrow[data-variant='alternative'] {
+            color: var(--color-primary-200);
+        }
+    </style>
 @endpushOnce
 
-<p {{ $attributes->merge(['class' => 'eyebrow']) }}>
-	{{ $slot }}
-</p>
+<p {{ $attributes->merge(['class' => 'eyebrow']) }} data-variant="{{ $variant }}">{{ $slot }}</p>

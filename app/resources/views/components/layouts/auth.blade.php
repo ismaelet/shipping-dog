@@ -33,7 +33,7 @@
 
             <div class="relative grid max-w-2xl gap-8 px-8 py-16">
                 <x-heading variant="main">{!! $welcomeTitle !!}</x-heading>
-                <x-typography.paragraph class="text-neutral-heading">
+                <x-typography.paragraph class="text-heading-400">
                     {!! $welcomeDescription !!}</x-typography.paragraph>
             </div>
         </section>

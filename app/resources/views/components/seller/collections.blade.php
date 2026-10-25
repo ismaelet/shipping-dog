@@ -52,7 +52,7 @@
 		</a>
 
 		{{-- Collection name --}}
-		<h3 class="text-neutral-heading mt-4 truncate text-center tracking-wide">
+		<h3 class="text-heading-400 mt-4 truncate text-center tracking-wide">
 			<a
 				href="{{ $collection->url() }}"
 				class="hover:text-primary-400 transition-colors"

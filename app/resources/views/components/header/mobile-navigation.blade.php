@@ -27,7 +27,7 @@
 								:component="'icon-' . $link['icon']"
 							/>
 
-							<span class="text-neutral-heading relative flex items-center gap-2 py-4 text-sm font-medium tracking-widest">
+							<span class="text-heading-400 relative flex items-center gap-2 py-4 text-sm font-medium tracking-widest">
 								<span class="">
 									{{ $link['title'] }}
 								</span>
@@ -57,7 +57,7 @@
 							:component="'icon-' . $link['icon']"
 						/>
 
-						<span class="mobile-nav-link text-neutral-heading block py-4 text-sm font-medium tracking-widest">
+						<span class="mobile-nav-link text-heading-400 block py-4 text-sm font-medium tracking-widest">
 							{{ $link['title'] }}
 						</span>
 					</a>

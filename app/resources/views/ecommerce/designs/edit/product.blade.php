@@ -93,7 +93,7 @@
 
 			<div class="wrapper surface bg-background-400 py-6">
 
-				<div class="close-icon item-panel-close icon text-neutral-heading cursor-pointer"><x-icon-close /></div>
+				<div class="close-icon item-panel-close icon text-heading-400 cursor-pointer"><x-icon-close /></div>
 
 				<div class="content px-6">
 

@@ -31,7 +31,7 @@
 		{{-- Mobile toggle --}}
 		<button
 			type="button"
-			class="product-list-filters-toggle text-neutral-heading mb-3 flex w-full cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-slate-800 px-4 py-3 text-left font-bold md:hidden"
+			class="product-list-filters-toggle text-heading-400 mb-3 flex w-full cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-slate-800 px-4 py-3 text-left font-bold md:hidden"
 			@click="open = !open"
 			:aria-expanded="open.toString()"
 			aria-controls="product-list-filters"
@@ -50,7 +50,7 @@
 			class="product-list-filters mt-2 grid grid-cols-1 md:mt-0"
 		>
 			<div class="overflow-hidden">
-				<h3 class="font-heading text-neutral-heading mb-4 hidden text-base font-semibold md:block">
+				<h3 class="font-heading text-heading-400 mb-4 hidden text-base font-semibold md:block">
 					Categoria
 				</h3>
 
@@ -62,7 +62,7 @@
 							'flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-sm font-bold transition-colors',
 							'bg-orange-500 text-white' =>
 								!$search && !$selectedTypeId && !$selectedGenderId,
-							'text-neutral-heading hover:bg-slate-700' =>
+							'text-heading-400 hover:bg-slate-700' =>
 								$search || $selectedTypeId || $selectedGenderId,
 						])
 						aria-pressed="{{ !$search && !$selectedTypeId && !$selectedGenderId ? 'true' : 'false' }}"
@@ -123,11 +123,11 @@
 						class="size-6"
 					>
 
-					<h3 class="font-heading text-neutral-heading mt-4 text-base font-semibold">
+					<h3 class="font-heading text-heading-400 mt-4 text-base font-semibold">
 						Design indipendenti
 					</h3>
 
-					<p class="text-neutral-heading/50 mt-2 text-sm leading-6">
+					<p class="text-heading-400/50 mt-2 text-sm leading-6">
 						Ogni acquisto sostiene direttamente un artista.
 					</p>
 				</div>

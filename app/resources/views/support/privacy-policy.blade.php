@@ -2,7 +2,7 @@
     <style>
         .privacy-policy .font-semibold,
         .privacy-policy strong {
-            color: var(--color-neutral-heading);
+            color: var(--color-heading-400);
         }
     </style>
 @endpushOnce

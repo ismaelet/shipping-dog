@@ -1272,10 +1272,10 @@
 		<div class="mt-8 grid justify-items-center gap-4">
 			<x-heading
 				variant="section"
-				class="text-neutral-heading"
+				class="text-heading-400"
 			>Manutenzione</x-heading>
 
-			<x-typography.main-subheading class="text-neutral-heading text-lg">Stiamo aggiornando il sito web. Torneremo
+			<x-typography.main-subheading class="text-heading-400 text-lg">Stiamo aggiornando il sito web. Torneremo
 				operativi al più presto</x-typography.main-subheading>
 
 			@if (!$fullMaintenance)

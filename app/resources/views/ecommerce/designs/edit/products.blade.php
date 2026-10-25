@@ -160,7 +160,7 @@
 		.item-panel .tab.active {
 			background-color: var(--color-background-400);
 			cursor: default;
-			color: var(--color-neutral-heading);
+			color: var(--color-heading-400);
 			border-bottom: 0;
 		}
 
@@ -217,7 +217,7 @@
 		}
 
 		.item-panel .inp p {
-			color: var(--color-neutral-heading);
+			color: var(--color-heading-400);
 		}
 
 		.item-panel .inp-box {

@@ -4,7 +4,7 @@
         <div class="flex flex-col justify-center p-8 sm:p-14 lg:p-20">
             <p class="text-primary-300 text-xs font-bold tracking-[0.2em] uppercase">Open call</p>
 
-            <h2 class="text-neutral-heading mt-4 text-4xl leading-tight font-bold tracking-tight sm:text-6xl">
+            <h2 class="text-heading-400 mt-4 text-4xl leading-tight font-bold tracking-tight sm:text-6xl">
                 Il tuo design.<br />
                 La tua vetrina.
             </h2>

@@ -12,9 +12,9 @@
 			<a
 				href="{{ $link['url'] }}"
 				@class([
-					'relative flex h-20 items-center gap-2 font-semibold text-neutral-heading transition-colors duration-100 hover:text-primary-500',
+					'relative flex h-20 items-center gap-2 font-semibold text-heading-400 transition-colors duration-100 hover:text-primary-500',
 					'text-primary-400' => isset($link['loc']) && $location === $link['loc'],
-					'text-neutral-heading' =>
+					'text-heading-400' =>
 						!isset($link['loc']) || $location !== $link['loc'],
 				])
 				@if (isset($link['loc']) && $location === $link['loc']) aria-current="page" @endif
@@ -39,7 +39,7 @@
 					@foreach ($link['dropdown'] as $dropdownLink)
 						<a
 							href="{{ $dropdownLink[1] }}"
-							class="hover:bg-primary-300 hover:text-neutral-heading block p-[1em] text-left text-sm font-medium leading-none text-white transition-colors"
+							class="hover:bg-primary-300 hover:text-heading-400 block p-[1em] text-left text-sm font-medium leading-none text-white transition-colors"
 						>
 							{{ $dropdownLink[0] }}
 						</a>

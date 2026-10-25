@@ -29,7 +29,7 @@
 
 		<div class="">
 			<!-- Dashboard title -->
-			<div class="navigation-header text-neutral-heading mb-12 mt-10 grid gap-2 text-center">
+			<div class="navigation-header text-heading-400 mb-12 mt-10 grid gap-2 text-center">
 				{!! embed_svg('logo/logo', ['w-full', 'h-10']) !!}
 				<p class="font-heading text-2xl font-semibold tracking-wider">{{ config('app.name') }}</p>
 			</div>

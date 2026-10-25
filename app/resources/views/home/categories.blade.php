@@ -20,7 +20,7 @@
 				Trova il tuo stile
 			</p>
 
-			<h2 class="text-neutral-heading mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
+			<h2 class="text-heading-400 mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
 				Esplora le categorie
 			</h2>
 		</div>

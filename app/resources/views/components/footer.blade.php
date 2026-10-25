@@ -38,7 +38,7 @@
 		<div>
 			<a
 				href="{{ route('home') }}"
-				class="text-neutral-heading inline-block text-2xl font-black tracking-[-0.04em]"
+				class="text-heading-400 inline-block text-2xl font-black tracking-[-0.04em]"
 				aria-label="Shipping Dog - Home"
 			>
 				SHIPPING<span class="text-orange-500">DOG</span>
@@ -54,7 +54,7 @@
 				@foreach (config('custom.contacts') as $socialMediaTag => $socialMedia)
 					<a
 						href="{{ $socialMedia['url'] }}"
-						class="text-neutral-heading grid size-10 place-items-center rounded-full border border-white/10 bg-white/5 transition-colors hover:border-orange-500 hover:bg-orange-500 hover:text-white [&_svg]:size-5"
+						class="text-heading-400 grid size-10 place-items-center rounded-full border border-white/10 bg-white/5 transition-colors hover:border-orange-500 hover:bg-orange-500 hover:text-white [&_svg]:size-5"
 						aria-label="{{ ucfirst($socialMediaTag) }}"
 						title="{{ ucfirst($socialMediaTag) }}"
 					>
@@ -67,7 +67,7 @@
 		{{-- Footer links --}}
 		@foreach ($footer['columns'] as $column)
 			<div>
-				<h3 class="text-neutral-heading text-lg font-bold">
+				<h3 class="text-heading-400 text-lg font-bold">
 					{{ $column['title'] }}
 				</h3>
 

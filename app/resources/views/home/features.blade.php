@@ -18,7 +18,7 @@
 <section class="features mx-auto grid grid-cols-1 gap-3 py-8 md:grid-cols-3">
 	@foreach ($features as $key => $feature)
 		<div
-			class="feature text-neutral-heading flex items-center gap-4 rounded-2xl border border-slate-950/10 bg-white p-5 dark:border-white/10 dark:bg-slate-800"
+			class="feature text-heading-400 flex items-center gap-4 rounded-2xl border border-slate-950/10 bg-white p-5 dark:border-white/10 dark:bg-slate-800"
 		>
 			{{-- Icon --}}
 			<div

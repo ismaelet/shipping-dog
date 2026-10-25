@@ -9,17 +9,18 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class ProductController extends Controller {
-
+class ProductController extends Controller
+{
     /**
      * Resource action: Display the specified product
      */
-    public function show(Product $product, Request $request): View|RedirectResponse {
+    public function show(Product $product, Request $request): View|RedirectResponse
+    {
         if (
-            !$product?->id ||
-            !$product?->seller ||
+            ! $product?->id ||
+            ! $product?->seller ||
             $product->trashed() ||
-            ($product->status == 0 && !$product->userIsOwner() && !is_admin())
+            ($product->status == 0 && ! $product->userIsOwner() && ! is_admin())
         ) {
             return redirect()->route('shop');
         }
@@ -42,7 +43,16 @@ class ProductController extends Controller {
             ->where('type_id', '<>', $product->type_id)
             ->where('products.status', 1)
             ->where('products.deleted', 0)
-            ->with('design', 'design_with_trashed', 'color', 'position', 'type')
+            ->with(
+                'design',
+                'design_with_trashed',
+                'color',
+                'position',
+                'type',
+                'seller.prices',
+                'specific_price',
+                'base_price',
+            )
             ->get();
 
         $relatedGarments = $sameDesignProducts->where('type.category', 'c')->sortBy('type.sort');
@@ -56,6 +66,12 @@ class ProductController extends Controller {
 
         $warning = Warning::currentWarning();
 
+        $breadcrumbs = [
+            ['label' => 'Prodotti', 'url' => route('shop')],
+            ['label' => $product->type->name, 'url' => route('shop', ['type' => $product->type->id])],
+            ['label' => $product->name, 'url' => null],
+        ];
+
         return view('ecommerce.product', [
             'product' => $product,
             'location' => 'shop',
@@ -68,13 +84,15 @@ class ProductController extends Controller {
             'relatedGarments' => $relatedGarments,
             'relatedAccessories' => $relatedAccessories,
             'warning' => $warning,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
 
     /**
      * Custom action: Change the status
      */
-    public function changeStatus(Product $product, Request $request): RedirectResponse {
+    public function changeStatus(Product $product, Request $request): RedirectResponse
+    {
         $request->validate([
             'status' => 'required|in:0,1',
         ]);

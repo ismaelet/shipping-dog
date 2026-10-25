@@ -72,15 +72,15 @@
                 /* Primary button: Neutral color */
                 &[data-color='neutral'] {
                     color: var(--color-background-400);
-                    background-color: var(--color-neutral-heading);
+                    background-color: var(--color-heading-400);
                     box-shadow: 0px 1rem 4rem -1rem color-mix(in hsl, var(--color-neutral-400), transparent 60%);
 
                     &:hover {
-                        background-color: color-mix(in hsl, var(--color-neutral-heading), var(--color-primary-400) 20%);
+                        background-color: color-mix(in hsl, var(--color-heading-400), var(--color-primary-400) 20%);
                     }
 
                     &::before {
-                        background: var(--color-neutral-heading);
+                        background: var(--color-heading-400);
                     }
                 }
 
@@ -99,15 +99,15 @@
                 padding-block: calc(var(--_padding-y) - var(--spacing-border));
                 padding-inline: calc(var(--_padding-x) - var(--spacing-border));
                 background-color: var(--color-surface-400);
-                border: var(--spacing-border) solid var(--color-neutral-border);
-                color: var(--color-neutral-heading);
+                border: var(--spacing-border) solid var(--color-border-400);
+                color: var(--color-heading-400);
                 transition:
                     border 0.2s,
                     color 0.2s;
 
                 /* Secondary button: Dark color scheme */
                 .dark & {
-                    border-color: var(--color-neutral-border);
+                    border-color: var(--color-border-400);
                 }
 
                 /* Secondary button: Primary color */
@@ -137,8 +137,8 @@
 
                 /* Secondary button: Hover state */
                 &:hover {
-                    color: var(--color-neutral-heading);
-                    border-color: var(--color-neutral-heading);
+                    color: var(--color-heading-400);
+                    border-color: var(--color-heading-400);
                 }
             }
 

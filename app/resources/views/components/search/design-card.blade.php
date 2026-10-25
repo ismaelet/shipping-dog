@@ -14,7 +14,7 @@
         />
     </div>
 
-    <h3 class="text-neutral-heading mt-3 truncate font-semibold">
+    <h3 class="text-heading-400 mt-3 truncate font-semibold">
         <a
             href="{{ $product->url() }}"
             class="focus-visible:outline-primary-400 after:absolute after:inset-0 after:rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2"
@@ -31,6 +31,6 @@
 
     <p class="mt-1 text-xs">
         Disponibile su
-        <span class="text-neutral-heading font-medium">{{ $design->products_count }} {{ $design->products_count === 1 ? 'articolo' : 'articoli' }}</span>
+        <span class="text-heading-400 font-medium">{{ $design->products_count }} {{ $design->products_count === 1 ? 'articolo' : 'articoli' }}</span>
     </p>
 </article>

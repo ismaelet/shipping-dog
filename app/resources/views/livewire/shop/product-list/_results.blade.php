@@ -24,7 +24,7 @@
 			{{ $products->onEachSide(1)->links('pagination.livewire') }}
 		</div>
 	@else
-		<div class="text-neutral-heading grid h-full grid-cols-1 content-start justify-items-center py-32 text-center">
+		<div class="text-heading-400 grid h-full grid-cols-1 content-start justify-items-center py-32 text-center">
 			<x-icon-warning class="h-24 w-24" />
 
 			<p class="mt-4 text-xl font-semibold">Nessun articolo trovato</p>

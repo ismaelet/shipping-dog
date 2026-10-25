@@ -64,12 +64,12 @@
 			width: 2rem;
 			height: 2rem;
 			border-radius: 9999px;
-			color: var(--color-neutral-heading);
+			color: var(--color-heading-400);
 			cursor: pointer;
 
 			&:hover {
 				background-color: color-mix(in srgb,
-						var(--color-neutral-heading) 5%,
+						var(--color-heading-400) 5%,
 						transparent);
 			}
 

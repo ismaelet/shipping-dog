@@ -30,7 +30,7 @@
             @class(['size-12 shrink-0 rounded-full border-2 border-surface-200 object-cover', 'sm:size-20' => $featured])
         />
         <div class="min-w-0">
-            <p class="text-neutral-heading truncate font-semibold">{{ $seller->name }}</p>
+            <p class="text-heading-400 truncate font-semibold">{{ $seller->name }}</p>
             @if ($seller->products->count())
                 <p class="text-sm">{{ $seller->products->count() }} prodotti</p>
             @endif
