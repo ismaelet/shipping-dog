@@ -1,8 +1,9 @@
-name: shippingdog
+name: shipping-dog
 services:
   app:
     build:
       context: .
+      dockerfile: docker/app/Dockerfile
       target: base
     volumes:
       - ./app:/var/www/html

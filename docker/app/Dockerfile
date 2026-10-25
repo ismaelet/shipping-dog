@@ -1,7 +1,6 @@
-# Base image
+# BASE IMAGE
 FROM dunglas/frankenphp:1-php8.4 AS base
 
-# Install PHP extensions
 RUN install-php-extensions \
     mysqli \
     pdo \
@@ -17,31 +16,42 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# DEPENDENCIES STAGE
+FROM base AS deps
+
 WORKDIR /var/www/html
 
-# Install Composer
 RUN install-php-extensions \
     @composer
 
-# Install Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get update \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Install pnpm
 RUN npm install -g pnpm@12
 
-# Build step
-FROM base AS build
+# BUILD STAGE
+FROM deps AS build
 
-# Copy application files
+WORKDIR /var/www/html
+
 COPY ./app /var/www/html
 
-# Install Composer dependencies
-RUN composer install --no-interaction --prefer-dist --no-progress --optimize-autoloader
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --no-progress \
+    --optimize-autoloader \
+    --no-scripts
 
-# Install frontend dependencies and build
 RUN pnpm install --frozen-lockfile \
     && pnpm run build
+
+# RUN STAGE
+FROM base AS run
+
+WORKDIR /var/www/html
+
+COPY --from=build /var/www/html/ ./

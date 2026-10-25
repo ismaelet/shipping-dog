@@ -1,0 +1,102 @@
+name: shipping-dog
+services:
+  app:
+    image: ${APP_IMAGE:?APP_IMAGE is required}
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+      target: run
+    configs:
+      - source: caddy_config
+        target: /etc/frankenphp/Caddyfile
+      - source: php_config
+        target: /usr/local/etc/php/conf.d/app.ini
+    volumes:
+      - app_storage:/var/www/html/storage
+      - caddy_data:/data
+      - caddy_runtime_config:/config
+    environment:
+      APP_NAME: Shipping Dog
+      APP_URL: https://staging.shippingdog.com
+      APP_ENV: production
+      APP_DEBUG: false
+      APP_LOCALE: it
+      APP_FALLBACK_LOCALE: en
+      APP_KEY: ${APP_KEY}
+
+      SESSION_DRIVER: file
+
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: shipping-dog
+      DB_USERNAME: shipping-dog
+      DB_PASSWORD: ${DB_PASSWORD}
+
+      MAIL_MAILER: smtp
+      MAIL_HOST: smtp.titan.email
+      MAIL_PORT: 465
+      MAIL_USERNAME: noreply@shippingdog.com
+      MAIL_PASSWORD: ${MAIL_PASSWORD:?MAIL_PASSWORD is required}
+      MAIL_ENCRYPTION: SSL
+      MAIL_FROM_ADDRESS: noreply@shippingdog.com
+      MAIL_FROM_NAME: ${APP_NAME}
+
+      SENTRY_LARAVEL_DSN: https://0f8f29d4a5ab45042175d54ef673db14@o4507159757717504.ingest.de.sentry.io/4509385828925520
+      SENTRY_TRACES_SAMPLE_RATE: 0
+
+      GOOGLE_CLIENT_ID: 31403388119-i2vlmbkk8cp8fbhrrbhusdb5g1qb1nbj.apps.googleusercontent.com
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:?GOOGLE_CLIENT_SECRET is required}
+      GOOGLE_REDIRECT_URI: https://staging.shippingdog.com/auth/google/callback
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:12.3
+    environment:
+      - "MARIADB_DATABASE=shipping-dog"
+      - "MARIADB_USER=shipping-dog"
+      - "MARIADB_PASSWORD=${DB_PASSWORD}"
+      - "MARIADB_RANDOM_ROOT_PASSWORD=1"
+    volumes:
+      - db:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  app_storage:
+  caddy_data:
+  caddy_runtime_config:
+  db:
+
+configs:
+  caddy_config:
+    content: >-
+      {
+          frankenphp
+          order php_server before file_server
+      }
+
+      staging.shippingdog.com {
+          handle {
+              encode zstd br gzip
+              root * /var/www/html/public
+              php_server
+          }
+      }
+
+  php_config:
+    content: |
+      [PHP]
+      upload_max_filesize = 512M
+      post_max_size = 512M
