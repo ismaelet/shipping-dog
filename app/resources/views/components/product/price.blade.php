@@ -17,7 +17,9 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
-            <p class="text-primary-200 text-sm">Prezzo scontato{{ $product->userIsOwner() ? ' solo per te' : '' }}</p>
+            <p class="dark:text-primary-200 text-primary-300 text-sm">
+                Prezzo scontato{{ $product->userIsOwner() ? ' solo per te' : '' }}
+            </p>
 
             @if ($product->userIsOwner())
                 <x-help.info>

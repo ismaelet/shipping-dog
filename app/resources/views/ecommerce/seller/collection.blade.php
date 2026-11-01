@@ -57,7 +57,7 @@
                 <div class="flex flex-wrap justify-end gap-2">
                     <x-button
                         type="button"
-                        size="small"
+                        size="sm"
                         width="auto"
                         x-on:click="$dispatch('open-modal', { name: 'collection-designs' })"
                     >
@@ -68,7 +68,7 @@
                     <x-button
                         type="button"
                         variant="secondary"
-                        size="small"
+                        size="sm"
                         width="auto"
                         x-on:click="$dispatch('open-modal', { name: 'change-cover' })"
                     >
@@ -80,7 +80,7 @@
                         type="button"
                         variant="secondary"
                         color="danger"
-                        size="small"
+                        size="sm"
                         width="auto"
                         x-on:click="$dispatch('open-modal', { name: 'delete-collection' })"
                     >
@@ -165,14 +165,9 @@
             </form>
 
             <x-slot:footer>
-                <x-button
-                    type="button"
-                    variant="secondary"
-                    size="small"
-                    width="auto"
-                    x-on:click="$dispatch('close-modal')"
-                >Annulla</x-button>
-                <x-button type="submit" form="change-cover-form" size="small" width="auto">Salva copertina</x-button>
+                <x-button type="button" variant="secondary" size="sm" width="auto" x-on:click="$dispatch('close-modal')"
+                    >Annulla</x-button>
+                <x-button type="submit" form="change-cover-form" size="sm" width="auto">Salva copertina</x-button>
             </x-slot:footer>
         </x-modal>
 
@@ -192,14 +187,9 @@
             </form>
 
             <x-slot:footer>
-                <x-button
-                    type="button"
-                    variant="secondary"
-                    size="small"
-                    width="auto"
-                    x-on:click="$dispatch('close-modal')"
-                >Annulla</x-button>
-                <x-button type="submit" form="delete-collection-form" color="danger" size="small" width="auto"
+                <x-button type="button" variant="secondary" size="sm" width="auto" x-on:click="$dispatch('close-modal')"
+                    >Annulla</x-button>
+                <x-button type="submit" form="delete-collection-form" color="danger" size="sm" width="auto"
                     >Elimina collezione</x-button>
             </x-slot:footer>
         </x-modal>

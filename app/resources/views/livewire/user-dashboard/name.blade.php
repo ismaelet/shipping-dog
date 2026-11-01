@@ -8,7 +8,7 @@
 
 <div class="text-center">
     @if ($name)
-        <x-heading.component class="text-center text-lg break-all">Ciao, {{ $name }}</x-heading.component>
+        <x-heading variant="article" class="text-center break-all">Ciao, {{ $name }}</x-heading>
     @endif
 
     @if ($username || $fullName)

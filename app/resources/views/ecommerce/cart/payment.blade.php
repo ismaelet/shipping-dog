@@ -10,70 +10,58 @@ $cart = cart();
 
 ?>
 
-<x-layouts.cart :title="$title . ' | Carrello'">
+<x-layouts.cart :title="$title.' | Carrello'">
+    <div class="grid-flow" data-spacing="700">
+        @if (cart()->shipping_method->isLocalDelivery())
+            <p class="center-content input-warning">
+                Hai scelto di ritirare il capo in sede, quindi l'ordine NON verrà spedito, ma dovrai ritirarlo nella
+                nostra sede in Piazza Scopoli, 9, 38033 Cavalese (TN)
+            </p>
+        @endif
 
-	<div
-		class="grid-flow"
-		data-spacing="700"
-	>
+        <div class="grid grid-cols-1 gap-8">
+            @if ($warning)
+                <x-alert type="error" :message="$warning->message" />
+            @endif
 
-		@if (cart()->shipping_method->isLocalDelivery())
-			<p class="center-content input-warning">Hai scelto di ritirare il capo in sede, quindi l'ordine NON verrà spedito, ma
-				dovrai ritirarlo nella nostra sede in Piazza Scopoli, 9, 38033 Cavalese (TN)</p>
-		@endif
+            <form id="pay_panel" class="grid items-start gap-8 lg:grid-cols-2" method="POST">
+                @csrf
 
-		<div class="grid grid-cols-1 gap-8">
+                <div class="card surface content-start">
+                    <x-heading variant="article" class="title">Pagamento</x-heading>
+                    @foreach ($paymentMethods as $paymentMethod)
+                        <label class="chck_item grid grid-cols-[max-content_1fr] items-center gap-4 sm:grid-cols-[5rem_1fr]">
+                            <x-checkbox
+                                type="radio"
+                                class=""
+                                name="payment_method_id"
+                                :value="$paymentMethod['id']"
+                                :checked="cart()->payment_method_id == $paymentMethod['id']"
+                            />
 
-			@if ($warning)
-				<x-alerts.warning :message="$warning->message" />
-			@endif
+                            <div class="grid grid-cols-1 gap-2 py-8">
+                                <x-heading variant="article-small">{{ $paymentMethod['name'] }}</x-heading>
 
-			<form
-				id="pay_panel"
-				class="grid items-start gap-8 lg:grid-cols-2"
-				method="POST"
-			>
-				@csrf
+                                @if (file_exists(base_path().'/resources/images/cart/pay_'.$paymentMethod['tag'].'.png'))
+                                    <img
+                                        class="max-h-18"
+                                        src="{{ Vite::image('cart/pay_' . $paymentMethod['tag'] . '.png') }}"
+                                    />
+                                @endif
 
-				<div class="cart-panel surface content-start">
-					<x-heading.component class="title">Pagamento</x-heading.component>
-					@foreach ($paymentMethods as $paymentMethod)
-						<label class="chck_item grid grid-cols-[max-content_1fr] items-center gap-4 sm:grid-cols-[5rem_1fr]">
-							<x-checkbox
-								type="radio"
-								class=""
-								name="payment_method_id"
-								:value="$paymentMethod['id']"
-								:checked="cart()->payment_method_id == $paymentMethod['id']"
-							/>
+                                <p class="pay_desc">{!! $paymentMethod['desc'] !!}</p>
+                            </div>
+                        </label>
+                    @endforeach
+                </div>
 
-							<div class="grid grid-cols-1 gap-2 py-8">
-								<h4 class="text-2xl">{{ $paymentMethod['name'] }}</h4>
+                <!-- Recap -->
+                <section id="recap" class="card surface">
+                    <x-heading variant="article">Riepilogo</x-heading>
 
-								@if (file_exists(base_path() . '/resources/images/cart/pay_' . $paymentMethod['tag'] . '.png'))
-									<img
-										class="max-h-18"
-										src="{{ Vite::image('cart/pay_' . $paymentMethod['tag'] . '.png') }}"
-									/>
-								@endif
-
-								<p class="pay_desc">{!! $paymentMethod['desc'] !!}</p>
-							</div>
-						</label>
-					@endforeach
-				</div>
-
-				<!-- Recap -->
-				<section
-					id="recap"
-					class="cart-panel surface"
-				>
-					<x-heading.component>Riepilogo</x-heading.component>
-
-					<livewire:cart.recap-panel />
-				</section>
-			</form>
-		</div>
-	</div>
-
+                    <livewire:cart.recap-panel />
+                </section>
+            </form>
+        </div>
+    </div>
 </x-layouts.cart>

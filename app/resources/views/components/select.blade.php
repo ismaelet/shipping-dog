@@ -56,20 +56,24 @@
                         color 150ms;
                 }
 
-                .select option:hover,
-                .select option:focus-visible {
+                .select option:not(:disabled):hover,
+                .select option:not(:disabled):focus-visible {
                     background: alpha(from rgb(255 255 255) / 8%);
                     color: var(--color-heading-400);
                 }
 
-                .select option:checked {
+                .select option:not(:disabled):checked {
                     background: alpha(from var(--color-primary-300) / 12%);
                     color: var(--color-primary-300);
                     font-weight: 600;
                 }
 
-                .select option::checkmark {
+                .select option:not(:disabled)::checkmark {
                     color: var(--color-primary-300);
+                }
+
+                .select option:disabled::checkmark {
+                    opacity: 0;
                 }
             }
         }

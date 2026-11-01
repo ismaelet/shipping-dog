@@ -1,0 +1,110 @@
+# stages:
+#   - build
+#   - deploy
+
+# build:
+#   stage: build
+#   image: docker:29.0.0-cli
+
+#   services:
+#     - name: docker:29.0.0-dind
+#       alias: docker
+
+#   variables:
+#     DOCKER_HOST: tcp://docker:2376
+#     DOCKER_TLS_CERTDIR: "/certs"
+#     DOCKER_TLS_VERIFY: "1"
+#     DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+
+#   before_script:
+#     - docker info
+#     - |
+#       echo "$CI_REGISTRY_PASSWORD" |
+#         docker login "$CI_REGISTRY" \
+#           -u "$CI_REGISTRY_USER" \
+#           --password-stdin
+
+#   script:
+#     - |
+#       docker build \
+#         --target run \
+#         --file docker/app/Dockerfile \
+#         --tag "$CI_REGISTRY_IMAGE/app:$CI_COMMIT_SHA" \
+#         .
+#     - docker push "$CI_REGISTRY_IMAGE/app:$CI_COMMIT_SHA"
+
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "development"'
+
+# prepare_staging:
+#   stage: deploy
+#   image: alpine:3.22
+
+#   environment:
+#     name: staging
+#     url: https://staging.shippingdog.com
+
+#   before_script:
+#     - apk add --no-cache openssh-client
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#     - cp "$DEPLOY_SSH_PRIVATE_KEY" ~/.ssh/id_ed25519
+#     - chmod 600 ~/.ssh/id_ed25519
+#     - cp "$DEPLOY_SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+#     - chmod 600 ~/.ssh/known_hosts
+
+#   script:
+#     - |
+#       test -s "$STAGING_ENV"
+#       ssh -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_SERVER" \
+#         'umask 077; cat > /opt/shipping-dog/.env.next' \
+#         < "$STAGING_ENV"
+#     - |
+#       ssh -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_SERVER" \
+#         'chmod 600 /opt/shipping-dog/.env.next &&
+#          mv /opt/shipping-dog/.env.next /opt/shipping-dog/.env'
+
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "development"'
+#       when: manual
+#     - when: never
+
+# deploy_staging:
+#   stage: deploy
+#   image: alpine:3.22
+
+#   environment:
+#     name: staging
+#     url: https://staging.shippingdog.com
+
+#   resource_group: shipping-dog-staging
+
+#   before_script:
+#     # Install the SSH client
+#     - apk add --no-cache openssh-client
+
+#     # Prepare the SSH configuration
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+
+#     # GitLab File variables contain paths to temporary files
+#     - cp "$DEPLOY_SSH_PRIVATE_KEY" ~/.ssh/id_ed25519
+#     - chmod 600 ~/.ssh/id_ed25519
+
+#     # Use the previously verified server host key
+#     - cp "$DEPLOY_SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+#     - chmod 600 ~/.ssh/known_hosts
+
+#   script:
+#     - echo "Testing DigitalOcean SSH connection..."
+#     - |
+#       ssh \
+#         -o BatchMode=yes \
+#         -o ConnectTimeout=10 \
+#         "$DEPLOY_USER@$DEPLOY_SERVER" \
+#         "whoami && hostname && docker --version && docker compose version"
+
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "development"'
+#       when: manual
+#     - when: never

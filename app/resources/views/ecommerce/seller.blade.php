@@ -30,6 +30,7 @@
                         {{-- Avatar --}}
                         <img
                             src="{{ $seller->icon() }}"
+                            referrerpolicy="no-referrer"
                             alt="Logo di {{ $seller->name }}"
                             class="border-background-400 bg-surface-500 relative mx-auto -mt-12 size-24 rounded-full border-8 object-cover shadow-lg sm:-mt-16 sm:size-32"
                         />
@@ -45,7 +46,7 @@
                             </div>
 
                             {{-- Seller name --}}
-                            <h1 class="text-heading-400 text-trim-start text-3xl font-bold tracking-tight sm:text-5xl">
+                            <h1 class="text-heading-400 text-trim text-3xl font-bold tracking-tight sm:text-5xl">
                                 {{ $seller->name }}
                             </h1>
 

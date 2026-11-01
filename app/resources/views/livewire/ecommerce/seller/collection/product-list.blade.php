@@ -27,7 +27,7 @@
                 <p>La tua collezione è ancora vuota. Aggiungi le tue grafiche per iniziare.</p>
                 <x-button
                     type="button"
-                    size="small"
+                    size="sm"
                     width="auto"
                     class="mt-4"
                     x-on:click="$dispatch('open-modal', { name: 'collection-designs' })"

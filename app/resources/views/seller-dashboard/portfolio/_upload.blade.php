@@ -44,7 +44,7 @@
                 </span>
                 <h2 class="font-heading text-heading-400 text-2xl font-semibold">Trascina qui il tuo PNG</h2>
                 <p class="text-sm">oppure seleziona un file dal dispositivo</p>
-                <x-button class="mt-4" size="small">Scegli un file</x-button>
+                <x-button class="mt-4" size="sm">Scegli un file</x-button>
             </div>
 
             <div class="bg-background-300 mx-auto w-full max-w-2xl rounded-2xl p-6">
@@ -110,7 +110,7 @@
                 </div>
 
                 @error('file')
-                    <x-alerts.error>{{ $message }}</x-alerts.error>
+                    <x-alert type="error">{{ $message }}</x-alert>
                 @enderror
             </div>
 
@@ -126,7 +126,7 @@
                         required
                     />
                     @error('name')
-                        <x-alerts.error>{{ $message }}</x-alerts.error>
+                        <x-alert type="error">{{ $message }}</x-alert>
                     @enderror
                 </div>
 
@@ -139,7 +139,7 @@
                         maxlength="160"
                     >{{ old('tags') }}</x-textarea>
                     @error('tags')
-                        <x-alerts.error>{{ $message }}</x-alerts.error>
+                        <x-alert type="error">{{ $message }}</x-alert>
                     @enderror
                 </div>
 
@@ -152,7 +152,7 @@
                     </p>
                     <x-input id="design-file-vector" type="file" name="file_vector" accept=".pdf,.ai" />
                     @error('file_vector')
-                        <x-alerts.error>{{ $message }}</x-alerts.error>
+                        <x-alert type="error">{{ $message }}</x-alert>
                     @enderror
                 </div>
 

@@ -3,10 +3,20 @@
     'type' => 'error',
 ])
 
-<p
-	{{ $attributes->class([
-	        'alert py-2 px-2 border rounded text-center',
-	        'border-green-500 bg-green-500/20 text-green-600' => $type == 'success',
-	        'border-red-500 bg-red-500/20 text-red-600' => $type == 'error',
-	    ])->merge() }}
->{{ $message }}</p>
+@php
+    $icons = [
+        'success' => 'icon-check',
+        'error' => 'icon-close',
+    ];
+@endphp
+
+<span {{
+    $attributes->class([
+        'alert flex justify-center items-center gap-2',
+        'text-success-400' => $type == 'success',
+        'text-danger-400' => $type == 'error',
+    ])->merge()
+}}>
+    <x-dynamic-component :component="$icons[$type]" class="size-4" />
+    {{ $message }}
+</span>

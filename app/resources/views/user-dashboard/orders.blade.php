@@ -1,5 +1,5 @@
 <x-user-dashboard :$title>
-    <section class="surface border-border-400 bg-surface-400 rounded-2xl border p-5 sm:p-8">
+    <section class="card border-border-400 bg-surface-400 rounded-2xl border p-5 sm:p-8">
         <x-user-dashboard.panel-header
             title="I tuoi ordini"
             subtitle="Acquisti"

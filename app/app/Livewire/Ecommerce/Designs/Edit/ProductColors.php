@@ -2,16 +2,19 @@
 
 namespace App\Livewire\Ecommerce\Designs\Edit;
 
+use App\Actions\Designs\EditDesign;
 use App\Models\Ecommerce\Product;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Throwable;
 
-class ProductColors extends Component {
-
+class ProductColors extends Component
+{
     /**
      * Property: ID of the product being edited
      */
@@ -32,7 +35,30 @@ class ProductColors extends Component {
     /**
      * Property: ID of the color used for product previews
      */
-    public int $defaultColorId;
+    public int $defaultColorId = 0;
+
+    public function boot(): void
+    {
+        if (isset($this->productId)) {
+            EditDesign::product($this->productId);
+        }
+    }
+
+    #[On('product-updated')]
+    public function refreshPreview(int $productId): void
+    {
+        if ($productId === $this->productId) {
+            $this->positionId = (int) $this->product->position_id;
+        } else {
+            $this->skipRender();
+        }
+    }
+
+    #[On('design-products-updated')]
+    public function refreshDefaultColor(): void
+    {
+        $this->defaultColorId = (int) $this->product->color_id;
+    }
 
     /**
      * Property: Indicates if there are unsaved changes
@@ -42,13 +68,15 @@ class ProductColors extends Component {
     /**
      * Life cycle method: Initialize the component
      */
-    public function mount(Product $product, int $positionId): void {
+    public function mount(Product $product, int $positionId): void
+    {
+        EditDesign::product($product->id);
         $this->productId = $product->id;
         $this->positionId = $positionId;
 
         $this->activeColorIds = $product->colors
             ->pluck('id')
-            ->map(fn(int|string $id): int => (int) $id)
+            ->map(fn (int|string $id): int => (int) $id)
             ->values()
             ->all();
 
@@ -60,19 +88,16 @@ class ProductColors extends Component {
     /**
      * Return the product.
      */
-    public function getProductProperty(): Product {
-        return Product::query()
-            ->with([
-                'type.colors',
-                'colors',
-            ])
-            ->findOrFail($this->productId);
+    public function getProductProperty(): Product
+    {
+        return EditDesign::product($this->productId);
     }
 
     /**
      * Return the colors available for the product type.
      */
-    public function getColorsProperty(): Collection {
+    public function getColorsProperty(): Collection
+    {
         return $this->product->type->colors
             ->sortBy([
                 ['reorder', 'asc'],
@@ -84,35 +109,38 @@ class ProductColors extends Component {
     /**
      * Handle changes to active colors.
      */
-    public function updatedActiveColorIds(): void {
-        $this->normalizeColorSelection();
+    public function updatedActiveColorIds(): void
+    {
+        $this->activeColorIds = array_map(fn ($id) => is_numeric($id) ? (int) $id : $id, $this->activeColorIds);
         $this->markAsChanged();
     }
 
     /**
      * Handle changes to the default color.
      */
-    public function updatedDefaultColorId(): void {
+    public function updatedDefaultColorId(): void
+    {
+        $this->activeColorIds = array_map(fn ($id) => is_numeric($id) ? (int) $id : $id, $this->activeColorIds);
         $this->defaultColorId = (int) $this->defaultColorId;
 
-        if (!in_array($this->defaultColorId, $this->activeColorIds, true)) {
+        if (! in_array($this->defaultColorId, $this->activeColorIds, true)) {
             $this->activeColorIds[] = $this->defaultColorId;
         }
 
-        $this->normalizeColorSelection();
         $this->markAsChanged();
     }
 
     /**
      * Ensure that the selected colors are valid.
      */
-    private function normalizeColorSelection(): void {
+    private function normalizeColorSelection(): void
+    {
         $availableColorIds = $this->availableColorIds();
 
         $this->activeColorIds = collect($this->activeColorIds)
-            ->map(fn(int|string $id): int => (int) $id)
+            ->map(fn (int|string $id): int => (int) $id)
             ->filter(
-                fn(int $id): bool => in_array(
+                fn (int $id): bool => in_array(
                     $id,
                     $availableColorIds,
                     true,
@@ -136,22 +164,23 @@ class ProductColors extends Component {
             }
         }
 
-        if (!in_array(
+        if (! in_array(
             $this->defaultColorId,
             $this->activeColorIds,
             true,
         )) {
-            $this->defaultColorId = $this->activeColorIds[0];
+            $this->defaultColorId = $this->activeColorIds[0] ?? 0;
         }
     }
 
     /**
      * Return the IDs of the colors available for the product type.
      */
-    private function availableColorIds(): array {
+    private function availableColorIds(): array
+    {
         return $this->product->type->colors
             ->pluck('id')
-            ->map(fn(int|string $id): int => (int) $id)
+            ->map(fn (int|string $id): int => (int) $id)
             ->values()
             ->all();
     }
@@ -159,7 +188,8 @@ class ProductColors extends Component {
     /**
      * Validate the selected colors.
      */
-    private function validateColorSelection(): void {
+    private function validateColorSelection(): void
+    {
         $availableColorIds = $this->availableColorIds();
 
         $this->validate([
@@ -170,12 +200,13 @@ class ProductColors extends Component {
             ],
             'activeColorIds.*' => [
                 'integer',
+                'distinct',
                 function (
                     string $attribute,
                     mixed $value,
                     \Closure $fail,
                 ) use ($availableColorIds): void {
-                    if (!in_array((int) $value, $availableColorIds, true)) {
+                    if (! in_array((int) $value, $availableColorIds, true)) {
                         $fail(
                             'Il colore selezionato non è disponibile per questo prodotto.',
                         );
@@ -190,7 +221,7 @@ class ProductColors extends Component {
                     mixed $value,
                     \Closure $fail,
                 ): void {
-                    if (!in_array(
+                    if (! in_array(
                         (int) $value,
                         $this->activeColorIds,
                         true,
@@ -207,7 +238,8 @@ class ProductColors extends Component {
     /**
      * Persist the active colors and default color.
      */
-    private function persistColors(): Product {
+    private function persistColors(): Product
+    {
         return DB::transaction(function (): Product {
             $product = Product::query()
                 ->with('type.colors')
@@ -226,28 +258,25 @@ class ProductColors extends Component {
     /**
      * Lifecycle hook: Render the component
      */
-    public function render(): View {
+    public function render(): View
+    {
         return view('livewire.ecommerce.designs.edit.product-colors');
     }
 
-
     /**
      * Action: Save the selected colors and default color for the product
      */
-    /**
-     * Action: Save the selected colors and default color for the product
-     */
-    public function save(): void {
-        $this->normalizeColorSelection();
+    public function save(): void
+    {
+        $this->saveStatus = 'inactive';
+        $this->activeColorIds = array_map(fn ($id) => is_numeric($id) ? (int) $id : $id, $this->activeColorIds);
         $this->validateColorSelection();
 
         try {
             $product = $this->persistColors();
 
-            $defaultColor = $product->type->colors->firstWhere(
-                'id',
-                $this->defaultColorId,
-            );
+            $product->deletePreviewImages();
+            $this->dispatch('product-updated', productId: $product->id);
 
             $this->saveStatus = 'saved';
         } catch (Throwable $exception) {
@@ -260,18 +289,20 @@ class ProductColors extends Component {
     /**
      * Helper method: mark the form as changed
      */
-    private function markAsChanged(): void {
+    private function markAsChanged(): void
+    {
         $this->saveStatus = 'active';
     }
 
     /**
      * Helper method: return the current preview image URL
      */
-    public function getPreviewImageProperty(): string {
-        return $this->product->image(
-            imageSize: 1024,
-            color: $this->defaultColorId,
-            position: $this->positionId,
-        );
+    public function getPreviewImageProperty(): string
+    {
+        if (! $this->defaultColorId || ! $this->product->type->colors->contains($this->defaultColorId)) {
+            return Vite::image('placeholder.webp');
+        }
+
+        return EditDesign::preview($this->product, $this->defaultColorId, $this->positionId);
     }
 }

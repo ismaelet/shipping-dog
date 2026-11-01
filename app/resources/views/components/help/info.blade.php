@@ -42,7 +42,7 @@
 
 <div class="info js-info group relative w-max cursor-pointer">
     <div class="group-hover:text-primary grid size-5 place-items-center rounded-full border transition-colors">
-        <x-icon-question class="size-3" />
+        <x-icon-info class="size-3" />
     </div>
 
     <p

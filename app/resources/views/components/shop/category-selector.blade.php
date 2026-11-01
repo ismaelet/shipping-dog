@@ -16,7 +16,24 @@
     });
 @endphp
 
-<div x-data="{ open: @js($isSelected || $defaultOpen) }" class="border-b border-white/10 last:border-0">
+@pushOnce('styles')
+    <style>
+        .shop-category-selector {
+            grid-template-rows: auto 0fr;
+            align-content: flex-start;
+            transition: grid-template-rows 0.2s ease-in-out;
+
+            &:has(button[aria-expanded='true']) {
+                grid-template-rows: auto 1fr;
+            }
+        }
+    </style>
+@endpushOnce
+
+<div
+    x-data=" { open: @js($isSelected || $defaultOpen) }"
+    class="shop-category-selector border-border-400 grid grid-cols-1 border-b last:border-0"
+>
     {{-- Category heading --}}
     <button
         type="button"
@@ -25,7 +42,7 @@
         @class([
             'flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-sm font-bold transition-colors',
             'text-primary-300' => $isSelected,
-            'text-heading-400 hover:bg-slate-700' => ! $isSelected,
+            'text-heading-400 hover:bg-surface-500' => ! $isSelected,
         ])
     >
         <span>{{ $title }}</span>
@@ -37,7 +54,7 @@
     </button>
 
     {{-- Product types --}}
-    <div x-show="open" x-collapse x-cloak>
+    <div class="overflow-hidden">
         @foreach ($types as $type)
             @php
                 $checked =

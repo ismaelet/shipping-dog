@@ -3,8 +3,6 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
-use App\Helpers\FileHelper;
-use App\Services\Files\ProductPreviewProcessor;
 use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Product\ProductColor;
 use App\Models\Ecommerce\Product\ProductPosition;
@@ -15,9 +13,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Vite;
 
-class OrderItem extends Model {
-
+class OrderItem extends Model
+{
     /**
      * The attributes that are mass assignable
      */
@@ -59,115 +58,117 @@ class OrderItem extends Model {
     /**
      * Get the the name of the order, including the design's name and id
      */
-    protected function fullName(): Attribute {
+    protected function fullName(): Attribute
+    {
         return Attribute::make(
-            get: fn(): string => $this->quantity . 'x ' . ($this->design_id ? $this->design_id . ' - ' : '') . $this->product_with_trashed?->name . ' (' . $this->description() . ')'
+            get: fn (): string => $this->quantity.'x '.($this->design_id ? $this->design_id.' - ' : '').$this->product_with_trashed?->name.' ('.$this->description().')'
         );
     }
 
     /**
      * Get the order that the order item belongs to
      */
-    public function order(): BelongsTo {
+    public function order(): BelongsTo
+    {
         return $this->belongsTo(Order::class);
     }
 
     /**
      * Get the order's seller
      */
-    public function seller(): BelongsTo {
+    public function seller(): BelongsTo
+    {
         return $this->belongsTo(Seller::class);
     }
 
     /**
      * Get the order's design
      */
-    public function design(): BelongsTo {
+    public function design(): BelongsTo
+    {
         return $this->belongsTo(Design::class);
     }
 
     /**
      * Get the order's design including deleted designs
      */
-    public function design_with_trashed(): BelongsTo {
+    public function design_with_trashed(): BelongsTo
+    {
         return $this->design()->withTrashed();
     }
 
     /**
      * Get the order's product
      */
-    public function product(): BelongsTo {
+    public function product(): BelongsTo
+    {
         return $this->belongsTo(Product::class);
     }
 
     /**
      * Get the order's product including trashed products
      */
-    public function product_with_trashed(): BelongsTo {
+    public function product_with_trashed(): BelongsTo
+    {
         return $this->product()->withTrashed();
     }
 
     /**
      * Get the order's type
      */
-    public function type(): BelongsTo {
+    public function type(): BelongsTo
+    {
         return $this->belongsTo(ProductType::class, 'type_id');
     }
 
     /**
      * Get the order's color.
-     *
-     * @return BelongsTo
      */
-    public function color(): BelongsTo {
+    public function color(): BelongsTo
+    {
         return $this->belongsTo(ProductColor::class);
     }
 
     /**
      * Get the order's size.
-     *
-     * @return BelongsTo
      */
-    public function size(): BelongsTo {
+    public function size(): BelongsTo
+    {
         return $this->belongsTo(ProductSize::class);
     }
 
     /**
      * Get the order's position.
-     *
-     * @return BelongsTo
      */
-    public function position(): BelongsTo {
+    public function position(): BelongsTo
+    {
         return $this->belongsTo(ProductPosition::class);
     }
 
     /**
      * Get the order's logo.
-     *
-     * @return BelongsTo
      */
-    public function logo(): BelongsTo {
+    public function logo(): BelongsTo
+    {
         return $this->belongsTo(Logo::class);
     }
 
     /**
      * Get the order's code.
-     *
-     * @return string
      */
-    public function idCode(): string {
-        return '#' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+    public function idCode(): string
+    {
+        return '#'.str_pad($this->id, 6, '0', STR_PAD_LEFT);
     }
 
     /**
      * Get the name of the order.
-     *
-     * @return string
      */
-    public function name(): string {
-        $name = $this->quantity > 1 ? [$this->quantity . 'x'] : [];
+    public function name(): string
+    {
+        $name = $this->quantity > 1 ? [$this->quantity.'x'] : [];
         $name[] = $this->product_with_trashed->name ?? '';
-        $name[] = !$this->product_with_trashed || $this->product_with_trashed->trashed() ? '-articolo rimosso-' :  null;
+        $name[] = ! $this->product_with_trashed || $this->product_with_trashed->trashed() ? '-articolo rimosso-' : null;
 
         return implode(' ', array_filter($name));
     }
@@ -175,12 +176,13 @@ class OrderItem extends Model {
     /**
      * Get the description of the order
      */
-    public function description(): string {
+    public function description(): string
+    {
         $description = $this->type?->name;
-        $description .= $this->color && $this->type?->colors->count() > 1 ? ' ' . $this->color?->name : '';
-        $description .= $this->size && $this->type?->sizes->count() > 1 ? ' ' . $this->size?->name : '';
-        $description .= $this->logo ? ' ' . $this->logo?->name : '';
-        $description .= $this->position_id && $this->position_id > 1 ? ' ' . $this->position?->name : '';
+        $description .= $this->color && $this->type?->colors->count() > 1 ? ' '.$this->color?->name : '';
+        $description .= $this->size && $this->type?->sizes->count() > 1 ? ' '.$this->size?->name : '';
+        $description .= $this->logo ? ' '.$this->logo?->name : '';
+        $description .= $this->position_id && $this->position_id > 1 ? ' '.$this->position?->name : '';
 
         return $description;
     }
@@ -188,14 +190,15 @@ class OrderItem extends Model {
     /**
      * Get the full description of the order
      */
-    public function multilineDescription(): string {
-        if (!$this->product_with_trashed) {
+    public function multilineDescription(): string
+    {
+        if (! $this->product_with_trashed) {
             return 'Articolo rimosso';
         }
 
         $type = $this->product_with_trashed->type->name;
-        $size = $this->size_id ? 'Taglia: ' . $this->size->name : null;
-        $color = $this->color ? 'Colore: ' . $this->color->name : null;
+        $size = $this->size_id ? 'Taglia: '.$this->size->name : null;
+        $color = $this->color ? 'Colore: '.$this->color->name : null;
         $position = $this->position_id > 1 ? $this->position->name : null;
         $logo = $this->logo_id ? $this->logo->name : null;
 
@@ -205,48 +208,54 @@ class OrderItem extends Model {
     /**
      * Returns the image of the order
      */
-    public function image(): string {
+    public function image(): string
+    {
         return $this->product_with_trashed ? $this->product_with_trashed->image(
             color: $this->color,
             position: $this->position,
-        ) : FileHelper::storageAsset(ProductPreviewProcessor::PLACEHOLDER_IMAGE);
+        ) : Vite::image('placeholder.webp');
     }
 
     /**
      * Get the creation date of the order as a string
      */
-    public function createdAtString(): string {
+    public function createdAtString(): string
+    {
         return date('d/m/Y', strtotime($this->created_at));
     }
 
     /**
      * Get the used credit for the order item
      */
-    public function usedCredit(): float {
+    public function usedCredit(): float
+    {
         return $this->credit ? $this->total_amount_after_discount : 0;
     }
 
     /**
      * Check if the order has a discount
      */
-    public function hasDiscount(): bool {
+    public function hasDiscount(): bool
+    {
         return $this->unit_discount > 0 || $this->total_discount > 0;
     }
 
     /**
      * Check if the order is free (total amount to pay is 0 or less)
      */
-    public function isFree(): bool {
+    public function isFree(): bool
+    {
         return $this->total_amount_to_pay <= 0;
     }
 
     /**
      * Update the prices of the order item
-     * 
+     *
      * ! Right not this only depends on if the user is the owner of the product,
      * ! but in the future it should depend on the coupon applied to the order or general promotions
      */
-    public function updatePrices(): self {
+    public function updatePrices(): self
+    {
         $amounts = app(OrderItemAmountCalculator::class)->calculate(
             product: $this->product,
             color: $this->color,
@@ -262,7 +271,8 @@ class OrderItem extends Model {
     /**
      * Scope a query to only include orders that have been paid
      */
-    public static function hasBeenPaid(): Builder {
+    public static function hasBeenPaid(): Builder
+    {
         return self::where('status', '>=', EcommerceHelper::statusFromTag('confirmed'));
     }
 }

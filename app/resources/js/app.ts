@@ -5,10 +5,12 @@ import { advancedInputBehaviorSetup } from "./inputs";
 import { enterAnimationSetup } from "./animations";
 import { themeSwitcherSetup } from "./theme";
 
+import customProductEditor from "./components/custom-product-editor";
 import portfolioUpload from "./components/portfolio-upload";
 import portfolioSorter from "./components/portfolio-sorter";
 
 document.addEventListener("alpine:init", () => {
+  window.Alpine.data("customProductEditor", customProductEditor);
   window.Alpine.data("portfolioUpload", portfolioUpload);
   window.Alpine.data("portfolioSorter", portfolioSorter);
 });

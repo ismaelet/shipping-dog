@@ -64,7 +64,7 @@
     <div class="user-dashboard-navigation surface border-border-400 bg-surface-400 grid overflow-clip rounded-xl border">
         {{-- Title --}}
         <label class="bg-surface-500 md:hidden" @click="open = ! open">
-            <h3 class="flex items-center gap-4 px-4 py-4 text-xl">
+            <h3 class="text-heading-400 flex items-center gap-4 px-4 py-4 text-xl">
                 <span class="w-5">
                     <x-icon-list />
                 </span>

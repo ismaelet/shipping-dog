@@ -1,4 +1,4 @@
-<section id="design" aria-label="Apri il tuo shop" class="py-20 sm:px-8">
+<section id="design" aria-label="Apri il tuo shop" class="pt-20 sm:px-8 sm:py-20">
     <div class="dark mx-auto grid max-w-7xl overflow-hidden rounded-4xl bg-slate-950 text-white lg:grid-cols-2">
         {{-- Content --}}
         <div class="flex flex-col justify-center p-8 sm:p-14 lg:p-20">

@@ -105,11 +105,6 @@
                     border 0.2s,
                     color 0.2s;
 
-                /* Secondary button: Dark color scheme */
-                .dark & {
-                    border-color: var(--color-border-400);
-                }
-
                 /* Secondary button: Primary color */
                 &[data-color='primary'] {
                     border-color: var(--color-primary-400);
@@ -137,21 +132,24 @@
 
                 /* Secondary button: Hover state */
                 &:hover {
-                    color: var(--color-heading-400);
-                    border-color: var(--color-heading-400);
+                    border-color: var(--color-stone-400);
+
+                    .dark & {
+                        border-color: currentColor;
+                    }
                 }
             }
 
             /* Sizes */
-            &[data-size='small'] {
-                min-width: 8rem;
+            &[data-size='xs'] {
+                --_padding-y: 1.125em;
+                min-width: 7rem;
                 font-size: var(--text-sm);
             }
 
-            &[data-size='auto'] {
-                min-width: unset;
-                height: 100%;
-                padding-block: unset;
+            &[data-size='sm'] {
+                min-width: 8rem;
+                font-size: var(--text-sm);
             }
 
             &[data-width='auto'] {
@@ -169,7 +167,20 @@
 
                 svg {
                     height: 1em;
+                    max-width: 1em;
                     margin-block: -0.5em;
+                }
+            }
+
+            &.animated {
+                svg {
+                    transition: translate 0.15s;
+                }
+
+                &:hover {
+                    svg {
+                        translate: 0.5em 0;
+                    }
                 }
             }
 

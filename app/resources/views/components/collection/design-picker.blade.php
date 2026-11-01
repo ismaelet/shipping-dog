@@ -117,13 +117,8 @@
 
         <x-slot:footer>
             @if ($designs->isEmpty())
-                <x-button
-                    type="button"
-                    variant="secondary"
-                    size="small"
-                    width="auto"
-                    x-on:click="$dispatch('close-modal')"
-                >Chiudi</x-button>
+                <x-button type="button" variant="secondary" size="sm" width="auto" x-on:click="$dispatch('close-modal')"
+                    >Chiudi</x-button>
             @else
                 <p
                     class="mr-auto text-sm"
@@ -134,17 +129,12 @@
                             : selected.length + ' grafiche nella collezione'
                     "
                 ></p>
-                <x-button
-                    type="button"
-                    variant="secondary"
-                    size="small"
-                    width="auto"
-                    x-on:click="$dispatch('close-modal')"
-                >Annulla</x-button>
+                <x-button type="button" variant="secondary" size="sm" width="auto" x-on:click="$dispatch('close-modal')"
+                    >Annulla</x-button>
                 <x-button
                     type="submit"
                     :form="$formId"
-                    size="small"
+                    size="sm"
                     width="auto"
                     x-bind:disabled="! changed"
                     class="disabled:cursor-not-allowed disabled:opacity-50"

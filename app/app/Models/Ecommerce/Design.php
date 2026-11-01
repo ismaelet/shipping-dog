@@ -3,19 +3,20 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\FileHelper;
-use App\Services\Files\DesignPreviewGenerator;
 use App\Models\Ecommerce\Design\CustomerPhoto;
-use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Design\DesignTag;
+use App\Models\Ecommerce\Design\LogoGroup;
+use App\Services\Files\DesignPreviewGenerator;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Vite;
 
-class Design extends Model {
-
+class Design extends Model
+{
     use SoftDeletes;
 
     /**
@@ -30,19 +31,21 @@ class Design extends Model {
         'sort',
         'color',
         'default_color_id',
-        'logo_group_id'
+        'logo_group_id',
     ];
 
-    public function full_name(): Attribute {
+    public function full_name(): Attribute
+    {
         return Attribute::make(
-            get: fn() => $this->name . ' - ' . $this->id,
+            get: fn () => $this->name.' - '.$this->id,
         );
     }
 
     /**
      * Delete the design and the related products
      */
-    public function delete() {
+    public function delete()
+    {
         $this->products()->delete();
 
         return parent::delete();
@@ -51,14 +54,16 @@ class Design extends Model {
     /**
      * Get the design's seller
      */
-    public function seller(): BelongsTo {
+    public function seller(): BelongsTo
+    {
         return $this->belongsTo(Seller::class, 'user_id', 'user_id');
     }
 
     /**
      * Get the design's main
      */
-    public function main_product(): HasOne {
+    public function main_product(): HasOne
+    {
         return $this->hasOne(Product::class)
             ->where('status', true)
             ->orderBy('type_id');
@@ -67,7 +72,8 @@ class Design extends Model {
     /**
      * Get the design's products
      */
-    public function products(): HasMany {
+    public function products(): HasMany
+    {
         return $this->hasMany(Product::class)
             ->where('status', true)
             ->orderBy('type_id');
@@ -76,42 +82,48 @@ class Design extends Model {
     /**
      * Get the design's tags
      */
-    public function tags(): HasOne {
+    public function tags(): HasOne
+    {
         return $this->hasOne(DesignTag::class);
     }
 
     /**
      * Get the design's customer photos
      */
-    public function customerPhotos(): HasMany {
+    public function customerPhotos(): HasMany
+    {
         return $this->hasMany(CustomerPhoto::class);
     }
 
     /**
      * Get the design's logo group
      */
-    public function logo_group(): BelongsTo {
+    public function logo_group(): BelongsTo
+    {
         return $this->belongsTo(LogoGroup::class);
     }
 
     /**
      * Ge the desing's url, that is the url of the main product
      */
-    public function url(): ?string {
+    public function url(): ?string
+    {
         return $this->main_product?->url();
     }
 
     /**
      * Get the design's time string
      */
-    public function createdAtString(): string {
+    public function createdAtString(): string
+    {
         return date('d/m/Y', strtotime($this->created_at));
     }
 
     /**
      * Get the count of products
      */
-    public function productCount(): int {
+    public function productCount(): int
+    {
         return $this->products->count();
     }
 
@@ -130,10 +142,11 @@ class Design extends Model {
     /**
      * Get the design's image
      */
-    public function image(int $size = 400): string {
-        $file = $size == 400 ? 'designs/previews/' . $this->id . '_m.webp' : 'designs/previews/' . $this->id . '.webp';
+    public function image(int $size = 400): string
+    {
+        $file = $size == 400 ? 'designs/previews/'.$this->id.'_m.webp' : 'designs/previews/'.$this->id.'.webp';
 
-        if (!FileHelper::exists($file)) {
+        if (! FileHelper::exists($file)) {
             app(DesignPreviewGenerator::class)->generate($this);
         }
 
@@ -141,37 +154,39 @@ class Design extends Model {
             return storage_asset($file);
         }
 
-        return storage_asset('product_types/mockups/no-image.webp');
+        return Vite::image('placeholder.webp');
     }
 
-    public function originalImage(): ?string {
+    public function originalImage(): ?string
+    {
 
-        if (FileHelper::exists($file = 'designs_vector/' . $this->id . '.ai')) {
+        if (FileHelper::exists($file = 'designs_vector/'.$this->id.'.ai')) {
             return storage_asset($file);
         }
 
-        if (FileHelper::exists($file = 'designs_vector/' . $this->id . '.pdf')) {
+        if (FileHelper::exists($file = 'designs_vector/'.$this->id.'.pdf')) {
             return storage_asset($file);
         }
 
-        if (FileHelper::exists($file = 'designs_originals/' . $this->id . '.png')) {
+        if (FileHelper::exists($file = 'designs_originals/'.$this->id.'.png')) {
             return storage_asset($file);
         }
 
         return null;
     }
 
-    public function originalDarkImage(): ?string {
+    public function originalDarkImage(): ?string
+    {
 
-        if (FileHelper::exists($file = 'designs_vector/' . $this->id . '_dark.ai')) {
+        if (FileHelper::exists($file = 'designs_vector/'.$this->id.'_dark.ai')) {
             return storage_asset($file);
         }
 
-        if (FileHelper::exists($file = 'designs_vector/' . $this->id . '_dark.pdf')) {
+        if (FileHelper::exists($file = 'designs_vector/'.$this->id.'_dark.pdf')) {
             return storage_asset($file);
         }
 
-        if (FileHelper::exists($file = 'designs_originals/' . $this->id . '_dark.png')) {
+        if (FileHelper::exists($file = 'designs_originals/'.$this->id.'_dark.png')) {
             return storage_asset($file);
         }
 
@@ -181,7 +196,8 @@ class Design extends Model {
     /**
      * Delete the design and clean the related data
      */
-    public function deleteAndClean(bool $permanently = false): void {
+    public function deleteAndClean(bool $permanently = false): void
+    {
         // Delete products
         foreach ($this->products as $product) {
             $product->deleteAndClean($permanently);

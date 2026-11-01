@@ -1,5 +1,5 @@
 {{-- Community --}}
-<section id="community" aria-label="La community Shipping Dog" class="breakout mb-12 py-16 text-center">
+<section id="community" aria-label="La community Shipping Dog" class="breakout mb-12 pt-16 pb-8 text-center sm:py-16">
     {{-- Heading --}}
     <p class="text-primary-500 text-xs font-bold tracking-[0.2em] uppercase">La community</p>
 

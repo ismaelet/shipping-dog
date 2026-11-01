@@ -11,13 +11,13 @@
                 'label' => 'Prodotti nella wishlist',
                 'value' => $wishlistCount,
                 'icon' => 'heart',
-                'iconClass' => 'bg-secondary-400/10 text-secondary-400',
+                'iconClass' => 'bg-detail-2-400/10 text-detail-2-400',
             ],
             [
                 'label' => 'Shop seguiti',
                 'value' => $followedShopCount,
                 'icon' => 'shop',
-                'iconClass' => 'bg-sky-400/10 text-sky-400',
+                'iconClass' => 'bg-detail-1-400/10 text-detail-1-400',
             ],
         ];
     @endphp
@@ -39,7 +39,7 @@
             @endforeach
         </section>
 
-        <section class="surface border-border-400 bg-surface-400 rounded-2xl border p-5 sm:p-8">
+        <section class="card border-border-400 bg-surface-400 rounded-2xl border p-5 sm:p-8">
             <x-user-dashboard.panel-header
                 title="La tua attività"
                 subtitle="Bentornato"

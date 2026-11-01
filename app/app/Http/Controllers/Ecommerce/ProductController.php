@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
+use App\Actions\Designs\EditDesign;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Product;
 use App\Models\Warning;
@@ -93,13 +94,12 @@ class ProductController extends Controller
      */
     public function changeStatus(Product $product, Request $request): RedirectResponse
     {
+        EditDesign::product($product->id);
         $request->validate([
             'status' => 'required|in:0,1',
         ]);
 
-        $product->update([
-            'status' => $request->status,
-        ]);
+        EditDesign::status($product, (bool) $request->status);
 
         return redirect()->back();
     }

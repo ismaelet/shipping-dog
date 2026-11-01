@@ -1,4 +1,6 @@
 <img
-	src="{{ $icon }}"
-	class="h-full w-full rounded-[inherit] object-cover"
->
+    src="{{ $icon }}"
+    referrerpolicy="no-referrer"
+    alt="User icon"
+    class="h-full w-full rounded-[inherit] object-cover"
+/>

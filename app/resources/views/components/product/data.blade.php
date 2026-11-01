@@ -102,7 +102,7 @@
                 <div class="mar-t-4 grid grid-cols-1 gap-4">
                     {{-- Warning --}}
                     @if ($warning)
-                        <x-alerts.warning :message="$warning->message" />
+                        <x-alert type="error" :message="$warning->message" />
                     @endif
 
                     {{-- Add to cart --}}
@@ -126,14 +126,13 @@
     </div>
 
     {{-- Additional information --}}
-    <div class="border-border-400 mt-12 grid grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] gap-6 border-b pb-12 max-sm:grid-cols-1">
+    <div class="border-border-400 mt-12 grid grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] items-start gap-6 border-b pb-12 max-sm:grid-cols-1">
         {{-- Product information --}}
         <x-product.info :$product />
 
         {{-- Seller information --}}
         <aside @class([
             'flex flex-col justify-between gap-5 rounded-3xl border border-border-400 bg-background-300 p-7 max-sm:p-5',
-            'col-span-full' => $product->type->info?->description && $product->type->info?->details,
         ])>
             <p class="text-primary-300 text-xs font-bold tracking-wide uppercase">Il creator</p>
 
@@ -158,7 +157,7 @@
                 </div>
             </a>
 
-            <x-button :href="$product->seller->url()" variant="secondary" size="small">
+            <x-button :href="$product->seller->url()" variant="secondary" size="sm">
                 Visita il negozio
                 <x-icon-shop />
             </x-button>

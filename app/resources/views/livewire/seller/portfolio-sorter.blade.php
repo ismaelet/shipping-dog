@@ -9,7 +9,7 @@
             <x-heading variant="article">Portfolio</x-heading>
             <p class="mt-3 text-sm">{{ $designs->count() }} grafiche pubblicate</p>
         </div>
-        <x-button href="{{ route('seller-dashboard.portfolio.add') }}" size="small">
+        <x-button href="{{ route('seller-dashboard.portfolio.add') }}" size="sm">
             Carica una grafica
             <x-icon-upload />
         </x-button>

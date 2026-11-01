@@ -33,8 +33,7 @@
 
             <div class="relative grid max-w-2xl gap-8 px-8 py-16">
                 <x-heading variant="main">{!! $welcomeTitle !!}</x-heading>
-                <x-typography.paragraph class="text-heading-400">
-                    {!! $welcomeDescription !!}</x-typography.paragraph>
+                <x-typography.paragraph class="text-heading-400"> {!! $welcomeDescription !!}</x-typography.paragraph>
             </div>
         </section>
 
@@ -42,7 +41,7 @@
         <form class="grid items-center justify-items-center" method="POST">
             @csrf
 
-            <div class="grid w-full max-w-xl grid-cols-1 gap-12 px-8 py-16">
+            <div class="px-content-padding grid w-full max-w-xl grid-cols-1 gap-12 py-16">
                 <x-heading variant="section" class="text-center">{{ $title }}</x-heading>
 
                 <div class="grid gap-4">{{ $formBody }}</div>

@@ -1,423 +1,337 @@
-@php
-	$initialTypeId = old('type_id', isset($product) ? $product->type_id : $types->first()?->id);
-
-	$initialPrice = old('price', isset($product) ? number_format($product->price()->price, 2, '.', '') : null);
-@endphp
-
-@pushOnce('styles')
-	<style>
-		.colors {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
-			gap: 1rem;
-		}
-
-		.color {
-			display: flex;
-			align-items: center;
-			gap: 0.5rem;
-		}
-
-		.color * {
-			cursor: pointer;
-		}
-
-		.color__checkbox,
-		.color__input,
-		.color__button {
-			display: none;
-		}
-
-		.color__icon {
-			width: 2rem;
-			aspect-ratio: 1;
-			background: linear-gradient(135deg, var(--_color-1) 50%, var(--_color-2) 50%);
-			border: 3px solid var(--color-neutral-500);
-			border-radius: 50%;
-			transition: border-color 0.2s;
-		}
-
-		.color__checkbox:checked+.color__icon {
-			border-color: var(--color-primary-400);
-		}
-
-		.color__upload {
-			display: none;
-		}
-
-		.color__upload--warning {
-			color: rgb(255, 91, 91);
-		}
-
-		.color:has(.color__checkbox:checked) .color__upload {
-			display: block;
-		}
-
-		.product-cover-image {
-			max-height: 30rem;
-		}
-
-		.delete-button {
-			--icon-size: 1em;
-			gap: 0.5em;
-			width: max-content;
-			background: transparent;
-			border: none;
-			font-size: var(--font-size-300);
-			color: red;
-			cursor: pointer;
-		}
-	</style>
-@endpushOnce
-
-@pushOnce('scripts')
-	<script>
-		document.addEventListener('alpine:init', () => {
-			Alpine.data('productPricing', (
-				references,
-				initialTypeId,
-				initialPrice = null,
-			) => ({
-				references,
-				typeId: Number(initialTypeId),
-				price: initialPrice,
-				gainW: 0,
-				gainC: 0,
-				minimumPrice: 0,
-
-				init() {
-					const reference = this.currentReference();
-
-					if (this.price === null || this.price === '') {
-						this.price = reference.price;
-					}
-
-					this.calculate();
-				},
-
-				currentReference() {
-					return this.references[this.typeId] ?? {
-						price: 0,
-						gain_w: 0,
-						gain_c: 0,
-						minimum_price: 0,
-					};
-				},
-
-				changeType() {
-					const reference = this.currentReference();
-
-					/*
-					 * Reset to the standard price of the newly selected type.
-					 * This avoids carrying a price from one product type to
-					 * another product type with different underlying costs.
-					 */
-					this.price = reference.price;
-
-					this.calculate();
-				},
-
-				calculate() {
-					const reference = this.currentReference();
-
-					let price = this.parseNumber(this.price);
-					const referencePrice = this.parseNumber(reference.price);
-					const referenceGainW = this.parseNumber(reference.gain_w);
-					const referenceGainC = this.parseNumber(reference.gain_c);
-
-					const baseW = referencePrice - referenceGainW / 0.75;
-					const baseC = referencePrice - referenceGainC / 0.75;
-
-					this.minimumPrice = this.parseNumber(
-						reference.minimum_price
-					);
-
-					if (price < 0) {
-						price = 0;
-					}
-
-					this.gainW = Math.max(
-						0,
-						(price - baseW) *
-						0.75,
-					).toFixed(2);
-
-					this.gainC = Math.max(
-						0,
-						(price - baseC) * 0.75,
-					).toFixed(2);
-				},
-
-				normalizePrice() {
-					let price = this.parseNumber(this.price);
-
-					if (price < this.minimumPrice) {
-						price = this.minimumPrice;
-					}
-
-					this.price = price.toFixed(2);
-
-					this.calculate();
-				},
-
-				parseNumber(value) {
-					const normalized = String(value ?? '')
-						.replace(',', '.')
-						.replace(/[^\d.-]/g, '');
-
-					const number = Number.parseFloat(normalized);
-
-					return Number.isFinite(number) ? number : 0;
-				},
-			}));
-		});
-	</script>
-@endpushOnce
-
 <x-layouts.seller-dashboard>
+  <div class="grid min-w-0 gap-8">
+    <header class="grid gap-4 sm:flex sm:items-start sm:justify-between">
+      <div class="grid min-w-0 gap-2">
+        <x-eyebrow>Prodotto personalizzato</x-eyebrow>
+        <x-heading
+          variant="section"
+          >{{ $product ? 'Modifica: '.$product->name : 'Aggiungi un prodotto' }}</x-heading
+        >
+        <p class="text-text-400">Gestisci i dettagli, i colori e le immagini del tuo prodotto.</p>
+      </div>
+      <x-button
+        href="{{ route('seller-dashboard.portfolio') }}"
+        variant="secondary"
+        size="sm"
+        width="auto"
+        >Torna al portfolio</x-button
+      >
+    </header>
 
-	<form
-		class="form pad-v-2 grid gap-8"
-		method="POST"
-		enctype="multipart/form-data"
-		action="{{ isset($product) ? route('seller-dashboard.portfolio.products.update', $product) : route('seller-dashboard.portfolio.products.store') }}"
-	>
-		@csrf
+    @if (session('success'))
+      <x-alert type="success" role="status">{{ session('success') }}</x-alert>
+    @endif
+    @if ($errors->any())
+      <x-alert type="error" role="alert"
+        >Controlla i campi evidenziati prima di salvare.</x-alert
+      >
+    @endif
+    @if ($product && !$product->status)
+      <p class="card border-border-400 border p-4 text-sm">Il prodotto non è ancora pubblico, ma verrà attivato al più presto.</p>
+    @endif
 
-		@if (!isset($product))
-			<input
-				type="hidden"
-				name="temp_id"
-				value="{{ $tempId }}"
-			>
-		@endif
+    @if ($types->isEmpty())
+      <div class="card grid gap-2 p-6">
+        <x-heading variant="article"
+          >Nessun tipo di prodotto disponibile</x-heading
+        >
+        <p>Non è possibile aggiungere un prodotto al momento. Riprova più tardi.</p>
+      </div>
+    @else
+      <form
+        id="custom-product-form"
+        class="grid min-w-0 gap-6"
+        method="POST"
+        enctype="multipart/form-data"
+        action="{{ $product ? route('seller-dashboard.portfolio.products.update', $product) : route('seller-dashboard.portfolio.products.store') }}"
+        x-data="customProductEditor(@js($priceReferences), @js($typeOptions), @js($initialTypeId), @js($initialPrice), @js($initialColorIds), @js($initialDefaultColorId))"
+        @submit="saving = true"
+        @pageshow.window="
+          saving = false;
+          pendingUploads = 0;
+        "
+        x-on:livewire-upload-start="startUpload"
+        x-on:livewire-upload-finish="finishUpload"
+        x-on:livewire-upload-error="finishUpload"
+        x-on:livewire-upload-cancel="finishUpload"
+      >
+        @csrf
+        @unless ($product)
+          <input type="hidden" name="temp_id" value="{{ $tempId }}" />
+        @endunless
+        <x-seller-dashboard.product.section
+          title="Dettagli del prodotto"
+          description="Scegli un nome e racconta cosa rende speciale il tuo prodotto."
+        >
+          <x-form.field>
+            <x-label for="product-name">Nome</x-label>
+            <x-input
+              id="product-name"
+              name="name"
+              :value="old('name', $product?->name)"
+              maxlength="255"
+              required
+              class="min-w-0 w-full"
+            />
+            @error ('name')
+              <x-alert type="error">{{ $message }}</x-alert>
+            @enderror
+          </x-form.field>
+          <x-form.field>
+            <x-label for="product-description"
+              >Descrizione
+              <span class="text-text-400 font-normal"
+                >(opzionale)</span
+              ></x-label
+            >
+            <x-textarea
+              id="product-description"
+              name="description"
+              maxlength="500"
+              class="w-full min-w-0"
+              placeholder="Descrivi il tuo prodotto"
+              >{{ old('description', $product?->descriptionModel?->description) }}</x-textarea
+            >
+            @error ('description')
+              <x-alert type="error">{{ $message }}</x-alert>
+            @enderror
+          </x-form.field>
+        </x-seller-dashboard.product.section>
 
-		<div class="grid gap-4">
-			<h1 class="txt-2rem">
-				<span class="txt-sbold">
-					{!! isset($product) ? '<span class="txt-light">Modifica:</span> ' . $product->name : 'Aggiungi un prodotto' !!}
-				</span>
-			</h1>
+        <x-seller-dashboard.product.section
+          title="Tipo e prezzo"
+          description="Imposta il prezzo di vendita. Il guadagno viene calcolato automaticamente."
+        >
+          <div class="grid min-w-0 gap-6 md:grid-cols-2">
+            <x-form.field>
+              <x-label for="product-type">Tipo di prodotto</x-label>
+              <x-select
+                id="product-type"
+                name="type_id"
+                x-model.number="typeId"
+                ::disabled="uploading"
+                @change="changeType"
+                required
+                class="w-full min-w-0"
+              >
+                @foreach ($types as $type)
+                  <option
+                    value="{{ $type->id }}"
+                    @selected ($type->id === $initialTypeId)
+                  >
+                    {{ $type->name }}
+                  </option>
+                @endforeach
+              </x-select>
+              @error ('type_id')
+                <x-alert type="error">{{ $message }}</x-alert>
+              @enderror
+            </x-form.field>
+            <x-form.field>
+              <x-label for="product-price">Prezzo di vendita (€)</x-label>
+              <x-input
+                id="product-price"
+                type="number"
+                name="price"
+                x-model="price"
+                @input="calculate"
+                @blur="normalizePrice"
+                ::min="minimumPrice"
+                step="0.01"
+                required
+                class="min-w-0 w-full"
+              />
+              <p class="text-text-400 text-sm">Prezzo minimo: <span x-text="minimumPrice.toFixed(
+                    2,
+                  )"></span> €</p>
+              @error ('price')
+                <x-alert type="error">{{ $message }}</x-alert>
+              @enderror
+            </x-form.field>
+          </div>
+          <dl class="bg-surface-500 grid gap-4 rounded-lg p-4 sm:grid-cols-2">
+            <div>
+              <dt class="text-text-400 text-sm">Guadagno capi chiari</dt>
+              <dd class="text-heading-400 mt-1 text-xl font-semibold">
+                <span x-text="gainW">0.00</span> €
+              </dd>
+            </div>
+            <div>
+              <dt class="text-text-400 text-sm">Guadagno capi scuri</dt>
+              <dd class="text-heading-400 mt-1 text-xl font-semibold">
+                <span x-text="gainC">0.00</span> €
+              </dd>
+            </div>
+          </dl>
+        </x-seller-dashboard.product.section>
 
-			@session('success')
-				<x-alerts.success>Modifiche al prodotto salvate</x-alerts.success>
-			@endsession
-		</div>
+        <x-seller-dashboard.product.section
+          title="Colori disponibili"
+          description="Seleziona i colori acquistabili e quello da mostrare nell’anteprima."
+        >
+          <fieldset class="grid gap-3">
+            <legend class="text-heading-400 mb-3 font-semibold">
+              Colori attivi
+            </legend>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <template x-for="color in colors" :key="color.id">
+                <label
+                  class="border-border-400 has-checked:border-primary-400 focus-within:outline-primary-400 flex cursor-pointer items-center gap-3 rounded-lg border p-3 focus-within:outline-2"
+                >
+                  <input
+                    type="checkbox"
+                    name="colors[]"
+                    :value="color.id"
+                    x-model.number="activeColorIds"
+                    :disabled="uploading"
+                    @change="changeColors"
+                    class="sr-only"
+                  />
+                  <span
+                    class="border-border-400 size-7 shrink-0 rounded-full border"
+                    :style="{
+                      background: `linear-gradient(135deg, ${color.primary} 50%, ${color.secondary} 50%)`,
+                    }"
+                  ></span>
+                  <span x-text="color.name"></span>
+                </label>
+              </template>
+            </div>
+            <p
+              x-show="colors.length === 0"
+              class="text-text-400 text-sm"
+            >Nessun colore disponibile per questo tipo di prodotto.</p>
+            @error ('colors')
+              <x-alert type="error">{{ $message }}</x-alert>
+            @enderror
+            @error ('colors.*')
+              <x-alert type="error">{{ $message }}</x-alert>
+            @enderror
+          </fieldset>
+          <x-form.field>
+            <x-label for="product-default-color">Colore predefinito</x-label>
+            <x-select
+              id="product-default-color"
+              name="default-color-id"
+              x-model.number="defaultColorId"
+              required
+              class="w-full"
+            >
+              <option value="0" disabled>Seleziona un colore attivo</option>
+              <template x-for="color in activeColors" :key="color.id"
+                ><option :value="color.id" x-text="color.name"></option
+              ></template>
+            </x-select>
+            @error ('default-color-id')
+              <x-alert type="error">{{ $message }}</x-alert>
+            @enderror
+          </x-form.field>
+        </x-seller-dashboard.product.section>
 
-		<div class="grid gap-8">
-			@if (isset($product) && !$product->status)
-				<p class="error">Il prodotto non è ancora pubblico, ma verrà attivato al più presto</p>
-			@endif
+        <x-seller-dashboard.product.section
+          title="Immagini del prodotto"
+          description="Carica una foto per ogni colore e posizione. Le immagini vengono caricate subito; salva per confermare i dettagli e le varianti."
+        >
+          <livewire:portfolio.product.images
+            :product-id="$product?->id"
+            :$tempId
+            :type-id="$initialTypeId"
+            :color-ids="$initialColorIds"
+          />
+          @error ('images')
+            <x-alert type="error">{{ $message }}</x-alert>
+          @enderror
+        </x-seller-dashboard.product.section>
 
-			<div class="form-field">
-				<x-label>Nome:</x-label>
+        <x-seller-dashboard.product.section
+          title="Immagini aggiuntive"
+          description="Aggiungi una copertina accanto alla descrizione e altre foto del prodotto (opzionali)."
+        >
+          <x-form.field>
+            <x-label for="product-cover">Immagine di copertina</x-label>
+            @if ($coverImage)
+              <img
+                src="{{ $coverImage }}"
+                alt="Copertina attuale del prodotto"
+                class="max-h-64 w-full rounded-lg object-contain"
+              />
+            @endif
+            <x-input
+              id="product-cover"
+              type="file"
+              name="cover-image"
+              accept="image/jpeg,image/png,image/webp"
+              class="min-w-0 w-full"
+            />
+            <p class="text-text-400 text-sm">JPG, PNG o WebP, massimo 5 MB.</p>
+            @error ('cover-image')
+              <x-alert type="error">{{ $message }}</x-alert>
+            @enderror
+          </x-form.field>
+          <x-form.field>
+            <x-label for="product-more-images">Altre immagini</x-label>
+            @if ($extraImages)
+              <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                @foreach ($extraImages as $image)
+                  <img
+                    src="{{ $image }}"
+                    alt="Immagine aggiuntiva del prodotto"
+                    class="aspect-square w-full rounded-lg object-cover"
+                  />
+                @endforeach
+              </div>
+            @endif
+            <x-input
+              id="product-more-images"
+              type="file"
+              name="more-images[]"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              class="min-w-0 w-full"
+            />
+            <p class="text-text-400 text-sm">Fino a 10 immagini per caricamento, massimo 5 MB ciascuna.</p>
+            @error ('more-images')
+              <x-alert type="error">{{ $message }}</x-alert>
+            @enderror
+            @error ('more-images.*')
+              <x-alert type="error">{{ $message }}</x-alert>
+            @enderror
+          </x-form.field>
+        </x-seller-dashboard.product.section>
 
-				<input
-					type="text"
-					class="input"
-					name="name"
-					value="{{ isset($product) ? $product->name : '' }}"
-					placeholder="Nome"
-					required
-				>
-
-				@error('name')
-					<x-alerts.error>{{ $message }}</x-alerts.error>
-				@enderror
-			</div>
-
-			<div
-				class="grid gap-4 md:grid-cols-5"
-				x-data="productPricing(
-	    @js($priceReferences),
-	    @js($initialTypeId),
-	    @js($initialPrice)
-	)"
-			>
-				<livewire:portfolio.product.type-select
-					:types="$types"
-					:initial-type-id="$initialTypeId"
-				/>
-
-				<div class="form-field">
-					<x-label>Prezzo:</x-label>
-
-					<div class="price-input flex self-end">
-						<input
-							type="number"
-							class="input grow"
-							name="price"
-							x-model="price"
-							x-on:input="calculate"
-							x-on:blur="normalizePrice"
-							x-bind:min="minimumPrice"
-							step="0.01"
-							placeholder="Prezzo"
-							required
-						>
-					</div>
-				</div>
-
-				<div class="form-field">
-					<x-label>Guadagno capi chiari:</x-label>
-					<p>Calcolato automaticamente</p>
-
-					<div class="price-input flex">
-						<input
-							type="text"
-							class="input grow"
-							x-bind:value="`${gainW} €`"
-							placeholder="Guadagno capi chiari"
-							readonly
-						>
-					</div>
-				</div>
-
-				<div class="form-field">
-					<x-label>Guadagno capi scuri:</x-label>
-					<p>Calcolato automaticamente</p>
-
-					<div class="price-input flex">
-						<input
-							type="text"
-							class="input grow"
-							x-bind:value="`${gainC} €`"
-							placeholder="Guadagno capi scuri"
-							readonly
-						>
-					</div>
-				</div>
-
-				@error('type_id')
-					<x-alerts.error class="md:col-span-4">{{ $message }}</x-alerts.error>
-				@enderror
-
-				@error('price')
-					<x-alerts.error class="md:col-span-4">{{ $message }}</x-alerts.error>
-				@enderror
-			</div>
-
-			<div class="form-field">
-				<x-label>Descrizione (opzionale):</x-label>
-				<x-textarea
-					name="description"
-					maxlength="500"
-					placeholder="Descrizione"
-				>{{ isset($product) ? $product->description() : '' }}</x-textarea>
-
-				@error('description')
-					<x-alerts.error>{{ $message }}</x-alerts.error>
-				@enderror
-			</div>
-
-			@error('default-color-id')
-				<x-alerts.error>{{ $message }}</x-alerts.error>
-			@enderror
-
-			@error('colors')
-				<x-alerts.error>{{ $message }}</x-alerts.error>
-			@enderror
-
-			@error('cover-image')
-				<x-alerts.error>{{ $message }}</x-alerts.error>
-			@enderror
-
-			<div class="surface grid grid-cols-1 gap-8 p-4">
-				<livewire:portfolio.product.active-colors :product="isset($product) ? $product : null" />
-
-				<span class="border-neutral-250 border-b"></span>
-
-				<livewire:portfolio.product.default-color :product="isset($product) ? $product : null" />
-			</div>
-
-			@foreach ($imagePositionTypes->where('base_of', null) ?? [] as $position)
-				<div class="surface grid grid-cols-1 gap-8 p-4">
-					<h3>Immagine {{ strtolower($position->name) }}</h3>
-
-					<livewire:portfolio.product.upload-image
-						:positionId="$position->id"
-						:product="isset($product) ? $product : null"
-						:tempId="$tempId ?? null"
-					/>
-				</div>
-			@endforeach
-
-			<div class="form-field">
-				<div>
-					<x-label>Immagine di copertina (opzionale):</x-label>
-					<p>Apparirà di fianco alla descrizione del prodotto</p>
-				</div>
-
-				@if (isset($product) && $product->hasSpecificCoverImage)
-					<label class="replace-image">
-						<input
-							type="file"
-							name="cover-image"
-							onchange="$('.js-submit').click()"
-						>
-						<img
-							class="product-cover-image"
-							src="{{ asset($product->coverImage) }}"
-						>
-					</label>
-				@else
-					<input
-						type="file"
-						class="input"
-						name="cover-image"
-					>
-				@endif
-			</div>
-
-			@if (isset($product))
-				<div class="form-field">
-					<div>
-						<x-label>Altre immagini (opzionali):</x-label>
-					</div>
-
-					<input
-						type="file"
-						class="input"
-						name="more-images[]"
-						multiple
-					>
-				</div>
-			@endif
-		</div>
-
-		<div
-			class="flex-group center-content"
-			data-spacing="700"
-		>
-			<x-button
-				type="submit"
-				name="{{ isset($product) ? 'edit' : 'add' }}"
-				class="js-submit"
-			>
-				{{ isset($product) ? 'Salva' : 'Aggiungi' }}
-			</x-button>
-
-			<x-button
-				href="{{ route('seller-dashboard.portfolio') }}"
-				variant="secondary"
-			>
-				Indietro
-			</x-button>
-
-			@if (isset($product))
-				<x-button
-					type="submit"
-					name="delete"
-					variant="secondary"
-					color="danger"
-					formaction="{{ route('seller-dashboard.portfolio.products.delete', $product) }}"
-					onclick="return confirm('Sei sicuro di voler eliminare questo prodotto? Questa azione non può essere annullata.')"
-				>
-					<x-icon-delete />
-					Elimina il prodotto
-				</x-button>
-			@endif
-		</div>
-	</form>
-
+        <div class="flex flex-wrap items-center justify-end gap-3">
+          <span
+            x-show="uploading"
+            style="display: none"
+            class="text-text-400 text-sm"
+            role="status"
+            >Attendi il caricamento delle immagini…</span
+          >
+          <x-button type="submit" ::disabled="uploading || saving"
+            ><x-icon-save /><span
+              x-text="saving ? 'Salvataggio…' : @js($product ? 'Salva modifiche' : 'Aggiungi prodotto')"
+              >{{ $product ? 'Salva modifiche' : 'Aggiungi prodotto' }}</span
+            ></x-button
+          >
+        </div>
+      </form>
+    @endif
+    @if ($product)
+      <form
+        method="POST"
+        action="{{ route('seller-dashboard.portfolio.products.delete', $product) }}"
+        class="border-border-400 flex justify-end border-t pt-6"
+      >
+        @csrf
+        <x-button
+          type="submit"
+          size="sm"
+          variant="secondary"
+          color="danger"
+          confirmation="Sei sicuro di voler eliminare questo prodotto? Questa azione non può essere annullata."
+          ><x-icon-delete />Elimina il prodotto</x-button
+        >
+      </form>
+    @endif
+  </div>
 </x-layouts.seller-dashboard>

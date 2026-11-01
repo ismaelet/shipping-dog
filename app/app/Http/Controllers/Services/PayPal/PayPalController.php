@@ -12,16 +12,17 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use stdClass;
 
-class PayPalController extends Controller {
-
+class PayPalController extends Controller
+{
     /**
      * Action: Authenticate
      */
-    public function authenticate(): string|RedirectResponse {
+    public function authenticate(): string|RedirectResponse
+    {
         // Set the headers
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
-            'Authorization' => 'Basic ' . base64_encode($this->clientId() . ':' . $this->clientSecret()),
+            'Authorization' => 'Basic '.base64_encode($this->clientId().':'.$this->clientSecret()),
         ];
 
         // Set the body
@@ -41,7 +42,7 @@ class PayPalController extends Controller {
         $accessToken = $response->access_token ?? false;
 
         // Error handling
-        if (!$accessToken) {
+        if (! $accessToken) {
             return $this->error($response);
         }
 
@@ -52,7 +53,8 @@ class PayPalController extends Controller {
     /**
      * Action: Create
      */
-    public function create(Request $request): RedirectResponse {
+    public function create(Request $request): RedirectResponse
+    {
         // Get the order
         $order = Order::with([
             'address',
@@ -77,8 +79,8 @@ class PayPalController extends Controller {
                 'paypal' => [
                     'experience_context' => $this->experienceContext($order),
                     'address' => $this->address($order->address),
-                ]
-            ]
+                ],
+            ],
         ];
 
         // Set the endpoint
@@ -96,7 +98,7 @@ class PayPalController extends Controller {
         $checkoutUrl = $response->links[1]->href ?? null;
 
         // Error handling
-        if (!$token || !$checkoutUrl) {
+        if (! $token || ! $checkoutUrl) {
             return $this->error($response, $order);
         }
 
@@ -112,7 +114,8 @@ class PayPalController extends Controller {
     /**
      * Action: Capture
      */
-    public function capture(Order $order): RedirectResponse {
+    public function capture(Order $order): RedirectResponse
+    {
         $order->load('order_items.type', 'order_items.product.type');
 
         // Set the headers
@@ -147,7 +150,8 @@ class PayPalController extends Controller {
     /**
      * Action: Cancel
      */
-    public function cancel(Order $order, Request $request): RedirectResponse {
+    public function cancel(Order $order, Request $request): RedirectResponse
+    {
         // Get the tokens from the session and the request
         $requestToken = $request->token;
 
@@ -166,7 +170,8 @@ class PayPalController extends Controller {
     /**
      * ~ Helper: Send the request
      */
-    private function sendRequest(array $headers, string $endpoint, array|string|null $body = null): stdClass {
+    private function sendRequest(array $headers, string $endpoint, array|string|null $body = null): stdClass
+    {
         // Encode the body
         $body = is_array($body) ? json_encode($body) : $body;
 
@@ -187,7 +192,8 @@ class PayPalController extends Controller {
     /**
      * ~ Helper: Error handling
      */
-    private function error($response, Order $order = null): RedirectResponse {
+    private function error($response, ?Order $order = null): RedirectResponse
+    {
         if (env('APP_DEBUG')) {
             dd($response);
         }
@@ -196,8 +202,8 @@ class PayPalController extends Controller {
             array_filter([
                 'order' => $order->id,
                 'address' => $order?->address->fullAddress(),
-                'response' => $response
-            ])
+                'response' => $response,
+            ]),
         ]]);
 
         return back()->with('error', 'Errore durante il pagamento. Non è stato prevelato nessun importo.');
@@ -206,54 +212,61 @@ class PayPalController extends Controller {
     /**
      * ~ Helper: Get the client ID
      */
-    private function clientId(): string {
-        return env('APP_ENV') == 'local' ? config('services.paypal.sandbox.client_id') : config('services.paypal.client_id');
+    private function clientId(): string
+    {
+        return config('services.paypal.client_id');
     }
 
     /**
      * ~ Helper: Get the client secret
      */
-    private function clientSecret(): string {
-        return env('APP_ENV') == 'local' ? config('services.paypal.sandbox.client_secret') : config('services.paypal.client_secret');
+    private function clientSecret(): string
+    {
+        return config('services.paypal.client_secret');
     }
 
     /**
      * ~ Helper: Get the authenticate endpoint
      */
-    private function authenticateEndpoint(): string {
+    private function authenticateEndpoint(): string
+    {
         return env('APP_ENV') == 'local' ? 'https://api-m.sandbox.paypal.com/v1/oauth2/token' : 'https://api-m.paypal.com/v1/oauth2/token';
     }
 
     /**
      * ~ Helper: Get the create endpoint
      */
-    private function createEndpoint(): string {
+    private function createEndpoint(): string
+    {
         return env('APP_ENV') == 'local' ? 'https://api-m.sandbox.paypal.com/v2/checkout/orders' : 'https://api-m.paypal.com/v2/checkout/orders';
     }
 
     /**
      * ~ Helper: Get the capture endpoint
      */
-    private function captureEndpoint(Order $order): string {
+    private function captureEndpoint(Order $order): string
+    {
         $orderPayPalId = $order->token;
 
-        return env('APP_ENV') == 'local' ? 'https://api-m.sandbox.paypal.com/v2/checkout/orders/' . $orderPayPalId . '/capture' : 'https://api-m.paypal.com/v2/checkout/orders/' . $orderPayPalId . '/capture';
+        return env('APP_ENV') == 'local' ? 'https://api-m.sandbox.paypal.com/v2/checkout/orders/'.$orderPayPalId.'/capture' : 'https://api-m.paypal.com/v2/checkout/orders/'.$orderPayPalId.'/capture';
     }
 
     /**
      * ~ Helper: Get the authorization code
      */
-    private function authorization(): string {
+    private function authorization(): string
+    {
         // $accessToken = session('paypal_access_token') ?: $this->authenticate();
         $accessToken = $this->authenticate();
 
-        return 'Bearer ' . $accessToken;
+        return 'Bearer '.$accessToken;
     }
 
     /**
      * ~ Helper: Get the purchase units
      */
-    private function purchaseUnits(Order $order): array {
+    private function purchaseUnits(Order $order): array
+    {
         $address = $order->address;
 
         return [
@@ -270,8 +283,8 @@ class PayPalController extends Controller {
                         'shipping' => [
                             'currency_code' => 'EUR',
                             'value' => number_format($order->shippingFee(), 2),
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'shipping' => [
                     'name' => [
@@ -280,16 +293,17 @@ class PayPalController extends Controller {
                     $order->shipping_method->isLocalDelivery() ? null : 'address' => $this->address($address),
                 ],
                 'items' => $this->items($order),
-            ]
+            ],
         ];
     }
 
     /**
      * ~ Helper: Get the address
      */
-    private function address(Address $address): array {
+    private function address(Address $address): array
+    {
         return [
-            'address_line_1' => $address->address . ', ' . $address->number,
+            'address_line_1' => $address->address.', '.$address->number,
             'admin_area_2' => $address->city,
             'admin_area_1' => $address->region,
             'postal_code' => $address->zip,
@@ -300,7 +314,8 @@ class PayPalController extends Controller {
     /**
      * ~ Helper: Get the items
      */
-    private function items(Order $order): array {
+    private function items(Order $order): array
+    {
         $order->load('order_items.product_with_trashed');
 
         $items = [];
@@ -323,7 +338,8 @@ class PayPalController extends Controller {
     /**
      * ~ Helper: Get the experience context
      */
-    private function experienceContext(Order $order): array {
+    private function experienceContext(Order $order): array
+    {
         return [
             'payment_method_preference' => 'IMMEDIATE_PAYMENT_REQUIRED',
             'brand_name' => config('app.name'),

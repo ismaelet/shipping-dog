@@ -1,264 +1,70 @@
-<?php ?>
-
-@pushOnce('styles')
-	<link
-		rel="stylesheet"
-		href="{{ asset('css/legacy/pricing.css') }}"
-	>
-@endpushOnce
-
 @pushOnce('scripts')
-	<script defer>
-		document.addEventListener('DOMContentLoaded', function() {
-			function update_price(ele) {
-				let parent = ele.closest('.price_box');
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function () {
+            function updatePrice(input) {
+                const row = input.closest('[data-base-white]');
+                let price = input.value ? parseFloat(input.value) : 0;
 
-				let price = ele.value ? parseFloat(ele.value) : 0;
-				let price_def = parent.querySelector('.price_def') ? parseFloat(parent.querySelector('.price_def')
-					?.value) : 0;
-				let gain_w_def = parent.querySelector('.gain_w_def') ? parseFloat(parent.querySelector('.gain_w_def')
-					?.value) : 0;
-				let gain_c_def = parent.querySelector('.gain_c_def') ? parseFloat(parent.querySelector('.gain_c_def')
-					?.value) : 0;
+                if (!price || price < 0) {
+                    price = 0.01;
+                }
 
-				let base_w = price_def - gain_w_def / 0.75;
-				let base_c = price_def - gain_c_def / 0.75;
+                const gainWhite = Math.max((price - parseFloat(row.dataset.baseWhite)) * 0.75, 0);
+                const gainColor = Math.max((price - parseFloat(row.dataset.baseColor)) * 0.75, 0);
 
-				if (!price || price < 0) {
-					price = 0.01;
-				}
+                row.querySelector('.gain-white').textContent = `${gainWhite.toFixed(2)} €`;
+                row.querySelector('.gain-color')?.replaceChildren(`${gainColor.toFixed(2)} €`);
+            }
 
-				let gain_w = (price - base_w) * 0.75;
-				let gain_c = (price - base_c) * 0.75;
+            document.querySelectorAll('.price-inp').forEach((input) => {
+                input.addEventListener('input', () => updatePrice(input));
+                input.addEventListener('blur', () => {
+                    const minimum = parseFloat(input.dataset.min);
+                    let price = input.value ? parseFloat(input.value) : 0;
 
-				if (gain_w < 0) gain_w = 0;
-				if (gain_c < 0) gain_c = 0;
+                    if (price < minimum) {
+                        price = minimum;
+                    }
 
-				gain_w = gain_w.toFixed(2);
-				gain_c = gain_c.toFixed(2);
-
-				let gain_w_input = parent.querySelector('.gain_w');
-				if (gain_w_input) gain_w_input.value = gain_w + ' €';
-
-				let gain_c_input = parent.querySelector('.gain_c');
-				if (gain_c_input) gain_c_input.value = gain_c + ' €';
-			}
-
-			document.querySelectorAll('.price_inp').forEach(function(input) {
-				input.addEventListener('input', function() {
-					update_price(this);
-				});
-
-				input.addEventListener('blur', function() {
-
-					let price = this.value ? parseFloat(this.value) : 0;
-					let min = this.dataset.min ? parseFloat(this.dataset.min) : 0;
-
-					if (price < min) {
-						price = min;
-					}
-
-					this.value = price.toFixed(2);
-
-					update_price(this);
-				});
-			});
-		});
-	</script>
-@endpushOnce
+                    input.value = price.toFixed(2);
+                    updatePrice(input);
+                });
+            });
+        });
+    </script>
+@endPushOnce
 
 <x-layouts.seller-dashboard>
-	<div class="">
-		<x-heading.component>Modifica prezzi</x-heading.component>
+    <div class="card grid gap-6 p-4 sm:p-6 lg:p-8">
+        <header class="border-border-400 grid gap-2 border-b pb-5">
+            <x-eyebrow>Listino negozio</x-eyebrow>
+            <x-heading variant="article">Modifica prezzi</x-heading>
+            <p class="text-text-400 text-sm leading-6">
+                Imposti il prezzo di vendita. Il tuo guadagno viene ricalcolato automaticamente in base al costo di
+                produzione.
+            </p>
+        </header>
 
-		<form
-			class="form"
-			method="POST"
-		>
-			@csrf
+        @if (session('success'))
+            <x-alert type="success" role="status">{{ session('success') }}</x-alert>
+            type="success">
+        @endif
 
-			<div class="pad-t-2 grid grid-cols-1 gap-8">
+        <form method="POST" class="grid gap-5">
+            @csrf
 
-				<div class="dashboard-panel surface">
+            @foreach ($pricingGroups as $group)
+                <x-seller-dashboard.pricing-group
+                    :title="$group['title']"
+                    :items="$group['items']"
+                    :has-color-gains="$group['hasColorGains']"
+                    :accent="$group['accent']"
+                />
+            @endforeach
 
-					@if (session('success'))
-						<x-alerts.success class="mb-4">{{ session('success') }}</x-alerts.success>
-					@endif
-
-					<h1
-						id="sub_cloth"
-						class="subtitle"
-					>Abbigliamento</h1>
-
-					<div class="price_tbl">
-						<div class="price_box">
-							<div
-								id="head_item"
-								class="price_cell"
-							>
-								<p class="price_head txt-lef">Articolo</p>
-							</div>
-							<div
-								id="head_price"
-								class="price_cell"
-							>
-								<p class="price_head">Prezzo</p>
-							</div>
-							<div
-								id="head_gain"
-								class="price_cell"
-							>
-								<p class="price_head">Guadagno Bianchi</p>
-							</div>
-							<div
-								id="head_gain"
-								class="price_cell"
-							>
-								<p class="price_head">Guadagno colorati</p>
-							</div>
-						</div>
-
-						<?php foreach ($res_cloth as $type) {
-				$gender = $type->gender;
-				$row_price = $seller->prices->firstWhere('type_id', $type->id) ?? $type->price;
-
-				$price = $row_price->price;
-				$gain_w = $row_price->gain_w;
-				$gain_c = $row_price->gain_c;
-				$min = round($price - max($gain_w, $gain_c) / .75, 2);
-
-			?>
-
-						<div class="price_box">
-							<input
-								type="hidden"
-								class="price_def"
-								value="<?= $price ?>"
-							>
-							<input
-								type="hidden"
-								class="gain_w_def"
-								value="<?= $gain_w ?>"
-							>
-							<input
-								type="hidden"
-								class="gain_c_def"
-								value="<?= $gain_c ?>"
-							>
-
-							<p class="price_item"><?= $type->name . ' ' . ($gender?->name ?? '') ?></p>
-
-							<div class="price_cell">
-								<input
-									type="number"
-									class="price price_inp price_edit"
-									name="price_<?= $type->tag ?>"
-									value="<?= number_format((float) $price, 2, '.', '') ?>"
-									min="<?= $min ?>"
-									data-min="<?= $min ?>"
-									step="0.01"
-									placeholder="Prezzo"
-									required
-								>
-							</div>
-							<div class="price_cell"><input
-									type="text"
-									class="gain_w price_inp"
-									value="<?= number_format((float) $gain_w, 2, '.', '') ?> €"
-									readonly
-								></div>
-							<div class="price_cell"><input
-									type="text"
-									class="gain_c price_inp"
-									value="<?= number_format((float) $gain_c, 2, '.', '') ?> €"
-									readonly
-								></div>
-						</div>
-						<?php } ?>
-					</div>
-				</div>
-
-				<div class="dashboard-panel surface">
-					<h1
-						id="sub_misc"
-						class="subtitle"
-					>Accessori</h1>
-					<div class="price_tbl">
-						<div class="price_box">
-							<div
-								id="head_item"
-								class="price_cell"
-							>
-								<p class="price_head txt-lef">Articolo</p>
-							</div>
-							<div
-								id="head_price"
-								class="price_cell"
-							>
-								<p class="price_head">Prezzo</p>
-							</div>
-							<div
-								id="head_gain"
-								class="price_cell"
-							>
-								<p class="price_head">Guadagno</p>
-							</div>
-						</div>
-
-						<?php foreach ($res_acc as $type) {
-				$row_price = $seller->prices->firstWhere('type_id', $type->id) ?? $type->price;
-
-				$price = $row_price->price;
-				$gain_w = $row_price->gain_w;
-				$gain_c = $row_price->gain_c;
-				$min = round($price - max($gain_w, $gain_c) / .75, 2);
-			?>
-
-						<div class="price_box">
-							<input
-								type="hidden"
-								class="price_def"
-								value="<?= $price ?>"
-							>
-							<input
-								type="hidden"
-								class="gain_w_def"
-								value="<?= $gain_w ?>"
-							>
-
-							<p class="price_item"><?= $type->name ?></p>
-							<div class="price_cell">
-								<input
-									type="number"
-									class="price price_inp price_edit"
-									name="price_<?= $type->tag ?>"
-									value="<?= number_format((float) $price, 2, '.', '') ?>"
-									min="<?= $min ?>"
-									data-min="<?= $min ?>"
-									step="0.01"
-									placeholder="Prezzo"
-									required
-								>
-							</div>
-							<div class="price_cell"><input
-									type="text"
-									class="gain_w price_inp"
-									value="<?= number_format((float) $gain_w, 2, '.', '') ?> €"
-									readonly
-								></div>
-						</div>
-						<?php } ?>
-					</div>
-				</div>
-
-				<div class="flex justify-center">
-					<x-button
-						type="submit"
-						name="submit"
-						class=""
-					>Aggiorna <span class="text-strong uppercase">tutti</span> gli articoli nel negozio</x-button>
-				</div>
-			</div>
-		</form>
-	</div>
+            <div class="flex justify-center pt-1">
+                <x-button type="submit" name="submit" size="sm"> Aggiorna tutti i prezzi </x-button>
+            </div>
+        </form>
+    </div>
 </x-layouts.seller-dashboard>

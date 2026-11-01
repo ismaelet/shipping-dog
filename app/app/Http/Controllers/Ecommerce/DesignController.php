@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
+use App\Actions\Designs\EditDesign;
 use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Design;
@@ -9,32 +10,33 @@ use App\Models\Ecommerce\Design\DesignTag;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductType;
-use App\Models\Ecommerce\Tag;
 use App\Services\Files\ImageProcessor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
-class DesignController extends Controller {
-
+class DesignController extends Controller
+{
     public function __construct(
         private ImageProcessor $imageProcessor,
-    ) {
-    }
+    ) {}
 
     /**
      * * Index action
      */
-    public function index() {
+    public function index()
+    {
         return redirect('/seller/portfolio');
     }
 
     /**
      * * Store action
      */
-    public function store(Request $request): RedirectResponse {
+    public function store(Request $request): RedirectResponse
+    {
         // Validate the request
         $request->validate([
             'name' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) {
@@ -70,23 +72,7 @@ class DesignController extends Controller {
         $types = ProductType::where('hidden', 0)->with('colors', 'positions')->get();
 
         foreach ($types as $type) {
-            $colorIds = $type->colors->pluck('id');
-            $colorTags = $type->colors->pluck('tag');
-            $positions = implode(',', $type->positions->pluck('id')->toArray());
-
-            $color_id = $colorIds->first();
-            $availableColorSlugs = implode(',', $colorTags->toArray());
-
-            // Create the item
-            Product::create([
-                'name' => $design->name,
-                'design_id' => $design->id,
-                'user_id' => $design->user_id,
-                'type_id' => $type->id,
-                'color_id' => $color_id,
-                'colors' => $availableColorSlugs,
-                'positions' => $positions,
-            ]);
+            EditDesign::createProduct($design, $type);
         }
 
         // Add tags
@@ -109,20 +95,27 @@ class DesignController extends Controller {
     /**
      * * Edit action
      */
-    public function edit(?Design $design): View {
-        if (!$design || !$design->status || $design->user_id !== Auth::id()) {
-            to_route('designs.index');
-        }
+    public function edit(?Design $design): View
+    {
+        abort_unless($design, 404);
+        EditDesign::authorize($design);
+        $hasLightVariant = Storage::disk('public')->exists('designs/'.$design->id.'.png');
+        $hasDarkVariant = Storage::disk('public')->exists('designs/'.$design->id.'_dark.png');
+        $hasVector = Storage::disk('public')->exists('designs_vector/'.$design->id.'.pdf') || Storage::disk('public')->exists('designs_vector/'.$design->id.'.ai');
 
-        $title = 'Modifica: ' . $design->name;
+        $title = 'Modifica: '.$design->name;
 
-        return view('ecommerce.designs.edit', compact('design', 'title'));
+        return view('ecommerce.designs.edit', compact('design', 'title', 'hasLightVariant', 'hasDarkVariant', 'hasVector'));
     }
 
     /**
      * * Action: Destroy
      */
-    public function destroy(Design $design): RedirectResponse {
+    public function destroy(Design $design): RedirectResponse
+    {
+        EditDesign::authorize($design);
+        Product::where('design_id', $design->id)->delete();
+        EditDesign::tags($design, null);
         $design->delete();
 
         return to_route('seller-dashboard.portfolio');
@@ -131,7 +124,9 @@ class DesignController extends Controller {
     /**
      * Custom action: upload image
      */
-    public function uploadImage(Design $design, Request $request): RedirectResponse {
+    public function uploadImage(Design $design, Request $request): RedirectResponse
+    {
+        EditDesign::authorize($design);
         // Validate the request
         $request->validate([
             'type' => ['required', 'string', 'in:light,dark,vector'],
@@ -147,6 +142,9 @@ class DesignController extends Controller {
                     'file_vector.mimes' => 'Il file deve essere un PDF o AI',
                 ]
             );
+            if (! $this->uploadVectorImage($design, $request->file('file_vector'))) {
+                return back()->withErrors(['file_vector' => 'Caricamento non riuscito.']);
+            }
         } else {
             // Validate the file type
             $inputName = $request->type == 'light' ? 'file_light' : 'file_dark';
@@ -154,20 +152,24 @@ class DesignController extends Controller {
             $request->validate([
                 $inputName => ['required', 'image'],
             ], [
-                $inputName . '.mimes' => 'Il file deve essere un\'immagine',
+                $inputName.'.mimes' => 'Il file deve essere un\'immagine',
             ]);
 
             // Upload the image
-            $this->uploadImageHelper($design, $request->file($inputName), $request->type);
+            if (! $this->uploadImageHelper($design, $request->file($inputName), $request->type)) {
+                return back()->withErrors([$inputName => 'Caricamento non riuscito.']);
+            }
         }
 
-        return back()->with(['#upload-image-' . $request->type => true]);
+        return back()->with(['#upload-image-'.$request->type => true]);
     }
 
     /**
      * Custom action: update tags
      */
-    public function updateTags(Design $design, Request $request): RedirectResponse {
+    public function updateTags(Design $design, Request $request): RedirectResponse
+    {
+        EditDesign::authorize($design);
         $request->validate([
             'tags' => ['nullable', 'string', 'max:255'],
         ]);
@@ -181,14 +183,14 @@ class DesignController extends Controller {
     /**
      * Custom action: update background color
      */
-    public function updateBackgroundColor(Design $design, Request $request): RedirectResponse {
+    public function updateBackgroundColor(Design $design, Request $request): RedirectResponse
+    {
+        EditDesign::authorize($design);
         $request->validate([
-            'color' => ['required', 'string', 'size:7'],
+            'color' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
         ]);
 
-        $design->update([
-            'color' => $request->color,
-        ]);
+        EditDesign::background($design, $request->color);
 
         return back()->with(['saved-background-color' => true, '#background-color' => true]);
     }
@@ -196,24 +198,14 @@ class DesignController extends Controller {
     /**
      * Custom action: update default color
      */
-    public function updateDefaultColor(Design $design, Request $request): RedirectResponse {
+    public function updateDefaultColor(Design $design, Request $request): RedirectResponse
+    {
+        EditDesign::authorize($design);
         $request->validate([
             'default_color_id' => ['required', 'integer', 'exists:product_colors,id'],
         ]);
 
-        $design->load('products.type', 'products.type.colors', 'products.colors');
-
-        $design->update([
-            'default_color_id' => $request->default_color_id,
-        ]);
-
-        $design->products->each(function ($product) use ($request) {
-            if ($product->type->colors->contains($request->default_color_id) && $product->colors->contains($request->default_color_id)) {
-                $product->update([
-                    'color_id' => $request->default_color_id,
-                ]);
-            }
-        });
+        EditDesign::defaultColor($design, (int) $request->default_color_id);
 
         return back()->with(['saved-default-color' => true, '#default-color' => true]);
     }
@@ -221,9 +213,10 @@ class DesignController extends Controller {
     /**
      * Helper method: upload image
      */
-    private function uploadImageHelper(Design $design, UploadedFile $file, string $variant = 'light'): bool {
+    private function uploadImageHelper(Design $design, UploadedFile $file, string $variant = 'light'): bool
+    {
         $design->load('products', 'products.color', 'products.type', 'products.position');
-        $fileName = $variant === 'light' ? $design->id : $design->id . '_dark';
+        $fileName = $variant === 'light' ? $design->id : $design->id.'_dark';
 
         // Save the aspect ratio
         $imageSize = getimagesize($file->getPathname());
@@ -232,16 +225,16 @@ class DesignController extends Controller {
 
         // Store the original file
         if (
-            !FileHelper::upload($file, 'designs_originals/' . $fileName . '.png')
+            ! FileHelper::upload($file, 'designs_originals/'.$fileName.'.png')
         ) {
             return false;
         }
 
         // Store the resized HD file
         if (
-            !$this->imageProcessor->upload(
+            ! $this->imageProcessor->upload(
                 file: $file,
-                path: 'designs/' . $fileName . '.png',
+                path: 'designs/'.$fileName.'.png',
                 size: 1024,
             )
         ) {
@@ -250,25 +243,16 @@ class DesignController extends Controller {
 
         // Store the resized LD file
         if (
-            !$this->imageProcessor->upload(
+            ! $this->imageProcessor->upload(
                 file: $file,
-                path: 'designs/' . $fileName . '_m.png',
+                path: 'designs/'.$fileName.'_m.png',
                 size: 512,
             )
         ) {
             return false;
         }
 
-        // Delete the old product images
-        if (!$design->custom) {
-            $design->products->each(function ($product) {
-                $product->deletePreviewImages();
-            });
-        }
-
-        // Delete old design images
-        FileHelper::delete('designs/previews/' . $fileName . '.jpg');
-        FileHelper::delete('designs/previews/' . $fileName . '_m.jpg');
+        EditDesign::invalidate($design);
 
         // Return true if every upload was successful
         return true;
@@ -277,68 +261,27 @@ class DesignController extends Controller {
     /**
      * ~ Helper method: upload vector image
      */
-    private function uploadVectorImage(Design $design, UploadedFile $file): bool {
+    private function uploadVectorImage(Design $design, UploadedFile $file): bool
+    {
         // Get the file extension
-        $extension = $file->getClientOriginalExtension();
+        $extension = strtolower($file->getClientOriginalExtension());
 
         // Store the file
-        return $file->storeAs('designs_vector',  $design->id . '.' . $extension, 'public');
+        if (! $file->storeAs('designs_vector', $design->id.'.'.$extension, 'public')) {
+            return false;
+        }
+        Storage::disk('public')->delete('designs_vector/'.$design->id.'.'.($extension === 'pdf' ? 'ai' : 'pdf'));
+
+        return true;
     }
 
     /**
      * ~ Helper method: update tags
      */
-    private function updateTagsHelper(Design $design, ?string $tags): ?DesignTag {
-        // Remove the previous tags
-        if ($design->tags) {
-            $previousTags = explode(',', $design->tags);
+    private function updateTagsHelper(Design $design, ?string $tags): ?DesignTag
+    {
+        EditDesign::tags($design, $tags);
 
-            foreach ($previousTags as $previousTag) {
-                $tag = Tag::where('tag', $previousTag)->first();
-
-                if ($tag && $tag->count > 1) {
-                    $tag->decrement('count');
-                } else {
-                    $tag?->delete();
-                }
-            }
-        }
-
-        // Add the new tags
-        if (!$tags) {
-            DesignTag::where('design_id', $design->id)->delete();
-
-            return null;
-        }
-
-        // Prepare the tags
-        $tags = strtolower(str_replace(['#'], '', $tags));
-        $tags = explode(',', $tags);
-        $tags = array_map('trim', $tags);
-        $tags = array_filter($tags);
-        $tags = array_unique($tags);
-        $tags = array_slice($tags, 0, 10);
-
-        // Increment the count of existing tags
-        $existingTags = Tag::whereIn('tag', $tags)->get()->pluck('tag')->toArray();
-
-        foreach ($existingTags as $tag) {
-            Tag::where('tag', $tag)->increment('count');
-        }
-
-        // Create new tags
-        foreach ($tags as $tag) {
-            Tag::create([
-                'tag' => $tag,
-                'count' => 1,
-            ]);
-        }
-
-        // Create the design tags
-        return DesignTag::updateOrCreate([
-            'design_id' => $design->id,
-        ], [
-            'tags' => implode(',', $tags),
-        ]);
+        return $design->tags()->first();
     }
 }

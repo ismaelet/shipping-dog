@@ -7,8 +7,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 
-class History extends Component {
-
+class History extends Component
+{
     /**
      * Property: The names of the months in Italian
      */
@@ -24,7 +24,7 @@ class History extends Component {
         'Settembre',
         'Ottobre',
         'Novembre',
-        'Dicembre'
+        'Dicembre',
     ];
 
     /**
@@ -44,7 +44,7 @@ class History extends Component {
         public ?int $selectedYear = null,
         ?Collection $sales = null,
     ) {
-        if (!$this->selectedYear) {
+        if (! $this->selectedYear) {
             $this->selectedYear = $sales?->first()->year;
         }
 
@@ -56,7 +56,8 @@ class History extends Component {
     /**
      * Lifecycle method: Get the view / contents that represent the component
      */
-    public function render(): View|Closure|string {
+    public function render(): View|Closure|string
+    {
         return view('components.sales.history');
     }
 
@@ -99,7 +100,8 @@ class History extends Component {
     /**
      * Helper method: Get the years with sales from the sales collection
      */
-    private function getYearsWithSales(?Collection $sales): array {
+    private function getYearsWithSales(?Collection $sales): array
+    {
         return $sales?->pluck('year')->unique()->sortDesc()->toArray() ?? [];
     }
 }

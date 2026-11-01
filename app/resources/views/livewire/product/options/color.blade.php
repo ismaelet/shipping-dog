@@ -27,7 +27,7 @@
                 />
 
                 <div
-                    class="color-option-primary size-5.5 rounded-full"
+                    class="color-option-primary size-5.5 rounded-full shadow-lg/20"
                     style="background-color: {{ $color->primary_color_hex }}"
                 >
                     @if ($color->secondary_color_hex)

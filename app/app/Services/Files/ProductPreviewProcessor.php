@@ -12,9 +12,10 @@ use App\Models\Ecommerce\Product\ProductTypeMockupSize;
 use GdImage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Vite;
 
-class ProductPreviewProcessor {
-
+class ProductPreviewProcessor
+{
     /**
      * Constant: the small image size for product previews
      */
@@ -34,11 +35,6 @@ class ProductPreviewProcessor {
      * Constant: the allowed image sizes for product previews
      */
     public const ALLOWED_IMAGE_SIZES = [self::SMALL_IMAGE_SIZE, self::BIG_IMAGE_SIZE];
-
-    /**
-     * Constant: the placeholder image path for product previews
-     */
-    public const PLACEHOLDER_IMAGE = 'product_types/mockups/no-image.webp';
 
     /**
      * Property: the image size for the product preview
@@ -78,7 +74,7 @@ class ProductPreviewProcessor {
                 return FileHelper::storageAsset($image);
             }
 
-            if ($this->product->id && !$this->product->isCustom()) {
+            if ($this->product->id && ! $this->product->isCustom()) {
                 $this->generateImage();
             }
 
@@ -87,7 +83,7 @@ class ProductPreviewProcessor {
             }
         }
 
-        return FileHelper::storageAsset(self::PLACEHOLDER_IMAGE);
+        return Vite::image('placeholder.webp');
     }
 
     /**
@@ -134,30 +130,36 @@ class ProductPreviewProcessor {
         };
     }
 
-    private function fileName(): string {
-        return $this->product->id . '-' . $this->color->tag . '-' . $this->position->id . '-' . $this->imageSize . '.webp';
+    private function fileName(): string
+    {
+        return $this->product->id.'-'.$this->color->tag.'-'.$this->position->id.'-'.$this->imageSize.'.webp';
     }
 
-    private function storageDirectory(): string {
-        return !$this->product->isCustom() ? 'products/' . $this->product->type->tag : 'products/custom';
+    private function storageDirectory(): string
+    {
+        return ! $this->product->isCustom() ? 'products/'.$this->product->type->tag : 'products/custom';
     }
 
-    private function fileStoragePath(): string {
-        return $this->storageDirectory() . '/' . $this->fileName();
+    private function fileStoragePath(): string
+    {
+        return $this->storageDirectory().'/'.$this->fileName();
     }
 
-    private function fileServerPath(): string {
+    private function fileServerPath(): string
+    {
         return Storage::disk('public')->path($this->fileStoragePath());
     }
 
-    private function hasImage(): bool {
+    private function hasImage(): bool
+    {
         return Storage::disk('public')->exists($this->fileStoragePath());
     }
 
     /**
      * Generate the image
      */
-    private function generateImage(): void {
+    private function generateImage(): void
+    {
         $design = $this->product->design_with_trashed;
 
         // Fetch mockup type data
@@ -167,7 +169,7 @@ class ProductPreviewProcessor {
         $mockupProductData = ProductMockup::where('product_id', $this->product->id)->where('position_id', $this->position->id)->first();
 
         // Background image
-        $backgroundImage = Storage::disk('public')->path('product_types/mockups/bgr/grey.png');
+        $backgroundImage = resource_path('images/product/mockup-background.png');
 
         // Clothing images
         $clothingImage = Storage::disk('public')->path(
@@ -177,32 +179,32 @@ class ProductPreviewProcessor {
         $clothingImageExtension = pathinfo($clothingImage, PATHINFO_EXTENSION);
 
         $details = file_exists($file = str_replace(
-            '.' . $clothingImageExtension,
-            '-det.' . $clothingImageExtension,
+            '.'.$clothingImageExtension,
+            '-det.'.$clothingImageExtension,
             $clothingImage
         )) ? $file : false;
 
         // Design image
-        $darkDesignImage = Storage::disk('public')->path('designs/' . $design->id . '_dark.png');
-        $lightDesignImage = Storage::disk('public')->path('designs/' . $design->id . '.png');
+        $darkDesignImage = Storage::disk('public')->path('designs/'.$design->id.'_dark.png');
+        $lightDesignImage = Storage::disk('public')->path('designs/'.$design->id.'.png');
 
         $designImage = $this->color->dark && file_exists($darkDesignImage)
             ? $darkDesignImage
             : $lightDesignImage;
 
         // Check if every required image exists
-        if (!file_exists($clothingImage)) {
-            error_log('Doesn\'t exist clothing file: ' . $clothingImage);
+        if (! file_exists($clothingImage)) {
+            error_log('Doesn\'t exist clothing file: '.$clothingImage);
 
             if (config('app.debug')) {
-                dd('Doesn\'t exist clothing file: ' . $clothingImage, $this->product->type->image($this->color->id, $this->position->id), $this->color, $this->position);
+                dd('Doesn\'t exist clothing file: '.$clothingImage, $this->product->type->image($this->color->id, $this->position->id), $this->color, $this->position);
             }
 
             return;
         }
 
-        if (!file_exists($designImage)) {
-            error_log('Doesn\'t exist design file: ' . $designImage . ' of product: ' . $this->product->id);
+        if (! file_exists($designImage)) {
+            error_log('Doesn\'t exist design file: '.$designImage.' of product: '.$this->product->id);
 
             if (config('app.debug')) {
                 // dd('Doesn\'t exist design file: ' . $designImage, $design->id, $this->color, $this->position);
@@ -211,11 +213,11 @@ class ProductPreviewProcessor {
             return;
         }
 
-        if (!$mockupProductData && !$mockupFrameworkData) {
-            error_log('Doesn\'t exist mockup data for product: ' . $this->product->id);
+        if (! $mockupProductData && ! $mockupFrameworkData) {
+            error_log('Doesn\'t exist mockup data for product: '.$this->product->id);
 
             if (config('app.debug')) {
-                dd('Doesn\'t exist mockup data for product: ' . $this->product->id, $this->product->type->name, $this->color->name, $this->position->name);
+                dd('Doesn\'t exist mockup data for product: '.$this->product->id, $this->product->type->name, $this->color->name, $this->position->name);
             }
 
             return;
@@ -230,7 +232,7 @@ class ProductPreviewProcessor {
 
         // Add the background
         if (
-            !$this->copyLayer(
+            ! $this->copyLayer(
                 canvas: $out,
                 sourcePath: $backgroundImage,
                 destinationX: 0,
@@ -250,7 +252,7 @@ class ProductPreviewProcessor {
 
         // Add the clothing image
         if (
-            !$this->copyLayer(
+            ! $this->copyLayer(
                 canvas: $out,
                 sourcePath: $clothingImage,
                 destinationX: 0,
@@ -312,7 +314,7 @@ class ProductPreviewProcessor {
         $des_y = (int) round(($y * $pY_min) + (($y * $sY_max - $des_h)) * $pY);
 
         if (
-            !$this->copyLayer(
+            ! $this->copyLayer(
                 canvas: $out,
                 sourcePath: $designImage,
                 destinationX: $des_x,
@@ -350,7 +352,7 @@ class ProductPreviewProcessor {
             quality: $this->imageSize >= 1000 ? 90 : 70,
         );
 
-        if (!$saved) {
+        if (! $saved) {
             Log::error('Could not save product preview image', [
                 'path' => $this->fileServerPath(),
                 'product_id' => $this->product->id,
@@ -370,15 +372,15 @@ class ProductPreviewProcessor {
         int $imageSize = 1024,
     ): ?string {
         $directory = 'product_types/rasters';
-        $fileName = $type->tag . '-' . $color->tag . '-' . $position->id . '-' . $imageSize . '.webp';
-        $filePath = Storage::disk('public')->path($directory . '/' . $fileName);
+        $fileName = $type->tag.'-'.$color->tag.'-'.$position->id.'-'.$imageSize.'.webp';
+        $filePath = Storage::disk('public')->path($directory.'/'.$fileName);
 
-        if (FileHelper::exists($directory . '/' . $fileName)) {
-            return FileHelper::storageAsset($directory . '/' . $fileName);
+        if (FileHelper::exists($directory.'/'.$fileName)) {
+            return FileHelper::storageAsset($directory.'/'.$fileName);
         }
 
         // Background image
-        $backgroundImage = Storage::disk('public')->path('product_types/mockups/bgr/grey.png');
+        $backgroundImage = resource_path('images/product/mockup-background.png');
 
         // Clothing images
         $clothingImage = Storage::disk('public')->path(
@@ -388,14 +390,15 @@ class ProductPreviewProcessor {
         $clothingImageExtension = pathinfo($clothingImage, PATHINFO_EXTENSION);
 
         $details = file_exists($file = str_replace(
-            '.' . $clothingImageExtension,
-            '-det.' . $clothingImageExtension,
+            '.'.$clothingImageExtension,
+            '-det.'.$clothingImageExtension,
             $clothingImage
         )) ? $file : false;
 
         // Check if every required image exists
-        if (!file_exists($clothingImage)) {
-            error_log('Doesn\'t exist clothing file: ' . $clothingImage);
+        if (! file_exists($clothingImage)) {
+            error_log('Doesn\'t exist clothing file: '.$clothingImage);
+
             return null;
         }
 
@@ -408,7 +411,7 @@ class ProductPreviewProcessor {
 
         // Add the background
         if (
-            !$this->copyLayer(
+            ! $this->copyLayer(
                 canvas: $out,
                 sourcePath: $backgroundImage,
                 destinationX: 0,
@@ -428,7 +431,7 @@ class ProductPreviewProcessor {
 
         // Add the clothing image
         if (
-            !$this->copyLayer(
+            ! $this->copyLayer(
                 canvas: $out,
                 sourcePath: $clothingImage,
                 destinationX: 0,
@@ -468,7 +471,7 @@ class ProductPreviewProcessor {
             quality: $imageSize >= 1000 ? 90 : 70,
         );
 
-        if (!$saved) {
+        if (! $saved) {
             Log::error('Could not save empty product preview image', [
                 'path' => $filePath,
                 'type_id' => $type->id,
@@ -483,23 +486,24 @@ class ProductPreviewProcessor {
 
         imagedestroy($out);
 
-        return FileHelper::storageAsset($directory . '/' . $fileName);
+        return FileHelper::storageAsset($directory.'/'.$fileName);
     }
 
     /**
      * Delete all generated preview images for a product
      */
-    public function deleteProductPreview(Product $product): void {
-        $directory = 'products/' . $product->type->tag;
+    public function deleteProductPreview(Product $product): void
+    {
+        $directory = 'products/'.$product->type->tag;
 
-        if (!Storage::disk('public')->exists($directory)) {
+        if (! Storage::disk('public')->exists($directory)) {
             return;
         }
 
         $files = Storage::disk('public')->files($directory);
 
         foreach ($files as $file) {
-            if (str_starts_with(basename($file), $product->id . '-')) {
+            if (str_starts_with(basename($file), $product->id.'-')) {
                 FileHelper::delete($file);
             }
         }
@@ -508,10 +512,11 @@ class ProductPreviewProcessor {
     /**
      * Delete all images related to a specific product type
      */
-    public function deleteByProductType(ProductType $type): void {
-        $directory = 'products/' . $type->tag;
+    public function deleteByProductType(ProductType $type): void
+    {
+        $directory = 'products/'.$type->tag;
 
-        if (!Storage::disk('public')->exists($directory)) {
+        if (! Storage::disk('public')->exists($directory)) {
             return;
         }
 
@@ -523,7 +528,8 @@ class ProductPreviewProcessor {
     /**
      * Helper method: create a GD image from a file path
      */
-    private function createImageFromPath(string $path): GdImage|false {
+    private function createImageFromPath(string $path): GdImage|false
+    {
         $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
         return match ($extension) {
@@ -547,13 +553,13 @@ class ProductPreviewProcessor {
     ): bool {
         $sourceImage = $this->createImageFromPath($sourcePath);
 
-        if (!$sourceImage) {
+        if (! $sourceImage) {
             return false;
         }
 
         $sourceSize = getimagesize($sourcePath);
 
-        if (!$sourceSize || !isset($sourceSize[0], $sourceSize[1])) {
+        if (! $sourceSize || ! isset($sourceSize[0], $sourceSize[1])) {
             imagedestroy($sourceImage);
 
             return false;
@@ -580,10 +586,11 @@ class ProductPreviewProcessor {
     /**
      * Helper method: get image dimensions from a file path.
      */
-    private function imageDimensions(string $path): ?array {
+    private function imageDimensions(string $path): ?array
+    {
         $size = getimagesize($path);
 
-        if (!$size || !isset($size[0], $size[1])) {
+        if (! $size || ! isset($size[0], $size[1])) {
             return null;
         }
 
@@ -596,7 +603,8 @@ class ProductPreviewProcessor {
     /**
      * Helper method: save a GD image as a WebP file with specified quality
      */
-    private function saveWebp(GdImage $image, string $path, int $quality): bool {
+    private function saveWebp(GdImage $image, string $path, int $quality): bool
+    {
         return imagewebp($image, $path, $quality);
     }
 }

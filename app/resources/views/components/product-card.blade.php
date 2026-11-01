@@ -58,29 +58,30 @@
     </div>
 
     {{-- Product details --}}
-    <div @class([
-        'flex items-start justify-between gap-4 pt-4',
-        'max-sm:flex-col max-sm:gap-1' => ! $light,
-    ])>
+    <div class="pt-4">
         <div @class(['min-w-0', 'max-sm:w-full' => ! $light])>
-            <h3 class="text-heading-400 font-semibold">
-                <a href="{{ $product->url() }}" class="hover:text-primary-300 transition-colors">
-                    {{ $categoryOnly ? $product->type->name : $product->name }}
-                </a>
-            </h3>
+            <div class="flex items-start justify-between gap-2">
+                <h3 class="text-heading-400 min-w-0 font-semibold">
+                    <a href="{{ $product->url() }}" class="hover:text-primary-300 wrap-break-word transition-colors">
+                        {{ $categoryOnly ? $product->type->name : $product->name }}
+                    </a>
+                </h3>
+
+                <p class="text-heading-400 shrink-0 font-semibold whitespace-nowrap">
+                    {{ price($product->price()->price) }}
+                </p>
+            </div>
 
             @if (! $categoryOnly)
                 <p class="mt-1 text-sm">{{ $product->type->name }}</p>
             @endif
 
-            <p class="text-text-400 mt-1 text-xs">
+            <p class="text-text-300 mt-1 text-xs">
                 by
                 <a href="{{ $product->seller->url() }}" class="hover:text-primary-300 transition-colors">
                     {{ $product->seller->name }}
                 </a>
             </p>
         </div>
-
-        <p class="text-heading-400 shrink-0 font-semibold whitespace-nowrap">{{ price($product->price()->price) }}</p>
     </div>
 </article>

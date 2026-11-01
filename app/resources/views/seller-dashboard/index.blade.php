@@ -56,7 +56,7 @@
                 @endif
 
                 <div>
-                    <x-button type="submit" name="edit" size="small">Salva modifiche</x-button>
+                    <x-button type="submit" name="edit" size="sm">Salva modifiche</x-button>
                 </div>
             </form>
 
@@ -179,7 +179,7 @@
                 </div>
 
                 <div>
-                    <x-button type="submit" size="small" class="seller-dashboard-submit">Salva contatti</x-button>
+                    <x-button type="submit" size="sm" class="seller-dashboard-submit">Salva contatti</x-button>
                 </div>
             </form>
         </div>
@@ -193,7 +193,7 @@
 
             {{-- Profile image --}}
             <div class="grid justify-items-center gap-4 text-center">
-                <h3 class="text-heading-400 font-semibold">Immagine di profilo</h3>
+                <x-heading variant="article-small">Immagine di profilo</x-heading>
 
                 <div class="aspect-square w-40 max-w-full overflow-hidden rounded-full">
                     <livewire:upload-image
@@ -207,14 +207,14 @@
 
                 <p class="text-text-400 text-sm leading-5">
                     Usa un'immagine quadrata di almeno
-                    <strong class="font-bold">150 × 150 px</strong>. Sarà mostrata nella pagina del negozio e nei tuoi
-                    articoli.
+                    <strong class="text-highlight">150 × 150 px</strong>. Sarà mostrata nella pagina del negozio e nei
+                    tuoi articoli.
                 </p>
             </div>
 
             {{-- Cover image --}}
             <div class="border-border-400 grid gap-4 border-t border-dashed pt-6">
-                <h3 class="text-heading-400 text-center font-semibold">Immagine di copertina</h3>
+                <x-heading variant="article-small" class="text-center">Immagine di copertina</x-heading>
 
                 <div class="grid min-h-37.5 grid-cols-1 overflow-hidden rounded-2xl">
                     <livewire:upload-image
@@ -228,7 +228,7 @@
 
                 <p class="text-text-400 text-center text-sm leading-5">
                     Carica una copertina di almeno
-                    <strong class="font-bold">1600 × 600 px</strong>
+                    <strong class="text-highlight">1600 × 600 px</strong>
                     per presentare al meglio il tuo universo creativo.
                 </p>
             </div>

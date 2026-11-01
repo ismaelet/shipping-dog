@@ -3,7 +3,6 @@
 namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
-use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Seller\Follower;
 use App\Models\Ecommerce\Seller\Payment;
@@ -24,8 +23,8 @@ use Illuminate\Support\Facades\Log;
 /**
  * Seller class
  */
-class Seller extends Model {
-
+class Seller extends Model
+{
     use HasFactory, SoftDeletes;
 
     /**
@@ -43,13 +42,14 @@ class Seller extends Model {
         'status',
         'activation_request_sent',
         'request',
-        'custom'
+        'custom',
     ];
 
     /**
      * Delete the seller's related data
      */
-    public function delete() {
+    public function delete()
+    {
         $this->designs?->each(function ($design) {
             $design->delete();
         });
@@ -60,118 +60,135 @@ class Seller extends Model {
     /**
      * Relationship: The user account that owns the seller
      */
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
     /**
      * Relationship: The the seller's designs
      */
-    public function designs(): HasMany {
+    public function designs(): HasMany
+    {
         return $this->hasMany(Design::class, 'user_id', 'user_id');
     }
 
     /**
      * Relationship: The the seller's products
      */
-    public function products(): HasMany {
+    public function products(): HasMany
+    {
         return $this->hasMany(Product::class, 'user_id', 'user_id');
     }
 
     /**
      * Relationship: The order items sold by the seller
      */
-    public function order_items(): HasMany {
+    public function order_items(): HasMany
+    {
         return $this->hasMany(OrderItem::class);
     }
 
     /**
      * Relationship: The the seller's followers
      */
-    public function followers(): HasMany {
+    public function followers(): HasMany
+    {
         return $this->hasMany(Follower::class, 'follower_id', 'user_id');
     }
 
     /**
      * Relationship: The the seller's prices
      */
-    public function prices(): HasMany {
+    public function prices(): HasMany
+    {
         return $this->hasMany(SellerPrice::class, 'seller_id', 'id');
     }
 
     /**
      * Relationship: The the seller's payments
      */
-    public function payments(): HasMany {
+    public function payments(): HasMany
+    {
         return $this->hasMany(Payment::class)->where('other', false);
     }
 
     /**
      * Get the seller's payments
      */
-    public function all_transfers(): HasMany {
+    public function all_transfers(): HasMany
+    {
         return $this->hasMany(Payment::class);
     }
 
     /**
      * Get the seller's payment request
      */
-    public function payment_request(): HasOne {
+    public function payment_request(): HasOne
+    {
         return $this->hasOne(PaymentRequest::class);
     }
 
     /**
      * Get the seller's logo groups
      */
-    public function logoGroups(): HasMany {
+    public function logoGroups(): HasMany
+    {
         return $this->hasMany(LogoGroup::class);
     }
 
     /**
      * Get the formatted time string
      */
-    public function createdAtString(): string {
+    public function createdAtString(): string
+    {
         return date('d/m/Y', strtotime($this->time));
     }
 
     /**
      * Get the seller's URL
      */
-    public function url(): string {
+    public function url(): string
+    {
         return route('seller.show', [$this]);
     }
 
     /**
      * Check if the seller is followed by the logged user
      */
-    public function auth_follower(): HasOne {
+    public function auth_follower(): HasOne
+    {
         return $this->hasOne(Follower::class, 'user_id', 'id')
             ->where('follower_id', Auth::id());
     }
 
-    public function isFollowed(): bool {
+    public function isFollowed(): bool
+    {
         return $this->auth_follower()->exists();
     }
 
     /**
      * Get the path to the seller's icon
      */
-    public function iconPath(): string {
+    public function iconPath(): string
+    {
         return $this->user->iconPath();
     }
 
     /**
      * Get the seller's icon
      */
-    public function icon(): string {
+    public function icon(): string
+    {
         return $this->user->icon();
     }
 
     /**
      * Get the seller's cover
      */
-    public function cover(int $size = 1920): string {
-        if (!$this->user) {
+    public function cover(int $size = 1920): string
+    {
+        if (! $this->user) {
             Log::error('Seller user not found', ['seller' => $this->id]);
         }
 
@@ -179,75 +196,85 @@ class Seller extends Model {
     }
 
     // Seller.php
-    public function coverPath(int $size = 1920): string {
+    public function coverPath(int $size = 1920): string
+    {
         return $this->user->coverPath($size);
     }
 
     /**
      * Get the amount to be payed
      */
-    public function toBePayed() {
+    public function toBePayed()
+    {
         return $this->earned - $this->payed + $this->other_transfers;
     }
 
     /**
      * Get the amount of credit that can be used for the current order.
-     * 
-     * @return float
      */
-    public function usableCredit(): float {
+    public function usableCredit(): float
+    {
         return $this->toBePayed() - cart()?->usedCredit();
     }
 
     /**
      * Get the formatted balance
      */
-    public function earnedString(): string {
+    public function earnedString(): string
+    {
         return EcommerceHelper::formatPrice($this->earned, true);
     }
 
-    public function payedString(): string {
+    public function payedString(): string
+    {
         return EcommerceHelper::formatPrice($this->payed, true);
     }
 
-    public function otherTransferAmountString(): string {
+    public function otherTransferAmountString(): string
+    {
         return EcommerceHelper::formatPrice($this->other_transfers, true);
     }
 
-    public function creditString(): string {
+    public function creditString(): string
+    {
         return EcommerceHelper::formatPrice($this->credit, true);
     }
 
-    public function toBePayedString(): string {
+    public function toBePayedString(): string
+    {
         return EcommerceHelper::formatPrice($this->toBePayed(), true);
     }
 
-    private function updateEarned(): self {
+    private function updateEarned(): self
+    {
         $this->update([
-            'earned' => $this->order_items->where('status', '>=', EcommerceHelper::statusFromTag('confirmed'))->sum('total_seller_earnings_after_reduction')
+            'earned' => $this->order_items->where('status', '>=', EcommerceHelper::statusFromTag('confirmed'))->sum('total_seller_earnings_after_reduction'),
         ]);
 
         return $this;
     }
 
-    public function isActive(): bool {
+    public function isActive(): bool
+    {
         return $this->status;
     }
 
     /**
      * Update the seller's paid amount
      */
-    private function updatePaid(): static {
+    private function updatePaid(): static
+    {
         $this->update([
-            'payed' => round($this->payments()->sum('value'), 2)
+            'payed' => round($this->payments()->sum('value'), 2),
         ]);
 
         return $this;
     }
 
-    private function updateOtherTransfers(): static {
+    private function updateOtherTransfers(): static
+    {
         $this->update([
-            'other_transfers' =>  round($this->all_transfers->where('other', 1)->sum('value'), 2)
+            'other_transfers' => round($this->all_transfers->where('other', 1)->sum('value'), 2),
         ]);
 
         return $this;
@@ -256,7 +283,8 @@ class Seller extends Model {
     /**
      * Update the seller's balance (earned, paid, other transfers and credit)
      */
-    public function updateBalance(): self {
+    public function updateBalance(): self
+    {
         $this->loadMissing('order_items', 'payments', 'all_transfers');
 
         $this->updateEarned();
@@ -269,7 +297,8 @@ class Seller extends Model {
     /**
      * * Query builders
      */
-    public static function isAwaiting(): Builder {
+    public static function isAwaiting(): Builder
+    {
         return self::where('status', 0)
             ->where('user_id', '!=', 2)
             ->whereIn('user_id', function ($query) {
@@ -282,7 +311,8 @@ class Seller extends Model {
     /**
      * * Static methods
      */
-    public static function awaitingApproval(): Collection {
+    public static function awaitingApproval(): Collection
+    {
         return self::where('status', 0)
             ->where('user_id', '!=', 2)
             ->whereIn('user_id', function ($query) {

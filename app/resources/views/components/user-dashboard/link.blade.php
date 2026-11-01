@@ -9,11 +9,11 @@
         href="{{ $link['url'] }}"
         @class([
             'block rounded-lg px-4 py-3 transition-colors',
-            'bg-primary-400 text-heading-400' => $checked,
+            'bg-primary-400 text-white' => $checked,
             'text-text-400 hover:bg-surface-500 hover:text-heading-400' => ! $checked,
         ])
     >
-        <p class="font-heading text-heading-400 flex items-center gap-4 text-sm lg:text-base">
+        <p class="font-heading flex items-center gap-4 text-sm lg:text-base">
             <x-dynamic-component class="h-5 w-5" :component="'icon-'.$link['icon']" />
 
             {{ $link['title'] }}

@@ -102,7 +102,7 @@
 @endpushOnce
 
 <x-layouts.main :$title :$location>
-    <div class="center-content fill-width bg-surface-400 dark relative grid px-8 py-20 sm:py-40">
+    <div class="center-content fill-width bg-surface-400 relative grid px-8 py-20 sm:py-40">
         <img
             class="absolute h-full w-full object-cover opacity-90"
             src="{{ Vite::image('contacts/header-background.webp') }}"
@@ -159,11 +159,12 @@
                         <x-heading variant="section" class="text-center">Scrivici</x-heading>
 
                         @if (session('success'))
-                            <x-alerts.success>{{ session('success') }}</x-alerts.success>
+                            <x-alert type="success">{{ session('success') }}</x-alert>
+                            type="success">
                         @endif
 
                         @if ($errors->any())
-                            <x-alerts.error>{!! $errors->first() !!}</x-alerts.error>
+                            <x-alert type="error">{!! $errors->first() !!}</x-alert>
                         @endif
 
                         <div class="">

@@ -8,9 +8,10 @@ use App\Models\Ecommerce\Product\ProductType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Vite;
 
-class CustomerPhoto extends Model {
-
+class CustomerPhoto extends Model
+{
     /**
      * The table associated with the model
      */
@@ -30,53 +31,63 @@ class CustomerPhoto extends Model {
     /**
      * Attribute: Get the full name of the customer
      */
-    public function fullName(): Attribute {
+    public function fullName(): Attribute
+    {
         $firstName = $this->first_name;
-        $lastName = $this->last_name || $this->last_name == '-' ? '' : substr($this->last_name, 0, 1) . '.';
+        $lastName = $this->last_name || $this->last_name == '-' ? '' : substr($this->last_name, 0, 1).'.';
 
         return Attribute::make(
-            get: fn() => implode(' ', [$firstName, $lastName])
+            get: fn () => implode(' ', [$firstName, $lastName])
         );
     }
 
     /**
      * Attribute: Get the server image path
      */
-    public function serverImage(): Attribute {
+    public function serverImage(): Attribute
+    {
         return Attribute::make(
-            get: fn() => $this->image()
+            get: fn () => $this->image()
         );
     }
 
     /**
      * Relationship: The design that this customer photo is associated with
      */
-    public function design(): BelongsTo {
+    public function design(): BelongsTo
+    {
         return $this->belongsTo(Design::class);
     }
 
     /**
      * Relationship: The type that this customer photo is associated with
      */
-    public function type(): BelongsTo {
+    public function type(): BelongsTo
+    {
         return $this->belongsTo(ProductType::class);
     }
 
     /**
      * Get the storage path of the image
      */
-    public function storagePath(): string {
-        return public_path('storage/users/testimonials/' . $this->id . '.webp');
+    public function storagePath(): string
+    {
+        return public_path('storage/users/testimonials/'.$this->id.'.webp');
     }
 
     /**
      * Get the URL of the image
      */
-    public function image(): string {
+    public function image(): string
+    {
         if (file_exists($this->storagePath())) {
-            return FileHelper::storageAsset('users/testimonials/' . $this->id . '.webp');
+            return FileHelper::storageAsset('users/testimonials/'.$this->id.'.webp');
         }
 
-        return FileHelper::storageAsset('users/testimonials/' . $this->id . '.jpg');
+        if (file_exists(public_path('storage/users/testimonials/'.$this->id.'.jpg'))) {
+            return FileHelper::storageAsset('users/testimonials/'.$this->id.'.jpg');
+        }
+
+        return Vite::image('placeholder.webp');
     }
 }

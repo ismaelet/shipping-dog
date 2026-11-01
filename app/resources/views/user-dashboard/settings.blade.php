@@ -22,8 +22,10 @@
                 @csrf
                 @method('DELETE')
 
-                <h3 class="font-heading text-danger-300 text-xl font-semibold">Elimina l'account</h3>
-                <p class="text-danger-200/60 mt-2 text-sm leading-6">
+                <h3 class="font-heading dark:text-danger-300 text-danger-400 text-xl font-semibold">
+                    Elimina l'account
+                </h3>
+                <p class="dark:text-danger-200/60 text-danger-400/70 mt-2 text-sm leading-6">
                     Questa operazione elimina definitivamente dati, ordini salvati e preferenze. Non può essere
                     annullata.
                 </p>
@@ -31,7 +33,7 @@
                 <x-button
                     class="mt-6"
                     type="submit"
-                    size="small"
+                    size="sm"
                     color="danger"
                     variant="secondary"
                     confirmation="Sei sicuro di voler eliminare il profilo? Non potrà essere ripristinato."

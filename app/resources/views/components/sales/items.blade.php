@@ -1,33 +1,38 @@
-<!--Designs version-->
-<div class="list-tbl mt-8">
+<section class="card overflow-hidden rounded-3xl shadow-sm">
+    <header class="border-border-400 flex items-end justify-between gap-4 border-b p-8">
+        <div>
+            <x-eyebrow class="mb-0">Performance</x-eyebrow>
+            <x-heading variant="article" class="mt-2">Vendite per grafica</x-heading>
+            <p class="mt-2 text-sm">I design ordinati per quantità venduta.</p>
+        </div>
+        <p class="text-sm">{{ $totalSales }} {{ $totalSales === 1 ? 'vendita totale' : 'vendite totali' }}</p>
+    </header>
 
-	<div class="list-tbl-head">
-		<p class="list-name shr">Quantità</p>
-		<p class="list-name lon">Grafica</p>
-		<p class="list-name shr">Guadagno totale</p>
-		<p class="list-name shr">Ultima vendita</p>
-		<p class="list-name shr">Aggiunto il</p>
-	</div>
+    <div class="overflow-x-auto">
+        <table class="w-full min-w-190 border-collapse text-left text-sm">
+            <thead class="bg-background-400/60 text-text-400 text-xs tracking-wider uppercase">
+                <tr>
+                    <th scope="col" class="px-6 py-4 font-bold">Quantità venduta</th>
+                    <th scope="col" class="px-6 py-4 font-bold">Grafica</th>
+                    <th scope="col" class="px-6 py-4 font-bold">Guadagno totale</th>
+                    <th scope="col" class="px-6 py-4 font-bold">Ultima vendita</th>
+                    <th scope="col" class="px-6 py-4 font-bold">Aggiunto il</th>
+                </tr>
+            </thead>
 
-	@foreach ($items as $item)
-		<!--sale line-->
-		<div class="list-row">
-			<div class="list-cell">
-				<p class="list-inp text-sm">{{ $item['total_sales'] }}</p>
-			</div>
-			<div class="list-cell">
-				<p class="list-inp text-sm">{{ $item['name'] }}</p>
-			</div>
-			<div class="list-cell">
-				<p class="list-inp text-sm">{{ $item['total_revenue'] }}</p>
-			</div>
-			<div class="list-cell">
-				<p class="list-inp text-sm">{{ $item['lastOrderCreatedAtString'] }}</p>
-			</div>
-			<div class="list-cell">
-				<p class="list-inp text-sm">{{ $item['createdAtString'] }}</p>
-			</div>
-		</div>
-	@endforeach
-
-</div>
+            <tbody>
+                @foreach ($items as $item)
+                    <tr class="border-border-400 border-b last:border-b-0">
+                        <td class="px-6 py-4">
+                            <span class="bg-primary-400/15 text-primary-500 dark:text-primary-200 inline-block min-w-10 rounded-full px-2.5 py-1 text-center text-xs font-bold">{{ $item['total_sales'] }}</span>
+                        </td>
+                        <td class="text-heading-400 px-6 py-4 font-semibold">{{ $item['name'] }}</td>
+                        <td class="text-heading-400 px-6 py-4 font-bold">{{ $item['total_revenue'] }}</td>
+                        <td class="px-6 py-4">{{ $item['lastOrderCreatedAtString'] }}</td>
+                        <td class="px-6 py-4">{{ $item['createdAtString'] }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</section>

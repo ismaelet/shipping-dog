@@ -13,7 +13,7 @@
             <x-button
                 type="button"
                 onclick="document.getElementById('seller-collection-dialog').showModal()"
-                size="small"
+                size="sm"
                 variant="secondary"
             >
                 Nuova collezione
@@ -84,11 +84,11 @@
                 </div>
 
                 <div class="flex justify-end gap-3">
-                    <x-button type="button" onclick="this.closest('dialog').close()" variant="secondary" size="small">
+                    <x-button type="button" onclick="this.closest('dialog').close()" variant="secondary" size="sm">
                         Annulla
                     </x-button>
 
-                    <x-button type="submit" size="small"> Aggiungi </x-button>
+                    <x-button type="submit" size="sm"> Aggiungi </x-button>
                 </div>
             </form>
         </dialog>

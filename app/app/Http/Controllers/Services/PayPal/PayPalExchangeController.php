@@ -13,18 +13,19 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use stdClass;
 
-class PayPalExchangeController extends Controller {
-
+class PayPalExchangeController extends Controller
+{
     private float $shippingFee = 8.00;
 
     /**
      * Action: Authenticate
      */
-    public function authenticate(): string|RedirectResponse {
+    public function authenticate(): string|RedirectResponse
+    {
         // Set the headers
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
-            'Authorization' => 'Basic ' . base64_encode($this->clientId() . ':' . $this->clientSecret()),
+            'Authorization' => 'Basic '.base64_encode($this->clientId().':'.$this->clientSecret()),
         ];
 
         // Set the body
@@ -44,7 +45,7 @@ class PayPalExchangeController extends Controller {
         $accessToken = $response->access_token ?? false;
 
         // Error handling
-        if (!$accessToken) {
+        if (! $accessToken) {
             return $this->error($response);
         }
 
@@ -55,12 +56,13 @@ class PayPalExchangeController extends Controller {
     /**
      * Action: Create
      */
-    public function create(Request $request, ChangeRequest $changeRequest): RedirectResponse {
+    public function create(Request $request, ChangeRequest $changeRequest): RedirectResponse
+    {
         // Set the headers
         $headers = [
             'Content-Type' => 'application/json',
             'Authorization' => $this->authorization(),
-            'PayPal-Request-Id' => 'change-' . $changeRequest->id,
+            'PayPal-Request-Id' => 'change-'.$changeRequest->id,
         ];
 
         // Set the body
@@ -71,8 +73,8 @@ class PayPalExchangeController extends Controller {
                 'paypal' => [
                     'experience_context' => $this->experienceContext($changeRequest),
                     'address' => $this->address($changeRequest->old_order->address),
-                ]
-            ]
+                ],
+            ],
         ];
 
         // Set the endpoint
@@ -90,7 +92,7 @@ class PayPalExchangeController extends Controller {
         $checkoutUrl = $response->links[1]->href ?? null;
 
         // Error handling
-        if (!$token || !$checkoutUrl) {
+        if (! $token || ! $checkoutUrl) {
             return $this->error($response, $changeRequest);
         }
 
@@ -106,7 +108,8 @@ class PayPalExchangeController extends Controller {
     /**
      * Action: Capture
      */
-    public function capture(ChangeRequest $changeRequest): RedirectResponse {
+    public function capture(ChangeRequest $changeRequest): RedirectResponse
+    {
         // Set the headers
         $headers = [
             'Content-Type' => 'application/json',
@@ -139,7 +142,8 @@ class PayPalExchangeController extends Controller {
     /**
      * Action: Cancel
      */
-    public function cancel(Order $order, Request $request): RedirectResponse {
+    public function cancel(Order $order, Request $request): RedirectResponse
+    {
         // Get the tokens from the session and the request
         $requestToken = $request->token;
 
@@ -158,7 +162,8 @@ class PayPalExchangeController extends Controller {
     /**
      * ~ Helper: Send the request
      */
-    private function sendRequest(array $headers, string $endpoint, array|string|null $body = null): stdClass {
+    private function sendRequest(array $headers, string $endpoint, array|string|null $body = null): stdClass
+    {
         // Encode the body
         $body = is_array($body) ? json_encode($body) : $body;
 
@@ -179,7 +184,8 @@ class PayPalExchangeController extends Controller {
     /**
      * ~ Helper: Error handling
      */
-    private function error($response, ?ChangeRequest $changeRequest = null): RedirectResponse {
+    private function error($response, ?ChangeRequest $changeRequest = null): RedirectResponse
+    {
         if (env('APP_DEBUG')) {
             dd($response);
         }
@@ -188,8 +194,8 @@ class PayPalExchangeController extends Controller {
             array_filter([
                 'order' => $changeRequest->id,
                 'address' => $changeRequest->old_order?->address->fullAddress(),
-                'response' => $response
-            ])
+                'response' => $response,
+            ]),
         ]]);
 
         return back()->with('error', 'Errore durante il pagamento. Non è stato prevelato nessun importo.');
@@ -198,59 +204,66 @@ class PayPalExchangeController extends Controller {
     /**
      * ~ Helper: Get the client ID
      */
-    private function clientId(): string {
-        return env('APP_ENV') == 'local' ? config('services.paypal.sandbox.client_id') : config('services.paypal.client_id');
+    private function clientId(): string
+    {
+        return config('services.paypal.client_id');
     }
 
     /**
      * ~ Helper: Get the client secret
      */
-    private function clientSecret(): string {
-        return env('APP_ENV') == 'local' ? config('services.paypal.sandbox.client_secret') : config('services.paypal.client_secret');
+    private function clientSecret(): string
+    {
+        return config('services.paypal.client_secret');
     }
 
     /**
      * ~ Helper: Get the authenticate endpoint
      */
-    private function authenticateEndpoint(): string {
+    private function authenticateEndpoint(): string
+    {
         return env('APP_ENV') == 'local' ? 'https://api-m.sandbox.paypal.com/v1/oauth2/token' : 'https://api-m.paypal.com/v1/oauth2/token';
     }
 
     /**
      * ~ Helper: Get the create endpoint
      */
-    private function createEndpoint(): string {
+    private function createEndpoint(): string
+    {
         return env('APP_ENV') == 'local' ? 'https://api-m.sandbox.paypal.com/v2/checkout/orders' : 'https://api-m.paypal.com/v2/checkout/orders';
     }
 
     /**
      * ~ Helper: Get the capture endpoint
      */
-    private function captureEndpoint(ChangeRequest $changeRequest): string {
+    private function captureEndpoint(ChangeRequest $changeRequest): string
+    {
         $orderPayPalId = $changeRequest->token;
 
-        return env('APP_ENV') == 'local' ? 'https://api-m.sandbox.paypal.com/v2/checkout/orders/' . $orderPayPalId . '/capture' : 'https://api-m.paypal.com/v2/checkout/orders/' . $orderPayPalId . '/capture';
+        return env('APP_ENV') == 'local' ? 'https://api-m.sandbox.paypal.com/v2/checkout/orders/'.$orderPayPalId.'/capture' : 'https://api-m.paypal.com/v2/checkout/orders/'.$orderPayPalId.'/capture';
     }
 
     /**
      * ~ Helper: Get the authorization code
      */
-    private function authorization(): string {
+    private function authorization(): string
+    {
         // $accessToken = session('paypal_access_token') ?: $this->authenticate();
         $accessToken = $this->authenticate();
 
-        return 'Bearer ' . $accessToken;
+        return 'Bearer '.$accessToken;
     }
 
     /**
      * ~ Helper: Get the purchase units
      */
-    private function purchaseUnits(ChangeRequest $changeRequest): array {
+    private function purchaseUnits(ChangeRequest $changeRequest): array
+    {
         $address = $changeRequest->old_order->address;
 
         return [
             [
-                'reference_id' => 'change-' . $changeRequest->id,
+                'reference_id' => 'change-'.$changeRequest->id,
                 'amount' => [
                     'currency_code' => 'EUR',
                     'value' => $this->shippingFee,
@@ -262,8 +275,8 @@ class PayPalExchangeController extends Controller {
                         'shipping' => [
                             'currency_code' => 'EUR',
                             'value' => 0.00,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'shipping' => [
                     'name' => [
@@ -272,16 +285,17 @@ class PayPalExchangeController extends Controller {
                     'address' => $this->address($address),
                 ],
                 'items' => $this->items(),
-            ]
+            ],
         ];
     }
 
     /**
      * ~ Helper: Get the address
      */
-    private function address(Address $address): array {
+    private function address(Address $address): array
+    {
         return [
-            'address_line_1' => $address->address . ', ' . $address->number,
+            'address_line_1' => $address->address.', '.$address->number,
             'admin_area_2' => $address->city,
             'admin_area_1' => $address->region,
             'postal_code' => $address->zip,
@@ -292,7 +306,8 @@ class PayPalExchangeController extends Controller {
     /**
      * ~ Helper: Get the items
      */
-    private function items(): array {
+    private function items(): array
+    {
 
         $items[] = [
             'name' => 'Spese di spedizione per cambio merce',
@@ -310,7 +325,8 @@ class PayPalExchangeController extends Controller {
     /**
      * ~ Helper: Get the experience context
      */
-    private function experienceContext(ChangeRequest $changeRequest): array {
+    private function experienceContext(ChangeRequest $changeRequest): array
+    {
         return [
             'payment_method_preference' => 'IMMEDIATE_PAYMENT_REQUIRED',
             'brand_name' => config('app.name'),

@@ -23,21 +23,6 @@ return [
             'path' => 'resources/svg',
             'prefix' => 'svg',
         ],
-
-        'rounded-filled-200' => [
-            'path' => 'resources/svg/icons/rounded/filled/200',
-            'prefix' => 'icon.200',
-        ],
-
-        'rounded-stroked-400' => [
-            'path' => 'resources/svg/icons/rounded/stroked/400',
-            'prefix' => 'icon.s',
-        ],
-
-        'rounded-stroked-200' => [
-            'path' => 'resources/svg/icons/rounded/stroked/200',
-            'prefix' => 'icon.s.200',
-        ],
     ],
 
     /*

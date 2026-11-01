@@ -1,78 +1,78 @@
-@pushOnce('styles')
-	<style>
-		.change-name {
-			background-color: transparent;
-			border-top: none;
-			border-left: none;
-			border-right: none;
-			outline: none;
-			line-height: unset;
-		}
-	</style>
-@endpushOnce
-
 <x-layouts.main :$title>
+  <div class="mb-20 mt-20 grid grid-cols-1 gap-16">
+    {{-- Name --}}
+    <livewire:ecommerce.designs.edit.name :$design />
 
-	<div
-		class="mb-20 mt-20 grid grid-cols-1 gap-16"
-		data-design-id="<?= $design->id ?>"
-	>
+    {{-- Design data --}}
+    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-7 lg:gap-16">
+      {{-- Left group --}}
+      <section class="grid min-w-0 gap-8 lg:col-span-3">
+        {{-- Light version --}}
+        <x-ecommerce.designs.edit.image-upload
+          :$design
+          variant="light"
+          :exists="$hasLightVariant"
+        />
 
-		{{-- Name --}}
-		@include('ecommerce.designs.edit.name')
+        @if (!$design->custom)
+          {{-- Dark version --}}
+          <x-ecommerce.designs.edit.image-upload
+            :$design
+            variant="dark"
+            :exists="$hasDarkVariant"
+          />
 
-		{{-- Design data --}}
-		<div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-7 lg:gap-16">
+          {{-- Vector --}}
+          @include ('ecommerce.designs.edit.image-vector')
+        @endif
+      </section>
 
-			{{-- Left group --}}
-			<section class="grid gap-8 lg:col-span-3">
+      {{-- Right group --}}
+      <div class="grid min-w-0 grid-cols-1 gap-8 lg:col-span-4">
+        {{-- Tags --}}
+        <livewire:ecommerce.designs.edit.tags :$design />
 
-				{{-- Light version --}}
-				@include('ecommerce.designs.edit.image-light')
+        {{-- Colors --}}
+        @if (!$design->custom)
+          <livewire:ecommerce.designs.edit.background-color :$design />
 
-				@if (!$design->custom)
-					{{-- Dark version --}}
-					@include('ecommerce.designs.edit.image-dark')
+          <livewire:ecommerce.designs.edit.default-color :$design />
+        @endif
+      </div>
+    </div>
 
-					{{-- Vector --}}
-					@include('ecommerce.designs.edit.image-vector')
-				@endif
+    {{-- Product list --}}
+    <section class="grid grid-cols-1 gap-8">
+      <div class="grid gap-2 text-center">
+        <x-heading variant="section">Prodotti collegati</x-heading>
 
-			</section>
+        <x-typography.section-subheading>
+          Qui puoi modificare il colore dei capi e la dimensione di stampa nei
+          prodotti con questa grafica.</x-typography.section-subheading
+        >
+      </div>
 
-			{{-- Right group --}}
-			<div class="grid grid-cols-1 gap-8 lg:col-span-4">
+      <div class="stack-content grid">
+        {{-- Products --}}
+        <livewire:ecommerce.designs.edit.product-list :$design />
+      </div>
+    </section>
 
-				{{-- Tags --}}
-				@include('ecommerce.designs.edit.tags')
-
-				{{-- Colors --}}
-				@if (!$design->custom)
-					@include('ecommerce.designs.edit.background-color')
-
-					@include('ecommerce.designs.edit.default-color')
-				@endif
-
-			</div>
-		</div>
-
-		{{-- Product list --}}
-		<section class="grid grid-cols-1 gap-8">
-			<div class="grid gap-2 text-center">
-				<x-heading variant="section">Prodotti collegati</x-heading>
-
-				<x-typography.section-subheading>Qui puoi modificare il colore dei capi e la dimensione di stampa nei prodotti con
-					questa grafica.</x-typography.section-subheading>
-			</div>
-
-			<div class="stack-content grid">
-				{{-- Products --}}
-				@include('ecommerce.designs.edit.products')
-			</div>
-
-		</section>
-
-		{{-- Delete button --}}
-		@include('ecommerce.designs.edit.delete-button')
-	</div>
+    {{-- Delete button --}}
+    <form
+      method="POST"
+      action="{{ route('designs.destroy', $design) }}"
+      class="flex justify-center"
+    >
+      @csrf
+      @method ('DELETE')
+      <x-button
+        type="submit"
+        variant="secondary"
+        color="danger"
+        confirmation="Sei sicuro di voler eliminare definitivamente la grafica e tutti i prodotti associati?"
+        ><x-icon-delete />Elimina la grafica</x-button
+      >
+    </form>
+  </div>
 </x-layouts.main>

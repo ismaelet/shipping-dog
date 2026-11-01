@@ -3,17 +3,21 @@
 @pushOnce('styles')
     <style>
         .eyebrow {
-            margin-bottom: 0.75rem;
-            color: var(--color-primary-300);
+            margin-bottom: 0.5rem;
+            color: var(--color-primary-400);
             font-size: var(--text-xs);
             font-weight: var(--font-weight-bold);
             letter-spacing: 0.18em;
             text-transform: uppercase;
             text-box: trim-both cap alphabetic;
-        }
 
-        .eyebrow[data-variant='alternative'] {
-            color: var(--color-primary-200);
+            .dark & {
+                color: var(--color-primary-300);
+
+                &[data-variant='alternative'] {
+                    color: var(--color-primary-200);
+                }
+            }
         }
     </style>
 @endpushOnce

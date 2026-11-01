@@ -1,75 +1,59 @@
-<x-layouts.cart :title="$title . ' | Carrello'">
-	<form
-		id="content"
-		method="POST"
-		class="grid grid-cols-1 gap-12 min-[1025px]:grid-cols-[3fr_2fr]"
-	>
-		@csrf
+<x-layouts.cart :title="$title.' | Carrello'">
+    <form id="content" method="POST" class="grid grid-cols-1 gap-12 min-[1025px]:grid-cols-[3fr_2fr]">
+        @csrf
 
-		<div
-			id="left_panel"
-			class="panel grid grid-cols-1 content-start gap-8"
-		>
+        <div id="left_panel" class="panel grid grid-cols-1 content-start gap-8">
+            <!-- Country -->
+            <section class="card">
+                <x-heading variant="article">Metodo di spedizione</x-heading>
 
-			<!-- Country -->
-			<section class="cart-panel surface">
-				<x-heading.component>Metodo di spedizione</x-heading.component>
+                <p class="">
+                    @if ($cart->hasLongDelivery())
+                        Il tuo ordine contiene un capo in
+                        <span class="txt-red font-semibold">preordine</span
+                        >. Se vuoi un
+                        <strong>tempo di consegna minore</strong
+                        >, ti consigliamo di selezionare solo magliette, felpe o accessori e con colore bianco, nero o
+                        grigio melange.<br
 
-				<p class="bott_txt">
-					@if ($cart->hasLongDelivery())
-						Il tuo ordine contiene un capo in <span class="txt-red font-semibold">preordine</span>. Se vuoi un <strong>tempo
-							di consegna minore</strong>, ti consigliamo di selezionare solo magliette, felpe o accessori e con colore
-						bianco, nero o grigio melange.<br>Se invece ti va bene la data di consegna indicata qui sotto, puoi lasciare
-						l'ordine così com'è.<br><br>
-					@endif
+                        />Se invece ti va bene la data di consegna indicata qui sotto, puoi lasciare l'ordine così
+                        com'è.<br
 
-					La data di consegna prevista comprende, oltre al tempo di spedizione, <strong>1-5 giorni lavorativi</strong> di
-					elaborazione dell'ordine.
-				</p>
+                        /><br />
+                    @endif
 
+                    La data di consegna prevista comprende, oltre al tempo di spedizione,
+                    <span class="text-highlight">1-5 giorni lavorativi</span> di elaborazione dell'ordine.
+                </p>
 
-				<!-- Shipping method -->
-				<livewire:cart.shipping-methods
-					:$cart
-					:$shippingMethods
-				/>
-			</section>
+                <!-- Shipping method -->
+                <livewire:cart.shipping-methods :$cart :$shippingMethods />
+            </section>
 
-			{{-- Shipping address --}}
-			<livewire:cart.shipping-address :$cart />
-		</div>
+            {{-- Shipping address --}}
+            <livewire:cart.shipping-address :$cart />
+        </div>
 
-		<div
-			id="right_panel"
-			class="panel grid grid-cols-1 content-start gap-8"
-		>
+        <div id="right_panel" class="panel grid grid-cols-1 content-start gap-8">
+            {{-- Order items --}}
+            <section id="items" class="card">
+                <x-heading variant="article">Articoli</x-heading>
 
-			{{-- Order items --}}
-			<section
-				id="items"
-				class="cart-panel surface"
-			>
-				<x-heading.component>Articoli</x-heading.component>
+                <livewire:cart.order-items-list :order="$cart" />
+            </section>
 
-				<livewire:cart.order-items-list :order="$cart" />
-			</section>
+            {{-- Credit panel --}}
+            <livewire:cart.credit-panel />
 
-			{{-- Credit panel --}}
-			<livewire:cart.credit-panel />
+            {{-- Coupon panel --}}
+            <livewire:cart.coupon-panel />
 
-			{{-- Coupon panel --}}
-			<livewire:cart.coupon-panel />
+            {{-- Recap panel --}}
+            <section id="recap" class="card">
+                <x-heading variant="article">Riepilogo</x-heading>
 
-			{{-- Recap panel --}}
-			<section
-				id="recap"
-				class="cart-panel surface"
-			>
-				<x-heading.component>Riepilogo</x-heading.component>
-
-				<livewire:cart.recap-panel />
-			</section>
-
-		</div>
-	</form>
+                <livewire:cart.recap-panel />
+            </section>
+        </div>
+    </form>
 </x-layouts.cart>

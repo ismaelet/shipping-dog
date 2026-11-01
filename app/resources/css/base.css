@@ -1,9 +1,6 @@
 /* Layout */
 @utility columns-* {
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(min(--value([length]), 100%), 1fr)
-  );
+  grid-template-columns: repeat(auto-fill, minmax(min(--value([length]), 100%), 1fr));
 }
 
 @utility flex-columns-* {
@@ -23,17 +20,12 @@
 
 .content-grid,
 .full-width {
-  --breakout-column: calc(
-    (var(--spacing-breakout) - var(--spacing-content)) / 2
-  );
+  --breakout-column: calc((var(--spacing-breakout) - var(--spacing-content)) / 2);
   display: grid;
   grid-template-columns:
     [full-width-start] minmax(var(--spacing-content-padding), 1fr)
     [breakout-start] minmax(0, var(--breakout-column))
-    [content-start] min(
-      100% - var(--spacing-content-padding) * 2,
-      var(--spacing-content)
-    )
+    [content-start] min(100% - var(--spacing-content-padding) * 2, var(--spacing-content))
     [content-end] minmax(0, var(--breakout-column))
     [breakout-end] minmax(var(--spacing-content-padding), 1fr) [full-width-end];
 }

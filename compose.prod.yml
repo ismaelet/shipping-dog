@@ -1,4 +1,4 @@
-name: shipping-dog
+name: ${COMPOSE_PROJECT_NAME:-shipping-dog-staging}
 services:
   app:
     image: ${APP_IMAGE:?APP_IMAGE is required}
@@ -15,14 +15,17 @@ services:
       - app_storage:/var/www/html/storage
       - caddy_data:/data
       - caddy_runtime_config:/config
+    working_dir: /var/www/html
     environment:
       APP_NAME: Shipping Dog
-      APP_URL: https://staging.shippingdog.com
-      APP_ENV: production
-      APP_DEBUG: false
+      APP_ENV: staging
+      APP_DEBUG: true
       APP_LOCALE: it
       APP_FALLBACK_LOCALE: en
-      APP_KEY: ${APP_KEY}
+
+      APP_DOMAIN: ${APP_DOMAIN:?APP_DOMAIN is required}
+      APP_URL: ${APP_URL:?APP_URL is required}
+      APP_KEY: ${APP_KEY:?APP_KEY is required}
 
       SESSION_DRIVER: file
 
@@ -31,23 +34,32 @@ services:
       DB_PORT: 3306
       DB_DATABASE: shipping-dog
       DB_USERNAME: shipping-dog
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
 
-      MAIL_MAILER: smtp
+      MAIL_MAILER: ${MAIL_MAILER:-log}
       MAIL_HOST: smtp.titan.email
       MAIL_PORT: 465
       MAIL_USERNAME: noreply@shippingdog.com
       MAIL_PASSWORD: ${MAIL_PASSWORD:?MAIL_PASSWORD is required}
       MAIL_ENCRYPTION: SSL
       MAIL_FROM_ADDRESS: noreply@shippingdog.com
-      MAIL_FROM_NAME: ${APP_NAME}
+      MAIL_FROM_NAME: Shipping Dog
 
-      SENTRY_LARAVEL_DSN: https://0f8f29d4a5ab45042175d54ef673db14@o4507159757717504.ingest.de.sentry.io/4509385828925520
+      # Services
+      SENTRY_LARAVEL_DSN: ${SENTRY_LARAVEL_DSN:?SENTRY_LARAVEL_DSN is required}
       SENTRY_TRACES_SAMPLE_RATE: 0
 
-      GOOGLE_CLIENT_ID: 31403388119-i2vlmbkk8cp8fbhrrbhusdb5g1qb1nbj.apps.googleusercontent.com
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:?GOOGLE_CLIENT_ID is required}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:?GOOGLE_CLIENT_SECRET is required}
-      GOOGLE_REDIRECT_URI: https://staging.shippingdog.com/auth/google/callback
+      GOOGLE_REDIRECT_URI: ${APP_URL:?APP_URL is required}/auth/google/callback
+
+      PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID:?PAYPAL_CLIENT_ID is required}
+      PAYPAL_CLIENT_SECRET: ${PAYPAL_CLIENT_SECRET:?PAYPAL_CLIENT_SECRET is required}
+
+      GLS_CLIENT_ID: ${GLS_CLIENT_ID:?GLS_CLIENT_ID is required}
+      GLS_CLIENT_PASSWORD: ${GLS_CLIENT_PASSWORD:?GLS_CLIENT_PASSWORD is required}
+      GLS_CONTRACT_CODE: ${GLS_CONTRACT_CODE:?GLS_CONTRACT_CODE is required}
+      GLS_HEADQUARTERS: TT
     ports:
       - 80:80
       - 443:443
@@ -62,7 +74,7 @@ services:
     environment:
       - "MARIADB_DATABASE=shipping-dog"
       - "MARIADB_USER=shipping-dog"
-      - "MARIADB_PASSWORD=${DB_PASSWORD}"
+      - "MARIADB_PASSWORD=${DB_PASSWORD:?DB_PASSWORD is required}"
       - "MARIADB_RANDOM_ROOT_PASSWORD=1"
     volumes:
       - db:/var/lib/mysql
@@ -87,7 +99,7 @@ configs:
           order php_server before file_server
       }
 
-      staging.shippingdog.com {
+      {$$APP_DOMAIN} {
           handle {
               encode zstd br gzip
               root * /var/www/html/public

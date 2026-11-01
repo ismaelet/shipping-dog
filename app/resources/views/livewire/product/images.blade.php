@@ -37,7 +37,7 @@
 
                 {{-- Logos on the image --}}
                 @if ($product->logoGroup() && $product->logoGroup()->preview)
-                    <img class="logo-field__preview-logo js-logo-image" alt="" />
+                    {{-- <img class="logo-field__preview-logo js-logo-image" alt="" /> --}}
                 @endif
 
                 {{-- Loading icon on image change --}}
@@ -47,9 +47,9 @@
                 />
 
                 {{-- Zoom icon on mobile --}}
-                <div id="img-zoom-icon" class="img-zoom icon-box clickable">
+                {{-- <div id="img-zoom-icon" class="img-zoom icon-box clickable">
                     <x-icon-search />
-                </div>
+                </div> --}}
 
                 {{-- Wishlist button --}}
                 <div class="absolute top-5 right-5 z-2">

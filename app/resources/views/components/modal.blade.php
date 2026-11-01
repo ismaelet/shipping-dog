@@ -2,6 +2,7 @@
     'name',
     'title',
     'size' => 'md',
+    'fixedHeight' => false,
     'open' => false,
     'closeOnBackdrop' => true,
 ])
@@ -10,6 +11,7 @@
     $maxWidth = match ($size) {
         'sm' => 'max-w-md',
         'lg' => 'max-w-4xl',
+        'xl' => 'max-w-6xl',
         default => 'max-w-xl',
     };
 @endphp
@@ -19,6 +21,10 @@
         .modal-body {
             top: calc(var(--header-height, 0px) / 2);
             max-height: calc(100dvh - var(--header-height, 0px) - 4rem);
+        }
+
+        .modal-body[data-fixed-height='true'] {
+            height: 80svh;
         }
     </style>
 @endpushOnce
@@ -55,6 +61,7 @@
                 x-transition:enter-start="translate-y-4 opacity-0 motion-reduce:translate-y-0"
                 x-transition:enter-end="translate-y-0 opacity-100"
                 class="modal-body {{ $maxWidth }} bg-background-400 relative flex w-full flex-col overflow-hidden rounded-t-xl sm:rounded-xl"
+                data-fixed-height="{{ $fixedHeight ? 'true' : 'false' }}"
             >
                 <div class="border-border-400 flex items-center justify-between gap-4 border-b px-5 py-4">
                     <x-heading variant="article" id="modal-title-{{ $name }}">{{ $title }}</x-heading>

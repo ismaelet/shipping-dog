@@ -28,7 +28,7 @@
             'subtitle' => 'Listino e margini',
             'route' => 'seller-dashboard.prices',
             'activeRoutes' => ['seller-dashboard.prices'],
-            'icon' => 'discount',
+            'icon' => 'price',
         ],
     ];
 @endphp

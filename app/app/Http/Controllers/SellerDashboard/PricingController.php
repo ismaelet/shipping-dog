@@ -17,13 +17,47 @@ class PricingController extends Controller {
     public function index(): View {
         $seller = Auth::user()->seller;
 
-        $res_cloth = ProductType::where('category', 'c')->where('hidden', false)->with('gender', 'price')->orderBy('id')->get();
-        $res_acc = ProductType::where('category', 'm')->where('hidden', false)->with('price')->orderBy('id')->get();
+        $clothing = ProductType::where('category', 'c')->where('hidden', false)->with('gender', 'price')->orderBy('id')->get();
+        $accessories = ProductType::where('category', 'm')->where('hidden', false)->with('price')->orderBy('id')->get();
+        $sellerPrices = $seller->prices->keyBy('type_id');
+
+        $formatItems = function ($types, bool $includeGender = false) use ($sellerPrices) {
+            return $types->map(function (ProductType $type) use ($sellerPrices, $includeGender) {
+                $price = $sellerPrices->get($type->id) ?? $type->price;
+                $gainWhite = (float) $price->gain_w;
+                $gainColor = (float) $price->gain_c;
+                $baseWhite = (float) $price->price - $gainWhite / 0.75;
+                $baseColor = (float) $price->price - $gainColor / 0.75;
+
+                return [
+                    'name' => trim($type->name . ' ' . ($includeGender ? ($type->gender?->name ?? '') : '')),
+                    'tag' => $type->tag,
+                    'price' => (float) $price->price,
+                    'gainWhite' => $gainWhite,
+                    'gainColor' => $gainColor,
+                    'minimum' => round((float) $price->price - max($gainWhite, $gainColor) / 0.75, 2),
+                    'baseWhite' => $baseWhite,
+                    'baseColor' => $baseColor,
+                ];
+            });
+        };
 
         return view('seller-dashboard.pricing', [
             'seller' => $seller,
-            'res_cloth' => $res_cloth,
-            'res_acc' => $res_acc,
+            'pricingGroups' => [
+                [
+                    'title' => 'Abbigliamento',
+                    'items' => $formatItems($clothing, true),
+                    'hasColorGains' => true,
+                    'accent' => 'primary',
+                ],
+                [
+                    'title' => 'Accessori',
+                    'items' => $formatItems($accessories),
+                    'hasColorGains' => false,
+                    'accent' => 'detail-1',
+                ],
+            ],
         ]);
     }
 

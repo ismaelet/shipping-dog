@@ -26,7 +26,7 @@
 
     {{-- Existing image --}}
     @if ($this->imageSrc)
-        <img src="{{ $this->imageSrc }}" alt="Uploaded image" class="{{ $aspectClass }} w-full object-cover" />
+        <img src="{{ $this->imageSrc }}" alt="Uploaded image" class="{{ $aspectClass }} w-full h-full object-cover" />
     @else
         <div class="text-text-400 flex h-full w-full items-center justify-center"></div>
     @endif
@@ -34,7 +34,7 @@
     {{-- Hover overlay --}}
     <div
         @class([
-            'absolute size-full inset-0 bg-black/40 transition-opacity',
+            'absolute size-full inset-0 bg-background-400/40 transition-opacity',
             'opacity-0 group-hover:opacity-100' => $this->imageExists,
             'opacity-100' => ! $this->imageExists,
         ])

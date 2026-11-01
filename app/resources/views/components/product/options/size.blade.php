@@ -10,7 +10,7 @@
 @pushOnce('styles')
     <style>
         .product-options--size {
-            grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(min(calc(25rem / var(--children)), 15rem), 1fr));
         }
     </style>
 @endpushOnce
@@ -22,7 +22,7 @@
         @if ($showTable)
             <button
                 type="button"
-                class="text-primary-200 hover:text-primary-400 cursor-pointer text-sm transition-colors"
+                class="dark:text-primary-200 text-primary-300 hover:text-primary-400 cursor-pointer text-sm transition-colors"
                 @click="$dispatch('open-modal', { name: 'product-size-guide' })"
             >
                 info taglie
@@ -30,7 +30,7 @@
         @endif
     </x-product.options.label>
 
-    <div class="product-options columns-[5rem]">
+    <div class="product-options product-options--size" style="--children: {{ $sizes->count() }};">
         @foreach ($sizes as $size)
             <label class="product-option">
                 <input

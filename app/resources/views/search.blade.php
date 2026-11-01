@@ -21,7 +21,7 @@
     <div class="full-width search-page content-start pb-20">
         <section class="full-width bg-surface-500 relative py-20 md:py-24">
             <img
-                src="{{ Vite::image('search-banner.webp') }}"
+                src="{{ Vite::image('search/banner.webp') }}"
                 alt="Search Banner"
                 class="fill-width absolute inset-0 h-full w-full object-cover"
             />
@@ -60,6 +60,7 @@
                                         <a
                                             href="{{ route('search', array_filter(['search' => $search, 'type' => $key === 'all' ? null : $key, 'sort' => $sort === 'relevance' ? null : $sort])) }}"
                                             @class([
+                                                'shadow-lg/3',
                                                 'focus-visible:outline-primary-400 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
                                                 'bg-primary-400 text-white' => $type === $key,
                                                 'bg-surface-400 text-heading-400 hover:bg-surface-500' => $type !== $key,

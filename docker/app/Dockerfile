@@ -10,12 +10,6 @@ RUN install-php-extensions \
     zip \
     opcache
 
-RUN apt-get update && apt-get install -y \
-    default-mysql-client \
-    git \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
-
 # DEPENDENCIES STAGE
 FROM base AS deps
 
@@ -55,3 +49,5 @@ FROM base AS run
 WORKDIR /var/www/html
 
 COPY --from=build /var/www/html/ ./
+
+RUN ln -s /var/www/html/storage/app/public /var/www/html/public/storage
