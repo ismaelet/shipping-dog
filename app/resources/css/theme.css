@@ -222,7 +222,7 @@ body {
       background-color 150ms,
       border-color 150ms;
 
-    @media (min-width: 40rem) {
+    @media (width >= 40rem) {
       font-size: var(--text-base);
     }
 
@@ -265,8 +265,8 @@ body {
   /* Pagination */
   .pagination-page {
     display: flex;
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 2rem;
+    height: 2rem;
     flex-shrink: 0;
     cursor: pointer;
     align-items: center;
@@ -280,6 +280,11 @@ body {
     font-weight: var(--font-weight-semibold);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-duration: 200ms;
+
+    @media (width >= theme(--breakpoint-xs)) {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
   }
 
   .pagination-page:not(:disabled):not(.is-active):hover {

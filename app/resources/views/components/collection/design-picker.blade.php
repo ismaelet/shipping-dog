@@ -121,7 +121,7 @@
                     >Chiudi</x-button>
             @else
                 <p
-                    class="mr-auto text-sm"
+                    class="w-full text-sm sm:mr-auto sm:w-auto"
                     aria-live="polite"
                     x-text="
                         selected.length === 1

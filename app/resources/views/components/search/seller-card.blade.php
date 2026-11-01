@@ -4,7 +4,7 @@
     href="{{ $seller->url() }}"
     {{
         $attributes->class([
-            'group bg-surface-400 focus-visible:outline-primary-400 block min-w-0 overflow-hidden rounded-xl transition-colors hover:bg-surface-500 focus-visible:outline-2 focus-visible:outline-offset-2 shadow-xl/5',
+            'group bg-surface-500 focus-visible:outline-primary-400 block min-w-0 overflow-hidden rounded-xl transition-colors hover:bg-surface-500 focus-visible:outline-2 focus-visible:outline-offset-2 shadow-xl/5',
             'sm:grid sm:grid-cols-2' => $featured,
         ])
     }}

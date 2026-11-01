@@ -39,11 +39,13 @@
 
         {{-- First page and leading ellipsis --}}
         @if ($windowStart > 1)
-            <a href="{{ $paginator->url(1) }}" class="pagination-page" aria-label="Vai alla pagina 1"> 1 </a>
+            {{-- <a href="{{ $paginator->url(1) }}" class="pagination-page" aria-label="Vai alla pagina 1"> 1 </a> --}}
 
             @if ($windowStart > 2)
-                <span class="shop-pagination-ellipsis flex size-8 items-center justify-center" aria-hidden="true"
-                    >...</span>
+                <span
+                    class="shop-pagination-ellipsis hidden size-8 items-center justify-center sm:flex"
+                    aria-hidden="true"
+                >...</span>
             @endif
         @endif
 
@@ -61,17 +63,19 @@
         {{-- Trailing ellipsis and last page --}}
         @if ($windowEnd < $lastPage)
             @if ($windowEnd < $lastPage - 1)
-                <span class="shop-pagination-ellipsis flex size-8 items-center justify-center" aria-hidden="true"
-                    >...</span>
+                <span
+                    class="shop-pagination-ellipsis hidden size-8 items-center justify-center sm:flex"
+                    aria-hidden="true"
+                >...</span>
             @endif
 
-            <a
+            {{-- <a
                 href="{{ $paginator->url($lastPage) }}"
                 class="pagination-page"
                 aria-label="Vai alla pagina {{ $lastPage }}"
             >
                 {{ $lastPage }}
-            </a>
+            </a> --}}
         @endif
 
         {{-- Next and last page --}}

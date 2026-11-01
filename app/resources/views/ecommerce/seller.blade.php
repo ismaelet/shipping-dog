@@ -7,7 +7,7 @@
                 <img
                     src="{{ $seller->cover() }}"
                     alt=""
-                    class="bg-primary-400 h-64 w-full rounded-3xl object-cover sm:h-80 lg:h-120"
+                    class="bg-primary-400 h-64 max-h-[40svh] w-full rounded-3xl object-cover sm:h-80 lg:h-120"
                 />
 
                 {{-- Edit profile --}}

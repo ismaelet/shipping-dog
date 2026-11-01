@@ -23,11 +23,11 @@
 <x-layouts.main :$location :$title>
     <section class="full-width">
         <div class="breakout py-5">
-            <div class="relative isolate flex items-center overflow-hidden rounded-4xl bg-slate-950 px-6 py-12 sm:px-10 lg:h-96 lg:px-16 lg:py-0">
+            <div class="bg-background-400 dark relative isolate flex items-center overflow-hidden rounded-4xl px-6 py-12 sm:px-10 lg:h-96 lg:px-16 lg:py-0">
                 <img
                     src="{{ Vite::image('shop/hero-background.webp') }}"
                     alt=""
-                    class="hero-image absolute inset-0 size-full object-cover opacity-90"
+                    class="hero-image absolute inset-0 size-full object-cover opacity-50 sm:opacity-90"
                 />
 
                 <div class="hero-gradient absolute inset-0"></div>
@@ -39,7 +39,7 @@
                         Trova il tuo prossimo preferito.
                     </h1>
 
-                    <p class="mt-5 max-w-lg text-sm leading-7 text-white/70 sm:text-base">
+                    <p class="text-heading-400 mt-5 max-w-lg text-sm leading-7 sm:text-base sm:text-white/70">
                         T-shirt e felpe originali, create da artisti indipendenti per chi non vuole vestirsi come tutti
                         gli altri.
                     </p>

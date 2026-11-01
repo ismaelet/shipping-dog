@@ -14,11 +14,22 @@
 @endphp
 
 @pushOnce('styles')
-    <style></style>
+    <style>
+        .results-group {
+            &:last-child {
+                padding-bottom: 5rem;
+            }
+
+            &:nth-child(odd) {
+                padding-block: 5rem;
+                background-color: var(--color-background-500);
+            }
+        }
+    </style>
 @endpushOnce
 
 <x-layouts.main :$title :$location>
-    <div class="full-width search-page content-start pb-20">
+    <div class="full-width search-page content-start">
         <section class="full-width bg-surface-500 relative py-20 md:py-24">
             <img
                 src="{{ Vite::image('search/banner.webp') }}"
@@ -28,9 +39,9 @@
             <x-search.form :value="$search" class="relative" />
         </section>
 
-        <div class="full-width pt-8">
+        <div class="full-width mt-12">
             @if (! $isValid)
-                <div class="mx-auto max-w-xl py-10 text-center">
+                <div class="text-center">
                     <h1 class="text-heading-400 text-xl font-semibold">
                         {{ $search === '' ? 'Cosa stai cercando?' : 'Ricerca troppo breve' }}
                     </h1>
@@ -44,7 +55,7 @@
                     <p class="mt-2">Prova a utilizzare parole più semplici oppure cerca un altro design o negozio.</p>
                 </div>
             @else
-                <div class="breakout">
+                <div class="breakout mb-8">
                     {{-- Results summary --}}
                     <x-heading variant="article" class="text-heading-400 text-xl font-semibold md:text-2xl">
                         {{ $designCount }} design e {{ $sellerCount }} {{ $sellerCount === 1 ? 'negozio' : 'negozi' }} per
@@ -52,7 +63,7 @@
                     </x-heading>
 
                     {{-- Tabs for filtering results --}}
-                    <div class="mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+                    <div class="mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-6">
                         <nav aria-label="Categorie di risultati">
                             <ul class="flex flex-wrap gap-2">
                                 @foreach ($tabs as $key => $tab)

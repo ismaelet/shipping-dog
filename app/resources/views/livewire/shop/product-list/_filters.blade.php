@@ -1,7 +1,19 @@
 @pushOnce('styles')
     <style>
         .product-list-filters-wrapper {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            align-content: start;
             top: calc(var(--header-height) + 1rem);
+            transition: grid-template-rows 0.2s ease-in-out;
+
+            @media (width < 48rem) {
+                grid-template-rows: auto 0fr;
+
+                &:has(.product-list-filters[data-open='true']) {
+                    grid-template-rows: auto 1fr;
+                }
+            }
         }
 
         .product-list-filters {
@@ -31,7 +43,7 @@
         {{-- Mobile toggle --}}
         <button
             type="button"
-            class="product-list-filters-toggle text-heading-400 mb-3 flex w-full cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-slate-800 px-4 py-3 text-left font-bold md:hidden"
+            class="product-list-filters-toggle text-heading-400 border-border-400 bg-surface-400 flex w-full cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-left font-bold md:hidden"
             @click="open = ! open"
             :aria-expanded="open.toString()"
             aria-controls="product-list-filters"
@@ -45,7 +57,11 @@
         </button>
 
         {{-- Filters --}}
-        <div id="product-list-filters" class="product-list-filters mt-2 grid grid-cols-1 md:mt-0">
+        <div
+            id="product-list-filters"
+            class="product-list-filters mt-2 grid grid-cols-1 overflow-hidden md:mt-0 md:overflow-visible"
+            x-bind:data-open="open"
+        >
             <div class="">
                 <h3 class="font-heading text-heading-400 mb-4 hidden text-base font-semibold md:block">Categoria</h3>
 

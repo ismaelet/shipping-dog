@@ -32,7 +32,7 @@
             </ol>
         </nav>
 
-        <header class="mt-4 grid grid-cols-1 items-start justify-between gap-x-8 gap-y-4 lg:grid-cols-[1fr_1.5fr]">
+        <header class="mt-4 grid grid-cols-1 items-start justify-between gap-x-8 gap-y-4 md:grid-cols-[1fr_1.5fr]">
             <div class="min-w-0">
                 @if ($userIsOwner)
                     <h1 class="sr-only">{{ $collection->name }}</h1>
@@ -54,11 +54,11 @@
             </div>
 
             @if ($userIsOwner)
-                <div class="flex flex-wrap justify-end gap-2">
+                <div class="flex flex-wrap gap-2 md:justify-end">
                     <x-button
                         type="button"
+                        class="xs:w-auto w-full"
                         size="sm"
-                        width="auto"
                         x-on:click="$dispatch('open-modal', { name: 'collection-designs' })"
                     >
                         <x-icon-add />
@@ -67,9 +67,9 @@
 
                     <x-button
                         type="button"
+                        class="xs:w-auto w-full"
                         variant="secondary"
                         size="sm"
-                        width="auto"
                         x-on:click="$dispatch('open-modal', { name: 'change-cover' })"
                     >
                         <x-icon-gallery />
@@ -78,10 +78,10 @@
 
                     <x-button
                         type="button"
+                        class="xs:w-auto w-full"
                         variant="secondary"
                         color="danger"
                         size="sm"
-                        width="auto"
                         x-on:click="$dispatch('open-modal', { name: 'delete-collection' })"
                     >
                         <x-icon-delete />

@@ -61,13 +61,13 @@
     <div class="pt-4">
         <div @class(['min-w-0', 'max-sm:w-full' => ! $light])>
             <div class="flex items-start justify-between gap-2">
-                <h3 class="text-heading-400 min-w-0 font-semibold">
+                <h3 class="text-heading-400 min-w-0 text-sm font-semibold sm:text-base">
                     <a href="{{ $product->url() }}" class="hover:text-primary-300 wrap-break-word transition-colors">
                         {{ $categoryOnly ? $product->type->name : $product->name }}
                     </a>
                 </h3>
 
-                <p class="text-heading-400 shrink-0 font-semibold whitespace-nowrap">
+                <p class="text-heading-400 shrink-0 text-sm font-semibold whitespace-nowrap sm:text-base">
                     {{ price($product->price()->price) }}
                 </p>
             </div>
