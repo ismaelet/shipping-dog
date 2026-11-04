@@ -38,7 +38,7 @@ class Password extends Component
         ]);
 
         if (! password_verify($this->current_password, $this->user->password)) {
-            session()->addError('current_password', 'La password attuale inserita non è corretta.');
+            $this->addError('current_password', 'La password attuale inserita non è corretta.');
 
             return;
         }
