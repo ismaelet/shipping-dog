@@ -33,7 +33,7 @@
         </div>
 
         <div class="mt-12">
-            <div class="grid grid-cols-2 gap-8 sm:columns-[15rem]">
+            <div class="grid grid-cols-2 gap-4 sm:columns-[15rem] sm:gap-8">
                 @foreach ($customerPhotos as $customerPhoto)
                     <x-community.photo-card :customer-photo="$customerPhoto" />
                 @endforeach

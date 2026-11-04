@@ -63,7 +63,7 @@
     </style>
 @endPushOnce
 
-<aside class="seller-dashboard-navigation sticky lg:mt-12 lg:self-start">
+<aside class="seller-dashboard-navigation lg:sticky lg:mt-12 lg:self-start">
     <label class="text-heading-400 font-heading flex cursor-pointer items-center justify-center gap-3 py-5 text-lg lg:hidden">
         <input type="checkbox" class="seller-dashboard-mobile-toggle sr-only" />
         <x-icon-list class="size-5" />

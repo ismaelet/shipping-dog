@@ -2,7 +2,7 @@
     $totalSales = collect($salesByMonth)->sum('salesCount');
 @endphp
 
-<section class="card rounded-3xl p-8 shadow-sm">
+<section class="card p-content-padding rounded-3xl shadow-sm">
     <header class="border-border-400 flex items-end justify-between gap-4 border-b pb-6">
         <div>
             <x-eyebrow class="">{{ $selectedYear }}</x-eyebrow>

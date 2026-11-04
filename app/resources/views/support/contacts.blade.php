@@ -90,7 +90,7 @@
             #form {
                 order: 1;
                 padding: 4rem 0;
-                border-bottom: 2px solid #999;
+                border-bottom: 2px solid var(--color-border-400);
             }
 
             #data {

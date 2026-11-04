@@ -17,7 +17,7 @@
 @endphp
 
 <div class="grid grid-cols-1 gap-8">
-    <section class="card rounded-3xl p-8 shadow-sm">
+    <section class="card p-content-padding rounded-3xl shadow-sm">
         <header class="border-border-400 flex flex-wrap items-end justify-between gap-6 border-b pb-6">
             <div class="max-w-xl">
                 <x-eyebrow class="mb-0">Il tuo shop</x-eyebrow>

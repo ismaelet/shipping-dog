@@ -17,7 +17,7 @@
 
     @if ($designs->isNotEmpty() || $customProducts->isNotEmpty())
         <div class="mt-5 grid gap-6">
-            <div class="bg-background-400 flex items-center gap-3 rounded-xl px-4 py-3">
+            <div class="bg-background-400 hidden items-center gap-3 rounded-xl px-4 py-3 sm:flex">
                 <x-icon-drag-handler class="text-heading-400 size-4 shrink-0" />
                 <p>
                     <span class="text-heading-400 font-semibold">Riordina il portfolio:</span>
@@ -47,7 +47,7 @@
                                         alt="{{ $design->name }}"
                                         loading="lazy"
                                     />
-                                    <div class="js-drag-handle bg-background-400/70 absolute top-2 right-2 grid size-10 cursor-grab place-items-center rounded-full backdrop-blur-md active:cursor-grabbing">
+                                    <div class="js-drag-handle bg-background-400/70 absolute top-2 right-2 hidden size-10 cursor-grab place-items-center rounded-full backdrop-blur-md active:cursor-grabbing sm:grid">
                                         <x-icon-drag-handler class="text-heading-400 size-4" />
                                     </div>
                                 </div>

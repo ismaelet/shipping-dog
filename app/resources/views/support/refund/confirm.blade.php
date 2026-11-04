@@ -1,7 +1,7 @@
 <x-layouts.form :$title :$location size="lg">
     <x-slot name="body">
         <div class="grid grid-cols-1 gap-8">
-            <div class="grid grid-cols-[10rem_1fr_1fr] items-center gap-4">
+            <div class="grid grid-cols-1 items-center gap-4 sm:grid-cols-[10rem_1fr_1fr]">
                 @foreach ($changeRequest->items as $item)
                     <div class="card col-span-full grid grid-cols-subgrid items-center text-center">
                         <div class="item-cell item-pic_cell">
@@ -10,13 +10,13 @@
                             </div>
                         </div>
 
-                        <div class="item-cell item-name_cell">
+                        <div class="item-cell item-name_cell py-2">
                             <x-heading variant="article-small">{{ $item->old_order_item->product_with_trashed->name }}</x-heading>
 
                             <p class="mt-2">{{ $item->old_order_item->description() }}</p>
                         </div>
 
-                        <div class="item-cell item-new_cell">
+                        <div class="item-cell item-new_cell py-2">
                             @if ($item->is_change)
                                 <h4 class="text-heading-400 font-semibold">Nuova taglia:</h4>
                                 <p class="">{{ $item->new_size->name }}</p>

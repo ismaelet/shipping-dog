@@ -5,7 +5,7 @@
     </div>
 
     <div class="grid grid-cols-1 gap-12">
-        <div class="grid grid-cols-2 gap-8 sm:columns-[15rem]">
+        <div class="grid grid-cols-2 gap-4 sm:columns-[15rem] sm:gap-8">
             @foreach ($productsWithSameDesign as $garment)
                 <x-product-card :product="$garment" />
             @endforeach

@@ -1,5 +1,5 @@
 <section class="card overflow-hidden rounded-3xl shadow-sm">
-    <header class="border-border-400 flex items-end justify-between gap-4 border-b p-8">
+    <header class="border-border-400 p-content-padding flex items-end justify-between gap-4 border-b">
         <div>
             <x-eyebrow class="mb-0">Performance</x-eyebrow>
             <x-heading variant="article" class="mt-2">Vendite per grafica</x-heading>

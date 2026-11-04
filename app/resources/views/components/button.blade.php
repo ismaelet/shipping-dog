@@ -92,6 +92,10 @@
                         background-image: linear-gradient(to right, var(--color-danger-400), var(--color-danger-500));
                     }
                 }
+
+                &:has(svg) {
+                    padding-block: calc(var(--_padding-y) * 0.8);
+                }
             }
 
             /* Secondary button */
@@ -138,6 +142,10 @@
                         border-color: currentColor;
                     }
                 }
+
+                &:has(svg) {
+                    padding-block: calc(var(--_padding-y) * 0.8 - var(--spacing-border));
+                }
             }
 
             /* Sizes */
@@ -163,12 +171,11 @@
                 justify-content: center;
                 align-items: center;
                 gap: 0.5em;
-                line-height: 0.7;
+                line-height: 1.25;
 
                 svg {
                     height: 1em;
                     max-width: 1em;
-                    margin-block: -0.5em;
                 }
             }
 
