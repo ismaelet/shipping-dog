@@ -1,68 +1,36 @@
-<x-layouts.form
-	:$title
-	action="{{ route('password.update') }}"
->
+<x-layouts.form :$title action="{{ route('password.update') }}">
+    <x-slot name="body">
+        @if (session('submitted'))
+            <p class="text-center text-lg font-semibold">Password cambiata con successo!</p>
+        @elseif (session('error'))
+            <x-alert type="error">Il link di reset non è valido o è scaduto</x-alert>
+        @else
+            <p class="">Inserisci qui sotto la nuova password desiderata:</p>
 
-	<x-slot name="body">
+            <x-input type="hidden" name="token" :value="$token" />
+            <x-input type="hidden" name="email" :value="$email" />
+            <x-input type="password" name="password" placeholder="Nuova password" required />
+            <x-input type="password" name="password_confirmation" placeholder="Conferma la nuova password" required />
 
-		@if (session('submitted'))
-			<p class="text-center text-lg font-semibold">Password cambiata con successo!</p>
-		@elseif (session('error'))
-			<x-form.alert type="error">Il link di rest non è valido o è scaduto</x-form.alert>
-		@else
-			<p class="">
-				Inserisci qui sotto la nuova password desiderata:
-			</p>
+            @error('password')
+                <x-form.input-warning>{{ $message }}</x-form.input-warning>
+            @enderror
+        @endif
+    </x-slot>
 
-			<x-input
-				type="hidden"
-				name="token"
-				:value="$token"
-			/>
-			<x-input
-				type="hidden"
-				name="email"
-				:value="$email"
-			/>
-			<x-input
-				type="password"
-				name="password"
-				placeholder="Nuova password"
-				required
-			/>
-			<x-input
-				type="password"
-				name="password_confirmation"
-				placeholder="Conferma la nuova password"
-				required
-			/>
+    <x-slot name="footer">
+        @if (session('error'))
+            <x-button
+                variant="secondary"
+                :href="route('password.request')"
+            >{{ __('Richiedi un nuovo codice') }}</x-button>
+        @else
+            @if (! session('submitted'))
+                {{-- If the form hasn't been submitted or the email is not found --}}
+                <x-button type="submit">Reimposta la password</x-button>
+            @endif
 
-			@error('password')
-				<x-form.input-warning>{{ $message }}</x-form.input-warning>
-			@enderror
-		@endif
-
-	</x-slot>
-
-	<x-slot name="footer">
-
-		@if (session('error'))
-			<x-button
-				variant="secondary"
-				:href="route('password.request')"
-			>{{ __('Richiedi un nuovo codice') }}</x-button>
-		@else
-			@if (!session('submitted'))
-				{{-- If the form hasn't been submitted or the email is not found --}}
-				<x-button type="submit">Reimposta la password</x-button>
-			@endif
-
-			<x-button
-				variant="secondary"
-				:href="route('login')"
-			>{{ __('Torna al login') }}</x-button>
-		@endif
-
-	</x-slot>
-
+            <x-button variant="secondary" :href="route('login')">{{ __('Torna al login') }}</x-button>
+        @endif
+    </x-slot>
 </x-layouts.form>

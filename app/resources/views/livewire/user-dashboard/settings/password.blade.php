@@ -33,10 +33,6 @@
                 placeholder="Almeno 8 caratteri"
                 required
             />
-
-            @error('new_password')
-                <x-alert wire:key="password-new_password-error" type="error">{{ $message }}</x-alert>
-            @enderror
         </div>
 
         <div class="grid content-start gap-2" wire:key="password-new_password_confirmation">
@@ -48,11 +44,19 @@
                 placeholder="Ripeti la nuova password"
                 required
             />
-
-            @error('new_password_confirmation')
-                <x-alert wire:key="password-new_password_confirmation-error" type="error">{{ $message }}</x-alert>
-            @enderror
         </div>
+
+        @error('new_password')
+            <x-alert class="col-span-full" wire:key="password-new_password-error" type="error">{{ $message }}</x-alert>
+        @enderror
+
+        @error('new_password_confirmation')
+            <x-alert
+                class="col-span-full"
+                wire:key="password-new_password_confirmation-error"
+                type="error"
+            >{{ $message }}</x-alert>
+        @enderror
 
         <div class="md:col-span-2">
             <x-button type="submit" size="sm">Aggiorna password</x-button>
