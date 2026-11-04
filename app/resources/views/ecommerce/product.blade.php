@@ -8,7 +8,9 @@
 
         <x-product.tags :$product />
 
-        <x-product.other-types :$product :$relatedGarments :$relatedAccessories />
+        @if (! $product->isCustom() && $productsWithSameDesign->count())
+            <x-product.other-types :$product :$productsWithSameDesign />
+        @endif
 
         <x-product.related-products :$product />
     </div>

@@ -4,9 +4,10 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
+    "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "lint": "oxlint"
+    "test:vitest": "vitest run"
   },
   "dependencies": {
     "alpinejs": "^3.17.5",

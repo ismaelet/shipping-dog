@@ -56,8 +56,14 @@ class ProductController extends Controller
             )
             ->get();
 
-        $relatedGarments = $sameDesignProducts->where('type.category', 'c')->sortBy('type.sort');
-        $relatedAccessories = $sameDesignProducts->where('type.category', 'm')->sortBy('type.sort');
+        $relatedGarments = $sameDesignProducts->where('type.category', 'c')
+            ->take(4)
+            ->sortBy('type.sort');
+        $relatedAccessories = $sameDesignProducts->where('type.category', 'm')
+            ->take(7 - $relatedGarments->count())
+            ->sortBy('type.sort');
+
+        $productsWithSameDesign = $relatedGarments->merge($relatedAccessories);
 
         $productColors = $product->colors;
 
@@ -82,10 +88,9 @@ class ProductController extends Controller
             'defaultColor' => $defaultColor,
             'defaultSize' => $defaultSize,
             'defaultPosition' => $defaultPosition,
-            'relatedGarments' => $relatedGarments,
-            'relatedAccessories' => $relatedAccessories,
             'warning' => $warning,
             'breadcrumbs' => $breadcrumbs,
+            'productsWithSameDesign' => $productsWithSameDesign,
         ]);
     }
 

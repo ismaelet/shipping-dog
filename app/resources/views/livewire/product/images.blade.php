@@ -1,6 +1,14 @@
-<div id="left-panel" class="h-full max-lg:max-w-none">
+@pushOnce('styles')
+    <style>
+        .image-section {
+            top: calc(var(--header-height) + 2rem);
+        }
+    </style>
+@endpushOnce
+
+<div id="left-panel" class="h-full max-lg:max-w-none lg:top-8">
     {{-- Preview image --}}
-    <section class="image-section grid w-full grid-cols-1 items-start gap-4 lg:sticky lg:top-8">
+    <section class="image-section sticky grid w-full grid-cols-1 items-start gap-4 lg:sticky">
         {{-- Other images --}}
         @if (count($imagesUrls) > 1)
             <div class="other-images js-other-images row-start-2 flex justify-start gap-3">
