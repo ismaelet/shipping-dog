@@ -8,9 +8,10 @@
 
 <div
     x-data
-    class="bg-background-400 group relative cursor-pointer"
+    class="bg-background-400 group relative h-full cursor-pointer"
     @class([$aspectClass])
     x-on:click="$refs.file.click()"
+    x-on:livewire-upload-error="$dispatch('upload-image-error', { message: 'Caricamento non riuscito. Controlla che il file non superi i 32 MB e riprova.' })"
 >
     <input
         x-ref="file"
@@ -28,7 +29,7 @@
     @if ($this->imageSrc)
         <img src="{{ $this->imageSrc }}" alt="Uploaded image" class="{{ $aspectClass }} w-full h-full object-cover" />
     @else
-        <div class="text-text-400 flex h-full w-full items-center justify-center"></div>
+        <div class="bg-surface-400 flex h-full w-full items-center justify-center"></div>
     @endif
 
     {{-- Hover overlay --}}

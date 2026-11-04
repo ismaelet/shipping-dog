@@ -191,6 +191,8 @@
                 <x-heading variant="article">Immagini negozio</x-heading>
             </header>
 
+            <x-upload-image-error class="text-center" />
+
             {{-- Profile image --}}
             <div class="grid justify-items-center gap-4 text-center">
                 <x-heading variant="article-small">Immagine di profilo</x-heading>

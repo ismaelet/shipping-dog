@@ -27,7 +27,10 @@ class Icon extends Component
      * Listens for the 'userIconUpdated' event to refresh the icon.
      */
     #[On('userIconUpdated')]
-    public function updatedIcon(): void {}
+    public function updatedIcon(): void
+    {
+        $this->icon = Auth::user()->icon();
+    }
 
     /**
      * Renders the icon view.
