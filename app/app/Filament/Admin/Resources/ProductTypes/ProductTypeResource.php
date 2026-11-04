@@ -24,6 +24,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
@@ -163,17 +164,13 @@ class ProductTypeResource extends Resource
                                             ])->columns(3)
                                             ->columnSpan('full'),
 
-                                        Fieldset::make('Descrizioni')
+                                        Group::make()
                                             ->relationship('info')
                                             ->schema([
                                                 Textarea::make('description')
                                                     ->label('Descrizione')
                                                     ->rows(5)
-                                                    ->placeholder('Descrizione (una breve descrizione del prodotto)'),
-                                                Textarea::make('details')
-                                                    ->label('Dettagli tecnici')
-                                                    ->rows(5)
-                                                    ->placeholder('Dettagli tecnici (una lista di informazioni su composizione e vestibilità, andare a capo per ogni riga)'),
+                                                    ->placeholder('Ogni campo deve essere in una riga separata e in formato titolo: testo'),
                                             ])->columnSpanFull(),
                                     ])->columns(3),
                             ]),

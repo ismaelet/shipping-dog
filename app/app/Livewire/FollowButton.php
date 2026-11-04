@@ -13,7 +13,7 @@ class FollowButton extends Component
     /**
      * The seller to follow.
      */
-    public ?Seller $seller;
+    public ?Seller $seller = null;
 
     /**
      * Whether the button is visible.
@@ -42,8 +42,8 @@ class FollowButton extends Component
     {
         $this->isVisible = $this->seller && $this->seller->user_id != Auth::id();
         $this->isAuthenticated = Auth::check();
-        $this->isFollowing = (bool) $this->seller->auth_follower?->id;
-        $this->followerRecord = $this->seller->auth_follower;
+        $this->followerRecord = $this->isAuthenticated ? $this->seller?->auth_follower()->first() : null;
+        $this->isFollowing = $this->followerRecord !== null;
     }
 
     /**
@@ -51,9 +51,11 @@ class FollowButton extends Component
      */
     public function follow(): void
     {
-        Follower::create([
-            'follower_id' => $this->seller->id,
-            'user_id' => Auth::id(),
+        $this->authorizeFollow();
+
+        $this->followerRecord = Follower::firstOrCreate([
+            'user_id' => $this->seller->user_id,
+            'follower_id' => Auth::id(),
         ]);
 
         $this->isFollowing = true;
@@ -64,12 +66,22 @@ class FollowButton extends Component
      */
     public function unfollow(): void
     {
+        $this->authorizeFollow();
+
         Follower::where([
-            'follower_id' => $this->seller->id,
-            'user_id' => Auth::id(),
+            'user_id' => $this->seller->user_id,
+            'follower_id' => Auth::id(),
         ])->delete();
 
+        $this->followerRecord = null;
+
         $this->isFollowing = false;
+    }
+
+    private function authorizeFollow(): void
+    {
+        abort_unless(Auth::check(), 403);
+        abort_unless($this->seller && $this->seller->user_id != Auth::id(), 403);
     }
 
     /**

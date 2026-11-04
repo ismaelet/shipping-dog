@@ -62,7 +62,6 @@ class ProductTypeInfo extends Model
 
         if (isset($rawData)) {
             $data = [];
-            $rawData = array_map(fn ($item) => trim($item, "\r\n&middot; "), $rawData);
 
             foreach ($rawData as $item) {
                 $label = trim(explode(' ', $item, 2)[0] ?? '', ' :');

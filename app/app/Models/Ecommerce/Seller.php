@@ -94,7 +94,7 @@ class Seller extends Model
      */
     public function followers(): HasMany
     {
-        return $this->hasMany(Follower::class, 'follower_id', 'user_id');
+        return $this->hasMany(Follower::class, 'user_id', 'user_id');
     }
 
     /**
@@ -158,7 +158,7 @@ class Seller extends Model
      */
     public function auth_follower(): HasOne
     {
-        return $this->hasOne(Follower::class, 'user_id', 'id')
+        return $this->hasOne(Follower::class, 'user_id', 'user_id')
             ->where('follower_id', Auth::id());
     }
 

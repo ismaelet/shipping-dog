@@ -39,11 +39,8 @@
         type="button"
         @click="open = ! open"
         :aria-expanded="open.toString()"
-        @class([
-            'flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-sm font-bold transition-colors',
-            'text-primary-300' => $isSelected,
-            'text-heading-400 hover:bg-surface-500' => ! $isSelected,
-        ])
+        class="flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-sm font-bold transition-colors"
+        x-bind:class="{ 'text-primary-300 bg-surface-500': open }"
     >
         <span>{{ $title }}</span>
 
