@@ -1,11 +1,26 @@
-<div id="product-list" class="py-16 md:py-20">
+@pushOnce('styles')
+    <style>
+        html {
+            scroll-padding-top: 2rem;
+        }
+    </style>
+@endpushOnce
+
+<div
+    id="product-list"
+    class="py-16 md:py-20"
+    @if ($scrollOnLoad)
+        x-data
+        x-init="$nextTick(() => $el.scrollIntoView())"
+    @endif
+>
     <header class="mb-10 flex flex-col gap-6 border-b border-white/10 pb-8 md:flex-row md:items-end md:justify-between">
         <div>
-            <p class="text-xs font-bold tracking-[0.2em] text-orange-500 uppercase">La collezione</p>
+            <x-eyebrow>La collezione</x-eyebrow>
 
-            <h2 class="font-heading text-heading-400 mt-2 text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
-                {{ $seller ? $seller->name : 'Tutti i prodotti' }}
-            </h2>
+            <x-heading variant="section-small">
+                {{ $design ? 'Grafica: ' . $design->name : ($seller ? $seller->name : 'Tutti i prodotti') }}
+            </x-heading>
 
             <p class="mt-2 text-sm">{{ $totalProducts }} articoli</p>
         </div>

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Shop;
 
+use App\Models\Ecommerce\Design;
 use App\Models\Ecommerce\Product\ProductGender;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Seller;
@@ -28,6 +29,9 @@ class ProductList extends Component
     #[Url(as: 'category')]
     public ?string $categoryFilter = null;
 
+    #[Url(as: 'design')]
+    public ?int $designId = null;
+
     #[Url]
     public ?string $sort = null;
 
@@ -41,8 +45,11 @@ class ProductList extends Component
 
     public ?string $selectedCategory = null;
 
+    public bool $scrollOnLoad = false;
+
     public function mount(): void
     {
+        $this->scrollOnLoad = $this->hasListParameters();
         $this->resolveFilters();
         $this->resolveSort();
     }
@@ -60,6 +67,7 @@ class ProductList extends Component
             ! $this->selectedTypeId &&
             ! $this->selectedGenderId &&
             ! $this->categoryFilter &&
+            ! $this->designId &&
             trim($this->search) === '';
 
         // Filtered products
@@ -69,6 +77,7 @@ class ProductList extends Component
             typeId: $this->selectedType?->id,
             genderId: $this->selectedGender?->id,
             category: $this->categoryFilter,
+            designId: $this->designId,
             sort: $sort,
             diversify: $shouldDiversify,
         );
@@ -96,6 +105,7 @@ class ProductList extends Component
             'products' => $products,
             'totalProducts' => $totalProducts,
             'productCount' => $products->total(),
+            'design' => $this->designId ? Design::find($this->designId) : null,
             'womenTypes' => $this->getCategoryTypes('c', 2),
             'menTypes' => $this->getCategoryTypes('c', 1),
             'unisexTypes' => $this->getCategoryTypes('c'),
@@ -143,6 +153,7 @@ class ProductList extends Component
         $this->selectedTypeId = null;
         $this->selectedGenderId = null;
         $this->categoryFilter = null;
+        $this->designId = null;
 
         $this->resolveFilters();
         $this->resetPage();
@@ -151,6 +162,17 @@ class ProductList extends Component
     public function updatedSearch(): void
     {
         $this->resetPage();
+    }
+
+    private function hasListParameters(): bool
+    {
+        return trim($this->search) !== ''
+            || $this->selectedTypeId
+            || $this->selectedGenderId
+            || $this->categoryFilter
+            || $this->designId
+            || $this->sort
+            || request()->has('page');
     }
 
     private function resolveFilters(): void

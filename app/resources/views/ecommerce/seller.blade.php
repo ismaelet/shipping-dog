@@ -23,7 +23,7 @@
 
             {{-- Profile information --}}
             <div class="relative text-center">
-                <div class="grid w-full sm:grid-cols-[1fr_auto_1fr]">
+                <div class="grid w-full justify-items-center sm:grid-cols-[1fr_auto_1fr]">
                     <div class=""></div>
 
                     <div class="">

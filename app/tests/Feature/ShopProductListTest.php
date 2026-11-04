@@ -95,4 +95,21 @@ class ShopProductListTest extends TestCase
         $this->assertStringContainsString('category', $query->toSql());
         $query->get()->each(fn ($product) => $this->assertSame('m', $product->type->category));
     }
+
+    public function test_design_url_filter_is_applied_and_cleared_by_filters(): void
+    {
+        Livewire::withQueryParams(['design' => 3527, 'search' => 'no-shop-product-matches-this-query'])
+            ->test(ProductList::class)
+            ->assertSet('designId', 3527)
+            ->call('removeFilters')
+            ->assertSet('designId', null);
+    }
+
+    public function test_search_query_filters_by_design(): void
+    {
+        $query = app(ProductSearchQuery::class)->build(designId: 3527);
+
+        $this->assertStringContainsString('`products`.`design_id` = ?', $query->toSql());
+        $query->get()->each(fn ($product) => $this->assertSame(3527, (int) $product->design_id));
+    }
 }

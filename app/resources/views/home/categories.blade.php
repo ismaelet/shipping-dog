@@ -65,7 +65,7 @@
             {{-- Accessories --}}
             <a
                 href="{{ route('shop', ['category' => 'm']) }}"
-                class="group relative min-h-80 overflow-hidden rounded-3xl bg-orange-500 p-6 text-white md:min-h-full"
+                class="group bg-primary-400 relative min-h-80 overflow-hidden rounded-3xl p-6 text-white md:min-h-full"
             >
                 <div class="flex h-full flex-col justify-between">
                     <x-icon-spark class="size-9" />
@@ -75,20 +75,7 @@
 
                         <h3 class="mt-1 text-2xl font-bold">Dettagli che parlano</h3>
 
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="mt-5 size-6 transition-transform group-hover:translate-x-2"
-                            aria-hidden="true"
-                        >
-                            <path d="M5 12h14" />
-                            <path d="m13 6 6 6-6 6" />
-                        </svg>
+                        <x-icon-arrow class="mt-5 size-5 transition-transform group-hover:translate-x-2" />
                     </div>
                 </div>
             </a>
