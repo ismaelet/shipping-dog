@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Livewire\Shop\ProductList;
 use App\Models\Ecommerce\Product\ProductType;
+use App\Queries\Shop\ProductSearchQuery;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
@@ -72,5 +73,26 @@ class ShopProductListTest extends TestCase
             ->assertSet('search', '')
             ->assertSet('selectedTypeId', null)
             ->assertSet('selectedGenderId', null);
+    }
+
+    public function test_category_url_filter_only_accepts_accessories_and_is_cleared_by_filters(): void
+    {
+        Livewire::withQueryParams(['category' => 'm', 'search' => 'no-shop-product-matches-this-query'])
+            ->test(ProductList::class)
+            ->assertSet('categoryFilter', 'm')
+            ->call('removeFilters')
+            ->assertSet('categoryFilter', null);
+
+        Livewire::withQueryParams(['category' => 'c', 'search' => 'no-shop-product-matches-this-query'])
+            ->test(ProductList::class)
+            ->assertSet('categoryFilter', null);
+    }
+
+    public function test_category_url_filter_returns_only_accessory_products(): void
+    {
+        $query = app(ProductSearchQuery::class)->build(category: 'm');
+
+        $this->assertStringContainsString('category', $query->toSql());
+        $query->get()->each(fn ($product) => $this->assertSame('m', $product->type->category));
     }
 }

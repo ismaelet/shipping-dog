@@ -31,7 +31,11 @@
 @endpushOnce
 
 <div
-    x-data=" { open: @js($isSelected || $defaultOpen) }"
+    wire:key="category-selector-{{ $genderId ?? 'accessories' }}"
+    data-open="{{ $isSelected || $defaultOpen ? 'true' : 'false' }}"
+    data-group="{{ $genderId ?? 'accessories' }}"
+    x-data="{ open: $el.dataset.open === 'true', group: $el.dataset.group }"
+    x-on:shop-category-picked.window="open = $event.detail.group === group"
     class="shop-category-selector border-border-400 grid grid-cols-1 border-b last:border-0"
 >
     {{-- Category heading --}}
@@ -40,7 +44,7 @@
         @click="open = ! open"
         :aria-expanded="open.toString()"
         class="flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-sm font-bold transition-colors"
-        x-bind:class="{ 'text-primary-300 bg-surface-500': open }"
+        x-bind:class="{ 'text-white bg-primary-300': open }"
     >
         <span>{{ $title }}</span>
 
@@ -62,6 +66,7 @@
             <button
                 type="button"
                 wire:key="category-{{ $genderId ?? 'accessories' }}-{{ $type->id }}"
+                x-on:click="$dispatch('shop-category-picked', { group })"
                 wire:click="selectType({{ $type->id }}, {{ $genderId === null ? 'null' : $genderId }})"
                 @class([
                     'flex min-h-11 w-full cursor-pointer items-center px-8 py-2 text-left text-sm font-medium transition-colors',

@@ -36,7 +36,7 @@
 <section
     class="min-w-0"
     x-data="{
-    open: @js((bool) ($search || $selectedTypeId || $selectedGenderId))
+    open: @js((bool) ($search || $selectedTypeId || $selectedGenderId || $categoryFilter))
 }"
 >
     <div class="product-list-filters-wrapper sticky">
@@ -69,12 +69,13 @@
                     <button
                         type="button"
                         wire:click="removeFilters"
+                        x-on:click="$dispatch('shop-category-picked', { group: null })"
                         @class([
-                            'flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-sm font-bold transition-colors',
-                            'bg-orange-500 text-white' => ! $search && ! $selectedTypeId && ! $selectedGenderId,
-                            'text-heading-400 hover:bg-surface-500' => $search || $selectedTypeId || $selectedGenderId,
+                            'flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-sm font-bold transition-colors border-b border-border-400',
+                            'bg-orange-500 text-white' => ! $search && ! $selectedTypeId && ! $selectedGenderId && ! $categoryFilter,
+                            'text-heading-400 hover:bg-surface-500' => $search || $selectedTypeId || $selectedGenderId || $categoryFilter,
                         ])
-                        aria-pressed="{{ !$search && !$selectedTypeId && !$selectedGenderId ? 'true' : 'false' }}"
+                        aria-pressed="{{ !$search && !$selectedTypeId && !$selectedGenderId && !$categoryFilter ? 'true' : 'false' }}"
                     >
                         <span>Tutti i prodotti</span>
                     </button>
@@ -111,10 +112,11 @@
                         :types="$accessoryTypes"
                         :selected-type-id="$selectedTypeId"
                         :selected-gender-id="$selectedGenderId"
+                        :default-open="$categoryFilter === 'm'"
                     />
                 </div>
 
-                @if ($selectedTypeId || $selectedGenderId || $search)
+                @if ($selectedTypeId || $selectedGenderId || $categoryFilter || $search)
                     <button
                         type="button"
                         wire:click="removeFilters"

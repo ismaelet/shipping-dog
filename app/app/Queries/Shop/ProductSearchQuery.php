@@ -13,6 +13,7 @@ class ProductSearchQuery
         string $search = '',
         ?int $typeId = null,
         ?int $genderId = null,
+        ?string $category = null,
         string $sort = 'popular',
         bool $diversify = false,
     ): Builder {
@@ -59,6 +60,13 @@ class ProductSearchQuery
         if ($genderId) {
             $products->whereHas('type', function ($query) use ($genderId) {
                 $query->whereIn('gender_id', [$genderId, 3]);
+            });
+        }
+
+        // Filter by product type category
+        if ($category) {
+            $products->whereHas('type', function ($query) use ($category) {
+                $query->where('category', $category);
             });
         }
 

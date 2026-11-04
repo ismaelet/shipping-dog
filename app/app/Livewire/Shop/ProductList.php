@@ -25,6 +25,9 @@ class ProductList extends Component
     #[Url(as: 'gender')]
     public ?int $selectedGenderId = null;
 
+    #[Url(as: 'category')]
+    public ?string $categoryFilter = null;
+
     #[Url]
     public ?string $sort = null;
 
@@ -56,6 +59,7 @@ class ProductList extends Component
             $sort === 'popular' &&
             ! $this->selectedTypeId &&
             ! $this->selectedGenderId &&
+            ! $this->categoryFilter &&
             trim($this->search) === '';
 
         // Filtered products
@@ -64,6 +68,7 @@ class ProductList extends Component
             search: trim($this->search),
             typeId: $this->selectedType?->id,
             genderId: $this->selectedGender?->id,
+            category: $this->categoryFilter,
             sort: $sort,
             diversify: $shouldDiversify,
         );
@@ -111,6 +116,7 @@ class ProductList extends Component
 
         $this->selectedTypeId = $typeId;
         $this->selectedGenderId = $genderId;
+        $this->categoryFilter = null;
 
         $this->resolveFilters();
         $this->resetPage();
@@ -136,6 +142,7 @@ class ProductList extends Component
         $this->search = '';
         $this->selectedTypeId = null;
         $this->selectedGenderId = null;
+        $this->categoryFilter = null;
 
         $this->resolveFilters();
         $this->resetPage();
@@ -148,6 +155,11 @@ class ProductList extends Component
 
     private function resolveFilters(): void
     {
+        // Only the accessories category can be filtered by URL
+        if ($this->categoryFilter !== 'm') {
+            $this->categoryFilter = null;
+        }
+
         $this->selectedType = $this->selectedTypeId
             ? ProductType::find($this->selectedTypeId)
             : null;
