@@ -8,18 +8,19 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class NotSeller {
+class NotSeller
+{
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next): Response|RedirectResponse
+    {
+        $seller = Auth::user()?->seller;
 
-	/**
-	 * Handle an incoming request.
-	 */
-	public function handle(Request $request, Closure $next): Response|RedirectResponse {
-		$seller = Auth::user()?->seller;
+        if ($seller) {
+            return redirect()->route('seller.show', ['seller' => $seller]);
+        }
 
-		if ($seller) {
-			return redirect()->route('seller.show', ['seller' => $seller]);
-		}
-
-		return $next($request);
-	}
+        return $next($request);
+    }
 }

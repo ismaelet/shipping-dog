@@ -12,8 +12,8 @@ use Illuminate\Support\Collection as SupportCollection;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class ProductLog extends Component {
-
+class ProductLog extends Component
+{
     /**
      * Property: The orders collection
      */
@@ -52,7 +52,8 @@ class ProductLog extends Component {
     /**
      * Lifecycle hook: Mount the component
      */
-    public function mount() {
+    public function mount()
+    {
         $this->firstOrder = Order::find(
             Configuration::where('name', 'product_log_start_from')->value('value')
         );
@@ -63,7 +64,8 @@ class ProductLog extends Component {
     /**
      * Lifecycle hook: Render the component
      */
-    public function render() {
+    public function render()
+    {
         return view('livewire.admin.product-log', [
             'designGroups' => $this->getDesignGroups(),
             'productGroups' => $this->getProductGroups(),
@@ -74,7 +76,8 @@ class ProductLog extends Component {
      * Event handler: Handle 'firstOrderUpdated' event
      */
     #[On('firstOrderUpdated')]
-    public function onFirstOrderUpdated(array $data): void {
+    public function onFirstOrderUpdated(array $data): void
+    {
         $this->firstOrder = Order::find($data['first_order_id'] ?? null);
 
         $this->loadOrderItems();
@@ -84,7 +87,8 @@ class ProductLog extends Component {
      * Event handler: Handle 'cleanOrderLog' event
      */
     #[On('cleanOrderLog')]
-    public function onCleanOrderLog(): void {
+    public function onCleanOrderLog(): void
+    {
         $this->orderItems = null;
         $this->inventoryItems = null;
     }
@@ -93,7 +97,8 @@ class ProductLog extends Component {
      * Event handler: Handle 'includeReadyUpdated' event
      */
     #[On('includeReadyUpdated')]
-    public function onIncludeReadyUpdated(array $data): void {
+    public function onIncludeReadyUpdated(array $data): void
+    {
         $this->showAll = (bool) $data['include_ready'];
 
         $this->loadOrderItems();
@@ -103,7 +108,8 @@ class ProductLog extends Component {
      * Event handler: Handle 'showPrintedUpdated' event
      */
     #[On('showPrintedUpdated')]
-    public function onShowPrintedUpdated(array $data): void {
+    public function onShowPrintedUpdated(array $data): void
+    {
         $this->showPrinted = (bool) $data['show_printed'];
 
         $this->loadOrderItems();
@@ -113,7 +119,8 @@ class ProductLog extends Component {
      * Event handler: Handle 'showInCartUpdated' event
      */
     #[On('showInCartUpdated')]
-    public function onShowInCartUpdated(array $data): void {
+    public function onShowInCartUpdated(array $data): void
+    {
         $this->showInCart = (bool) $data['show_in_cart'];
 
         $this->loadOrderItems();
@@ -122,8 +129,9 @@ class ProductLog extends Component {
     /**
      * Helper method: Load orders from the database
      */
-    protected function loadOrderItems(): void {
-        if (!$this->firstOrder) {
+    protected function loadOrderItems(): void
+    {
+        if (! $this->firstOrder) {
             $this->orderItems = null;
             $this->inventoryItems = null;
 
@@ -166,7 +174,7 @@ class ProductLog extends Component {
                 'order.shipping_method',
             ]);
 
-        if (!$this->showAll) {
+        if (! $this->showAll) {
             $query->where('orders.status', EcommerceHelper::statusFromTag('confirmed'));
         }
 
@@ -184,8 +192,9 @@ class ProductLog extends Component {
     /**
      * Helper method: Apply filters for printed and in-cart items
      */
-    protected function applyPrintedAndCartFilters(Builder $query): void {
-        if (!$this->showPrinted && !$this->showInCart) {
+    protected function applyPrintedAndCartFilters(Builder $query): void
+    {
+        if (! $this->showPrinted && ! $this->showInCart) {
             $query->where(function ($query) {
                 $query
                     ->where('order_items.is_printed', false)
@@ -207,25 +216,28 @@ class ProductLog extends Component {
     /**
      * Helper method: Check if there are order items
      */
-    public function hasOrderItems(): bool {
+    public function hasOrderItems(): bool
+    {
         return $this->orderItems?->isNotEmpty() ?? false;
     }
 
     /**
      * Helper method: Check if there are inventory items
      */
-    public function hasInventoryItems(): bool {
+    public function hasInventoryItems(): bool
+    {
         return $this->inventoryItems?->isNotEmpty() ?? false;
     }
 
     /**
      * Helper method: Get design groups for the view
-     * 
+     *
      * Groups order items by seller and then by design
      */
-    protected function getDesignGroups(): SupportCollection {
+    protected function getDesignGroups(): SupportCollection
+    {
         return collect($this->orderItems ?? [])
-            ->filter(fn(OrderItem $item) => $item->seller)
+            ->filter(fn (OrderItem $item) => $item->seller)
             ->groupBy(function (OrderItem $item) {
                 if ($item->isFree()) {
                     return 'free';
@@ -235,7 +247,7 @@ class ProductLog extends Component {
                     return 'discounted';
                 }
 
-                return 'seller-' . $item->seller_id;
+                return 'seller-'.$item->seller_id;
             })
             ->map(function (SupportCollection $sellerItems, string $groupKey) {
                 if ($groupKey === 'free') {
@@ -265,12 +277,13 @@ class ProductLog extends Component {
 
     /**
      * Helper method: Get designs for a specific seller
-     * 
+     *
      * Groups order items by design for a given seller
      */
-    protected function getDesignsForSeller(SupportCollection $sellerItems): SupportCollection {
+    protected function getDesignsForSeller(SupportCollection $sellerItems): SupportCollection
+    {
         return $sellerItems
-            ->groupBy(fn(OrderItem $item) => $item->design_id ?? 'custom')
+            ->groupBy(fn (OrderItem $item) => $item->design_id ?? 'custom')
             ->map(function (SupportCollection $designItems) {
                 $design = $designItems->first()?->design;
 
@@ -286,12 +299,13 @@ class ProductLog extends Component {
 
     /**
      * Helper method: Get product groups for the view
-     * 
+     *
      * Groups order items by product type, then by color and size
      */
-    protected function getProductGroups(): SupportCollection {
+    protected function getProductGroups(): SupportCollection
+    {
         return collect($this->orderItems ?? [])
-            ->filter(fn(OrderItem $item) => $item->type)
+            ->filter(fn (OrderItem $item) => $item->type)
             ->sortBy('type_id')
             ->groupBy('type_id')
             ->map(function (SupportCollection $typeItems) {
@@ -307,12 +321,13 @@ class ProductLog extends Component {
 
     /**
      * Helper method: Get groups of order items by type, color, size, and position
-     * 
+     *
      * Groups order items that have the same type, color, size, and position
      */
-    protected function getTypeColorSizePositionGroups(SupportCollection $items): SupportCollection {
+    protected function getTypeColorSizePositionGroups(SupportCollection $items): SupportCollection
+    {
         return $items
-            ->filter(fn(OrderItem $item) => $item->type && $item->color && $item->size)
+            ->filter(fn (OrderItem $item) => $item->type && $item->color && $item->size)
             ->sortBy([
                 ['type_id', 'asc'],
                 ['color_id', 'asc'],
@@ -348,12 +363,13 @@ class ProductLog extends Component {
 
     /**
      * Helper method: Get groups of order items by color and size
-     * 
+     *
      * Groups order items that have the same color and size
      */
-    protected function getColorSizeGroups(SupportCollection $items): SupportCollection {
+    protected function getColorSizeGroups(SupportCollection $items): SupportCollection
+    {
         return $items
-            ->filter(fn(OrderItem $item) => $item->color && $item->size)
+            ->filter(fn (OrderItem $item) => $item->color && $item->size)
             ->sortBy([
                 ['color_id', 'asc'],
                 ['size_id', 'asc'],
@@ -384,27 +400,30 @@ class ProductLog extends Component {
     /**
      * Helper method: Check if an order item is for local delivery
      */
-    protected function isLocalDelivery(OrderItem $item): bool {
+    protected function isLocalDelivery(OrderItem $item): bool
+    {
         return $item->order?->shipping_method?->isLocalDelivery() === true;
     }
 
     /**
      * Helper method: Get the suffix for local delivery
      */
-    protected function localDeliverySuffix(bool $isLocalDelivery): string {
+    protected function localDeliverySuffix(bool $isLocalDelivery): string
+    {
         return $isLocalDelivery ? ' (ritiro in sede)' : '';
     }
 
     /**
      * Helper method: Get the title for a design group
-     * 
+     *
      * If the design exists, returns "ID - Name", otherwise returns the product name or a default message
      */
-    protected function getDesignTitle(SupportCollection $items): string {
+    protected function getDesignTitle(SupportCollection $items): string
+    {
         $design = $items->first()->design;
 
         if ($design) {
-            return $design->id . ' - ' . $design->name;
+            return $design->id.' - '.$design->name;
         }
 
         return $items->first()?->product?->name ?: ' Prodotto non trovato ';

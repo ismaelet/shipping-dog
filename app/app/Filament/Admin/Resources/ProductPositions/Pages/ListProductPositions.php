@@ -2,9 +2,8 @@
 
 namespace App\Filament\Admin\Resources\ProductPositions\Pages;
 
-use Filament\Actions\CreateAction;
 use App\Filament\Admin\Resources\ProductPositions\ProductPositionResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListProductPositions extends ListRecords

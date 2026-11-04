@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller {
-
+class UserController extends Controller
+{
     /**
      * Delete the user account
      */
-    public function destroy() {
+    public function destroy()
+    {
         $user = User::find(Auth::id());
 
         if ($user) {
@@ -20,6 +21,6 @@ class UserController extends Controller {
         }
 
         return redirect()->route('login')
-            ->with('success', "Il tuo account è stato eliminato con successo.");
+            ->with('success', 'Il tuo account è stato eliminato con successo.');
     }
 }

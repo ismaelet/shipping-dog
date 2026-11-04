@@ -2,23 +2,25 @@
 
 namespace App\Models\Traits;
 
-trait Cache {
+trait Cache
+{
+    private $cache = [];
 
-	private $cache = [];
+    /**
+     * Set a value in the cache
+     */
+    private function setCache(string $key, $value): self
+    {
+        $this->cache[$key] = $value;
 
-	/**
-	 * Set a value in the cache
-	 */
-	private function setCache(string $key, $value): self {
-		$this->cache[$key] = $value;
+        return $this;
+    }
 
-		return $this;
-	}
-
-	/**
-	 * Get a value from the cache
-	 */
-	private function getCache(string $key) {
-		return $this->cache[$key] ?? null;
-	}
+    /**
+     * Get a value from the cache
+     */
+    private function getCache(string $key)
+    {
+        return $this->cache[$key] ?? null;
+    }
 }

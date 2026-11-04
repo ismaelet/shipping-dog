@@ -15,7 +15,7 @@
 ### PHP and Laravel
 
 - PHP syntax: cd app && php -l app/Http/Controllers/ExampleController.php
-- Targeted tests: cd app && php artisan test --filter=TestName
+- Tests (local, isolated `shipping_dog_test` DB on the compose MariaDB): cd app && pnpm run test:pest [--filter=TestName]
 - Blade compilation: cd app && php artisan view:cache
 - PHP formatting check: cd app && vendor/bin/pint --test
 
@@ -42,24 +42,6 @@
 
 ## Validation
 
-Run Docker commands from the repository root.
-
-```bash
-# Inspect recent logs
-docker compose logs --tail=100 app
-
-# Run targeted PHP tests
-docker compose exec -e APP_ENV=testing app php artisan test --filter=TestName
-
-# Run full PHP test suite when justified
-docker compose exec -e APP_ENV=testing app php artisan test
-
-# Build frontend assets
-cd app && pnpm build
-```
-
-- Assume containers are already running. Do not restart, rebuild, or install dependencies unnecessarily.
-- Always use `APP_ENV=testing` for PHP tests.
 - Add or update tests for new behavior, bug fixes, or meaningful logic changes when existing coverage is insufficient.
 - Prefer targeted tests before running the full suite.
 - Styling, markup-only, and documentation changes do not require new tests.

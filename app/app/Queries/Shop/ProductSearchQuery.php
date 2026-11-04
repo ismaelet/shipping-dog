@@ -6,7 +6,8 @@ use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Seller;
 use Illuminate\Database\Eloquent\Builder;
 
-class ProductSearchQuery {
+class ProductSearchQuery
+{
     public function build(
         ?Seller $seller = null,
         string $search = '',

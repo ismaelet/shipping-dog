@@ -8,54 +8,55 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class Password extends Component {
+class Password extends Component
+{
+    public User $user;
 
-	public User $user;
-	public string $current_password;
-	public string $new_password;
-	public string $new_password_confirmation;
+    public string $current_password;
 
-	/**
-	 * Initializes the component with the authenticated user's data.
-	 * 
-	 * @return void
-	 */
-	public function mount(): void {
-		$this->user = Auth::user();
-	}
+    public string $new_password;
 
-	/**
-	 * Saves the new password after validating the current password.
-	 * 
-	 * @return void
-	 */
-	public function save(): void {
-		$this->validate([
-			'current_password' => 'required|string',
-			'new_password' => 'required|string|min:8|confirmed',
-			'new_password_confirmation' => 'required|string|min:8',
-		]);
+    public string $new_password_confirmation;
 
-		if (!password_verify($this->current_password, $this->user->password)) {
-			session()->addError('current_password', 'La password attuale inserita non è corretta.');
-			return;
-		}
+    /**
+     * Initializes the component with the authenticated user's data.
+     */
+    public function mount(): void
+    {
+        $this->user = Auth::user();
+    }
 
-		$this->user->update([
-			'password' => Hash::make($this->new_password),
-		]);
+    /**
+     * Saves the new password after validating the current password.
+     */
+    public function save(): void
+    {
+        $this->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+            'new_password_confirmation' => 'required|string|min:8',
+        ]);
 
-		session()->flash('success', 'Password aggiornata con successo.');
+        if (! password_verify($this->current_password, $this->user->password)) {
+            session()->addError('current_password', 'La password attuale inserita non è corretta.');
 
-		$this->reset(['current_password', 'new_password', 'new_password_confirmation']);
-	}
+            return;
+        }
 
-	/**
-	 * Renders the password settings view.
-	 * 
-	 * @return View
-	 */
-	public function render(): View {
-		return view('livewire.user-dashboard.settings.password');
-	}
+        $this->user->update([
+            'password' => Hash::make($this->new_password),
+        ]);
+
+        session()->flash('success', 'Password aggiornata con successo.');
+
+        $this->reset(['current_password', 'new_password', 'new_password_confirmation']);
+    }
+
+    /**
+     * Renders the password settings view.
+     */
+    public function render(): View
+    {
+        return view('livewire.user-dashboard.settings.password');
+    }
 }

@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
-class NameInput extends Component {
-
+class NameInput extends Component
+{
     /**
      * Property: The seller that owns the collection.
      */
@@ -35,7 +35,8 @@ class NameInput extends Component {
     /**
      * Mount the component.
      */
-    public function mount(Seller $seller, DesignCollection $collection): void {
+    public function mount(Seller $seller, DesignCollection $collection): void
+    {
         $this->seller = $seller;
         $this->collection = $collection;
         $this->name = $collection->name;
@@ -44,7 +45,8 @@ class NameInput extends Component {
     /**
      * Update the collection name.
      */
-    public function updatedName(): void {
+    public function updatedName(): void
+    {
         $this->authorizeCollectionUpdate();
 
         $name = trim($this->name);
@@ -74,7 +76,8 @@ class NameInput extends Component {
     /**
      * Check whether the current user can update the collection.
      */
-    private function authorizeCollectionUpdate(): void {
+    private function authorizeCollectionUpdate(): void
+    {
         $canUpdate = $this->collection->user_id === $this->seller->id
             && Auth::check()
             && Auth::id() === $this->seller->user_id;
@@ -85,7 +88,8 @@ class NameInput extends Component {
     /**
      * Render the component.
      */
-    public function render() {
+    public function render()
+    {
         return view('livewire.ecommerce.seller.collection.name-input');
     }
 }

@@ -2,31 +2,29 @@
 
 namespace App\Filament\Admin\Resources\ProductTypes\RelationManagers;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\CreateAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use App\Services\Files\ProductPreviewProcessor;
-use Filament\Forms;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ViewField;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class MockupSizesRelationManager extends RelationManager {
+class MockupSizesRelationManager extends RelationManager
+{
     protected static string $relationship = 'mockup_sizes';
 
     protected static ?string $title = 'Dimensioni mockup';
 
-    public function form(Schema $schema): Schema {
+    public function form(Schema $schema): Schema
+    {
         return $schema
             ->components([
                 Section::make()->schema([
@@ -95,11 +93,12 @@ class MockupSizesRelationManager extends RelationManager {
                         ->maxValue(100),
                 ])->columns(3),
                 ViewField::make('rating')
-                    ->view('filament.forms.components.mockup-previewer')->columnSpanFull()
+                    ->view('filament.forms.components.mockup-previewer')->columnSpanFull(),
             ]);
     }
 
-    public function table(Table $table): Table {
+    public function table(Table $table): Table
+    {
         return $table
             ->recordTitleAttribute('position.name')
             ->columns([

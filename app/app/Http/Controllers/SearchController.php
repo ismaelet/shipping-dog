@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class SearchController extends Controller {
-
+class SearchController extends Controller
+{
     private const MIN_QUERY_LENGTH = 3;
 
     private const DESIGNS_PER_PAGE = 20;
@@ -22,7 +22,8 @@ class SearchController extends Controller {
 
     private const SORTS = ['relevance', 'popular', 'recent'];
 
-    public function index(Request $request): View {
+    public function index(Request $request): View
+    {
         $search = trim(mb_substr((string) $request->query('search', ''), 0, 100));
         $type = in_array($request->query('type'), self::TYPES, true) ? $request->query('type') : 'all';
         $sort = in_array($request->query('sort'), self::SORTS, true) ? $request->query('sort') : 'relevance';
@@ -34,7 +35,7 @@ class SearchController extends Controller {
         $sellerCount = 0;
 
         if ($isValid) {
-            $like = '%' . addcslashes($search, '%_\\') . '%';
+            $like = '%'.addcslashes($search, '%_\\').'%';
             $designsQuery = $this->designsQuery($search, $like);
             $sellersQuery = $this->sellersQuery($search, $like);
 
@@ -59,7 +60,7 @@ class SearchController extends Controller {
         }
 
         return view('search', [
-            'title' => 'Cerca: ' . $search,
+            'title' => 'Cerca: '.$search,
             'location' => 'search',
             'search' => $search,
             'type' => $type,
@@ -73,7 +74,8 @@ class SearchController extends Controller {
         ]);
     }
 
-    private function designsQuery(string $search, string $like): Builder {
+    private function designsQuery(string $search, string $like): Builder
+    {
         return Design::query()
             ->join('sellers', 'designs.user_id', '=', 'sellers.user_id')
             ->whereNull('sellers.deleted_at')
@@ -88,7 +90,8 @@ class SearchController extends Controller {
                 ->orWhereHas('tags', fn (Builder $tags) => $tags->where('tags', 'like', $like)));
     }
 
-    private function sortDesigns(Builder $query, string $search, string $like, string $sort): Builder {
+    private function sortDesigns(Builder $query, string $search, string $like, string $sort): Builder
+    {
         $query->select('designs.*')
             ->with('main_product.type', 'main_product.color', 'main_product.position', 'main_product.design_with_trashed', 'seller')
             ->withCount('products');
@@ -101,7 +104,7 @@ class SearchController extends Controller {
             return $query->orderByDesc('designs.created_at')->orderByDesc('designs.id');
         }
 
-        $prefix = addcslashes($search, '%_\\') . '%';
+        $prefix = addcslashes($search, '%_\\').'%';
 
         return $query
             ->orderByRaw(
@@ -112,15 +115,17 @@ class SearchController extends Controller {
             ->orderByDesc('designs.id');
     }
 
-    private function sellersQuery(string $search, string $like): Builder {
+    private function sellersQuery(string $search, string $like): Builder
+    {
         return Seller::query()
             ->where('status', true)
             ->where('hidden', false)
             ->where('name', 'like', $like);
     }
 
-    private function sortSellers(Builder $query, string $search, string $like): Builder {
-        $prefix = addcslashes($search, '%_\\') . '%';
+    private function sortSellers(Builder $query, string $search, string $like): Builder
+    {
+        $prefix = addcslashes($search, '%_\\').'%';
 
         return $query
             ->withCount(['designs' => fn (Builder $designs) => $designs->where('status', true)->where('hidden', false)])

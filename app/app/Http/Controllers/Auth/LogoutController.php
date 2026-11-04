@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class LogoutController extends Controller {
-
+class LogoutController extends Controller
+{
     /**
      * Render the logout page
      */
-    public function index() {
+    public function index()
+    {
         return view('auth.logout')
             ->with('location', 'logout')
             ->with('title', 'Logout');
@@ -19,7 +20,8 @@ class LogoutController extends Controller {
     /**
      * Logout the user
      */
-    public function logout() {
+    public function logout()
+    {
         Auth::logout();
         session()->flush();
 

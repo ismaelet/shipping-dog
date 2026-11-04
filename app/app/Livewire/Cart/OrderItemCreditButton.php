@@ -8,8 +8,8 @@ use Illuminate\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class OrderItemCreditButton extends Component {
-
+class OrderItemCreditButton extends Component
+{
     /**
      * Property: The order item ID for which the credit button is displayed
      */
@@ -33,7 +33,8 @@ class OrderItemCreditButton extends Component {
     /**
      * Lifecycle hook: Mount the component
      */
-    public function mount(int $orderItemId): void {
+    public function mount(int $orderItemId): void
+    {
         $this->orderItemId = $orderItemId;
 
         $this->loadOrderItem();
@@ -43,14 +44,16 @@ class OrderItemCreditButton extends Component {
     /**
      * Lifecycle hook: Render the component view
      */
-    public function render(): View {
+    public function render(): View
+    {
         return view('livewire.cart.order-item-credit-button');
     }
 
     /**
      * Event handler: Use the credit for the order item
      */
-    public function useCredit(): void {
+    public function useCredit(): void
+    {
         $this->loadOrderItem();
 
         if (! $this->orderItem) {
@@ -72,7 +75,8 @@ class OrderItemCreditButton extends Component {
     /**
      * Event handler: Remove the credit used for the order item
      */
-    public function removeCredit(): void {
+    public function removeCredit(): void
+    {
         $this->loadOrderItem();
 
         if (! $this->orderItem) {
@@ -95,7 +99,8 @@ class OrderItemCreditButton extends Component {
      * Event handler: Refresh the credit used when the event is dispatched
      */
     #[On('used-credit-updated')]
-    public function usedCreditUpdated(): void {
+    public function usedCreditUpdated(): void
+    {
         $this->loadOrderItem();
         $this->refreshState();
     }
@@ -103,7 +108,8 @@ class OrderItemCreditButton extends Component {
     /**
      * Helper method: Load the order item safely
      */
-    private function loadOrderItem(): void {
+    private function loadOrderItem(): void
+    {
         $this->orderItem = OrderItem::with([
             'order.coupon',
             'product',
@@ -114,7 +120,8 @@ class OrderItemCreditButton extends Component {
     /**
      * Helper method: Refresh the button state
      */
-    private function refreshState(): void {
+    private function refreshState(): void
+    {
         if (! $this->orderItem) {
             $this->usedCredit = false;
             $this->eligible = false;

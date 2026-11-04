@@ -4,8 +4,8 @@ namespace App\Models\Ecommerce;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BasePrice extends Model {
-
+class BasePrice extends Model
+{
     /**
      * Property: the primary key for the model
      */
@@ -23,6 +23,6 @@ class BasePrice extends Model {
         'type_id',
         'price',
         'gain_w',
-        'gain_c'
+        'gain_c',
     ];
 }

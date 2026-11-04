@@ -13,8 +13,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class ShippingResource extends Resource {
-
+class ShippingResource extends Resource
+{
     /**
      * The model the resource corresponds to.
      */
@@ -23,7 +23,7 @@ class ShippingResource extends Resource {
     /**
      * The icon of the resource.
      */
-    protected static string | \UnitEnum | null $navigationGroup = 'Vendite';
+    protected static string|\UnitEnum|null $navigationGroup = 'Vendite';
 
     /**
      * The label of a singular resource.
@@ -38,40 +38,45 @@ class ShippingResource extends Resource {
     /**
      * The icon of the resource
      */
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-truck';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-truck';
 
     /**
      * Get the query for the resource
      */
-    public static function getEloquentQuery(): Builder {
+    public static function getEloquentQuery(): Builder
+    {
         return self::getModel()::hasNoLabel();
     }
 
     /**
      * Get the badge value for the resource
      */
-    public static function getNavigationBadge(): ?string {
+    public static function getNavigationBadge(): ?string
+    {
         return static::getEloquentQuery()->count();
     }
 
     /**
      * Get the badge color for the resource
      */
-    public static function getNavigationBadgeColor(): ?string {
+    public static function getNavigationBadgeColor(): ?string
+    {
         return static::getNavigationBadge() > 0 ? 'primary' : 'neutral';
     }
 
     /**
      * Determine whether the resource can be created
      */
-    public static function canCreate(): bool {
+    public static function canCreate(): bool
+    {
         return false;
     }
 
     /**
      * Get the table schema for the resource
      */
-    public static function table(Table $table): Table {
+    public static function table(Table $table): Table
+    {
         return $table
 
             // The columns displayed in the table
@@ -108,7 +113,8 @@ class ShippingResource extends Resource {
     /**
      * Get the pages for the resource
      */
-    public static function getPages(): array {
+    public static function getPages(): array
+    {
         return [
             'index' => ListShippings::route('/'),
         ];

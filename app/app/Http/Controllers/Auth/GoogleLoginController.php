@@ -15,11 +15,13 @@ use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
 use Throwable;
 
-class GoogleLoginController extends Controller {
+class GoogleLoginController extends Controller
+{
     /**
      * Redirect the user to the Google authentication page.
      */
-    public function redirect(Request $request): RedirectResponse {
+    public function redirect(Request $request): RedirectResponse
+    {
         if ($request->filled('intended')) {
             $request->session()->put(
                 'url.intended',
@@ -33,7 +35,8 @@ class GoogleLoginController extends Controller {
     /**
      * Obtain the user information from Google.
      */
-    public function callback(Request $request): RedirectResponse {
+    public function callback(Request $request): RedirectResponse
+    {
         // Google returns an error when the user denies or cancels login.
         if ($request->filled('error')) {
             Log::info('Google OAuth login was cancelled or rejected.', [
@@ -50,7 +53,7 @@ class GoogleLoginController extends Controller {
         }
 
         // Do not call Socialite without an authorization code.
-        if (!$request->filled('code')) {
+        if (! $request->filled('code')) {
             return redirect()
                 ->route('login')
                 ->withErrors([
@@ -107,11 +110,11 @@ class GoogleLoginController extends Controller {
             ->orWhere('email', $email)
             ->first();
 
-        if (!$user) {
+        if (! $user) {
             $user = $this->registerUser($googleUser);
         }
 
-        if (!$user->google_id) {
+        if (! $user->google_id) {
             $this->linkGoogleAccount($user, $googleUser);
         }
 
@@ -124,8 +127,9 @@ class GoogleLoginController extends Controller {
         return redirect()->intended($intendedUrl);
     }
 
-    private function registerUser(ContractsUser $googleUser): User {
-        $user = new User();
+    private function registerUser(ContractsUser $googleUser): User
+    {
+        $user = new User;
         $user->google_id = $googleUser->getId();
         $user->name = $googleUser->getName()
             ?: $googleUser->getNickname()

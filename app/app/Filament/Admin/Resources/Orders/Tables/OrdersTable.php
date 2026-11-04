@@ -14,8 +14,10 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class OrdersTable {
-    public static function configure(Table $table): Table {
+class OrdersTable
+{
+    public static function configure(Table $table): Table
+    {
         return $table
 
             // The query that should be used to fetch records. This query
@@ -41,12 +43,12 @@ class OrdersTable {
                     ->listWithLineBreaks()
                     ->wrap()
                     ->searchable(query: function (Builder $query, $search) {
-                        $query->where('full_name', 'like', '%' . $search . '%')
-                            ->orWhere('first_name', 'like', '%' . $search . '%')
-                            ->orWhere('last_name', 'like', '%' . $search . '%')
-                            ->orWhere('address', 'like', '%' . $search . '%')
-                            ->orWhere('city', 'like', '%' . $search . '%')
-                            ->orWhere('email', 'like', '%' . $search . '%');
+                        $query->where('full_name', 'like', '%'.$search.'%')
+                            ->orWhere('first_name', 'like', '%'.$search.'%')
+                            ->orWhere('last_name', 'like', '%'.$search.'%')
+                            ->orWhere('address', 'like', '%'.$search.'%')
+                            ->orWhere('city', 'like', '%'.$search.'%')
+                            ->orWhere('email', 'like', '%'.$search.'%');
                     })
                     ->sortable(['full_name', 'first_name', 'last_name', 'address', 'email']),
 
@@ -63,10 +65,10 @@ class OrdersTable {
                         $query->whereHas('order_items', function (Builder $query) use ($search) {
                             $query
                                 ->WhereHas('product', function (Builder $query) use ($search) {
-                                    $query->where('name', 'like', '%' . $search . '%');
+                                    $query->where('name', 'like', '%'.$search.'%');
                                 })
                                 ->orWhereHas('seller', function (Builder $query) use ($search) {
-                                    $query->where('name', 'like', '%' . $search . '%');
+                                    $query->where('name', 'like', '%'.$search.'%');
                                 });
                         });
                     })
@@ -86,7 +88,7 @@ class OrdersTable {
                     ->options(
                         array_combine(
                             array_keys(config('ecommerce.order.statuses')),
-                            array_map(fn($status) => '<span style="color: var(--status-' . $status['tag'] . '-400); text-wrap: nowrap;">' . $status['label'] . '</span >', config('ecommerce.order.statuses'))
+                            array_map(fn ($status) => '<span style="color: var(--status-'.$status['tag'].'-400); text-wrap: nowrap;">'.$status['label'].'</span >', config('ecommerce.order.statuses'))
                         )
                     )
                     ->searchableOptions()
@@ -148,7 +150,7 @@ class OrdersTable {
             ->recordActions([
                 ViewAction::make()
                     ->color('info'),
-                EditAction::make()
+                EditAction::make(),
             ])
 
             // The bulk actions that should be available for the table.

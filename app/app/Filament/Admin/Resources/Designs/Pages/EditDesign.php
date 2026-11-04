@@ -2,9 +2,8 @@
 
 namespace App\Filament\Admin\Resources\Designs\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Admin\Resources\Designs\DesignResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditDesign extends EditRecord

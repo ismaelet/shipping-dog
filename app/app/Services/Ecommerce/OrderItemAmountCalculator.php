@@ -5,8 +5,8 @@ namespace App\Services\Ecommerce;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductColor;
 
-final class OrderItemAmountCalculator {
-
+final class OrderItemAmountCalculator
+{
     public function calculate(
         Product $product,
         ?ProductColor $color,

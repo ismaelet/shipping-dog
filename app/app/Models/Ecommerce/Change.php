@@ -7,45 +7,49 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Change extends Model {
+class Change extends Model
+{
+    /**
+     * The attributes that are mass assignable
+     */
+    protected $fillable = [
+        'change_request_id',
+        'old_order_item_id',
+        'new_order_item_id',
+        'old_size_id',
+        'new_size_id',
+        'is_change',
+    ];
 
-	/**
-	 * The attributes that are mass assignable
-	 */
-	protected $fillable = [
-		'change_request_id',
-		'old_order_item_id',
-		'new_order_item_id',
-		'old_size_id',
-		'new_size_id',
-		'is_change'
-	];
+    /**
+     * Get the old order that owns the change.
+     */
+    public function old_order_item(): BelongsTo
+    {
+        return $this->belongsTo(OrderItem::class, 'old_order_item_id', 'id');
+    }
 
-	/**
-	 * Get the old order that owns the change.
-	 */
-	public function old_order_item(): BelongsTo {
-		return $this->belongsTo(OrderItem::class, 'old_order_item_id', 'id');
-	}
+    /**
+     * Get the new order generated from the change
+     */
+    public function new_order_item(): BelongsTo
+    {
+        return $this->belongsTo(OrderItem::class, 'new_order_item_id', 'id');
+    }
 
-	/**
-	 * Get the new order generated from the change
-	 */
-	public function new_order_item(): BelongsTo {
-		return $this->belongsTo(OrderItem::class, 'new_order_item_id', 'id');
-	}
+    /**
+     * Get the old size of the change.
+     */
+    public function old_size(): HasOne
+    {
+        return $this->hasOne(ProductSize::class, 'id', 'old_size_id');
+    }
 
-	/**
-	 * Get the old size of the change.
-	 */
-	public function old_size(): HasOne {
-		return $this->hasOne(ProductSize::class, 'id', 'old_size_id');
-	}
-
-	/**
-	 * Get the new size of the change.
-	 */
-	public function new_size(): HasOne {
-		return $this->hasOne(ProductSize::class, 'id', 'new_size_id');
-	}
+    /**
+     * Get the new size of the change.
+     */
+    public function new_size(): HasOne
+    {
+        return $this->hasOne(ProductSize::class, 'id', 'new_size_id');
+    }
 }

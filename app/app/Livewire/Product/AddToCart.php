@@ -15,8 +15,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class AddToCart extends Component {
-
+class AddToCart extends Component
+{
     /**
      * Property: The product associated with the component
      */
@@ -56,17 +56,19 @@ class AddToCart extends Component {
     /**
      * Lifecycle hook: Render the component view
      */
-    public function render(): View {
+    public function render(): View
+    {
         return view('livewire.product.add-to-cart');
     }
 
     /**
      * Action: Add the product to the cart
      */
-    public function addToCart(): void {
+    public function addToCart(): void
+    {
         // Validate the quantity
         $this->validate([
-            'quantity' => ['required', 'integer', 'min:1', 'max:' . $this->maxQuantity],
+            'quantity' => ['required', 'integer', 'min:1', 'max:'.$this->maxQuantity],
         ]);
 
         // Create the order item
@@ -86,7 +88,8 @@ class AddToCart extends Component {
      * Event handler: Handle updates to the color option
      */
     #[On('change-color')]
-    public function updateColor(int $id): void {
+    public function updateColor(int $id): void
+    {
         $this->colorId = $id;
     }
 
@@ -94,7 +97,8 @@ class AddToCart extends Component {
      * Event handler: Handle updates to the size option
      */
     #[On('change-size')]
-    public function updateSize(int $id): void {
+    public function updateSize(int $id): void
+    {
         $this->sizeId = $id;
     }
 
@@ -102,7 +106,8 @@ class AddToCart extends Component {
      * Event handler: Handle updates to the position option
      */
     #[On('change-position')]
-    public function updatePosition(int $id): void {
+    public function updatePosition(int $id): void
+    {
         $this->positionId = $id;
     }
 
@@ -110,22 +115,24 @@ class AddToCart extends Component {
      * Event handler: Handle updates to the logo option
      */
     #[On('change-logo')]
-    public function updateLogo(int $id): void {
+    public function updateLogo(int $id): void
+    {
         $this->logoId = $id;
     }
 
     /**
      * Helper method: Create an order item for the product and add it to the cart
      */
-    private function createOrderItem(): void {
+    private function createOrderItem(): void
+    {
         // Get the cart
         $order = $this->getOrCreateOrder();
 
         // Get the selected color, or default to the first available color
         $color = $this->product->colors->firstWhere('id', $this->colorId);
 
-        if (!$color) {
-            throw new \RuntimeException('Il colore selezionato non è valido per questo prodotto. Prodotto: ' . $this->product->id . '. Colore selezionato: ' . $this->colorId);
+        if (! $color) {
+            throw new \RuntimeException('Il colore selezionato non è valido per questo prodotto. Prodotto: '.$this->product->id.'. Colore selezionato: '.$this->colorId);
         }
 
         // Check if the order item already exists in the cart
@@ -195,7 +202,8 @@ class AddToCart extends Component {
     /**
      * Helper method: Get or create the current cart
      */
-    private function getOrCreateOrder(): Order {
+    private function getOrCreateOrder(): Order
+    {
         if (cart()) {
             $order = cart();
 

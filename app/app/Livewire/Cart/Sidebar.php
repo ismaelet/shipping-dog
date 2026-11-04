@@ -9,8 +9,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class Sidebar extends Component {
-
+class Sidebar extends Component
+{
     /**
      * Property: The current cart ID
      */
@@ -40,14 +40,16 @@ class Sidebar extends Component {
     /**
      * Lifecycle hook: Initialize the component
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->loadCart();
     }
 
     /**
      * Lifecycle hook: Render the component view
      */
-    public function render(): View {
+    public function render(): View
+    {
         return view('livewire.cart.sidebar');
     }
 
@@ -55,7 +57,8 @@ class Sidebar extends Component {
      * Event handler: Update the cart when an order item is added, removed, or updated
      */
     #[On('update-cart')]
-    public function updateCart(bool $showSidebar = true): void {
+    public function updateCart(bool $showSidebar = true): void
+    {
         $this->loadCart();
 
         if ($this->quantity > 0 && $showSidebar) {
@@ -66,10 +69,11 @@ class Sidebar extends Component {
     /**
      * Helper method: Load the current cart and order items
      */
-    private function loadCart(): void {
+    private function loadCart(): void
+    {
         $cartId = cart()?->id;
 
-        if (!$cartId) {
+        if (! $cartId) {
             $this->clearCart();
 
             return;
@@ -85,7 +89,7 @@ class Sidebar extends Component {
             'order_items.type',
         ])->find($cartId);
 
-        if (!$cart) {
+        if (! $cart) {
             $this->clearCart();
 
             return;
@@ -101,7 +105,8 @@ class Sidebar extends Component {
     /**
      * Helper method: Clear the cart properties
      */
-    private function clearCart(): void {
+    private function clearCart(): void
+    {
         $this->cartId = null;
         $this->orderItems = null;
         $this->quantity = 0;

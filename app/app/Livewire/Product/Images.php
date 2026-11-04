@@ -7,8 +7,8 @@ use App\Models\Ecommerce\Product\ProductPosition;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class Images extends Component {
-
+class Images extends Component
+{
     /**
      * Property: The product instance
      */
@@ -42,7 +42,8 @@ class Images extends Component {
     /**
      * Lifecycle Method: Mount the component
      */
-    public function mount() {
+    public function mount()
+    {
         $this->selectedColorId = $this->product->color_id;
         $this->selectedPosition = $this->product->position;
         $this->previewPositionId = $this->product->position_id;
@@ -53,14 +54,16 @@ class Images extends Component {
     /**
      * Lifecycle Method: Render the component view
      */
-    public function render() {
+    public function render()
+    {
         return view('livewire.product.images');
     }
 
     /**
      * Event listener: Update preview position
      */
-    public function updatedPreviewPositionId(): void {
+    public function updatedPreviewPositionId(): void
+    {
         $this->mainImageUrl = $this->getMainImageUrl();
         $this->imagesUrls = $this->getImagesUrls();
     }
@@ -69,7 +72,8 @@ class Images extends Component {
      * Event listener: Update color
      */
     #[On('change-color')]
-    public function changeColor(int $id): void {
+    public function changeColor(int $id): void
+    {
         $this->selectedColorId = $id;
         $this->mainImageUrl = $this->getMainImageUrl();
         $this->imagesUrls = $this->getImagesUrls();
@@ -79,7 +83,8 @@ class Images extends Component {
      * Event listener: Update position
      */
     #[On('change-position')]
-    public function changePosition(int $id): void {
+    public function changePosition(int $id): void
+    {
         $this->selectedPosition = ProductPosition::find($id);
         $this->previewPositionId = $id;
         $this->mainImageUrl = $this->getMainImageUrl();
@@ -89,7 +94,8 @@ class Images extends Component {
     /**
      * Get main image URL
      */
-    public function getMainImageUrl(): string {
+    public function getMainImageUrl(): string
+    {
         if ($this->product->isCustom()) {
             $customImage = $this->product->image(
                 imageSize: 1024,
@@ -119,7 +125,8 @@ class Images extends Component {
     /**
      * Get image URLs
      */
-    public function getImagesUrls(): array {
+    public function getImagesUrls(): array
+    {
         $urls = [$this->selectedPosition->id => $this->product->image(
             imageSize: 480,
             color: $this->selectedColorId,
@@ -146,6 +153,7 @@ class Images extends Component {
 
                 if ($customImage) {
                     $urls[$position->id] = $customImage;
+
                     continue;
                 }
             }

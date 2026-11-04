@@ -5,13 +5,14 @@ namespace App\Services\Files;
 use App\Models\Ecommerce\Design;
 use Illuminate\Support\Facades\Storage;
 
-class DesignPreviewGenerator {
-
-    public function generate(Design $design): void {
+class DesignPreviewGenerator
+{
+    public function generate(Design $design): void
+    {
         $disk = Storage::disk('public');
-        $sourcePath = 'designs/' . $design->id . '.png';
+        $sourcePath = 'designs/'.$design->id.'.png';
 
-        if (!$disk->exists($sourcePath)) {
+        if (! $disk->exists($sourcePath)) {
             return;
         }
 
@@ -41,9 +42,9 @@ class DesignPreviewGenerator {
             );
 
             $disk->makeDirectory('designs/previews');
-            $previewPath = 'designs/previews/' . $design->id . '.webp';
+            $previewPath = 'designs/previews/'.$design->id.'.webp';
 
-            if (!imagewebp($preview, $disk->path($previewPath), 90)) {
+            if (! imagewebp($preview, $disk->path($previewPath), 90)) {
                 return;
             }
 
@@ -58,7 +59,7 @@ class DesignPreviewGenerator {
 
             try {
                 imagecopyresampled($thumbnail, $encodedPreview, 0, 0, 0, 0, 400, 400, 1024, 1024);
-                imagewebp($thumbnail, $disk->path('designs/previews/' . $design->id . '_m.webp'), 80);
+                imagewebp($thumbnail, $disk->path('designs/previews/'.$design->id.'_m.webp'), 80);
             } finally {
                 imagedestroy($thumbnail);
                 imagedestroy($encodedPreview);

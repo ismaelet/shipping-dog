@@ -9,8 +9,8 @@ use Illuminate\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class WishlistButton extends Component {
-
+class WishlistButton extends Component
+{
     /**
      * Property: The product to wishlist
      */
@@ -39,7 +39,8 @@ class WishlistButton extends Component {
     /**
      * Lifecycle method: Mount the component
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->colorId = $this->product->color_id;
         $this->positionId = $this->product->position_id;
 
@@ -49,19 +50,21 @@ class WishlistButton extends Component {
     /**
      * Lifecycle method: Render the component
      */
-    public function render(): View {
+    public function render(): View
+    {
         return view('livewire.wishlist-button');
     }
 
     /**
      * Action: Add the product to the wishlist
      */
-    public function store(): void {
+    public function store(): void
+    {
         $userId = $this->userId();
         $colorId = $this->normalizeId($this->colorId);
         $positionId = $this->normalizeId($this->positionId);
 
-        if (!$userId || !$colorId || !$positionId) {
+        if (! $userId || ! $colorId || ! $positionId) {
             return;
         }
 
@@ -79,12 +82,13 @@ class WishlistButton extends Component {
     /**
      * Action: Remove the product from the wishlist
      */
-    public function destroy(): void {
+    public function destroy(): void
+    {
         $userId = $this->userId();
         $colorId = $this->normalizeId($this->colorId);
         $positionId = $this->normalizeId($this->positionId);
 
-        if (!$userId || !$colorId || !$positionId) {
+        if (! $userId || ! $colorId || ! $positionId) {
             return;
         }
 
@@ -102,7 +106,8 @@ class WishlistButton extends Component {
      * Event listener: Update color
      */
     #[On('change-color')]
-    public function changeColor(int|string|array|null $id): void {
+    public function changeColor(int|string|array|null $id): void
+    {
         $this->colorId = $id;
         $this->refreshWishlistState();
     }
@@ -111,7 +116,8 @@ class WishlistButton extends Component {
      * Event listener: Update position
      */
     #[On('change-position')]
-    public function changePosition(int|string|array|null $id): void {
+    public function changePosition(int|string|array|null $id): void
+    {
         $this->positionId = $id;
         $this->refreshWishlistState();
     }
@@ -119,12 +125,13 @@ class WishlistButton extends Component {
     /**
      * Helper method: Refresh the wishlist state based on the current color and position
      */
-    private function refreshWishlistState(): void {
+    private function refreshWishlistState(): void
+    {
         $userId = $this->userId();
         $colorId = $this->normalizeId($this->colorId);
         $positionId = $this->normalizeId($this->positionId);
 
-        if (!$userId || !$colorId || !$positionId) {
+        if (! $userId || ! $colorId || ! $positionId) {
             $this->wishlistRecordId = null;
             $this->wishlisted = false;
 
@@ -143,14 +150,16 @@ class WishlistButton extends Component {
     /**
      * Helper method: Get the authenticated user ID
      */
-    private function userId(): ?int {
+    private function userId(): ?int
+    {
         return Auth::id();
     }
 
     /**
      * Helper method: Normalize an ID
      */
-    private function normalizeId(int|string|array|null $value): ?int {
+    private function normalizeId(int|string|array|null $value): ?int
+    {
         if (is_array($value)) {
             $value = $value['id'] ?? null;
         }

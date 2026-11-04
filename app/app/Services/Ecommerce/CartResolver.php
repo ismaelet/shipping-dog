@@ -6,12 +6,13 @@ use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
 use Illuminate\Support\Facades\Auth;
 
-class CartResolver {
-
+class CartResolver
+{
     /**
      * Get the active cart.
      */
-    public function cart(): ?Order {
+    public function cart(): ?Order
+    {
         if (Auth::check()) {
             return Auth::user()->cart;
         }
@@ -30,7 +31,8 @@ class CartResolver {
     /**
      * Get the ID of the active cart.
      */
-    public function cartId(): ?int {
+    public function cartId(): ?int
+    {
         return $this->cart()?->id;
     }
 }

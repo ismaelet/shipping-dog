@@ -5,11 +5,13 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
-    public function up(): void {
+    public function up(): void
+    {
         // Set the logo_id to 0 for all the order items where the logo_id is less than 0
         DB::table('order_items')->where('logo_id', '<', 0)->update(['logo_id' => 0]);
 
@@ -28,7 +30,8 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down(): void {
+    public function down(): void
+    {
         //
     }
 };

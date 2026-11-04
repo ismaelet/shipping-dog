@@ -4,8 +4,8 @@ namespace App\Models\Ecommerce\Product;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProductDescription extends Model {
-
+class ProductDescription extends Model
+{
     /**
      * Property: The primary key associated with the table
      */

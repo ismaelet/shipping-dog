@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class Community extends Controller {
-
+class Community extends Controller
+{
     /**
      * Display the community page.
-     *
-     * @param Request $request
-     * @return View
      */
-    public function index(Request $request): View {
+    public function index(Request $request): View
+    {
         return view('community', []);
     }
 }

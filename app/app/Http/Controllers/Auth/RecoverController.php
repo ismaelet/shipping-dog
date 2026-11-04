@@ -13,14 +13,13 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class RecoverController extends Controller {
-
+class RecoverController extends Controller
+{
     /**
      * Render the recover page
-     * 
-     * @return View
      */
-    public function index(): View {
+    public function index(): View
+    {
         return view('auth.forgot-password')
             ->with('location', 'recover')
             ->with('title', 'Recupero accesso');
@@ -28,11 +27,9 @@ class RecoverController extends Controller {
 
     /**
      * Process the request
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
-    public function store(Request $request): RedirectResponse {
+    public function store(Request $request): RedirectResponse
+    {
         $request->validate([
             'email' => 'required|email',
         ]);
@@ -44,7 +41,6 @@ class RecoverController extends Controller {
         return $status === Password::ResetLinkSent
             ? back()->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
-
 
         // // Process the request
         // $email = $request->email;

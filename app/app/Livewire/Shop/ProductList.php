@@ -12,8 +12,8 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ProductList extends Component {
-
+class ProductList extends Component
+{
     use WithPagination;
 
     #[Url]
@@ -38,22 +38,24 @@ class ProductList extends Component {
 
     public ?string $selectedCategory = null;
 
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->resolveFilters();
         $this->resolveSort();
     }
 
-    public function render(ProductSearchQuery $productSearch) {
+    public function render(ProductSearchQuery $productSearch)
+    {
         $this->resolveFilters();
 
-        $sort = ($this->sort === 'custom' && !$this->seller)
+        $sort = ($this->sort === 'custom' && ! $this->seller)
             ? 'popular'
             : ($this->sort ?? 'popular');
 
         $shouldDiversify =
             $sort === 'popular' &&
-            !$this->selectedTypeId &&
-            !$this->selectedGenderId &&
+            ! $this->selectedTypeId &&
+            ! $this->selectedGenderId &&
             trim($this->search) === '';
 
         // Filtered products
@@ -76,7 +78,7 @@ class ProductList extends Component {
         $totalProducts = Cache::remember(
             $cacheKey,
             now()->addMinutes(10),
-            fn() => $productSearch->build(
+            fn () => $productSearch->build(
                 seller: $this->seller,
                 search: '',
                 typeId: null,
@@ -97,7 +99,8 @@ class ProductList extends Component {
     }
 
     #[On('selectType')]
-    public function selectType(?int $typeId, ?int $genderId): void {
+    public function selectType(?int $typeId, ?int $genderId): void
+    {
         if (
             $typeId === $this->selectedTypeId &&
             $genderId === $this->selectedGenderId
@@ -113,12 +116,13 @@ class ProductList extends Component {
         $this->resetPage();
     }
 
-    public function changeSort(string $sort): void {
+    public function changeSort(string $sort): void
+    {
         $allowedSorts = $this->seller
             ? ['new', 'popular', 'custom']
             : ['new', 'popular'];
 
-        if (!in_array($sort, $allowedSorts, true)) {
+        if (! in_array($sort, $allowedSorts, true)) {
             return;
         }
 
@@ -127,7 +131,8 @@ class ProductList extends Component {
     }
 
     #[On('clearFilters')]
-    public function removeFilters(): void {
+    public function removeFilters(): void
+    {
         $this->search = '';
         $this->selectedTypeId = null;
         $this->selectedGenderId = null;
@@ -136,11 +141,13 @@ class ProductList extends Component {
         $this->resetPage();
     }
 
-    public function updatedSearch(): void {
+    public function updatedSearch(): void
+    {
         $this->resetPage();
     }
 
-    private function resolveFilters(): void {
+    private function resolveFilters(): void
+    {
         $this->selectedType = $this->selectedTypeId
             ? ProductType::find($this->selectedTypeId)
             : null;
@@ -151,13 +158,14 @@ class ProductList extends Component {
             ? ProductGender::find($this->selectedGenderId)
             : null;
 
-        if ($this->selectedType && !$this->selectedGender) {
+        if ($this->selectedType && ! $this->selectedGender) {
             $this->selectedGender = $this->selectedType->gender;
         }
     }
 
-    private function resolveSort(): void {
-        if (!$this->sort && $this->seller) {
+    private function resolveSort(): void
+    {
+        if (! $this->sort && $this->seller) {
             $this->sort = [
                 'new',
                 'popular',
@@ -169,7 +177,7 @@ class ProductList extends Component {
             ? ['new', 'popular', 'custom']
             : ['new', 'popular'];
 
-        if (!in_array($this->sort, $allowedSorts, true)) {
+        if (! in_array($this->sort, $allowedSorts, true)) {
             $this->sort = 'popular';
         }
     }
@@ -199,7 +207,8 @@ class ProductList extends Component {
         return $query->orderBy('sort')->get();
     }
 
-    public function applySearch(): void {
+    public function applySearch(): void
+    {
         $this->resetPage();
     }
 }

@@ -2,24 +2,23 @@
 
 namespace App\Filament\Admin\Resources\Shippings\Actions;
 
-use Filament\Actions\Action;
 use App\Helpers\EcommerceHelper;
 use App\Models\Ecommerce\Order;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
 /**
  * RemoveLabeling action.
- * 
+ *
  * Set the status of an order to awaiting-shipping, skipping the labeling process.
  */
-class RemoveLabeling {
-
+class RemoveLabeling
+{
     /**
      * Create a new action.
-     *
-     * @return Action
      */
-    public static function make(): Action {
+    public static function make(): Action
+    {
         return Action::make('already-shipped')
             ->label('Cancella')
             ->requiresConfirmation()

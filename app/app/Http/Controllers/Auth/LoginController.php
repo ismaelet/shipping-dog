@@ -12,12 +12,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
-class LoginController extends Controller {
-
+class LoginController extends Controller
+{
     /**
      * Display the login view
      */
-    public function index(): View {
+    public function index(): View
+    {
         return view('auth.login')
             ->with('location', 'login')
             ->with('title', 'Login');
@@ -26,7 +27,8 @@ class LoginController extends Controller {
     /**
      * Handle an authentication attempt
      */
-    public function auth(Request $request): RedirectResponse {
+    public function auth(Request $request): RedirectResponse
+    {
         $credentials = $request->validate([
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
@@ -69,7 +71,8 @@ class LoginController extends Controller {
         ])->onlyInput('email');
     }
 
-    private function isMD5(string $hash): bool {
+    private function isMD5(string $hash): bool
+    {
         return (bool) preg_match('/^[a-f0-9]{32}$/i', $hash);
     }
 
@@ -79,7 +82,8 @@ class LoginController extends Controller {
      * If the user does not have a cart, assign the guest cart to the user by updating the user_id of the guest cart to the authenticated user's id.
      * If there is no guest cart no action is taken.
      */
-    public static function mergeGuestCart(): void {
+    public static function mergeGuestCart(): void
+    {
         $sessionOrderId = session('cart_id');
 
         if ($sessionOrderId) {

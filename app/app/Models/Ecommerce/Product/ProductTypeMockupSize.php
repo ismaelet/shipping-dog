@@ -5,8 +5,8 @@ namespace App\Models\Ecommerce\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProductTypeMockupSize extends Model {
-
+class ProductTypeMockupSize extends Model
+{
     /**
      * The table associated with the model.
      *
@@ -16,7 +16,7 @@ class ProductTypeMockupSize extends Model {
 
     /**
      * The attributes that are mass assignable.
-     * 
+     *
      * @var array<int, string>
      */
     protected $fillable = [
@@ -28,25 +28,27 @@ class ProductTypeMockupSize extends Model {
         'pos_y_def',
         'siz_x_max',
         'siz_x_def',
-        'siz_y_max'
+        'siz_y_max',
     ];
 
     /**
      * Get the type of the mockup
      */
-    public function type(): BelongsTo {
+    public function type(): BelongsTo
+    {
         return $this->belongsTo(ProductType::class, 'type_id', 'id');
     }
 
-    public function position(): BelongsTo {
+    public function position(): BelongsTo
+    {
         return $this->belongsTo(ProductPosition::class, 'position_id', 'id');
     }
-
 
     /**
      * Get mockup by type ID
      */
-    public static function firstByTypeId(int $type_id, ?int $position_id = null): ?self {
+    public static function firstByTypeId(int $type_id, ?int $position_id = null): ?self
+    {
         if ($position_id) {
             return self::where('type_id', $type_id)->where('position_id', $position_id)->first();
         } else {
@@ -59,20 +61,22 @@ class ProductTypeMockupSize extends Model {
     /**
      * Get the clothing image path
      */
-    public function clothingImage(?int $color_id = null, ?int $position_id = null): string {
+    public function clothingImage(?int $color_id = null, ?int $position_id = null): string
+    {
         $color_id = $color_id ?: $this->type->colorCollection()->first()->id;
         $position_id = $position_id ?: 1;
         $color = ProductColor::find($color_id);
         $position = ProductPosition::find($position_id);
-        $imageSlug = $color->tag . '-' . $position->basicPositionId();
+        $imageSlug = $color->tag.'-'.$position->basicPositionId();
 
-        return '/product_types/mockups/' . $this->type->tag . '/' . $imageSlug . '.webp';
+        return '/product_types/mockups/'.$this->type->tag.'/'.$imageSlug.'.webp';
     }
 
     /**
      * Get the overlay image path
      */
-    public function overlayImage(): ?string {
+    public function overlayImage(): ?string
+    {
         $file = str_replace('.', '-det.', $this->clothingImage());
         $serverFile = FileHelper::storagePath($file);
 

@@ -9,12 +9,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class PricingController extends Controller {
-
+class PricingController extends Controller
+{
     /**
      * Display the pricing page for the seller.
      */
-    public function index(): View {
+    public function index(): View
+    {
         $seller = Auth::user()->seller;
 
         $clothing = ProductType::where('category', 'c')->where('hidden', false)->with('gender', 'price')->orderBy('id')->get();
@@ -30,7 +31,7 @@ class PricingController extends Controller {
                 $baseColor = (float) $price->price - $gainColor / 0.75;
 
                 return [
-                    'name' => trim($type->name . ' ' . ($includeGender ? ($type->gender?->name ?? '') : '')),
+                    'name' => trim($type->name.' '.($includeGender ? ($type->gender?->name ?? '') : '')),
                     'tag' => $type->tag,
                     'price' => (float) $price->price,
                     'gainWhite' => $gainWhite,
@@ -61,15 +62,20 @@ class PricingController extends Controller {
         ]);
     }
 
-    public function update(): RedirectResponse {
+    public function update(): RedirectResponse
+    {
         $seller = Auth::user()->seller;
 
         foreach (ProductType::where('hidden', false)->with('price')->get() as $type) {
-            $price = request()->input('price_' . $type->tag);
-            if ($price === null) continue;
+            $price = request()->input('price_'.$type->tag);
+            if ($price === null) {
+                continue;
+            }
 
             $row_price = $seller->prices()->where('type_id', $type->id)->first() ?? $type->price;
-            if (! $row_price) continue;
+            if (! $row_price) {
+                continue;
+            }
 
             $price_old = $row_price->price;
             $gain_w_old = $row_price->gain_w;
@@ -93,7 +99,7 @@ class PricingController extends Controller {
         }
 
         return redirect()->back()->with([
-            'success' => 'I prezzi sono stati aggiornati con successo!'
+            'success' => 'I prezzi sono stati aggiornati con successo!',
         ]);
     }
 }

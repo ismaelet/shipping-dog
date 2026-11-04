@@ -7,8 +7,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class NameDisplay extends Component {
-
+class NameDisplay extends Component
+{
     /**
      * Property: The collection.
      */
@@ -23,7 +23,8 @@ class NameDisplay extends Component {
     /**
      * Mount the component.
      */
-    public function mount(DesignCollection $collection): void {
+    public function mount(DesignCollection $collection): void
+    {
         $this->collection = $collection;
         $this->name = $collection->name;
     }
@@ -32,14 +33,16 @@ class NameDisplay extends Component {
      * Update the displayed collection name.
      */
     #[On('collection-name-updated')]
-    public function updateName(string $name): void {
+    public function updateName(string $name): void
+    {
         $this->name = $name;
     }
 
     /**
      * Render the component.
      */
-    public function render() {
+    public function render()
+    {
         return view('livewire.ecommerce.seller.collection.name-display');
     }
 }

@@ -2,22 +2,22 @@
 
 use App\Models\Ecommerce\Product;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
-    public function up(): void {
+    public function up(): void
+    {
         $productsWithNoColors = Product::doesntHave('colors')
             ->with('type', 'type.colors')
             ->get();
 
         $productsWithNoColors->each(function (Product $product) {
-            if (!$product->type) {
+            if (! $product->type) {
                 $product->delete();
+
                 return;
             }
 
@@ -36,7 +36,8 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down(): void {
+    public function down(): void
+    {
         //
     }
 };

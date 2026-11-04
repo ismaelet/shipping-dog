@@ -1,5 +1,5 @@
 # BASE IMAGE
-FROM dunglas/frankenphp:1-php8.4 AS base
+FROM dunglas/frankenphp:1-php8.5 AS base
 
 RUN install-php-extensions \
     mysqli \

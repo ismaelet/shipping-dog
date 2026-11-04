@@ -4,22 +4,25 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
-	/**
-	 * Run the migrations.
-	 */
-	public function up(): void {
-		Schema::table('sys_payment', function (Blueprint $table) {
-			$table->rename('payment_methods');
-		});
-	}
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('sys_payment', function (Blueprint $table) {
+            $table->rename('payment_methods');
+        });
+    }
 
-	/**
-	 * Reverse the migrations.
-	 */
-	public function down(): void {
-		Schema::table('payment_methods', function (Blueprint $table) {
-			$table->rename('sys_payment');
-		});
-	}
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('payment_methods', function (Blueprint $table) {
+            $table->rename('sys_payment');
+        });
+    }
 };

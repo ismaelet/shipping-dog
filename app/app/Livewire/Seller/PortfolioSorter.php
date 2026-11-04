@@ -12,9 +12,11 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
-class PortfolioSorter extends Component {
+class PortfolioSorter extends Component
+{
     #[Computed]
-    public function designs(): Collection {
+    public function designs(): Collection
+    {
         return Design::query()
             ->where('user_id', Auth::id())
             ->withCount('products')
@@ -24,7 +26,8 @@ class PortfolioSorter extends Component {
     }
 
     #[Computed]
-    public function customProducts(): Collection {
+    public function customProducts(): Collection
+    {
         return $this->customProductsQuery()
             ->with('type', 'color', 'position', 'design_with_trashed')
             ->orderBy('sort')
@@ -32,7 +35,8 @@ class PortfolioSorter extends Component {
             ->get();
     }
 
-    private function customProductsQuery(): Builder {
+    private function customProductsQuery(): Builder
+    {
         return Product::query()
             ->where('user_id', Auth::id())
             ->where(function (Builder $query) {
@@ -45,7 +49,8 @@ class PortfolioSorter extends Component {
             });
     }
 
-    public function saveOrder(string $type, array $ids): void {
+    public function saveOrder(string $type, array $ids): void
+    {
         validator(
             ['type' => $type, 'ids' => $ids],
             [
@@ -63,13 +68,13 @@ class PortfolioSorter extends Component {
             $allowedIds = (clone $query)
                 ->lockForUpdate()
                 ->pluck('id')
-                ->map(fn($id) => (int) $id)
+                ->map(fn ($id) => (int) $id)
                 ->sort()
                 ->values()
                 ->all();
 
             $submittedIds = collect($ids)
-                ->map(fn($id) => (int) $id)
+                ->map(fn ($id) => (int) $id)
                 ->sort()
                 ->values()
                 ->all();
@@ -88,7 +93,8 @@ class PortfolioSorter extends Component {
         });
     }
 
-    public function render() {
+    public function render()
+    {
         return view('livewire.seller.portfolio-sorter', [
             'designs' => $this->designs,
             'customProducts' => $this->customProducts,

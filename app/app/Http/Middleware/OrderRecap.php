@@ -9,16 +9,17 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class OrderRecap {
-
+class OrderRecap
+{
     /**
      * Handle an incoming request.
      */
-    public function handle(Request $request, Closure $next): Response|RedirectResponse {
+    public function handle(Request $request, Closure $next): Response|RedirectResponse
+    {
         $order = $request->order;
 
         // If the order is not found, redirect to the find route
-        if (!$order) {
+        if (! $order) {
             return to_route('orders.find');
         }
 

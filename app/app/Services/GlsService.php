@@ -10,33 +10,36 @@ use Illuminate\Support\Facades\Log;
 use stdClass;
 use Throwable;
 
-class GlsService {
-
+class GlsService
+{
     /**
      * Endpoints
      */
     private const ADD_PARCEL_ENDPOINT = 'https://labelservice.gls-italy.com/ilswebservice.asmx/AddParcel';
+
     private const CLOSE_WORK_DAY_BY_SHIPMENT_NUMBER_ENDPOINT = 'https://labelservice.gls-italy.com/ilsWebService.asmx/CloseWorkDayByShipmentNumber';
+
     private const TRACK_PARCEL_ENDPOINT = 'https://infoweb.gls-italy.com/XML/get_xml_track.php';
 
     /**
      * Add Parcel
      */
-    public function addParcels(Collection|Order $orders): bool {
+    public function addParcels(Collection|Order $orders): bool
+    {
         $orders = $this->normalizeOrders($orders)->load('address');
 
         // Set the body
         $body = [
-            'XMLInfoParcel' => "<Info>
-				" . $this->payloadHeader() . "
-				" . $this->addParcelsData($orders) . "
-			</Info>"
+            'XMLInfoParcel' => '<Info>
+				'.$this->payloadHeader().'
+				'.$this->addParcelsData($orders).'
+			</Info>',
         ];
 
         // Send the request
         $response = $this->sendRequest(self::ADD_PARCEL_ENDPOINT, $body);
 
-        if (!$response) {
+        if (! $response) {
             return false;
         }
 
@@ -47,24 +50,25 @@ class GlsService {
     /**
      * Transmit Parcel
      */
-    public function transmitParcels(Collection|Order $orders): array {
+    public function transmitParcels(Collection|Order $orders): array
+    {
         $orders = $this->normalizeOrders($orders)->load('address');
 
         // Set body
         $body = [
-            '_xmlRequest' => "<Info>
-			" . $this->payloadHeader() . "
-			" . $this->transmitParcelsData($orders) . "
-		</Info>"
+            '_xmlRequest' => '<Info>
+			'.$this->payloadHeader().'
+			'.$this->transmitParcelsData($orders).'
+		</Info>',
         ];
 
         // Send the request
         $response = $this->sendRequest(self::CLOSE_WORK_DAY_BY_SHIPMENT_NUMBER_ENDPOINT, $body);
 
-        if (!$response) {
+        if (! $response) {
             return [
                 'success' => false,
-                'error' => 'Errore nella trasmissione'
+                'error' => 'Errore nella trasmissione',
             ];
         }
 
@@ -75,23 +79,25 @@ class GlsService {
     /**
      * Track parcel
      */
-    public function trackParcels(): void {
+    public function trackParcels(): void
+    {
         $this->trackParcelOrders()->each(
-            fn(Order $order) => $this->trackParcel($order)
+            fn (Order $order) => $this->trackParcel($order)
         );
     }
 
     /**
      * Helper: Send Request
      */
-    private function sendRequest(string $endpoint, array $body): stdClass|false {
+    private function sendRequest(string $endpoint, array $body): stdClass|false
+    {
         try {
             $response = Http::asForm()
                 ->timeout(30)
                 ->retry(2, 500)
                 ->post($endpoint, $body);
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 Log::error('GLS request failed', [
                     'Endpoint' => $endpoint,
                     'StatusCode' => $response->status(),
@@ -129,9 +135,10 @@ class GlsService {
     }
 
     /**
-     * Helper: Payload Header 
+     * Helper: Payload Header
      */
-    private function payloadHeader(): string {
+    private function payloadHeader(): string
+    {
         $headquarters = $this->escapeXml(config('services.gls.headquarters'));
         $clientId = $this->escapeXml(config('services.gls.client_id'));
         $clientPassword = $this->escapeXml(config('services.gls.client_password'));
@@ -144,19 +151,21 @@ class GlsService {
     /**
      * Add Parcel Helper: Add Parcels Data
      */
-    private function addParcelsData(Collection $orders): string {
+    private function addParcelsData(Collection $orders): string
+    {
         return $orders
-            ->map(fn(Order $order) => $this->parcelXml($order))
+            ->map(fn (Order $order) => $this->parcelXml($order))
             ->implode('');
     }
 
     /**
      * Add Parcel Helper: Update Order
      */
-    private function updateOrdersAfterAdd(Collection $orders, stdClass $response): bool {
+    private function updateOrdersAfterAdd(Collection $orders, stdClass $response): bool
+    {
         $parcels = $response->Parcel ?? null;
 
-        if (!$parcels) {
+        if (! $parcels) {
             Log::error('GLS AddParcel response contains no parcels', [
                 'Response' => $response,
             ]);
@@ -180,14 +189,14 @@ class GlsService {
             $order = $orders[$parcelKey];
             $shippingNumber = $parcel->NumeroSpedizione ?? null;
 
-            if (!$shippingNumber) {
+            if (! $shippingNumber) {
                 Log::error('Error adding a GLS parcel', ['Order' => $order->id, 'Response' => $response]);
 
                 return false;
             }
 
             $order->update([
-                'tracking' => $shippingNumber
+                'tracking' => $shippingNumber,
             ]);
         }
 
@@ -197,10 +206,11 @@ class GlsService {
     /**
      * Transmit Parcel Helper: Transmit Parcels Data
      */
-    private function transmitParcelsData(Collection $orders): string {
+    private function transmitParcelsData(Collection $orders): string
+    {
         return $orders
             ->map(
-                fn(Order $order) => $this->parcelXml(
+                fn (Order $order) => $this->parcelXml(
                     $order,
                     includeShippingNumber: true
                 )
@@ -211,35 +221,36 @@ class GlsService {
     /**
      * Transmit Parcel Helper: Update Orders
      */
-    private function updateOrdersAfterTransmit(stdClass $response): array {
+    private function updateOrdersAfterTransmit(stdClass $response): array
+    {
         $parcels = $response->Parcel ?? null;
 
-        if (!$parcels) {
+        if (! $parcels) {
             Log::error('Error transmitting bulk GLS parcel', ['Response' => $response]);
 
             return [
                 'success' => false,
-                'error' => 'Errore di trasmissione non specificato'
+                'error' => 'Errore di trasmissione non specificato',
             ];
         }
 
-        if ($parcels && !is_array($parcels)) {
+        if ($parcels && ! is_array($parcels)) {
             $parcels = [$parcels];
         }
 
         foreach ($parcels as $parcel) {
-            if (!$parcel || !isset($parcel->NumeroDiSpedizioneGLSDaConfermare)) {
+            if (! $parcel || ! isset($parcel->NumeroDiSpedizioneGLSDaConfermare)) {
                 Log::error('Error transmitting a GLS parcel', ['Response' => $response]);
 
                 return [
                     'success' => false,
-                    'error' => 'Errore di trasmissione non specificato'
+                    'error' => 'Errore di trasmissione non specificato',
                 ];
             }
 
             $order = Order::where('tracking', $parcel->NumeroDiSpedizioneGLSDaConfermare)->first();
 
-            if (!$order) {
+            if (! $order) {
                 Log::error('GLS order not found after transmission', [
                     'Tracking' => $parcel->NumeroDiSpedizioneGLSDaConfermare,
                     'Response' => $response,
@@ -258,14 +269,15 @@ class GlsService {
 
         return [
             'success' => true,
-            'error' => false
+            'error' => false,
         ];
     }
 
     /**
      * Track Parcel Helper: Orders
      */
-    private function trackParcelOrders(): Collection {
+    private function trackParcelOrders(): Collection
+    {
         return Order::whereIn('status', [
             EcommerceHelper::statusFromTag('awaiting-shipping'),
             EcommerceHelper::statusFromTag('shipped'),
@@ -278,7 +290,8 @@ class GlsService {
     /**
      * Track Parcel Helper: Track Parcel
      */
-    public function trackParcel(Order $order, bool $sendEmail = true): bool {
+    public function trackParcel(Order $order, bool $sendEmail = true): bool
+    {
         $shippedStatus = EcommerceHelper::statusFromTag('shipped');
         $deliveredStatus = EcommerceHelper::statusFromTag('delivered');
 
@@ -305,7 +318,7 @@ class GlsService {
 
         $body = $response->body();
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             Log::error('Error while sending a tracking request to GLS', [
                 'Order' => $order->id,
                 'Tracking' => $order->tracking,
@@ -356,7 +369,7 @@ class GlsService {
                     'ContentType' => $response->header('Content-Type'),
                     'ResponseStart' => mb_substr($body, 0, 1000),
                     'XmlErrors' => collect(libxml_get_errors())
-                        ->map(fn($error) => trim($error->message))
+                        ->map(fn ($error) => trim($error->message))
                         ->all(),
                 ]);
 
@@ -369,11 +382,11 @@ class GlsService {
 
         $status = trim((string) $xml->StatoSpedizione);
 
-        if (!$status && isset($xml->SPEDIZIONE)) {
+        if (! $status && isset($xml->SPEDIZIONE)) {
             $status = trim((string) $xml->SPEDIZIONE->StatoSpedizione);
         }
 
-        if (!$status) {
+        if (! $status) {
             Log::error('GLS tracking status missing', [
                 'Order' => $order->id,
                 'Tracking' => $order->tracking,
@@ -484,7 +497,8 @@ class GlsService {
     /**
      * Helper: Normalize Orders
      */
-    private function normalizeOrders(Collection|Order $orders): Collection {
+    private function normalizeOrders(Collection|Order $orders): Collection
+    {
         return ($orders instanceof Order
             ? new Collection([$orders])
             : $orders
@@ -494,7 +508,8 @@ class GlsService {
     /**
      * Helper: Escape XML
      */
-    private function escapeXml(mixed $value): string {
+    private function escapeXml(mixed $value): string
+    {
         return htmlspecialchars((string) ($value ?? ''), ENT_XML1 | ENT_QUOTES, 'UTF-8');
     }
 }

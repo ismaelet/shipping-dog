@@ -3,7 +3,6 @@
 namespace App\Filament\Admin\Resources\Warnings\Pages;
 
 use App\Filament\Admin\Resources\Warnings\WarningResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateWarning extends CreateRecord

@@ -2,24 +2,21 @@
 
 namespace App\Filament\Admin\Resources\Sellers;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Fieldset;
-use Filament\Actions\ActionGroup;
-use Filament\Actions\Action;
-use Filament\Actions\DeleteAction;
-use App\Filament\Admin\Resources\Sellers\Pages\ListSellers;
-use App\Filament\Admin\Resources\Sellers\Pages\EditSeller;
 use App\Filament\Admin\Resources\SellerResource\Pages;
+use App\Filament\Admin\Resources\Sellers\Pages\EditSeller;
+use App\Filament\Admin\Resources\Sellers\Pages\ListSellers;
 use App\Helpers\FileHelper;
 use App\Models\Ecommerce\Seller;
 use App\Models\Ecommerce\Seller\Payment;
-use Dompdf\FrameDecorator\Text;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Split;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -28,8 +25,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class SellerResource extends Resource {
-
+class SellerResource extends Resource
+{
     /**
      * The model the resource corresponds to.
      */
@@ -38,7 +35,7 @@ class SellerResource extends Resource {
     /**
      * The icon of the resource.
      */
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-building-storefront';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-building-storefront';
 
     /**
      * The label of a singular resource.
@@ -53,7 +50,7 @@ class SellerResource extends Resource {
     /**
      * The group in which the resource's navigation item will be displayed.
      */
-    protected static string | \UnitEnum | null $navigationGroup = 'Utenti e Negozi';
+    protected static string|\UnitEnum|null $navigationGroup = 'Utenti e Negozi';
 
     /**
      * The sort order of the resource's navigation item.
@@ -63,21 +60,24 @@ class SellerResource extends Resource {
     /**
      * Get the display value of the resource navigation badge.
      */
-    public static function getNavigationBadge(): ?string {
+    public static function getNavigationBadge(): ?string
+    {
         return static::getModel()::isAwaiting()->count();
     }
 
     /**
      * Get the display color of the resource navigation badge.
      */
-    public static function getNavigationBadgeColor(): ?string {
+    public static function getNavigationBadgeColor(): ?string
+    {
         return static::getNavigationBadge() > 0 ? 'primary' : 'gray';
     }
 
     /**
      * The form for creating or updating records.
      */
-    public static function form(Schema $schema): Schema {
+    public static function form(Schema $schema): Schema
+    {
         return $schema
             ->components([
                 Section::make([
@@ -97,22 +97,23 @@ class SellerResource extends Resource {
                     // Address
                     Fieldset::make('Dati di Pagamento')
                         ->relationship('payment_request')
-                        ->visible(fn(Seller $record): bool => (bool) $record->payment_request)
+                        ->visible(fn (Seller $record): bool => (bool) $record->payment_request)
                         ->schema([
                             TextInput::make('paypal')
                                 ->label('Indirizzo PayPal')
                                 ->placeholder('Indirizzo PayPal')
                                 ->default('-')
                                 ->columnSpanFull(),
-                        ])
-                ])
+                        ]),
+                ]),
             ]);
     }
 
     /**
      * Get the query for the resource.
      */
-    public static function getEloquentQuery(): Builder {
+    public static function getEloquentQuery(): Builder
+    {
         return self::$model::query()
             ->select('sellers.*')
             ->selectRaw('earned - payed + other_transfers as to_be_paid');
@@ -121,7 +122,8 @@ class SellerResource extends Resource {
     /**
      * The table for listing records.
      */
-    public static function table(Table $table): Table {
+    public static function table(Table $table): Table
+    {
         return $table
 
             // Columns
@@ -210,7 +212,7 @@ class SellerResource extends Resource {
                     Action::make('view-shop')
                         ->label('Visualizza')
                         ->icon('heroicon-o-eye')
-                        ->url(fn(Seller $record): string => route('seller.show', $record))
+                        ->url(fn (Seller $record): string => route('seller.show', $record))
                         ->openUrlInNewTab(true),
                     Action::make('login')
                         ->icon('heroicon-o-arrow-left-end-on-rectangle')
@@ -224,17 +226,17 @@ class SellerResource extends Resource {
                         ->label('Scarica ricevuta')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->color('success')
-                        ->visible(fn(Seller $record): bool => $record->request)
+                        ->visible(fn (Seller $record): bool => $record->request)
                         ->action(
-                            fn(Seller $record): BinaryFileResponse => FileHelper::download('documents/payments/Ricevuta_' . $record->id . '.pdf')
+                            fn (Seller $record): BinaryFileResponse => FileHelper::download('documents/payments/Ricevuta_'.$record->id.'.pdf')
                         ),
                     Action::make('download-communication')
                         ->label('Scarica comunicazione')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->color('success')
-                        ->visible(fn(Seller $record): bool => $record->request)
+                        ->visible(fn (Seller $record): bool => $record->request)
                         ->action(
-                            fn(Seller $record): BinaryFileResponse => FileHelper::download('documents/payments/Comunicazione_' . $record->id . '.pdf')
+                            fn (Seller $record): BinaryFileResponse => FileHelper::download('documents/payments/Comunicazione_'.$record->id.'.pdf')
                         ),
                     Action::make('pay-seller')
                         ->label('Paga negozio')
@@ -249,17 +251,17 @@ class SellerResource extends Resource {
 
                             $record->updateBalance();
                             $record->update([
-                                'request' => false
+                                'request' => false,
                             ]);
                         }),
                     Action::make('remove-request')
                         ->label('Rimuovi richiesta')
                         ->icon('heroicon-o-x-circle')
                         ->color('warning')
-                        ->visible(fn(Seller $record) => $record->request)
-                        ->action(fn(Seller $record) => $record->update(['request' => false])),
+                        ->visible(fn (Seller $record) => $record->request)
+                        ->action(fn (Seller $record) => $record->update(['request' => false])),
                     DeleteAction::make(),
-                ])
+                ]),
             ])
 
             // Bulk actions
@@ -269,7 +271,8 @@ class SellerResource extends Resource {
     /**
      * Get the pages available to the resource.
      */
-    public static function getPages(): array {
+    public static function getPages(): array
+    {
         return [
             'index' => ListSellers::route('/'),
             'edit' => EditSeller::route('/{record}/edit'),

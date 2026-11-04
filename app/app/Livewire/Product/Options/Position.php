@@ -6,8 +6,8 @@ use App\Models\Ecommerce\Product;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
-class Position extends Component {
-
+class Position extends Component
+{
     /**
      * Property: The product instance
      */
@@ -31,7 +31,8 @@ class Position extends Component {
     /**
      * Lifecycle method: Mount the component
      */
-    public function mount() {
+    public function mount()
+    {
         $this->selectedPositionId = $this->defaultPositionId;
         $this->positions = $this->product->positions();
     }
@@ -39,14 +40,16 @@ class Position extends Component {
     /**
      * lifecycle method: Render the component view
      */
-    public function render() {
+    public function render()
+    {
         return view('livewire.product.options.position');
     }
 
     /**
      * Event listener: Update position
      */
-    public function updatedSelectedPositionId(): void {
+    public function updatedSelectedPositionId(): void
+    {
         $this->dispatch('change-position', id: $this->selectedPositionId);
     }
 }

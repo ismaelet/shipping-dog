@@ -9,14 +9,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
-class RegisterController extends Controller {
-    public function index() {
+class RegisterController extends Controller
+{
+    public function index()
+    {
         return view('auth.register')
             ->with('location', 'login')
             ->with('title', 'Registrati');
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         // Validation
         $this->validate($request, [
             'password' => ['required', 'confirmed'],

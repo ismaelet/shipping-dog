@@ -2,12 +2,13 @@
 
 namespace App\Helpers;
 
-class StringHelper {
-
+class StringHelper
+{
     /**
      * Split a string at the last occurrence of a separator.
      */
-    public static function explodeLast(string $separator, ?string $string): array {
+    public static function explodeLast(string $separator, ?string $string): array
+    {
         if ($string === null) {
             return [];
         }

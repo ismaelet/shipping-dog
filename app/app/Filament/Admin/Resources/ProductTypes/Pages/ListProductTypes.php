@@ -2,17 +2,18 @@
 
 namespace App\Filament\Admin\Resources\ProductTypes\Pages;
 
-use Filament\Actions\CreateAction;
 use App\Filament\Admin\Resources\ProductTypes\ProductTypeResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
-class ListProductTypes extends ListRecords {
-	protected static string $resource = ProductTypeResource::class;
+class ListProductTypes extends ListRecords
+{
+    protected static string $resource = ProductTypeResource::class;
 
-	protected function getHeaderActions(): array {
-		return [
-			CreateAction::make(),
-		];
-	}
+    protected function getHeaderActions(): array
+    {
+        return [
+            CreateAction::make(),
+        ];
+    }
 }

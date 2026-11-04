@@ -2,24 +2,19 @@
 
 namespace App\Filament\Admin\Resources\ProductTypes;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Tabs\Tab;
-use Filament\Schemas\Components\Fieldset;
-use Filament\Schemas\Components\Grid;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use App\Filament\Admin\Resources\ProductTypes\Pages\ListProductTypes;
 use App\Filament\Admin\Resources\ProductTypes\Pages\CreateProductType;
 use App\Filament\Admin\Resources\ProductTypes\Pages\EditProductType;
+use App\Filament\Admin\Resources\ProductTypes\Pages\ListProductTypes;
 use App\Filament\Admin\Resources\ProductTypes\RelationManagers\ColorsRelationManager;
 use App\Filament\Admin\Resources\ProductTypes\RelationManagers\MeasuresRelationManager;
 use App\Filament\Admin\Resources\ProductTypes\RelationManagers\MockupSizesRelationManager;
 use App\Filament\Admin\Resources\ProductTypes\RelationManagers\PositionsRelationManager;
 use App\Models\Ecommerce\Product;
 use App\Models\Ecommerce\Product\ProductType;
+use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
@@ -27,13 +22,18 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class ProductTypeResource extends Resource {
-
+class ProductTypeResource extends Resource
+{
     /**
      * The model the resource corresponds to.
      */
@@ -42,7 +42,7 @@ class ProductTypeResource extends Resource {
     /**
      * The icon of the resource.
      */
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cube-transparent';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cube-transparent';
 
     /**
      * The label of a singular resource.
@@ -57,27 +57,26 @@ class ProductTypeResource extends Resource {
     /**
      * The group in which the resource's navigation item will be displayed.
      */
-    protected static string | \UnitEnum | null $navigationGroup = 'Struttura';
+    protected static string|\UnitEnum|null $navigationGroup = 'Struttura';
 
     /**
      * The sort order of the resource's navigation item.
      */
     protected static ?int $navigationSort = 0;
 
-
     /**
      * Get the query for the resource.
      */
-    public static function getEloquentQuery(): Builder {
+    public static function getEloquentQuery(): Builder
+    {
         return self::getModel()::query()->with('gender', 'colors', 'positions', 'mockup_sizes', 'mockup_sizes.position');
     }
 
     /**
      * Get the resource's form schema.
-     *
-     * @return \Filament\Schemas\Schema
      */
-    public static function form(Schema $schema): Schema {
+    public static function form(Schema $schema): Schema
+    {
         return $schema
             ->components([
                 Tabs::make('Tabs')
@@ -176,7 +175,7 @@ class ProductTypeResource extends Resource {
                                                     ->rows(5)
                                                     ->placeholder('Dettagli tecnici (una lista di informazioni su composizione e vestibilità, andare a capo per ogni riga)'),
                                             ])->columnSpanFull(),
-                                    ])->columns(3)
+                                    ])->columns(3),
                             ]),
                         // Tabs\Tab::make('Dimensioni di stampa')
                         // 	->visible(fn($record) => (bool) $record)
@@ -197,7 +196,7 @@ class ProductTypeResource extends Resource {
                         // 		return $inputs;
                         // }),
                         Tab::make('Mockup')
-                            ->visible(fn($record) => (bool) $record)
+                            ->visible(fn ($record) => (bool) $record)
                             ->schema([
                                 Repeater::make('colors')
                                     ->label('')
@@ -213,50 +212,51 @@ class ProductTypeResource extends Resource {
 
                                                         if ($type) {
                                                             foreach ($type->positions->where('base_of', 0) as $position) {
-                                                                $uploaders[] = FileUpload::make('product-mockup_' . $type->tag . '-' . $record->tag . '-' . $position->id)
-                                                                    ->label($position->name . ' - Base')
+                                                                $uploaders[] = FileUpload::make('product-mockup_'.$type->tag.'-'.$record->tag.'-'.$position->id)
+                                                                    ->label($position->name.' - Base')
                                                                     ->image()
                                                                     ->panelAspectRatio('1:1')
                                                                     ->disk('public')
-                                                                    ->directory('product_types/mockups/' . $type->tag)
+                                                                    ->directory('product_types/mockups/'.$type->tag)
                                                                     ->getUploadedFileNameForStorageUsing(
-                                                                        fn($record): string => $record->tag . '-' . $position->id . '.webp',
+                                                                        fn ($record): string => $record->tag.'-'.$position->id.'.webp',
                                                                     );
 
-                                                                $uploaders[] = FileUpload::make('product-mockup_' . $type->tag . '-' . $record->tag . '-' . $position->id . '-det')
-                                                                    ->label($position->name . ' - Sovrapponi')
+                                                                $uploaders[] = FileUpload::make('product-mockup_'.$type->tag.'-'.$record->tag.'-'.$position->id.'-det')
+                                                                    ->label($position->name.' - Sovrapponi')
                                                                     ->image()
                                                                     ->panelAspectRatio('1:1')
                                                                     ->disk('public')
-                                                                    ->directory('product_types/mockups/' . $type->tag)
+                                                                    ->directory('product_types/mockups/'.$type->tag)
                                                                     ->getUploadedFileNameForStorageUsing(
-                                                                        fn($record): string => $record->tag . '-' . $position->id . '-det.webp',
+                                                                        fn ($record): string => $record->tag.'-'.$position->id.'-det.webp',
                                                                     );
                                                             }
                                                         }
 
                                                         return $uploaders;
                                                     }
-                                                )
+                                                ),
                                         ];
                                     })
                                     ->grid([
                                         'default' => 1,
-                                        'lg' => 2
+                                        'lg' => 2,
                                     ])
                                     ->addable(false)
                                     ->deletable(false)
-                                    ->itemLabel(fn(array $state): ?string => $state['name'] ?? null)
+                                    ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
                                     ->collapsed(),
 
-                            ])
+                            ]),
 
                     ])
-                    ->contained(false)
+                    ->contained(false),
             ])->columns(1);
     }
 
-    public static function table(Table $table): Table {
+    public static function table(Table $table): Table
+    {
         return $table
             ->columns([
                 // ID
@@ -297,16 +297,17 @@ class ProductTypeResource extends Resource {
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()
-                    ->before(fn($record) => self::deleteAction($record)),
+                    ->before(fn ($record) => self::deleteAction($record)),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make()
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
-    public static function getRelations(): array {
+    public static function getRelations(): array
+    {
         return [
             ColorsRelationManager::class,
             MeasuresRelationManager::class,
@@ -315,7 +316,8 @@ class ProductTypeResource extends Resource {
         ];
     }
 
-    public static function getPages(): array {
+    public static function getPages(): array
+    {
         return [
             'index' => ListProductTypes::route('/'),
             'create' => CreateProductType::route('/create'),
@@ -323,7 +325,8 @@ class ProductTypeResource extends Resource {
         ];
     }
 
-    public static function deleteAction(ProductType $record) {
+    public static function deleteAction(ProductType $record)
+    {
         Product::where('type_id', $record->id)->forceDelete();
     }
 }

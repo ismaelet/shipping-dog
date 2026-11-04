@@ -9,12 +9,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class UnconfirmedOrder {
-
+class UnconfirmedOrder
+{
     /**
      * Handle an incoming request.
      */
-    public function handle(Request $request, Closure $next): Response|RedirectResponse {
+    public function handle(Request $request, Closure $next): Response|RedirectResponse
+    {
         $order = null;
 
         if ($request->route('order')) {

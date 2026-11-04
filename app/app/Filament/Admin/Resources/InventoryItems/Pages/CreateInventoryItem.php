@@ -3,9 +3,9 @@
 namespace App\Filament\Admin\Resources\InventoryItems\Pages;
 
 use App\Filament\Admin\Resources\InventoryItems\InventoryItemResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateInventoryItem extends CreateRecord {
-	protected static string $resource = InventoryItemResource::class;
+class CreateInventoryItem extends CreateRecord
+{
+    protected static string $resource = InventoryItemResource::class;
 }

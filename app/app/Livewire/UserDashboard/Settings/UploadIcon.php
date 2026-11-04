@@ -11,8 +11,8 @@ use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
-class UploadIcon extends Component {
-
+class UploadIcon extends Component
+{
     use WithFileUploads;
 
     /**
@@ -34,35 +34,39 @@ class UploadIcon extends Component {
     /**
      * Lifecycle hook: mount the component and set the authenticated user
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->user = Auth::user();
     }
 
     /**
      * Lifecycle hook: boot the component and inject services
      */
-    public function boot(ImageProcessor $imageProcessor): void {
+    public function boot(ImageProcessor $imageProcessor): void
+    {
         $this->imageProcessor = $imageProcessor;
     }
 
     /**
      * Lifecycle hook: render the component view for uploading an icon
      */
-    public function render(): View {
+    public function render(): View
+    {
         return view('livewire.user-dashboard.settings.upload-icon');
     }
 
     /**
      * Lifecycle hook: handle the image upload when the image property is updated
      */
-    public function updatedImage(): void {
+    public function updatedImage(): void
+    {
         $this->validateOnly('image');
 
-        if (!$this->image) {
+        if (! $this->image) {
             return;
         }
 
-        if (!$this->save()) {
+        if (! $this->save()) {
             $this->addError('image', 'Errore durante il caricamento dell’immagine.');
 
             return;
@@ -74,10 +78,11 @@ class UploadIcon extends Component {
     /**
      * Helper method: save the uploaded image using the image processor service
      */
-    public function save(): bool {
+    public function save(): bool
+    {
         return $this->imageProcessor->upload(
             file: $this->image,
-            path: 'users/icons/' . Auth::id() . '.webp',
+            path: 'users/icons/'.Auth::id().'.webp',
             size: 252,
             mode: 'crop',
         );

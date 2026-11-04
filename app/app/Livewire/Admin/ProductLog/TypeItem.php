@@ -12,8 +12,8 @@ use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class TypeItem extends Component {
-
+class TypeItem extends Component
+{
     /**
      * Property: The order items collection
      */
@@ -87,7 +87,8 @@ class TypeItem extends Component {
     /**
      * Lifecycle hook: Mount the component
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->updateCounts();
 
         $this->quantity = $this->orderItems->sum('quantity');
@@ -102,14 +103,16 @@ class TypeItem extends Component {
     /**
      * Lifecycle hook: Render the component
      */
-    public function render() {
+    public function render()
+    {
         return view('livewire.admin.product-log.type-item');
     }
 
     /**
      * Action handler: Handle 'setPrinted' action
      */
-    public function setIsPrinted(): void {
+    public function setIsPrinted(): void
+    {
         foreach ($this->orderItems as $item) {
             $item->update([
                 'is_printed' => (bool) $this->isNotPrintedCount,
@@ -119,13 +122,13 @@ class TypeItem extends Component {
         $this->updateCounts();
 
         $this->dispatch(
-            'isPrintedUpdated.' .
-                ($this->category === 'design' ? 'product' : 'design') .
-                '.' .
-                $this->type->id .
-                '.' .
-                $this->color->id .
-                '.' .
+            'isPrintedUpdated.'.
+                ($this->category === 'design' ? 'product' : 'design').
+                '.'.
+                $this->type->id.
+                '.'.
+                $this->color->id.
+                '.'.
                 $this->size->id,
             [
                 'design_id' => $this->design?->id,
@@ -136,7 +139,8 @@ class TypeItem extends Component {
     /**
      * Action handler: Handle 'setInCart' action
      */
-    public function setInCart(): void {
+    public function setInCart(): void
+    {
         foreach ($this->orderItems as $item) {
             $item->update([
                 'is_in_cart' => (bool) $this->isNotInCartCount,
@@ -146,13 +150,13 @@ class TypeItem extends Component {
         $this->updateCounts();
 
         $this->dispatch(
-            'inCartUpdated.' .
-                ($this->category === 'design' ? 'product' : 'design') .
-                '.' .
-                $this->type->id .
-                '.' .
-                $this->color->id .
-                '.' .
+            'inCartUpdated.'.
+                ($this->category === 'design' ? 'product' : 'design').
+                '.'.
+                $this->type->id.
+                '.'.
+                $this->color->id.
+                '.'.
                 $this->size->id
         );
     }
@@ -161,41 +165,48 @@ class TypeItem extends Component {
      * Event handler: Handle 'inCartUpdated' event
      */
     #[On('inCartUpdated.{category}.{type.id}.{color.id}.{size.id}')]
-    public function onInCartUpdated(): void {
+    public function onInCartUpdated(): void
+    {
         $this->updateCounts();
     }
 
     #[On('isPrintedUpdated.{category}.{type.id}.{color.id}.{size.id}')]
-    public function onIsPrintedUpdated(array $data): void {
+    public function onIsPrintedUpdated(array $data): void
+    {
         $this->updateCounts();
     }
 
-    public function updateCounts(): void {
+    public function updateCounts(): void
+    {
         $this->isPrintedCount = $this->isPrintedCount();
         $this->isNotPrintedCount = $this->isNotPrintedCount();
         $this->isInCartCount = $this->isInCartCount();
         $this->isNotInCartCount = $this->isNotInCartCount();
     }
 
-    public function isPrintedCount(): int {
+    public function isPrintedCount(): int
+    {
         return $this->orderItems
             ->where('is_printed', true)
             ->count();
     }
 
-    public function isNotPrintedCount(): int {
+    public function isNotPrintedCount(): int
+    {
         return $this->orderItems
             ->where('is_printed', false)
             ->count();
     }
 
-    public function isInCartCount(): int {
+    public function isInCartCount(): int
+    {
         return $this->orderItems
             ->where('is_in_cart', true)
             ->count();
     }
 
-    public function isNotInCartCount(): int {
+    public function isNotInCartCount(): int
+    {
         return $this->orderItems
             ->where('is_in_cart', false)
             ->count();

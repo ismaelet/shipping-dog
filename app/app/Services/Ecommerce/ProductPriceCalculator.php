@@ -2,11 +2,11 @@
 
 namespace App\Services\Ecommerce;
 
-final class ProductPriceCalculator {
-
+final class ProductPriceCalculator
+{
     /**
      * Constant: The percentage of increment in price that goes to the seller earnings
-     * 
+     *
      * It is not 100% to cover VAT and PayPal fees related to the increment
      */
     public const SELLER_PERCENTAGE = 0.75;

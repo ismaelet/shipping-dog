@@ -7,19 +7,21 @@ use App\Models\Ecommerce\Address;
 use App\Models\Ecommerce\ShippingMethod;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class CartAddressController extends Controller {
-
+class CartAddressController extends Controller
+{
     /**
      * View the cart address page
      */
-    public function index(): View {
+    public function index(): View
+    {
         $cart = cart();
 
         $address = $cart->address;
 
-        if (!$address && Auth::check()) {
+        if (! $address && Auth::check()) {
             // retrieve the latest address of the user and save it to the cart
             $oldAddress = Address::where('user_id', Auth::id())->latest()->first();
             $address = $oldAddress ? $oldAddress->replicate(['order_id'])->fill(['order_id' => $cart->id]) : null;
@@ -30,7 +32,7 @@ class CartAddressController extends Controller {
             }
         }
 
-        if (!in_array($cart->shipping_method_id, ShippingMethod::FREE_SHIPPING_METHODS)) {
+        if (! in_array($cart->shipping_method_id, ShippingMethod::FREE_SHIPPING_METHODS)) {
             // if the shipping isn't free, fetch the shipping methods
             $shippingMethods = ShippingMethod::whereRaw('FIND_IN_SET(tag, "sta,pre,rit") > 0')
                 ->orderByDesc('tier')
@@ -63,7 +65,8 @@ class CartAddressController extends Controller {
     /**
      * Update or create the address
      */
-    public function update(): RedirectResponse {
+    public function update(): RedirectResponse
+    {
         $cart = cart();
 
         $full_name = str_replace('-', ',', $_POST['full_name']);
@@ -74,7 +77,7 @@ class CartAddressController extends Controller {
         $city = ucwords(strtolower(trim($city)));
         $email = strtolower(trim($_POST['email']));
         $phone = trim($_POST['phone']);
-        $security = \Illuminate\Support\Str::random(10);
+        $security = Str::random(10);
         $courierNotes = $_POST['courier_notes'] ?? '';
         $reg = $_POST['region'] ?? '';
 
@@ -90,11 +93,11 @@ class CartAddressController extends Controller {
             'region' => $reg,
             'email' => $email,
             'phone' => $phone,
-            'security' => $security
+            'security' => $security,
         ]);
 
         $cart->update([
-            'courier_notes' => $courierNotes
+            'courier_notes' => $courierNotes,
         ]);
 
         $cart->shipping_method_id = request()->shipping_method_id;
@@ -103,6 +106,6 @@ class CartAddressController extends Controller {
 
         cart()->advance();
 
-        return redirect()->route('cart.' . cart()->stepTag());
+        return redirect()->route('cart.'.cart()->stepTag());
     }
 }

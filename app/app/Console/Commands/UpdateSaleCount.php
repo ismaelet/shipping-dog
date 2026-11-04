@@ -2,12 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Helpers\EcommerceHelper;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class UpdateSaleCount extends Command {
-
+class UpdateSaleCount extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -25,7 +24,8 @@ class UpdateSaleCount extends Command {
     /**
      * Track parcels
      */
-    public function handle() {
+    public function handle()
+    {
         // * Products
         DB::table('products')->update(['sales' => 0, 'recent_sales' => 0]);
 

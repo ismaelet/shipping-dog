@@ -10,8 +10,8 @@ use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
-class UploadImage extends Component {
-
+class UploadImage extends Component
+{
     use WithFileUploads;
 
     /**
@@ -58,7 +58,8 @@ class UploadImage extends Component {
     /**
      * Lifecycle hook: mount the component
      */
-    public function mount() {
+    public function mount()
+    {
         $this->url = is_array($this->url) ? $this->url : [$this->url];
         $this->size = is_array($this->size) ? $this->size : [$this->size];
         $this->quality = is_array($this->quality) ? $this->quality : [$this->quality];
@@ -70,21 +71,24 @@ class UploadImage extends Component {
     /**
      * Lifecycle hook: boot the component.
      */
-    public function boot(ImageProcessor $imageProcessor): void {
+    public function boot(ImageProcessor $imageProcessor): void
+    {
         $this->imageProcessor = $imageProcessor;
     }
 
     /**
      * lifecycle hook: render the component
      */
-    public function render() {
+    public function render()
+    {
         return view('livewire.upload-image');
     }
 
     /**
      * Upload product image for a specific color
      */
-    public function updatedImage(): void {
+    public function updatedImage(): void
+    {
         $this->validateOnly('image');
 
         foreach ($this->url as $index => $url) {
@@ -103,7 +107,8 @@ class UploadImage extends Component {
         $this->image = null;
     }
 
-    private function uploadImage(string $url, int $size, int $quality, string $mode): void {
+    private function uploadImage(string $url, int $size, int $quality, string $mode): void
+    {
         $this->imageProcessor->upload(
             file: $this->image,
             path: $url,
@@ -114,13 +119,15 @@ class UploadImage extends Component {
     }
 
     #[Computed]
-    public function imageExists(): bool {
+    public function imageExists(): bool
+    {
         return $this->imageUrl !== null
             && FileHelper::exists($this->imageUrl);
     }
 
     #[Computed]
-    public function imageSrc(): ?string {
+    public function imageSrc(): ?string
+    {
         return $this->imageExists
             ? FileHelper::storageAsset($this->imageUrl)
             : null;

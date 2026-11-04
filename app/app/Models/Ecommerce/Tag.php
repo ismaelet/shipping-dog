@@ -4,10 +4,11 @@ namespace App\Models\Ecommerce;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model {
+class Tag extends Model
+{
+    protected $table = 'sys_tags';
 
-	protected $table = 'sys_tags';
-	protected $fillable = [
-		'tag', 'count', 'sales', 'hide'
-	];
+    protected $fillable = [
+        'tag', 'count', 'sales', 'hide',
+    ];
 }

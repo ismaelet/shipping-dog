@@ -4,7 +4,6 @@ namespace App\Models\Ecommerce;
 
 use App\Helpers\EcommerceHelper;
 use App\Helpers\FileHelper;
-use App\Services\Files\ProductPreviewProcessor;
 use App\Models\Ecommerce\Design\Logo;
 use App\Models\Ecommerce\Design\LogoGroup;
 use App\Models\Ecommerce\Product\ProductColor;
@@ -15,6 +14,7 @@ use App\Models\Ecommerce\Product\ProductPrice;
 use App\Models\Ecommerce\Product\ProductSize;
 use App\Models\Ecommerce\Product\ProductType;
 use App\Models\Ecommerce\Seller\SellerPrice;
+use App\Services\Files\ProductPreviewProcessor;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,8 +29,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class Product extends Model {
-
+class Product extends Model
+{
     use HasFactory, SoftDeletes;
 
     /**
@@ -44,13 +44,14 @@ class Product extends Model {
         'color_id',
         'status',
         'positions',
-        'recent_sales'
+        'recent_sales',
     ];
 
     /**
      * Replace the default delete method to also delete the specific price
      */
-    public function delete(): ?bool {
+    public function delete(): ?bool
+    {
         $this->specific_price()->delete();
 
         return parent::delete();
@@ -59,74 +60,83 @@ class Product extends Model {
     /**
      * The position ID attribute mutator
      */
-    public function positionId(): Attribute {
+    public function positionId(): Attribute
+    {
         return Attribute::make(
-            get: fn(?int $value) => $value ?: (int) explode(',', $this->positions)[0] ?? null,
-            set: fn(int $value) => $value,
+            get: fn (?int $value) => $value ?: (int) explode(',', $this->positions)[0] ?? null,
+            set: fn (int $value) => $value,
         );
     }
 
     /**
      * Get the product's seller
      */
-    public function seller(): BelongsTo {
+    public function seller(): BelongsTo
+    {
         return $this->belongsTo(Seller::class, 'user_id', 'user_id');
     }
 
     /**
      * Get the product's design.
      */
-    public function design(): BelongsTo {
+    public function design(): BelongsTo
+    {
         return $this->belongsTo(Design::class);
     }
 
     /**
      * Get the product's design including trashed designs.
      */
-    public function design_with_trashed(): BelongsTo {
+    public function design_with_trashed(): BelongsTo
+    {
         return $this->design()->withTrashed();
     }
 
     /**
      * Get the product's type.
      */
-    public function type(): BelongsTo {
+    public function type(): BelongsTo
+    {
         return $this->belongsTo(ProductType::class);
     }
 
     /**
      * Get the product's price.
      */
-    public function specific_price(): HasOne {
+    public function specific_price(): HasOne
+    {
         return $this->hasOne(ProductPrice::class);
     }
 
     /**
      * Get the platform price.
      */
-    public function base_price(): HasOne {
+    public function base_price(): HasOne
+    {
         return $this->hasOne(BasePrice::class, 'type_id', 'type_id');
     }
 
     /**
      * Get the position of the product.
      */
-    public function position(): BelongsTo {
+    public function position(): BelongsTo
+    {
         return $this->belongsTo(ProductPosition::class);
     }
 
     /**
      * Get the size of the product.
      */
-    public function size(): BelongsTo {
+    public function size(): BelongsTo
+    {
         return $this->belongsTo(ProductSize::class);
     }
-
 
     /**
      * Get the product's price
      */
-    public function price(): ProductPrice|SellerPrice|BasePrice {
+    public function price(): ProductPrice|SellerPrice|BasePrice
+    {
         // Check if the product has a specific price
         if ($this->specific_price) {
             return $this->specific_price;
@@ -141,54 +151,66 @@ class Product extends Model {
         return $this->base_price;
     }
 
-    public function sellerPrice() {
+    public function sellerPrice()
+    {
         return ($this->price()->price - $this->price()->gain_w / .75) * 0.9;
     }
 
-    public function productPrice(): float {
+    public function productPrice(): float
+    {
         return $this->price()->price ?? 0;
     }
 
-    public function logoPrice(): float {
+    public function logoPrice(): float
+    {
         return $this->logo()?->price ?: 0;
     }
 
-    public function positionPrice(): float {
+    public function positionPrice(): float
+    {
         return $this->position?->price ?: 0;
     }
 
-    public function fullPrice(): float {
+    public function fullPrice(): float
+    {
         return $this->productPrice() + $this->logoPrice() + $this->positionPrice();
     }
 
-    public function customerDiscount() {
+    public function customerDiscount()
+    {
         return $this->userIsOwner() ? $this->fullPrice() - $this->sellerPrice() : 0;
     }
 
-    public function customerPrice(): float {
+    public function customerPrice(): float
+    {
         return $this->fullPrice() - $this->customerDiscount();
     }
 
-    public function priceString(): string {
+    public function priceString(): string
+    {
         return EcommerceHelper::formatPrice($this->price()->price);
     }
 
-    public function fullPriceString(): string {
+    public function fullPriceString(): string
+    {
         return EcommerceHelper::formatPrice($this->fullPrice());
     }
 
-    public function sellerPriceString(): string {
+    public function sellerPriceString(): string
+    {
         return EcommerceHelper::formatPrice($this->sellerPrice());
     }
 
-    public function customerPriceString(): string {
+    public function customerPriceString(): string
+    {
         return EcommerceHelper::formatPrice($this->customerPrice());
     }
 
     /**
      * Get the product gain
      */
-    public function sellerEarningBeforeReduction(?ProductColor $color = null): float {
+    public function sellerEarningBeforeReduction(?ProductColor $color = null): float
+    {
         $color = $color ?: $this->color;
 
         return $color->type == 'w' ? $this->price()->gain_w : $this->price()->gain_c;
@@ -197,14 +219,16 @@ class Product extends Model {
     /**
      * Get the product's defaul color
      */
-    public function color(): BelongsTo {
+    public function color(): BelongsTo
+    {
         return $this->belongsTo(ProductColor::class);
     }
 
     /**
      * Get the product's colors
      */
-    public function colors(): BelongsToMany {
+    public function colors(): BelongsToMany
+    {
         return $this->belongsToMany(
             ProductColor::class,
             'product_product_color',
@@ -216,11 +240,13 @@ class Product extends Model {
     /**
      * Get the product's description
      */
-    public function descriptionModel(): HasOne {
+    public function descriptionModel(): HasOne
+    {
         return $this->hasOne(ProductDescription::class, 'product_id', 'id');
     }
 
-    public function description(): string|false {
+    public function description(): string|false
+    {
         if ($this->descriptionModel) {
             return $this->descriptionModel->description ?: false;
         }
@@ -231,7 +257,8 @@ class Product extends Model {
     /**
      * Relationship: Get the product's mockups
      */
-    public function mockup(): HasMany {
+    public function mockup(): HasMany
+    {
         return $this->hasMany(ProductMockup::class);
     }
 
@@ -285,11 +312,13 @@ class Product extends Model {
     /**
      * Delete the generated preview images for this product.
      */
-    public function deletePreviewImages(): void {
+    public function deletePreviewImages(): void
+    {
         app(ProductPreviewProcessor::class)->deleteProductPreview($this);
     }
 
-    public function positions(): ?Collection {
+    public function positions(): ?Collection
+    {
         return ProductPosition::whereIn('id', explode(',', $this->positions))
             ->orderBy('id')
             ->get();
@@ -298,32 +327,37 @@ class Product extends Model {
     /**
      * Get the product's slug
      */
-    public function slug(): string {
-        return $this->id . '-' . Str::slug($this->name);
+    public function slug(): string
+    {
+        return $this->id.'-'.Str::slug($this->name);
     }
 
     /**
      * Check if the product is popular based on recent sales.
      */
-    public function isPopular(): bool {
+    public function isPopular(): bool
+    {
         return $this->recent_sales > 5;
     }
 
     /**
      * Check if the product is new based on its creation date.
      */
-    public function isNew(): bool {
+    public function isNew(): bool
+    {
         return $this->created_at >= now()->subDays(30);
     }
 
     /**
      * Get the product's url
      */
-    public function url(): string {
+    public function url(): string
+    {
         return route('products.show', $this);
     }
 
-    public function fullUrl(?int $color_id = null, ?int $position_id = null): string {
+    public function fullUrl(?int $color_id = null, ?int $position_id = null): string
+    {
         if ($color_id) {
             $parameters['color_id'] = $color_id;
         }
@@ -338,7 +372,8 @@ class Product extends Model {
     /**
      * Get the base product, without any design
      */
-    public function blankProduct(): ?self {
+    public function blankProduct(): ?self
+    {
         return self::where('id', '!=', $this->id)
             ->where('type_id', $this->type_id)
             ->where('status', 1)
@@ -350,21 +385,24 @@ class Product extends Model {
     /**
      * Check if the product is a custom product
      */
-    public function isCustom(): bool {
+    public function isCustom(): bool
+    {
         return $this->design_with_trashed ? $this->design_with_trashed->custom : true;
     }
 
     /**
      * Check if the product is owned by the logged user
      */
-    public function userIsOwner(): bool {
+    public function userIsOwner(): bool
+    {
         return $this->user_id == Auth::id();
     }
 
     /**
      * Get the product's logo group
      */
-    public function logoGroup(): ?LogoGroup {
+    public function logoGroup(): ?LogoGroup
+    {
         if ($this->design && in_array($this->type_id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])) {
             return $this->design->logo_group;
         }
@@ -375,7 +413,8 @@ class Product extends Model {
     /**
      * Get the product's logos.
      */
-    public function logos(): ?Collection {
+    public function logos(): ?Collection
+    {
         if ($this->logoGroup()) {
             return $this->logoGroup()->logos;
         }
@@ -386,17 +425,19 @@ class Product extends Model {
     /**
      * Set the product's logo id.
      */
-    public function logoId(): Attribute {
+    public function logoId(): Attribute
+    {
         return Attribute::make(
-            get: fn(?int $value) => $value,
-            set: fn(int $value) => $value,
+            get: fn (?int $value) => $value,
+            set: fn (int $value) => $value,
         );
     }
 
     /**
      * Get the product's logo.
      */
-    public function logo(): ?Logo {
+    public function logo(): ?Logo
+    {
         if ($this->logo_id) {
             return Logo::find($this->logo_id);
         }
@@ -411,7 +452,8 @@ class Product extends Model {
     /**
      * Get a collection of related products
      */
-    public function relatedProducts(int $quantity = 8): Collection {
+    public function relatedProducts(int $quantity = 8): Collection
+    {
         $relatedProducts = Product::where('user_id', $this->seller->user_id)
             ->where(function ($query) {
                 $query->where('design_id', '<>', $this->design_id)
@@ -470,7 +512,8 @@ class Product extends Model {
     /**
      * Delete the product and clean the related data
      */
-    public function deleteAndClean(bool $permanently = false): void {
+    public function deleteAndClean(bool $permanently = false): void
+    {
         if ($permanently) {
             $this->price()->delete();
             $this->delete();
@@ -480,15 +523,16 @@ class Product extends Model {
         }
     }
 
-    public function coverImage(): ?string {
+    public function coverImage(): ?string
+    {
         switch (true) {
             case FileHelper::exists($this->specificCoverImage()):
                 return $this->specificCoverImage();
 
-            case !$this->isCustom() && FileHelper::exists($file = '/product_types/covers/' . $this->type->tag . '.webp'):
+            case ! $this->isCustom() && FileHelper::exists($file = '/product_types/covers/'.$this->type->tag.'.webp'):
                 return FileHelper::storageAsset($file);
 
-            case !$this->isCustom() && FileHelper::exists($file = '/product_types/covers/' . $this->type->tag . '.jpg'):
+            case ! $this->isCustom() && FileHelper::exists($file = '/product_types/covers/'.$this->type->tag.'.jpg'):
                 return FileHelper::storageAsset($file);
 
             default:
@@ -499,21 +543,23 @@ class Product extends Model {
     /**
      * Get the specific cover image path
      */
-    public function specificCoverImage(): string {
-        return FileHelper::storageAsset('/products/' . $this->id . '-cover.webp');
+    public function specificCoverImage(): string
+    {
+        return FileHelper::storageAsset('/products/'.$this->id.'-cover.webp');
     }
 
     /**
      * Get custom images array
      */
-    public function customImages(?int $positionId = null): SupportCollection {
+    public function customImages(?int $positionId = null): SupportCollection
+    {
         $positionSlug = $positionId ? $positionId : 'more';
-        $prefix = 'products/custom/' . $this->id . '-' . $positionSlug;
+        $prefix = 'products/custom/'.$this->id.'-'.$positionSlug;
 
         $files = Storage::disk('public')->files('products/custom');
 
-        $matchingFiles = array_filter($files, fn($file) => str_starts_with($file, $prefix));
+        $matchingFiles = array_filter($files, fn ($file) => str_starts_with($file, $prefix));
 
-        return collect($matchingFiles)->map(fn($file) => FileHelper::storageAsset($file));
+        return collect($matchingFiles)->map(fn ($file) => FileHelper::storageAsset($file));
     }
 }

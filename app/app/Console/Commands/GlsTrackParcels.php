@@ -5,8 +5,8 @@ namespace App\Console\Commands;
 use App\Services\GlsService;
 use Illuminate\Console\Command;
 
-class GlsTrackParcels extends Command {
-
+class GlsTrackParcels extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -24,10 +24,11 @@ class GlsTrackParcels extends Command {
     /**
      * Track parcels
      */
-    public function handle(): int {
+    public function handle(): int
+    {
         $this->info('1. GLS command started');
 
-        $glsService = new GlsService();
+        $glsService = new GlsService;
 
         $this->info('2. Calling trackParcels()');
 

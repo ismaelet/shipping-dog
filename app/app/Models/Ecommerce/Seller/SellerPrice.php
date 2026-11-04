@@ -4,8 +4,8 @@ namespace App\Models\Ecommerce\Seller;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SellerPrice extends Model {
-
+class SellerPrice extends Model
+{
     /**
      * The table associated with the model.
      *
@@ -15,7 +15,7 @@ class SellerPrice extends Model {
 
     /**
      * The attributes that are mass assignable.
-     * 
+     *
      * @var array
      */
     protected $fillable = [

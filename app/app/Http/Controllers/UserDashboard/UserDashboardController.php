@@ -12,16 +12,16 @@ use Dompdf\Dompdf;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class UserDashboardController extends Controller {
-
+class UserDashboardController extends Controller
+{
     /**
      * Display the user dashboard
      */
-    public function index(Request $request): View {
+    public function index(Request $request): View
+    {
         $title = 'Attività recenti';
         $user = user();
 
@@ -52,7 +52,8 @@ class UserDashboardController extends Controller {
     /**
      * Display the orders tab
      */
-    public function orders(): View {
+    public function orders(): View
+    {
         return view('user-dashboard.orders', [
             'location' => 'user-dashboard',
             'title' => 'Ordini',
@@ -63,7 +64,8 @@ class UserDashboardController extends Controller {
     /**
      * Download the list of the user's orders as a PDF
      */
-    public function downloadOrders(Request $request): Response {
+    public function downloadOrders(Request $request): Response
+    {
         $user = user();
 
         $html = view('user-dashboard.orders-pdf', [
@@ -72,7 +74,7 @@ class UserDashboardController extends Controller {
             'generatedAt' => Carbon::now()->locale('it')->isoFormat('D MMMM YYYY'),
         ])->render();
 
-        $dompdf = new Dompdf();
+        $dompdf = new Dompdf;
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
@@ -86,7 +88,8 @@ class UserDashboardController extends Controller {
     /**
      * The user's confirmed orders, newest first
      */
-    private function confirmedOrdersQuery(): Builder {
+    private function confirmedOrdersQuery(): Builder
+    {
         return Order::where('user_id', user()->id)
             ->where('status', '!=', EcommerceHelper::statusFromTag('open'))
             ->with(
@@ -101,11 +104,9 @@ class UserDashboardController extends Controller {
 
     /**
      * Display the settings tab
-     *
-     * @param Request $request
-     * @return View
      */
-    public function settings(Request $request): View {
+    public function settings(Request $request): View
+    {
         return view('user-dashboard.settings', [
             'location' => 'user-dashboard',
             'title' => 'Impostazioni',

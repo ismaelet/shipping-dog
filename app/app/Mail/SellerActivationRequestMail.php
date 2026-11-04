@@ -10,8 +10,8 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SellerActivationRequestMail extends Mailable {
-
+class SellerActivationRequestMail extends Mailable
+{
     use Queueable, SerializesModels;
 
     /**
@@ -22,14 +22,16 @@ class SellerActivationRequestMail extends Mailable {
     /**
      * Create a new message instance
      */
-    public function __construct(public Seller $seller) {
-        $this->text = 'Hai ricevuto la richiesta di attivazione dello shop <strong>' . $this->seller->name . '</strong> (' . $this->seller->user->email . ').';
+    public function __construct(public Seller $seller)
+    {
+        $this->text = 'Hai ricevuto la richiesta di attivazione dello shop <strong>'.$this->seller->name.'</strong> ('.$this->seller->user->email.').';
     }
 
     /**
      * Get the message envelope
      */
-    public function envelope(): Envelope {
+    public function envelope(): Envelope
+    {
         return new Envelope(
             from: new Address(config('mail.from.address'), config('mail.from.name')),
             replyTo: [
@@ -42,7 +44,8 @@ class SellerActivationRequestMail extends Mailable {
     /**
      * Get the message content definition
      */
-    public function content(): Content {
+    public function content(): Content
+    {
         return new Content(
             view: 'emails.seller-activation-request',
         );
@@ -51,7 +54,8 @@ class SellerActivationRequestMail extends Mailable {
     /**
      * Get the attachments for the message
      */
-    public function attachments(): array {
+    public function attachments(): array
+    {
         return [];
     }
 }

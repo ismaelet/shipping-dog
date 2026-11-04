@@ -6,37 +6,36 @@ use App\Models\Ecommerce\Seller;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Payment extends Model {
+class Payment extends Model
+{
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'seller_payments';
 
-	/**
-	 * The table associated with the model.
-	 * 
-	 * @var string
-	 */
-	protected $table = 'seller_payments';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'seller_id',
+        'value',
+        'other',
+        'description',
+    ];
 
-	/**
-	 * The attributes that are mass assignable.
-	 * 
-	 * @var array
-	 */
-	protected $fillable = [
-		'seller_id',
-		'value',
-		'other',
-		'description',
-	];
+    /**
+     * * Relationships
+     */
 
-	/**
-	 * * Relationships
-	 */
-
-	/**
-	 * Get the seller that received the payment.
-	 * 
-	 * @return BelongsTo
-	 */
-	public function seller(): BelongsTo {
-		return $this->belongsTo(Seller::class);
-	}
+    /**
+     * Get the seller that received the payment.
+     */
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(Seller::class);
+    }
 }

@@ -7,15 +7,13 @@ use App\Models\Ecommerce\Product;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class HomeController extends Controller {
-
+class HomeController extends Controller
+{
     /**
      * Display the home page.
-     *
-     * @param Request $request
-     * @return View
      */
-    public function index(Request $request): View {
+    public function index(Request $request): View
+    {
         $fanPicsCount = 5;
 
         // Products
@@ -33,7 +31,7 @@ class HomeController extends Controller {
             'base_price',
         ];
 
-        $productQuery = fn() => Product::query()
+        $productQuery = fn () => Product::query()
             ->join('sellers', 'products.user_id', '=', 'sellers.user_id')
             ->where('products.status', true)
             ->where('sellers.status', true)
@@ -68,19 +66,19 @@ class HomeController extends Controller {
         // categories
         $features = [
             [
-                "title" => "Creato da artisti",
-                "description" => "Design originali da creativi indipendenti.",
-                "icon" => "artist"
+                'title' => 'Creato da artisti',
+                'description' => 'Design originali da creativi indipendenti.',
+                'icon' => 'artist',
             ],
             [
-                "title" => "Stampato in Italia",
-                "description" => "Produzione responsabile e di qualità.",
-                "icon" => "shirt"
+                'title' => 'Stampato in Italia',
+                'description' => 'Produzione responsabile e di qualità.',
+                'icon' => 'shirt',
             ],
             [
-                "title" => "Resi semplici",
-                "description" => "Hai 30 giorni per cambiare idea.",
-                "icon" => "return"
+                'title' => 'Resi semplici',
+                'description' => 'Hai 30 giorni per cambiare idea.',
+                'icon' => 'return',
             ],
         ];
 

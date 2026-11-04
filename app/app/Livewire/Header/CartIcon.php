@@ -7,8 +7,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class CartIcon extends Component {
-
+class CartIcon extends Component
+{
     /**
      * Property: The quantity of items in the cart
      */
@@ -18,14 +18,16 @@ class CartIcon extends Component {
     /**
      * Lifecycle hook: Initialize the component
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->updateCart();
     }
 
     /**
      * Lifecycle hook: Render the component view
      */
-    public function render(): View {
+    public function render(): View
+    {
         return view('livewire.header.cart-icon');
     }
 
@@ -33,10 +35,11 @@ class CartIcon extends Component {
      * Event: Update the cart quantity
      */
     #[On('update-cart')]
-    public function updateCart(): void {
+    public function updateCart(): void
+    {
         $cart = cart();
 
-        if (!$cart) {
+        if (! $cart) {
             $this->quantity = 0;
 
             return;

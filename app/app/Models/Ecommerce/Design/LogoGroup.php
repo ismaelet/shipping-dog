@@ -4,26 +4,27 @@ namespace App\Models\Ecommerce\Design;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LogoGroup extends Model {
+class LogoGroup extends Model
+{
+    protected $fillable = [];
 
+    /**
+     * Get the logo group's logos
+     */
+    public function logos()
+    {
+        return $this->hasMany(Logo::class);
+    }
 
-	protected $fillable = [];
+    /**
+     * Delete the logo group and clean the related data
+     */
+    public function deleteAndClean()
+    {
+        // Delete the logos
+        $this->logos()->delete();
 
-	/**
-	 * Get the logo group's logos
-	 */
-	public function logos() {
-		return $this->hasMany(Logo::class);
-	}
-
-	/**
-	 * Delete the logo group and clean the related data
-	 */
-	public function deleteAndClean() {
-		// Delete the logos
-		$this->logos()->delete();
-
-		// Delete the logo group
-		$this->delete();
-	}
+        // Delete the logo group
+        $this->delete();
+    }
 }

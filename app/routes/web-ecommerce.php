@@ -67,7 +67,6 @@ Route::resource('products', ProductController::class)->only(['show', 'update'])-
 
 Route::post('/products/{product}/status', [ProductController::class, 'changeStatus'])->name('products.status');
 
-
 /**
  * * Cart
  */

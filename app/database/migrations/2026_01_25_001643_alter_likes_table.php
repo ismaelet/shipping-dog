@@ -4,11 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
-    public function up(): void {
+    public function up(): void
+    {
         Schema::table('likes', function (Blueprint $table) {
             $table->unsignedBigInteger('color_id')->nullable()->after('product_id');
             $table->unsignedBigInteger('position_id')->nullable()->after('color_id');
@@ -18,7 +20,8 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down(): void {
+    public function down(): void
+    {
         Schema::table('likes', function (Blueprint $table) {
             $table->dropColumn('color_id');
             $table->dropColumn('position_id');

@@ -7,19 +7,18 @@ use App\Models\Framework\Configuration;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
-use Illuminate\Contracts\View\View;
 use Filament\Schemas\Schema;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
-class Filter extends Component implements HasSchemas {
-
+class Filter extends Component implements HasSchemas
+{
     use InteractsWithSchemas;
 
     /**
@@ -41,52 +40,55 @@ class Filter extends Component implements HasSchemas {
     /**
      * Lifecycle hook: Mount the component
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->form->fill();
     }
 
     /**
      * Lifecycle hook: Render the component
      */
-    public function render(): View {
+    public function render(): View
+    {
         return view('livewire.admin.product-log.filter');
     }
 
     /**
      * Filament method: Define the form schema
      */
-    public function form(Schema $schema): Schema {
+    public function form(Schema $schema): Schema
+    {
         return $schema
             ->components([
                 Fieldset::make('body')
-                    ->label('Mostrando ' . ($this->orderItems?->count() ?: 0) . " " . ($this->orderItems?->count() == 1 ? 'articolo' : 'articoli'))
+                    ->label('Mostrando '.($this->orderItems?->count() ?: 0).' '.($this->orderItems?->count() == 1 ? 'articolo' : 'articoli'))
                     ->schema([
                         Select::make('first_order_id')
                             ->label('Carica da')
-                            ->getSearchResultsUsing(fn(string $search): array => Order::query()
+                            ->getSearchResultsUsing(fn (string $search): array => Order::query()
                                 ->where('orders.id', 'like', "%{$search}%")
-                                ->orWhereHas('address', fn($query) => $query->where('full_name', 'like', "%{$search}%"))
+                                ->orWhereHas('address', fn ($query) => $query->where('full_name', 'like', "%{$search}%"))
                                 ->limit(20)
                                 ->orderBy('orders.id', 'desc')
                                 ->with('address')
                                 ->get()
-                                ->mapWithKeys(fn($order) => [
-                                    $order->id => $order->idCode() . ' - ' . $order->address?->full_name
+                                ->mapWithKeys(fn ($order) => [
+                                    $order->id => $order->idCode().' - '.$order->address?->full_name,
                                 ])
                                 ->all())
 
                             ->getOptionLabelUsing(function ($value): ?string {
                                 $order = Order::with('address')->find($value);
 
-                                if (!$order) {
+                                if (! $order) {
                                     return null;
                                 }
 
-                                return $order->idCode() . ' - ' . $order->address?->full_name;
+                                return $order->idCode().' - '.$order->address?->full_name;
                             })
 
                             ->searchable()
-                            ->default(fn(): ?int => $this->firstOrder?->id ?: null)
+                            ->default(fn (): ?int => $this->firstOrder?->id ?: null)
                             ->required(),
                         Action::make('load')
                             ->label('Carica')
@@ -110,7 +112,7 @@ class Filter extends Component implements HasSchemas {
                             ])
                             ->columnSpanFull(),
                         Grid::make(2)
-                            ->visible(fn(): bool => $this->orderItems?->count() > 0)
+                            ->visible(fn (): bool => $this->orderItems?->count() > 0)
                             ->schema([
                                 Action::make('copy')
                                     ->label('Copia tutto')
@@ -136,7 +138,8 @@ class Filter extends Component implements HasSchemas {
     /**
      * Filament method: Load orders starting from the selected order ID
      */
-    public function load(): void {
+    public function load(): void
+    {
         $firstOrderId = $this->form->getState()['first_order_id'];
         $firstOrder = Order::find($firstOrderId);
 
@@ -155,14 +158,16 @@ class Filter extends Component implements HasSchemas {
     /**
      * Filament method: Copy data from the selected order ID
      */
-    public function copy(): void {
+    public function copy(): void
+    {
         $this->dispatch('copyAll');
     }
 
     /**
      * Filament method: Clean the order log
      */
-    public function clean(): void {
+    public function clean(): void
+    {
         $lastOrder = Order::orderBy('id', 'desc')
             ->first();
 
@@ -179,21 +184,24 @@ class Filter extends Component implements HasSchemas {
     /**
      * Update handler: Handle changes to the 'include_ready' checkbox
      */
-    public function updatedDataIncludeReady(bool $value): void {
+    public function updatedDataIncludeReady(bool $value): void
+    {
         $this->dispatch('includeReadyUpdated', ['include_ready' => $value]);
     }
 
     /**
      * Update handler: Handle changes to the 'show_printed' checkbox
      */
-    public function updatedDataShowPrinted(bool $value): void {
+    public function updatedDataShowPrinted(bool $value): void
+    {
         $this->dispatch('showPrintedUpdated', ['show_printed' => $value]);
     }
 
     /**
      * Update handler: Handle changes to the 'show_in_cart' checkbox
      */
-    public function updatedDataShowInCart(bool $value): void {
+    public function updatedDataShowInCart(bool $value): void
+    {
         $this->dispatch('showInCartUpdated', ['show_in_cart' => $value]);
     }
 }

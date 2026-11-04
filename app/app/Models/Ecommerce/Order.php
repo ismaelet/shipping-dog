@@ -24,8 +24,8 @@ use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
 /**
  * Represents a shopping order in the e-commerce system.
  */
-class Order extends Model {
-
+class Order extends Model
+{
     /**
      * The attributes that are mass assignable.
      */
@@ -53,7 +53,8 @@ class Order extends Model {
     /**
      * Update the order's order_items status when the order is updated.
      */
-    public function update(array $attributes = [], array $options = []): bool {
+    public function update(array $attributes = [], array $options = []): bool
+    {
         // Synchronize the order_items status with the order status
         if (isset($attributes['status'])) {
             $this->order_items->each->update([
@@ -71,125 +72,124 @@ class Order extends Model {
         return parent::update($attributes, $options);
     }
 
-    protected function estimatedDelivery(): Attribute {
+    protected function estimatedDelivery(): Attribute
+    {
         return Attribute::make(
-            get: fn(): string => $this->shipping_method->deliveryDateString($this->created_at, $this->hasLongDelivery())
+            get: fn (): string => $this->shipping_method->deliveryDateString($this->created_at, $this->hasLongDelivery())
         );
     }
 
     /**
      * Get the order's user.
-     *
-     * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
     /**
      * Get the order's shipping method.
-     *
-     * @return BelongsTo
      */
-    public function shipping_method(): BelongsTo {
+    public function shipping_method(): BelongsTo
+    {
         return $this->belongsTo(ShippingMethod::class);
     }
 
     /**
      * Get the order's payment method.
-     *
-     * @return BelongsTo
      */
-    public function payment_method(): BelongsTo {
+    public function payment_method(): BelongsTo
+    {
         return $this->belongsTo(PaymentMethod::class);
     }
 
     /**
      * Get the order's address.
-     *
-     * @return HasOne
      */
-    public function address(): HasOne {
+    public function address(): HasOne
+    {
         return $this->hasOne(Address::class);
     }
 
     /**
      * Get the order's coupon.
-     *
-     * @return HasOne
      */
-    public function coupon(): HasOne {
+    public function coupon(): HasOne
+    {
         return $this->hasOne(Coupon::class, 'code', 'code');
     }
 
     /**
      * Get the order's change request.
-     *
-     * @return HasOne
      */
-    public function change_request(): HasOne {
+    public function change_request(): HasOne
+    {
         return $this->hasOne(ChangeRequest::class, 'new_order_id');
     }
 
     /**
      * Get the order's order_items.
-     *
-     * @return HasMany
      */
-    public function order_items(): HasMany {
+    public function order_items(): HasMany
+    {
         return $this->hasMany(OrderItem::class);
     }
 
     /**
      * Get the order's code
      */
-    public function idCode(): string {
-        return '#' . str_pad($this->id, 5, '0', STR_PAD_LEFT);
+    public function idCode(): string
+    {
+        return '#'.str_pad($this->id, 5, '0', STR_PAD_LEFT);
     }
 
     /**
      * Get the order's created at date as a string
      */
-    public function createdAtString(): string {
+    public function createdAtString(): string
+    {
         return date('d/m/Y', strtotime($this->created_at));
     }
 
     /**
      * Get the order's created at date in a human readable Italian format (e.g. "13 settembre 2025")
      */
-    public function humanDate(): string {
+    public function humanDate(): string
+    {
         return Carbon::parse($this->created_at)->locale('it')->isoFormat('D MMMM YYYY');
     }
 
     /**
      * Get the main title of the order: the first item's name, plus the number of other items
      */
-    public function mainTitle(): string {
+    public function mainTitle(): string
+    {
         $first = $this->order_items->first();
 
-        if (!$first) {
+        if (! $first) {
             return 'Nessun prodotto';
         }
 
         $title = $first->product_with_trashed?->name ?: 'Articolo rimosso';
         $others = $this->order_items->count() - 1;
 
-        return $others > 0 ? $title . ' +' . $others : $title;
+        return $others > 0 ? $title.' +'.$others : $title;
     }
 
     /**
      * Get the order's sub-title (e.g. "Taglia S · 2 articoli")
      */
-    public function subTitle(): string {
+    public function subTitle(): string
+    {
         $first = $this->order_items->first();
         $count = (int) $this->order_items->sum('quantity');
         $parts = [];
 
         if ($first && $this->order_items->count() === 1) {
-            $parts[] = $first->size && $first->type?->sizes->count() > 1 ? 'Taglia ' . $first->size->name : 'Taglia unica';
+            $parts[] = $first->size && $first->type?->sizes->count() > 1 ? 'Taglia '.$first->size->name : 'Taglia unica';
         }
 
-        $parts[] = $count . ($count === 1 ? ' articolo' : ' articoli');
+        $parts[] = $count.($count === 1 ? ' articolo' : ' articoli');
 
         return implode(' · ', $parts);
     }
@@ -197,35 +197,40 @@ class Order extends Model {
     /**
      * Check if the order is empty (has no order items)
      */
-    public function isEmpty(): bool {
-        return !$this->order_items()->exists();
+    public function isEmpty(): bool
+    {
+        return ! $this->order_items()->exists();
     }
 
     /**
      * Get the order's payment URL
      */
-    public function paymentUrl(): string {
+    public function paymentUrl(): string
+    {
         return route('paypal.orders.create', ['order_id' => $this->id]);
     }
 
     /**
      * Get the order's recap URL
      */
-    public function recapUrl(): string {
+    public function recapUrl(): string
+    {
         return route('orders.show', ['order' => $this->id]);
     }
 
     /**
      * Get the order's recap URL with the security token
      */
-    public function recapUrlWithToken(): string {
+    public function recapUrlWithToken(): string
+    {
         return route('orders.show', ['order' => $this->id, 'token' => $this->token]);
     }
 
     /**
      * Check if the order has a long delivery time
      */
-    public function hasLongDelivery(): bool {
+    public function hasLongDelivery(): bool
+    {
         foreach ($this->order_items as $orderItem) {
             if ($orderItem->product && ($orderItem->product->type?->preorder || $orderItem->color?->preorder)) {
                 return true;
@@ -238,74 +243,82 @@ class Order extends Model {
     /**
      * Get the order's order_items as a string.
      */
-    public function orderItemsString(): string {
+    public function orderItemsString(): string
+    {
         $orderItemsString = '';
 
-        if (!$this->order_items->count()) {
+        if (! $this->order_items->count()) {
             return 'Nessun prodotto';
         }
 
         foreach ($this->order_items as $orderItem) {
-            $orderItemsString .= $orderItem->full_name . '<br>';
+            $orderItemsString .= $orderItem->full_name.'<br>';
         }
 
         return $orderItemsString;
     }
 
-
     /**
      * Get the order's step data.
      */
-    public function stepData(): array {
+    public function stepData(): array
+    {
         return config('ecommerce.cart.steps')[$this->step];
     }
 
     /**
      * Get the order's step tag.
      */
-    public function stepTag(): string {
+    public function stepTag(): string
+    {
         return $this->stepData()['tag'];
     }
 
     /**
      * Get the order's status data.
      */
-    public function statusData(): array {
+    public function statusData(): array
+    {
         return config('ecommerce.order.statuses')[$this->status];
     }
 
     /**
      * Get the order's status tag.
      */
-    public function statusTag(): string {
+    public function statusTag(): string
+    {
         return $this->statusData()['tag'];
     }
 
     /**
      * Get the order's status name.
      */
-    public function statusName(): string {
+    public function statusName(): string
+    {
         return $this->statusData()['label'];
     }
 
     /**
      * Get the order's status color.
      */
-    public function statusColor(): string {
+    public function statusColor(): string
+    {
         return $this->statusData()['color'];
     }
 
     /**
      * Get the status icon.
      */
-    public function statusIcon(): string {
+    public function statusIcon(): string
+    {
         return $this->statusData()['icon'];
     }
 
     /**
      * Attribute: Status Label
      */
-    public function statusLabel(): string {
+    public function statusLabel(): string
+    {
         return view('components.ecommerce.order-status-label', [
             'order' => $this,
         ])->render();
@@ -314,7 +327,8 @@ class Order extends Model {
     /**
      * ~ Attribute: Order Items Price
      */
-    public function orderItemsPrice(): float {
+    public function orderItemsPrice(): float
+    {
         $orderItemsPrice = 0;
 
         foreach ($this->order_items as $orderItem) {
@@ -327,7 +341,8 @@ class Order extends Model {
     /**
      * Attribute: Full Order Items Price
      */
-    public function fullOrderItemsPrice(): float {
+    public function fullOrderItemsPrice(): float
+    {
         $price = 0;
 
         foreach ($this->order_items as $orderItem) {
@@ -340,7 +355,8 @@ class Order extends Model {
     /**
      * The used credit for the order
      */
-    public function usedCredit(): float {
+    public function usedCredit(): float
+    {
         $shippingCredit = $this->credit_ship ? $this->grossShippingFee() : 0;
         $orderItemsCredit = $this->usedOrderItemsCredit();
 
@@ -350,7 +366,8 @@ class Order extends Model {
     /**
      * Attribute: Get the total credit used for order items.
      */
-    public function usedOrderItemsCredit(): float {
+    public function usedOrderItemsCredit(): float
+    {
         $credit = 0;
 
         foreach ($this->order_items as $orderItem) {
@@ -365,28 +382,32 @@ class Order extends Model {
     /**
      * Get the order's net shipping fee.
      */
-    public function shippingFee(): float {
+    public function shippingFee(): float
+    {
         return $this->credit_ship ? 0 : $this->grossShippingFee();
     }
 
     /**
      * Get the order's gross shipping fee.
      */
-    public function grossShippingFee(): float {
+    public function grossShippingFee(): float
+    {
         return $this->shipping_method ? $this->shipping_method->price($this->order_items->sum('quantity')) : 0;
     }
 
     /**
      * Get the order's total discount.
      */
-    public function discount(): float {
+    public function discount(): float
+    {
         return $this->orderItemsDiscount() + $this->shippingDiscount();
     }
 
     /**
      * Get the order's total order_items discount.
      */
-    public function orderItemsDiscount(): float {
+    public function orderItemsDiscount(): float
+    {
         $orderItemsDiscount = 0;
 
         foreach ($this->order_items as $orderItem) {
@@ -399,44 +420,50 @@ class Order extends Model {
     /**
      * ~ Attribute: Shipping Discount
      */
-    public function shippingDiscount(): float {
+    public function shippingDiscount(): float
+    {
         return $this->credit_ship ? $this->grossShippingFee() : 0;
     }
 
     /**
      * ~ Attribute: Price String
      */
-    public function priceString(): string {
+    public function priceString(): string
+    {
         return EcommerceHelper::formatPrice($this->price);
     }
 
     /**
      * ~ Attribute: Shipping Fee String
      */
-    public function shippingFeeString(): string {
+    public function shippingFeeString(): string
+    {
         return EcommerceHelper::formatPrice($this->shippingFee());
     }
 
     /**
      * Get the order's total discount formatted as a price string.
      */
-    public function discountString(): string {
+    public function discountString(): string
+    {
         return EcommerceHelper::formatPrice($this->discount());
     }
 
     /**
      * Get the order's order_items discount formatted as a price string.
      */
-    public function orderItemsDiscountString(): string {
+    public function orderItemsDiscountString(): string
+    {
         return EcommerceHelper::formatPrice($this->orderItemsDiscount());
     }
 
     /**
      * Advance the order to the next step or to a specific step.
      */
-    public function advance(?string $advanceToStepTag = null): self {
+    public function advance(?string $advanceToStepTag = null): self
+    {
         // If no specific step is given, advance to the next step
-        if (!$advanceToStepTag) {
+        if (! $advanceToStepTag) {
             // The current order step
             $currentStep = $this->step;
 
@@ -465,7 +492,8 @@ class Order extends Model {
     /**
      * Update the order's quantity and price.
      */
-    public function updateOrderItems(): self {
+    public function updateOrderItems(): self
+    {
         $this->updateQuantity();
         $this->updatePrice();
 
@@ -475,7 +503,8 @@ class Order extends Model {
     /**
      * Update the order's quantity.
      */
-    public function updateQuantity(): self {
+    public function updateQuantity(): self
+    {
         $this->quantity = $this->order_items()->sum('quantity');
         $this->save();
 
@@ -485,7 +514,8 @@ class Order extends Model {
     /**
      * Update the order's price.
      */
-    public function updatePrice(): self {
+    public function updatePrice(): self
+    {
         $orderItemsPrice = $this->orderItemsPrice();
         $shippingFee = $this->shippingFee();
 
@@ -500,10 +530,11 @@ class Order extends Model {
     /**
      * Try to apply a coupon to the order.
      */
-    public function applyCoupon(string $couponCode): string|false {
+    public function applyCoupon(string $couponCode): string|false
+    {
         $coupon = Coupon::firstWhere('code', $couponCode);
 
-        if (!$coupon) {
+        if (! $coupon) {
             return 'Il codice sconto non esiste';
         }
 
@@ -515,7 +546,7 @@ class Order extends Model {
         // Remove shipping cost if the coupon has free shipping
         if ($coupon->shipping) {
             $this->update([
-                'shipping_method_id' => ShippingMethod::FREE_SHIPPING_METHODS[0]
+                'shipping_method_id' => ShippingMethod::FREE_SHIPPING_METHODS[0],
             ]);
         }
 
@@ -525,13 +556,13 @@ class Order extends Model {
             $ourDiscount = 0;
 
             // Check if the order matches the coupon requirements
-            $matchesDesign = !$coupon->design_id || $coupon->design_id == $orderItem->design_id;
-            $matchesSeller = !$coupon->seller_id || $coupon->seller_id == $orderItem->seller_id;
-            $matchesType = !$coupon->type_id || $coupon->type_id == $orderItem->type_id;
-            $matchesColor = !$coupon->color_id || $coupon->color_id == $orderItem->color_id;
+            $matchesDesign = ! $coupon->design_id || $coupon->design_id == $orderItem->design_id;
+            $matchesSeller = ! $coupon->seller_id || $coupon->seller_id == $orderItem->seller_id;
+            $matchesType = ! $coupon->type_id || $coupon->type_id == $orderItem->type_id;
+            $matchesColor = ! $coupon->color_id || $coupon->color_id == $orderItem->color_id;
 
             // Check if the order item matches the coupon requirements
-            if (!$matchesDesign || !$matchesSeller || !$matchesType || !$matchesColor) {
+            if (! $matchesDesign || ! $matchesSeller || ! $matchesType || ! $matchesColor) {
                 continue;
             }
 
@@ -543,7 +574,7 @@ class Order extends Model {
                 // Precentage discount
                 if ($coupon->mod_us3 && $this->quantity > 2) {
                     $ourDiscountPercentage = $coupon->mod_us3;
-                } else if ($coupon->mod_us2 && $this->quantity > 1) {
+                } elseif ($coupon->mod_us2 && $this->quantity > 1) {
                     $ourDiscountPercentage = $coupon->mod_us2;
                 } else {
                     $ourDiscountPercentage = $coupon->mod_us;
@@ -551,7 +582,7 @@ class Order extends Model {
 
                 if ($coupon->mod_them3 && $this->quantity > 2) {
                     $sellerDiscountPercentage = $coupon->mod_them3;
-                } else if ($coupon->mod_them2 && $this->quantity > 1) {
+                } elseif ($coupon->mod_them2 && $this->quantity > 1) {
                     $sellerDiscountPercentage = $coupon->mod_them2;
                 } else {
                     $sellerDiscountPercentage = $coupon->mod_them;
@@ -560,7 +591,7 @@ class Order extends Model {
                 // Fixed discount
                 if ($coupon->flat_us3 && $this->quantity > 2) {
                     $ourDiscountFixed = $coupon->flat_us3;
-                } else if ($coupon->flat_us2 && $this->quantity > 1) {
+                } elseif ($coupon->flat_us2 && $this->quantity > 1) {
                     $ourDiscountFixed = $coupon->flat_us2;
                 } else {
                     $ourDiscountFixed = $coupon->flat_us;
@@ -568,7 +599,7 @@ class Order extends Model {
 
                 if ($coupon->flat_them3 && $this->quantity > 2) {
                     $sellerDiscountFixed = $coupon->flat_them3;
-                } else if ($coupon->flat_them2 && $this->quantity > 1) {
+                } elseif ($coupon->flat_them2 && $this->quantity > 1) {
                     $sellerDiscountFixed = $coupon->flat_them2;
                 } else {
                     $sellerDiscountFixed = $coupon->flat_them;
@@ -608,7 +639,8 @@ class Order extends Model {
     /**
      * Remove the coupon from the order.
      */
-    public function removeCoupon(): void {
+    public function removeCoupon(): void
+    {
         // Remove the coupon code from the order
         $this->update([
             'code' => null,
@@ -629,7 +661,8 @@ class Order extends Model {
     /**
      * Confirm the order.
      */
-    public function confirm(bool $sendNotification = true, bool $updateDate = true): void {
+    public function confirm(bool $sendNotification = true, bool $updateDate = true): void
+    {
         // Forget the order ID
         session()->forget('cart_id');
 
@@ -660,7 +693,7 @@ class Order extends Model {
                 UsedCoupon::create(['coupon_id' => $this->coupon->id, 'user_id' => $this->user_id]);
             }
 
-            if (!$this->coupon->permanent) {
+            if (! $this->coupon->permanent) {
                 $this->coupon->delete();
             }
         }
@@ -677,14 +710,15 @@ class Order extends Model {
         }
 
         // Send the shipping data
-        $glsService = new GlsService();
+        $glsService = new GlsService;
         $glsService->addParcels($this);
     }
 
     /**
      * Confirm the order's order_items.
      */
-    public function confirmOrderItems(): void {
+    public function confirmOrderItems(): void
+    {
         foreach ($this->order_items as $orderItem) {
             // Check if the order is in the inventory
             $inventoryItem = InventoryItem::where('product_id', $orderItem->product_id)
@@ -703,7 +737,8 @@ class Order extends Model {
     /**
      * Update the selle5rs balance after an order is confirmed or cancelled
      */
-    private function updateSellersBalance(): void {
+    private function updateSellersBalance(): void
+    {
         $this->order_items->loadMissing('seller');
 
         $this->order_items
@@ -718,7 +753,8 @@ class Order extends Model {
     /**
      * Cancel an order
      */
-    public function cancel(bool $sendNotification = false): void {
+    public function cancel(bool $sendNotification = false): void
+    {
 
         // Update the order
         $this->update([
@@ -737,15 +773,16 @@ class Order extends Model {
     /**
      * Action: Send the order's status email
      */
-    public function sendStatusEmail(bool $forced = false): void {
-        $type = 'order-status-update-' . $this->statusTag();
+    public function sendStatusEmail(bool $forced = false): void
+    {
+        $type = 'order-status-update-'.$this->statusTag();
         $email = $this->address->email;
 
         // Check if the email is already sent
         if (
-            !$forced && SentEmail::where('email', $email)
-            ->where('type', $type)
-            ->exists()
+            ! $forced && SentEmail::where('email', $email)
+                ->where('type', $type)
+                ->exists()
         ) {
             // Log::error("Email already sent for {$email} with type {$type}");
             return;
@@ -760,24 +797,27 @@ class Order extends Model {
         try {
             Mail::to($email)->queue(new OrderStatusMail($this));
         } catch (UnexpectedResponseException $e) {
-            Log::info("Email sending failed for {$email}: " . $e->getMessage());
+            Log::info("Email sending failed for {$email}: ".$e->getMessage());
         }
     }
 
     /**
      * Delete the order.
      */
-    public function delete(): bool {
+    public function delete(): bool
+    {
         session()->forget('cart_id');
 
         return parent::delete();
     }
 
-    public static function hasBeenPaid(): Builder {
+    public static function hasBeenPaid(): Builder
+    {
         return self::where('status', '>=', EcommerceHelper::statusFromTag('confirmed'));
     }
 
-    public static function hasNoLabel(): Builder {
+    public static function hasNoLabel(): Builder
+    {
         return self::join('addresses', 'orders.id', '=', 'addresses.order_id')
             ->where('status', EcommerceHelper::statusFromTag('confirmed'))
             ->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())
@@ -785,16 +825,14 @@ class Order extends Model {
             ->select('orders.*', 'orders.id as order_id', 'addresses.full_name');
     }
 
-
     /**
      * * Static methods
      */
     /**
      * Get the orders that need a label to be printed.
-     *
-     * @return Collection
      */
-    public static function unlabelled(): Collection {
+    public static function unlabelled(): Collection
+    {
         return self::join('addresses', 'orders.id', '=', 'addresses.order_id')
             ->where('status', EcommerceHelper::statusFromTag('confirmed'))
             ->whereIn('shipping_method_id', ShippingMethod::shippingMethodsWithLabels())

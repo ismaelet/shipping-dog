@@ -2,22 +2,23 @@
 
 namespace App\Filament\Admin\Resources\Payments\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Admin\Resources\Payments\PaymentResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditPayment extends EditRecord {
-
+class EditPayment extends EditRecord
+{
     protected static string $resource = PaymentResource::class;
 
-    protected function getHeaderActions(): array {
+    protected function getHeaderActions(): array
+    {
         return [
             DeleteAction::make(),
         ];
     }
 
-    protected function afterSave(): void {
+    protected function afterSave(): void
+    {
         $this->record->seller->updateBalance();
     }
 }

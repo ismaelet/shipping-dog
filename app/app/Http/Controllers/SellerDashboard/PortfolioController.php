@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class PortfolioController extends Controller {
-    public function index(Request $request): View {
+class PortfolioController extends Controller
+{
+    public function index(Request $request): View
+    {
         $seller = Auth::user()->seller;
 
         $activeTab = $request->routeIs('seller-dashboard.portfolio.add')

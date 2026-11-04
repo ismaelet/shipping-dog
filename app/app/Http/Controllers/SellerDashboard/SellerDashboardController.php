@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\SellerDashboard;
 
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Seller;
 use App\Models\User\UserContact;
@@ -10,20 +9,19 @@ use App\Services\Files\ImageProcessor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
-class SellerDashboardController extends Controller {
-
+class SellerDashboardController extends Controller
+{
     public function __construct(
         private ImageProcessor $imageProcessor,
-    ) {
-    }
+    ) {}
 
     /**
      * Displays the seller dashboard.
-     *
-     * @return View
      */
-    public function index(): View {
+    public function index(): View
+    {
         $user = Auth::user();
         $seller = $user->seller;
         $noCover = strpos($seller->cover(), '0.jpg');
@@ -34,11 +32,12 @@ class SellerDashboardController extends Controller {
     /**
      * Updates the seller's settings.
      *
-     * @param Seller $seller The seller instance.
-     * @param Request $request The request object.
+     * @param  Seller  $seller  The seller instance.
+     * @param  Request  $request  The request object.
      * @return RedirectResponse The redirect response.
      */
-    public function update(Seller $seller, Request $request): RedirectResponse {
+    public function update(Seller $seller, Request $request): RedirectResponse
+    {
         // Validate the request data
         $request->validate([
             'name' => 'required|string|max:50',
@@ -56,12 +55,13 @@ class SellerDashboardController extends Controller {
 
     /**
      * Updates the seller's contact information.
-     * 
-     * @param Seller $seller The seller instance.
-     * @param Request $request The request object containing the contact information.
+     *
+     * @param  Seller  $seller  The seller instance.
+     * @param  Request  $request  The request object containing the contact information.
      * @return RedirectResponse The redirect response.
      */
-    public function updateContacts(Seller $seller, Request $request): RedirectResponse {
+    public function updateContacts(Seller $seller, Request $request): RedirectResponse
+    {
         $data = $request->validate([
             'website' => 'nullable|url|max:255',
             'facebook' => 'nullable|string|max:255',
@@ -73,7 +73,7 @@ class SellerDashboardController extends Controller {
         ]);
 
         foreach (['facebook', 'instagram', 'twitter', 'youtube', 'tiktok', 'bluesky'] as $type) {
-            if (!empty($data[$type])) {
+            if (! empty($data[$type])) {
                 $data[$type] = $this->formatContactUrl($data[$type], $type);
             }
         }
@@ -89,11 +89,12 @@ class SellerDashboardController extends Controller {
     /**
      * Formats the contact URL for social media platforms.
      *
-     * @param string $url The URL to format.
-     * @param string $type The type of social media platform.
+     * @param  string  $url  The URL to format.
+     * @param  string  $type  The type of social media platform.
      * @return string The formatted URL.
      */
-    private function formatContactUrl(string $value, string $type): string {
+    private function formatContactUrl(string $value, string $type): string
+    {
         $baseUrls = [
             'facebook' => 'https://facebook.com/',
             'instagram' => 'https://instagram.com/',
@@ -117,24 +118,25 @@ class SellerDashboardController extends Controller {
         // Extract username
         $username = basename(trim($value, '/@'));
 
-        return $baseUrls[$type] . $username;
+        return $baseUrls[$type].$username;
     }
 
     /**
      * Uploads the seller icon.
      *
-     * @param Seller $seller The seller instance.
-     * @param Request $request The request object.
+     * @param  Seller  $seller  The seller instance.
+     * @param  Request  $request  The request object.
      * @return RedirectResponse The redirect response.
      */
-    public function uploadSellerIcon(Seller $seller, Request $request): RedirectResponse {
+    public function uploadSellerIcon(Seller $seller, Request $request): RedirectResponse
+    {
         $request->validate([
             'icon' => ['required', 'mimes:jpeg,png,webp'],
         ]);
 
         $this->imageProcessor->upload(
             file: $request->file('icon'),
-            path: 'users/icons/' . $seller->user_id . '.webp',
+            path: 'users/icons/'.$seller->user_id.'.webp',
             size: 252,
             mode: 'crop',
         );
@@ -145,25 +147,26 @@ class SellerDashboardController extends Controller {
     /**
      * Uploads a cover image for the seller's dashboard.
      *
-     * @param Seller $seller The seller instance.
-     * @param Request $request The HTTP request object.
+     * @param  Seller  $seller  The seller instance.
+     * @param  Request  $request  The HTTP request object.
      * @return RedirectResponse The redirect response.
      */
-    public function uploadSellerCover(Seller $seller, Request $request): RedirectResponse {
+    public function uploadSellerCover(Seller $seller, Request $request): RedirectResponse
+    {
         $request->validate([
             'cover' => ['required', 'mimes:jpeg,png,webp'],
         ]);
 
         $this->imageProcessor->upload(
             file: $request->file('cover'),
-            path: 'shops/covers/' . $seller->user_id . '.webp',
+            path: 'shops/covers/'.$seller->user_id.'.webp',
             size: 1920,
             mode: 'width',
         );
 
         $this->imageProcessor->upload(
             file: $request->file('cover'),
-            path: 'shops/covers/' . $seller->user_id . '_m.webp',
+            path: 'shops/covers/'.$seller->user_id.'_m.webp',
             size: 400,
             mode: 'width',
         );

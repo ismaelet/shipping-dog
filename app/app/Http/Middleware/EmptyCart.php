@@ -7,17 +7,18 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class EmptyCart {
+class EmptyCart
+{
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next): Response|RedirectResponse
+    {
 
-	/**
-	 * Handle an incoming request.
-	 */
-	public function handle(Request $request, Closure $next): Response|RedirectResponse {
+        if (cart()?->id) {
+            return redirect()->route('cart');
+        }
 
-		if (cart()?->id) {
-			return redirect()->route('cart');
-		}
-
-		return $next($request);
-	}
+        return $next($request);
+    }
 }

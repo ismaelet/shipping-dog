@@ -5,8 +5,8 @@ namespace App\Filament\Widgets;
 use App\Models\Ecommerce\OrderItem;
 use Filament\Widgets\ChartWidget;
 
-class ProductTypesChart extends ChartWidget {
-
+class ProductTypesChart extends ChartWidget
+{
     protected ?string $heading = 'Categorie più vendute';
 
     protected ?string $description = 'Le categorie di prodotto più vendute del mese';
@@ -15,15 +15,17 @@ class ProductTypesChart extends ChartWidget {
 
     protected static bool $isLazy = false;
 
-    protected int | string | array $columnSpan = [
+    protected int|string|array $columnSpan = [
         'lg' => 7,
     ];
 
-    protected function getType(): string {
+    protected function getType(): string
+    {
         return 'bar';
     }
 
-    protected function getData(): array {
+    protected function getData(): array
+    {
         $productTypes = [];
 
         $data = OrderItem::hasBeenPaid()

@@ -19,6 +19,14 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing" force="true"/>
+        <env name="LOG_CHANNEL" value="stderr" force="false"/>
+        <env name="DB_CONNECTION" value="mysql" force="true"/>
+        <env name="DB_HOST" value="127.0.0.1" force="false"/>
+        <env name="DB_DATABASE" value="shipping_dog_test" force="false"/>
+        <env name="DB_USERNAME" value="shipping_dog_test" force="false"/>
+        <env name="DB_PASSWORD" value="shipping_dog_test_password" force="false"/>
+        <env name="DB_URL" value="" force="true"/>
+        <env name="DATABASE_URL" value="" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_STORE" value="array"/>

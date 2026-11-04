@@ -4,13 +4,12 @@ namespace App\Livewire\Cart;
 
 use App\Models\Ecommerce\Coupon;
 use App\Models\Ecommerce\Order;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class CouponPanel extends Component {
-
+class CouponPanel extends Component
+{
     public Order $cart;
 
     public ?Coupon $coupon;
@@ -21,10 +20,9 @@ class CouponPanel extends Component {
 
     /**
      * Initialize the component.
-     *
-     * @return void 
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->cart = cart();
         $this->coupon = $this->cart?->coupon;
         $this->couponCode = $this->coupon?->code ?? '';
@@ -33,10 +31,9 @@ class CouponPanel extends Component {
 
     /**
      * Reset the coupon code error when the user updates the coupon code input.
-     * 
-     * @return void
      */
-    public function updatedCouponCode(): void {
+    public function updatedCouponCode(): void
+    {
         $this->resetValidation();
     }
 
@@ -45,7 +42,8 @@ class CouponPanel extends Component {
      *
      * @return void
      */
-    public function save() {
+    public function save()
+    {
         // Validate the coupon code
         $this->validate([
             'couponCode' => 'required|string|max:255|exists:coupons,code',
@@ -68,7 +66,8 @@ class CouponPanel extends Component {
      *
      * @return void
      */
-    public function remove() {
+    public function remove()
+    {
         // Remove the coupon from the cart
         $this->cart->removeCoupon();
 
@@ -82,20 +81,18 @@ class CouponPanel extends Component {
 
     /**
      * Refresh the credit used when the 'usedCreditUpdated' event is dispatched.
-     * 
-     * @return void
      */
     #[On('usedCreditUpdated')]
-    public function usedCreditUpdated(): void {
+    public function usedCreditUpdated(): void
+    {
         $this->usedCredit = $this->cart->usedCredit();
     }
 
     /**
      * Render the component view.
-     *
-     * @return View
      */
-    public function render(): View {
+    public function render(): View
+    {
         return view('livewire.cart.coupon-panel');
     }
 }

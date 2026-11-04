@@ -5,11 +5,13 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
-    public function up(): void {
+    public function up(): void
+    {
         Schema::create('product_product_color', function (Blueprint $table) {
             $table->id();
 
@@ -29,7 +31,7 @@ return new class extends Migration {
             ->chunkById(500, function ($products) {
                 foreach ($products as $product) {
                     $tags = collect(explode(',', $product->colors))
-                        ->map(fn($tag) => trim($tag))
+                        ->map(fn ($tag) => trim($tag))
                         ->filter()
                         ->unique()
                         ->values();
@@ -62,7 +64,8 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down(): void {
+    public function down(): void
+    {
         Schema::table('products', function (Blueprint $table) {
             $table->text('colors')->nullable();
         });

@@ -1,16 +1,17 @@
 <?php
 
-use App\Models\Ecommerce\OrderItem;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
-    public function up(): void {
+    public function up(): void
+    {
         Schema::table('order_items', function (Blueprint $table) {
             $table->decimal('unit_amount_before_discount', 10, 2)->default(0)->after('logo_id');
             $table->renameColumn('fullProductPrice', 'total_amount_before_discount');
@@ -54,7 +55,8 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down(): void {
+    public function down(): void
+    {
         Schema::table('order_items', function (Blueprint $table) {
             $table->renameColumn('total_amount_before_discount', 'fullProductPrice');
             $table->renameColumn('total_discount', 'price_disc');

@@ -7,20 +7,21 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 
-class TotalRevenueOverview {
-
+class TotalRevenueOverview
+{
     /**
      * Invoke the widget.
      *
      * @return Stat The generated statistic.
      */
-    public static function make(): Stat {
+    public static function make(): Stat
+    {
         $value = self::getCurrentMonthRevenue();
         $difference = round($value / self::getLastMonthRevenue() * 100) - 100;
         $positiveTrend = $difference > 0;
 
         return Stat::make('Fatturato totale', price($value))
-            ->description($difference . '% rispetto al mese scorso')
+            ->description($difference.'% rispetto al mese scorso')
             ->descriptionIcon($positiveTrend ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
             ->chart(self::getData())
             ->color($positiveTrend ? 'success' : 'danger');
@@ -31,7 +32,8 @@ class TotalRevenueOverview {
      *
      * @return array The chart data.
      */
-    private static function getData(): array {
+    private static function getData(): array
+    {
         $data = Trend::query(
             Order::hasBeenPaid()
         )
@@ -42,14 +44,16 @@ class TotalRevenueOverview {
             ->perDay()
             ->sum('price');
 
-        return $data->map(fn(TrendValue $value) => $value->aggregate)->toArray();
+        return $data->map(fn (TrendValue $value) => $value->aggregate)->toArray();
     }
 
-    private static function getCurrentMonthRevenue(): float {
+    private static function getCurrentMonthRevenue(): float
+    {
         return Order::hasBeenPaid()->whereBetween('created_at', [now()->subMonth(), now()])->sum('price');
     }
 
-    private static function getLastMonthRevenue(): float {
+    private static function getLastMonthRevenue(): float
+    {
         return Order::hasBeenPaid()->whereBetween('created_at', [now()->subMonths(2), now()->subMonth()])->sum('price');
     }
 }

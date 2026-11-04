@@ -5,8 +5,8 @@ namespace App\Models\Ecommerce\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class ProductSize extends Model {
-
+class ProductSize extends Model
+{
     /**
      * Property: The table associated with the model
      */
@@ -20,7 +20,8 @@ class ProductSize extends Model {
     /**
      * Relationship: Get the product types for the size
      */
-    public function types(): BelongsToMany {
+    public function types(): BelongsToMany
+    {
         return $this->belongsToMany(ProductType::class);
     }
 }

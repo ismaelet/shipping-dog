@@ -35,7 +35,6 @@ Route::post('/forgot-password', [RecoverController::class, 'store'])->middleware
 Route::get('/reset-password/{token}', [ResetController::class, 'index'])->middleware('guest')->name('password.reset');
 Route::post('/reset-password', [ResetController::class, 'update'])->middleware('guest')->name('password.update');
 
-
 /**
  * Google oAuth routes
  */

@@ -9,15 +9,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class OrderFindController extends Controller {
-
+class OrderFindController extends Controller
+{
     /**
      * Display the page to find an order by email and ID.
-     * 
-     * @param Request $request
-     * @return View
      */
-    public function index(Request $request): View {
+    public function index(Request $request): View
+    {
         $title = 'Stato ordine';
         $location = 'support';
 
@@ -38,14 +36,13 @@ class OrderFindController extends Controller {
         ));
     }
 
-
     /**
      * Display the page to find an order by email and ID.
-     * 
-     * @param Request $request
+     *
      * @return View
      */
-    public function show(Request $request): RedirectResponse {
+    public function show(Request $request): RedirectResponse
+    {
         $id = (int) trim($request->id, '#');
         $email = strtolower(trim($request->email));
 

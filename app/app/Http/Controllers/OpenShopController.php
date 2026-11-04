@@ -3,20 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ecommerce\Seller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class OpenShopController extends Controller {
-
+class OpenShopController extends Controller
+{
     /**
      * Display the home page.
-     *
-     * @param Request $request
-     * @return View
      */
-    public function index(Request $request): View {
+    public function index(Request $request): View
+    {
         $title = 'Apri un negozio';
         $location = 'open-shop';
 
@@ -28,12 +27,10 @@ class OpenShopController extends Controller {
 
     /**
      * Create a new shop.
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
-    public function add(Request $request): RedirectResponse {
-        /** @var \App\Models\User $user */
+    public function add(Request $request): RedirectResponse
+    {
+        /** @var User $user */
         $user = Auth::user();
 
         $name = trim($request->name);
@@ -53,7 +50,7 @@ class OpenShopController extends Controller {
             'description' => $desc,
         ]);
 
-        if (!$user->name) {
+        if (! $user->name) {
             $user->update(['name' => $name]);
         }
 

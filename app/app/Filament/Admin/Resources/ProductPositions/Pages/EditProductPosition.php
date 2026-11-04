@@ -2,9 +2,8 @@
 
 namespace App\Filament\Admin\Resources\ProductPositions\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Admin\Resources\ProductPositions\ProductPositionResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditProductPosition extends EditRecord

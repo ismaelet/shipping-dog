@@ -2,23 +2,26 @@
 
 namespace App\Filament\Admin\Resources\ProductTypes\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Admin\Resources\ProductTypes\ProductTypeResource;
-use App\Services\Files\ProductPreviewProcessor;
 use App\Models\Ecommerce\Product\ProductType;
+use App\Services\Files\ProductPreviewProcessor;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditProductType extends EditRecord {
+class EditProductType extends EditRecord
+{
     protected static string $resource = ProductTypeResource::class;
 
-    protected function getHeaderActions(): array {
+    protected function getHeaderActions(): array
+    {
         return [
             DeleteAction::make()
-                ->before(fn(ProductType $record) => ProductTypeResource::deleteAction($record))
+                ->before(fn (ProductType $record) => ProductTypeResource::deleteAction($record)),
         ];
     }
 
-    protected function afterSave(): void {
+    protected function afterSave(): void
+    {
         app(ProductPreviewProcessor::class)->deleteByProductType($this->record);
     }
 }

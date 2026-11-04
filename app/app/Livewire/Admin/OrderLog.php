@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class OrderLog extends Component {
-
+class OrderLog extends Component
+{
     /**
      * Property: The orders collection
      */
@@ -34,11 +34,12 @@ class OrderLog extends Component {
     /**
      * Lifecycle hook: Mount the component
      */
-    public function mount() {
+    public function mount()
+    {
         $this->firstOrder = Order::find(Configuration::where('name', 'order_log_start_from')->value('value'));
         $this->orders = $this->loadOrders();
 
-        if (!$this->firstOrder) {
+        if (! $this->firstOrder) {
             $this->previousOrder = Order::find(Configuration::where('name', 'order_log_start_from')->value('value') - 1);
         }
     }
@@ -46,7 +47,8 @@ class OrderLog extends Component {
     /**
      * Lifecycle hook: Render the component
      */
-    public function render() {
+    public function render()
+    {
         return view('livewire.admin.order-log');
     }
 
@@ -54,7 +56,8 @@ class OrderLog extends Component {
      * Event handler: Handle 'firstOrderUpdated' event
      */
     #[On('firstOrderUpdated')]
-    public function onFirstOrderUpdated(array $data): void {
+    public function onFirstOrderUpdated(array $data): void
+    {
         $firstOrderId = $data['first_order_id'] ?? null;
         $this->firstOrder = Order::find($firstOrderId);
         $this->orders = $this->loadOrders();
@@ -64,7 +67,8 @@ class OrderLog extends Component {
      * Event handler: Handle 'cleanOrderLog' event
      */
     #[On('cleanOrderLog')]
-    public function onCleanOrderLog(): void {
+    public function onCleanOrderLog(): void
+    {
         $this->orders = null;
     }
 
@@ -72,7 +76,8 @@ class OrderLog extends Component {
      * Event handler: Handle 'includeReadyUpdated' event
      */
     #[On('includeReadyUpdated')]
-    public function onIncludeReadyUpdated(array $data): void {
+    public function onIncludeReadyUpdated(array $data): void
+    {
         $this->showAll = $data['include_ready'];
         $this->orders = $this->loadOrders();
     }
@@ -80,8 +85,9 @@ class OrderLog extends Component {
     /**
      * Load orders from the database
      */
-    public function loadOrders(): ?Collection {
-        if (!$this->firstOrder) {
+    public function loadOrders(): ?Collection
+    {
+        if (! $this->firstOrder) {
             return null;
         }
 
@@ -91,7 +97,7 @@ class OrderLog extends Component {
             EcommerceHelper::statusFromTag('confirmed'),
         );
 
-        if (!$this->showAll) {
+        if (! $this->showAll) {
             $orders = $orders->where('status', EcommerceHelper::statusFromTag('confirmed'));
         }
 

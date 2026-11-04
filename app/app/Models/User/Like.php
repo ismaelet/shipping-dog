@@ -6,8 +6,8 @@ use App\Models\Ecommerce\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Like extends Model {
-
+class Like extends Model
+{
     /**
      * Property: The attributes that are mass assignable
      */
@@ -21,7 +21,8 @@ class Like extends Model {
     /**
      * Relationship: The product that is liked
      */
-    public function product(): BelongsTo {
+    public function product(): BelongsTo
+    {
         return $this->belongsTo(Product::class);
     }
 }

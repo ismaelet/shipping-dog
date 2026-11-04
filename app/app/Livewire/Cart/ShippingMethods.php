@@ -3,12 +3,11 @@
 namespace App\Livewire\Cart;
 
 use App\Models\Ecommerce\Order;
-use App\Models\Ecommerce\ShippingMethod;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
-class ShippingMethods extends Component {
-
+class ShippingMethods extends Component
+{
     /**
      * Property: The cart associated with the cart page
      */
@@ -32,14 +31,16 @@ class ShippingMethods extends Component {
     /**
      * Lifecycle hook: Mount the component
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->selectedShippingMethodId = $this->cart->shipping_method_id;
     }
 
     /**
      * Lifecycle hook: Render the component view
      */
-    public function render() {
+    public function render()
+    {
         $this->cart->loadMissing([
             'order_items.product',
             'order_items.product.type',
@@ -54,14 +55,16 @@ class ShippingMethods extends Component {
     /**
      * Updated hook: When the selected shipping method ID is updated, select the shipping method and update the cart
      */
-    public function updatedSelectedShippingMethodId(int|string $value): void {
+    public function updatedSelectedShippingMethodId(int|string $value): void
+    {
         $this->selectShippingMethod($value);
     }
 
     /**
-     * Action: Select a shipping method and update the cart 
+     * Action: Select a shipping method and update the cart
      */
-    public function selectShippingMethod(int|string $value): void {
+    public function selectShippingMethod(int|string $value): void
+    {
         $value = (int) $value;
 
         if ($this->selectedShippingMethodId === $value) {

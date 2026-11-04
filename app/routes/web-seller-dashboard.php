@@ -45,7 +45,6 @@ Route::prefix('/seller')->middleware(Seller::class)->name('seller-dashboard')->g
     Route::post('/payment/download', [PaymentRequestController::class, 'download'])->name('.payment.download');
 });
 
-
 /**
  * * Designs
  */

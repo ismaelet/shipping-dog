@@ -2,35 +2,33 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
-use Dompdf\Options;
-use Dompdf\Dompdf;
-use App\Helpers\StringHelper;
 use App\Helpers\FileHelper;
+use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Seller\PaymentRequest;
 use App\Models\Shipping\Province;
 use DateTimeImmutable;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use NumberFormatter;
 
-class PaymentRequestController extends Controller {
-
+class PaymentRequestController extends Controller
+{
     /**
      * Display the payment request index page.
-     *
-     * @param  Request  $request
-     * @return View|RedirectResponse
      */
-    public function index(Request $request): View|RedirectResponse {
+    public function index(Request $request): View|RedirectResponse
+    {
         $seller = $request->seller;
         $paymentRequest = $seller->payment_request;
         $toBePayed = $seller->toBePayed();
         $waitingDays = ceil($toBePayed / 100);
 
-        if (!$paymentRequest || !$paymentRequest->national_id) {
+        if (! $paymentRequest || ! $paymentRequest->national_id) {
             return to_route('seller-dashboard.payment.edit');
         }
 
@@ -43,11 +41,9 @@ class PaymentRequestController extends Controller {
 
     /**
      * Display the payment request edit page.
-     *
-     * @param  Request $request
-     * @return View
      */
-    public function edit(Request $request): View {
+    public function edit(Request $request): View
+    {
         $seller = $request->seller;
         $paymentRequest = $seller->payment_request;
         $provinces = Province::orderBy('name')->get();
@@ -56,21 +52,19 @@ class PaymentRequestController extends Controller {
             ->with([
                 'title' => 'Richiesta Pagamento',
                 'paymentRequest' => $paymentRequest,
-                'provinces' => $provinces
+                'provinces' => $provinces,
             ]);
     }
 
     /**
      * Update the payment request.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
-    public function update(Request $request): RedirectResponse {
+    public function update(Request $request): RedirectResponse
+    {
         $seller = $request->seller;
         $toBePayed = $seller->toBePayed();
-        $reciptFilePath = 'documents/payments/Ricevuta_' . $seller->id . '.pdf';
-        $contractFilePath = 'documents/payments/Comunicazione_' . $seller->id . '.pdf';
+        $reciptFilePath = 'documents/payments/Ricevuta_'.$seller->id.'.pdf';
+        $contractFilePath = 'documents/payments/Comunicazione_'.$seller->id.'.pdf';
 
         PaymentRequest::updateOrCreate(
             ['seller_id' => $request->seller->id],
@@ -99,23 +93,21 @@ class PaymentRequestController extends Controller {
 
     /**
      * Download the payment request documents.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
-    public function download(Request $request): RedirectResponse {
+    public function download(Request $request): RedirectResponse
+    {
         $seller = $request->seller;
         $toBePayed = $seller->toBePayed();
         $waitingDays = ceil($toBePayed / 100);
         $paymentRequest = $seller->payment_request;
-        $reciptFilePath = 'documents/payments/Ricevuta_' . $seller->id . '.pdf';
-        $contractFilePath = 'documents/payments/Comunicazione_' . $seller->id . '.pdf';
+        $reciptFilePath = 'documents/payments/Ricevuta_'.$seller->id.'.pdf';
+        $contractFilePath = 'documents/payments/Comunicazione_'.$seller->id.'.pdf';
 
         // Update the request status
         $seller->update(['request' => 1]);
 
         // Generate the documents if the total has changed or the files don't exist
-        if ($paymentRequest->total != $toBePayed || !FileHelper::exists($reciptFilePath) || !FileHelper::exists($contractFilePath)) {
+        if ($paymentRequest->total != $toBePayed || ! FileHelper::exists($reciptFilePath) || ! FileHelper::exists($contractFilePath)) {
             // Update the total
             $paymentRequest->update(['total' => $toBePayed]);
 
@@ -128,9 +120,9 @@ class PaymentRequestController extends Controller {
                 $fileDirectory = StringHelper::explodeLast('/', $document)[0];
 
                 // Calculate the date
-                $dateNow = new DateTimeImmutable();
+                $dateNow = new DateTimeImmutable;
                 $date['start'] = $dateNow->format('d/m/Y');
-                $date['end'] = $dateNow->modify('+' . $waitingDays . ' day')->format('d/m/Y');
+                $date['end'] = $dateNow->modify('+'.$waitingDays.' day')->format('d/m/Y');
 
                 // Calculate the payment data
                 $formatter = new NumberFormatter('it', NumberFormatter::SPELLOUT);
@@ -154,7 +146,7 @@ class PaymentRequestController extends Controller {
                 $mark = $payment['net'] >= 80 ? "Marca da bollo<br>sull'originale" : '';
 
                 // Get the template
-                $template = file_get_contents(base_path() . '/resources/views/ecommerce/payment-requests/' . $templateName . '-template.html');
+                $template = file_get_contents(base_path().'/resources/views/ecommerce/payment-requests/'.$templateName.'-template.html');
 
                 // Get the template keys
                 $templateKeys = ['first_name', 'last_name', 'birthdate', 'birthplace', 'birthprovince', 'address', 'city', 'province', 'zip', 'cf', 'national_id', 'gross', 'net', 'netWord', 'netDecimals', 'tax', 'signature', 'mark', 'date-start', 'date-end'];
@@ -184,11 +176,11 @@ class PaymentRequestController extends Controller {
                 ];
 
                 // Replace the template keys with the template values
-                $templateKeys = array_map(fn($key) => '{{' . $key . '}}', $templateKeys);
+                $templateKeys = array_map(fn ($key) => '{{'.$key.'}}', $templateKeys);
                 $template = str_replace($templateKeys, $templateValues, $template);
 
                 // Generate the PDF
-                $options = (new Options())->set('isRemoteEnabled', true);
+                $options = (new Options)->set('isRemoteEnabled', true);
                 $dompdf = new Dompdf($options);
                 $dompdf->loadHtml($template);
                 $dompdf->setPaper('A4', 'portrait');
@@ -196,13 +188,13 @@ class PaymentRequestController extends Controller {
                 $output = $dompdf->output();
 
                 // Save the PDF
-                if (!Storage::directoryExists('public/' . $fileDirectory)) {
-                    Storage::makeDirectory('public/' . $fileDirectory);
+                if (! Storage::directoryExists('public/'.$fileDirectory)) {
+                    Storage::makeDirectory('public/'.$fileDirectory);
                 }
 
                 $result = file_put_contents(FileHelper::storagePath($document), $output);
 
-                if (!$result) {
+                if (! $result) {
                     return redirect()->back()->with('error', 'Errore durante la generazione dei documenti');
                 }
             }

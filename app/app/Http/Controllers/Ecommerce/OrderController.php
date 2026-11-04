@@ -9,12 +9,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class OrderController extends Controller {
-
+class OrderController extends Controller
+{
     /**
      * Resource action: Show
      */
-    public function show(Order $order): View {
+    public function show(Order $order): View
+    {
         $order->load(
             'order_items',
             'order_items.color',
@@ -29,7 +30,7 @@ class OrderController extends Controller {
 
         return view('ecommerce.orders.show')
             ->with([
-                'title' => 'Ordine #' . $order->id,
+                'title' => 'Ordine #'.$order->id,
                 'order' => $order,
             ]);
     }
@@ -37,7 +38,8 @@ class OrderController extends Controller {
     /**
      * Resource action: Update
      */
-    public function update(Order $order, Request $request): RedirectResponse {
+    public function update(Order $order, Request $request): RedirectResponse
+    {
         $request->validate([
             'status' => 'integer',
         ]);
@@ -45,7 +47,7 @@ class OrderController extends Controller {
         if ($request->has('status')) {
             if ($request->status == EcommerceHelper::statusFromTag('cancelled')) {
                 $order->cancel();
-            } else if ($request->status == EcommerceHelper::statusFromTag('confirmed')) {
+            } elseif ($request->status == EcommerceHelper::statusFromTag('confirmed')) {
                 $order->confirm(false, false);
             } else {
                 $order->update($request->only('status'));
@@ -61,7 +63,8 @@ class OrderController extends Controller {
     /**
      * Resource action: Destroy
      */
-    public function destroy(Order $order): RedirectResponse {
+    public function destroy(Order $order): RedirectResponse
+    {
         $order->load(
             'order_items',
             'order_items.seller',

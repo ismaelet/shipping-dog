@@ -11,12 +11,14 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\Vite;
 
-class FeedEntry {
-
+class FeedEntry
+{
     public const INDEX = 'event_id';
 
     private $type_id;
+
     private $event_id;
+
     private $subjectId;
 
     /**
@@ -44,7 +46,8 @@ class FeedEntry {
      */
     private ?Design $design = null;
 
-    function __construct($row) {
+    public function __construct($row)
+    {
         $this->type_id = $row['type'];
         $this->event_id = $row['event_id'] ?? null;
         $this->subjectId = $row['srcID'] ?? null;
@@ -55,7 +58,8 @@ class FeedEntry {
         $this->design = $this->design();
     }
 
-    private function news(): ?News {
+    private function news(): ?News
+    {
         if ($this->type_id == 1) {
             return News::find($this->event_id);
         }
@@ -63,7 +67,8 @@ class FeedEntry {
         return null;
     }
 
-    private function profile(): ?User {
+    private function profile(): ?User
+    {
         if (in_array($this->type_id, [3, 4])) {
             return User::find($this->subjectId);
         }
@@ -71,7 +76,8 @@ class FeedEntry {
         return null;
     }
 
-    private function orderItem(): ?OrderItem {
+    private function orderItem(): ?OrderItem
+    {
         if ($this->type_id == 2) {
             return OrderItem::with('color', 'product', 'product.design')->find($this->event_id);
         }
@@ -79,15 +85,17 @@ class FeedEntry {
         return null;
     }
 
-    private function seller(): ?Seller {
+    private function seller(): ?Seller
+    {
         if ($this->type_id == 5) {
-            return  $this->design->seller;
+            return $this->design->seller;
         }
 
         return null;
     }
 
-    private function design(): ?Design {
+    private function design(): ?Design
+    {
         if ($this->type_id == 2) {
             return $this->orderItem->product?->design;
         }
@@ -99,29 +107,31 @@ class FeedEntry {
         return null;
     }
 
-    public function title(): string {
+    public function title(): string
+    {
         switch ($this->type_id) {
             case 1:
                 return 'Novità da Shipping Dog';
             case 2:
-                return 'Hai venduto ' . (int) $this->orderItem->quantity . ' x ' . $this->link($this->orderItem->product?->url(), $this->orderItem->product?->name ?: 'prodotto rimosso');
+                return 'Hai venduto '.(int) $this->orderItem->quantity.' x '.$this->link($this->orderItem->product?->url(), $this->orderItem->product?->name ?: 'prodotto rimosso');
             case 3:
-                return e($this->profile->name) . ' ha aggiunto un design ai preferiti';
+                return e($this->profile->name).' ha aggiunto un design ai preferiti';
             case 4:
-                return e($this->profile->name) . ' ha iniziato a seguirti';
+                return e($this->profile->name).' ha iniziato a seguirti';
             case 5:
-                return $this->link($this->seller->clientUrl, $this->seller->name) . ' ha caricato un nuovo design';
+                return $this->link($this->seller->clientUrl, $this->seller->name).' ha caricato un nuovo design';
             default:
                 return '';
         }
     }
 
-    public function subtitle(): string {
+    public function subtitle(): string
+    {
         switch ($this->type_id) {
             case 1:
                 return (string) $this->news()?->text;
             case 2:
-                return 'Guadagno: ' . price($this->orderItem->total_seller_earnings_after_reduction);
+                return 'Guadagno: '.price($this->orderItem->total_seller_earnings_after_reduction);
             case 3:
             case 5:
                 return $this->link($this->design->clientUrl, $this->design->name ?: 'design rimosso');
@@ -133,7 +143,8 @@ class FeedEntry {
     /**
      * Relative date: "Oggi", "Ieri", "2 giorni fa"...
      */
-    public function date(): string {
+    public function date(): string
+    {
         $date = Carbon::instance($this->created_at)->locale('it');
 
         if ($date->isToday()) {
@@ -147,13 +158,15 @@ class FeedEntry {
         return $date->diffForHumans(now(), ['parts' => 1]);
     }
 
-    private function link(?string $url, string $label): string {
+    private function link(?string $url, string $label): string
+    {
         $label = e($label);
 
-        return $url ? '<a class="text-secondary-400 hover:underline" href="' . e($url) . '">' . $label . '</a>' : $label;
+        return $url ? '<a class="text-secondary-400 hover:underline" href="'.e($url).'">'.$label.'</a>' : $label;
     }
 
-    public function image() {
+    public function image()
+    {
         switch ($this->type_id) {
             case 1:
                 return Vite::image('user/icon.webp');

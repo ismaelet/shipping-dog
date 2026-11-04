@@ -17,8 +17,10 @@ use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Mail;
 
-class OrderForm {
-    public static function configure(Schema $schema): Schema {
+class OrderForm
+{
+    public static function configure(Schema $schema): Schema
+    {
         return $schema
             ->components([
                 Actions::make([
@@ -32,12 +34,12 @@ class OrderForm {
 
                             Notification::make()
                                 ->title('E-mail inviata')
-                                ->body('A ' . $record->address->email . ' correttamente')
+                                ->body('A '.$record->address->email.' correttamente')
                                 ->success()
                                 ->send();
 
                             return true;
-                        })
+                        }),
                 ])->columnSpanFull(),
 
                 // Price
@@ -156,7 +158,7 @@ class OrderForm {
                             ->placeholder('Codice della transazione')
                             ->readOnly()
                             ->columnSpanFull(),
-                    ])
+                    ]),
             ]);
     }
 }

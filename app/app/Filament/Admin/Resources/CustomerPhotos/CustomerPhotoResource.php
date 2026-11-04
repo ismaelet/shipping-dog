@@ -14,62 +14,66 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class CustomerPhotoResource extends Resource {
+class CustomerPhotoResource extends Resource
+{
+    /**
+     * Property: The model the resource corresponds to
+     */
+    protected static ?string $model = CustomerPhoto::class;
 
-	/**
-	 * Property: The model the resource corresponds to
-	 */
-	protected static ?string $model = CustomerPhoto::class;
+    /**
+     * Property: The icon that should be displayed in the navigation item for the resource
+     */
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
 
-	/**
-	 * Property: The icon that should be displayed in the navigation item for the resource
-	 */
-	protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
+    /**
+     * Property: The label of a singular resource
+     */
+    // protected static ?string $recordTitleAttribute = 'id';
 
-	/**
-	 * Property: The label of a singular resource
-	 */
-	// protected static ?string $recordTitleAttribute = 'id';
+    /**
+     * Property: The label of a singular resource
+     */
+    protected static ?string $label = 'Foto';
 
-	/**
-	 * Property: The label of a singular resource
-	 */
-	protected static ?string $label = 'Foto';
+    /**
+     * Property: The label of a plural resource
+     */
+    protected static ?string $pluralLabel = 'Foto clienti';
 
-	/**
-	 * Property: The label of a plural resource
-	 */
-	protected static ?string $pluralLabel = 'Foto clienti';
+    /**
+     * Property: The group the resource should be displayed in the navigation
+     */
+    protected static string|\UnitEnum|null $navigationGroup = 'Prodotti';
 
-	/**
-	 * Property: The group the resource should be displayed in the navigation
-	 */
-	protected static string | \UnitEnum | null $navigationGroup = 'Prodotti';
+    /**
+     * Property: The sort order of the resource in the navigation
+     */
+    protected static ?int $navigationSort = 3;
 
-	/**
-	 * Property: The sort order of the resource in the navigation
-	 */
-	protected static ?int $navigationSort = 3;
+    public static function form(Schema $schema): Schema
+    {
+        return CustomerPhotoForm::configure($schema);
+    }
 
-	public static function form(Schema $schema): Schema {
-		return CustomerPhotoForm::configure($schema);
-	}
+    public static function table(Table $table): Table
+    {
+        return CustomerPhotosTable::configure($table);
+    }
 
-	public static function table(Table $table): Table {
-		return CustomerPhotosTable::configure($table);
-	}
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
 
-	public static function getRelations(): array {
-		return [
-			//
-		];
-	}
-
-	public static function getPages(): array {
-		return [
-			'index' => ListCustomerPhotos::route('/'),
-			'create' => CreateCustomerPhoto::route('/create'),
-			'edit' => EditCustomerPhoto::route('/{record}/edit'),
-		];
-	}
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListCustomerPhotos::route('/'),
+            'create' => CreateCustomerPhoto::route('/create'),
+            'edit' => EditCustomerPhoto::route('/{record}/edit'),
+        ];
+    }
 }

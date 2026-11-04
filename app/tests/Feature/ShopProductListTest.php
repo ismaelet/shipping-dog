@@ -9,17 +9,20 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class ShopProductListTest extends TestCase {
+class ShopProductListTest extends TestCase
+{
     use DatabaseTransactions;
 
-    public function test_it_renders_an_empty_state_when_search_has_no_matches(): void {
+    public function test_it_renders_an_empty_state_when_search_has_no_matches(): void
+    {
         Livewire::withQueryParams(['search' => 'no-shop-product-matches-this-query'])
             ->test(ProductList::class)
             ->assertSee('Nessun articolo trovato')
             ->assertSee('Rimuovi i filtri');
     }
 
-    public function test_it_accepts_supported_sort_orders_and_ignores_unsupported_values(): void {
+    public function test_it_accepts_supported_sort_orders_and_ignores_unsupported_values(): void
+    {
         Livewire::withQueryParams(['search' => 'no-shop-product-matches-this-query'])
             ->test(ProductList::class)
             ->assertSet('sort', 'popular')
@@ -29,7 +32,8 @@ class ShopProductListTest extends TestCase {
             ->assertSet('sort', 'new');
     }
 
-    public function test_type_filter_resolves_its_gender_and_toggling_it_clears_the_filter(): void {
+    public function test_type_filter_resolves_its_gender_and_toggling_it_clears_the_filter(): void
+    {
         $genderId = DB::table('items_genders')->insertGetId([
             'tag' => 'TST',
             'name' => 'Test',
@@ -56,7 +60,8 @@ class ShopProductListTest extends TestCase {
             ->assertSet('selectedGenderId', null);
     }
 
-    public function test_clear_filters_resets_search_type_and_gender(): void {
+    public function test_clear_filters_resets_search_type_and_gender(): void
+    {
         Livewire::withQueryParams([
             'search' => 'no-shop-product-matches-this-query',
             'type' => 999999,

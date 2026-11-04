@@ -1,15 +1,15 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
-    public function up(): void {
+    public function up(): void
+    {
         $sellers = DB::table('sellers')->get();
 
         $sellers->each(function ($seller) {
@@ -25,7 +25,7 @@ return new class extends Migration {
                     'updated_at' => now(),
                 ]);
 
-                DB::table('sellers')->where('id', $seller->id)->update(['credit' => 0, 'other_transfers' => DB::raw('other_transfers + ' . $credit)]);
+                DB::table('sellers')->where('id', $seller->id)->update(['credit' => 0, 'other_transfers' => DB::raw('other_transfers + '.$credit)]);
             }
         });
     }
@@ -33,7 +33,8 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down(): void {
+    public function down(): void
+    {
         $sellers = DB::table('sellers')->get();
 
         $sellers->each(function ($seller) {
@@ -46,7 +47,7 @@ return new class extends Migration {
             if ($payments->isNotEmpty()) {
                 $credit = $payments->sum('value');
 
-                DB::table('sellers')->where('id', $seller->id)->update(['credit' => DB::raw('credit + ' . $credit), 'other_transfers' => DB::raw('other_transfers - ' . $credit)]);
+                DB::table('sellers')->where('id', $seller->id)->update(['credit' => DB::raw('credit + '.$credit), 'other_transfers' => DB::raw('other_transfers - '.$credit)]);
 
                 DB::table('seller_payments')
                     ->where('seller_id', $seller->id)

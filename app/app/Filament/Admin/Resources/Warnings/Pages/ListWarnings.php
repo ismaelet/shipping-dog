@@ -2,9 +2,8 @@
 
 namespace App\Filament\Admin\Resources\Warnings\Pages;
 
-use Filament\Actions\CreateAction;
 use App\Filament\Admin\Resources\Warnings\WarningResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListWarnings extends ListRecords

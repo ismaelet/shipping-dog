@@ -7,8 +7,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
-class ImageProcessor {
-
+class ImageProcessor
+{
     /**
      * Upload and optionally resize an image.
      */
@@ -35,7 +35,7 @@ class ImageProcessor {
 
         $originalImage = $this->createFromFile($file);
 
-        if (!$originalImage) {
+        if (! $originalImage) {
             return false;
         }
 
@@ -53,7 +53,7 @@ class ImageProcessor {
             $type = 'jpg';
         }
 
-        if (!in_array($type, ['jpg', 'png', 'webp'], true)) {
+        if (! in_array($type, ['jpg', 'png', 'webp'], true)) {
             imagedestroy($originalImage);
 
             return false;
@@ -79,10 +79,11 @@ class ImageProcessor {
     /**
      * Create a GD image from an uploaded file.
      */
-    private function createFromFile(UploadedFile|TemporaryUploadedFile $file): GdImage|false {
+    private function createFromFile(UploadedFile|TemporaryUploadedFile $file): GdImage|false
+    {
         $filePath = $file->getRealPath();
 
-        if (!$filePath) {
+        if (! $filePath) {
             return false;
         }
 
@@ -103,7 +104,8 @@ class ImageProcessor {
      * Returns:
      * [newWidth, newHeight, sourceX, sourceY, sourceWidth, sourceHeight]
      */
-    private function calculateDimensions(GdImage $originalImage, int $newSize, string $mode): ?array {
+    private function calculateDimensions(GdImage $originalImage, int $newSize, string $mode): ?array
+    {
         $originalWidth = imagesx($originalImage);
         $originalHeight = imagesy($originalImage);
 
@@ -152,7 +154,7 @@ class ImageProcessor {
         }
 
         return array_map(
-            static fn(float|int $value): int => (int) round($value),
+            static fn (float|int $value): int => (int) round($value),
             $dimensions
         );
     }
@@ -160,7 +162,8 @@ class ImageProcessor {
     /**
      * Create the destination image canvas.
      */
-    private function createCanvas(int $width, int $height, string $type): GdImage {
+    private function createCanvas(int $width, int $height, string $type): GdImage
+    {
         $canvas = imagecreatetruecolor($width, $height);
 
         if (in_array($type, ['webp', 'png'], true)) {
@@ -201,7 +204,7 @@ class ImageProcessor {
             $originalHeight,
         );
 
-        if (!$resampled) {
+        if (! $resampled) {
             return false;
         }
 
