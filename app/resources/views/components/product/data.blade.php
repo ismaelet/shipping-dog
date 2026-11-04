@@ -6,8 +6,12 @@
     <style>
         .product-main-content {
             display: grid;
-            grid-template-columns: 55fr 45fr;
+            grid-template-columns: minmax(0, 1fr);
             align-items: flex-start;
+
+            @media (width >= 48rem) {
+                grid-template-columns: 55fr 45fr;
+            }
         }
 
         .product-options {
@@ -136,8 +140,8 @@
         ])>
             <p class="text-primary-300 text-xs font-bold tracking-wide uppercase">Il creator</p>
 
-            <a href="{{ $product->seller->url() }}" class="flex flex-wrap items-center gap-4">
-                <div class="flex items-center gap-4">
+            <div class="flex flex-wrap items-start justify-between gap-4 sm:flex-nowrap">
+                <a href="{{ $product->seller->url() }}" class="flex items-center gap-4">
                     <img
                         class="size-14 rounded-full object-cover"
                         src="{{ $product->seller->icon() }}"
@@ -150,12 +154,10 @@
                         </h2>
                         <p class="text-text-400 text-xs">Membro dal {{ $product->seller->createdAtString() }}</p>
                     </div>
-                </div>
+                </a>
 
-                <div class="ml-auto">
-                    <livewire:follow-button :seller="$product->seller" />
-                </div>
-            </a>
+                <livewire:follow-button :seller="$product->seller" />
+            </div>
 
             <x-button :href="$product->seller->url()" variant="secondary" size="sm">
                 Visita il negozio

@@ -20,7 +20,7 @@
 @endpushOnce
 
 <form
-    class="mt-8 flex"
+    class="mt-8 grid grid-cols-1 gap-2 sm:flex sm:gap-0"
     wire:submit.prevent="addToCart"
     x-data="{
     quantity: @entangle('quantity'),
@@ -35,12 +35,12 @@
     },
 }"
 >
-    <label class="quantity !border-border-400 !text-heading-400 flex !flex-none grow !items-center rounded-l-full border border-r-0 border-neutral-300 sm:grow-0">
+    <label class="quantity text-heading-400 border-border-400 flex grow items-center justify-between rounded-l-full rounded-r-full border py-3 sm:grow-0 sm:rounded-r-none sm:border-r-0 sm:py-0">
         <button
             type="button"
             @click="decrease()"
             :disabled="quantity <= 1"
-            class="!w-10 cursor-pointer disabled:cursor-default disabled:opacity-50"
+            class="w-10! cursor-pointer disabled:cursor-default disabled:opacity-50"
         >
             -
         </button>
@@ -52,20 +52,20 @@
             min="1"
             :max="maxQuantity"
             step="1"
-            class="!text-heading-400 !w-[2.125rem] !bg-transparent"
+            class="text-heading-400! w-8.5! bg-transparent!"
         />
 
         <button
             type="button"
             @click="increase()"
             :disabled="quantity >= maxQuantity"
-            class="!w-10 cursor-pointer disabled:cursor-default disabled:opacity-50"
+            class="w-10! cursor-pointer disabled:cursor-default disabled:opacity-50"
         >
             +
         </button>
     </label>
 
-    <x-button type="submit" class="relative grow rounded-l-none">
+    <x-button type="submit" class="relative grow sm:rounded-l-none">
         <span class="contents" wire:loading.class="invisible">
             Aggiungi al carrello
             <x-icon-bag class="size-[1.25em]!" />
