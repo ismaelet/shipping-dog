@@ -120,6 +120,7 @@
                     <button
                         type="button"
                         wire:click="removeFilters"
+                        x-on:click="$dispatch('shop-category-picked', { group: null })"
                         class="hover:text-danger-400 mt-4 flex cursor-pointer items-center gap-2 text-sm font-semibold transition-colors"
                     >
                         <span aria-hidden="true"><x-icon-close class="size-4" /></span>
