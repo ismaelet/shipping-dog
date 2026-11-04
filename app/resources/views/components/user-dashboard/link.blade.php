@@ -7,6 +7,7 @@
 <li class="list-none">
     <a
         href="{{ $link['url'] }}"
+        @if ($dashboardLocation) wire:navigate data-preserve-scroll @endif
         @class([
             'block rounded-lg px-4 py-3 transition-colors',
             'bg-primary-400 text-white' => $checked,

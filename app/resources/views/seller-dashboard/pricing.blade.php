@@ -47,7 +47,6 @@
 
         @if (session('success'))
             <x-alert type="success" role="status">{{ session('success') }}</x-alert>
-            type="success">
         @endif
 
         <form method="POST" class="grid gap-5">

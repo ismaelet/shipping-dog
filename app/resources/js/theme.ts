@@ -38,23 +38,29 @@ export function themeSwitcherSetup(): void {
   applyTheme(getTheme());
   syncSwitchers();
 
-  document.querySelectorAll<HTMLInputElement>('input[name="theme"]').forEach((input) => {
-    input.addEventListener("change", () => {
-      if (input.checked) {
-        switchTheme(input.value as Theme);
-      }
-    });
+  // Delegated so the listeners survive wire:navigate body swaps.
+  document.addEventListener("change", (event) => {
+    const input = event.target as HTMLInputElement;
+
+    if (input.matches?.('input[name="theme"]') && input.checked) {
+      switchTheme(input.value as Theme);
+    }
   });
 
   // Keep compatibility with existing header buttons.
-  document.querySelectorAll<HTMLElement>(".js-color-scheme-switcher").forEach((button) => {
-    button.addEventListener("click", () => {
-      const theme = button.dataset.colorScheme;
+  document.addEventListener("click", (event) => {
+    const button = (event.target as Element).closest<HTMLElement>(".js-color-scheme-switcher");
+    const theme = button?.dataset.colorScheme;
 
-      if (theme === "light" || theme === "dark") {
-        switchTheme(theme);
-      }
-    });
+    if (theme === "light" || theme === "dark") {
+      switchTheme(theme);
+    }
+  });
+
+  // wire:navigate replaces the document, so reapply the theme afterwards.
+  document.addEventListener("livewire:navigated", () => {
+    applyTheme(getTheme());
+    syncSwitchers();
   });
 
   // React to changes in OS theme when System is selected.

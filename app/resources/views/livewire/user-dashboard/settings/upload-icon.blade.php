@@ -6,7 +6,6 @@
 >
     @session('success')
         <x-alert type="success" class="mb-5"> {{ session('success') }} </x-alert>
-        type="success">
     @endsession
 
     <div class="grid gap-6">

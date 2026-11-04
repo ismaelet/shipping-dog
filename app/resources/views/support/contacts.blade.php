@@ -160,7 +160,6 @@
 
                         @if (session('success'))
                             <x-alert type="success">{{ session('success') }}</x-alert>
-                            type="success">
                         @endif
 
                         @if ($errors->any())

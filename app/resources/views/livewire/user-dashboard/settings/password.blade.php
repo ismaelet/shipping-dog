@@ -6,11 +6,10 @@
 >
     <form class="grid gap-5 md:grid-cols-2" wire:submit="save">
         @session('success')
-            <x-alert type="success" class="md:col-span-2">{{ session('success') }}</x-alert>
-            type="success">
+            <x-alert wire:key="password-success" type="success" class="md:col-span-2">{{ session('success') }}</x-alert>
         @endsession
 
-        <div class="grid content-start gap-2 md:col-span-2">
+        <div class="grid content-start gap-2 md:col-span-2" wire:key="password-current_password">
             <x-label>Password attuale</x-label>
             <x-input
                 class="w-full"
@@ -21,11 +20,11 @@
             />
 
             @error('current_password')
-                <x-alert type="error">{{ $message }}</x-alert>
+                <x-alert wire:key="password-current_password-error" type="error">{{ $message }}</x-alert>
             @enderror
         </div>
 
-        <div class="grid content-start gap-2">
+        <div class="grid content-start gap-2" wire:key="password-new_password">
             <x-label>Nuova password</x-label>
             <x-input
                 class="w-full"
@@ -36,11 +35,11 @@
             />
 
             @error('new_password')
-                <x-alert type="error">{{ $message }}</x-alert>
+                <x-alert wire:key="password-new_password-error" type="error">{{ $message }}</x-alert>
             @enderror
         </div>
 
-        <div class="grid content-start gap-2">
+        <div class="grid content-start gap-2" wire:key="password-new_password_confirmation">
             <x-label>Conferma password</x-label>
             <x-input
                 class="w-full"
@@ -51,7 +50,7 @@
             />
 
             @error('new_password_confirmation')
-                <x-alert type="error">{{ $message }}</x-alert>
+                <x-alert wire:key="password-new_password_confirmation-error" type="error">{{ $message }}</x-alert>
             @enderror
         </div>
 

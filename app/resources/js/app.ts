@@ -19,3 +19,22 @@ enterAnimationSetup();
 advancedInputBehaviorSetup();
 onEnterViewSetup();
 themeSwitcherSetup();
+
+// Keep the scroll position when navigating through links marked with data-preserve-scroll
+let preservedScrollY: number | null = null;
+
+document.addEventListener("click", (event) => {
+  const link = (event.target as Element).closest("[data-preserve-scroll]");
+
+  preservedScrollY = link ? window.scrollY : null;
+});
+
+document.addEventListener("livewire:navigated", () => {
+  if (preservedScrollY === null) return;
+
+  const y = preservedScrollY;
+
+  preservedScrollY = null;
+  window.scrollTo({ top: y, behavior: "instant" });
+  requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "instant" }));
+});
