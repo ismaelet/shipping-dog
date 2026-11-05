@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Services\Nexi\NexiController;
 use App\Http\Controllers\Services\PayPal\PayPalController;
 use App\Http\Controllers\Services\PayPal\PayPalExchangeController;
 use App\Http\Middleware\UnconfirmedOrder;
@@ -25,3 +26,26 @@ Route::prefix('paypal')->name('paypal.')->group(function () {
 
     Route::get('/exchange/{changeRequest}/cancel', [PayPalExchangeController::class, 'cancel'])->name('exchange.cancel');
 });
+
+/**
+ * Nexi payment routes for orders
+ */
+Route::prefix('services/nexi')
+    ->name('nexi.orders.')
+    ->group(function () {
+        Route::get('/create/{order}', [
+            NexiController::class, 'create',
+        ])->name('create');
+    });
+
+Route::get('/services/nexi/result/{order}', [
+    NexiController::class, 'result',
+])->name('nexi.orders.result');
+
+Route::get('/services/nexi/cancel/{order}', [
+    NexiController::class, 'cancel',
+])->name('nexi.orders.cancel');
+
+Route::post('/services/nexi/notification', [
+    NexiController::class, 'notification',
+])->name('nexi.orders.notification');

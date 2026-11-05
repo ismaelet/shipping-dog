@@ -36,6 +36,12 @@ return [
         'client_secret' => env('PAYPAL_CLIENT_SECRET'),
     ],
 
+    'nexi' => [
+        'sandbox' => env('NEXI_SANDBOX', true),
+        'alias' => env('NEXI_ALIAS'),
+        'mac_key' => env('NEXI_MAC_KEY'),
+    ],
+
     'gls' => [
         'client_id' => env('GLS_CLIENT_ID'),
         'client_password' => env('GLS_CLIENT_PASSWORD'),

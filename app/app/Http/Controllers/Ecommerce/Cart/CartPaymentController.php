@@ -23,7 +23,9 @@ class CartPaymentController extends Controller
         // setup cart
         if ($cart->price == 0) {
             $allowedPaymentMethods = [4];
-            $paymentMethods = PaymentMethod::whereIn('id', $allowedPaymentMethods)->get();
+            $paymentMethods = PaymentMethod::whereIn('id', $allowedPaymentMethods)
+                ->where('active', 1)
+                ->get();
 
             if (! in_array($cart->payment_method_id, $allowedPaymentMethods)) {
                 $cart->update([
@@ -31,8 +33,10 @@ class CartPaymentController extends Controller
                 ]);
             }
         } elseif ($cart->shipping_method->isLocalDelivery()) {
-            $allowedPaymentMethods = [1, 3];
-            $paymentMethods = PaymentMethod::whereIn('id', $allowedPaymentMethods)->get();
+            $allowedPaymentMethods = [1, 2, 3];
+            $paymentMethods = PaymentMethod::whereIn('id', $allowedPaymentMethods)
+                ->where('active', 1)
+                ->get();
 
             if (! in_array($cart->payment_method_id, $allowedPaymentMethods)) {
                 $cart->update([
@@ -73,7 +77,7 @@ class CartPaymentController extends Controller
 
         $paymentMethodId = $cart->payment_method_id;
 
-        if ($paymentMethodId == 1) {
+        if (in_array((int) $paymentMethodId, [1, 2], true)) {
             return redirect($cart->paymentUrl());
         } elseif (in_array($paymentMethodId, [3, 4])) {
             $token = Str::random(20);

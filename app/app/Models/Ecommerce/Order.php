@@ -5,6 +5,7 @@ namespace App\Models\Ecommerce;
 use App\Helpers\EcommerceHelper;
 use App\Mail\OrderStatusMail;
 use App\Models\Ecommerce\Seller\Payment;
+use App\Models\NexiPayment;
 use App\Models\SentEmail;
 use App\Models\User;
 use App\Services\GlsService;
@@ -136,6 +137,14 @@ class Order extends Model
     }
 
     /**
+     * Get the Nexi payment attempts for this order.
+     */
+    public function nexiPayments(): HasMany
+    {
+        return $this->hasMany(NexiPayment::class);
+    }
+
+    /**
      * Get the order's code
      */
     public function idCode(): string
@@ -207,7 +216,19 @@ class Order extends Model
      */
     public function paymentUrl(): string
     {
-        return route('paypal.orders.create', ['order_id' => $this->id]);
+        return match ((int) $this->payment_method_id) {
+            1 => route('paypal.orders.create', [
+                'order_id' => $this->id,
+            ]),
+
+            2 => route('nexi.orders.create', [
+                'order' => $this->id,
+            ]),
+
+            default => throw new \InvalidArgumentException(
+                'Metodo di pagamento non valido.'
+            ),
+        };
     }
 
     /**
