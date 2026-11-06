@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class NexiPayment extends Model
 {
+    protected $hidden = ['hosted_page_url', 'return_token', 'security_token'];
+
     protected $fillable = [
+        'order_fingerprint',
         'order_id',
         'transaction_id',
         'amount',
@@ -20,6 +23,11 @@ class NexiPayment extends Model
         'fulfillment_started_at',
         'fulfilled_at',
         'fulfillment_error',
+        'provider_order_id',
+        'hosted_page_url',
+        'security_token',
+        'initialization_status',
+        'initialized_at',
     ];
 
     protected function casts(): array
@@ -29,6 +37,8 @@ class NexiPayment extends Model
             'paid_at' => 'datetime',
             'fulfillment_started_at' => 'datetime',
             'fulfilled_at' => 'datetime',
+            'initialized_at' => 'datetime',
+            'security_token' => 'encrypted',
         ];
     }
 

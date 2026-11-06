@@ -64,6 +64,11 @@ class RecapPanel extends Component
      */
     private function refreshOrder(): void
     {
+        if ((int) $this->order?->payment_method_id === 2 && $this->order->nexiPayments()->exists()) {
+            $this->order = $this->order->fresh();
+
+            return;
+        }
         $this->order->updatePrice();
         $this->order = $this->order->fresh() ?: cart();
     }

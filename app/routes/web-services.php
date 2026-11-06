@@ -33,6 +33,7 @@ Route::prefix('paypal')->name('paypal.')->group(function () {
 Route::prefix('services/nexi')
     ->name('nexi.orders.')
     ->group(function () {
+        Route::post('/create/{order}', [NexiController::class, 'store'])->name('store');
         Route::get('/create/{order}', [
             NexiController::class, 'create',
         ])->name('create');

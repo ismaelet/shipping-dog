@@ -19,3 +19,6 @@ Schedule::call(fn () => Artisan::call(GlsTrackParcels::class))
 // Clear expired password reset tokens daily
 Schedule::call(fn () => Artisan::call('auth:clear-resets'))
     ->daily();
+
+// Durable payment scan also recovers a process failure after callback commit.
+Schedule::command('nexi:process')->everyMinute()->withoutOverlapping();

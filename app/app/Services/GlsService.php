@@ -24,7 +24,7 @@ class GlsService
     /**
      * Add Parcel
      */
-    public function addParcels(Collection|Order $orders): bool
+    public function addParcels(Collection|Order $orders, bool $singleAttempt = false): bool
     {
         $orders = $this->normalizeOrders($orders)->load('address');
 
@@ -37,14 +37,14 @@ class GlsService
         ];
 
         // Send the request
-        $response = $this->sendRequest(self::ADD_PARCEL_ENDPOINT, $body);
+        $response = $this->sendRequest(self::ADD_PARCEL_ENDPOINT, $body, $singleAttempt);
 
         if (! $response) {
             return false;
         }
 
         // Update the orders
-        return $this->updateOrdersAfterAdd($orders, $response);
+        return $this->updateOrdersAfterAdd($orders, $response, $singleAttempt);
     }
 
     /**
@@ -89,19 +89,20 @@ class GlsService
     /**
      * Helper: Send Request
      */
-    private function sendRequest(string $endpoint, array $body): stdClass|false
+    private function sendRequest(string $endpoint, array $body, bool $singleAttempt = false): stdClass|false
     {
         try {
-            $response = Http::asForm()
-                ->timeout(30)
-                ->retry(2, 500)
-                ->post($endpoint, $body);
+            $request = Http::asForm()->timeout(30);
+            if (! $singleAttempt) {
+                $request->retry(2, 500);
+            }
+            $response = $request->post($endpoint, $body);
 
             if (! $response->successful()) {
                 Log::error('GLS request failed', [
                     'Endpoint' => $endpoint,
                     'StatusCode' => $response->status(),
-                    'Response' => mb_substr($response->body(), 0, 1000),
+                    'Response' => $singleAttempt ? '[redacted]' : mb_substr($response->body(), 0, 1000),
                 ]);
 
                 return false;
@@ -112,7 +113,7 @@ class GlsService
             if ($xml === false) {
                 Log::error('Invalid GLS response XML', [
                     'Endpoint' => $endpoint,
-                    'Response' => mb_substr($response->body(), 0, 1000),
+                    'Response' => $singleAttempt ? '[redacted]' : mb_substr($response->body(), 0, 1000),
                 ]);
 
                 return false;
@@ -127,7 +128,7 @@ class GlsService
         } catch (Throwable $exception) {
             Log::error('Error sending a request to GLS', [
                 'Endpoint' => $endpoint,
-                'Exception' => $exception,
+                'Exception' => $singleAttempt ? $exception::class : $exception,
             ]);
 
             return false;
@@ -161,13 +162,13 @@ class GlsService
     /**
      * Add Parcel Helper: Update Order
      */
-    private function updateOrdersAfterAdd(Collection $orders, stdClass $response): bool
+    private function updateOrdersAfterAdd(Collection $orders, stdClass $response, bool $redact = false): bool
     {
         $parcels = $response->Parcel ?? null;
 
         if (! $parcels) {
             Log::error('GLS AddParcel response contains no parcels', [
-                'Response' => $response,
+                'Response' => $redact ? '[redacted]' : $response,
             ]);
 
             return false;
@@ -179,7 +180,7 @@ class GlsService
             Log::error('GLS returned an unexpected parcel count', [
                 'Expected' => $orders->count(),
                 'Received' => count($parcels),
-                'Response' => $response,
+                'Response' => $redact ? '[redacted]' : $response,
             ]);
 
             return false;
@@ -190,7 +191,7 @@ class GlsService
             $shippingNumber = $parcel->NumeroSpedizione ?? null;
 
             if (! $shippingNumber) {
-                Log::error('Error adding a GLS parcel', ['Order' => $order->id, 'Response' => $response]);
+                Log::error('Error adding a GLS parcel', ['Order' => $order->id, 'Response' => $redact ? '[redacted]' : $response]);
 
                 return false;
             }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Cart\Payments;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ecommerce\PaymentMethod;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -18,6 +19,8 @@ class FreeController extends Controller
         ]);
 
         $order = cart();
+        abort_unless($order && in_array((int) $order->payment_method_id, [3, 4], true)
+            && PaymentMethod::allowedFor($order)->whereKey($order->payment_method_id)->exists(), 422);
         $token = $request->input('token');
 
         if ($order->status || $order->token !== $token) {

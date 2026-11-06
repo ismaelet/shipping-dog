@@ -8,6 +8,7 @@ use App\Models\Warning;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class CartPaymentController extends Controller
@@ -20,37 +21,10 @@ class CartPaymentController extends Controller
 
         $cart = cart();
 
-        // setup cart
-        if ($cart->price == 0) {
-            $allowedPaymentMethods = [4];
-            $paymentMethods = PaymentMethod::whereIn('id', $allowedPaymentMethods)
-                ->where('active', 1)
-                ->get();
-
-            if (! in_array($cart->payment_method_id, $allowedPaymentMethods)) {
-                $cart->update([
-                    'payment_method_id' => $paymentMethods->first()->id,
-                ]);
-            }
-        } elseif ($cart->shipping_method->isLocalDelivery()) {
-            $allowedPaymentMethods = [1, 2, 3];
-            $paymentMethods = PaymentMethod::whereIn('id', $allowedPaymentMethods)
-                ->where('active', 1)
-                ->get();
-
-            if (! in_array($cart->payment_method_id, $allowedPaymentMethods)) {
-                $cart->update([
-                    'payment_method_id' => $paymentMethods->first()->id,
-                ]);
-            }
-        } else {
-            $paymentMethods = PaymentMethod::where('active', 1)->get();
-
-            if (! $cart->payment_method_id || ! $paymentMethods->contains('id', $cart->payment_method_id)) {
-                $cart->update([
-                    'payment_method_id' => $paymentMethods->first()->id,
-                ]);
-            }
+        $paymentMethods = PaymentMethod::allowedFor($cart)->get();
+        abort_if($paymentMethods->isEmpty(), 503);
+        if (! $paymentMethods->contains('id', $cart->payment_method_id)) {
+            $cart->update(['payment_method_id' => $paymentMethods->first()->id]);
         }
 
         $warning = Warning::currentWarning();
@@ -69,7 +43,7 @@ class CartPaymentController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $request->validate([
-            'payment_method_id' => 'required|exists:payment_methods,id',
+            'payment_method_id' => ['required', 'integer', Rule::in(PaymentMethod::allowedFor(cart())->pluck('id')->all())],
         ]);
 
         $cart = cart();

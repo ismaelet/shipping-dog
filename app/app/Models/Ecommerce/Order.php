@@ -682,7 +682,7 @@ class Order extends Model
     /**
      * Confirm the order.
      */
-    public function confirm(bool $sendNotification = true, bool $updateDate = true): void
+    public function confirm(bool $sendNotification = true, bool $updateDate = true, bool $createShipment = true): void
     {
         // Forget the order ID
         session()->forget('cart_id');
@@ -731,8 +731,10 @@ class Order extends Model
         }
 
         // Send the shipping data
-        $glsService = new GlsService;
-        $glsService->addParcels($this);
+        if ($createShipment) {
+            $glsService = new GlsService;
+            $glsService->addParcels($this);
+        }
     }
 
     /**

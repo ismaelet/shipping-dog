@@ -30,7 +30,9 @@
             <x-heading variant="article" class="text-current">{{ $order->statusName() }}</x-heading>
         </div>
 
-        @if (in_array($order->status, [EcommerceHelper::statusFromTag('received')]))
+        @if ((int) $order->payment_method_id === 2 && (int) $order->status === EcommerceHelper::statusFromTag('received'))
+            <p>Pagamento Nexi in elaborazione. Se hai interrotto il pagamento, contatta l'assistenza prima di riprovare.</p>
+        @elseif (in_array($order->status, [EcommerceHelper::statusFromTag('received')]))
             <form
                 class="grid justify-items-center gap-6"
                 method="POST"

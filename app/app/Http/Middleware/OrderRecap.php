@@ -33,6 +33,12 @@ class OrderRecap
             return $next($request);
         }
 
+        // Nexi returns grant read-only recap access without exposing the reusable order token.
+        if ($request->isMethod('GET') && $request->routeIs('orders.show')
+            && $request->session()->get('nexi_recaps.'.$order->id) === true) {
+            return $next($request);
+        }
+
         // If the user is authenticated and the order belongs to the user, continue
         if (Auth::check() && $order->user_id == Auth::id()) {
             return $next($request);

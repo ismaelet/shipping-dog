@@ -38,8 +38,9 @@ return [
 
     'nexi' => [
         'sandbox' => env('NEXI_SANDBOX', true),
-        'alias' => env('NEXI_ALIAS'),
-        'mac_key' => env('NEXI_MAC_KEY'),
+        'external_operations_enabled' => env('NEXI_EXTERNAL_OPERATIONS_ENABLED', false),
+        'sandbox_api_key' => env('NEXI_SANDBOX_API_KEY'),
+        'api_key' => env('NEXI_API_KEY'),
     ],
 
     'gls' => [

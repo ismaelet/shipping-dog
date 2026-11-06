@@ -40,6 +40,8 @@ class OrderController extends Controller
      */
     public function update(Order $order, Request $request): RedirectResponse
     {
+        abort_if((int) $order->payment_method_id === 2 && $order->nexiPayments()->exists(), 409, 'Nexi order requires payment reconciliation.');
+
         $request->validate([
             'status' => 'integer',
         ]);
@@ -65,6 +67,8 @@ class OrderController extends Controller
      */
     public function destroy(Order $order): RedirectResponse
     {
+        abort_if((int) $order->payment_method_id === 2 && $order->nexiPayments()->exists(), 409, 'Nexi order requires payment reconciliation.');
+
         $order->load(
             'order_items',
             'order_items.seller',

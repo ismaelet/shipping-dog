@@ -1,4 +1,3 @@
-@use('App\Services\Files\ProductPreviewProcessor')
 
 <div class="grid gap-4">
     @if (! $order || $order->order_items->isEmpty())
@@ -14,7 +13,7 @@
                 @else
                     <div>
                         <img
-                            src="{{ FileHelper::storageAsset(ProductPreviewProcessor::PLACEHOLDER_IMAGE) }}"
+                            src="{{ Vite::image('placeholder.webp') }}"
                             class="rounded"
                         />
                     </div>

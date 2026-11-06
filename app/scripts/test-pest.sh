@@ -12,6 +12,15 @@ DB_NAME="${TEST_DB_DATABASE:-shipping_dog_test}"
 DB_USER="${TEST_DB_USERNAME:-shipping_dog_test}"
 DB_PASS="${TEST_DB_PASSWORD:-shipping_dog_test_password}"
 
+if [ "$DB_NAME" != "shipping_dog_test" ] || [ "$DB_USER" != "shipping_dog_test" ]; then
+  echo "Refusing tests outside the dedicated shipping_dog_test database/user." >&2
+  exit 1
+fi
+if [ -f bootstrap/cache/config.php ]; then
+  echo "Refusing tests with cached application configuration; remove the config cache first." >&2
+  exit 1
+fi
+
 if [ -z "${TEST_DB_SKIP_PROVISION:-}" ]; then
   docker compose -f ../compose.yml exec -T db mariadb -uroot -p"${MARIADB_ROOT_PASSWORD:-rootpassword}" -e "
     CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -19,6 +28,11 @@ if [ -z "${TEST_DB_SKIP_PROVISION:-}" ]; then
     GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
     FLUSH PRIVILEGES;"
 fi
+
+# Isolate config loading from any concurrent development config:cache command.
+test_cache_dir="$(mktemp -d /tmp/shipping-dog-test-config.XXXXXX)"
+trap 'rmdir "$test_cache_dir" 2>/dev/null || true' EXIT
+export APP_CONFIG_CACHE="$test_cache_dir/config.php"
 
 export APP_KEY="${APP_KEY:-base64:$(php -r 'echo base64_encode(random_bytes(32));')}"
 export APP_ENV=testing

@@ -5,265 +5,204 @@ namespace App\Http\Controllers\Services\Nexi;
 use App\Helpers\EcommerceHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Ecommerce\Order;
+use App\Models\Ecommerce\PaymentMethod;
 use App\Models\NexiPayment;
+use App\Services\Payments\NexiOrderSnapshot;
+use App\Services\Payments\NexiPaymentReconciliation;
 use App\Services\Payments\NexiService;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Throwable;
 
 class NexiController extends Controller
 {
-    public function __construct(
-        private readonly NexiService $nexi
-    ) {}
+    public function __construct(private readonly NexiService $nexi) {}
 
-    /**
-     * Initialize a Nexi payment for an existing order.
-     */
-    public function create(Request $request, Order $order): View
+    public function create(Request $request, Order $order): Response
     {
-        // Only the customer who owns the current cart
-        // session can initiate its payment.
-        abort_unless(
-            (string) $request->session()->get('cart_id')
-                === (string) $order->id,
-            403
-        );
+        $this->authorizeCustomer($request, $order);
+        abort_unless(in_array((int) $order->status, [0, 1], true), 409);
+        abort_unless((int) $order->payment_method_id === 2 && PaymentMethod::whereKey(2)->where('active', 1)->exists(), 422);
 
-        // Nexi is payment method ID 2.
-        abort_unless(
-            (int) $order->payment_method_id === 2,
-            422
-        );
-
-        // An already confirmed order cannot be paid again.
-        abort_if(
-            $order->status >= EcommerceHelper::statusFromTag('confirmed'),
-            409
-        );
-
-        // Convert the database DECIMAL amount to cents
-        // without using floating-point arithmetic.
-        $price = (string) $order->price;
-
-        abort_unless(
-            preg_match('/^\d{1,6}(\.\d{1,2})?$/', $price),
-            422
-        );
-
-        [$euros, $cents] = array_pad(
-            explode('.', $price, 2),
-            2,
-            '0'
-        );
-
-        $amount = (int) $euros * 100
-            + (int) str_pad($cents, 2, '0');
-
-        abort_if($amount <= 0, 422);
-
-        // Generate a unique payment reference.
-        $transactionId = 'SD'.Str::upper(Str::random(20));
-
-        // Store the pending payment.
-        $payment = NexiPayment::create([
-            'order_id' => $order->id,
-            'transaction_id' => $transactionId,
-            'amount' => $amount,
-            'currency' => 'EUR',
-            'status' => 'pending',
-            'return_token' => Str::random(64),
-        ]);
-
-        // Generate the signed Nexi payment parameters.
-        $parameters = $this->nexi->paymentParameters(
-            transactionId: $payment->transaction_id,
-            amountInCents: (int) $payment->amount,
-            returnUrl: route('nexi.orders.result', [
-                'order' => $order->id,
-                'return_token' => $payment->return_token,
-            ]),
-            cancelUrl: route('nexi.orders.cancel', [
-                'order' => $order->id,
-                'return_token' => $payment->return_token,
-            ]),
-            notificationUrl: route('nexi.orders.notification'),
-        );
-
-        return view('ecommerce.cart.nexi-redirect', [
-            'paymentUrl' => $this->nexi->paymentUrl(),
-            'parameters' => $parameters,
-        ]);
+        return $this->paymentView('ecommerce.cart.nexi-start', compact('order'));
     }
 
-    /**
-     * Handle the server-to-server notification from Nexi.
-     */
-    public function notification(Request $request): Response
+    public function store(Request $request, Order $order): RedirectResponse
     {
-        $data = $request->all();
-
-        // Verify the signature before trusting any payment data.
-        if (! $this->nexi->verifyNotification($data)) {
-            Log::warning('Nexi notification: invalid MAC');
-
-            return response('Invalid signature', 403);
-        }
-
-        $transactionId = $data['codTrans'];
+        $this->authorizeCustomer($request, $order);
 
         try {
-            return DB::transaction(function () use ($data, $transactionId) {
-                $payment = NexiPayment::where(
-                    'transaction_id',
-                    $transactionId
-                )->lockForUpdate()->first();
+            $this->nexi->assertConfigured();
+            [$payment, $initialize] = DB::transaction(function () use ($order) {
+                $order = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
+                abort_unless(in_array((int) $order->status, [0, 1], true), 409);
+                abort_unless((int) $order->payment_method_id === 2 && PaymentMethod::whereKey(2)->where('active', 1)->exists(), 422);
+                abort_if($order->isEmpty() || ! $order->address, 422);
 
-                if (! $payment) {
-                    return response('Payment not found', 404);
+                $amount = $this->nexi->amountInCents((string) $order->getRawOriginal('price'));
+                $payment = $order->nexiPayments()->latest('id')->first();
+
+                if ($payment) {
+                    abort_unless($payment->status === 'pending', 409, 'Il tentativo precedente richiede verifica prima di un nuovo pagamento.');
+                    abort_unless($payment->amount === $amount && $payment->order_fingerprint
+                        && hash_equals($payment->order_fingerprint, app(NexiOrderSnapshot::class)->fingerprint($order)), 409);
+
+                    if ($payment->initialization_status === 'ready') {
+                        abort_unless($payment->hosted_page_url && $payment->security_token, 409);
+
+                        return [$payment, false];
+                    }
+
+                    abort_unless($payment->initialization_status === 'not_started', 409, 'L\'inizializzazione richiede verifica prima di essere ripetuta.');
+                    $payment->update(['initialization_status' => 'creating']);
+
+                    return [$payment, true];
                 }
 
-                // Prevent mismatched amounts and currencies.
-                if (
-                    ! ctype_digit($data['importo'])
-                    || (int) $data['importo'] !== (int) $payment->amount
-                    || $data['divisa'] !== $payment->currency
-                ) {
-                    Log::error('Nexi payment mismatch', [
-                        'payment_id' => $payment->id,
-                    ]);
+                $order->update([
+                    'status' => EcommerceHelper::statusFromTag('received'),
+                    'token' => Str::random(64),
+                ]);
+                $payment = $order->nexiPayments()->create([
+                    'transaction_id' => 'SD'.Str::upper(Str::random(16)),
+                    'amount' => $amount,
+                    'currency' => 'EUR',
+                    'status' => 'pending',
+                    'initialization_status' => 'creating',
+                    'return_token' => Str::random(64),
+                    'order_fingerprint' => app(NexiOrderSnapshot::class)->fingerprint($order->fresh()),
+                ]);
 
-                    return response('Payment mismatch', 422);
-                }
+                return [$payment, true];
+            }, 3);
+        } catch (\InvalidArgumentException $exception) {
+            Log::error('Nexi initialization configuration or amount invalid', ['order_id' => $order->id]);
+            abort(503, 'Pagamento temporaneamente non disponibile.');
+        } catch (HttpExceptionInterface $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            Log::error('Nexi initialization failed', ['order_id' => $order->id, 'exception' => $exception::class]);
+            abort(503, 'Pagamento temporaneamente non disponibile.');
+        }
 
-                $order = Order::whereKey($payment->order_id)
-                    ->lockForUpdate()
-                    ->first();
+        $request->session()->put('nexi_order_id', $payment->order_id);
+        $request->session()->put('nexi_recaps.'.$payment->order_id, true);
+        if ((string) $request->session()->get('cart_id') === (string) $payment->order_id) {
+            $request->session()->forget('cart_id');
+        }
 
-                if (
-                    ! $order
-                    || (int) $order->payment_method_id !== 2
-                ) {
-                    return response('Invalid order', 422);
-                }
-
-                // Avoid acknowledging a payment for a modified
-                // order with a different total.
-                $expectedAmount = (int) round(
-                    (float) $order->price * 100
+        if ($initialize) {
+            try {
+                $session = $this->nexi->createHostedPage(
+                    $payment->transaction_id,
+                    $payment->amount,
+                    route('nexi.orders.result', ['order' => $payment->order_id, 'return_token' => $payment->return_token]),
+                    route('nexi.orders.cancel', ['order' => $payment->order_id, 'return_token' => $payment->return_token]),
+                    route('nexi.orders.notification'),
                 );
 
-                if ($expectedAmount !== (int) $payment->amount) {
-                    return response('Order amount mismatch', 422);
-                }
-
-                // Successful payment.
-                if ($data['esito'] === 'OK') {
-                    if ($payment->status === 'paid') {
-                        return response('OK', 200);
-                    }
-
-                    if ($payment->status !== 'pending') {
-                        return response('Invalid payment state', 409);
-                    }
-
-                    if (! in_array((int) $order->status, [
-                        EcommerceHelper::statusFromTag('open'),
-                        EcommerceHelper::statusFromTag('received'),
-                    ], true)) {
-                        return response('Invalid order state', 409);
-                    }
-
-                    $payment->update([
-                        'status' => 'paid',
-                        'paid_at' => now(),
+                DB::transaction(function () use ($payment, $session) {
+                    $locked = NexiPayment::whereKey($payment->id)->lockForUpdate()->firstOrFail();
+                    abort_unless($locked->initialization_status === 'creating', 409);
+                    $locked->update([
+                        ...$session,
+                        'initialization_status' => 'ready',
+                        'initialized_at' => now(),
                     ]);
+                }, 3);
+                $payment = $payment->fresh();
+            } catch (Throwable $exception) {
+                NexiPayment::whereKey($payment->id)->where('initialization_status', 'creating')
+                    ->update(['initialization_status' => 'review']);
+                Log::error('Nexi initialization outcome requires reconciliation', [
+                    'payment_id' => $payment->id,
+                    'exception' => $exception::class,
+                ]);
+                abort(503, 'Pagamento temporaneamente non disponibile. Contatta l\'assistenza prima di riprovare.');
+            }
+        }
 
-                    Log::info('Nexi payment verified', [
-                        'order_id' => $order->id,
-                        'payment_id' => $payment->id,
-                    ]);
+        return redirect()->away($payment->hosted_page_url)->withHeaders([
+            'Cache-Control' => 'private, no-store',
+            'Referrer-Policy' => 'no-referrer',
+        ]);
+    }
 
-                    return response('OK', 200);
-                }
+    public function notification(Request $request): Response
+    {
+        if (! $request->isJson()) {
+            return response('JSON notification required', 415);
+        }
 
-                // Store an unsuccessful outcome without changing
-                // an already successful payment.
-                if ($payment->status === 'paid') {
-                    return response('OK', 200);
-                }
+        $data = $request->json()->all();
+        $orderId = $data['orderId'] ?? null;
+        $securityToken = $data['securityToken'] ?? null;
+        if (! is_string($orderId) || ! is_string($securityToken) || $securityToken === '') {
+            return response('Invalid notification', 403);
+        }
 
-                if ($payment->status === 'pending') {
-                    $payment->update([
-                        'status' => 'failed',
-                    ]);
-                }
+        $payment = NexiPayment::where('provider_order_id', $orderId)->first();
+        if (! $payment) {
+            return response('Payment not found', 404);
+        }
+        if (! is_string($payment->security_token) || ! hash_equals($payment->security_token, $securityToken)) {
+            return response('Invalid notification', 403);
+        }
 
-                return response('OK', 200);
-            }, 3);
-
-        } catch (\Throwable $e) {
-            Log::error('Nexi notification processing failed', [
-                'transaction_id' => $transactionId,
-                'error' => $e->getMessage(),
+        try {
+            abort_unless($payment->currency === 'EUR', 422);
+            app(NexiPaymentReconciliation::class)->reconcile($payment->id);
+        } catch (Throwable $exception) {
+            Log::error('Nexi notification verification failed', [
+                'payment_id' => $payment->id,
+                'exception' => $exception::class,
             ]);
 
-            return response('Processing error', 500);
+            return response('Verification error', 503);
         }
+
+        return response('OK');
     }
 
-    /**
-     * Customer returns from Nexi after payment.
-     */
-    public function result(
-        Request $request,
-        Order $order
-    ): RedirectResponse {
-        $this->authorizeReturn($request, $order);
-
-        // The notification handler determines payment success.
-        // Never confirm an order from this browser redirect.
-        return redirect($order->recapUrlWithToken());
-    }
-
-    /**
-     * Customer returns after cancelling payment.
-     */
-    public function cancel(
-        Request $request,
-        Order $order
-    ): RedirectResponse {
-        $this->authorizeReturn($request, $order);
-
-        // Don't cancel the order here: a successful payment
-        // notification might already have arrived.
-        return redirect($order->recapUrlWithToken());
-    }
-
-    /**
-     * Verify that the return belongs to a Nexi payment
-     * associated with this order.
-     */
-    private function authorizeReturn(
-        Request $request,
-        Order $order
-    ): void {
+    public function result(Request $request, Order $order): Response
+    {
         $token = $request->query('return_token');
-
-        abort_unless(
-            is_string($token) && strlen($token) === 64,
-            403
-        );
-
-        $payment = NexiPayment::query()
-            ->where('order_id', $order->id)
-            ->where('return_token', $token)
-            ->first();
-
+        abort_unless(is_string($token) && strlen($token) === 64, 403);
+        $payment = $order->nexiPayments()->where('return_token', $token)->first();
         abort_unless($payment, 403);
+        $request->session()->put('nexi_recaps.'.$order->id, true);
+
+        return $this->paymentView('ecommerce.cart.nexi-result', compact('order', 'payment'));
+    }
+
+    public function cancel(Request $request, Order $order): Response
+    {
+        return $this->result($request, $order);
+    }
+
+    private function paymentView(string $view, array $data): Response
+    {
+        return response()->view($view, $data)->withHeaders([
+            'Cache-Control' => 'private, no-store',
+            'Referrer-Policy' => 'no-referrer',
+            'X-Robots-Tag' => 'noindex, nofollow',
+        ]);
+    }
+
+    private function authorizeCustomer(Request $request, Order $order): void
+    {
+        if ($order->user_id) {
+            abort_unless($request->user() && (string) $request->user()->id === (string) $order->user_id, 403);
+
+            return;
+        }
+
+        abort_unless((string) $request->session()->get('cart_id') === (string) $order->id
+            || (string) $request->session()->get('nexi_order_id') === (string) $order->id, 403);
     }
 }

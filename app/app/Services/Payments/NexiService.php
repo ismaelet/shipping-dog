@@ -2,143 +2,184 @@
 
 namespace App\Services\Payments;
 
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
+use RuntimeException;
 
 class NexiService
 {
-    /**
-     * Prepare the parameters for a Nexi payment.
-     */
-    public function paymentParameters(
-        string $transactionId,
+    public function assertConfigured(): void
+    {
+        $this->apiKey();
+    }
+
+    public function createHostedPage(
+        string $orderId,
         int $amountInCents,
-        string $returnUrl,
+        string $resultUrl,
         string $cancelUrl,
         string $notificationUrl
     ): array {
         if ($amountInCents <= 0 || $amountInCents > 99999999) {
-            throw new InvalidArgumentException(
-                'Invalid payment amount.'
-            );
+            throw new InvalidArgumentException('Invalid payment amount.');
         }
 
-        if (! preg_match('/^[a-zA-Z0-9_-]{2,30}$/', $transactionId)) {
-            throw new InvalidArgumentException(
-                'Invalid transaction ID.'
-            );
+        if (! preg_match('/^[a-zA-Z0-9_-]{1,27}$/', $orderId)) {
+            throw new InvalidArgumentException('Invalid Nexi order ID.');
         }
 
-        $parameters = [
-            'alias' => config('services.nexi.alias'),
-            'importo' => (string) $amountInCents,
-            'divisa' => 'EUR',
-            'codTrans' => $transactionId,
-            'url' => $returnUrl,
-            'url_back' => $cancelUrl,
-            'urlpost' => $notificationUrl,
-        ];
-
-        $parameters['mac'] = $this->generateMac(
-            $parameters['codTrans'],
-            $parameters['divisa'],
-            $parameters['importo']
-        );
-
-        return $parameters;
-    }
-
-    /**
-     * Generate the MAC for a payment request.
-     */
-    private function generateMac(
-        string $transactionId,
-        string $currency,
-        string $amount
-    ): string {
-        $key = config('services.nexi.mac_key');
-
-        if (! is_string($key) || $key === '') {
-            throw new InvalidArgumentException(
-                'Nexi MAC key is not configured.'
-            );
-        }
-
-        $string = 'codTrans='.$transactionId
-            .'divisa='.$currency
-            .'importo='.$amount
-            .$key;
-
-        return sha1($string);
-    }
-
-    /**
-     * Generate the expected MAC for a payment notification.
-     */
-    private function generateNotificationMac(array $data): string
-    {
-        $key = config('services.nexi.mac_key');
-
-        if (! is_string($key) || $key === '') {
-            throw new InvalidArgumentException(
-                'Nexi MAC key is not configured.'
-            );
-        }
-
-        $fields = [
-            'codTrans',
-            'esito',
-            'importo',
-            'divisa',
-            'data',
-            'orario',
-            'codAut',
-        ];
-
-        $string = '';
-
-        foreach ($fields as $field) {
-            $string .= $field.'='.$data[$field];
-        }
-
-        return sha1($string.$key);
-    }
-
-    /**
-     * Verify that a notification was signed by Nexi.
-     */
-    public function verifyNotification(array $data): bool
-    {
-        $requiredFields = [
-            'codTrans',
-            'esito',
-            'importo',
-            'divisa',
-            'data',
-            'orario',
-            'codAut',
-            'mac',
-        ];
-
-        foreach ($requiredFields as $field) {
-            if (
-                ! array_key_exists($field, $data)
-                || ! is_string($data[$field])
-            ) {
-                return false;
+        foreach ([$resultUrl, $cancelUrl, $notificationUrl] as $url) {
+            if (! filter_var($url, FILTER_VALIDATE_URL) || parse_url($url, PHP_URL_SCHEME) !== 'https'
+                || strlen($url) > 2048) {
+                throw new InvalidArgumentException('Nexi requires public HTTPS callback URLs within protocol limits.');
             }
         }
 
-        if (
-            ! preg_match('/^[a-fA-F0-9]{40}$/', $data['mac'])
-        ) {
+        $response = $this->request()->post('/orders/hpp', [
+            'orderId' => $orderId,
+            'amount' => (string) $amountInCents,
+            'currency' => 'EUR',
+            'actionType' => 'PAY',
+            'captureType' => 'IMPLICIT',
+            'resultUrl' => $resultUrl,
+            'cancelUrl' => $cancelUrl,
+            'notificationUrl' => $notificationUrl,
+        ]);
+
+        if (! $response->successful()) {
+            throw new RuntimeException('Nexi HPP initialization returned HTTP '.$response->status().'.');
+        }
+
+        $data = $response->json();
+        if (! is_array($data)
+            || ($data['orderId'] ?? null) !== $orderId
+            || ! is_string($data['hostedPage'] ?? null)
+            || ! is_string($data['securityToken'] ?? null)
+            || $data['securityToken'] === ''
+            || ! $this->isNexiHostedPage($data['hostedPage'])) {
+            throw new RuntimeException('Nexi HPP initialization returned an invalid response.');
+        }
+
+        return [
+            'provider_order_id' => $data['orderId'],
+            'hosted_page_url' => $data['hostedPage'],
+            'security_token' => $data['securityToken'],
+        ];
+    }
+
+    /**
+     * Return the provider's current state based only on executed order operations.
+     */
+    public function orderStatus(string $providerOrderId, int $expectedAmount): string
+    {
+        $response = $this->request()->get('/orders/'.rawurlencode($providerOrderId));
+
+        if (! $response->successful()) {
+            throw new RuntimeException('Nexi order verification returned HTTP '.$response->status().'.');
+        }
+
+        $data = $response->json();
+        if (! is_array($data) || ($data['orderId'] ?? null) !== $providerOrderId
+            || ! is_array($data['operations'] ?? null)) {
+            throw new RuntimeException('Nexi order verification returned an invalid response.');
+        }
+
+        $authorized = false;
+        $failure = null;
+        foreach ($data['operations'] as $operation) {
+            if (! is_array($operation)) {
+                continue;
+            }
+
+            $type = strtoupper((string) ($operation['operationType'] ?? ''));
+            $result = strtoupper((string) ($operation['operationResult'] ?? ''));
+            if (! $this->operationMatchesExpectedPayment($operation, $expectedAmount)) {
+                continue;
+            }
+
+            if (in_array($type, ['CAPTURE', 'PAYMENT', 'PURCHASE'], true) && $result === 'EXECUTED') {
+                return 'paid';
+            }
+
+            if ($type === 'AUTHORIZATION' && $result === 'EXECUTED') {
+                $authorized = true;
+            }
+
+            if (in_array($result, ['DECLINED', 'FAILED', 'CANCELLED', 'CANCELED', 'ABORTED'], true)) {
+                $failure = in_array($result, ['CANCELLED', 'CANCELED', 'ABORTED'], true) ? 'cancelled' : 'failed';
+            }
+        }
+
+        return $authorized ? 'authorized' : ($failure ?? 'pending');
+    }
+
+    public function amountInCents(string $price): int
+    {
+        if (! preg_match('/^([0-9]{1,6})(?:\.([0-9]{1,2}))?$/', $price, $parts)) {
+            throw new InvalidArgumentException('Invalid payment amount.');
+        }
+
+        $amount = (int) $parts[1] * 100 + (int) str_pad($parts[2] ?? '', 2, '0');
+        if ($amount <= 0 || $amount > 99999999) {
+            throw new InvalidArgumentException('Invalid payment amount.');
+        }
+
+        return $amount;
+    }
+
+    private function request(): PendingRequest
+    {
+        return Http::acceptJson()
+            ->asJson()
+            ->withHeaders([
+                'X-Api-Key' => $this->apiKey(),
+                'Correlation-Id' => (string) Str::uuid(),
+            ])
+            ->connectTimeout(5)
+            ->timeout(15)
+            ->baseUrl($this->baseUrl());
+    }
+
+    private function apiKey(): string
+    {
+        $apiKey = config('services.nexi.sandbox')
+            ? config('services.nexi.sandbox_api_key')
+            : config('services.nexi.api_key');
+        if (! is_string($apiKey) || $apiKey === '') {
+            throw new InvalidArgumentException('Nexi REST API key is not configured.');
+        }
+
+        return $apiKey;
+    }
+
+    private function baseUrl(): string
+    {
+        return config('services.nexi.sandbox')
+            ? 'https://xpaysandbox.nexigroup.com/api/phoenix-0.0/psp/api/v1'
+            : 'https://xpay.nexigroup.com/api/phoenix-0.0/psp/api/v1';
+    }
+
+    private function isNexiHostedPage(string $url): bool
+    {
+        if (! filter_var($url, FILTER_VALIDATE_URL) || parse_url($url, PHP_URL_SCHEME) !== 'https') {
             return false;
         }
 
-        $expectedMac = $this->generateNotificationMac($data);
+        $host = strtolower((string) parse_url($url, PHP_URL_HOST));
 
-        return hash_equals(
-            $expectedMac,
-            strtolower($data['mac'])
-        );
+        return $host === 'nexigroup.com' || str_ends_with($host, '.nexigroup.com');
+    }
+
+    private function operationMatchesExpectedPayment(array $operation, int $expectedAmount): bool
+    {
+        $amount = $operation['amount'] ?? null;
+        $currency = $operation['currency'] ?? null;
+
+        return (is_string($amount) || is_int($amount))
+            && preg_match('/^[0-9]{1,8}$/', (string) $amount) === 1
+            && (int) $amount === $expectedAmount
+            && $currency === 'EUR';
     }
 }
