@@ -14,10 +14,9 @@ beforeEach(function () {
 it('creates an HPP order with REST credentials, a UUID correlation ID, and implicit capture', function () {
     Http::fake([
         'https://xpaysandbox.nexigroup.com/api/phoenix-0.0/psp/api/v1/orders/hpp' => Http::response([
-            'orderId' => 'SD1234567890123456',
             'hostedPage' => 'https://xpaysandbox.nexigroup.com/checkout/session',
             'securityToken' => 'provider-security-token',
-        ], 201),
+        ], 200),
     ]);
 
     $session = app(NexiService::class)->createHostedPage(
@@ -41,14 +40,19 @@ it('creates an HPP order with REST credentials, a UUID correlation ID, and impli
             && $request->hasHeader('X-Api-Key', 'sandbox-key')
             && preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i', $correlationId) === 1
             && $request->data() === [
-                'orderId' => 'SD1234567890123456',
-                'amount' => '1234',
-                'currency' => 'EUR',
-                'actionType' => 'PAY',
-                'captureType' => 'IMPLICIT',
-                'resultUrl' => 'https://merchant.example/result',
-                'cancelUrl' => 'https://merchant.example/cancel',
-                'notificationUrl' => 'https://merchant.example/notification',
+                'order' => [
+                    'orderId' => 'SD1234567890123456',
+                    'amount' => '1234',
+                    'currency' => 'EUR',
+                ],
+                'paymentSession' => [
+                    'amount' => '1234',
+                    'actionType' => 'PAY',
+                    'captureType' => 'IMPLICIT',
+                    'resultUrl' => 'https://merchant.example/result',
+                    'cancelUrl' => 'https://merchant.example/cancel',
+                    'notificationUrl' => 'https://merchant.example/notification',
+                ],
             ];
     });
 });
@@ -57,10 +61,9 @@ it('uses the production endpoint and production API key when sandbox is disabled
     config(['services.nexi.sandbox' => false, 'services.nexi.api_key' => 'production-key']);
     Http::fake([
         'https://xpay.nexigroup.com/api/phoenix-0.0/psp/api/v1/orders/hpp' => Http::response([
-            'orderId' => 'SD1234567890123456',
             'hostedPage' => 'https://xpay.nexigroup.com/checkout/session',
             'securityToken' => 'provider-security-token',
-        ], 201),
+        ], 200),
     ]);
 
     app(NexiService::class)->createHostedPage(
@@ -78,12 +81,12 @@ it('uses the production endpoint and production API key when sandbox is disabled
 it('verifies a captured operation from the REST order resource', function () {
     Http::fake([
         '*/orders/SD1234567890123456' => Http::response([
-            'orderId' => 'SD1234567890123456',
             'operations' => [[
+                'orderId' => 'SD1234567890123456',
                 'operationType' => 'CAPTURE',
                 'operationResult' => 'EXECUTED',
-                'amount' => '1234',
-                'currency' => 'EUR',
+                'operationAmount' => '1234',
+                'operationCurrency' => 'EUR',
             ]],
         ]),
     ]);
@@ -95,46 +98,45 @@ it('verifies a captured operation from the REST order resource', function () {
         && $request->hasHeader('Correlation-Id'));
 });
 
-it('rejects a provider order response for a different order reference', function () {
+it('ignores provider operations for a different order reference', function () {
     Http::fake([
         '*/orders/SD1234567890123456' => Http::response([
-            'orderId' => 'SDDIFFERENTORDER',
             'operations' => [[
+                'orderId' => 'SDDIFFERENTORDER',
                 'operationType' => 'CAPTURE',
                 'operationResult' => 'EXECUTED',
-                'amount' => '1234',
-                'currency' => 'EUR',
+                'operationAmount' => '1234',
+                'operationCurrency' => 'EUR',
             ]],
         ]),
     ]);
 
-    app(NexiService::class)->orderStatus('SD1234567890123456', 1234);
-})->throws(RuntimeException::class);
+    expect(app(NexiService::class)->orderStatus('SD1234567890123456', 1234))->toBe('pending');
+});
 
 it('distinguishes authorizations, failures, cancellations, and mismatched amounts', function (array $operation, string $expected) {
     Http::fake([
         '*/orders/SD1234567890123456' => Http::response([
-            'orderId' => 'SD1234567890123456',
-            'operations' => [$operation],
+            'operations' => [array_merge(['orderId' => 'SD1234567890123456'], $operation)],
         ]),
     ]);
 
     expect(app(NexiService::class)->orderStatus('SD1234567890123456', 1234))->toBe($expected);
 })->with([
     'authorization' => [[
-        'operationType' => 'AUTHORIZATION', 'operationResult' => 'EXECUTED', 'amount' => '1234', 'currency' => 'EUR',
+        'operationType' => 'AUTHORIZATION', 'operationResult' => 'AUTHORIZED', 'operationAmount' => '1234', 'operationCurrency' => 'EUR',
     ], 'authorized'],
     'declined' => [[
-        'operationType' => 'PAYMENT', 'operationResult' => 'DECLINED', 'amount' => '1234', 'currency' => 'EUR',
+        'operationType' => 'AUTHORIZATION', 'operationResult' => 'DECLINED', 'operationAmount' => '1234', 'operationCurrency' => 'EUR',
     ], 'failed'],
     'cancelled' => [[
-        'operationType' => 'PAYMENT', 'operationResult' => 'CANCELLED', 'amount' => '1234', 'currency' => 'EUR',
+        'operationType' => 'AUTHORIZATION', 'operationResult' => 'CANCELED', 'operationAmount' => '1234', 'operationCurrency' => 'EUR',
     ], 'cancelled'],
     'wrong amount' => [[
-        'operationType' => 'CAPTURE', 'operationResult' => 'EXECUTED', 'amount' => '1', 'currency' => 'EUR',
+        'operationType' => 'CAPTURE', 'operationResult' => 'EXECUTED', 'operationAmount' => '1', 'operationCurrency' => 'EUR',
     ], 'pending'],
     'wrong currency' => [[
-        'operationType' => 'CAPTURE', 'operationResult' => 'EXECUTED', 'amount' => '1234', 'currency' => 'USD',
+        'operationType' => 'CAPTURE', 'operationResult' => 'EXECUTED', 'operationAmount' => '1234', 'operationCurrency' => 'USD',
     ], 'pending'],
 ]);
 
@@ -187,3 +189,30 @@ it('converts decimal amounts without floating point', function (string $input, i
 it('rejects invalid decimal values', function (string $input) {
     app(NexiService::class)->amountInCents($input);
 })->with(['0', '-1', '1.001', '1e2', '1000000', 'NaN'])->throws(InvalidArgumentException::class);
+
+it('maps documented operation results without confusing authentication or authorization with capture', function (string $type, string $result, string $expected) {
+    Http::fake(['*/orders/SD1234567890123456' => Http::response([
+        'operations' => [[
+            'orderId' => 'SD1234567890123456', 'operationType' => $type,
+            'operationResult' => $result, 'operationAmount' => '1234', 'operationCurrency' => 'EUR',
+        ]],
+    ])]);
+    expect(app(NexiService::class)->orderStatus('SD1234567890123456', 1234))->toBe($expected);
+})->with([
+    ['AUTHORIZATION', 'EXECUTED', 'paid'],
+    ['AUTHORIZATION', 'AUTHORIZED', 'authorized'],
+    ['AUTHORIZATION', 'THREEDS_VALIDATED', 'pending'],
+    ['AUTHORIZATION', 'THREEDS_FAILED', 'failed'],
+    ['AUTHORIZATION', 'DENIED_BY_RISK', 'failed'],
+    ['AUTHORIZATION', 'CANCELED', 'cancelled'],
+    ['CAPTURE', 'PENDING', 'pending'],
+    ['CARD_VERIFICATION', 'EXECUTED', 'pending'],
+    ['REFUND', 'EXECUTED', 'pending'],
+    ['UNKNOWN', 'EXECUTED', 'pending'],
+    ['UNKNOWN', 'DECLINED', 'pending'],
+]);
+
+it('rejects malformed order resources', function (array $body) {
+    Http::fake(['*/orders/*' => Http::response($body)]);
+    app(NexiService::class)->orderStatus('SD1234567890123456', 1234);
+})->with([[[]], [['operations' => 'invalid']]])->throws(RuntimeException::class);

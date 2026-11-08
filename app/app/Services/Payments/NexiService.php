@@ -38,14 +38,19 @@ class NexiService
         }
 
         $response = $this->request()->post('/orders/hpp', [
-            'orderId' => $orderId,
-            'amount' => (string) $amountInCents,
-            'currency' => 'EUR',
-            'actionType' => 'PAY',
-            'captureType' => 'IMPLICIT',
-            'resultUrl' => $resultUrl,
-            'cancelUrl' => $cancelUrl,
-            'notificationUrl' => $notificationUrl,
+            'order' => [
+                'orderId' => $orderId,
+                'amount' => (string) $amountInCents,
+                'currency' => 'EUR',
+            ],
+            'paymentSession' => [
+                'amount' => (string) $amountInCents,
+                'actionType' => 'PAY',
+                'captureType' => 'IMPLICIT',
+                'resultUrl' => $resultUrl,
+                'cancelUrl' => $cancelUrl,
+                'notificationUrl' => $notificationUrl,
+            ],
         ]);
 
         if (! $response->successful()) {
@@ -54,7 +59,6 @@ class NexiService
 
         $data = $response->json();
         if (! is_array($data)
-            || ($data['orderId'] ?? null) !== $orderId
             || ! is_string($data['hostedPage'] ?? null)
             || ! is_string($data['securityToken'] ?? null)
             || $data['securityToken'] === ''
@@ -63,7 +67,7 @@ class NexiService
         }
 
         return [
-            'provider_order_id' => $data['orderId'],
+            'provider_order_id' => $orderId,
             'hosted_page_url' => $data['hostedPage'],
             'security_token' => $data['securityToken'],
         ];
@@ -81,8 +85,7 @@ class NexiService
         }
 
         $data = $response->json();
-        if (! is_array($data) || ($data['orderId'] ?? null) !== $providerOrderId
-            || ! is_array($data['operations'] ?? null)) {
+        if (! is_array($data) || ! is_array($data['operations'] ?? null)) {
             throw new RuntimeException('Nexi order verification returned an invalid response.');
         }
 
@@ -95,20 +98,21 @@ class NexiService
 
             $type = strtoupper((string) ($operation['operationType'] ?? ''));
             $result = strtoupper((string) ($operation['operationResult'] ?? ''));
-            if (! $this->operationMatchesExpectedPayment($operation, $expectedAmount)) {
+            if (! $this->operationMatchesExpectedPayment($operation, $providerOrderId, $expectedAmount)) {
                 continue;
             }
 
-            if (in_array($type, ['CAPTURE', 'PAYMENT', 'PURCHASE'], true) && $result === 'EXECUTED') {
+            if (in_array($type, ['CAPTURE', 'AUTHORIZATION'], true) && $result === 'EXECUTED') {
                 return 'paid';
             }
 
-            if ($type === 'AUTHORIZATION' && $result === 'EXECUTED') {
+            if ($type === 'AUTHORIZATION' && $result === 'AUTHORIZED') {
                 $authorized = true;
             }
 
-            if (in_array($result, ['DECLINED', 'FAILED', 'CANCELLED', 'CANCELED', 'ABORTED'], true)) {
-                $failure = in_array($result, ['CANCELLED', 'CANCELED', 'ABORTED'], true) ? 'cancelled' : 'failed';
+            if (in_array($type, ['AUTHORIZATION', 'CAPTURE'], true)
+                && in_array($result, ['DECLINED', 'DENIED_BY_RISK', 'THREEDS_FAILED', 'FAILED', 'CANCELED'], true)) {
+                $failure = $result === 'CANCELED' ? 'cancelled' : 'failed';
             }
         }
 
@@ -172,12 +176,13 @@ class NexiService
         return $host === 'nexigroup.com' || str_ends_with($host, '.nexigroup.com');
     }
 
-    private function operationMatchesExpectedPayment(array $operation, int $expectedAmount): bool
+    private function operationMatchesExpectedPayment(array $operation, string $providerOrderId, int $expectedAmount): bool
     {
-        $amount = $operation['amount'] ?? null;
-        $currency = $operation['currency'] ?? null;
+        $amount = $operation['operationAmount'] ?? null;
+        $currency = $operation['operationCurrency'] ?? null;
 
-        return (is_string($amount) || is_int($amount))
+        return ($operation['orderId'] ?? null) === $providerOrderId
+            && (is_string($amount) || is_int($amount))
             && preg_match('/^[0-9]{1,8}$/', (string) $amount) === 1
             && (int) $amount === $expectedAmount
             && $currency === 'EUR';

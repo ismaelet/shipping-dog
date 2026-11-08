@@ -101,8 +101,8 @@ class NexiController extends Controller
                 $session = $this->nexi->createHostedPage(
                     $payment->transaction_id,
                     $payment->amount,
-                    route('nexi.orders.result', ['order' => $payment->order_id, 'return_token' => $payment->return_token]),
-                    route('nexi.orders.cancel', ['order' => $payment->order_id, 'return_token' => $payment->return_token]),
+                    route('nexi.orders.result', ['order' => $payment->order_id, 'return_token' => $payment->return_token, 'orderId' => $payment->transaction_id]),
+                    route('nexi.orders.cancel', ['order' => $payment->order_id, 'return_token' => $payment->return_token, 'orderId' => $payment->transaction_id]),
                     route('nexi.orders.notification'),
                 );
 
@@ -140,7 +140,7 @@ class NexiController extends Controller
         }
 
         $data = $request->json()->all();
-        $orderId = $data['orderId'] ?? null;
+        $orderId = data_get($data, 'operation.orderId');
         $securityToken = $data['securityToken'] ?? null;
         if (! is_string($orderId) || ! is_string($securityToken) || $securityToken === '') {
             return response('Invalid notification', 403);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Services\Nexi\NexiController;
+use App\Http\Controllers\Services\Nexi\NexiSandboxController;
 use App\Http\Controllers\Services\PayPal\PayPalController;
 use App\Http\Controllers\Services\PayPal\PayPalExchangeController;
 use App\Http\Middleware\UnconfirmedOrder;
@@ -50,3 +51,8 @@ Route::get('/services/nexi/cancel/{order}', [
 Route::post('/services/nexi/notification', [
     NexiController::class, 'notification',
 ])->name('nexi.orders.notification');
+
+// Fixture access is unavailable outside the explicitly enabled, isolated sandbox.
+Route::get('/services/nexi/sandbox/guest/{order}', [
+    NexiSandboxController::class, 'guest',
+])->name('nexi.sandbox.guest');

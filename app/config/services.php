@@ -37,6 +37,8 @@ return [
     ],
 
     'nexi' => [
+        'local_sandbox' => env('NEXI_LOCAL_SANDBOX', false),
+        'local_trusted_proxies' => env('TRUSTED_PROXIES'),
         'sandbox' => env('NEXI_SANDBOX', true),
         'external_operations_enabled' => env('NEXI_EXTERNAL_OPERATIONS_ENABLED', false),
         'sandbox_api_key' => env('NEXI_SANDBOX_API_KEY'),

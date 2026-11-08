@@ -48,7 +48,7 @@ function fakeNexiApi(
     string $operationResult = 'EXECUTED',
     string $amount = '1234',
     string $currency = 'EUR',
-    int $hppStatus = 201,
+    int $hppStatus = 200,
     bool $connectionFailure = false
 ): void {
     $GLOBALS['nexi_operation'] = compact('operationType', 'operationResult', 'amount', 'currency', 'hppStatus', 'connectionFailure');
@@ -60,7 +60,6 @@ function fakeNexiApi(
     Http::fake([
         'https://xpaysandbox.nexigroup.com/api/phoenix-0.0/psp/api/v1/orders/hpp' => function (Request $request) {
             return Http::response([
-                'orderId' => $request->data()['orderId'],
                 'hostedPage' => 'https://xpaysandbox.nexigroup.com/checkout/session',
                 'securityToken' => 'provider-security-token',
             ], $GLOBALS['nexi_operation']['hppStatus']);
@@ -73,12 +72,12 @@ function fakeNexiApi(
             $orderId = basename(parse_url($request->url(), PHP_URL_PATH));
 
             return Http::response([
-                'orderId' => $orderId,
                 'operations' => [[
+                    'orderId' => $orderId,
                     'operationType' => $GLOBALS['nexi_operation']['operationType'],
                     'operationResult' => $GLOBALS['nexi_operation']['operationResult'],
-                    'amount' => $GLOBALS['nexi_operation']['amount'],
-                    'currency' => $GLOBALS['nexi_operation']['currency'],
+                    'operationAmount' => $GLOBALS['nexi_operation']['amount'],
+                    'operationCurrency' => $GLOBALS['nexi_operation']['currency'],
                 ]],
             ]);
         },
@@ -88,7 +87,7 @@ function fakeNexiApi(
 function nexiNotification(NexiPayment $payment, array $overrides = []): array
 {
     return array_replace([
-        'orderId' => $payment->provider_order_id,
+        'operation' => ['orderId' => $payment->provider_order_id],
         'securityToken' => $payment->security_token,
     ], $overrides);
 }
@@ -114,8 +113,8 @@ it('stores the returned order reference and encrypts the notification security t
     expect(DB::table('nexi_payments')->where('id', $payment->id)->value('security_token'))
         ->not->toBe('provider-security-token');
     Http::assertSent(fn (Request $request) => str_ends_with($request->url(), '/orders/hpp')
-        && $request->data()['actionType'] === 'PAY'
-        && $request->data()['captureType'] === 'IMPLICIT'
+        && $request->data()['paymentSession']['actionType'] === 'PAY'
+        && $request->data()['paymentSession']['captureType'] === 'IMPLICIT'
         && $request->hasHeader('X-Api-Key', 'test-api-key')
         && $request->hasHeader('Correlation-Id'));
 });
@@ -130,7 +129,7 @@ it('does not automatically retry an HPP request with an uncertain result', funct
 });
 
 it('does not fulfill an authorization and advances only after a captured operation', function () {
-    fakeNexiApi('AUTHORIZATION');
+    fakeNexiApi('AUTHORIZATION', 'AUTHORIZED');
     ($this->start)();
     $payment = NexiPayment::first();
 
@@ -249,7 +248,7 @@ it('rejects malformed unsigned and mismatched notifications', function (string $
     ($this->start)();
     $payment = NexiPayment::first();
     $data = match ($kind) {
-        'unknown' => nexiNotification($payment, ['orderId' => 'SDUNKNOWN']),
+        'unknown' => nexiNotification($payment, ['operation' => ['orderId' => 'SDUNKNOWN']]),
         'missing' => [],
         default => nexiNotification($payment, ['securityToken' => 'invalid-token']),
     };
@@ -258,7 +257,7 @@ it('rejects malformed unsigned and mismatched notifications', function (string $
 })->with([['unknown', 404], ['missing', 403], ['invalid token', 403]]);
 
 it('allows a verified capture to advance a failed or cancelled payment without later downgrade', function (string $operationResult) {
-    fakeNexiApi('PAYMENT', $operationResult);
+    fakeNexiApi('AUTHORIZATION', $operationResult);
     ($this->start)();
     $payment = NexiPayment::first();
     $this->postJson(route('nexi.orders.notification'), nexiNotification($payment))->assertOk();
@@ -266,11 +265,11 @@ it('allows a verified capture to advance a failed or cancelled payment without l
     ($this->start)()->assertStatus(409);
     fakeNexiApi('CAPTURE', 'EXECUTED');
     $this->postJson(route('nexi.orders.notification'), nexiNotification($payment))->assertOk();
-    fakeNexiApi('PAYMENT', $operationResult);
+    fakeNexiApi('AUTHORIZATION', $operationResult);
     $this->postJson(route('nexi.orders.notification'), nexiNotification($payment))->assertOk();
     expect($payment->fresh()->status)->toBe('paid');
     ($this->start)()->assertStatus(409);
-})->with(['DECLINED', 'CANCELLED']);
+})->with(['DECLINED', 'CANCELED']);
 
 it('validates return capabilities without trusting browser outcomes or exposing the order token', function () {
     ($this->start)();
@@ -402,7 +401,7 @@ it('does not repeat an operation already claimed by another worker and permits e
 });
 
 it('does not confirm a provider-side failed payment', function () {
-    fakeNexiApi('PAYMENT', 'DECLINED');
+    fakeNexiApi('AUTHORIZATION', 'DECLINED');
     ($this->start)();
     $payment = NexiPayment::first();
     $this->postJson(route('nexi.orders.notification'), nexiNotification($payment))->assertOk();
