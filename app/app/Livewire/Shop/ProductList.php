@@ -21,16 +21,16 @@ class ProductList extends Component
     public string $search = '';
 
     #[Url(as: 'type')]
-    public ?int $selectedTypeId = null;
+    public ?string $selectedTypeId = null;
 
     #[Url(as: 'gender')]
-    public ?int $selectedGenderId = null;
+    public ?string $selectedGenderId = null;
 
-    #[Url(as: 'category')]
+    #[Url(as: 'group')]
     public ?string $categoryFilter = null;
 
     #[Url(as: 'design')]
-    public ?int $designId = null;
+    public ?string $designId = null;
 
     #[Url]
     public ?string $sort = null;
@@ -49,6 +49,10 @@ class ProductList extends Component
 
     public function mount(): void
     {
+        if (! request()->has('group') && request()->query('category') === 'm') {
+            $this->categoryFilter = 'm';
+        }
+
         $this->scrollOnLoad = $this->hasListParameters();
         $this->resolveFilters();
         $this->resolveSort();
@@ -77,7 +81,7 @@ class ProductList extends Component
             typeId: $this->selectedType?->id,
             genderId: $this->selectedGender?->id,
             category: $this->categoryFilter,
-            designId: $this->designId,
+            designId: $this->validId($this->designId),
             sort: $sort,
             diversify: $shouldDiversify,
         );
@@ -105,7 +109,7 @@ class ProductList extends Component
             'products' => $products,
             'totalProducts' => $totalProducts,
             'productCount' => $products->total(),
-            'design' => $this->designId ? Design::find($this->designId) : null,
+            'design' => $this->validId($this->designId) ? Design::find($this->validId($this->designId)) : null,
             'womenTypes' => $this->getCategoryTypes('c', 2),
             'menTypes' => $this->getCategoryTypes('c', 1),
             'unisexTypes' => $this->getCategoryTypes('c'),
@@ -117,15 +121,21 @@ class ProductList extends Component
     public function selectType(?int $typeId, ?int $genderId): void
     {
         if (
-            $typeId === $this->selectedTypeId &&
-            $genderId === $this->selectedGenderId
+            (string) $typeId === (string) $this->selectedTypeId &&
+            (string) $genderId === (string) $this->selectedGenderId
         ) {
             $typeId = null;
             $genderId = null;
         }
 
-        $this->selectedTypeId = $typeId;
-        $this->selectedGenderId = $genderId;
+        $this->selectedTypeId = $typeId !== null
+            ? (string) $typeId
+            : null;
+
+        $this->selectedGenderId = $genderId !== null
+            ? (string) $genderId
+            : null;
+
         $this->categoryFilter = null;
 
         $this->resolveFilters();
@@ -177,19 +187,21 @@ class ProductList extends Component
 
     private function resolveFilters(): void
     {
-        // Only the accessories category can be filtered by URL
         if ($this->categoryFilter !== 'm') {
             $this->categoryFilter = null;
         }
 
-        $this->selectedType = $this->selectedTypeId
-            ? ProductType::find($this->selectedTypeId)
+        $typeId = $this->validId($this->selectedTypeId);
+        $genderId = $this->validId($this->selectedGenderId);
+
+        $this->selectedType = $typeId
+            ? ProductType::find($typeId)
             : null;
 
         $this->selectedCategory = $this->selectedType?->category;
 
-        $this->selectedGender = $this->selectedGenderId
-            ? ProductGender::find($this->selectedGenderId)
+        $this->selectedGender = $genderId
+            ? ProductGender::find($genderId)
             : null;
 
         if ($this->selectedType && ! $this->selectedGender) {
@@ -239,6 +251,21 @@ class ProductList extends Component
         });
 
         return $query->orderBy('sort')->get();
+    }
+
+    private function validId(?string $value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        $id = filter_var(
+            $value,
+            FILTER_VALIDATE_INT,
+            ['options' => ['min_range' => 1]]
+        );
+
+        return $id === false ? null : $id;
     }
 
     public function applySearch(): void

@@ -86,7 +86,7 @@
                         :gender-id="2"
                         :selected-type-id="$selectedTypeId"
                         :selected-gender-id="$selectedGenderId"
-                        :default-open="$selectedGenderId === 2"
+                        :default-open="$selectedGenderId === '2'"
                     />
 
                     <x-shop.category-selector
@@ -95,7 +95,7 @@
                         :gender-id="1"
                         :selected-type-id="$selectedTypeId"
                         :selected-gender-id="$selectedGenderId"
-                        :default-open="$selectedGenderId === 1"
+                        :default-open="$selectedGenderId === '1'"
                     />
 
                     <x-shop.category-selector
@@ -104,7 +104,7 @@
                         :gender-id="3"
                         :selected-type-id="$selectedTypeId"
                         :selected-gender-id="$selectedGenderId"
-                        :default-open="$selectedGenderId === 3"
+                        :default-open="$selectedGenderId === '3'"
                     />
 
                     <x-shop.category-selector

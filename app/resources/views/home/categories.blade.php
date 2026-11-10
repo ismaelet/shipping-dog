@@ -64,7 +64,7 @@
 
             {{-- Accessories --}}
             <a
-                href="{{ route('shop', ['category' => 'm']) }}"
+                href="{{ route('shop', ['group' => 'm']) }}"
                 class="group bg-primary-400 relative min-h-80 overflow-hidden rounded-3xl p-6 text-white md:min-h-full"
             >
                 <div class="flex h-full flex-col justify-between">

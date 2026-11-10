@@ -61,6 +61,28 @@ class ShopProductListTest extends TestCase
             ->assertSet('selectedGenderId', null);
     }
 
+    public function test_gender_url_filter_opens_the_matching_category_without_a_type(): void
+    {
+        foreach (['1', '2', '3'] as $genderId) {
+            $component = Livewire::withQueryParams([
+                'gender' => $genderId,
+                'search' => 'no-shop-product-matches-this-query',
+            ])
+                ->test(ProductList::class)
+                ->assertSet('selectedGenderId', $genderId)
+                ->assertSet('selectedTypeId', null);
+
+            foreach (['1', '2', '3'] as $categoryGenderId) {
+                $expectedOpen = $categoryGenderId === $genderId ? 'true' : 'false';
+
+                $this->assertMatchesRegularExpression(
+                    '/data-open="'.$expectedOpen.'"\\s+data-group="'.$categoryGenderId.'"/',
+                    $component->html(),
+                );
+            }
+        }
+    }
+
     public function test_clear_filters_resets_search_type_and_gender(): void
     {
         Livewire::withQueryParams([
@@ -73,6 +95,37 @@ class ShopProductListTest extends TestCase
             ->assertSet('search', '')
             ->assertSet('selectedTypeId', null)
             ->assertSet('selectedGenderId', null);
+    }
+
+    public function test_group_url_filter_opens_accessories_and_filters_products(): void
+    {
+        $component = Livewire::withQueryParams(['group' => 'm'])
+            ->test(ProductList::class)
+            ->assertSet('categoryFilter', 'm')
+            ->assertSet('selectedTypeId', null)
+            ->assertViewHas('products', function ($products) {
+                $expected = app(ProductSearchQuery::class)->build(category: 'm')->paginate(36);
+
+                $this->assertSame($expected->total(), $products->total());
+                $this->assertSame($expected->pluck('id')->all(), $products->pluck('id')->all());
+                $products->each(fn ($product) => $this->assertSame('m', $product->type->category));
+
+                return true;
+            });
+
+        $this->assertMatchesRegularExpression(
+            '/data-open="true"\\s+data-group="accessories"/',
+            $component->html(),
+        );
+
+        $component->call('removeFilters')->assertSet('categoryFilter', null);
+    }
+
+    public function test_group_url_filter_rejects_unsupported_categories(): void
+    {
+        Livewire::withQueryParams(['group' => 'c', 'category' => 'm'])
+            ->test(ProductList::class)
+            ->assertSet('categoryFilter', null);
     }
 
     public function test_category_url_filter_only_accepts_accessories_and_is_cleared_by_filters(): void
