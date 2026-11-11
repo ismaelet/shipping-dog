@@ -19,7 +19,7 @@ class FaqController extends Controller
             [
                 'eyebrow' => 'Acquisti e assistenza',
                 'title' => 'Ordini',
-                'icon' => 'faq-orders.svg',
+                'icon' => 'faq.orders',
                 'accent' => 'text-[#ff8904]',
                 'items' => [
                     [
@@ -40,7 +40,7 @@ class FaqController extends Controller
             [
                 'eyebrow' => 'Consegne e tracciamento',
                 'title' => 'Spedizioni',
-                'icon' => 'faq-shipping.svg',
+                'icon' => 'faq.shipping',
                 'accent' => 'text-[#00bcff]',
                 'items' => [
                     [
@@ -60,7 +60,7 @@ class FaqController extends Controller
             [
                 'eyebrow' => 'Creator e negozi',
                 'title' => 'Vendite',
-                'icon' => 'faq-selling.svg',
+                'icon' => 'faq.selling',
                 'accent' => 'text-[#00d084]',
                 'items' => [
                     [

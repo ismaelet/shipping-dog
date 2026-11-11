@@ -120,7 +120,7 @@
                                 <details data-faq-item class="group border-b-border-400 border-b last:border-b-0">
                                     <summary class="hover:bg-surface-500 flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 px-4 py-4 transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-orange-400 sm:px-7 sm:py-5">
                                         <span class="flex min-w-0 items-center gap-3">
-                                            <img src="{{ Vite::image($group['icon']) }}" alt="" class="shrink-0" />
+                                            <x-dynamic-component :component="'icon-'.$group['icon']" class="shrink-0" />
                                             <span class="text-heading-400 font-sans leading-6 font-semibold sm:text-base">
                                                 {{ $faq['question'] }}
                                             </span>
