@@ -97,7 +97,7 @@ class SellerResource extends Resource
                     // Address
                     Fieldset::make('Dati di Pagamento')
                         ->relationship('payment_request')
-                        ->visible(fn (Seller $record): bool => (bool) $record->payment_request)
+                        ->visible(fn (?Seller $record): bool => (bool) $record?->payment_request)
                         ->schema([
                             TextInput::make('paypal')
                                 ->label('Indirizzo PayPal')
