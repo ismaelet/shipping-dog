@@ -80,7 +80,7 @@
             @else
                 <p>
                     I pagamenti non sono inviati automaticamente, ma devono essere richiesti. È possibile richiederli se
-                    il totale a pagare è superiore a <strong>25,00€ netti</strong> (31,25€ lordi).
+                    il totale a pagare è superiore a <span class="text-highlight">25,00€ netti</span> (31,25€ lordi).
                 </p>
             @endif
         </div>
